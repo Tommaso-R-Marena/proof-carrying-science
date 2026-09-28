@@ -202,6 +202,22 @@ def campaign() -> dict:
             return (not r["valid"],r["errors"])
     run("external_reviewer_policy_rejects_producer_supported_claim",external_policy_rejects_producer_success)
 
+
+    def private_key_leak_bundle():
+        from pcs.bundle import create_reproducible_bundle, BundleSafetyError
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d); project=p/"project"; init_project(project)
+            priv,pub=p/"priv.pem",p/"pub.pem"; generate_keypair(priv,pub)
+            attest(project/"manifest.json",p/"evidence",private_key=priv,public_key=pub)
+            evidence=p/"evidence"
+            (evidence/"accidental-private.pem").write_bytes(priv.read_bytes())
+            try:
+                create_reproducible_bundle(evidence/"certificate.json",p/"unsafe.zip")
+            except BundleSafetyError as e:
+                return True,str(e)
+            return False,"private key material was included in an evidence bundle"
+    run("private_key_material_accidentally_staged_for_bundle",private_key_leak_bundle)
+
     total=len(results); rejected=sum(x["rejected"] for x in results)
     return {"campaign":"pcs-v0.5-foundational-attacks","attacks":total,"rejected":rejected,"false_accepts":total-rejected,"results":results}
 
