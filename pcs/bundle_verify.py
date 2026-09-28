@@ -22,7 +22,7 @@ MAX_SINGLE_FILE = 50 * 1024 * 1024
 
 def _safe_member(name: str) -> bool:
     p = PurePosixPath(name)
-    return bool(name) and not p.is_absolute() and ".." not in p.parts and "\" not in name
+    return bool(name) and not p.is_absolute() and ".." not in p.parts and "\\" not in name
 
 
 def verify_bundle(
@@ -69,10 +69,13 @@ def verify_bundle(
 
             package_sig_result = None
             package_sig_path = root / "package_signature.json"
-            if require_signature or public_key is not None or expected_signer_fingerprint is not None:
-                if not package_sig_path.is_file():
+            package_signature_present = package_sig_path.is_file()
+            authentication_requested = bool(
+                require_signature or public_key is not None or expected_signer_fingerprint is not None
+            )
+            if authentication_requested:
+                if not package_signature_present:
                     errors.append("required package_signature.json is missing")
-                    errors.append("required signature.json is missing")
                 elif public_key is None:
                     errors.append("public key is required to verify package signature")
                 else:
@@ -84,6 +87,15 @@ def verify_bundle(
                     )
                     if not package_sig_result["valid"]:
                         errors.extend([f"package signature: {e}" for e in package_sig_result["errors"]])
+
+            if package_sig_result is not None:
+                authenticity_status = "VERIFIED" if package_sig_result["valid"] else "INVALID"
+            elif package_signature_present:
+                authenticity_status = "PRESENT_NOT_VERIFIED"
+            elif require_signature:
+                authenticity_status = "REQUIRED_MISSING"
+            else:
+                authenticity_status = "UNSIGNED"
 
             cert_sig_result = None
             cert_signature_path = root / "signature.json"
@@ -104,16 +116,31 @@ def verify_bundle(
                 if not policy_result["pass"]:
                     errors.extend([f"policy: {f}" for f in policy_result["failures"]])
 
+            dimensions = {
+                "scientific_replay": "PASS" if integrity["valid"] else "FAIL",
+                "package_integrity": "PASS" if package_manifest_result["valid"] else "FAIL",
+                "signer_authenticity": authenticity_status,
+                "reviewer_policy": (
+                    "NOT_APPLIED" if policy_result is None else "PASS" if policy_result["pass"] else "FAIL"
+                ),
+            }
+
             return {
                 "valid": not errors,
                 "errors": errors,
                 "bundle": str(bundle_path),
                 "file_count": len(names),
                 "uncompressed_bytes": total,
+                "assurance_dimensions": dimensions,
                 "certificate": integrity,
                 "package_manifest": package_manifest_result,
                 "package_signature": package_sig_result,
                 "certificate_signature": cert_sig_result,
                 "signature": package_sig_result or cert_sig_result,
                 "policy": policy_result,
+                "interpretation": (
+                    "Overall validity reflects only the checks requested in this invocation. "
+                    "A replay-valid bundle is not authenticated unless signer_authenticity is VERIFIED, "
+                    "and it is not reviewer-approved unless reviewer_policy is PASS."
+                ),
             }
