@@ -1,7 +1,9 @@
 name: PCS CI
+# TEMPORARY: automatic triggers are disabled while GitHub is completing jobs
+# before runner allocation (steps=[] for both Python and Lean jobs). Re-enable
+# push/pull_request only after issue #1 records a real executed workflow.
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   python-assurance:
