@@ -24,3 +24,20 @@ jobs:
           pcs certify examples/biopharma_demo/manifest.json -o evidence
           pcs verify evidence/certificate.json
           pcs gate evidence/certificate.json --claim C1 --claim C2 --claim C3
+      - name: Formal-source hygiene
+        run: |
+          ! grep -R --line-number --fixed-strings 'sorry' formal/PCS.lean formal/PCS
+
+  lean-kernel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Lean assurance kernel
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Reject admitted proofs
+        run: |
+          ! grep -R --line-number --fixed-strings 'sorry' formal/PCS.lean formal/PCS
