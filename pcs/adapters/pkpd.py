@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from ..checks.units import parse_unit
+from ..jsonio import strict_json_load, StrictJSONError
 
 
 MODEL_TYPE = "one_compartment_iv_bolus"
@@ -109,7 +110,7 @@ def validate_one_compartment_iv(spec: dict[str, Any]) -> tuple[bool, dict[str, A
 
 
 def _load_spec(path: str | Path) -> dict[str, Any]:
-    obj = json.loads(Path(path).read_text(encoding="utf-8"))
+    obj = strict_json_load(path)
     if not isinstance(obj, dict):
         raise ValueError("PK/PD model specification must be a JSON object")
     return obj
