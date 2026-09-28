@@ -19,7 +19,7 @@ Use PASS / PARTIAL / OPEN rather than a marketing score.
 | Runtime provenance bound into attestations | Implemented; full suite rerun pending CI |
 | Generated limitations statement bound into attestations | Implemented; full suite rerun pending CI |
 | PK + direct-Emax restricted adapter | PASS for declared scope |
-| Automated-test inventory | 62 tests currently in repository |
+| Automated-test inventory | 65 tests currently in repository |
 | Last retained full Python execution | PASS (44/44 before later decision/refinement/security/provenance additions); current 60-test inventory pending full rerun |
 | New decision vectors | PASS in direct evaluation; full repository suite pending CI |
 | Frozen adversarial campaign inventory | 22 cases currently encoded |
