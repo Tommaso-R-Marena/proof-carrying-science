@@ -19,12 +19,12 @@ Use PASS / PARTIAL / OPEN rather than a marketing score.
 | Runtime provenance bound into attestations | Implemented; full suite rerun pending CI |
 | Generated limitations statement bound into attestations | Implemented; full suite rerun pending CI |
 | PK + direct-Emax restricted adapter | PASS for declared scope |
-| Automated-test inventory | 58 tests currently in repository |
-| Last fully executed Python suite | PASS (44/44 before later decision/refinement/security/provenance additions) |
+| Automated-test inventory | 60 tests currently in repository |
+| Last retained full Python execution | PASS (44/44 before later decision/refinement/security/provenance additions); current 60-test inventory pending full rerun |
 | New decision vectors | PASS in direct evaluation; full repository suite pending CI |
-| Frozen adversarial campaign inventory | 18 cases currently encoded |
+| Frozen adversarial campaign inventory | 20 cases currently encoded |
 | Last fully executed adversarial campaign | PASS (16/16 rejected, 0 false accepts in that finite campaign); not a proof |
-| New private-key and stale-output cases | Implemented; full 18-case campaign pending CI |
+| New private-key, stale-output, and ZIP-namespace cases | Implemented; full 20-case campaign pending execution |
 | Machine-compiled Lean kernel | OPEN |
 | Python-to-Lean whole-claim refinement | PARTIAL: source architecture + conformance vectors; machine proof OPEN |
 | External design-partner workflow | OPEN |
@@ -32,3 +32,6 @@ Use PASS / PARTIAL / OPEN rather than a marketing score.
 | Entity/banking/legal operations | OPEN |
 | GxP validated product | OPEN / not required for early pilot |
 | Regulatory endorsement | NOT CLAIMED |
+
+
+Authoritative execution bookkeeping: `results/EXECUTION_LEDGER.md`.
