@@ -54,3 +54,17 @@ def test_doctor_core_checks_healthy_without_requiring_lean():
     result=doctor(); assert result["healthy"]
     names={x["name"] for x in result["checks"]}
     assert {"python","cryptography","lean","lake","pkpd_reference_selfcheck"}.issubset(names)
+
+
+def test_attest_refuses_nonempty_output_directory():
+    from pcs.attest import AttestationError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td); project=root/"project"; init_project(project)
+        evidence=root/"evidence"; evidence.mkdir(); (evidence/"stale-signature.json").write_text("stale")
+        try:
+            attest(project/"manifest.json",evidence)
+        except AttestationError as exc:
+            assert "stale evidence contamination" in str(exc)
+        else:
+            raise AssertionError("expected AttestationError")
+        assert (evidence/"stale-signature.json").read_text()=="stale"
