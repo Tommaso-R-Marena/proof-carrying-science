@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proof-Carrying Science</title>
+<meta name="description" content="Independent, replayable assurance for critical scientific computation.">
+<style>
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #111827; background: #f8fafc; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 980px; margin: 0 auto; padding: 72px 24px 96px; }
+.badge { display: inline-block; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 999px; font-size: 13px; background: white; }
+h1 { font-size: clamp(42px, 7vw, 72px); line-height: .98; letter-spacing: -0.045em; margin: 24px 0; max-width: 900px; }
+.lede { font-size: 21px; line-height: 1.55; color: #475569; max-width: 760px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 16px; margin: 48px 0; }
+.card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; }
+.card h2 { font-size: 17px; margin-top: 0; }
+.card p { color: #64748b; line-height: 1.5; }
+section { margin-top: 64px; }
+h2 { font-size: 30px; letter-spacing: -.02em; }
+pre { overflow-x: auto; background: #0f172a; color: #e2e8f0; padding: 22px; border-radius: 16px; line-height: 1.5; }
+.note { border-left: 4px solid #64748b; padding: 4px 0 4px 18px; color: #475569; }
+footer { margin-top: 72px; color: #64748b; font-size: 14px; }
+</style>
+</head>
+<body><main>
+<span class="badge">Private design-partner alpha</span>
+<h1>Make critical scientific computation independently verifiable.</h1>
+<p class="lede">Proof-Carrying Science turns bounded computational workflows into replayable evidence packages: what was claimed, what assumptions were made, what artifacts were used, what checks were independently replayed, and what remains unresolved.</p>
+<div class="grid">
+  <div class="card"><h2>Explicit claims</h2><p>Scientific assertions are represented as scoped claims with machine-readable predicates and named assumptions.</p></div>
+  <div class="card"><h2>Replayable evidence</h2><p>The verifier reruns supported checks from packaged artifacts instead of trusting a recorded PASS value.</p></div>
+  <div class="card"><h2>Signed artifacts</h2><p>Certificates can be Ed25519-signed, bundled deterministically, archived, and independently checked.</p></div>
+  <div class="card"><h2>Honest boundaries</h2><p>Computational correctness is kept separate from empirical, biological, clinical, and regulatory validation.</p></div>
+</div>
+<section>
+<h2>Initial focus: computational biopharma</h2>
+<p class="lede">The first restricted adapter covers one-compartment IV-bolus PK with a direct Emax PD layer, dimensional contracts, provenance, and independent equation replay.</p>
+</section>
+<section>
+<h2>What a PCS certificate does not mean</h2>
+<p class="note">A passing computational certificate does not establish that a biological model is adequate for a drug, that a therapy is safe or effective, that a workflow is regulator-approved, or that unsupported arbitrary code is correct.</p>
+</section>
+<footer>Proof-Carrying Science — research and engineering preview. Formal Lean kernel development is in progress; the current executable replay checker is Python.</footer>
+</main></body>
+</html>

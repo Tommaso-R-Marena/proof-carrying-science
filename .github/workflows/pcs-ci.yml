@@ -1,0 +1,26 @@
+name: PCS CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  python-assurance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PCS and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Unit, integration, and product tests
+        run: pytest -q
+      - name: Frozen adversarial campaign
+        run: python scripts/adversarial_campaign.py
+      - name: Reference certificate round trip
+        run: |
+          pcs certify examples/biopharma_demo/manifest.json -o evidence
+          pcs verify evidence/certificate.json
+          pcs gate evidence/certificate.json --claim C1 --claim C2 --claim C3
