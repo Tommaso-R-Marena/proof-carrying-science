@@ -10,8 +10,9 @@ class PolicyError(ValueError):
     pass
 
 
-def load_policy(path: str | Path) -> dict:
-    policy = json.loads(Path(path).read_text(encoding="utf-8"))
+def validate_policy(policy: dict) -> dict:
+    if not isinstance(policy, dict):
+        raise PolicyError("acceptance policy must be a JSON object")
     if policy.get("policy_version") != POLICY_VERSION:
         raise PolicyError("unsupported acceptance policy version")
     required = policy.get("required_claims")
@@ -26,6 +27,10 @@ def load_policy(path: str | Path) -> dict:
     if fp is not None and (not isinstance(fp, str) or len(fp) != 64):
         raise PolicyError("expected_signer_fingerprint must be a 64-character SHA-256 hex string")
     return policy
+
+
+def load_policy(path: str | Path) -> dict:
+    return validate_policy(json.loads(Path(path).read_text(encoding="utf-8")))
 
 
 def evaluate_policy(certificate: dict, policy: dict, *, signature_valid: bool | None = None, signer_fingerprint: str | None = None) -> dict:
