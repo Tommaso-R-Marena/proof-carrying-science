@@ -9,6 +9,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey,
 from .hashing import canonical_json_bytes, sha256_file
 from .signing import _load_private, _load_public, public_key_fingerprint
 from .schema_validation import validate_package_manifest_shape, SchemaValidationError
+from .jsonio import strict_json_load, StrictJSONError
 
 PACKAGE_FORMAT = "pcs-package-v1"
 PACKAGE_SIGNATURE_FORMAT = "pcs-package-ed25519-v1"
@@ -36,7 +37,10 @@ def build_package_manifest(root: str | Path, output_path: str | Path | None = No
     cert_path = root / "certificate.json"
     if not cert_path.is_file():
         raise PackageError("package lacks certificate.json")
-    cert = json.loads(cert_path.read_text(encoding="utf-8"))
+    try:
+        cert = strict_json_load(cert_path)
+    except StrictJSONError as exc:
+        raise PackageError(str(exc)) from exc
     manifest = {
         "package_format": PACKAGE_FORMAT,
         "certificate_semantic_hash": cert.get("semantic_hash"),
@@ -59,8 +63,8 @@ def verify_package_manifest(root: str | Path, manifest_path: str | Path | None =
     if not path.is_file():
         return {"valid": False, "errors": ["package_manifest.json is missing"]}
     try:
-        manifest = json.loads(path.read_text(encoding="utf-8"))
-    except Exception as e:
+        manifest = strict_json_load(path)
+    except (StrictJSONError, OSError) as e:
         return {"valid": False, "errors": [f"invalid package manifest: {type(e).__name__}: {e}"]}
     try:
         validate_package_manifest_shape(manifest)
@@ -116,7 +120,10 @@ def verify_package_manifest(root: str | Path, manifest_path: str | Path | None =
 
 
 def sign_package_manifest(manifest_path: str | Path, private_key_path: str | Path, output_path: str | Path) -> dict:
-    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    try:
+        manifest = strict_json_load(manifest_path)
+    except StrictJSONError as exc:
+        raise PackageError(str(exc)) from exc
     try:
         validate_package_manifest_shape(manifest)
     except SchemaValidationError as exc:
@@ -146,7 +153,7 @@ def verify_package_signature(
 ) -> dict:
     errors: list[str] = []
     manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
-    record = json.loads(Path(signature_path).read_text(encoding="utf-8"))
+    record = strict_json_load(signature_path)
     if record.get("signature_format") != PACKAGE_SIGNATURE_FORMAT:
         errors.append("unsupported package signature format")
     try:
