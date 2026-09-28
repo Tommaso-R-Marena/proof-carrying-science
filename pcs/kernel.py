@@ -14,6 +14,7 @@ from .checks.chemistry import reaction_balanced
 from .checks.units import units_compatible
 from .adapters.pkpd import check_contract_file, check_output_file
 from .schema_validation import validate_manifest_shape, validate_certificate_shape, SchemaValidationError
+from .jsonio import strict_json_load, StrictJSONError
 
 SPEC_VERSION = "pcs-0.5"
 CHECKER_VERSION = "pcs-python-kernel/0.5.0"
@@ -256,7 +257,10 @@ def build_certificate(manifest_path: str | Path, out_dir: str | Path) -> dict[st
     artifact_out = out / "artifacts"
     artifact_out.mkdir(exist_ok=True)
 
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"), parse_constant=lambda x: (_ for _ in ()).throw(AssuranceError(f"non-finite JSON constant: {x}")))
+    try:
+        manifest = strict_json_load(manifest_path)
+    except StrictJSONError as exc:
+        raise AssuranceError(str(exc)) from exc
     try:
         validate_manifest_shape(manifest)
     except SchemaValidationError as exc:
@@ -351,7 +355,17 @@ def build_certificate(manifest_path: str | Path, out_dir: str | Path) -> dict[st
 def verify_certificate(certificate_path: str | Path) -> dict[str, Any]:
     path = Path(certificate_path).resolve()
     root = path.parent
-    cert = json.loads(path.read_text(encoding="utf-8"), parse_constant=lambda x: (_ for _ in ()).throw(AssuranceError(f"non-finite JSON constant: {x}")))
+    try:
+        cert = strict_json_load(path)
+    except StrictJSONError as exc:
+        return {
+            "valid": False,
+            "errors": [str(exc)],
+            "certificate": str(path),
+            "integrity_hash": None,
+            "semantic_hash": None,
+            "claim_statuses": {},
+        }
     errors: list[str] = []
     try:
         validate_certificate_shape(cert)
