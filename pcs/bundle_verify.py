@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import tempfile
 import zipfile
+import unicodedata
 from pathlib import Path, PurePosixPath
 
 from .kernel import verify_certificate
@@ -18,6 +19,13 @@ class BundleVerificationError(ValueError):
 MAX_FILES = 1000
 MAX_TOTAL_UNCOMPRESSED = 100 * 1024 * 1024
 MAX_SINGLE_FILE = 50 * 1024 * 1024
+
+_WINDOWS_FORBIDDEN = set('<>:"|?*')
+_WINDOWS_RESERVED = {
+    "con", "prn", "aux", "nul",
+    *(f"com{i}" for i in range(1, 10)),
+    *(f"lpt{i}" for i in range(1, 10)),
+}
 
 
 def _safe_member(name: str) -> bool:
@@ -41,6 +49,42 @@ def _validate_zip_namespace(infos: list[zipfile.ZipInfo]) -> set[str]:
         expected = f"{canonical}/" if is_dir else canonical
         if not canonical or name != expected:
             raise BundleVerificationError(f"non-canonical ZIP member: {name!r}")
+
+        # Require a portable namespace: Python/OS extraction can otherwise map
+        # distinct ZIP names to the same path on Windows or normalization-sensitive
+        # filesystems.
+        portable_parts: list[str] = []
+        for segment in PurePosixPath(canonical).parts:
+            nfc = unicodedata.normalize("NFC", segment)
+            if segment != nfc:
+                raise BundleVerificationError(
+                    f"non-NFC ZIP member segment is not portable: {segment!r}"
+                )
+            if any(ord(ch) < 32 or ch in _WINDOWS_FORBIDDEN for ch in segment):
+                raise BundleVerificationError(
+                    f"ZIP member contains non-portable filename characters: {segment!r}"
+                )
+            if segment.endswith((" ", ".")):
+                raise BundleVerificationError(
+                    f"ZIP member has non-portable trailing space/dot: {segment!r}"
+                )
+            stem = segment.split(".", 1)[0].casefold()
+            if stem in _WINDOWS_RESERVED:
+                raise BundleVerificationError(
+                    f"ZIP member uses Windows-reserved filename: {segment!r}"
+                )
+            portable_parts.append(nfc.casefold())
+
+        portable_key = "/".join(portable_parts)
+        for existing, existing_kind in kinds.items():
+            existing_key = "/".join(
+                unicodedata.normalize("NFC", p).casefold()
+                for p in PurePosixPath(existing).parts
+            )
+            if existing_key == portable_key and existing != canonical:
+                raise BundleVerificationError(
+                    f"cross-platform ZIP name collision: {existing!r} vs {canonical!r}"
+                )
 
         kind = "directory" if is_dir else "file"
         if canonical in kinds:
