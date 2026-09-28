@@ -4,7 +4,7 @@
 
 ## Current repository inventory
 
-- 86 Python tests are present.
+- 89 Python tests are present.
 - 25 targeted adversarial attacks are encoded.
 - These inventory counts are **not** promoted to execution claims while hosted runners remain unavailable.
 
