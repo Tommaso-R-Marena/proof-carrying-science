@@ -215,7 +215,7 @@ def cmd_attest(args):
 
 def cmd_freeze_intake(args):
     try:
-        result = freeze_intake_file(args.input, args.output)
+        result = freeze_intake_file(args.input, args.output, overwrite=args.force)
     except (OSError, json.JSONDecodeError, PilotIntakeError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -344,6 +344,7 @@ def build_parser():
     fi = sub.add_parser("freeze-intake", help="freeze a pre-result pilot claim/assumption inventory by semantic hash")
     fi.add_argument("input", help="pilot intake JSON")
     fi.add_argument("-o", "--output", required=True, help="write the timestamped intake lock JSON")
+    fi.add_argument("--force", action="store_true", help="explicitly replace an existing intake lock")
     fi.set_defaults(func=cmd_freeze_intake)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
