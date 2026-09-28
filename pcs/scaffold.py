@@ -57,6 +57,31 @@ def _manifest(subject: str) -> dict:
     }
 
 
+def _pilot_intake(subject: str, manifest: dict) -> dict:
+    return {
+        "intake_format": "pcs-pilot-intake-v1",
+        "pilot_id": f"{subject}-intake",
+        "workflow_summary": (
+            "Restricted one-compartment IV-bolus PK plus direct Emax PD computational assurance starter."
+        ),
+        "claims": [
+            {
+                "id": c["id"],
+                "statement": c["statement"],
+                "desired_assurance": c["kind"],
+                "rationale": "Frozen before attestation so the target claim cannot be weakened after seeing results.",
+            }
+            for c in manifest["claims"]
+        ],
+        "assumptions": [
+            {"id": a["id"], "statement": a["statement"]}
+            for a in manifest.get("assumptions", [])
+        ],
+        "data_classification": "synthetic",
+        "notes": "Starter intake. Replace with the design partner's agreed claims before running a real pilot.",
+    }
+
+
 def init_project(destination: str | Path, *, template: str = "pkpd", subject: str | None = None, force: bool = False) -> dict[str, object]:
     if template != "pkpd":
         raise ScaffoldError(f"unsupported template: {template!r}")
@@ -68,13 +93,16 @@ def init_project(destination: str | Path, *, template: str = "pkpd", subject: st
     readme = (
         "# PCS PK/PD starter\n\n"
         "This starter demonstrates computational assurance for a restricted one-compartment IV-bolus PK model with a direct Emax PD layer.\n\n"
-        "Replace the synthetic model and output with your bounded workflow, then run:\n\n"
-        "    pcs certify manifest.json -o evidence\n"
+        "Replace the synthetic model and output with your bounded workflow, freeze the agreed claims, then run:\n\n"
+        "    pcs freeze-intake pilot_intake.json -o pilot_intake.lock.json\n"
+        "    pcs attest manifest.json -o evidence --intake-lock pilot_intake.lock.json\n"
         "    pcs verify evidence/certificate.json\n\n"
         "Passing checks establish only the declared computational properties. They do not establish biological or clinical adequacy.\n"
     )
+    manifest = _manifest(subject)
     files = {
-        "manifest.json": json.dumps(_manifest(subject), indent=2, sort_keys=True) + "\n",
+        "manifest.json": json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        "pilot_intake.json": json.dumps(_pilot_intake(subject, manifest), indent=2, sort_keys=True) + "\n",
         "model.json": json.dumps(_MODEL, indent=2, sort_keys=True) + "\n",
         "predictions.csv": _predictions(),
         "README.md": readme,
