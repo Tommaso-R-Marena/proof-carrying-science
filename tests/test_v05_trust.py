@@ -60,3 +60,18 @@ def test_policy_is_external_not_part_of_signed_bundle():
         with zipfile.ZipFile(bundle) as zf: names=set(zf.namelist())
         assert not any(n.startswith("policy") or "/policy" in n for n in names)
         assert verify_bundle(bundle,public_key=pub,require_signature=True)["valid"]
+
+
+def test_bundle_refuses_accidental_private_key_material():
+    from pcs.bundle import create_reproducible_bundle, BundleSafetyError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        _,priv,_,_,evidence,_=_signed_attestation(root)
+        (evidence/"accidental-private.pem").write_bytes(priv.read_bytes())
+        try:
+            create_reproducible_bundle(evidence/"certificate.json",root/"unsafe.zip")
+        except BundleSafetyError as exc:
+            assert "private-key material" in str(exc)
+        else:
+            raise AssertionError("expected BundleSafetyError")
+        assert not (root/"unsafe.zip").exists()
