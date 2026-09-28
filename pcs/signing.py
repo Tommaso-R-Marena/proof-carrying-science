@@ -74,6 +74,15 @@ def signature_payload(certificate: dict) -> dict:
 
 
 def sign_certificate(certificate_path: str | Path, private_key_path: str | Path, output_path: str | Path) -> dict:
+    # Import lazily to avoid coupling the module graph while ensuring every direct
+    # API caller gets the same integrity/replay gate as the CLI.
+    from .kernel import verify_certificate
+
+    verified = verify_certificate(certificate_path)
+    if not verified["valid"]:
+        raise SignatureError(
+            f"refusing to sign invalid certificate: {verified['errors']}"
+        )
     try:
         cert = strict_json_load(certificate_path)
     except StrictJSONError as exc:
