@@ -4,6 +4,26 @@ import zipfile
 from pathlib import Path
 
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
+_PRIVATE_KEY_MARKERS = (
+    b"-----BEGIN PRIVATE KEY-----",
+    b"-----BEGIN ENCRYPTED PRIVATE KEY-----",
+    b"-----BEGIN OPENSSH PRIVATE KEY-----",
+    b"-----BEGIN RSA PRIVATE KEY-----",
+    b"-----BEGIN EC PRIVATE KEY-----",
+)
+
+
+class BundleSafetyError(ValueError):
+    pass
+
+
+def _reject_private_key_material(path: Path) -> None:
+    # Read only enough to identify standard PEM/OpenSSH key headers.
+    prefix = path.read_bytes()[:8192]
+    if any(marker in prefix for marker in _PRIVATE_KEY_MARKERS):
+        raise BundleSafetyError(
+            f"refusing to bundle apparent private-key material: {path.name}"
+        )
 
 
 def create_reproducible_bundle(certificate_path: str | Path, output_path: str | Path) -> dict[str, str | int]:
@@ -13,6 +33,8 @@ def create_reproducible_bundle(certificate_path: str | Path, output_path: str | 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     files = [p for p in root.rglob('*') if p.is_file() and p.resolve() != output_path]
     files.sort(key=lambda p: p.relative_to(root).as_posix())
+    for p in files:
+        _reject_private_key_material(p)
     with zipfile.ZipFile(output_path, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
         for p in files:
             rel = p.relative_to(root).as_posix()
