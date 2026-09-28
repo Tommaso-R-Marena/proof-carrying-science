@@ -23,7 +23,11 @@ def build_package_manifest(root: str | Path, output_path: str | Path | None = No
     if not root.is_dir():
         raise PackageError(f"package root is not a directory: {root}")
     entries: dict[str, dict[str, int | str]] = {}
-    for p in sorted(x for x in root.rglob("*") if x.is_file()):
+    staged = sorted(root.rglob("*"))
+    symlinks = [p.relative_to(root).as_posix() for p in staged if p.is_symlink()]
+    if symlinks:
+        raise PackageError(f"refusing to manifest staged symlinks: {symlinks}")
+    for p in (x for x in staged if x.is_file()):
         rel = p.relative_to(root).as_posix()
         if rel in EXCLUDED_PACKAGE_FILES:
             continue
