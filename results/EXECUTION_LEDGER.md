@@ -6,7 +6,7 @@ This file is the authoritative distinction between **repository inventory** and 
 
 As of 2026-09-28 after ZIP namespace hardening:
 
-- 86 Python test functions are present under `tests/`.
+- 89 Python test functions are present under `tests/`.
 - 25 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
 - Lean sources target Lean 4.16.0 and contain no intentionally admitted `sorry` proofs.
 
