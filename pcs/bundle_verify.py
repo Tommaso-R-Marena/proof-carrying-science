@@ -17,6 +17,7 @@ from .bundle import (
 from .package import verify_package_manifest, verify_package_signature
 from .policy import evaluate_policy, validate_policy
 from .signing import verify_signature
+from .schema_validation import validate_verification_receipt_shape, SchemaValidationError
 
 
 class BundleVerificationError(ValueError):
@@ -214,7 +215,7 @@ def verify_bundle(
                 ),
             }
 
-            return {
+            receipt = {
                 "verification_receipt_format": "pcs-bundle-verification-v1",
                 "verifier_version": CHECKER_VERSION,
                 "verified_at": datetime.now(timezone.utc).isoformat(),
@@ -242,3 +243,10 @@ def verify_bundle(
                     "and it is not reviewer-approved unless reviewer_policy is PASS."
                 ),
             }
+            try:
+                validate_verification_receipt_shape(receipt)
+            except SchemaValidationError as exc:
+                raise BundleVerificationError(
+                    f"internal verification receipt violated its JSON Schema: {exc}"
+                ) from exc
+            return receipt
