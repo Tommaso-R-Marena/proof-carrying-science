@@ -12,14 +12,17 @@ body { margin: 0; }
 main { max-width: 980px; margin: 0 auto; padding: 72px 24px 96px; }
 .badge { display: inline-block; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 999px; font-size: 13px; background: white; }
 h1 { font-size: clamp(42px, 7vw, 72px); line-height: .98; letter-spacing: -0.045em; margin: 24px 0; max-width: 900px; }
-.lede { font-size: 21px; line-height: 1.55; color: #475569; max-width: 760px; }
+.lede { font-size: 21px; line-height: 1.55; color: #475569; max-width: 790px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 16px; margin: 48px 0; }
 .card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; }
 .card h2 { font-size: 17px; margin-top: 0; }
 .card p { color: #64748b; line-height: 1.5; }
 section { margin-top: 64px; }
 h2 { font-size: 30px; letter-spacing: -.02em; }
-pre { overflow-x: auto; background: #0f172a; color: #e2e8f0; padding: 22px; border-radius: 16px; line-height: 1.5; }
+.flow { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:24px; }
+.step { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; }
+.step strong { display:block; margin-bottom:6px; }
+.step span { color:#64748b; font-size:14px; line-height:1.45; }
 .note { border-left: 4px solid #64748b; padding: 4px 0 4px 18px; color: #475569; }
 footer { margin-top: 72px; color: #64748b; font-size: 14px; }
 </style>
@@ -27,21 +30,40 @@ footer { margin-top: 72px; color: #64748b; font-size: 14px; }
 <body><main>
 <span class="badge">Private design-partner alpha</span>
 <h1>Make critical scientific computation independently verifiable.</h1>
-<p class="lede">Proof-Carrying Science turns bounded computational workflows into replayable evidence packages: what was claimed, what assumptions were made, what artifacts were used, what checks were independently replayed, and what remains unresolved.</p>
+<p class="lede">Proof-Carrying Science turns a bounded computational workflow into a replayable evidence package: exact artifacts, explicit assumptions, checks or proofs, runtime provenance, signer identity, reviewer policy, and what remains unresolved.</p>
+
 <div class="grid">
-  <div class="card"><h2>Explicit claims</h2><p>Scientific assertions are represented as scoped claims with machine-readable predicates and named assumptions.</p></div>
-  <div class="card"><h2>Replayable evidence</h2><p>The verifier reruns supported checks from packaged artifacts instead of trusting a recorded PASS value.</p></div>
-  <div class="card"><h2>Signed artifacts</h2><p>Certificates can be Ed25519-signed, bundled deterministically, archived, and independently checked.</p></div>
-  <div class="card"><h2>Honest boundaries</h2><p>Computational correctness is kept separate from empirical, biological, clinical, and regulatory validation.</p></div>
+  <div class="card"><h2>Scoped claims</h2><p>Consequential assertions are represented explicitly, with named assumptions and machine-readable predicates where supported.</p></div>
+  <div class="card"><h2>Replayable evidence</h2><p>The verifier reruns supported checks from packaged artifacts instead of trusting a producer-recorded PASS value.</p></div>
+  <div class="card"><h2>Authenticated handoff</h2><p>A signed package manifest binds the certificate, human-readable report, limitations, runtime provenance, and delivered artifacts.</p></div>
+  <div class="card"><h2>Reviewer-controlled acceptance</h2><p>The producer does not choose the final acceptance threshold. Reviewers can supply an external policy and pin the expected signer fingerprint.</p></div>
 </div>
+
+<section>
+<h2>Four questions, kept separate</h2>
+<div class="flow">
+  <div class="step"><strong>Did the evidence replay?</strong><span>Scientific/computational replay status.</span></div>
+  <div class="step"><strong>Is the package intact?</strong><span>All delivered files match the bound package manifest.</span></div>
+  <div class="step"><strong>Who issued it?</strong><span>Signer authenticity is verified only against a trusted public key.</span></div>
+  <div class="step"><strong>Does the reviewer accept it?</strong><span>An external policy decides whether the scoped result is acceptable for its context.</span></div>
+</div>
+</section>
+
 <section>
 <h2>Initial focus: computational biopharma</h2>
-<p class="lede">The first restricted adapter covers one-compartment IV-bolus PK with a direct Emax PD layer, dimensional contracts, provenance, and independent equation replay.</p>
+<p class="lede">The first restricted adapter covers one-compartment IV-bolus PK with a direct Emax PD layer, dimensional contracts, provenance, and independent equation replay. The near-term product is a fixed-scope assurance pilot around a workflow the customer already cares about—not a claim to verify all of pharmacometrics.</p>
 </section>
+
+<section>
+<h2>Design-partner pilot</h2>
+<p class="lede">A partner supplies one bounded workflow and 3–10 reviewer-defined claims. PCS returns a signed evidence package that an independent reviewer can replay from scratch, plus an explicit limitations statement and runtime provenance.</p>
+</section>
+
 <section>
 <h2>What a PCS certificate does not mean</h2>
-<p class="note">A passing computational certificate does not establish that a biological model is adequate for a drug, that a therapy is safe or effective, that a workflow is regulator-approved, or that unsupported arbitrary code is correct.</p>
+<p class="note">A passing computational certificate does not establish that a biological model is adequate for a drug, that a therapy is safe or effective, that a workflow is regulator-approved or GxP validated, or that unsupported arbitrary code is correct.</p>
 </section>
-<footer>Proof-Carrying Science — research and engineering preview. Formal Lean kernel development is in progress; the current executable replay checker is Python.</footer>
+
+<footer>Proof-Carrying Science — private research and engineering preview. The current executable replay checker is Python. The Lean assurance kernel and Python-to-Lean refinement are active research work and are not described as machine-checked until a real Lean build succeeds.</footer>
 </main></body>
 </html>
