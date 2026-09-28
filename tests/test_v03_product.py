@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 import tempfile
 import time
+import zipfile
 from pathlib import Path
 
 from pcs.bundle import create_reproducible_bundle
@@ -43,6 +44,10 @@ def test_reproducible_bundle_is_byte_identical():
         p=Path(d); build_certificate(MANIFEST,p/"evidence"); cert=p/"evidence/certificate.json"
         a=create_reproducible_bundle(cert,p/"a.zip"); b=create_reproducible_bundle(cert,p/"b.zip")
         assert a["sha256"]==b["sha256"]; assert sha256_file(p/"a.zip")==sha256_file(p/"b.zip")
+        assert a["archive_format"]=="zip-stored-v1"
+        with zipfile.ZipFile(p/"a.zip") as zf:
+            assert zf.infolist()
+            assert all(info.compress_type==zipfile.ZIP_STORED for info in zf.infolist())
 
 def test_certificate_diff_detects_changed_artifact_and_status():
     with tempfile.TemporaryDirectory() as d:
