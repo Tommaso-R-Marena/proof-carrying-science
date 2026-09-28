@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from .schema_validation import validate_policy_shape, SchemaValidationError
+from .jsonio import strict_json_load, StrictJSONError
 
 POLICY_VERSION = "pcs-acceptance-policy-v1"
 
@@ -36,7 +37,10 @@ def validate_policy(policy: dict) -> dict:
 
 
 def load_policy(path: str | Path) -> dict:
-    return validate_policy(json.loads(Path(path).read_text(encoding="utf-8")))
+    try:
+        return validate_policy(strict_json_load(path))
+    except StrictJSONError as exc:
+        raise PolicyError(str(exc)) from exc
 
 
 def evaluate_policy(certificate: dict, policy: dict, *, signature_valid: bool | None = None, signer_fingerprint: str | None = None) -> dict:
