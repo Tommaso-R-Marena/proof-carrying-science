@@ -96,7 +96,8 @@ inductive Assures : List Assumption → AssuranceLevel → Claim → List Eviden
       (member : e ∈ es)
       (context : ContextCovers Γ c)
       (claimKind : c.kind = ClaimKind.computational)
-      (evidenceKind : e.kind = EvidenceKind.computationalTest)
+      (evidenceKind : e.kind = EvidenceKind.computationalTest ∨
+                      e.kind = EvidenceKind.formalProof)
       (passed : e.outcome = Outcome.pass)
       (bound : BoundTo e c) : Assures Γ AssuranceLevel.computational c es
   | empirical {Γ : List Assumption} {c : Claim} {es : List Evidence} (e : Evidence)
@@ -136,6 +137,17 @@ theorem computational_assurance_is_predicate_bound
   cases h with
   | computational e member _ _ _ _ bound =>
       exact ⟨e, member, bound.1, bound.2⟩
+
+theorem computational_assurance_has_correctness_evidence
+    {Γ : List Assumption} {c : Claim} {es : List Evidence}
+    (h : Assures Γ AssuranceLevel.computational c es) :
+    ∃ e, e ∈ es ∧
+      (e.kind = EvidenceKind.computationalTest ∨
+       e.kind = EvidenceKind.formalProof) ∧
+      e.outcome = Outcome.pass := by
+  cases h with
+  | computational e member _ _ evidenceKind passed _ =>
+      exact ⟨e, member, evidenceKind, passed⟩
 
 theorem computational_assurance_cannot_use_unverified
     {Γ : List Assumption} {c : Claim} {es : List Evidence}
