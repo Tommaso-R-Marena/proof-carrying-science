@@ -130,6 +130,11 @@ def sign_package_manifest(manifest_path: str | Path, private_key_path: str | Pat
         raise PackageError(str(exc)) from exc
     if manifest.get("package_format") != PACKAGE_FORMAT:
         raise PackageError("refusing to sign unsupported package manifest")
+    package_check = verify_package_manifest(Path(manifest_path).resolve().parent, manifest_path)
+    if not package_check["valid"]:
+        raise PackageError(
+            f"refusing to sign package manifest that does not match staged files: {package_check['errors']}"
+        )
     key = _load_private(private_key_path)
     pub = key.public_key()
     signature = key.sign(canonical_json_bytes(manifest))
