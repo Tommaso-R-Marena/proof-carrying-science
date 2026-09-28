@@ -194,10 +194,13 @@ def verify_bundle(
             policy_result = None
             policy_sha256 = None
             if policy is not None:
-                cert_obj = strict_json_load(cert)
-                policy_bytes = Path(policy).read_bytes()
-                policy_sha256 = hashlib.sha256(policy_bytes).hexdigest()
-                policy_obj = validate_policy(strict_json_loads(policy_bytes.decode("utf-8")))
+                try:
+                    cert_obj = strict_json_load(cert)
+                    policy_bytes = Path(policy).read_bytes()
+                    policy_sha256 = hashlib.sha256(policy_bytes).hexdigest()
+                    policy_obj = validate_policy(strict_json_loads(policy_bytes.decode("utf-8")))
+                except (StrictJSONError, UnicodeDecodeError) as exc:
+                    raise BundleVerificationError(f"invalid reviewer policy/certificate JSON: {exc}") from exc
                 policy_result = evaluate_policy(
                     cert_obj,
                     policy_obj,
