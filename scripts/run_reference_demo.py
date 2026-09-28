@@ -10,6 +10,7 @@ from pcs.attest import attest
 from pcs.bundle_verify import verify_bundle
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
+from pcs.intake import freeze_intake_file
 
 
 def main() -> int:
@@ -29,8 +30,10 @@ def main() -> int:
     evidence = root / "evidence"
     bundle = root / "evidence.zip"
     policy_path = root / "reviewer-policy.json"
+    intake_lock = root / "pilot-intake.lock.json"
 
     init_project(project, template="pkpd", subject="pcs-reference-demo")
+    freeze_intake_file(project / "pilot_intake.json", intake_lock)
 
     with tempfile.TemporaryDirectory(prefix="pcs-demo-key-") as keydir:
         keydir = Path(keydir)
@@ -44,6 +47,7 @@ def main() -> int:
             private_key=private_key,
             public_key=public_key,
             bundle_path=bundle,
+            intake_lock=intake_lock,
         )
 
         policy = {
@@ -73,6 +77,7 @@ def main() -> int:
         "valid": verification["valid"],
         "assurance_dimensions": verification["assurance_dimensions"],
         "claim_statuses": verification["certificate"]["claim_statuses"],
+        "pilot_intake_lock": str(intake_lock),
         "errors": verification["errors"],
     }
     (root / "demo-summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
