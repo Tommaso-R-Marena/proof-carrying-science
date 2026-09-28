@@ -35,12 +35,18 @@ def create_reproducible_bundle(certificate_path: str | Path, output_path: str | 
     files.sort(key=lambda p: p.relative_to(root).as_posix())
     for p in files:
         _reject_private_key_material(p)
-    with zipfile.ZipFile(output_path, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+    # Use ZIP_STORED rather than DEFLATE. Compression heuristics can vary across
+    # zlib/runtime versions; stored entries make archive bytes depend only on the
+    # ordered file names, fixed metadata, and file bytes.
+    with zipfile.ZipFile(output_path, "w", compression=zipfile.ZIP_STORED) as zf:
         for p in files:
             rel = p.relative_to(root).as_posix()
             info = zipfile.ZipInfo(rel, FIXED_TIME)
-            info.compress_type = zipfile.ZIP_DEFLATED
+            info.compress_type = zipfile.ZIP_STORED
+            info.create_system = 3
             info.external_attr = 0o100644 << 16
-            zf.writestr(info, p.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+            info.extra = b""
+            info.comment = b""
+            zf.writestr(info, p.read_bytes(), compress_type=zipfile.ZIP_STORED)
     h = hashlib.sha256(output_path.read_bytes()).hexdigest()
-    return {"bundle": str(output_path), "sha256": h, "files": len(files)}
+    return {"bundle": str(output_path), "sha256": h, "files": len(files), "archive_format": "zip-stored-v1"}
