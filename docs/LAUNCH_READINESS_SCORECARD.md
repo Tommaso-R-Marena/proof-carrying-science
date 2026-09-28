@@ -14,14 +14,17 @@ Use PASS / PARTIAL / OPEN rather than a marketing score.
 | External reviewer acceptance policy | PASS |
 | Reproducible evidence ZIP | PASS |
 | Certificate diff | PASS |
-| Private-key material refused from evidence ZIPs | PASS at guard/unit level; full suite rerun pending CI |
+| Private-key material refused from evidence ZIPs | Implemented; full suite rerun pending CI |
+| Non-empty/stale attestation output refused | Implemented; full suite rerun pending CI |
+| Runtime provenance bound into attestations | Implemented; full suite rerun pending CI |
+| Generated limitations statement bound into attestations | Implemented; full suite rerun pending CI |
 | PK + direct-Emax restricted adapter | PASS for declared scope |
-| Automated-test inventory | 51 tests currently in repository |
-| Last fully executed Python suite | PASS (44/44 before the later decision/refinement/security additions) |
+| Automated-test inventory | 57 tests currently in repository |
+| Last fully executed Python suite | PASS (44/44 before later decision/refinement/security/provenance additions) |
 | New decision vectors | PASS in direct evaluation; full repository suite pending CI |
-| Frozen adversarial campaign | 17 cases currently encoded |
+| Frozen adversarial campaign inventory | 18 cases currently encoded |
 | Last fully executed adversarial campaign | PASS (16/16 rejected, 0 false accepts in that finite campaign); not a proof |
-| New private-key leak case | Guard behavior independently checked; full 17-case campaign pending CI |
+| New private-key and stale-output cases | Implemented; full 18-case campaign pending CI |
 | Machine-compiled Lean kernel | OPEN |
 | Python-to-Lean whole-claim refinement | PARTIAL: source architecture + conformance vectors; machine proof OPEN |
 | External design-partner workflow | OPEN |
