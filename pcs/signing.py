@@ -15,9 +15,19 @@ class SignatureError(ValueError):
     pass
 
 
-def generate_keypair(private_path: str | Path, public_path: str | Path) -> dict[str, str]:
-    private_path = Path(private_path)
-    public_path = Path(public_path)
+def generate_keypair(
+    private_path: str | Path,
+    public_path: str | Path,
+    *,
+    overwrite: bool = False,
+) -> dict[str, str]:
+    private_path = Path(private_path).resolve()
+    public_path = Path(public_path).resolve()
+    if private_path == public_path:
+        raise SignatureError("private and public key paths must be different")
+    existing = [str(p) for p in (private_path, public_path) if p.exists()]
+    if existing and not overwrite:
+        raise SignatureError(f"refusing to overwrite existing signing key material: {existing}")
     private_path.parent.mkdir(parents=True, exist_ok=True)
     public_path.parent.mkdir(parents=True, exist_ok=True)
     key = Ed25519PrivateKey.generate()
