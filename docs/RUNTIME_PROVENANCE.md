@@ -53,3 +53,10 @@ PCS does not automatically convert any of those differences into scientific clai
 The current snapshot is descriptive. It trusts Python/platform metadata exposed by the runtime and package metadata exposed by installed distributions. Future work may add independently attested container digests, SBOMs, signed build provenance, or hardware/runtime identity.
 
 Those stronger mechanisms should remain separate from the scientific claim calculus: reproducibility context and scientific correctness are related but not interchangeable.
+
+
+## Mid-attestation drift guard
+
+The attestation path now snapshots the runtime **before** certificate generation/replay and snapshots it again before any certificate/package signature is issued. If the runtime semantic hash changes during that interval, attestation fails closed and no evidence ZIP is produced.
+
+This guard does not prove that the runtime is correct or uncompromised. It establishes the narrower property that one signed attestation is not silently assembled across two different recorded Python/platform/package environments.
