@@ -44,6 +44,17 @@ The executable reference kernel can:
 
 The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
 
+## Pre-result pilot commitment
+
+A design partner can freeze the requested claims and assumptions before results are inspected:
+
+```bash
+pcs freeze-intake pilot_intake.json -o pilot_intake.lock.json
+pcs attest manifest.json -o evidence --intake-lock pilot_intake.lock.json
+```
+
+The lock binds claim IDs, claim statements, assurance classes, assumption IDs, and assumption statements. The signed package includes the lock so post-hoc weakening is detectable.
+
 ## Fastest design-partner workflow
 
 Install in editable form during development:
