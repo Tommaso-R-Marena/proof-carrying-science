@@ -61,13 +61,20 @@ def freeze_intake(intake: dict[str, Any]) -> dict[str, Any]:
     return lock
 
 
-def freeze_intake_file(input_path: str | Path, output_path: str | Path) -> dict[str, Any]:
+def freeze_intake_file(
+    input_path: str | Path,
+    output_path: str | Path,
+    *,
+    overwrite: bool = False,
+) -> dict[str, Any]:
     try:
         intake = strict_json_load(input_path)
     except StrictJSONError as exc:
         raise PilotIntakeError(str(exc)) from exc
     lock = freeze_intake(intake)
     out = Path(output_path)
+    if out.exists() and not overwrite:
+        raise PilotIntakeError(f"refusing to overwrite existing pilot intake lock: {out}")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(lock, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return lock
