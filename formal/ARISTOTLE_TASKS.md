@@ -1,6 +1,6 @@
 # Aristotle proof queue
 
-Target toolchain: `leanprover/lean4:v4.16.0`.
+Target toolchain: `leanprover/lean4:v4.28.0` (matching the most recent directly observed Aristotle backend default as of July 2026).
 
 The formal library is intentionally split so Aristotle can solve small obligations in sequence.
 
