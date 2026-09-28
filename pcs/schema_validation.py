@@ -61,3 +61,12 @@ def validate_policy_shape(value: Any) -> None:
 
 def validate_verification_receipt_shape(value: Any) -> None:
     validate_shape(value, "verification_receipt.schema.json", label="verification receipt")
+
+
+def validate_pilot_intake_shape(value: Any) -> None:
+    validate_shape(value, "pilot_intake.schema.json", label="pilot intake")
+
+
+def validate_pilot_intake_lock_shape(value: Any) -> None:
+    validate_shape(value, "pilot_intake_lock.schema.json", label="pilot intake lock")
+    validate_pilot_intake_shape(value.get("intake") if isinstance(value, dict) else None)
