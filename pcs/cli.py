@@ -2,7 +2,6 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 from .kernel import build_certificate, verify_certificate, AssuranceError
@@ -24,7 +23,12 @@ from .intake import freeze_intake_file, PilotIntakeError
 
 def cmd_certify(args):
     try:
-        cert = build_certificate(args.manifest, args.output)
+        out = Path(args.output).resolve()
+        if out.exists() and any(out.iterdir()):
+            raise AssuranceError(
+                f"certification output directory must be empty to prevent stale evidence contamination: {out}"
+            )
+        cert = build_certificate(args.manifest, out)
     except (AssuranceError, OSError, json.JSONDecodeError) as e:
         print(f"REJECT: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -156,7 +160,6 @@ def cmd_verify_bundle(args):
     receipt_path = getattr(args, "receipt", None)
     if receipt_path:
         receipt = dict(result)
-        receipt["verified_at"] = datetime.now(timezone.utc).isoformat()
         out = Path(receipt_path)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
