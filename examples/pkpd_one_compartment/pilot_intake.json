@@ -1,0 +1,27 @@
+{
+  "intake_format": "pcs-pilot-intake-v1",
+  "pilot_id": "PCS-DEMO-PKPD-001",
+  "workflow_summary": "Synthetic one-compartment IV-bolus PK with direct Emax PD; verify restricted model contract and analytic replay only.",
+  "claims": [
+    {
+      "id": "C_PK_CONTRACT",
+      "statement": "The PK model artifact satisfies the restricted positivity and dimensional contract.",
+      "desired_assurance": "computational",
+      "rationale": "The pilot should establish the representation/unit/positivity contract before output replay."
+    },
+    {
+      "id": "C_PK_REPLAY",
+      "statement": "The prediction artifact matches the declared analytic one-compartment IV-bolus PK and direct Emax PD model within the stated numeric tolerance.",
+      "desired_assurance": "computational",
+      "rationale": "The reviewer wants independent equation replay against the delivered output artifact."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A_PK_MODEL",
+      "statement": "The restricted one-compartment IV-bolus equation is the declared computational model; no claim of biological adequacy is made."
+    }
+  ],
+  "data_classification": "synthetic",
+  "notes": "Reference intake for demonstrating pre-result claim freezing. No biological, clinical, regulatory, or model-adequacy claim is requested."
+}
