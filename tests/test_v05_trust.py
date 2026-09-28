@@ -75,3 +75,24 @@ def test_bundle_refuses_accidental_private_key_material():
         else:
             raise AssertionError("expected BundleSafetyError")
         assert not (root/"unsafe.zip").exists()
+
+
+def test_verifier_separates_replay_integrity_authenticity_and_policy():
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td); _,_,pub,keys,_,bundle=_signed_attestation(root)
+
+        without_key=verify_bundle(bundle)
+        assert without_key["valid"]
+        assert without_key["assurance_dimensions"]["scientific_replay"]=="PASS"
+        assert without_key["assurance_dimensions"]["package_integrity"]=="PASS"
+        assert without_key["assurance_dimensions"]["signer_authenticity"]=="PRESENT_NOT_VERIFIED"
+        assert without_key["assurance_dimensions"]["reviewer_policy"]=="NOT_APPLIED"
+
+        with_key=verify_bundle(
+            bundle,
+            public_key=pub,
+            require_signature=True,
+            expected_signer_fingerprint=keys["fingerprint"],
+        )
+        assert with_key["valid"]
+        assert with_key["assurance_dimensions"]["signer_authenticity"]=="VERIFIED"
