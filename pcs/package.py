@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey,
 
 from .hashing import canonical_json_bytes, sha256_file
 from .signing import _load_private, _load_public, public_key_fingerprint
+from .schema_validation import validate_package_manifest_shape, SchemaValidationError
 
 PACKAGE_FORMAT = "pcs-package-v1"
 PACKAGE_SIGNATURE_FORMAT = "pcs-package-ed25519-v1"
@@ -42,6 +43,10 @@ def build_package_manifest(root: str | Path, output_path: str | Path | None = No
         "certificate_integrity_hash": cert.get("integrity_hash"),
         "files": entries,
     }
+    try:
+        validate_package_manifest_shape(manifest)
+    except SchemaValidationError as exc:
+        raise PackageError(str(exc)) from exc
     out = Path(output_path).resolve() if output_path else root / "package_manifest.json"
     out.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
     return manifest
@@ -57,6 +62,10 @@ def verify_package_manifest(root: str | Path, manifest_path: str | Path | None =
         manifest = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
         return {"valid": False, "errors": [f"invalid package manifest: {type(e).__name__}: {e}"]}
+    try:
+        validate_package_manifest_shape(manifest)
+    except SchemaValidationError as exc:
+        errors.append(str(exc))
     if manifest.get("package_format") != PACKAGE_FORMAT:
         errors.append("unsupported package manifest format")
     files = manifest.get("files")
@@ -108,6 +117,10 @@ def verify_package_manifest(root: str | Path, manifest_path: str | Path | None =
 
 def sign_package_manifest(manifest_path: str | Path, private_key_path: str | Path, output_path: str | Path) -> dict:
     manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    try:
+        validate_package_manifest_shape(manifest)
+    except SchemaValidationError as exc:
+        raise PackageError(str(exc)) from exc
     if manifest.get("package_format") != PACKAGE_FORMAT:
         raise PackageError("refusing to sign unsupported package manifest")
     key = _load_private(private_key_path)
