@@ -6,8 +6,8 @@ This file is the authoritative distinction between **repository inventory** and 
 
 As of 2026-09-28 after ZIP namespace hardening:
 
-- 66 Python test functions are present under `tests/`.
-- 23 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
+- 86 Python test functions are present under `tests/`.
+- 25 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
 - Lean sources target Lean 4.16.0 and contain no intentionally admitted `sorry` proofs.
 
 Inventory counts are not execution results.
@@ -58,3 +58,7 @@ Do not promote the inventory counts into PASS claims until one environment execu
 5. `lake build` for the Lean kernel.
 
 When that happens, record the commit SHA, environment identity, commands, exit codes, and resulting counts here.
+
+### Added since the last full retained execution
+
+The current inventory additionally covers executable JSON Schema drift, duplicate-JSON parser differentials, pre-result pilot claim/assumption freezing, final delivered-bundle self-verification, signing-key overwrite/path safety, and additional cross-platform ZIP namespace attacks. These remain inventory until executed together from one commit.
