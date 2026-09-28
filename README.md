@@ -35,8 +35,8 @@ The executable reference kernel can:
 - pin an expected signer identity by public-key fingerprint;
 - evaluate reviewer-supplied acceptance policies that remain external to producer bundles;
 - create deterministic evidence ZIPs;
-- safely unpack and independently verify evidence ZIPs with path-traversal and size limits;
-- enforce claim-status gates in CI;
+- safely unpack and independently verify evidence ZIPs with path-traversal, namespace-collision, portability, and size limits;
+- emit reviewer verification receipts binding exact bundle/policy bytes and assurance dimensions;\n- enforce claim-status gates in CI;
 - scaffold a bounded PK/PD pilot project;
 - perform an environment/reference self-check;
 - generate a complete evidence package, HTML report, optional signature, and deterministic ZIP with one command;
@@ -80,7 +80,8 @@ pcs verify-bundle pilot-evidence.zip \
   --public-key signing-public.pem \
   --require-signature \
   --expected-signer-fingerprint <trusted-fingerprint> \
-  --policy policies/pkpd_design_partner.example.json
+  --policy policies/pkpd_design_partner.example.json \
+  --receipt verification-receipt.json
 ```
 
 The reviewer can also run:
