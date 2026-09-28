@@ -1,69 +1,70 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Proof-Carrying Science</title>
-<meta name="description" content="Independent, replayable assurance for critical scientific computation.">
-<style>
-:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #111827; background: #f8fafc; }
-* { box-sizing: border-box; }
-body { margin: 0; }
-main { max-width: 980px; margin: 0 auto; padding: 72px 24px 96px; }
-.badge { display: inline-block; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 999px; font-size: 13px; background: white; }
-h1 { font-size: clamp(42px, 7vw, 72px); line-height: .98; letter-spacing: -0.045em; margin: 24px 0; max-width: 900px; }
-.lede { font-size: 21px; line-height: 1.55; color: #475569; max-width: 790px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 16px; margin: 48px 0; }
-.card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; }
-.card h2 { font-size: 17px; margin-top: 0; }
-.card p { color: #64748b; line-height: 1.5; }
-section { margin-top: 64px; }
-h2 { font-size: 30px; letter-spacing: -.02em; }
-.flow { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:24px; }
-.step { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; }
-.step strong { display:block; margin-bottom:6px; }
-.step span { color:#64748b; font-size:14px; line-height:1.45; }
-.note { border-left: 4px solid #64748b; padding: 4px 0 4px 18px; color: #475569; }
-footer { margin-top: 72px; color: #64748b; font-size: 14px; }
-</style>
+<meta name="description" content="Independently verifiable assurance infrastructure for critical scientific computation.">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body><main>
-<span class="badge">Private design-partner alpha</span>
-<h1>Make critical scientific computation independently verifiable.</h1>
-<p class="lede">Proof-Carrying Science turns a bounded computational workflow into a replayable evidence package: exact artifacts, explicit assumptions, checks or proofs, runtime provenance, signer identity, reviewer policy, and what remains unresolved.</p>
+<body>
+<div class="shell">
+<nav>
+  <a class="brand" href="index.html"><span class="mark">PCS</span>Proof-Carrying Science</a>
+  <div class="navlinks"><a href="#how">How it works</a><a href="#focus">Initial focus</a><a href="#research">Research</a><a class="button secondary" href="demo.html">Interactive demo</a></div>
+</nav>
+<main>
+<section class="hero">
+  <div class="eyebrow">Private design-partner alpha</div>
+  <h1>Evidence that travels with the computation.</h1>
+  <p class="lede">Proof-Carrying Science turns consequential computational claims into replayable, signed evidence packages: exact artifacts, explicit assumptions, machine-checkable obligations, runtime provenance, reviewer policy, and unresolved limits.</p>
+  <div class="actions"><a class="button primary" href="demo.html">Open the product demo →</a><a class="button secondary" href="#how">See the architecture</a></div>
+  <div class="trustbar">
+    <div class="trustcell"><strong>Scientific replay</strong><span>Did supported checks independently rerun?</span></div>
+    <div class="trustcell"><strong>Package integrity</strong><span>Are the delivered bytes exactly the reviewed bytes?</span></div>
+    <div class="trustcell"><strong>Signer authenticity</strong><span>Did the expected organization issue this package?</span></div>
+    <div class="trustcell"><strong>Reviewer policy</strong><span>Does it meet criteria the reviewer chose?</span></div>
+  </div>
+</section>
 
-<div class="grid">
-  <div class="card"><h2>Scoped claims</h2><p>Consequential assertions are represented explicitly, with named assumptions and machine-readable predicates where supported.</p></div>
-  <div class="card"><h2>Replayable evidence</h2><p>The verifier reruns supported checks from packaged artifacts instead of trusting a producer-recorded PASS value.</p></div>
-  <div class="card"><h2>Authenticated handoff</h2><p>A signed package manifest binds the certificate, human-readable report, limitations, runtime provenance, and delivered artifacts.</p></div>
-  <div class="card"><h2>Reviewer-controlled acceptance</h2><p>The producer does not choose the final acceptance threshold. Reviewers can supply an external policy and pin the expected signer fingerprint.</p></div>
+<section class="section" id="how">
+  <div class="eyebrow">How PCS works</div><h2>The producer is not the trust boundary.</h2>
+  <p class="section-intro">PCS separates evidence generation from evidence acceptance. Complex workflows may produce evidence; a smaller checker replays and binds that evidence to the scoped claim it is supposed to support.</p>
+  <div class="pipeline">
+    <div class="pipe"><small>01</small><strong>Declare</strong><p>Claims, assumptions, workflow boundary, and reviewer expectations.</p></div>
+    <div class="pipe"><small>02</small><strong>Bind</strong><p>Content-address data, code, model files, outputs, and runtime provenance.</p></div>
+    <div class="pipe"><small>03</small><strong>Check</strong><p>Replay supported tests or independently check proof artifacts.</p></div>
+    <div class="pipe"><small>04</small><strong>Sign</strong><p>Bind certificate, report, limitations, and artifacts into one authenticated package.</p></div>
+    <div class="pipe"><small>05</small><strong>Review</strong><p>Apply an external acceptance policy chosen by the receiving organization.</p></div>
+  </div>
+</section>
+
+<section class="section" id="focus">
+  <div class="eyebrow">Initial commercial wedge</div><h2>Computational biopharma first.</h2>
+  <p class="section-intro">The first restricted adapter targets a bounded one-compartment IV-bolus PK model with a direct Emax PD layer. The near-term product is a fixed-scope assurance pilot around an existing workflow—not a claim to verify all pharmacometrics.</p>
+  <div class="grid3">
+    <div class="card"><div class="num">A</div><h3>Model contract</h3><p>Check positivity, dimensions, units, and declared representation constraints.</p></div>
+    <div class="card"><div class="num">B</div><h3>Independent replay</h3><p>Recompute the declared analytic equations from packaged parameters and compare exported outputs under explicit tolerances.</p></div>
+    <div class="card"><div class="num">C</div><h3>Auditable handoff</h3><p>Deliver a deterministic bundle with hashes, runtime provenance, signed limitations, and reviewer-controlled acceptance.</p></div>
+  </div>
+  <div class="callout"><div><strong>See what happens when a result is tampered with.</strong><p>The interactive demo separates scientific replay failure from package authentication and reviewer acceptance.</p></div><a class="button secondary" href="demo.html">Run demo</a></div>
+</section>
+
+<section class="section" id="research">
+  <div class="eyebrow">Research program</div><h2>From reproducibility to proof-carrying science.</h2>
+  <p class="section-intro">The formal target is <strong>Γ ; E ⊢ C @ L</strong>: under explicit assumptions Γ, evidence E supports scoped claim C at assurance class L. Formal correctness, finite computation, empirical validation, and provenance remain distinct evidence classes.</p>
+  <div class="grid3">
+    <div class="card"><div class="num">01</div><h3>Open trust root</h3><p>The checker, certificate format, and foundational semantics are intended to remain independently inspectable.</p></div>
+    <div class="card"><div class="num">02</div><h3>Domain packs</h3><p>Biopharma first; later chemistry, biology, AI, devices, engineering, and other high-consequence computation.</p></div>
+    <div class="card"><div class="num">03</div><h3>Research financed by product</h3><p>Commercial deployment, integration, governance, and assurance engineering can fund openly publishable foundational research.</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>What a PCS certificate does not mean.</h2>
+  <p class="disclaimer">A passing computational certificate does not establish that a biological model is adequate for a drug, that a therapy is safe or effective, that a workflow is regulator-approved or GxP validated, or that unsupported arbitrary code is correct. PCS is designed to make those boundaries explicit rather than blur them.</p>
+</section>
+</main>
+<footer>Proof-Carrying Science · Private research and engineering preview · Current executable replay checker: Python · Lean assurance kernel: active machine-checking work.</footer>
 </div>
-
-<section>
-<h2>Four questions, kept separate</h2>
-<div class="flow">
-  <div class="step"><strong>Did the evidence replay?</strong><span>Scientific/computational replay status.</span></div>
-  <div class="step"><strong>Is the package intact?</strong><span>All delivered files match the bound package manifest.</span></div>
-  <div class="step"><strong>Who issued it?</strong><span>Signer authenticity is verified only against a trusted public key.</span></div>
-  <div class="step"><strong>Does the reviewer accept it?</strong><span>An external policy decides whether the scoped result is acceptable for its context.</span></div>
-</div>
-</section>
-
-<section>
-<h2>Initial focus: computational biopharma</h2>
-<p class="lede">The first restricted adapter covers one-compartment IV-bolus PK with a direct Emax PD layer, dimensional contracts, provenance, and independent equation replay. The near-term product is a fixed-scope assurance pilot around a workflow the customer already cares about—not a claim to verify all of pharmacometrics.</p>
-</section>
-
-<section>
-<h2>Design-partner pilot</h2>
-<p class="lede">A partner supplies one bounded workflow and 3–10 reviewer-defined claims. PCS returns a signed evidence package that an independent reviewer can replay from scratch, plus an explicit limitations statement and runtime provenance.</p>
-</section>
-
-<section>
-<h2>What a PCS certificate does not mean</h2>
-<p class="note">A passing computational certificate does not establish that a biological model is adequate for a drug, that a therapy is safe or effective, that a workflow is regulator-approved or GxP validated, or that unsupported arbitrary code is correct.</p>
-</section>
-
-<footer>Proof-Carrying Science — private research and engineering preview. The current executable replay checker is Python. The Lean assurance kernel and Python-to-Lean refinement are active research work and are not described as machine-checked until a real Lean build succeeds.</footer>
-</main></body>
+</body>
 </html>
