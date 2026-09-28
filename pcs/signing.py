@@ -84,9 +84,15 @@ def sign_certificate(certificate_path: str | Path, private_key_path: str | Path,
 
 
 def verify_signature(certificate_path: str | Path, signature_path: str | Path, public_key_path: str | Path) -> dict:
-    cert = json.loads(Path(certificate_path).read_text(encoding="utf-8"))
-    record = strict_json_load(signature_path)
-    expected_payload = signature_payload(cert)
+    try:
+        cert = strict_json_load(certificate_path)
+        record = strict_json_load(signature_path)
+    except StrictJSONError as exc:
+        return {"valid": False, "errors": [str(exc)], "public_key_fingerprint": None}
+    try:
+        expected_payload = signature_payload(cert)
+    except SignatureError as exc:
+        return {"valid": False, "errors": [str(exc)], "public_key_fingerprint": record.get("public_key_fingerprint")}
     errors: list[str] = []
     if record.get("signature_format") != "pcs-ed25519-v1":
         errors.append("unsupported signature format")
