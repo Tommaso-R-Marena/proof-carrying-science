@@ -89,15 +89,29 @@ def load_lock(path: str | Path) -> dict[str, Any]:
 def assert_lock_matches_certificate(lock: dict[str, Any], certificate: dict[str, Any]) -> None:
     lock = validate_lock(lock)
     intake = lock["intake"]
-    locked_claims = {str(c["id"]) for c in intake.get("claims", [])}
-    cert_claims = {str(c.get("id")) for c in certificate.get("claims", [])}
-    if locked_claims != cert_claims:
+
+    locked_claims = {str(c["id"]): c for c in intake.get("claims", [])}
+    cert_claims = {str(c.get("id")): c for c in certificate.get("claims", [])}
+    if set(locked_claims) != set(cert_claims):
         raise PilotIntakeError(
             f"certificate claim IDs differ from frozen intake: locked={sorted(locked_claims)} certificate={sorted(cert_claims)}"
         )
-    locked_assumptions = {str(a["id"]) for a in intake.get("assumptions", [])}
-    cert_assumptions = {str(a.get("id")) for a in certificate.get("assumptions", [])}
-    if locked_assumptions != cert_assumptions:
+    for cid, locked in locked_claims.items():
+        cert = cert_claims[cid]
+        if cert.get("statement") != locked.get("statement"):
+            raise PilotIntakeError(f"certificate claim statement changed after intake freeze: {cid}")
+        if cert.get("kind") != locked.get("desired_assurance"):
+            raise PilotIntakeError(
+                f"certificate claim assurance class changed after intake freeze: {cid} "
+                f"locked={locked.get('desired_assurance')} certificate={cert.get('kind')}"
+            )
+
+    locked_assumptions = {str(a["id"]): a for a in intake.get("assumptions", [])}
+    cert_assumptions = {str(a.get("id")): a for a in certificate.get("assumptions", [])}
+    if set(locked_assumptions) != set(cert_assumptions):
         raise PilotIntakeError(
             f"certificate assumption IDs differ from frozen intake: locked={sorted(locked_assumptions)} certificate={sorted(cert_assumptions)}"
         )
+    for aid, locked in locked_assumptions.items():
+        if cert_assumptions[aid].get("statement") != locked.get("statement"):
+            raise PilotIntakeError(f"certificate assumption statement changed after intake freeze: {aid}")
