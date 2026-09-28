@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Pilot Intake Lock v1",
+  "type": "object",
+  "required": ["lock_format","frozen_at","intake_semantic_hash","intake"],
+  "properties": {
+    "lock_format":{"const":"pcs-pilot-intake-lock-v1"},
+    "frozen_at":{"type":"string","format":"date-time"},
+    "intake_semantic_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},
+    "intake":{"$ref":"pilot_intake.schema.json"}
+  },
+  "additionalProperties":false
+}
