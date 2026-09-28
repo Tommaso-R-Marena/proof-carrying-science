@@ -6,6 +6,7 @@ from pathlib import Path
 from .bundle import create_reproducible_bundle
 from .environment import write_environment
 from .kernel import build_certificate, verify_certificate
+from .limitations import write_limitations
 from .package import build_package_manifest, sign_package_manifest
 from .report import write_html
 from .signing import sign_certificate
@@ -31,6 +32,7 @@ def attest(
     if not verification["valid"]:
         raise AttestationError(f"certificate failed independent replay: {verification['errors']}")
     report_path = write_html(cert, out / "report.html")
+    limitations_path = write_limitations(cert, out / "LIMITATIONS.md")
 
     # Runtime provenance is signed as part of the delivered package. It is evidence
     # about reproducibility context, not proof that the scientific claims are true.
@@ -57,6 +59,7 @@ def attest(
         "integrity_hash": cert["integrity_hash"],
         "claim_statuses": verification["claim_statuses"],
         "report": str(report_path),
+        "limitations": str(limitations_path),
         "runtime": str(out / "runtime.json"),
         "runtime_semantic_hash": runtime["semantic_hash"],
         "signed": certificate_signature is not None,
