@@ -28,6 +28,11 @@ def attest(
     bundle_path: str | Path | None = None,
     intake_lock: str | Path | None = None,
 ) -> dict[str, object]:
+    if (private_key is None) != (public_key is None):
+        raise AttestationError(
+            "signed attestation requires both private_key and public_key so the delivered bundle can be immediately self-verified"
+        )
+
     out = Path(output_dir).resolve()
     if out.exists():
         if not out.is_dir():
@@ -79,10 +84,7 @@ def attest(
     package_signature = None
     if private_key is not None:
         certificate_signature = sign_certificate(cert_path, private_key, out / "signature.json")
-        if public_key is not None:
-            shutil.copyfile(public_key, out / "signer-public.pem")
-    elif public_key is not None:
-        raise AttestationError("public_key was provided without private_key")
+        shutil.copyfile(public_key, out / "signer-public.pem")
 
     package_manifest = build_package_manifest(out)
     if private_key is not None:
