@@ -201,3 +201,39 @@ def test_verification_receipt_binds_exact_bundle_and_policy():
         assert record["assurance_dimensions"]["signer_authenticity"]=="VERIFIED"
         assert record["assurance_dimensions"]["reviewer_policy"]=="PASS"
         assert record["verified_at"]
+
+
+def test_bundle_private_key_scan_covers_beyond_prefix():
+    from pcs.bundle import create_reproducible_bundle, BundleSafetyError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        evidence=root/"evidence"
+        evidence.mkdir()
+        (evidence/"certificate.json").write_text("{}")
+        (evidence/"late-key.bin").write_bytes(
+            b"x"*16384 + b"-----BEGIN PRIVATE KEY-----\nforbidden"
+        )
+        try:
+            create_reproducible_bundle(evidence/"certificate.json",root/"unsafe.zip")
+        except BundleSafetyError as exc:
+            assert "private-key material" in str(exc)
+        else:
+            raise AssertionError("private-key marker beyond old prefix should be rejected")
+
+
+def test_bundle_creator_enforces_same_single_file_limit(monkeypatch):
+    import pcs.bundle as bundle_module
+    from pcs.bundle import create_reproducible_bundle, BundleSafetyError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        evidence=root/"evidence"
+        evidence.mkdir()
+        (evidence/"certificate.json").write_text("{}")
+        (evidence/"large.bin").write_bytes(b"01234567890")
+        monkeypatch.setattr(bundle_module,"MAX_BUNDLE_SINGLE_FILE",10)
+        try:
+            create_reproducible_bundle(evidence/"certificate.json",root/"too-large.zip")
+        except BundleSafetyError as exc:
+            assert "oversized file" in str(exc)
+        else:
+            raise AssertionError("producer should refuse files verifier would reject")
