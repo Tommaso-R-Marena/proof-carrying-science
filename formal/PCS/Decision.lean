@@ -48,4 +48,86 @@ theorem formalEvidenceAccepts_sound
   rcases h with ⟨claimKind, evidenceKind, passed, required, predicate⟩
   exact Assures.formal e member context claimKind evidenceKind passed ⟨required, predicate⟩
 
+/-- Executable whole-claim status. This mirrors the pure Python decision kernel
+    after artifact/evidence replay and semantic binding have already succeeded.
+    It deliberately does not perform scientific checks itself. -/
+inductive DecisionStatus
+  | formal
+  | computational
+  | empirical
+  | mixed
+  | open_
+  | failed
+  deriving DecidableEq, Repr
+
+def requiredEvidenceFor (c : Claim) (es : List Evidence) : List Evidence :=
+  es.filter (fun e => c.requiredEvidence.contains e.id)
+
+def missingRequiredEvidence (c : Claim) (es : List Evidence) : Bool :=
+  c.requiredEvidence.any (fun eid => !(es.any (fun e => e.id == eid)))
+
+def hasOutcome (o : Outcome) (es : List Evidence) : Bool :=
+  es.any (fun e => e.outcome == o)
+
+def hasKind (k : EvidenceKind) (es : List Evidence) : Bool :=
+  es.any (fun e => e.kind == k)
+
+def allKind (k : EvidenceKind) (es : List Evidence) : Bool :=
+  es.all (fun e => e.kind == k)
+
+/-- Pure claim decision corresponding to `pcs.decision.assess_claim`.
+
+    Preconditions for the intended refinement theorem:
+    * evidence IDs are unique;
+    * all listed evidence has already been independently replayed/established;
+    * claim/evidence semantic binding has already been checked;
+    * the explicit assumption context is handled separately by `ContextCovers`.
+
+    The decision is intentionally conservative: unsupported combinations remain OPEN.
+-/
+def decideClaim (c : Claim) (es : List Evidence) : DecisionStatus :=
+  let req := requiredEvidenceFor c es
+  if missingRequiredEvidence c es then
+    DecisionStatus.open_
+  else if hasOutcome Outcome.fail req then
+    DecisionStatus.failed
+  else if hasOutcome Outcome.unverified req then
+    DecisionStatus.open_
+  else if req.isEmpty then
+    DecisionStatus.open_
+  else
+    match c.kind with
+    | ClaimKind.formal =>
+        if allKind EvidenceKind.formalProof req
+        then DecisionStatus.formal
+        else DecisionStatus.open_
+    | ClaimKind.empirical =>
+        if hasKind EvidenceKind.empiricalValidation req ||
+           hasKind EvidenceKind.statisticalValidation req
+        then DecisionStatus.empirical
+        else DecisionStatus.open_
+    | ClaimKind.mixed =>
+        if hasKind EvidenceKind.formalProof req &&
+           (hasKind EvidenceKind.empiricalValidation req ||
+            hasKind EvidenceKind.statisticalValidation req)
+        then DecisionStatus.mixed
+        else DecisionStatus.open_
+    | ClaimKind.computational =>
+        if hasKind EvidenceKind.computationalTest req ||
+           hasKind EvidenceKind.formalProof req
+        then DecisionStatus.computational
+        else DecisionStatus.open_
+
+/-
+Next machine-checked target once the Lean runner is available:
+
+  decideClaim c es = DecisionStatus.<accepted class>
+  ∧ NormalizedEvidence es
+  ∧ ContextCovers Γ c
+  --------------------------------------------------
+  Assures Γ <corresponding AssuranceLevel> c es
+
+This is intentionally a one-way soundness target, not completeness.
+-/
+
 end PCS.Decision
