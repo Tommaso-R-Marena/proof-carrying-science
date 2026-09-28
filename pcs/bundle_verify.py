@@ -18,6 +18,7 @@ from .package import verify_package_manifest, verify_package_signature
 from .policy import evaluate_policy, validate_policy
 from .signing import verify_signature
 from .schema_validation import validate_verification_receipt_shape, SchemaValidationError
+from .jsonio import strict_json_load, strict_json_loads, StrictJSONError
 
 
 class BundleVerificationError(ValueError):
@@ -193,10 +194,10 @@ def verify_bundle(
             policy_result = None
             policy_sha256 = None
             if policy is not None:
-                cert_obj = json.loads(cert.read_text(encoding="utf-8"))
+                cert_obj = strict_json_load(cert)
                 policy_bytes = Path(policy).read_bytes()
                 policy_sha256 = hashlib.sha256(policy_bytes).hexdigest()
-                policy_obj = validate_policy(json.loads(policy_bytes.decode("utf-8")))
+                policy_obj = validate_policy(strict_json_loads(policy_bytes.decode("utf-8")))
                 policy_result = evaluate_policy(
                     cert_obj,
                     policy_obj,
