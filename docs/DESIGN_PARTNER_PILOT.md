@@ -28,7 +28,7 @@ The partner provides one bounded computational workflow and states 3–10 claims
 3. Package inputs by cryptographic hash.
 4. Run/replay the supported checks.
 5. Red-team the certificate and workflow bindings.
-6. Deliver an HTML report, JSON certificate, signed signature record, reproducible evidence ZIP, and limitation statement.
+6. Deliver an HTML report, JSON certificate, signed signature record, reproducible evidence ZIP, and limitation statement.\n7. Ask the independent reviewer to persist a PCS verification receipt that binds the exact bundle and reviewer policy used.
 
 ## Explicit non-goals
 
