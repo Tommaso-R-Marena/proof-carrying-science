@@ -4,7 +4,7 @@
 
 **V0.5 SOURCE ACTIVE; MACHINE-CHECKED STATUS NOT YET ESTABLISHED.**
 
-Target toolchain: `leanprover/lean4:v4.16.0`.
+Target toolchain: `leanprover/lean4:v4.28.0`.
 
 PCS now contains:
 
@@ -64,7 +64,7 @@ Separately, the Python v0.5 candidate was executed in the working environment be
 
 ## Reproduction command
 
-Once Lean 4.16.0 is available:
+Once Lean 4.28.0 is available:
 
 ```bash
 ./scripts/verify_lean.sh
@@ -77,3 +77,8 @@ The command must succeed and the source audit must find no `sorry` before PCS is
 The Lean kernel is an independent synthesis artifact. It contains no CertiForge optimizer semantics, CASMI/QFD algorithms, unpublished biological results, or proof-carrying-agent implementation details. See `PUBLICATION_FIREWALL.md`.
 
 Historical compilation experiments in other private repositories are no longer part of the PCS development path. All current and future PCS formal work belongs in `Tommaso-R-Marena/proof-carrying-science`.
+
+
+## Aristotle compatibility pin
+
+On 2026-09-28, PCS was repinned to `leanprover/lean4:v4.28.0` because the most recent direct public observation located for Aristotle's backend (2026-07-12) reported that submitted projects were rewritten to Lean/Mathlib v4.28.0. This is a compatibility pin, not evidence that PCS compiles. If a new Aristotle output header reports a newer backend default, update the pin and record the observed version before formal verification claims are promoted.
