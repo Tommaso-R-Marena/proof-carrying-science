@@ -22,6 +22,7 @@ First run lake build and repair any elaboration/compatibility errors in the exis
 Then solve every sorry in:
   Aristotle/Normalization.lean
   Aristotle/DecisionExtraction.lean
+  Aristotle/SerializedBridge.lean
 
 Preserve theorem statements unless they are actually ill-typed. If you believe a theorem is false, do not weaken it silently: explain the counterexample or missing precondition and make the smallest semantically justified correction.
 
@@ -73,3 +74,14 @@ The useful handoff is:
 5. `#print axioms` output for the principal soundness theorems if available.
 
 Do not mark the PCS formal kernel machine-checked until the returned project independently builds under the recorded toolchain.
+
+
+## Dependency order
+
+1. Make the clean PCS library compile under Lean 4.28.0.
+2. Solve `Aristotle/Normalization.lean`.
+3. Solve `Aristotle/DecisionExtraction.lean`.
+4. Solve `Aristotle/SerializedBridge.lean` using the previous direct soundness theorems.
+5. Re-run `lake build` and the no-sorry audit.
+
+`PCS.Normalized.DecisionInput` intentionally begins after raw JSON parsing/schema validation/evidence replay. Do not claim a raw-byte-to-Lean theorem merely from the normalized bridge.
