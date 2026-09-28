@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .bundle import create_reproducible_bundle
+from .bundle_verify import verify_bundle
 from .environment import snapshot_environment
 from .kernel import build_certificate, verify_certificate
 from .limitations import write_limitations
@@ -89,6 +90,22 @@ def attest(
 
     bundle_path = Path(bundle_path).resolve() if bundle_path is not None else out.with_suffix(".zip")
     bundle = create_reproducible_bundle(cert_path, bundle_path)
+
+    # Verify the exact delivered archive from scratch after all report/signature/
+    # manifest generation. This closes the gap between pre-bundle replay and the
+    # bytes actually handed to a reviewer.
+    expected_fingerprint = (package_signature or certificate_signature or {}).get("public_key_fingerprint")
+    final_verification = verify_bundle(
+        bundle_path,
+        public_key=public_key,
+        require_signature=bool(private_key is not None and public_key is not None),
+        expected_signer_fingerprint=(expected_fingerprint if public_key is not None else None),
+    )
+    if not final_verification["valid"]:
+        raise AttestationError(
+            f"final delivered bundle failed independent verification: {final_verification['errors']}"
+        )
+
     return {
         "certificate": str(cert_path),
         "semantic_hash": cert["semantic_hash"],
@@ -104,4 +121,5 @@ def attest(
         "public_key_fingerprint": (package_signature or certificate_signature or {}).get("public_key_fingerprint"),
         "package_manifest": package_manifest,
         "bundle": bundle,
+        "final_bundle_verification": final_verification,
     }
