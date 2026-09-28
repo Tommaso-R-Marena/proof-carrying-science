@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Acceptance Policy v1",
+  "type": "object",
+  "required": ["policy_version", "required_claims"],
+  "properties": {
+    "policy_version": {"const": "pcs-acceptance-policy-v1"},
+    "require_signature": {"type": "boolean"},
+    "expected_signer_fingerprint": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "required_claims": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
