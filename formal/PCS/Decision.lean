@@ -25,7 +25,7 @@ theorem computationalEvidenceAccepts_sound
     Assures Γ AssuranceLevel.computational c es := by
   simp [computationalEvidenceAccepts] at h
   rcases h with ⟨claimKind, evidenceKind, passed, required, predicate⟩
-  exact Assures.computational e member context claimKind evidenceKind passed ⟨required, predicate⟩
+  exact Assures.computational e member context claimKind (Or.inl evidenceKind) passed ⟨required, predicate⟩
 
 def formalEvidenceAccepts (c : Claim) (e : Evidence) : Bool :=
   if c.kind = ClaimKind.formal then
