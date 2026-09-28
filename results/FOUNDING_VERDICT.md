@@ -4,8 +4,8 @@
 
 ## Current repository inventory
 
-- 66 Python tests are present.
-- 23 targeted adversarial attacks are encoded.
+- 86 Python tests are present.
+- 25 targeted adversarial attacks are encoded.
 - These inventory counts are **not** promoted to execution claims while hosted runners remain unavailable.
 
 ## Last retained full execution evidence
@@ -37,3 +37,7 @@
 No claim of biological truth, clinical validity, regulatory acceptance, or arbitrary-program correctness is made.
 
 See `results/EXECUTION_LEDGER.md` for the authoritative evidence/inventory distinction.
+
+## New launch hardening in current inventory
+
+Current source now includes executable JSON Schema validation, strict duplicate-key JSON parsing, pre-result pilot claim/assumption locks bound into signed packages, final bundle re-verification before attestation succeeds, safe signing-key generation defaults, and a browser-only pilot intake builder. None of these additions are promoted to executed PASS status until the full current suite runs from one recorded commit.
