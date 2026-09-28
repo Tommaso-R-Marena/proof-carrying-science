@@ -43,7 +43,11 @@ def create_reproducible_bundle(certificate_path: str | Path, output_path: str | 
     root = certificate_path.parent
     output_path = Path(output_path).resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    files = [p for p in root.rglob('*') if p.is_file() and p.resolve() != output_path]
+    staged = list(root.rglob("*"))
+    symlinks = [p.relative_to(root).as_posix() for p in staged if p.is_symlink()]
+    if symlinks:
+        raise BundleSafetyError(f"refusing to bundle staged symlinks: {symlinks}")
+    files = [p for p in staged if p.is_file() and p.resolve() != output_path]
     files.sort(key=lambda p: p.relative_to(root).as_posix())
     if len(files) > MAX_BUNDLE_FILES:
         raise BundleSafetyError(
