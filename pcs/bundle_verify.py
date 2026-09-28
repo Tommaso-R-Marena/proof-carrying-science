@@ -8,6 +8,11 @@ import unicodedata
 from pathlib import Path, PurePosixPath
 
 from .kernel import verify_certificate, CHECKER_VERSION
+from .bundle import (
+    MAX_BUNDLE_FILES,
+    MAX_BUNDLE_TOTAL_UNCOMPRESSED,
+    MAX_BUNDLE_SINGLE_FILE,
+)
 from .package import verify_package_manifest, verify_package_signature
 from .policy import evaluate_policy, validate_policy
 from .signing import verify_signature
@@ -16,10 +21,6 @@ from .signing import verify_signature
 class BundleVerificationError(ValueError):
     pass
 
-
-MAX_FILES = 1000
-MAX_TOTAL_UNCOMPRESSED = 100 * 1024 * 1024
-MAX_SINGLE_FILE = 50 * 1024 * 1024
 
 _WINDOWS_FORBIDDEN = set('<>:"|?*')
 _WINDOWS_RESERVED = {
@@ -122,18 +123,18 @@ def verify_bundle(
     errors: list[str] = []
     with zipfile.ZipFile(bundle_path, "r") as zf:
         infos = zf.infolist()
-        if len(infos) > MAX_FILES:
-            raise BundleVerificationError(f"bundle has too many files: {len(infos)} > {MAX_FILES}")
+        if len(infos) > MAX_BUNDLE_FILES:
+            raise BundleVerificationError(f"bundle has too many files: {len(infos)} > {MAX_BUNDLE_FILES}")
         names = _validate_zip_namespace(infos)
         total = 0
         for info in infos:
             mode = (info.external_attr >> 16) & 0o170000
             if mode == 0o120000:
                 raise BundleVerificationError(f"symlink ZIP member not allowed: {info.filename!r}")
-            if info.file_size > MAX_SINGLE_FILE:
+            if info.file_size > MAX_BUNDLE_SINGLE_FILE:
                 raise BundleVerificationError(f"bundle member too large: {info.filename!r}")
             total += info.file_size
-            if total > MAX_TOTAL_UNCOMPRESSED:
+            if total > MAX_BUNDLE_TOTAL_UNCOMPRESSED:
                 raise BundleVerificationError("bundle exceeds uncompressed size limit")
         if "certificate.json" not in names:
             raise BundleVerificationError("bundle lacks certificate.json at package root")
