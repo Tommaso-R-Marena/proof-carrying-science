@@ -9,13 +9,14 @@ from .hashing import sha256_file
 from .impact import impact_from_artifacts
 from .report import write_html
 from .signing import generate_keypair, sign_certificate, verify_signature, SignatureError
-from .bundle import create_reproducible_bundle
+from .bundle import create_reproducible_bundle, BundleSafetyError
 from .bundle_verify import verify_bundle, BundleVerificationError
 from .diffing import diff_certificates
 from .scaffold import init_project, ScaffoldError
 from .doctor import doctor
 from .attest import attest, AttestationError
 from .policy import load_policy, evaluate_policy_file, PolicyError
+from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 
 
@@ -128,8 +129,9 @@ def cmd_bundle(args):
             print(json.dumps(integrity, indent=2, sort_keys=True), file=sys.stderr)
             print("REJECT: refusing to bundle an invalid certificate", file=sys.stderr)
             return 2
+        build_package_manifest(Path(args.certificate).resolve().parent)
         result = create_reproducible_bundle(args.certificate, args.output)
-    except (OSError, json.JSONDecodeError, AssuranceError) as e:
+    except (OSError, json.JSONDecodeError, AssuranceError, PackageError, BundleSafetyError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
