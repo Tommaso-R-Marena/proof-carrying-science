@@ -1,7 +1,18 @@
 {
   "campaign": "pcs-v0.5-foundational-attacks",
-  "attacks": 17,
-  "rejected": 17,
-  "false_accepts": 0,
-  "note": "A finite adversarial campaign is not a security proof. Private-key bundle refusal is now included."
+  "encoded_attacks": 17,
+  "last_full_execution": {
+    "attacks": 16,
+    "rejected": 16,
+    "false_accepts": 0,
+    "status": "PASS"
+  },
+  "added_since_last_full_execution": [
+    {
+      "attack": "private_key_material_accidentally_staged_for_bundle",
+      "guard_check": "PASS",
+      "full_campaign_rerun": "PENDING_CI"
+    }
+  ],
+  "note": "A finite adversarial campaign is not a security proof. Do not report 17/17 until the full updated campaign executes."
 }
