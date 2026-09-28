@@ -3,9 +3,12 @@ import json
 import tempfile
 import zipfile
 from pathlib import Path
+from types import SimpleNamespace
 
 from pcs.attest import attest
 from pcs.bundle_verify import verify_bundle
+from pcs.cli import cmd_verify_bundle
+from pcs.hashing import sha256_file
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
 
@@ -165,3 +168,36 @@ def test_verifier_rejects_windows_reserved_zip_member():
             assert "Windows-reserved" in str(exc)
         else:
             raise AssertionError("Windows-reserved ZIP filename should be rejected")
+
+
+def test_verification_receipt_binds_exact_bundle_and_policy():
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        _,_,pub,keys,_,bundle=_signed_attestation(root)
+        policy=root/"reviewer-policy.json"
+        policy.write_text(json.dumps({
+            "policy_version":"pcs-acceptance-policy-v1",
+            "require_signature":True,
+            "expected_signer_fingerprint":keys["fingerprint"],
+            "required_claims":{
+                "C_PKPD_CONTRACT":["COMPUTATIONALLY_SUPPORTED"],
+                "C_PKPD_REPLAY":["COMPUTATIONALLY_SUPPORTED"]
+            }
+        },sort_keys=True))
+        receipt=root/"verification-receipt.json"
+        rc=cmd_verify_bundle(SimpleNamespace(
+            bundle=str(bundle),
+            public_key=str(pub),
+            require_signature=True,
+            expected_signer_fingerprint=keys["fingerprint"],
+            policy=str(policy),
+            receipt=str(receipt),
+        ))
+        assert rc==0
+        record=json.loads(receipt.read_text(encoding="utf-8"))
+        assert record["verification_receipt_format"]=="pcs-bundle-verification-v1"
+        assert record["bundle_sha256"]==sha256_file(bundle)
+        assert record["verification_inputs"]["policy_sha256"]==sha256_file(policy)
+        assert record["assurance_dimensions"]["signer_authenticity"]=="VERIFIED"
+        assert record["assurance_dimensions"]["reviewer_policy"]=="PASS"
+        assert record["verified_at"]
