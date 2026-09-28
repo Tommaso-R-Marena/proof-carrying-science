@@ -42,7 +42,7 @@ The executable reference kernel can:
 - generate a complete evidence package, HTML report, optional signature, and deterministic ZIP with one command;
 - validate and replay a restricted one-compartment IV-bolus PK + direct-Emax PD workflow.
 
-The repository also contains a Lean 4.16 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
+The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
 
 ## Fastest design-partner workflow
 
@@ -91,6 +91,33 @@ pcs inspect pilot-evidence/certificate.json
 pcs impact pilot-evidence/certificate.json --artifact pkpd_model
 pcs diff previous/certificate.json pilot-evidence/certificate.json
 ```
+
+
+## Launch preview
+
+A static launch-preview website and browser demo live under `site/`.
+
+Preview locally:
+
+```bash
+python -m http.server 8000 --directory site
+```
+
+Then open `http://localhost:8000/` and `http://localhost:8000/demo.html`.
+
+For the actual product path rather than the browser visualization:
+
+```bash
+python scripts/run_reference_demo.py --output demo-run
+```
+
+This creates and verifies a signed synthetic PK/PD evidence bundle using an external reviewer policy.
+
+## Aristotle / Lean handoff
+
+The formal project is currently pinned to `leanprover/lean4:v4.28.0`, matching the most recent directly observed Aristotle backend default found during the 2026-09-28 compatibility audit. Aristotle-specific unfinished obligations are isolated under `formal/Aristotle/`; they are not imported into the no-placeholder core until solved and compiled.
+
+See `formal/ARISTOTLE_PROJECT_PROMPT.md` for the ready-to-run project prompt.
 
 ## Initial assurance checks
 
@@ -150,7 +177,7 @@ Today, the Python checker is part of the TCB. The research program is to shrink 
 
 ## Current limitations
 
-- Lean source exists but a successful Lean 4.16 build is still open.
+- Lean source exists but a successful Lean 4.28 build is still open.
 - No arbitrary Python/R/C++ correctness theorem is claimed.
 - The PK/PD adapter is intentionally restricted and synthetic-first.
 - Chemical parsing is intentionally narrow.
