@@ -2,36 +2,65 @@
 
 ## Current verdict
 
-**SOURCE COMPLETE FOR V0.2; MACHINE-CHECKED STATUS NOT YET ESTABLISHED.**
+**V0.5 SOURCE ACTIVE; MACHINE-CHECKED STATUS NOT YET ESTABLISHED.**
 
 Target toolchain: `leanprover/lean4:v4.16.0`.
 
-The repository contains a small Lean assurance kernel defining typed claims, assumptions, evidence classes, outcomes, machine-readable predicates, explicit claim/evidence binding, and the indexed judgment `Assures Γ L C E`, representing `Γ ; E ⊢ C @ L`. The central design rule is that assurance constructors carry successful evidence explicitly rather than accepting a user-supplied status label.
+PCS now contains:
 
-Theorem targets currently encoded include:
+- the indexed assurance judgment `Assures Γ L C E`, representing `Γ ; E ⊢ C @ L`;
+- typed claims, assumptions, evidence classes, outcomes, and machine-readable predicates;
+- explicit claim/evidence binding;
+- single-evidence computational/formal admission functions with source-level soundness proofs;
+- an executable whole-claim `decideClaim` function mirroring the pure Python decision kernel after evidence replay;
+- restricted PK/PD dimensional contracts.
 
-- the explicit assumption context covers every assumption ID declared by an assured claim;
+The Python side now freezes cross-language decision cases in `tests/decision_vectors.json`. See `PYTHON_LEAN_REFINEMENT.md`.
+
+## Already encoded theorem/source targets
+
+The source currently states or targets:
+
+- explicit assumption-context coverage;
 - formal assurance contains passing formal-proof evidence;
-- computational assurance is bound to the claim's machine-readable predicate;
-- computational assurance cannot be constructed from unverified evidence;
+- computational assurance is predicate-bound;
+- unverified evidence cannot establish computational assurance;
 - empirical assurance requires empirical/statistical evidence;
-- mixed assurance requires both formal and empirical classes;
+- mixed assurance requires formal plus empirical/statistical evidence;
 - canonical one-compartment IV PK units are dimensionally valid;
-- canonical direct-Emax PD units are dimensionally valid.
+- canonical direct-Emax PD units are dimensionally valid;
+- Boolean single-evidence admission refines to the logical `Assures` judgment.
 
-`PCS.PKPD` intentionally formalizes the **representation/unit contract**, not the real-exponential PK equation or empirical drug adequacy. Numeric equation replay currently lives in the independently rerun Python adapter. Formalizing the analytic equation, code generation, and numerical error bounds is a later refinement.
+The next main theorem is whole-claim one-way soundness:
 
-## Compilation attempts on 2026-09-28
+```text
+decideClaim c es = accepted(L)
+∧ NormalizedEvidence es
+∧ ContextCovers Γ c
+---------------------------------
+Γ ; es ⊢ c @ L
+```
 
-The current local execution environment has no `lean`, `lake`, or `elan`, and outbound installation is unavailable. To avoid touching the publication line, a private, non-merged branch of the existing private CertiForge repository was used only as an isolated compilation harness:
+This is intentionally a soundness target, not completeness.
 
-`pcs-kernel-compile-2026-09-28`
+## What is still not proved
 
-The harness targets Lean 4.16.0, matching CertiForge's existing toolchain, invokes `lake build`, and rejects any occurrence of `sorry` in the PCS sources.
+The current source does **not** yet establish:
 
-GitHub Actions did **not** reach the Lean build step. The latest diagnostic job completed with `runner_id = 0`, an empty runner name, and `steps = []`. Therefore these failed runs are runner/provisioning failures and provide neither positive nor negative evidence about Lean source correctness.
+- a machine-checked successful Lean build;
+- whole-claim decision soundness for all accepted classes;
+- serialization/decoding refinement from PCS JSON into Lean datatypes;
+- Python implementation refinement to the Lean decision function;
+- formal real-analysis semantics of the PK exponential/Emax equations;
+- empirical adequacy of any PK/PD model.
 
-No claim that this kernel is machine checked should be made until a real Lean process returns `lake build` success and the no-`sorry` audit passes.
+## Standalone CI status
+
+The standalone repository now contains a dedicated Lean CI job using `leanprover/lean-action@v1`, plus a no-`sorry` source gate.
+
+As of September 28, 2026, GitHub Actions jobs for this repository are completing with no exposed execution steps; the latest inspected job had an empty step list. The same symptom affected a trivial smoke workflow. This is consistent with runner/provisioning failure before repository commands execute, so it provides neither positive nor negative evidence about the Lean source or Python tests.
+
+Separately, the Python v0.5 candidate was executed in the working environment before repository migration: 44/44 tests passed, and the frozen v0.5 targeted adversarial campaign rejected 16/16 attacks with 0 false accepts in that finite campaign. A finite campaign is not a security proof.
 
 ## Reproduction command
 
@@ -41,10 +70,10 @@ Once Lean 4.16.0 is available:
 ./scripts/verify_lean.sh
 ```
 
-The script fails if Lean/Lake are absent, if `lake build` fails, or if `sorry` appears in the formal sources.
+The command must succeed and the source audit must find no `sorry` before PCS is described as machine checked.
 
 ## Publication boundary
 
 The Lean kernel is an independent synthesis artifact. It contains no CertiForge optimizer semantics, CASMI/QFD algorithms, unpublished biological results, or proof-carrying-agent implementation details. See `PUBLICATION_FIREWALL.md`.
 
-A direct attempt to bootstrap the official Lean 4.16.0 Linux release in the current sandbox also failed at the environment/download boundary before the toolchain was installed; this does not provide evidence for or against source correctness.
+Historical compilation experiments in other private repositories are no longer part of the PCS development path. All current and future PCS formal work belongs in `Tommaso-R-Marena/proof-carrying-science`.
