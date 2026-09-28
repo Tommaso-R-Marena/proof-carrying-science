@@ -231,6 +231,38 @@ def campaign() -> dict:
             return False,"non-empty attestation output directory was accepted"
     run("stale_attestation_output_contamination",stale_output_contamination)
 
+    def duplicate_zip_members():
+        from pcs.bundle_verify import BundleVerificationError
+        import warnings
+        with tempfile.TemporaryDirectory() as d:
+            z=Path(d)/"duplicate.zip"
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", UserWarning)
+                with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+                    zf.writestr("certificate.json","{}")
+                    zf.writestr("certificate.json","{}")
+            try:
+                verify_bundle(z)
+            except BundleVerificationError as e:
+                return ("duplicate" in str(e), str(e))
+            return False,"duplicate ZIP member names were accepted"
+    run("duplicate_zip_member_ambiguity",duplicate_zip_members)
+
+    def zip_file_parent_collision():
+        from pcs.bundle_verify import BundleVerificationError
+        with tempfile.TemporaryDirectory() as d:
+            z=Path(d)/"collision.zip"
+            with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("certificate.json","{}")
+                zf.writestr("artifacts","regular-file")
+                zf.writestr("artifacts/data.csv","x")
+            try:
+                verify_bundle(z)
+            except BundleVerificationError as e:
+                return ("namespace collision" in str(e), str(e))
+            return False,"file-as-parent ZIP namespace collision was accepted"
+    run("zip_file_parent_namespace_collision",zip_file_parent_collision)
+
     total=len(results); rejected=sum(x["rejected"] for x in results)
     return {"campaign":"pcs-v0.5-foundational-attacks","attacks":total,"rejected":rejected,"false_accepts":total-rejected,"results":results}
 
