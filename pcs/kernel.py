@@ -13,6 +13,7 @@ from .checks.splits import csv_key_disjoint
 from .checks.chemistry import reaction_balanced
 from .checks.units import units_compatible
 from .adapters.pkpd import check_contract_file, check_output_file
+from .schema_validation import validate_manifest_shape, validate_certificate_shape, SchemaValidationError
 
 SPEC_VERSION = "pcs-0.5"
 CHECKER_VERSION = "pcs-python-kernel/0.5.0"
@@ -256,6 +257,10 @@ def build_certificate(manifest_path: str | Path, out_dir: str | Path) -> dict[st
     artifact_out.mkdir(exist_ok=True)
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"), parse_constant=lambda x: (_ for _ in ()).throw(AssuranceError(f"non-finite JSON constant: {x}")))
+    try:
+        validate_manifest_shape(manifest)
+    except SchemaValidationError as exc:
+        raise AssuranceError(str(exc)) from exc
     assumptions = deepcopy(manifest.get("assumptions", []))
     claims = deepcopy(manifest.get("claims", []))
     artifacts = deepcopy(manifest.get("artifacts", []))
@@ -335,6 +340,10 @@ def build_certificate(manifest_path: str | Path, out_dir: str | Path) -> dict[st
     cert_for_hash = deepcopy(cert)
     cert_for_hash["integrity_hash"] = ""
     cert["integrity_hash"] = sha256_json(cert_for_hash)
+    try:
+        validate_certificate_shape(cert)
+    except SchemaValidationError as exc:
+        raise AssuranceError(str(exc)) from exc
     (out / "certificate.json").write_text(json.dumps(cert, indent=2, sort_keys=True), encoding="utf-8")
     return cert
 
@@ -344,6 +353,17 @@ def verify_certificate(certificate_path: str | Path) -> dict[str, Any]:
     root = path.parent
     cert = json.loads(path.read_text(encoding="utf-8"), parse_constant=lambda x: (_ for _ in ()).throw(AssuranceError(f"non-finite JSON constant: {x}")))
     errors: list[str] = []
+    try:
+        validate_certificate_shape(cert)
+    except SchemaValidationError as exc:
+        return {
+            "valid": False,
+            "errors": [str(exc)],
+            "certificate": str(path),
+            "integrity_hash": cert.get("integrity_hash"),
+            "semantic_hash": cert.get("semantic_hash"),
+            "claim_statuses": {},
+        }
 
     if cert.get("spec_version") != SPEC_VERSION:
         errors.append(f"unsupported spec_version: {cert.get('spec_version')!r}")
