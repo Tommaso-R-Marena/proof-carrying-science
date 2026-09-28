@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
 from .hashing import canonical_json_bytes
+from .jsonio import strict_json_load, StrictJSONError
 
 
 class SignatureError(ValueError):
@@ -63,7 +64,10 @@ def signature_payload(certificate: dict) -> dict:
 
 
 def sign_certificate(certificate_path: str | Path, private_key_path: str | Path, output_path: str | Path) -> dict:
-    cert = json.loads(Path(certificate_path).read_text(encoding="utf-8"))
+    try:
+        cert = strict_json_load(certificate_path)
+    except StrictJSONError as exc:
+        raise SignatureError(str(exc)) from exc
     payload = signature_payload(cert)
     key = _load_private(private_key_path)
     pub = key.public_key()
@@ -81,7 +85,7 @@ def sign_certificate(certificate_path: str | Path, private_key_path: str | Path,
 
 def verify_signature(certificate_path: str | Path, signature_path: str | Path, public_key_path: str | Path) -> dict:
     cert = json.loads(Path(certificate_path).read_text(encoding="utf-8"))
-    record = json.loads(Path(signature_path).read_text(encoding="utf-8"))
+    record = strict_json_load(signature_path)
     expected_payload = signature_payload(cert)
     errors: list[str] = []
     if record.get("signature_format") != "pcs-ed25519-v1":
