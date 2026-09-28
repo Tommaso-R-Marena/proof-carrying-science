@@ -15,7 +15,7 @@ Use PASS / PARTIAL / OPEN rather than a marketing score.
 | Reproducible evidence ZIP | PASS |
 | Certificate diff | PASS |
 | PK + direct-Emax restricted adapter | PASS for declared scope |
-| Automated tests | PASS (44/44) |
+| Automated tests | PASS (49/49) |
 | Adversarial campaign | PASS (16/16 targeted attacks rejected, 0 false accepts in this campaign); not a proof |
 | Machine-compiled Lean kernel | OPEN |
 | Python-to-Lean refinement | OPEN |

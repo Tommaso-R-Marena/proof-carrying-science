@@ -4,7 +4,7 @@
 
 ## Verified in the local founding build
 
-- 44/44 automated tests pass.
+- 49/49 automated tests pass.
 - 16/16 targeted foundational attacks are rejected, with 0 false accepts in that campaign.
 - Package signatures bind the certificate, human-readable report, signatures, public-key copy, artifacts, and delivered files.
 - Signer identity can be pinned by Ed25519 public-key fingerprint.

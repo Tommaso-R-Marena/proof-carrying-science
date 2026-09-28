@@ -242,34 +242,9 @@ def _run_check(check: dict, artifact_map: dict[str, dict], root: Path) -> dict:
 
 
 def derive_claim_status(claim: dict, evidence_map: dict[str, dict]) -> dict:
-    required = [evidence_map[eid] for eid in claim.get("required_evidence", []) if eid in evidence_map]
-    if len(required) != len(claim.get("required_evidence", [])):
-        return {"status": "OPEN", "reason": "required evidence missing"}
-    if any(e["outcome"] == "FAIL" for e in required):
-        return {"status": "FALSIFIED_OR_CHECK_FAILED", "reason": "at least one required check failed"}
-    if any(e["outcome"] == "UNVERIFIED" for e in required):
-        return {"status": "OPEN", "reason": "at least one required evidence object is not independently verified"}
-    if not required:
-        return {"status": "OPEN", "reason": "no evidence supplied"}
-
-    kind = claim.get("kind", "computational")
-    kinds = {e.get("kind") for e in required}
-    if kind == "formal":
-        if kinds <= {"formal_proof"} and all(e["outcome"] == "PASS" for e in required):
-            return {"status": "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS", "reason": "all declared formal obligations independently accepted"}
-        return {"status": "OPEN", "reason": "formal claim lacks independently accepted formal evidence"}
-    if kind == "empirical":
-        if kinds & {"empirical_validation", "statistical_validation"}:
-            return {"status": "EMPIRICALLY_VALIDATED_WITHIN_SCOPE", "reason": "declared empirical/statistical evidence passed"}
-        return {"status": "OPEN", "reason": "empirical claim lacks empirical/statistical evidence"}
-    if kind == "mixed":
-        if ("formal_proof" in kinds) and (kinds & {"empirical_validation", "statistical_validation"}):
-            return {"status": "MIXED_SUPPORT_UNDER_ASSUMPTIONS", "reason": "formal and empirical evidence classes present"}
-        return {"status": "OPEN", "reason": "mixed claim still lacks formal or empirical evidence class"}
-    if kinds & {"computational_test", "formal_proof"}:
-        return {"status": "COMPUTATIONALLY_SUPPORTED", "reason": "all declared computational checks passed"}
-    return {"status": "OPEN", "reason": "computational claim lacks computational/formal correctness evidence"}
-
+    """Compatibility wrapper around the pure decision kernel."""
+    from .decision import assess_claim
+    return assess_claim(claim, evidence_map)
 
 def build_certificate(manifest_path: str | Path, out_dir: str | Path) -> dict[str, Any]:
     manifest_path = Path(manifest_path).resolve()
