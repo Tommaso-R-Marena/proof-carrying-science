@@ -263,6 +263,35 @@ def campaign() -> dict:
             return False,"file-as-parent ZIP namespace collision was accepted"
     run("zip_file_parent_namespace_collision",zip_file_parent_collision)
 
+    def casefold_zip_collision():
+        from pcs.bundle_verify import BundleVerificationError
+        with tempfile.TemporaryDirectory() as d:
+            z=Path(d)/"casefold.zip"
+            with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("certificate.json","{}")
+                zf.writestr("Artifacts/data.csv","a")
+                zf.writestr("artifacts/data.csv","b")
+            try:
+                verify_bundle(z)
+            except BundleVerificationError as e:
+                return ("cross-platform ZIP name collision" in str(e), str(e))
+            return False,"case-folding ZIP namespace collision was accepted"
+    run("zip_casefold_namespace_collision",casefold_zip_collision)
+
+    def windows_reserved_zip_name():
+        from pcs.bundle_verify import BundleVerificationError
+        with tempfile.TemporaryDirectory() as d:
+            z=Path(d)/"reserved.zip"
+            with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("certificate.json","{}")
+                zf.writestr("artifacts/CON.txt","x")
+            try:
+                verify_bundle(z)
+            except BundleVerificationError as e:
+                return ("Windows-reserved" in str(e), str(e))
+            return False,"Windows-reserved ZIP filename was accepted"
+    run("zip_windows_reserved_filename",windows_reserved_zip_name)
+
     total=len(results); rejected=sum(x["rejected"] for x in results)
     return {"campaign":"pcs-v0.5-foundational-attacks","attacks":total,"rejected":rejected,"false_accepts":total-rejected,"results":results}
 
