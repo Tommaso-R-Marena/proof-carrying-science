@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .hashing import sha256_json
+from .jsonio import strict_json_load
 
 RUNTIME_FORMAT = "pcs-runtime-v1"
 
@@ -124,6 +125,6 @@ def diff_environments(left: dict[str, Any], right: dict[str, Any]) -> dict[str, 
 
 
 def diff_environment_files(left_path: str | Path, right_path: str | Path) -> dict[str, Any]:
-    left = json.loads(Path(left_path).read_text(encoding="utf-8"))
-    right = json.loads(Path(right_path).read_text(encoding="utf-8"))
+    left = strict_json_load(left_path)
+    right = strict_json_load(right_path)
     return diff_environments(left, right)
