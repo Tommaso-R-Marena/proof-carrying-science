@@ -11,6 +11,7 @@ from .limitations import write_limitations
 from .package import build_package_manifest, sign_package_manifest
 from .report import write_html
 from .signing import sign_certificate
+from .intake import load_lock, assert_lock_matches_certificate, PilotIntakeError
 
 
 class AttestationError(ValueError):
@@ -24,6 +25,7 @@ def attest(
     private_key: str | Path | None = None,
     public_key: str | Path | None = None,
     bundle_path: str | Path | None = None,
+    intake_lock: str | Path | None = None,
 ) -> dict[str, object]:
     out = Path(output_dir).resolve()
     if out.exists():
@@ -49,6 +51,19 @@ def attest(
         raise AttestationError(f"certificate failed independent replay: {verification['errors']}")
     report_path = write_html(cert, out / "report.html")
     limitations_path = write_limitations(cert, out / "LIMITATIONS.md")
+
+    intake_lock_path = None
+    if intake_lock is not None:
+        try:
+            lock = load_lock(intake_lock)
+            assert_lock_matches_certificate(lock, cert)
+        except PilotIntakeError as exc:
+            raise AttestationError(str(exc)) from exc
+        intake_lock_path = out / "pilot-intake-lock.json"
+        intake_lock_path.write_text(
+            json.dumps(lock, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
     # Fail closed if the runtime changed while checks/report generation were running.
     # This does not prove runtime correctness; it prevents an attestation from silently
@@ -83,6 +98,7 @@ def attest(
         "limitations": str(limitations_path),
         "runtime": str(out / "runtime.json"),
         "runtime_semantic_hash": runtime["semantic_hash"],
+        "pilot_intake_lock": str(intake_lock_path) if intake_lock_path is not None else None,
         "signed": certificate_signature is not None,
         "package_signed": package_signature is not None,
         "public_key_fingerprint": (package_signature or certificate_signature or {}).get("public_key_fingerprint"),
