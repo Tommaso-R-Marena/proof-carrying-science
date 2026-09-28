@@ -218,6 +218,21 @@ def campaign() -> dict:
             return False,"private key material was included in an evidence bundle"
     run("private_key_material_accidentally_staged_for_bundle",private_key_leak_bundle)
 
+    def delayed_private_key_marker():
+        from pcs.bundle import create_reproducible_bundle, BundleSafetyError
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d); evidence=p/"evidence"; evidence.mkdir()
+            (evidence/"certificate.json").write_text("{}")
+            (evidence/"late-key.bin").write_bytes(
+                b"x"*16384 + b"-----BEGIN PRIVATE KEY-----\nforbidden"
+            )
+            try:
+                create_reproducible_bundle(evidence/"certificate.json",p/"unsafe.zip")
+            except BundleSafetyError as e:
+                return ("private-key material" in str(e), str(e))
+            return False,"private key marker beyond historical prefix scan was accepted"
+    run("private_key_marker_beyond_prefix_scan",delayed_private_key_marker)
+
 
     def stale_output_contamination():
         with tempfile.TemporaryDirectory() as d:
