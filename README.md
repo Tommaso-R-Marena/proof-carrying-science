@@ -79,9 +79,12 @@ pcs keygen --private-key signing-private.pem --public-key signing-public.pem
 Produce the full attestation:
 
 ```bash
+pcs freeze-intake pilot/pilot_intake.json -o pilot-intake.lock.json
+
 pcs attest pilot/manifest.json -o pilot-evidence \
   --private-key signing-private.pem \
-  --public-key signing-public.pem
+  --public-key signing-public.pem \
+  --intake-lock pilot-intake.lock.json
 ```
 
 Independently verify the delivered bundle from scratch:
