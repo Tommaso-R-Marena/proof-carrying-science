@@ -96,3 +96,39 @@ def test_verifier_separates_replay_integrity_authenticity_and_policy():
         )
         assert with_key["valid"]
         assert with_key["assurance_dimensions"]["signer_authenticity"]=="VERIFIED"
+
+
+def test_verifier_rejects_duplicate_zip_members():
+    import warnings
+    from pcs.bundle_verify import BundleVerificationError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        z=root/"duplicate.zip"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("certificate.json","{}")
+                zf.writestr("certificate.json","{}")
+        try:
+            verify_bundle(z)
+        except BundleVerificationError as exc:
+            assert "duplicate" in str(exc)
+        else:
+            raise AssertionError("duplicate ZIP members should be rejected")
+
+
+def test_verifier_rejects_file_as_parent_namespace_collision():
+    from pcs.bundle_verify import BundleVerificationError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        z=root/"collision.zip"
+        with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("certificate.json","{}")
+            zf.writestr("artifacts","regular-file")
+            zf.writestr("artifacts/data.csv","x")
+        try:
+            verify_bundle(z)
+        except BundleVerificationError as exc:
+            assert "namespace collision" in str(exc)
+        else:
+            raise AssertionError("file/parent namespace collision should be rejected")
