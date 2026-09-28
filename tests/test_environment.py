@@ -5,6 +5,7 @@ import tempfile
 from copy import deepcopy
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from pcs.bundle_verify import verify_bundle
 from pcs.cli import cmd_bundle
@@ -92,3 +93,28 @@ def test_low_level_bundle_command_builds_required_package_manifest():
         assert (evidence / "package_manifest.json").is_file()
         verified = verify_bundle(output)
         assert verified["valid"], verified["errors"]
+
+
+def test_attestation_refuses_runtime_drift():
+    from pcs.attest import attest, AttestationError
+    from pcs.environment import snapshot_environment, runtime_semantic_hash
+    from pcs.scaffold import init_project
+
+    before = snapshot_environment()
+    after = deepcopy(before)
+    after["python"] = deepcopy(after["python"])
+    after["python"]["version"] = "changed-during-attestation"
+    after["semantic_hash"] = runtime_semantic_hash(after)
+
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        project = root / "project"
+        init_project(project)
+        with patch("pcs.attest.snapshot_environment", side_effect=[before, after]):
+            try:
+                attest(project / "manifest.json", root / "evidence")
+            except AttestationError as exc:
+                assert "runtime environment changed during attestation" in str(exc)
+            else:
+                raise AssertionError("runtime drift should prevent attestation")
+        assert not (root / "evidence.zip").exists()
