@@ -31,3 +31,10 @@ CI is considered restored only when a workflow exposes normal steps and successf
 3. the reference certificate round trip;
 4. the no-`sorry` formal source audit;
 5. `lake build` for the Lean 4.16 kernel.
+
+
+## Temporary trigger policy
+
+On September 28, 2026 the workflow was switched to **manual dispatch only**. Repeated pushes were producing failed Python and Lean jobs with `steps=[]`, which created a misleading red status on every source/documentation commit even though no repository command ran.
+
+This is not a waiver of CI. Automatic `push` / `pull_request` triggers must be restored once GitHub can allocate a runner and issue #1 records a workflow that actually executes checkout/test/build steps.
