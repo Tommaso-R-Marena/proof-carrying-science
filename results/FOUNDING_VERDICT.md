@@ -4,8 +4,8 @@
 
 ## Current repository inventory
 
-- 64 Python tests are present.
-- 22 targeted adversarial attacks are encoded.
+- 66 Python tests are present.
+- 23 targeted adversarial attacks are encoded.
 - These inventory counts are **not** promoted to execution claims while hosted runners remain unavailable.
 
 ## Last retained full execution evidence
@@ -26,7 +26,7 @@
 
 ## Still open
 
-- a successful full 64-test / 22-attack execution from the current commit;
+- a successful full 66-test / 23-attack execution from the current commit;
 - successful Lean 4.16 build of the formal kernel;
 - executable-to-Lean refinement theorem;
 - production signing-key custody/revocation/transparency infrastructure;
