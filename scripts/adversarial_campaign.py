@@ -218,6 +218,19 @@ def campaign() -> dict:
             return False,"private key material was included in an evidence bundle"
     run("private_key_material_accidentally_staged_for_bundle",private_key_leak_bundle)
 
+
+    def stale_output_contamination():
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d); project=p/"project"; init_project(project)
+            evidence=p/"evidence"; evidence.mkdir()
+            (evidence/"stale-signature.json").write_text("stale")
+            try:
+                attest(project/"manifest.json",evidence)
+            except Exception as e:
+                return ("stale evidence contamination" in str(e), str(e))
+            return False,"non-empty attestation output directory was accepted"
+    run("stale_attestation_output_contamination",stale_output_contamination)
+
     total=len(results); rejected=sum(x["rejected"] for x in results)
     return {"campaign":"pcs-v0.5-foundational-attacks","attacks":total,"rejected":rejected,"false_accepts":total-rejected,"results":results}
 
