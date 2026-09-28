@@ -16,6 +16,7 @@ from .scaffold import init_project, ScaffoldError
 from .doctor import doctor
 from .attest import attest, AttestationError
 from .policy import load_policy, evaluate_policy_file, PolicyError
+from .environment import write_environment, diff_environment_files
 
 
 def cmd_certify(args):
@@ -187,6 +188,26 @@ def cmd_attest(args):
     return 0
 
 
+def cmd_snapshot_env(args):
+    try:
+        result = write_environment(args.output)
+    except OSError as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps({"wrote": str(args.output), "semantic_hash": result["semantic_hash"], "packages": len(result["packages"])}, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_env_diff(args):
+    try:
+        result = diff_environment_files(args.left, args.right)
+    except (OSError, json.JSONDecodeError, ValueError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser():
     p = argparse.ArgumentParser(prog="pcs", description="Proof-Carrying Science reference CLI")
     sub = p.add_subparsers(required=True)
@@ -276,6 +297,15 @@ def build_parser():
     att.add_argument("--public-key")
     att.add_argument("--bundle", help="output ZIP path; defaults to <output>.zip")
     att.set_defaults(func=cmd_attest)
+
+    se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
+    se.add_argument("-o", "--output", required=True)
+    se.set_defaults(func=cmd_snapshot_env)
+
+    ed = sub.add_parser("env-diff", help="compare two PCS runtime provenance snapshots")
+    ed.add_argument("left")
+    ed.add_argument("right")
+    ed.set_defaults(func=cmd_env_diff)
 
     return p
 
