@@ -6,8 +6,8 @@ This file is the authoritative distinction between **repository inventory** and 
 
 As of 2026-09-28 after ZIP namespace hardening:
 
-- 60 Python test functions are present under `tests/`.
-- 20 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
+- 62 Python test functions are present under `tests/`.
+- 22 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
 - Lean sources target Lean 4.16.0 and contain no intentionally admitted `sorry` proofs.
 
 Inventory counts are not execution results.
@@ -35,7 +35,7 @@ The ZIP namespace validator added after the last full campaign was directly exer
 - `..` traversal;
 - backslash paths.
 
-Those focused checks passed, but they do not substitute for a full 60-test / 20-attack execution.
+Those focused checks passed, but they do not substitute for a full 62-test / 22-attack execution.
 
 ## Hosted CI blocker
 
