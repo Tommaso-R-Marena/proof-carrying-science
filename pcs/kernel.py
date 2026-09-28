@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 import shutil
 import re
+import hashlib
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -285,13 +286,18 @@ def build_certificate(manifest_path: str | Path, out_dir: str | Path) -> dict[st
         src = _safe_under(src_root, a["path"], f"artifact {a['id']}")
         if not src.is_file():
             raise AssuranceError(f"artifact {a['id']} not found: {src}")
-        target_dir = artifact_out / a["id"]
+        # Keep customer filenames and artifact IDs as metadata, but do not
+        # use them as delivery filesystem names. A stable ASCII key avoids
+        # Windows-reserved names, Unicode/case collisions, and separator quirks.
+        storage_key = hashlib.sha256(a["id"].encode("utf-8")).hexdigest()[:24]
+        target_dir = artifact_out / storage_key
         target_dir.mkdir(parents=True, exist_ok=True)
-        dst = target_dir / src.name
+        dst = target_dir / "payload"
         shutil.copy2(src, dst)
         aa = deepcopy(a)
         aa["source_path"] = a["path"]
-        aa["path"] = str(dst.relative_to(out)).replace("\", "/")
+        aa["storage_key"] = storage_key
+        aa["path"] = dst.relative_to(out).as_posix()
         aa["sha256"] = sha256_file(dst)
         packaged_artifacts.append(aa)
 
