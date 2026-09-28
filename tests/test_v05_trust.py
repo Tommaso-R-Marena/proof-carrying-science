@@ -237,3 +237,35 @@ def test_bundle_creator_enforces_same_single_file_limit(monkeypatch):
             assert "oversized file" in str(exc)
         else:
             raise AssertionError("producer should refuse files verifier would reject")
+
+
+def test_staged_symlink_to_external_file_is_refused():
+    from pcs.bundle import create_reproducible_bundle, BundleSafetyError
+    from pcs.package import build_package_manifest, PackageError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        evidence=root/"evidence"
+        evidence.mkdir()
+        (evidence/"certificate.json").write_text("{}")
+        outside=root/"outside-secret.txt"
+        outside.write_text("must-not-be-packaged")
+        link=evidence/"linked-secret.txt"
+        try:
+            link.symlink_to(outside)
+        except OSError:
+            import pytest
+            pytest.skip("filesystem does not permit symlink creation")
+
+        try:
+            build_package_manifest(evidence)
+        except PackageError as exc:
+            assert "staged symlinks" in str(exc)
+        else:
+            raise AssertionError("package manifest should reject staged symlink")
+
+        try:
+            create_reproducible_bundle(evidence/"certificate.json",root/"unsafe.zip")
+        except BundleSafetyError as exc:
+            assert "staged symlinks" in str(exc)
+        else:
+            raise AssertionError("bundle writer should reject staged symlink")
