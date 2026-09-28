@@ -5,6 +5,7 @@ import hashlib
 import tempfile
 import zipfile
 import unicodedata
+from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
 from .kernel import verify_certificate, CHECKER_VERSION
@@ -216,6 +217,7 @@ def verify_bundle(
             return {
                 "verification_receipt_format": "pcs-bundle-verification-v1",
                 "verifier_version": CHECKER_VERSION,
+                "verified_at": datetime.now(timezone.utc).isoformat(),
                 "valid": not errors,
                 "errors": errors,
                 "bundle": str(bundle_path),
