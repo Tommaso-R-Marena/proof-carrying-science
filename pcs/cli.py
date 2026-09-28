@@ -93,7 +93,7 @@ def cmd_gate(args):
 
 def cmd_keygen(args):
     try:
-        result = generate_keypair(args.private_key, args.public_key)
+        result = generate_keypair(args.private_key, args.public_key, overwrite=args.force)
     except (OSError, SignatureError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -288,6 +288,7 @@ def build_parser():
     kg = sub.add_parser("keygen", help="generate an Ed25519 certificate-signing keypair")
     kg.add_argument("--private-key", required=True)
     kg.add_argument("--public-key", required=True)
+    kg.add_argument("--force", action="store_true", help="explicitly replace existing key files")
     kg.set_defaults(func=cmd_keygen)
 
     s = sub.add_parser("sign", help="sign a valid certificate without modifying it")
