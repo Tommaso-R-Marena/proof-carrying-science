@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import tempfile
 import zipfile
 import unicodedata
 from pathlib import Path, PurePosixPath
 
-from .kernel import verify_certificate
+from .kernel import verify_certificate, CHECKER_VERSION
 from .package import verify_package_manifest, verify_package_signature
-from .policy import evaluate_policy_file
+from .policy import evaluate_policy, validate_policy
 from .signing import verify_signature
 
 
@@ -117,6 +118,7 @@ def verify_bundle(
     policy: str | Path | None = None,
 ) -> dict[str, object]:
     bundle_path = Path(bundle_path).resolve()
+    bundle_sha256 = hashlib.sha256(bundle_path.read_bytes()).hexdigest()
     errors: list[str] = []
     with zipfile.ZipFile(bundle_path, "r") as zf:
         infos = zf.infolist()
@@ -186,11 +188,15 @@ def verify_bundle(
                     errors.extend([f"certificate signature: {e}" for e in cert_sig_result["errors"]])
 
             policy_result = None
+            policy_sha256 = None
             if policy is not None:
                 cert_obj = json.loads(cert.read_text(encoding="utf-8"))
-                policy_result = evaluate_policy_file(
+                policy_bytes = Path(policy).read_bytes()
+                policy_sha256 = hashlib.sha256(policy_bytes).hexdigest()
+                policy_obj = validate_policy(json.loads(policy_bytes.decode("utf-8")))
+                policy_result = evaluate_policy(
                     cert_obj,
-                    policy,
+                    policy_obj,
                     signature_valid=bool(package_sig_result and package_sig_result["valid"]),
                     signer_fingerprint=(package_sig_result or {}).get("public_key_fingerprint"),
                 )
@@ -207,9 +213,17 @@ def verify_bundle(
             }
 
             return {
+                "verification_receipt_format": "pcs-bundle-verification-v1",
+                "verifier_version": CHECKER_VERSION,
                 "valid": not errors,
                 "errors": errors,
                 "bundle": str(bundle_path),
+                "bundle_sha256": bundle_sha256,
+                "verification_inputs": {
+                    "require_signature": bool(require_signature),
+                    "expected_signer_fingerprint": expected_signer_fingerprint,
+                    "policy_sha256": policy_sha256,
+                },
                 "file_count": len(names),
                 "uncompressed_bytes": total,
                 "assurance_dimensions": dimensions,
