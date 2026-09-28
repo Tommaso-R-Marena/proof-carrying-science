@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .hashing import sha256_json
+from .jsonio import strict_json_load, StrictJSONError
 from .schema_validation import (
     validate_pilot_intake_shape,
     validate_pilot_intake_lock_shape,
@@ -61,7 +62,10 @@ def freeze_intake(intake: dict[str, Any]) -> dict[str, Any]:
 
 
 def freeze_intake_file(input_path: str | Path, output_path: str | Path) -> dict[str, Any]:
-    intake = json.loads(Path(input_path).read_text(encoding="utf-8"))
+    try:
+        intake = strict_json_load(input_path)
+    except StrictJSONError as exc:
+        raise PilotIntakeError(str(exc)) from exc
     lock = freeze_intake(intake)
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -82,7 +86,10 @@ def validate_lock(lock: dict[str, Any]) -> dict[str, Any]:
 
 
 def load_lock(path: str | Path) -> dict[str, Any]:
-    lock = json.loads(Path(path).read_text(encoding="utf-8"))
+    try:
+        lock = strict_json_load(path)
+    except StrictJSONError as exc:
+        raise PilotIntakeError(str(exc)) from exc
     return validate_lock(lock)
 
 
