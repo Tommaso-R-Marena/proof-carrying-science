@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from .schema_validation import validate_policy_shape, SchemaValidationError
+
 POLICY_VERSION = "pcs-acceptance-policy-v1"
 
 
@@ -11,6 +13,10 @@ class PolicyError(ValueError):
 
 
 def validate_policy(policy: dict) -> dict:
+    try:
+        validate_policy_shape(policy)
+    except SchemaValidationError as exc:
+        raise PolicyError(str(exc)) from exc
     if not isinstance(policy, dict):
         raise PolicyError("acceptance policy must be a JSON object")
     if policy.get("policy_version") != POLICY_VERSION:
