@@ -71,6 +71,11 @@ def test_attestation_bundle_binds_runtime_snapshot():
         assert validate_environment(runtime)["valid"]
         manifest = result["package_manifest"]
         assert "runtime.json" in manifest["files"]
+        assert "LIMITATIONS.md" in manifest["files"]
+        limitations = (root / "evidence" / "LIMITATIONS.md").read_text(encoding="utf-8")
+        assert "does not by itself establish" in limitations
+        assert "clinical safety" in limitations
+        assert result["semantic_hash"] in limitations
         verified = verify_bundle(result["bundle"]["bundle"])
         assert verified["valid"], verified["errors"]
 
