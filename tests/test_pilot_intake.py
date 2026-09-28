@@ -71,3 +71,15 @@ def test_tampered_intake_lock_hash_is_rejected():
     lock["intake"]["notes"] = "tampered after freeze"
     with pytest.raises(PilotIntakeError, match="semantic hash mismatch"):
         validate_lock(lock)
+
+
+def test_freeze_intake_file_refuses_overwrite_by_default():
+    from pcs.intake import freeze_intake_file
+    intake_path, _ = _paths()
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "pilot.lock.json"
+        freeze_intake_file(intake_path, out)
+        original = out.read_bytes()
+        with pytest.raises(PilotIntakeError, match="refusing to overwrite"):
+            freeze_intake_file(intake_path, out)
+        assert out.read_bytes() == original
