@@ -33,7 +33,7 @@ Accept a pilot only when all of the following are true:
 7. Generate `report.html`.
 8. Sign the final certificate with the pilot signing key.
 9. Create the deterministic evidence ZIP.
-10. Verify the ZIP from a clean temporary directory with `pcs verify-bundle --require-signature`.
+10. Verify the ZIP from a clean temporary directory with `pcs verify-bundle --require-signature --receipt verification-receipt.json`.\n11. Archive the reviewer receipt alongside the delivery record; it must bind the exact bundle SHA-256 and any external acceptance-policy SHA-256.
 
 ## Required delivery package
 
@@ -44,7 +44,7 @@ Accept a pilot only when all of the following are true:
 - packaged source artifacts that the agreement permits PCS to redistribute back to the partner
 - deterministic evidence ZIP
 - SHA-256 of the ZIP
-- a one-page limitations statement
+- a one-page limitations statement\n- reviewer-generated `verification-receipt.json` when the recipient performs the independent check
 
 ## Partner review
 
