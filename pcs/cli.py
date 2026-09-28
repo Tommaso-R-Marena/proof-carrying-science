@@ -19,6 +19,7 @@ from .attest import attest, AttestationError
 from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
+from .intake import freeze_intake_file, PilotIntakeError
 
 
 def cmd_certify(args):
@@ -200,11 +201,27 @@ def cmd_attest(args):
             private_key=args.private_key,
             public_key=args.public_key,
             bundle_path=args.bundle,
+            intake_lock=args.intake_lock,
         )
     except (OSError, json.JSONDecodeError, AssuranceError, SignatureError, AttestationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_freeze_intake(args):
+    try:
+        result = freeze_intake_file(args.input, args.output)
+    except (OSError, json.JSONDecodeError, PilotIntakeError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps({
+        "wrote": str(Path(args.output).resolve()),
+        "pilot_id": result["intake"]["pilot_id"],
+        "intake_semantic_hash": result["intake_semantic_hash"],
+        "frozen_at": result["frozen_at"],
+    }, indent=2, sort_keys=True))
     return 0
 
 
@@ -317,7 +334,13 @@ def build_parser():
     att.add_argument("--private-key")
     att.add_argument("--public-key")
     att.add_argument("--bundle", help="output ZIP path; defaults to <output>.zip")
+    att.add_argument("--intake-lock", help="frozen pilot intake lock; claim/assumption IDs must exactly match the certificate")
     att.set_defaults(func=cmd_attest)
+
+    fi = sub.add_parser("freeze-intake", help="freeze a pre-result pilot claim/assumption inventory by semantic hash")
+    fi.add_argument("input", help="pilot intake JSON")
+    fi.add_argument("-o", "--output", required=True, help="write the timestamped intake lock JSON")
+    fi.set_defaults(func=cmd_freeze_intake)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
     se.add_argument("-o", "--output", required=True)
