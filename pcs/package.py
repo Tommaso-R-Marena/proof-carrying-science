@@ -109,7 +109,7 @@ def verify_package_manifest(root: str | Path, manifest_path: str | Path | None =
     cert_path = root / "certificate.json"
     if cert_path.is_file():
         try:
-            cert = json.loads(cert_path.read_text(encoding="utf-8"))
+            cert = strict_json_load(cert_path)
             if manifest.get("certificate_semantic_hash") != cert.get("semantic_hash"):
                 errors.append("package manifest certificate semantic hash mismatch")
             if manifest.get("certificate_integrity_hash") != cert.get("integrity_hash"):
@@ -152,8 +152,11 @@ def verify_package_signature(
     expected_fingerprint: str | None = None,
 ) -> dict:
     errors: list[str] = []
-    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
-    record = strict_json_load(signature_path)
+    try:
+        manifest = strict_json_load(manifest_path)
+        record = strict_json_load(signature_path)
+    except StrictJSONError as exc:
+        return {"valid": False, "errors": [str(exc)], "public_key_fingerprint": None}
     if record.get("signature_format") != PACKAGE_SIGNATURE_FORMAT:
         errors.append("unsupported package signature format")
     try:
