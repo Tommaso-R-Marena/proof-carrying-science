@@ -2,6 +2,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .kernel import build_certificate, verify_certificate, AssuranceError
@@ -140,10 +141,27 @@ def cmd_bundle(args):
 
 def cmd_verify_bundle(args):
     try:
-        result = verify_bundle(args.bundle, public_key=args.public_key, require_signature=args.require_signature, expected_signer_fingerprint=args.expected_signer_fingerprint, policy=args.policy)
-    except (OSError, json.JSONDecodeError, AssuranceError, SignatureError, BundleVerificationError) as e:
+        result = verify_bundle(
+            args.bundle,
+            public_key=args.public_key,
+            require_signature=args.require_signature,
+            expected_signer_fingerprint=args.expected_signer_fingerprint,
+            policy=args.policy,
+        )
+    except (OSError, json.JSONDecodeError, AssuranceError, SignatureError, BundleVerificationError, PolicyError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
+
+    receipt_path = getattr(args, "receipt", None)
+    if receipt_path:
+        receipt = dict(result)
+        receipt["verified_at"] = datetime.now(timezone.utc).isoformat()
+        out = Path(receipt_path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        result = dict(result)
+        result["receipt_written"] = str(out.resolve())
+
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["valid"] else 1
 
@@ -275,6 +293,7 @@ def build_parser():
     vb.add_argument("--require-signature", action="store_true", help="reject unsigned bundles")
     vb.add_argument("--expected-signer-fingerprint", help="pin the accepted Ed25519 public-key SHA-256 fingerprint")
     vb.add_argument("--policy", help="external reviewer acceptance-policy JSON")
+    vb.add_argument("--receipt", help="write a JSON verification receipt for this exact bundle/policy invocation")
     vb.set_defaults(func=cmd_verify_bundle)
 
     d = sub.add_parser("diff", help="compare the scientific content of two certificates")
