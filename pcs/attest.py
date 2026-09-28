@@ -25,7 +25,15 @@ def attest(
     bundle_path: str | Path | None = None,
 ) -> dict[str, object]:
     out = Path(output_dir).resolve()
-    out.mkdir(parents=True, exist_ok=True)
+    if out.exists():
+        if not out.is_dir():
+            raise AttestationError(f"attestation output is not a directory: {out}")
+        if any(out.iterdir()):
+            raise AttestationError(
+                f"attestation output directory must be empty to prevent stale evidence contamination: {out}"
+            )
+    else:
+        out.mkdir(parents=True, exist_ok=False)
     cert = build_certificate(manifest, out)
     cert_path = out / "certificate.json"
     verification = verify_certificate(cert_path)
