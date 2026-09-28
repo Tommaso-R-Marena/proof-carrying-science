@@ -4,6 +4,7 @@ import importlib.metadata
 import json
 import platform
 import sys
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -30,6 +31,40 @@ def _packages() -> list[dict[str, str]]:
     ]
 
 
+def _semantic_projection(snapshot: dict[str, Any]) -> dict[str, Any]:
+    out = deepcopy(snapshot)
+    out.pop("semantic_hash", None)
+    return out
+
+
+def runtime_semantic_hash(snapshot: dict[str, Any]) -> str:
+    return sha256_json(_semantic_projection(snapshot))
+
+
+def validate_environment(snapshot: dict[str, Any]) -> dict[str, Any]:
+    errors: list[str] = []
+    if snapshot.get("format") != RUNTIME_FORMAT:
+        errors.append("unsupported PCS runtime snapshot format")
+    supplied = snapshot.get("semantic_hash")
+    expected = runtime_semantic_hash(snapshot)
+    if supplied != expected:
+        errors.append("runtime semantic hash mismatch")
+    if not isinstance(snapshot.get("python"), dict):
+        errors.append("runtime snapshot lacks python metadata")
+    if not isinstance(snapshot.get("platform"), dict):
+        errors.append("runtime snapshot lacks platform metadata")
+    packages = snapshot.get("packages")
+    if not isinstance(packages, list):
+        errors.append("runtime snapshot packages must be a list")
+    elif packages != sorted(packages, key=lambda x: str(x.get("name", "")) if isinstance(x, dict) else ""):
+        errors.append("runtime snapshot packages are not normalized")
+    return {
+        "valid": not errors,
+        "errors": errors,
+        "semantic_hash": supplied,
+    }
+
+
 def snapshot_environment() -> dict[str, Any]:
     """Return deterministic runtime provenance without environment variables or secrets."""
     snapshot: dict[str, Any] = {
@@ -47,7 +82,7 @@ def snapshot_environment() -> dict[str, Any]:
         },
         "packages": _packages(),
     }
-    snapshot["semantic_hash"] = sha256_json(snapshot)
+    snapshot["semantic_hash"] = runtime_semantic_hash(snapshot)
     return snapshot
 
 
@@ -66,6 +101,10 @@ def _package_map(snapshot: dict[str, Any]) -> dict[str, str]:
 
 
 def diff_environments(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
+    for label, snapshot in (("left", left), ("right", right)):
+        validation = validate_environment(snapshot)
+        if not validation["valid"]:
+            raise ValueError(f"{label} runtime snapshot invalid: {validation['errors']}")
     lp, rp = _package_map(left), _package_map(right)
     added = {k: rp[k] for k in sorted(rp.keys() - lp.keys())}
     removed = {k: lp[k] for k in sorted(lp.keys() - rp.keys())}
@@ -87,6 +126,4 @@ def diff_environments(left: dict[str, Any], right: dict[str, Any]) -> dict[str, 
 def diff_environment_files(left_path: str | Path, right_path: str | Path) -> dict[str, Any]:
     left = json.loads(Path(left_path).read_text(encoding="utf-8"))
     right = json.loads(Path(right_path).read_text(encoding="utf-8"))
-    if left.get("format") != RUNTIME_FORMAT or right.get("format") != RUNTIME_FORMAT:
-        raise ValueError("unsupported PCS runtime snapshot format")
     return diff_environments(left, right)
