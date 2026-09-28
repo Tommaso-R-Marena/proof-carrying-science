@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import shutil
+import json
 from pathlib import Path
 
 from .bundle import create_reproducible_bundle
-from .environment import write_environment
+from .environment import snapshot_environment
 from .kernel import build_certificate, verify_certificate
 from .limitations import write_limitations
 from .package import build_package_manifest, sign_package_manifest
@@ -34,6 +35,13 @@ def attest(
             )
     else:
         out.mkdir(parents=True, exist_ok=False)
+
+    runtime = snapshot_environment()
+    (out / "runtime.json").write_text(
+        json.dumps(runtime, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
     cert = build_certificate(manifest, out)
     cert_path = out / "certificate.json"
     verification = verify_certificate(cert_path)
@@ -42,9 +50,14 @@ def attest(
     report_path = write_html(cert, out / "report.html")
     limitations_path = write_limitations(cert, out / "LIMITATIONS.md")
 
-    # Runtime provenance is signed as part of the delivered package. It is evidence
-    # about reproducibility context, not proof that the scientific claims are true.
-    runtime = write_environment(out / "runtime.json")
+    # Fail closed if the runtime changed while checks/report generation were running.
+    # This does not prove runtime correctness; it prevents an attestation from silently
+    # spanning two different recorded execution environments.
+    runtime_after = snapshot_environment()
+    if runtime_after.get("semantic_hash") != runtime.get("semantic_hash"):
+        raise AttestationError(
+            "runtime environment changed during attestation; refusing to sign mixed-runtime evidence"
+        )
 
     certificate_signature = None
     package_signature = None
