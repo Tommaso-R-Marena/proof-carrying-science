@@ -53,3 +53,10 @@ The certificate signature alone is not sufficient for a human-facing assurance d
 Verification can pin an expected signer fingerprint supplied out of band. This prevents an attacker from replacing both the bundle and the public key with a self-signed substitute.
 
 Acceptance criteria are deliberately external to the producer bundle. A reviewer supplies an independent `pcs-acceptance-policy-v1` document naming required claims, allowed statuses, signature requirements, and optionally a pinned signer fingerprint. A producer-valid bundle can therefore still be rejected by the reviewer.
+
+
+## Reviewer verification receipts
+
+`pcs verify-bundle --receipt <path>` can persist a v1 verification receipt. The receipt records the verifier version, exact bundle SHA-256, exact reviewer-policy SHA-256 when supplied, signature/policy requirements, assurance dimensions, and the verification result.
+
+The receipt is an **audit record of a verifier invocation**, not an authenticated statement of reviewer identity. v1 receipts are not separately signed. If reviewer identity/non-repudiation becomes a customer requirement, add a distinct reviewer-signing layer rather than reusing the producer's signing identity.
