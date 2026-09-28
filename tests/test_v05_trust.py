@@ -132,3 +132,36 @@ def test_verifier_rejects_file_as_parent_namespace_collision():
             assert "namespace collision" in str(exc)
         else:
             raise AssertionError("file/parent namespace collision should be rejected")
+
+
+def test_verifier_rejects_casefold_colliding_zip_members():
+    from pcs.bundle_verify import BundleVerificationError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        z=root/"casefold.zip"
+        with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("certificate.json","{}")
+            zf.writestr("Artifacts/data.csv","a")
+            zf.writestr("artifacts/data.csv","b")
+        try:
+            verify_bundle(z)
+        except BundleVerificationError as exc:
+            assert "cross-platform ZIP name collision" in str(exc)
+        else:
+            raise AssertionError("case-folding ZIP collision should be rejected")
+
+
+def test_verifier_rejects_windows_reserved_zip_member():
+    from pcs.bundle_verify import BundleVerificationError
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td)
+        z=root/"reserved.zip"
+        with zipfile.ZipFile(z,"w",compression=zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("certificate.json","{}")
+            zf.writestr("artifacts/CON.txt","x")
+        try:
+            verify_bundle(z)
+        except BundleVerificationError as exc:
+            assert "Windows-reserved" in str(exc)
+        else:
+            raise AssertionError("Windows-reserved ZIP filename should be rejected")
