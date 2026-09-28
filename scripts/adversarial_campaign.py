@@ -307,6 +307,32 @@ def campaign() -> dict:
             return False,"Windows-reserved ZIP filename was accepted"
     run("zip_windows_reserved_filename",windows_reserved_zip_name)
 
+    def duplicate_json_key_certificate():
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/"certificate.json"
+            p.write_text('{"spec_version":"pcs-0.5","subject":"first","subject":"second"}')
+            r=verify_certificate(p)
+            return (
+                (not r["valid"]) and any("duplicate JSON object key" in e for e in r["errors"]),
+                r["errors"],
+            )
+    run("duplicate_json_key_parser_differential",duplicate_json_key_certificate)
+
+    def posthoc_intake_claim_rewrite():
+        from pcs.intake import freeze_intake, assert_lock_matches_certificate, PilotIntakeError
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)
+            intake=json.loads((PKPD_MANIFEST.parent/"pilot_intake.json").read_text())
+            lock=freeze_intake(intake)
+            cert=build_certificate(PKPD_MANIFEST,p/"evidence")
+            cert["claims"][0]["statement"]="weakened post-hoc claim"
+            try:
+                assert_lock_matches_certificate(lock,cert)
+            except PilotIntakeError as e:
+                return ("claim statement changed" in str(e),str(e))
+            return False,"post-hoc claim rewrite with same ID was accepted"
+    run("posthoc_claim_rewrite_after_intake_freeze",posthoc_intake_claim_rewrite)
+
     total=len(results); rejected=sum(x["rejected"] for x in results)
     return {"campaign":"pcs-v0.5-foundational-attacks","attacks":total,"rejected":rejected,"false_accepts":total-rejected,"results":results}
 
