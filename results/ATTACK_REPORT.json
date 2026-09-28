@@ -1,6 +1,6 @@
 {
   "campaign": "pcs-v0.5-foundational-attacks",
-  "encoded_attacks": 18,
+  "encoded_attacks": 20,
   "last_full_execution": {
     "attacks": 16,
     "rejected": 16,
@@ -10,12 +10,20 @@
   "added_since_last_full_execution": [
     {
       "attack": "private_key_material_accidentally_staged_for_bundle",
-      "full_campaign_rerun": "PENDING_CI"
+      "full_campaign_rerun": "PENDING"
     },
     {
       "attack": "stale_attestation_output_contamination",
-      "full_campaign_rerun": "PENDING_CI"
+      "full_campaign_rerun": "PENDING"
+    },
+    {
+      "attack": "duplicate_zip_member_ambiguity",
+      "full_campaign_rerun": "PENDING"
+    },
+    {
+      "attack": "zip_file_parent_namespace_collision",
+      "full_campaign_rerun": "PENDING"
     }
   ],
-  "note": "A finite adversarial campaign is not a security proof. Do not report 18/18 until the full updated campaign executes."
+  "note": "A finite adversarial campaign is not a security proof. The repository currently encodes 20 attacks, but the authoritative last full campaign remains 16/16 rejected with 0 false accepts until all 20 execute together from one current commit. See results/EXECUTION_LEDGER.md."
 }
