@@ -79,6 +79,8 @@ def test_packaged_schemas_match_repository_canonical_copies():
         "package_manifest.schema.json",
         "acceptance_policy.schema.json",
         "verification_receipt.schema.json",
+        "pilot_intake.schema.json",
+        "pilot_intake_lock.schema.json",
     ]
     for name in names:
         assert (root / "schemas" / name).read_bytes() == (root / "pcs" / "schemas" / name).read_bytes()
