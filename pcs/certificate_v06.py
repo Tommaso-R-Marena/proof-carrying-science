@@ -10,6 +10,10 @@ from .crypto_domains_v06 import (
     domain_sha256,
 )
 from .schema_validation import SchemaValidationError, validate_v06_certificate_shape
+from .certificate_semantics_v06 import (
+    V06CertificateSemanticsError,
+    validate_certificate_semantics_v06,
+)
 
 
 SPEC_VERSION_V06 = "pcs-0.6"
@@ -54,7 +58,8 @@ def finalize_certificate_hashes_v06(certificate: dict[str, Any]) -> dict[str, An
     )
     try:
         validate_v06_certificate_shape(out)
-    except SchemaValidationError as exc:
+        validate_certificate_semantics_v06(out)
+    except (SchemaValidationError, V06CertificateSemanticsError) as exc:
         raise V06CertificateError(str(exc)) from exc
     return out
 
@@ -63,7 +68,8 @@ def verify_certificate_hashes_v06(certificate: dict[str, Any]) -> dict[str, Any]
     errors: list[str] = []
     try:
         validate_v06_certificate_shape(certificate)
-    except SchemaValidationError as exc:
+        validate_certificate_semantics_v06(certificate)
+    except (SchemaValidationError, V06CertificateSemanticsError) as exc:
         return {"valid": False, "errors": [str(exc)]}
 
     expected_semantic = domain_sha256(
