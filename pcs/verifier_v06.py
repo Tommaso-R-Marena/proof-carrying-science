@@ -45,6 +45,11 @@ def verify_end_to_end_v06(
     package_files: Mapping[str, bytes],
     public_key: Ed25519PublicKey,
     expected_fingerprint: str | None = None,
+    scheduler_strategy: str = "manifest",
+    scheduler_history: list[dict[str, Any]] | None = None,
+    bandit_alpha: float = 1.0,
+    shadow_bandit: bool = False,
+    telemetry_sink: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Verify one complete PCS v0.6 package through the executable trust chain.
 
@@ -121,7 +126,15 @@ def verify_end_to_end_v06(
         )
     stages["package_binding"] = True
 
-    replay = verify_certificate_replay_v06(certificate, package_files)
+    replay = verify_certificate_replay_v06(
+        certificate,
+        package_files,
+        scheduler_strategy=scheduler_strategy,
+        scheduler_history=scheduler_history,
+        bandit_alpha=bandit_alpha,
+        shadow_bandit=shadow_bandit,
+        telemetry_sink=telemetry_sink,
+    )
     if not replay["valid"]:
         return _failed("replay", list(replay["errors"]), stages=stages)
     stages["replay"] = True
@@ -157,7 +170,7 @@ def verify_end_to_end_v06(
             }
         )
 
-    return {
+    result = {
         "format": VERIFIER_FORMAT_V06,
         "valid": True,
         "failed_stage": None,
@@ -170,3 +183,10 @@ def verify_end_to_end_v06(
         "verified_members": package_check["verified_members"],
         "claims": claims,
     }
+    if (
+        scheduler_strategy != "manifest"
+        or shadow_bandit
+        or bool(scheduler_history)
+    ):
+        result["replay_scheduler"] = replay["scheduler"]
+    return result
