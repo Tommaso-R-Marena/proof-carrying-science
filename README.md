@@ -618,3 +618,55 @@ Today, the Python checker is part of the TCB. The research program is to shrink 
 - No GxP validation or regulator endorsement is claimed.
 
 For launch work, start with `docs/FOUNDING_OFFER.md`, `docs/DESIGN_PARTNER_PILOT.md`, `docs/PILOT_OPERATIONS_RUNBOOK.md`, `docs/DATA_HANDLING_FOR_PILOTS.md`, and `docs/LAUNCH_READINESS_SCORECARD.md`.
+
+
+## Reproducibility environment capture
+
+Guided v0.6 onboarding now captures the declared software environment alongside
+scientific artifacts and static workflow provenance.
+
+```bash
+pcs discover-v06 ./my-project
+pcs environment-plan-v06 ./my-project/pcs-discovery.json \
+  -o environment-plan.json \
+  --script reconstruct-environment.sh
+```
+
+The environment layer recognizes Python/R dependency declarations, common lockfiles,
+Python/R interpreter constraints, Conda/Nix environment specifications, and
+Dockerfile/Containerfile base-image pinning. It distinguishes loose declarations
+from stronger lock/hash/digest evidence and emits one of:
+
+```text
+strongly_pinned
+container_base_pinned
+locked_application_dependencies
+hash_pinned_dependencies
+declared_dependencies
+environment_unspecified
+```
+
+The generated reconstruction script is **review-before-run**. PCS verification never
+runs package managers, container builds, or project installation code automatically.
+
+Confirmed guided manifests bind the environment source artifacts and canonical
+`pcs-environment-capture-v1` proposition into the signed certificate as
+`pcs-environment-binding-v1`.
+
+Independent verification now executes:
+
+```text
+package_binding
+→ environment_replay
+→ workflow_replay
+→ scientific replay
+→ normalized_set
+```
+
+`environment_replay` reconstructs the exact delivered environment source tree and
+freshly regenerates the environment capture. A fully re-hashed and re-signed false
+dependency/interpreter/container claim is therefore expected to fail before workflow
+or scientific replay.
+
+Normative boundary and supported formats:
+`docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
