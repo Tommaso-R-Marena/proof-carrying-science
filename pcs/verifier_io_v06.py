@@ -16,6 +16,7 @@ from .package_v06 import (
 )
 from .signing import public_key_fingerprint
 from .verifier_v06 import verify_end_to_end_v06
+from .policy_v06 import apply_reviewer_policy_v06
 
 
 CONTROL_FILES_V06 = {
@@ -143,6 +144,7 @@ def verify_package_directory_end_to_end_v06(
     public_key_path: str | Path,
     *,
     expected_fingerprint: str | None = None,
+    policy_path: str | Path | None = None,
 ) -> dict[str, Any]:
     loaded = load_package_directory_v06(root)
     public_key = load_public_key_v06(public_key_path)
@@ -159,7 +161,7 @@ def verify_package_directory_end_to_end_v06(
     receipt["public_key_fingerprint"] = result.get(
         "public_key_fingerprint", public_key_fingerprint(public_key)
     )
-    return receipt
+    return apply_reviewer_policy_v06(receipt, policy_path)
 
 
 def write_verification_receipt_v06(
