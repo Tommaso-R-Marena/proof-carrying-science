@@ -233,3 +233,31 @@ def test_golden_generator_reproduces_exact_files():
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "reproduce exactly" in proc.stdout
+
+
+def test_certificate_byte_contract_enforces_raw_size_bound(monkeypatch):
+    import pcs.byte_contract_v06 as byte_contract
+
+    certificate = _raw("certificate.json")
+    monkeypatch.setattr(
+        byte_contract,
+        "MAX_CERTIFICATE_BYTES_V06",
+        len(certificate) - 1,
+    )
+    result = byte_contract.verify_signed_certificate_bytes_v06(
+        certificate,
+        _raw("certificate_signature.json"),
+        _public_key(),
+    )
+    assert not result["valid"]
+    assert any("exceeds byte limit" in error for error in result["errors"])
+
+
+def test_certificate_byte_contract_rejects_non_bytes_input():
+    result = verify_signed_certificate_bytes_v06(
+        bytearray(_raw("certificate.json")),
+        _raw("certificate_signature.json"),
+        _public_key(),
+    )
+    assert not result["valid"]
+    assert any("immutable bytes" in error for error in result["errors"])
