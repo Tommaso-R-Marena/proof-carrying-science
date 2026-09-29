@@ -28,6 +28,10 @@ from .verifier_zip_v06 import (
     V06BundleVerificationError,
     verify_package_zip_end_to_end_v06,
 )
+from .bundle_v06 import (
+    V06BundleBuildError,
+    create_verified_bundle_v06,
+)
 
 
 def cmd_certify(args):
@@ -106,6 +110,23 @@ def cmd_verify_v06_bundle(args):
         output["receipt_written"] = str(receipt_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result["valid"] else 1
+
+
+def cmd_bundle_v06(args):
+    try:
+        result = create_verified_bundle_v06(
+            args.package,
+            args.output,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            overwrite=args.force,
+        )
+    except (OSError, V06BundleBuildError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
 
 
 def cmd_inspect(args):
@@ -355,6 +376,24 @@ def build_parser():
         help="explicitly replace an existing receipt",
     )
     v6b.set_defaults(func=cmd_verify_v06_bundle)
+
+    b6 = sub.add_parser(
+        "bundle-v06",
+        help="create a deterministic verified PCS v0.6 ZIP bundle",
+    )
+    b6.add_argument("package", help="complete PCS v0.6 package directory")
+    b6.add_argument("-o", "--output", required=True, help="output ZIP path")
+    b6.add_argument("--public-key", required=True, help="trusted Ed25519 public key PEM")
+    b6.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    b6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing output ZIP",
+    )
+    b6.set_defaults(func=cmd_bundle_v06)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")
