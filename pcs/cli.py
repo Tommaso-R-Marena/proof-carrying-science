@@ -64,6 +64,10 @@ from .discover_v06 import (
     discover_project_v06,
     write_discovery_outputs_v06,
 )
+from .discovery_review_v06 import (
+    V06DiscoveryReviewError,
+    write_discovery_review_v06,
+)
 
 
 def cmd_certify(args):
@@ -331,6 +335,11 @@ def cmd_discover_v06(args):
             if args.report
             else root / "pcs-discovery.json"
         )
+        review_output = (
+            Path(args.review).resolve()
+            if args.review
+            else root / "pcs-discovery-review.md"
+        )
         result = discover_project_v06(
             root,
             subject=args.subject,
@@ -343,6 +352,12 @@ def cmd_discover_v06(args):
             report_output=report_output,
             overwrite=args.force,
         )
+        review_path = write_discovery_review_v06(
+            result,
+            review_output,
+            overwrite=args.force,
+        )
+        written["discovery_review"] = str(review_path)
         draft_path = Path(written["manifest_draft"]).resolve()
         project_root_flag = (
             f" --project-root {root}"
@@ -361,7 +376,7 @@ def cmd_discover_v06(args):
                 f"{project_root_flag} -o {root / 'manifest.json'}"
             ),
         }
-    except (OSError, V06DiscoveryError) as e:
+    except (OSError, V06DiscoveryError, V06DiscoveryReviewError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -662,6 +677,10 @@ def build_parser():
     d6.add_argument("project", help="scientific project directory to inspect locally")
     d6.add_argument("-o", "--output", help="manifest draft path; defaults inside project")
     d6.add_argument("--report", help="discovery report path; defaults inside project")
+    d6.add_argument(
+        "--review",
+        help="human-readable discovery review Markdown; defaults inside project",
+    )
     d6.add_argument("--subject", help="override the discovered project subject")
     d6.add_argument(
         "--minimum-confidence",
