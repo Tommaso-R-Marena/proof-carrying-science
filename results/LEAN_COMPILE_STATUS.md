@@ -1,9 +1,23 @@
 # PCS Lean compilation status
 
-**Verdict: NOT YET MACHINE-CHECKED.**
+## Verdict
 
-Target toolchain: Lean 4.16.0.
+**RETURNED ARISTOTLE PROJECT: MACHINE-CHECKED PASS.**
 
-The source tree contains no intentional `sorry`. A successful `./scripts/verify_lean.sh` run is required before describing the kernel as machine checked.
+**PCS-NAMESPACE PROMOTION BRANCH: FINAL REBUILD PENDING.**
 
-Earlier attempts outside this standalone repository failed at environment/runner provisioning before Lean executed. Those attempts provide neither positive nor negative evidence about source correctness.
+Toolchain used by the successful returned build:
+
+```text
+leanprover/lean4:v4.28.0
+Lean 4.28.0
+commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b
+```
+
+The returned Aristotle project completed `lake build` successfully with 15 jobs. Its placeholder audit found no `sorry` or `admit`, and its axiom audit found no `sorryAx` or project-specific axiom.
+
+The proofs have been namespace-promoted into ordinary `PCS/*` modules on branch:
+
+`formal/aristotle-proof-promotion-2026-09-29`
+
+The promotion only changes module/namespace wiring; theorem statements and proof bodies are preserved. One final build of that production-shaped branch is required before merge and before updating the main release verdict.
