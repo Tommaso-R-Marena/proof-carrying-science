@@ -44,6 +44,40 @@ The executable reference kernel can:
 
 The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
 
+
+## v0.6 end-to-end reviewer verification
+
+The v0.6 research line exposes one fail-closed reviewer command for a delivered
+package directory:
+
+```bash
+pcs verify-v06 delivered-package \
+  --public-key trusted-reviewer-key.pem \
+  --expected-signer-fingerprint <sha256-of-trusted-ed25519-public-key> \
+  --receipt verification-receipt.json
+```
+
+The command verifies, in order:
+
+1. exact canonical JCS bytes for the certificate, signatures and manifest;
+2. the certificate Ed25519 signature;
+3. the exact signed package member set, sizes, SHA-256 hashes and certificate binding;
+4. fresh replay of all supported scientific evidence;
+5. exact equality of the delivered normalized decision set with the replay-derived set.
+
+Exit codes are stable:
+
+- `0`: the complete v0.6 verification chain accepted;
+- `1`: the package was read successfully but verification rejected it;
+- `2`: an operational/input error prevented verification.
+
+Verification receipts are deterministic JSON derived from the verification result.
+Existing receipt files are not overwritten unless `--force-receipt` is supplied
+explicitly.
+
+For reviewer deployments, pin `--expected-signer-fingerprint` rather than trusting
+an arbitrary public key delivered inside the same package.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
