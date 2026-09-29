@@ -88,15 +88,14 @@ def validate_normalized_index_v06(index: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_normalized_set_v06(
+def build_normalized_set_after_replay_v06(
     certificate: dict[str, Any],
-    package_files: Mapping[str, bytes],
+    replay: dict[str, Any],
 ) -> dict[str, Any]:
-    replay = verify_certificate_replay_v06(certificate, package_files)
-    if not replay["valid"]:
+    if not replay.get("valid"):
         raise V06NormalizedSetError(
             "certificate must pass executable replay before normalized-set derivation: "
-            + "; ".join(replay["errors"])
+            + "; ".join(replay.get("errors", []))
         )
 
     entries: list[dict[str, Any]] = []
@@ -156,6 +155,14 @@ def build_normalized_set_v06(
     }
 
 
+def build_normalized_set_v06(
+    certificate: dict[str, Any],
+    package_files: Mapping[str, bytes],
+) -> dict[str, Any]:
+    replay = verify_certificate_replay_v06(certificate, package_files)
+    return build_normalized_set_after_replay_v06(certificate, replay)
+
+
 def parse_normalized_index_bytes_v06(raw: bytes) -> dict[str, Any]:
     if not isinstance(raw, bytes):
         raise V06NormalizedSetError("v0.6 normalized index must be immutable bytes")
@@ -184,9 +191,10 @@ def parse_normalized_index_bytes_v06(raw: bytes) -> dict[str, Any]:
     return value
 
 
-def verify_normalized_set_v06(
+def verify_normalized_set_after_replay_v06(
     certificate: dict[str, Any],
     package_files: Mapping[str, bytes],
+    replay: dict[str, Any],
 ) -> dict[str, Any]:
     errors: list[str] = []
     raw_index = package_files.get(INDEX_PATH_V06)
@@ -198,7 +206,7 @@ def verify_normalized_set_v06(
 
     try:
         delivered_index = parse_normalized_index_bytes_v06(raw_index)
-        expected = build_normalized_set_v06(certificate, package_files)
+        expected = build_normalized_set_after_replay_v06(certificate, replay)
     except (V06NormalizedSetError, V06NormalizationError) as exc:
         return {"valid": False, "errors": [str(exc)]}
 
@@ -257,3 +265,15 @@ def verify_normalized_set_v06(
         "claim_ids": delivered_claim_ids,
         "entries": delivered_index["entries"],
     }
+
+
+def verify_normalized_set_v06(
+    certificate: dict[str, Any],
+    package_files: Mapping[str, bytes],
+) -> dict[str, Any]:
+    replay = verify_certificate_replay_v06(certificate, package_files)
+    return verify_normalized_set_after_replay_v06(
+        certificate,
+        package_files,
+        replay,
+    )
