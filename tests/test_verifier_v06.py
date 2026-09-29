@@ -12,6 +12,7 @@ from pcs.byte_contract_v06 import parse_certificate_bytes_v06
 from pcs.canonical_json import canonicalize_jcs, canonicalize_jcs_bytes
 from pcs.certificate_v06 import finalize_certificate_hashes_v06
 from pcs.certificate_semantics_v06 import workflow_summary_v06
+from pcs.environment_replay_v06 import environment_binding_v06
 from pcs.normalized_set_v06 import (
     INDEX_PATH_V06,
     index_semantic_hash_v06,
@@ -141,6 +142,7 @@ def test_end_to_end_fails_at_package_binding_before_replay_on_artifact_tamper():
         "canonical_inputs": True,
         "certificate_signature": True,
         "package_binding": False,
+        "environment_replay": False,
         "workflow_replay": False,
         "replay": False,
         "normalized_set": False,
@@ -362,3 +364,117 @@ def test_resigned_false_static_workflow_claim_fails_at_workflow_replay():
     assert result["stages"]["workflow_replay"] is False
     assert result["stages"]["replay"] is False
     assert any("output set differs" in error for error in result["errors"])
+
+
+
+def test_resigned_false_environment_claim_fails_at_environment_replay():
+    certificate = parse_certificate_bytes_v06(_raw("certificate.json"))
+    forged = deepcopy(certificate)
+
+    requirements = b"numpy==1.26.4 --hash=sha256:" + (b"a" * 64) + b"\n"
+    env_artifact = {
+        "id": "env_requirements",
+        "path": "artifacts/env_requirements/payload",
+        "role": "environment-specification",
+        "sha256": hashlib.sha256(requirements).hexdigest(),
+        "media_type": "text/plain",
+        "source_path": "requirements.txt",
+    }
+    forged["artifacts"].append(env_artifact)
+
+    false_environment = {
+        "format": "pcs-environment-capture-v1",
+        "static_only": True,
+        "network_accessed": False,
+        "user_code_executed": False,
+        "source_artifact_ids": ["env_requirements"],
+        "sources": [
+            {
+                "artifact_id": "env_requirements",
+                "path": "requirements.txt",
+                "kind": "requirements",
+                "sha256": hashlib.sha256(requirements).hexdigest(),
+                "size": len(requirements),
+            }
+        ],
+        "python": {
+            "interpreter_constraints": [],
+            "dependencies": [
+                {
+                    "ecosystem": "python",
+                    "name": "numpy",
+                    "raw": "numpy==9.9.9",
+                    "source_path": "requirements.txt",
+                    "source_kind": "requirements",
+                    "exact_pin": True,
+                    "hash_pinned": True,
+                    "version": "9.9.9",
+                }
+            ],
+        },
+        "r": {"interpreter_constraints": [], "dependencies": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+        "hermeticity": "hash_pinned_dependencies",
+        "replay_plan": {
+            "format": "pcs-environment-replay-plan-v1",
+            "hermeticity": "hash_pinned_dependencies",
+            "required_tools": ["python"],
+            "steps": [
+                {
+                    "kind": "pip_install",
+                    "source_path": "requirements.txt",
+                    "command_template": (
+                        "python -m pip install --require-hashes -r requirements.txt"
+                    ),
+                    "network_required": True,
+                    "executes_project_build_instructions": True,
+                }
+            ],
+            "automatic_execution_permitted_by_pcs": False,
+            "reason": "forged but correctly signed environment claim",
+        },
+        "unresolved": [],
+        "summary": {
+            "source_files": 1,
+            "dependency_records": 1,
+            "python_dependency_records": 1,
+            "r_dependency_records": 0,
+            "conda_dependency_records": 0,
+            "container_specs": 0,
+            "unresolved_items": 0,
+        },
+        "semantic_sha256": "0" * 64,
+        "human_confirmed": True,
+        "confirmation_scope": "reviewed",
+    }
+    forged["environment"] = environment_binding_v06(false_environment)
+    forged["semantic_hash"] = ""
+    forged["integrity_hash"] = ""
+    forged = finalize_certificate_hashes_v06(forged)
+
+    files = _golden_files()
+    files["artifacts/env_requirements/payload"] = requirements
+    cert_bytes, cert_sig, manifest_bytes, package_sig = _signed_inputs(
+        forged,
+        files,
+    )
+    files["certificate.json"] = cert_bytes
+
+    result = _verify(
+        certificate_bytes=cert_bytes,
+        certificate_signature_bytes=cert_sig,
+        package_manifest_bytes=manifest_bytes,
+        package_signature_bytes=package_sig,
+        files=files,
+    )
+
+    assert result["valid"] is False
+    assert result["failed_stage"] == "environment_replay"
+    assert result["stages"]["canonical_inputs"] is True
+    assert result["stages"]["certificate_signature"] is True
+    assert result["stages"]["package_binding"] is True
+    assert result["stages"]["environment_replay"] is False
+    assert result["stages"]["workflow_replay"] is False
+    assert result["stages"]["replay"] is False
+    assert any("fresh capture" in error for error in result["errors"])
