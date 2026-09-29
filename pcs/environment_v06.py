@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shlex
 import tomllib
 from pathlib import Path
 from typing import Any
@@ -771,7 +772,9 @@ def _replay_plan(
                 {
                     "kind": "container_build",
                     "source_path": container["source_path"],
-                    "command_template": f"docker build -f {container['source_path']} .",
+                    "command_template": (
+                        f"docker build -f {shlex.quote(container['source_path'])} ."
+                    ),
                     "network_required": True,
                     "executes_project_build_instructions": True,
                 }
@@ -794,7 +797,7 @@ def _replay_plan(
             {
                 "kind": "conda_lock",
                 "source_path": lock,
-                "command_template": f"conda-lock install {lock}",
+                "command_template": f"conda-lock install {shlex.quote(lock)}",
                 "network_required": True,
                 "executes_project_build_instructions": False,
             }
@@ -847,7 +850,8 @@ def _replay_plan(
                     "kind": "pip_install",
                     "source_path": first,
                     "command_template": (
-                        f"python -m pip install {'--require-hashes ' if use_hashes else ''}-r {first}"
+                        f"python -m pip install {'--require-hashes ' if use_hashes else ''}"
+                        f"-r {shlex.quote(first)}"
                     ),
                     "network_required": True,
                     "executes_project_build_instructions": True,
@@ -875,7 +879,7 @@ def _replay_plan(
             {
                 "kind": "conda_environment",
                 "source_path": env_file,
-                "command_template": f"conda env create -f {env_file}",
+                "command_template": f"conda env create -f {shlex.quote(env_file)}",
                 "network_required": True,
                 "executes_project_build_instructions": False,
             }
