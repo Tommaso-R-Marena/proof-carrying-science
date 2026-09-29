@@ -13,6 +13,7 @@ from pcs.normalized_wire import (
     normalize_verified_certificate,
     predicate_commitment,
     validate_normalized_wire,
+    verify_normalized_against_certificate,
     wire_semantic_hash,
 )
 
@@ -210,3 +211,32 @@ def test_wire_verifier_rejects_hash_tamper():
     assert not result["valid"]
     assert "wire semantic hash mismatch" in result["errors"]
     assert "source claim id does not match normalized claim id" in result["errors"]
+
+
+def test_wire_exactly_reproduces_from_verified_source_certificate():
+    root = Path(__file__).resolve().parents[1]
+    with tempfile.TemporaryDirectory() as d:
+        out = Path(d) / "evidence"
+        build_certificate(root / "examples/pkpd_one_compartment/manifest.json", out)
+        wire = normalize_verified_certificate(out / "certificate.json", "C_PK_REPLAY")
+        result = verify_normalized_against_certificate(wire, out / "certificate.json")
+        assert result["valid"], result["errors"]
+        assert result["source_certificate_match"] is True
+
+
+def test_source_certificate_binding_rejects_rehashed_but_unrelated_wire():
+    root = Path(__file__).resolve().parents[1]
+    with tempfile.TemporaryDirectory() as d:
+        out = Path(d) / "evidence"
+        build_certificate(root / "examples/pkpd_one_compartment/manifest.json", out)
+        wire = normalize_verified_certificate(out / "certificate.json", "C_PK_REPLAY")
+        wire["source"]["certificate_semantic_hash"] = "f" * 64
+        wire["wire_semantic_hash"] = wire_semantic_hash(wire)
+
+        internal = validate_normalized_wire(wire)
+        assert internal["valid"], internal["errors"]
+
+        bound = verify_normalized_against_certificate(wire, out / "certificate.json")
+        assert not bound["valid"]
+        assert bound["source_certificate_match"] is False
+        assert any("does not exactly match source certificate" in e for e in bound["errors"])
