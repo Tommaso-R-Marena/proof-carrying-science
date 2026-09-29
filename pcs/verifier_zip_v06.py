@@ -22,6 +22,7 @@ from .verifier_io_v06 import (
     load_public_key_v06,
 )
 from .verifier_v06 import verify_end_to_end_v06
+from .policy_v06 import apply_reviewer_policy_v06
 
 
 MAX_ARCHIVE_ENTRIES_V06 = MAX_PACKAGE_FILES_V06 + 128
@@ -319,6 +320,7 @@ def verify_package_zip_end_to_end_v06(
     public_key_path: str | Path,
     *,
     expected_fingerprint: str | None = None,
+    policy_path: str | Path | None = None,
 ) -> dict[str, Any]:
     loaded = load_package_zip_v06(bundle)
     public_key = load_public_key_v06(public_key_path)
@@ -335,4 +337,4 @@ def verify_package_zip_end_to_end_v06(
     receipt["bundle_sha256"] = loaded["bundle_sha256"]
     receipt["archive_bytes"] = loaded["archive_bytes"]
     receipt["archive_format"] = "zip"
-    return receipt
+    return apply_reviewer_policy_v06(receipt, policy_path)
