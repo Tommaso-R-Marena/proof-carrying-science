@@ -3,6 +3,8 @@ from __future__ import annotations
 import hashlib
 
 import pytest
+from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from pcs.crypto_domains_v06 import (
     CERTIFICATE_INTEGRITY_DOMAIN,
@@ -19,7 +21,7 @@ from pcs.crypto_domains_v06 import (
     signature_payload_bytes,
     signature_payload_envelope,
 )
-from pcs.hashing import sha256_json
+from pcs.hashing import canonical_json_bytes, sha256_json
 
 
 PAYLOAD = {"z": "é", "a": 1.0, "nested": {"b": 2, "a": 1}}
@@ -76,3 +78,38 @@ def test_unknown_domains_fail_closed():
         domain_sha256("pcs-unknown-sha256-v2", PAYLOAD)
     with pytest.raises(CryptoDomainError):
         signature_payload_bytes("pcs-unknown-signature-v2", PAYLOAD)
+
+
+def test_v05_and_v06_signature_payloads_are_not_interchangeable():
+    key = Ed25519PrivateKey.generate()
+    public = key.public_key()
+
+    legacy_payload = canonical_json_bytes(PAYLOAD)
+    v06_payload = signature_payload_bytes(CERTIFICATE_SIGNATURE_DOMAIN, PAYLOAD)
+
+    legacy_signature = key.sign(legacy_payload)
+    v06_signature = key.sign(v06_payload)
+
+    public.verify(legacy_signature, legacy_payload)
+    public.verify(v06_signature, v06_payload)
+
+    with pytest.raises(InvalidSignature):
+        public.verify(legacy_signature, v06_payload)
+    with pytest.raises(InvalidSignature):
+        public.verify(v06_signature, legacy_payload)
+
+
+def test_certificate_and_package_signature_domains_cannot_cross_verify():
+    key = Ed25519PrivateKey.generate()
+    public = key.public_key()
+
+    certificate_payload = signature_payload_bytes(CERTIFICATE_SIGNATURE_DOMAIN, PAYLOAD)
+    package_payload = signature_payload_bytes(PACKAGE_SIGNATURE_DOMAIN, PAYLOAD)
+
+    certificate_signature = key.sign(certificate_payload)
+    package_signature = key.sign(package_payload)
+
+    with pytest.raises(InvalidSignature):
+        public.verify(certificate_signature, package_payload)
+    with pytest.raises(InvalidSignature):
+        public.verify(package_signature, certificate_payload)
