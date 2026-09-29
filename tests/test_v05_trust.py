@@ -332,3 +332,33 @@ def test_validly_resigned_package_cannot_substitute_unrelated_normalized_state()
             "normalized wire does not exactly match source certificate normalization" in e
             for e in result["normalized_decisions"]["errors"]
         )
+
+
+
+def test_051_resigned_bundle_cannot_downgrade_away_normalized_refinement():
+    from pcs.bundle import create_reproducible_bundle
+    from pcs.package import build_package_manifest, sign_package_manifest
+    import shutil
+
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        _, priv, pub, _, evidence, _ = _signed_attestation(root)
+
+        shutil.rmtree(evidence / "normalized")
+        build_package_manifest(evidence)
+        sign_package_manifest(
+            evidence / "package_manifest.json",
+            priv,
+            evidence / "package_signature.json",
+        )
+        downgraded = root / "resigned-without-normalized.zip"
+        create_reproducible_bundle(evidence / "certificate.json", downgraded)
+
+        result = verify_bundle(downgraded, public_key=pub, require_signature=True)
+        assert not result["valid"]
+        assert result["assurance_dimensions"]["signer_authenticity"] == "VERIFIED"
+        assert result["assurance_dimensions"]["normalized_refinement"] == "REQUIRED_MISSING"
+        assert any(
+            "0.5.1 bundle requires normalized decision artifacts" in e
+            for e in result["errors"]
+        )
