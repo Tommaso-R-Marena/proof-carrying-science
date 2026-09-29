@@ -20,7 +20,33 @@ after independent certificate replay verification. Full Python predicates are
 SHA-256 committed before they cross into Lean so that domain-specific fields are
 not projected away.
 
-## Required work
+## Executable verification
+
+Before changing Lean sources, run from the repository root if the environment has
+Python 3.11+ and the project dependencies available:
+
+```bash
+python -m pytest -q tests/test_normalized_wire.py tests/test_v05_trust.py tests/test_attestation_finalization.py
+```
+
+Then, if feasible, run the complete suite:
+
+```bash
+python -m pytest -q
+```
+
+In particular confirm:
+- the repository PK/PD example exactly reproduces the frozen normalized wire vector;
+- a rehashed predicate-binding or decision-status mutation is rejected;
+- a normalized wire can be required to reproduce exactly from its source certificate;
+- a correctly re-signed package with a substituted normalized state is rejected;
+- a correctly re-signed 0.5.1 package with the normalized layer removed is rejected;
+- a normal signed attestation packages normalized states for every claim and verifies them.
+
+If the Python environment is unavailable, report that explicitly rather than
+claiming these tests passed.
+
+## Required Lean work
 
 1. Use the existing `leanprover/lean4:v4.28.0` toolchain.
 2. Run `lake build` from `formal/`.
@@ -79,3 +105,19 @@ typed, well-formed claim-scoped DecisionWire
 
 Raw JSON parsing and SHA-256 correctness remain outside this theorem and must stay
 explicitly identified as the next lower refinement boundary.
+
+
+## Final verdict format
+
+Return a single explicit verdict with separate lines for:
+
+- PYTHON TARGETED TESTS: PASS / FAIL / NOT RUN
+- PYTHON FULL SUITE: PASS / FAIL / NOT RUN
+- LEAN 4.28 BUILD: PASS / FAIL
+- PLACEHOLDER / FORBIDDEN DECLARATION AUDIT: PASS / FAIL
+- WIRE CODEC VECTORS: PASS / FAIL
+- WIRE SOUNDNESS AXIOM AUDIT: PASS / FAIL
+- SOURCE CHANGES REQUIRED: NONE / list exact changes
+
+Do not merge or mark the branch verified unless the Lean build passes. Do not
+describe Python tests as executed if they were not actually run.
