@@ -88,6 +88,16 @@ The discovery engine is a usability/recommendation layer, not a scientific verdi
 Confidence scores select only high-confidence supported patterns by default; the
 scientist remains responsible for the meaning of the confirmed claims.
 
+Static Python/Jupyter workflow discovery now complements the file-pattern detectors.
+The CLI parses source with Python ASTs without importing or executing user code,
+resolves conservative local file reads/writes, drafts artifact-dependency workflow
+nodes, reports dynamic/ambiguous references instead of guessing, and keeps partial
+inferences below the default 0.95 auto-selection threshold. Confirmed workflow
+inferences are carried into the signed certificate as explicit static-only
+provenance.
+
+See `docs/STATIC_WORKFLOW_DISCOVERY_V06.md`.
+
 ## v0.6 end-to-end reviewer verification
 
 The v0.6 research line exposes one fail-closed reviewer command for a delivered
