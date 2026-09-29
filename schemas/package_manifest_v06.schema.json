@@ -56,6 +56,25 @@
             "minimum": 0
           }
         }
+      },
+      "required": [
+        "certificate.json"
+      ],
+      "propertyNames": {
+        "allOf": [
+          {
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          {
+            "not": {
+              "enum": [
+                "package_manifest.json",
+                "package_signature.json"
+              ]
+            }
+          }
+        ]
       }
     }
   }
