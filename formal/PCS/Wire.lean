@@ -90,6 +90,9 @@ def decodedEvidence (w : DecisionWire) : List Evidence :=
 def evidenceIds (w : DecisionWire) : List String :=
   w.evidence.map (fun e => e.id)
 
+def contextIds (w : DecisionWire) : List String :=
+  w.context.map (fun a => a.id)
+
 /--
 Well-formedness facts that must be established by the executable decoder/
 normalizer before the typed wire state may enter the machine-checked decision
@@ -101,6 +104,7 @@ they are the remaining lower refinement boundary.
 structure WellFormed (w : DecisionWire) : Prop where
   sourceClaim : w.source.claimId = w.claim.id
   exactEvidenceScope : evidenceIds w = w.claim.requiredEvidence
+  exactContextScope : contextIds w = w.claim.assumptions
   uniqueEvidenceIds : UniqueEvidenceIds (decodedEvidence w)
   context : ContextCovers (decodedContext w) (decodeClaim w.claim)
   binding : RequiredEvidenceBound (decodeClaim w.claim) (decodedEvidence w)
@@ -120,6 +124,10 @@ def toDecisionInput (w : DecisionWire) (h : WellFormed w) : DecisionInput where
 theorem source_claim_identity {w : DecisionWire} (h : WellFormed w) :
     w.source.claimId = (toDecisionInput w h).claim.id := by
   simpa [toDecisionInput, decodeClaim] using h.sourceClaim
+
+theorem exact_context_scope_preserved {w : DecisionWire} (h : WellFormed w) :
+    contextIds w = (toDecisionInput w h).claim.assumptions := by
+  simpa [toDecisionInput, decodeClaim] using h.exactContextScope
 
 theorem decoded_decision_matches_recorded
     (w : DecisionWire) (h : WellFormed w) :
