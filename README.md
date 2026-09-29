@@ -36,7 +36,8 @@ The executable reference kernel can:
 - evaluate reviewer-supplied acceptance policies that remain external to producer bundles;
 - create deterministic evidence ZIPs;
 - safely unpack and independently verify evidence ZIPs with path-traversal, namespace-collision, portability, and size limits;
-- emit reviewer verification receipts binding exact bundle/policy bytes and assurance dimensions;\n- enforce claim-status gates in CI;
+- emit reviewer verification receipts binding exact bundle/policy bytes and assurance dimensions;
+- enforce claim-status gates in CI;
 - scaffold a bounded PK/PD pilot project;
 - perform an environment/reference self-check;
 - generate a complete evidence package, HTML report, optional signature, and deterministic ZIP with one command;
@@ -365,6 +366,45 @@ roles, subject groups, accepted-review count, and selected scientific subject.
 
 This layer is governance over already verified reviewer receipts. It does not
 rewrite claim status or elevate PCS assurance classes.
+
+### Adaptive replay scheduling
+
+PCS v0.6 now includes a telemetry-driven ordering layer for mandatory replay checks.
+It can run deterministic baselines or a contextual LinUCB-style bandit, but the
+scheduler never changes which evidence is required or how a scientific check is
+evaluated.
+
+Recommended initial deployment is shadow mode:
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-public.pem \
+  --scheduler manifest \
+  --shadow-bandit \
+  --scheduler-history scheduler-history.jsonl \
+  --scheduler-telemetry-append scheduler-history.jsonl
+```
+
+Analyze accumulated history with:
+
+```bash
+pcs scheduler-report-v06 scheduler-history.jsonl \
+  -o scheduler-report.json
+```
+
+Implemented strategies are `manifest`, `cheapest-first`,
+`failure-rate-first`, `failure-per-second`, and `bandit`.
+
+Active bandit ordering has a cold-start guard: it falls back to the deterministic
+failure-per-second baseline until there are at least 20 eligible observations
+overall and 3 observations for every check type in the current package.
+
+All mandatory checks still execute and replay results are reconstructed in
+certificate order before claim assessment. Persisted telemetry hashes evidence IDs
+and contains timing/size/outcome metadata only; it is not part of scientific truth
+semantics.
+
+See `docs/ADAPTIVE_SCHEDULER_V06.md`.
 
 ## Pre-result pilot commitment
 
