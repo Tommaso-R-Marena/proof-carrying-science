@@ -171,12 +171,14 @@ def verify_package_file_map_v06(
     expected_files = manifest.get("files", {})
     names = list(files.keys())
     if any(not isinstance(name, str) for name in names):
-        errors.append("v0.6 package file-map keys must be strings")
-    else:
-        try:
-            validate_package_namespace_v06({name: expected_files.get(name, {}) for name in names})
-        except V06PackageError as exc:
-            errors.append(str(exc))
+        return {
+            "valid": False,
+            "errors": ["v0.6 package file-map keys must be strings"],
+        }
+    try:
+        validate_package_namespace_v06({name: expected_files.get(name, {}) for name in names})
+    except V06PackageError as exc:
+        errors.append(str(exc))
 
     expected_names = set(expected_files)
     actual_names = set(names)
