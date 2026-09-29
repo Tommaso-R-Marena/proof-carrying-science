@@ -332,9 +332,12 @@ def verify_certificate_replay_v06(
         "checker_version": certificate["checker_version"],
         "scheduler": {
             "format": schedule["format"],
+            "requested_strategy": schedule["requested_strategy"],
             "strategy": schedule["strategy"],
+            "fallback_reason": schedule["fallback_reason"],
             "history_runs": schedule["history_runs"],
             "bandit_alpha": schedule["bandit_alpha"],
+            "bandit_readiness": schedule["bandit_readiness"],
             "all_mandatory_checks_execute": schedule["all_mandatory_checks_execute"],
             "scientific_verdict_uses_scheduler": schedule[
                 "scientific_verdict_uses_scheduler"
@@ -377,9 +380,12 @@ def verify_certificate_replay_v06(
         "claim_statuses": claim_statuses,
         "scheduler": {
             "format": schedule["format"],
+            "requested_strategy": schedule["requested_strategy"],
             "strategy": schedule["strategy"],
+            "fallback_reason": schedule["fallback_reason"],
             "history_runs": schedule["history_runs"],
             "bandit_alpha": schedule["bandit_alpha"],
+            "bandit_readiness": schedule["bandit_readiness"],
             "all_mandatory_checks_execute": schedule["all_mandatory_checks_execute"],
             "scientific_verdict_uses_scheduler": schedule[
                 "scientific_verdict_uses_scheduler"
