@@ -15,6 +15,24 @@ Every pilot delivery should record:
 
 Do not imply that a source-formalized Lean component was machine checked unless the recorded release has successful build evidence.
 
+## Local release gate
+
+Run from a clean committed checkout:
+
+```bash
+python scripts/run_release_gate.py
+```
+
+This freezes the exact commit, runtime provenance, `pcs doctor`, Python tests, adversarial campaign, reference demo, formal placeholder audit, and a Lean `lake build` when Lake is available under `results/runs/<timestamp>-<commit>/`.
+
+For a release where PCS will claim the Lean kernel is machine checked, require Lean explicitly:
+
+```bash
+python scripts/run_release_gate.py --require-lean
+```
+
+Do not promote inventory counts to executed claims without the retained run directory.
+
 ## Release procedure
 
 1. Freeze the pilot claim inventory and assumptions.
