@@ -9,6 +9,7 @@ import PCS.Wire
 import PCS.WireVectors
 import PCS.WireCodec
 import PCS.WireCodecVectors
+import PCS.WireCheck
 import PCS.PKPD
 import PCS.DecisionVectors
 import PCS.AcceptanceTests
@@ -87,3 +88,13 @@ decision-extraction, normalization, and normalized-state soundness theorems.
 #print axioms PCS.WireCodec.unknown_evidence_kind_rejected
 #print axioms PCS.WireCodec.unknown_outcome_rejected
 #print axioms PCS.WireCodec.unknown_decision_rejected
+
+
+#print axioms PCS.WireCheck.decodedEvidence_unique_of_wire_ids_nodup
+#print axioms PCS.WireCheck.contextCovers_of_exact_context_scope
+#print axioms PCS.WireCheck.requiredEvidenceBound_of_commitments
+#print axioms PCS.WireCheck.wireCheck_sound
+#print axioms PCS.WireCheck.wireCheck_computational_sound
+#print axioms PCS.WireCheck.wireCheck_formal_sound
+#print axioms PCS.WireCheck.wireCheck_empirical_sound
+#print axioms PCS.WireCheck.wireCheck_mixed_sound
