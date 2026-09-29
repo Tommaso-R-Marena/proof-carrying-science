@@ -15,6 +15,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from .bundle_v06 import V06BundleBuildError, create_verified_bundle_v06
 from .canonical_json import JCS_PROFILE, canonicalize_jcs, canonicalize_jcs_bytes
 from .certificate_semantics_v06 import (
+    V06CertificateSemanticsError,
     artifact_ids_from_predicate,
     workflow_summary_v06,
 )
@@ -301,7 +302,10 @@ def build_attestation_directory_v06(
         raise V06AttestationError("manifest root must be an object")
 
     private_key = _load_private_key_v06(private_key_path)
-    public_key = load_public_key_v06(public_key_path)
+    try:
+        public_key = load_public_key_v06(public_key_path)
+    except V06VerifierIOError as exc:
+        raise V06AttestationError(str(exc)) from exc
     private_fingerprint = public_key_fingerprint(private_key.public_key())
     public_fingerprint = public_key_fingerprint(public_key)
     if private_fingerprint != public_fingerprint:
@@ -457,7 +461,10 @@ def build_attestation_directory_v06(
             assumption["rationale"] = raw_assumption["rationale"]
         assumptions.append(assumption)
 
-    workflow_summary = workflow_summary_v06(workflow, artifact_ids)
+    try:
+        workflow_summary = workflow_summary_v06(workflow, artifact_ids)
+    except V06CertificateSemanticsError as exc:
+        raise V06AttestationError(str(exc)) from exc
 
     certificate: dict[str, Any] = {
         "spec_version": SPEC_VERSION_V06,
@@ -570,6 +577,15 @@ def attest_v06(
 ) -> dict[str, Any]:
     """Produce one self-verified v0.6 delivery ZIP from a project manifest."""
     output = Path(output_bundle).resolve()
+    if output.exists():
+        if output.is_dir():
+            raise V06AttestationError(
+                f"v0.6 attestation output must be a file path, not a directory: {output}"
+            )
+        if not overwrite:
+            raise V06AttestationError(
+                f"refusing to overwrite existing v0.6 bundle: {output}"
+            )
     output.parent.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory(
