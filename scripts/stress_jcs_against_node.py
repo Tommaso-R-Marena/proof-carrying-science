@@ -98,7 +98,8 @@ for (const hex of hexes) {
     node_object_script = r"""
 import fs from "node:fs";
 import { canonicalizeJcs } from "./site/jcs.mjs";
-const values = JSON.parse(fs.readFileSync(0, "utf8"));
+import { parseStrictJson } from "./site/strict_json.mjs";
+const values = parseStrictJson(fs.readFileSync(0, "utf8"));
 process.stdout.write(JSON.stringify(values.map(canonicalizeJcs)));
 """
     node_objects = json.loads(
