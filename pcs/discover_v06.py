@@ -274,7 +274,7 @@ def _recommend_pkpd(
                 },
             }
         )
-        if len(predictions) == 1:
+        if len(models) == 1 and len(predictions) == 1:
             output = predictions[0]
             recs.append(
                 {
@@ -427,7 +427,7 @@ def _recommend_structured_checks(
                         "detector": "reaction-json",
                         "confidence": 0.99,
                         "reason": "JSON exposes reactants/products arrays compatible with the PCS reaction-balance checker.",
-                        "artifact_ids": [],
+                        "artifact_ids": [item["artifact_id"]],
                         "check": {
                             "id": ev,
                             "type": "reaction_balance",
@@ -457,7 +457,7 @@ def _recommend_structured_checks(
                     "detector": "unit-pair-json",
                     "confidence": 0.99,
                     "reason": "JSON explicitly declares left_unit/right_unit for compatibility checking.",
-                    "artifact_ids": [],
+                    "artifact_ids": [item["artifact_id"]],
                     "check": {
                         "id": ev,
                         "type": "unit_compatible",
@@ -798,6 +798,7 @@ def confirm_manifest_draft_v06(
     draft_path: str | Path,
     output_path: str | Path,
     *,
+    project_root: str | Path | None = None,
     overwrite: bool = False,
     allow_empty: bool = False,
 ) -> dict[str, Any]:
@@ -824,7 +825,13 @@ def confirm_manifest_draft_v06(
             "refusing to confirm a manifest with no claims; add a supported claim/check or pass --allow-empty explicitly"
         )
 
-    verified = _verify_snapshot(draft.parent, manifest)
+    root = Path(project_root).resolve() if project_root is not None else draft.parent.resolve()
+    output_candidate = Path(output_path).resolve()
+    if output_candidate.parent != root:
+        raise V06DiscoveryError(
+            "confirmed manifest must be written in the project root so artifact paths remain bound"
+        )
+    verified = _verify_snapshot(root, manifest)
     confirmed = json.loads(json.dumps(manifest))
     confirmed["pcs_intake"]["status"] = "confirmed"
     confirmed["pcs_intake"]["requires_confirmation"] = False
