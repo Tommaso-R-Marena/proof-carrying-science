@@ -185,19 +185,34 @@ def main() -> int:
     args = parser.parse_args()
 
     expected = build()
+    expected_paths = {Path(rel).as_posix() for rel in expected}
+    actual_paths = {
+        path.relative_to(GOLDEN).as_posix()
+        for path in GOLDEN.rglob("*")
+        if path.is_file()
+    }
+
     if args.write:
+        for stale in sorted(actual_paths - expected_paths):
+            (GOLDEN / stale).unlink()
         for rel, raw in expected.items():
             path = GOLDEN / rel
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(raw)
-        print(f"WROTE {len(expected)} v0.6 golden files")
+        print(
+            f"WROTE {len(expected)} v0.6 golden files; "
+            f"removed {len(actual_paths - expected_paths)} stale files"
+        )
         return 0
 
     failures: list[str] = []
+    for stale in sorted(actual_paths - expected_paths):
+        failures.append(f"unexpected stale golden file {stale}")
+    for missing in sorted(expected_paths - actual_paths):
+        failures.append(f"missing {missing}")
     for rel, raw in expected.items():
         path = GOLDEN / rel
         if not path.is_file():
-            failures.append(f"missing {rel}")
             continue
         actual = path.read_bytes()
         if actual != raw:
