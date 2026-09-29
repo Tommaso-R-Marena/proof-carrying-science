@@ -1102,3 +1102,24 @@ def environment_replay_plan_v06(environment: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(plan, dict) or plan.get("format") != ENVIRONMENT_REPLAY_PLAN_FORMAT_V06:
         raise V06EnvironmentCaptureError("environment lacks a valid v0.6 replay plan")
     return plan
+
+
+
+def write_environment_replay_plan_v06(
+    environment: dict[str, Any],
+    output: str | Path,
+    *,
+    overwrite: bool = False,
+) -> Path:
+    plan = environment_replay_plan_v06(environment)
+    path = Path(output).resolve()
+    if path.exists() and not overwrite:
+        raise V06EnvironmentCaptureError(
+            f"refusing to overwrite existing environment replay plan: {path}"
+        )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(plan, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    return path
