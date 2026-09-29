@@ -87,7 +87,7 @@ def _validate_evidence_kind(evidence: dict[str, Any]) -> None:
         )
 
 
-def _workflow_summary(
+def workflow_summary_v06(
     workflow: dict[str, Any],
     artifact_ids: set[str],
 ) -> dict[str, Any]:
@@ -257,7 +257,7 @@ def validate_certificate_semantics_v06(certificate: dict[str, Any]) -> None:
                     f"claim {claim['id']} predicate references unknown artifact {artifact_id}"
                 )
 
-    expected_workflow_summary = _workflow_summary(
+    expected_workflow_summary = workflow_summary_v06(
         certificate["workflow"],
         set(artifact_map),
     )
