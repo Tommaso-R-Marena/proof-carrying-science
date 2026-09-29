@@ -12,22 +12,47 @@
     "assurance_dimensions"
   ],
   "properties": {
-    "verification_receipt_format": {"const": "pcs-bundle-verification-v1"},
-    "verifier_version": {"type": "string", "minLength": 1},
-    "verified_at": {"type": "string", "format": "date-time"},
-    "valid": {"type": "boolean"},
-    "bundle_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "verification_receipt_format": {
+      "const": "pcs-bundle-verification-v1"
+    },
+    "verifier_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "bundle_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
     "verification_inputs": {
       "type": "object",
-      "required": ["require_signature", "expected_signer_fingerprint", "policy_sha256"],
+      "required": [
+        "require_signature",
+        "expected_signer_fingerprint",
+        "policy_sha256"
+      ],
       "properties": {
-        "require_signature": {"type": "boolean"},
+        "require_signature": {
+          "type": "boolean"
+        },
         "expected_signer_fingerprint": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^[0-9a-fA-F]{64}$"
         },
         "policy_sha256": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^[a-f0-9]{64}$"
         }
       },
@@ -40,13 +65,82 @@
         "package_integrity",
         "signer_authenticity",
         "reviewer_policy"
+      ],
+      "properties": {
+        "scientific_replay": {
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "package_integrity": {
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "signer_authenticity": {
+          "enum": [
+            "VERIFIED",
+            "INVALID",
+            "PRESENT_NOT_VERIFIED",
+            "REQUIRED_MISSING",
+            "UNSIGNED"
+          ]
+        },
+        "reviewer_policy": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "NOT_APPLIED"
+          ]
+        },
+        "normalized_refinement": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "NOT_PRESENT"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "errors": {
+      "type": "array"
+    },
+    "certificate": {
+      "type": "object"
+    },
+    "package_manifest": {
+      "type": "object"
+    },
+    "package_signature": {
+      "type": [
+        "object",
+        "null"
       ]
     },
-    "errors": {"type": "array"},
-    "certificate": {"type": "object"},
-    "package_manifest": {"type": "object"},
-    "package_signature": {"type": ["object", "null"]},
-    "policy": {"type": ["object", "null"]}
+    "policy": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "normalized_decisions": {
+      "type": "object"
+    },
+    "certificate_signature": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "signature": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
   },
   "additionalProperties": true
 }
