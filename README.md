@@ -78,6 +78,28 @@ explicitly.
 For reviewer deployments, pin `--expected-signer-fingerprint` rather than trusting
 an arbitrary public key delivered inside the same package.
 
+
+### Verify the delivered v0.6 ZIP directly
+
+A reviewer does not need to extract the archive first:
+
+```bash
+pcs verify-v06-bundle delivered-package.zip \
+  --public-key trusted-reviewer-key.pem \
+  --expected-signer-fingerprint <sha256-of-trusted-ed25519-public-key> \
+  --receipt verification-receipt.json
+```
+
+The v0.6 ZIP verifier never calls `extractall` or writes archive members to a
+temporary filesystem. It validates the archive namespace, rejects traversal,
+duplicate and cross-platform-colliding names, symlinks, encrypted members,
+unsupported compression methods and resource-limit violations, then streams each
+member under bounded uncompressed-size limits and sends the exact bytes to the
+end-to-end verifier.
+
+The receipt additionally binds `bundle_sha256`, the SHA-256 of the exact ZIP
+file supplied by the reviewer.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
