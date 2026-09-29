@@ -34,6 +34,11 @@ from .bundle_v06 import (
 )
 from .attest_v06 import V06AttestationError, attest_v06
 from .policy_v06 import V06ReviewerPolicyError
+from .benchmark_v06 import (
+    V06BenchmarkError,
+    run_benchmark_registry_v06,
+    write_benchmark_report_v06,
+)
 
 
 def cmd_certify(args):
@@ -154,6 +159,25 @@ def cmd_attest_v06(args):
 
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
     return 0
+
+
+def cmd_benchmark_v06(args):
+    try:
+        report = run_benchmark_registry_v06(args.registry)
+        if args.output:
+            out = write_benchmark_report_v06(
+                report,
+                args.output,
+                overwrite=args.force,
+            )
+            report = dict(report)
+            report["report_written"] = str(out)
+    except (OSError, V06BenchmarkError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if report["summary"]["unexpected"] == 0 else 1
 
 
 def cmd_inspect(args):
@@ -448,6 +472,19 @@ def build_parser():
         help="explicitly replace an existing output ZIP after the replacement self-verifies",
     )
     a6.set_defaults(func=cmd_attest_v06)
+
+    bm6 = sub.add_parser(
+        "benchmark-v06",
+        help="run a provenance-bound PCS v0.6 real-world benchmark registry",
+    )
+    bm6.add_argument("registry", help="benchmark registry JSON")
+    bm6.add_argument("-o", "--output", help="write deterministic benchmark report JSON")
+    bm6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing benchmark report",
+    )
+    bm6.set_defaults(func=cmd_benchmark_v06)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")
