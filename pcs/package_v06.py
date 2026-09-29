@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 from typing import Any
 import unicodedata
 
@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import (
     Ed25519PublicKey,
 )
 
-from .canonical_json import JCS_PROFILE
+from .canonical_json import CanonicalJSONError, JCS_PROFILE, parse_jcs_json
 from .certificate_v06 import SPEC_VERSION_V06, verify_certificate_hashes_v06
 from .crypto_domains_v06 import (
     CERTIFICATE_INTEGRITY_DOMAIN,
@@ -21,9 +21,21 @@ from .schema_validation import (
     validate_v06_package_manifest_shape,
 )
 from .signing_v06 import sign_jcs_payload, verify_jcs_signature
+from .hashing import sha256_file
 
 
 PACKAGE_FORMAT_V06 = "pcs-package-v2"
+EXCLUDED_PACKAGE_FILES_V06 = {"package_manifest.json", "package_signature.json"}
+MAX_PACKAGE_FILES_V06 = 1000
+MAX_PACKAGE_TOTAL_BYTES_V06 = 100 * 1024 * 1024
+MAX_PACKAGE_SINGLE_FILE_V06 = 50 * 1024 * 1024
+_PRIVATE_KEY_MARKERS_V06 = (
+    b"-----BEGIN PRIVATE KEY-----",
+    b"-----BEGIN ENCRYPTED PRIVATE KEY-----",
+    b"-----BEGIN OPENSSH PRIVATE KEY-----",
+    b"-----BEGIN RSA PRIVATE KEY-----",
+    b"-----BEGIN EC PRIVATE KEY-----",
+)
 
 _WINDOWS_FORBIDDEN_V06 = set('<>:"|?*')
 _WINDOWS_RESERVED_V06 = {
@@ -108,6 +120,128 @@ def _validate_package_manifest_contract_v06(manifest: dict[str, Any]) -> None:
     except SchemaValidationError as exc:
         raise V06PackageError(str(exc)) from exc
     validate_package_namespace_v06(manifest.get("files", {}))
+
+
+def _load_certificate_file_v06(path: Path) -> dict[str, Any]:
+    try:
+        value = parse_jcs_json(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, CanonicalJSONError) as exc:
+        raise V06PackageError(f"invalid v0.6 certificate JSON: {type(exc).__name__}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise V06PackageError("v0.6 certificate root must be an object")
+    checked = verify_certificate_hashes_v06(value)
+    if not checked["valid"]:
+        raise V06PackageError(f"invalid v0.6 certificate: {checked['errors']}")
+    return value
+
+
+def _contains_private_key_material_v06(path: Path) -> bool:
+    overlap = max(len(marker) for marker in _PRIVATE_KEY_MARKERS_V06) - 1
+    tail = b""
+    with path.open("rb") as fh:
+        while True:
+            chunk = fh.read(1024 * 1024)
+            if not chunk:
+                return False
+            data = tail + chunk
+            if any(marker in data for marker in _PRIVATE_KEY_MARKERS_V06):
+                return True
+            tail = data[-overlap:] if overlap else b""
+
+
+def _inventory_package_directory_v06(root: Path) -> dict[str, dict[str, int | str]]:
+    staged = sorted(root.rglob("*"))
+    symlinks = [p.relative_to(root).as_posix() for p in staged if p.is_symlink()]
+    if symlinks:
+        raise V06PackageError(f"refusing staged symlinks in v0.6 package: {symlinks}")
+
+    regular = [
+        p for p in staged
+        if p.is_file() and p.relative_to(root).as_posix() not in EXCLUDED_PACKAGE_FILES_V06
+    ]
+    if len(regular) > MAX_PACKAGE_FILES_V06:
+        raise V06PackageError(
+            f"v0.6 package has too many files: {len(regular)} > {MAX_PACKAGE_FILES_V06}"
+        )
+
+    files: dict[str, dict[str, int | str]] = {}
+    total = 0
+    for path in regular:
+        rel = path.relative_to(root).as_posix()
+        size = path.stat().st_size
+        if size > MAX_PACKAGE_SINGLE_FILE_V06:
+            raise V06PackageError(f"v0.6 package member too large: {rel!r}")
+        total += size
+        if total > MAX_PACKAGE_TOTAL_BYTES_V06:
+            raise V06PackageError(
+                f"v0.6 package exceeds total byte limit: {total} > {MAX_PACKAGE_TOTAL_BYTES_V06}"
+            )
+        if _contains_private_key_material_v06(path):
+            raise V06PackageError(
+                f"refusing apparent private-key material in v0.6 package: {rel!r}"
+            )
+        files[rel] = {"sha256": sha256_file(path), "size": size}
+
+    validate_package_namespace_v06(files)
+    return files
+
+
+def build_package_manifest_from_directory_v06(root: str | Path) -> dict[str, Any]:
+    root_path = Path(root).resolve()
+    if not root_path.is_dir():
+        raise V06PackageError(f"v0.6 package root is not a directory: {root_path}")
+    certificate_path = root_path / "certificate.json"
+    if not certificate_path.is_file():
+        raise V06PackageError("v0.6 package lacks certificate.json")
+    certificate = _load_certificate_file_v06(certificate_path)
+    files = _inventory_package_directory_v06(root_path)
+    if "certificate.json" not in files:
+        raise V06PackageError("v0.6 package inventory omitted certificate.json")
+    return build_package_manifest_v06(certificate, files)
+
+
+def verify_package_directory_v06(
+    root: str | Path,
+    manifest: dict[str, Any],
+) -> dict[str, Any]:
+    root_path = Path(root).resolve()
+    errors: list[str] = []
+    if not root_path.is_dir():
+        return {"valid": False, "errors": [f"v0.6 package root is not a directory: {root_path}"]}
+
+    try:
+        _validate_package_manifest_contract_v06(manifest)
+        actual_files = _inventory_package_directory_v06(root_path)
+    except V06PackageError as exc:
+        return {"valid": False, "errors": [str(exc)]}
+
+    expected_files = manifest.get("files", {})
+    expected_names = set(expected_files)
+    actual_names = set(actual_files)
+    missing = sorted(expected_names - actual_names)
+    unexpected = sorted(actual_names - expected_names)
+    if missing:
+        errors.append(f"v0.6 package files missing: {missing}")
+    if unexpected:
+        errors.append(f"unexpected v0.6 package files: {unexpected}")
+
+    for name in sorted(expected_names & actual_names):
+        expected = expected_files[name]
+        actual = actual_files[name]
+        if expected.get("sha256") != actual.get("sha256"):
+            errors.append(f"v0.6 package hash mismatch: {name}")
+        if expected.get("size") != actual.get("size"):
+            errors.append(f"v0.6 package size mismatch: {name}")
+
+    certificate_path = root_path / "certificate.json"
+    try:
+        certificate = _load_certificate_file_v06(certificate_path)
+        bound = verify_package_manifest_v06(manifest, certificate)
+        errors.extend(bound["errors"])
+    except V06PackageError as exc:
+        errors.append(str(exc))
+
+    return {"valid": not errors, "errors": errors}
 
 
 def build_package_manifest_v06(
