@@ -131,6 +131,7 @@ V06_CERTIFICATE = finalize_certificate_hashes_v06(
         "integrity_hash_format": "pcs-certificate-integrity-sha256-v2",
         "generated_at": "2026-09-29T00:00:00+00:00",
         "subject": "signature fixture",
+        "mission_scope": "signature binding fixture",
         "assumptions": [],
         "claims": [],
         "artifacts": [],
