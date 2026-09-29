@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -629,14 +630,28 @@ def append_telemetry_history_v06(
         raise V06SchedulerError("refusing to append non-v0.6 replay telemetry")
     path = Path(output).resolve()
     path.parent.mkdir(parents=True, exist_ok=True)
-    line = json.dumps(
-        telemetry,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
+    line = (
+        json.dumps(
+            telemetry,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        )
+        + "\n"
+    ).encode("utf-8")
+    fd = os.open(
+        path,
+        os.O_APPEND | os.O_CREAT | os.O_WRONLY,
+        0o600,
     )
-    with path.open("a", encoding="utf-8", newline="\n") as fh:
-        fh.write(line + "\n")
+    try:
+        written = os.write(fd, line)
+        if written != len(line):
+            raise V06SchedulerError(
+                f"short telemetry-history append: {written} != {len(line)}"
+            )
+    finally:
+        os.close(fd)
     return path
 
 
