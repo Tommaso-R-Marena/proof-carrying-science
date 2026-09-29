@@ -16,6 +16,7 @@ from .normalized_set_v06 import verify_normalized_set_after_replay_v06
 from .replay_v06 import verify_certificate_replay_v06
 from .signing_v06 import verify_certificate_signature_v06
 from .workflow_replay_v06 import verify_static_workflow_replay_v06
+from .environment_replay_v06 import verify_environment_replay_v06
 
 
 VERIFIER_FORMAT_V06 = "pcs-end-to-end-verifier-v06-v1"
@@ -60,9 +61,10 @@ def verify_end_to_end_v06(
     2. certificate hash/schema validity and its Ed25519 signature;
     3. exact signed package member set, byte sizes/hashes, certificate binding and
        package-manifest Ed25519 signature;
-    4. fresh static replay of any human-confirmed workflow dependency claims;
-    5. fresh replay of every certificate evidence item;
-    6. exact equality of the delivered normalized set with the set derived from
+    4. fresh regeneration of any human-confirmed reproducibility-environment contract;
+    5. fresh static replay of any human-confirmed workflow dependency claims;
+    6. fresh replay of every certificate evidence item;
+    7. exact equality of the delivered normalized set with the set derived from
        that *same* replay result.
 
     This is the production executable composition point. It does not turn an
@@ -74,6 +76,7 @@ def verify_end_to_end_v06(
         "canonical_inputs": False,
         "certificate_signature": False,
         "package_binding": False,
+        "environment_replay": False,
         "workflow_replay": False,
         "replay": False,
         "normalized_set": False,
@@ -128,6 +131,18 @@ def verify_end_to_end_v06(
             stages=stages,
         )
     stages["package_binding"] = True
+
+    environment_replay = verify_environment_replay_v06(
+        certificate,
+        package_files,
+    )
+    if not environment_replay["valid"]:
+        return _failed(
+            "environment_replay",
+            list(environment_replay["errors"]),
+            stages=stages,
+        )
+    stages["environment_replay"] = True
 
     workflow_replay = verify_static_workflow_replay_v06(
         certificate,
@@ -196,6 +211,14 @@ def verify_end_to_end_v06(
         "public_key_fingerprint": package_check["public_key_fingerprint"],
         "normalized_index_semantic_hash": normalized["index_semantic_hash"],
         "verified_members": package_check["verified_members"],
+        "environment_replay": {
+            "mode": environment_replay["mode"],
+            "hermeticity": environment_replay["hermeticity"],
+            "source_files_checked": environment_replay["source_files_checked"],
+            "dependency_records": environment_replay.get("dependency_records", 0),
+            "unresolved_items": environment_replay.get("unresolved_items", 0),
+            "replay_plan": environment_replay.get("replay_plan"),
+        },
         "workflow_replay": {
             "nodes_checked": workflow_replay["nodes_checked"],
             "mode": workflow_replay["mode"],
