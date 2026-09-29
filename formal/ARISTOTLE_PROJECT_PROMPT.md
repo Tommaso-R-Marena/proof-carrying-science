@@ -85,3 +85,9 @@ Do not mark the PCS formal kernel machine-checked until the returned project ind
 5. Re-run `lake build` and the no-sorry audit.
 
 `PCS.Normalized.DecisionInput` intentionally begins after raw JSON parsing/schema validation/evidence replay. Do not claim a raw-byte-to-Lean theorem merely from the normalized bridge.
+
+
+## Final acceptance contract
+
+Before returning the project, read and satisfy `ARISTOTLE_FINAL_ACCEPTANCE.md`.
+Treat it as the final build/no-placeholder/axiom-audit checklist.
