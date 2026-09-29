@@ -36,6 +36,7 @@ def certificate(subject: str = "package fixture") -> dict:
             "integrity_hash_format": "pcs-certificate-integrity-sha256-v2",
             "generated_at": "2026-09-29T00:00:00+00:00",
             "subject": subject,
+            "mission_scope": "package binding fixture",
             "assumptions": [],
             "claims": [],
             "artifacts": [],
