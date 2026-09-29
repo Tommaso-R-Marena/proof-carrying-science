@@ -102,6 +102,11 @@ def prepare_verified_environment_workspace_v06(
 
     try:
         loaded = load_package_zip_v06(bundle)
+        if loaded.get("bundle_sha256") != verified.get("bundle_sha256"):
+            raise V06EnvironmentWorkspaceError(
+                "bundle bytes changed after verification and before workspace "
+                "materialization"
+            )
         certificate = parse_certificate_bytes_v06(loaded["certificate_bytes"])
     except (V06BundleVerificationError, OSError, ValueError) as exc:
         raise V06EnvironmentWorkspaceError(str(exc)) from exc
