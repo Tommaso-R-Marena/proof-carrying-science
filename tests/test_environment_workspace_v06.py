@@ -116,8 +116,24 @@ def test_prepare_verified_environment_workspace_materializes_signed_project_with
     )
     assert metadata["format"] == ENVIRONMENT_WORKSPACE_FORMAT_V06
     assert metadata["bundle_sha256"] == result["bundle_sha256"]
+    assert metadata["certificate_semantic_hash"] == result[
+        "certificate_semantic_hash"
+    ]
+    assert metadata["certificate_integrity_hash"] == result[
+        "certificate_integrity_hash"
+    ]
+    assert metadata["normalized_index_semantic_hash"] == result[
+        "normalized_index_semantic_hash"
+    ]
+    assert metadata["public_key_fingerprint"] == result[
+        "public_key_fingerprint"
+    ]
     assert metadata["automatic_execution_permitted_by_pcs"] is False
     assert metadata["materialized_artifacts"]
+    assert (workspace / metadata["verification_receipt"]).exists()
+    assert len(metadata["replay_plan_sha256"]) == 64
+    assert len(metadata["review_before_run_script_sha256"]) == 64
+    assert len(metadata["verification_receipt_sha256"]) == 64
 
     plan = json.loads(
         (workspace / "pcs-environment-plan.json").read_text(encoding="utf-8")
