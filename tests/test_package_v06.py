@@ -139,6 +139,12 @@ def test_public_and_packaged_v06_package_schemas_match():
         "control\x1fchar",
         "delete\x7fchar",
         "e\u0301.txt",
+        ".",
+        "package_manifest.json",
+        "package_signature.json",
+        "CON .txt",
+        "a" * 256,
+        "/".join(["a" * 200] * 6),
     ],
 )
 def test_v06_package_namespace_rejects_nonportable_member_names(name: str):
@@ -296,3 +302,22 @@ def test_v06_directory_builder_enforces_single_file_limit(tmp_path: Path, monkey
     monkeypatch.setattr(package_v06, "MAX_PACKAGE_SINGLE_FILE_V06", 4)
     with pytest.raises(V06PackageError, match="too large"):
         build_package_manifest_from_directory_v06(tmp_path)
+
+
+
+def test_v06_package_manifest_requires_certificate_member():
+    cert = certificate()
+    with pytest.raises(V06PackageError, match="must bind certificate.json"):
+        build_package_manifest_v06(
+            cert,
+            {"artifact.txt": {"sha256": "a" * 64, "size": 1}},
+        )
+
+
+def test_v06_signer_rejects_manifest_that_self_binds_signature_file():
+    key = Ed25519PrivateKey.generate()
+    manifest = build_package_manifest_v06(certificate(), FILES)
+    bad = deepcopy(manifest)
+    bad["files"]["package_signature.json"] = {"sha256": "c" * 64, "size": 10}
+    with pytest.raises(V06PackageError, match="self-referential"):
+        sign_package_manifest_v06(bad, key)
