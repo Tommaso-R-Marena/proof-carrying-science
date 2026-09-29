@@ -93,11 +93,11 @@ def init_project(destination: str | Path, *, template: str = "pkpd", subject: st
     readme = (
         "# PCS PK/PD starter\n\n"
         "This starter demonstrates computational assurance for a restricted one-compartment IV-bolus PK model with a direct Emax PD layer.\n\n"
-        "Replace the synthetic model and output with your bounded workflow, freeze the agreed claims, then run:\n\n"
-        "    pcs freeze-intake pilot_intake.json -o pilot_intake.lock.json\n"
-        "    pcs attest manifest.json -o evidence --intake-lock pilot_intake.lock.json\n"
-        "    pcs verify evidence/certificate.json\n\n"
-        "Passing checks establish only the declared computational properties. They do not establish biological or clinical adequacy.\n"
+        "Replace the synthetic model and output with your bounded workflow, then produce a v0.6 delivery bundle:\n\n"
+        "    pcs keygen --private-key signing-private.pem --public-key signing-public.pem\n"
+        "    pcs attest-v06 manifest.json -o study.pcs.zip --private-key signing-private.pem --public-key signing-public.pem\n"
+        "    pcs verify-v06-bundle study.pcs.zip --public-key signing-public.pem --expected-signer-fingerprint <fingerprint>\n\n"
+        "Passing checks establishes only the declared computational properties. A valid PCS bundle may honestly record a failed scientific claim. It does not establish biological or clinical adequacy.\n"
     )
     manifest = _manifest(subject)
     files = {
