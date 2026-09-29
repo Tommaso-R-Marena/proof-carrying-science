@@ -274,6 +274,7 @@ def plan_evidence_v06(
     history: list[dict[str, Any]] | None = None,
     bandit_alpha: float = 1.0,
     shadow_bandit: bool = False,
+    candidate_overrides: dict[str, dict[str, int]] | None = None,
 ) -> dict[str, Any]:
     if strategy not in SCHEDULER_STRATEGIES_V06:
         raise V06SchedulerError(f"unsupported v0.6 scheduler strategy: {strategy!r}")
@@ -291,6 +292,18 @@ def plan_evidence_v06(
         )
         for i, item in enumerate(evidence)
     ]
+    if candidate_overrides:
+        for candidate in candidates:
+            override = candidate_overrides.get(candidate["evidence_id"])
+            if not isinstance(override, dict):
+                continue
+            if isinstance(override.get("input_bytes"), int) and override["input_bytes"] >= 0:
+                candidate["input_bytes"] = override["input_bytes"]
+            if (
+                isinstance(override.get("artifact_count"), int)
+                and override["artifact_count"] >= 0
+            ):
+                candidate["artifact_count"] = override["artifact_count"]
     stats = history_stats_v06(history)
     models = _bandit_models(history)
 
@@ -421,10 +434,10 @@ def scheduler_report_v06(
             prior.append(run)
             continue
 
-        candidates = []
         artifact_sizes: dict[str, int] = {}
         fake_evidence: list[dict[str, Any]] = []
         checks_by_id: dict[str, dict[str, Any]] = {}
+        candidate_overrides: dict[str, dict[str, int]] = {}
         for check in checks:
             evidence_id = check.get("evidence_id")
             check_type = check.get("check_type")
@@ -437,6 +450,10 @@ def scheduler_report_v06(
                 }
             )
             checks_by_id[evidence_id] = check
+            candidate_overrides[evidence_id] = {
+                "input_bytes": int(check.get("input_bytes", 0)),
+                "artifact_count": int(check.get("artifact_count", 0)),
+            }
 
         if not fake_evidence:
             prior.append(run)
@@ -450,6 +467,7 @@ def scheduler_report_v06(
                 strategy=strategy,
                 history=prior,
                 bandit_alpha=bandit_alpha,
+                candidate_overrides=candidate_overrides,
             )
             sim = simulate_time_to_first_failure_v06(
                 plan["execution_order"],
