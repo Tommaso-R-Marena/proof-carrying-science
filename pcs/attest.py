@@ -13,7 +13,7 @@ from .package import build_package_manifest, sign_package_manifest
 from .report import write_html
 from .signing import sign_certificate
 from .intake import load_lock, assert_lock_matches_certificate, PilotIntakeError
-from .normalized_wire import write_normalized_set
+from .normalized_wire import write_normalized_set, NormalizationError
 
 
 class AttestationError(ValueError):
@@ -56,7 +56,10 @@ def attest(
     verification = verify_certificate(cert_path)
     if not verification["valid"]:
         raise AttestationError(f"certificate failed independent replay: {verification['errors']}")
-    normalized_index = write_normalized_set(cert_path, out / "normalized")
+    try:
+        normalized_index = write_normalized_set(cert_path, out / "normalized")
+    except NormalizationError as exc:
+        raise AttestationError(f"normalized decision export failed: {exc}") from exc
     report_path = write_html(cert, out / "report.html")
     limitations_path = write_limitations(cert, out / "LIMITATIONS.md")
 
