@@ -696,6 +696,10 @@ def analyze_static_workflow_v06(
                         "exact_resolved_set"
                         if source["source_kind"] in {"python", "jupyter"}
                         and source["confidence"] == 0.98
+                        and not any(
+                            artifact_id in ambiguous_outputs
+                            for artifact_id in source["writes"]
+                        )
                         else "claimed_subset"
                     ),
                     "confidence": source["confidence"],
