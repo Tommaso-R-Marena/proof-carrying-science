@@ -10,4 +10,6 @@ import PCS.DecisionExtraction
 import PCS.SerializedBridge
 import PCS.Wire
 import PCS.WireVectors
+import PCS.WireCodec
+import PCS.WireCodecVectors
 import PCS.Audit
