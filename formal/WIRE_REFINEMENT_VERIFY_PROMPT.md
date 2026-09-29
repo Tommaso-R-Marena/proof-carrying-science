@@ -66,7 +66,8 @@ claiming these tests passed.
    - explicit context coverage;
    - required-evidence predicate binding;
    - recorded decision equality with `decideClaim`.
-6. Compile the frozen `PCS.WireVectors.pkpdWire` examples and the raw-string
+6. Compile the frozen `PCS.WireVectors.pkpdWire` examples, including
+   `pkpdWireWellFormed` and the concrete end-to-end `Assures` example, and the raw-string
    `PCS.WireCodecVectors.rawPkpdWire` decoder examples.
 7. Confirm unknown wire-format/version/enum strings are rejected and that raw
    recorded invariant booleans / wire hash are not treated as proofs of
