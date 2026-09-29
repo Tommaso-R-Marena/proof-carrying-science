@@ -167,6 +167,11 @@ def validate_certificate_semantics_v06(certificate: dict[str, Any]) -> None:
 
     for artifact in artifacts:
         _safe_relative_path(artifact["path"], label=f"artifact {artifact['id']} path")
+        if "source_path" in artifact:
+            _safe_relative_path(
+                artifact["source_path"],
+                label=f"artifact {artifact['id']} source_path",
+            )
 
     for assumption in assumptions:
         for claim_id in assumption["scope"]:
