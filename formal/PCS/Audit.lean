@@ -70,6 +70,7 @@ decision-extraction, normalization, and normalized-state soundness theorems.
 
 
 #print axioms PCS.Wire.source_claim_identity
+#print axioms PCS.Wire.exact_context_scope_preserved
 #print axioms PCS.Wire.decoded_decision_matches_recorded
 #print axioms PCS.Wire.predicate_commitment_eq_preserved
 #print axioms PCS.Wire.wire_computational_sound
