@@ -8,6 +8,12 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 from .byte_contract_v06 import parse_certificate_bytes_v06
+from .canonical_json import canonicalize_jcs
+from .environment_execute_v06 import (
+    V06SandboxReplayError,
+    build_sandbox_replay_plan_v06,
+    write_sandbox_replay_plan_v06,
+)
 from .environment_replay_v06 import (
     V06EnvironmentReplayError,
     environment_from_binding_v06,
@@ -239,6 +245,33 @@ def prepare_verified_environment_workspace_v06(
         except (V06EnvironmentCaptureError, OSError) as exc:
             raise V06EnvironmentWorkspaceError(str(exc)) from exc
 
+        try:
+            signed_certificate_path = staging / "pcs-signed-certificate.json"
+            signed_certificate_path.write_bytes(loaded["certificate_bytes"])
+            signed_certificate_signature_path = (
+                staging / "pcs-signed-certificate-signature.json"
+            )
+            signed_certificate_signature_path.write_bytes(
+                loaded["certificate_signature_bytes"]
+            )
+            signed_environment_path = staging / "pcs-signed-environment.json"
+            signed_environment_path.write_text(
+                canonicalize_jcs(environment) + "\n",
+                encoding="utf-8",
+            )
+            sandbox_execution_plan = build_sandbox_replay_plan_v06(
+                certificate,
+                environment,
+            )
+            sandbox_execution_plan_path = None
+            if sandbox_execution_plan is not None:
+                sandbox_execution_plan_path = write_sandbox_replay_plan_v06(
+                    sandbox_execution_plan,
+                    staging / "pcs-execution-plan.json",
+                )
+        except (OSError, V06SandboxReplayError) as exc:
+            raise V06EnvironmentWorkspaceError(str(exc)) from exc
+
         receipt_path = staging / "pcs-verification-receipt.json"
         receipt_path.write_text(
             json.dumps(verified, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
@@ -256,6 +289,29 @@ def prepare_verified_environment_workspace_v06(
             "public_key_fingerprint": verified.get("public_key_fingerprint"),
             "environment_hermeticity": environment.get("hermeticity"),
             "environment_semantic_sha256": environment.get("semantic_sha256"),
+            "signed_certificate": signed_certificate_path.name,
+            "signed_certificate_sha256": hashlib.sha256(
+                signed_certificate_path.read_bytes()
+            ).hexdigest(),
+            "signed_certificate_signature": signed_certificate_signature_path.name,
+            "signed_certificate_signature_sha256": hashlib.sha256(
+                signed_certificate_signature_path.read_bytes()
+            ).hexdigest(),
+            "signed_environment_contract": signed_environment_path.name,
+            "signed_environment_contract_sha256": hashlib.sha256(
+                signed_environment_path.read_bytes()
+            ).hexdigest(),
+            "sandbox_execution_available": sandbox_execution_plan_path is not None,
+            "sandbox_execution_plan": (
+                sandbox_execution_plan_path.name
+                if sandbox_execution_plan_path is not None
+                else None
+            ),
+            "sandbox_execution_plan_sha256": (
+                hashlib.sha256(sandbox_execution_plan_path.read_bytes()).hexdigest()
+                if sandbox_execution_plan_path is not None
+                else None
+            ),
             "environment_source_artifact_ids": list(
                 binding.get("source_artifact_ids", [])
             ),
@@ -309,6 +365,12 @@ def prepare_verified_environment_workspace_v06(
         ),
         "public_key_fingerprint": verified.get("public_key_fingerprint"),
         "environment_hermeticity": environment.get("hermeticity"),
+        "sandbox_execution_available": sandbox_execution_plan_path is not None,
+        "sandbox_execution_plan": (
+            str(destination / sandbox_execution_plan_path.name)
+            if sandbox_execution_plan_path is not None
+            else None
+        ),
         "materialized_artifact_count": len(materialized),
         "environment_source_count": len(binding.get("source_artifact_ids", [])),
         "replay_plan": str(destination / "pcs-environment-plan.json"),

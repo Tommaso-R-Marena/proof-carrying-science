@@ -37,6 +37,7 @@ V06_TESTS = [
     "tests/test_workflow_replay_v06.py",
     "tests/test_environment_replay_v06.py",
     "tests/test_environment_workspace_v06.py",
+    "tests/test_environment_execute_v06.py",
     "tests/test_environment_v06.py",
     "tests/test_benchmark_v06.py",
     "tests/test_signing_v06.py",

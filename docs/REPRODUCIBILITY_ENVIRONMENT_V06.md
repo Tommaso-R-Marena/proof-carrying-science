@@ -261,3 +261,80 @@ package can have weak or incomplete environment declarations.
 
 The environment layer is reproducibility provenance, not scientific evidence
 promotion.
+
+
+## Sandboxed realized-environment replay
+
+A prepared workspace can now be executed explicitly:
+
+\`\`\`bash
+pcs execute-environment-v06 replay-workspace \
+  -o realized-replay \
+  --public-key trusted-producer.pem \
+  --expected-signer-fingerprint <fingerprint>
+\`\`\`
+
+The execution stage re-verifies the producer-signed certificate, re-derives the
+execution plan from the signed workflow/environment contract, validates every
+materialized source artifact against its signed SHA-256 value, and then copies
+only those signed artifacts into a disposable OCI sandbox. The prepared workspace
+itself is never mutated.
+
+Before any workflow node runs, PCS removes every pre-existing signed workflow
+output from the disposable copy. This prevents a producer-supplied output from
+being mistaken for a successfully reproduced result. Python, Jupyter, and R
+static workflow nodes are topologically ordered and run with network disabled,
+a read-only container root filesystem, dropped Linux capabilities, no-new-
+privileges, bounded CPU/memory/PIDs, a temporary /tmp, and a fixed process
+environment. There is deliberately no unsandboxed fallback.
+
+If the signed environment includes exactly one container specification whose
+base stages are digest-pinned, PCS can rebuild it with an offline/no-pull OCI
+build. Otherwise the reviewer must provide an already-local image with
+\`--image\`. A signed container reference that cannot be related to the realized
+image fails the enforceable environment comparison.
+
+After execution, PCS writes:
+
+\`\`\`text
+realized-replay/
+  pcs-realized-environment.json
+  pcs-replay-execution.json
+  outputs/<reproduced workflow outputs...>
+\`\`\`
+
+The realized-environment record captures Python and R interpreter versions,
+installed Python/R/Conda package versions, Python/R interpreter executable
+SHA-256 where available, OS/kernel/architecture evidence, OCI image ID/repo
+digests, and a canonical dependency-tree fingerprint. The execution receipt
+also records bounded stdout/stderr plus hashes, whether stale outputs were
+removed, regenerated output hashes/sizes, mutations to signed non-output
+artifacts, unexpected files, and a field-by-field comparison with the producer's
+signed reconstruction contract.
+
+Exact signed package pins and interpreter constraints are enforced. Non-exact
+dependency declarations must at least be present and are labeled as not exactly
+version-enforced. Values that the existing static contract never promised
+(interpreter binary hash, full realized dependency-tree fingerprint, final OCI
+image digest, and complete OS/kernel identity) are captured as
+\`observed_not_signed\`; PCS does not retroactively mislabel them as producer
+commitments.
+
+A replay receipt is valid only when every selected workflow node exits zero,
+all declared outputs are recreated byte-for-byte, signed non-output artifacts
+remain unchanged, the exact output namespace is respected when the static
+workflow contract claimed an exact set, and every enforceable environment
+expectation matches.
+
+### Determinism boundary
+
+The runner removes common nondeterminism by fixing process environment/thread
+counts, disabling network access, starting from clean signed inputs, removing
+pre-existing outputs, applying fixed resource limits, and comparing exact output
+bytes. v0.6 does **not** virtualize the host kernel's wall clock or entropy
+source. Therefore the receipt reports those limits explicitly instead of
+claiming universal deterministic behavior for programs that intentionally read
+time, entropy, hardware-specific state, or other kernel facilities.
+
+The OCI runtime, host kernel, language/package introspection APIs, local image
+store/build engine, and SHA-256 implementation remain in the execution TCB.

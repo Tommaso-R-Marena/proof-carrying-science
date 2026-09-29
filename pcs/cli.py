@@ -84,6 +84,10 @@ from .environment_workspace_v06 import (
     V06EnvironmentWorkspaceError,
     prepare_verified_environment_workspace_v06,
 )
+from .environment_execute_v06 import (
+    V06SandboxReplayError,
+    execute_prepared_replay_workspace_v06,
+)
 
 
 def cmd_certify(args):
@@ -452,6 +456,26 @@ def cmd_prepare_environment_v06(args):
 
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
     return 0
+
+
+def cmd_execute_environment_v06(args):
+    try:
+        result = execute_prepared_replay_workspace_v06(
+            args.workspace,
+            args.output,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            runtime=args.runtime,
+            image=args.image,
+            timeout_seconds=args.timeout_seconds,
+            memory=args.memory,
+            cpus=args.cpus,
+        )
+    except (OSError, ValueError, V06VerifierIOError, V06SandboxReplayError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["valid"] else 1
 
 
 def cmd_environment_plan_v06(args):
@@ -827,6 +851,21 @@ def build_parser():
         help="pin the accepted producer public-key fingerprint",
     )
     pew6.set_defaults(func=cmd_prepare_environment_v06)
+
+    sew6 = sub.add_parser(
+        "execute-environment-v06",
+        help="sandbox-execute a prepared replay workspace and capture realized environment/output state",
+    )
+    sew6.add_argument("workspace", help="workspace created by prepare-environment-v06")
+    sew6.add_argument("-o", "--output", required=True, help="new realized replay result directory")
+    sew6.add_argument("--public-key", required=True, help="trusted producer Ed25519 public key PEM")
+    sew6.add_argument("--expected-signer-fingerprint", help="pin the accepted producer public-key fingerprint")
+    sew6.add_argument("--runtime", choices=["auto", "docker", "podman"], default="auto")
+    sew6.add_argument("--image", help="existing local OCI image; required when no signed digest-pinned container can be rebuilt offline")
+    sew6.add_argument("--timeout-seconds", type=int, default=300)
+    sew6.add_argument("--memory", default="2g")
+    sew6.add_argument("--cpus", type=float, default=1.0)
+    sew6.set_defaults(func=cmd_execute_environment_v06)
 
     ep6 = sub.add_parser(
         "environment-plan-v06",
