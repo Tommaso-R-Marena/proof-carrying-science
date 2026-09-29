@@ -46,6 +46,48 @@ The executable reference kernel can:
 The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
 
 
+## Guided v0.6 project onboarding
+
+Scientists no longer need to hand-author a PCS manifest from scratch.
+
+```bash
+pcs discover-v06 ./my-project
+```
+
+PCS scans the project locally, safely inventories regular files, excludes key
+material and common build/environment directories, snapshots SHA-256/size metadata,
+and detects supported patterns such as:
+
+- restricted one-compartment IV-bolus + direct-Emax model JSON;
+- matching `time,concentration,effect` prediction tables;
+- named train/test/validation CSV splits with a shared subject/sample identifier;
+- reaction JSON with reactants/products;
+- explicit left-unit/right-unit compatibility specifications.
+
+The command writes:
+
+```text
+my-project/
+  pcs-manifest.draft.json
+  pcs-discovery.json
+```
+
+The draft is intentionally **not attestable**. Review or edit the proposed claims,
+assumptions, checks, artifact selection, and workflow first, then explicitly confirm:
+
+```bash
+pcs confirm-v06 ./my-project/pcs-manifest.draft.json
+```
+
+This writes `my-project/manifest.json` only after re-hashing every selected
+artifact against the discovery snapshot. `attest-v06` independently checks the
+same snapshot again, so a file changed after human confirmation cannot be silently
+signed.
+
+The discovery engine is a usability/recommendation layer, not a scientific verdict.
+Confidence scores select only high-confidence supported patterns by default; the
+scientist remains responsible for the meaning of the confirmed claims.
+
 ## v0.6 end-to-end reviewer verification
 
 The v0.6 research line exposes one fail-closed reviewer command for a delivered
