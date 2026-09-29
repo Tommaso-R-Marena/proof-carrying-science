@@ -16,6 +16,10 @@ from .crypto_domains_v06 import (
     signature_payload_envelope,
 )
 from .signing import public_key_fingerprint
+from .schema_validation import (
+    SchemaValidationError,
+    validate_v06_signature_record_shape,
+)
 
 
 SIGNATURE_RECORD_FORMAT = "pcs-ed25519-jcs-v2"
@@ -34,7 +38,7 @@ def sign_jcs_payload(
     canonical = canonicalize_jcs_bytes(envelope)
     signature = private_key.sign(canonical)
     public_key = private_key.public_key()
-    return {
+    record = {
         "signature_format": SIGNATURE_RECORD_FORMAT,
         "algorithm": "Ed25519",
         "public_key_fingerprint": public_key_fingerprint(public_key),
@@ -42,6 +46,8 @@ def sign_jcs_payload(
         "payload": envelope,
         "signature": base64.b64encode(signature).decode("ascii"),
     }
+    validate_v06_signature_record_shape(record)
+    return record
 
 
 def verify_jcs_signature(
@@ -52,6 +58,15 @@ def verify_jcs_signature(
     expected_fingerprint: str | None = None,
 ) -> dict[str, Any]:
     errors: list[str] = []
+
+    try:
+        validate_v06_signature_record_shape(record)
+    except SchemaValidationError as exc:
+        return {
+            "valid": False,
+            "errors": [str(exc)],
+            "public_key_fingerprint": public_key_fingerprint(public_key),
+        }
 
     if expected_domain not in SIGNATURE_DOMAINS:
         return {
