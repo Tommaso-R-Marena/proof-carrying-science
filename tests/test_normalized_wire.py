@@ -240,3 +240,14 @@ def test_source_certificate_binding_rejects_rehashed_but_unrelated_wire():
         assert not bound["valid"]
         assert bound["source_certificate_match"] is False
         assert any("does not exactly match source certificate" in e for e in bound["errors"])
+
+
+def test_repository_pkpd_example_exactly_matches_frozen_wire_vector():
+    root = Path(__file__).resolve().parents[1]
+    fixture = json.loads((root / "tests/normalized_wire_vectors.json").read_text(encoding="utf-8"))
+    expected = fixture["vectors"][0]["wire"]
+    with tempfile.TemporaryDirectory() as d:
+        out = Path(d) / "evidence"
+        build_certificate(root / "examples/pkpd_one_compartment/manifest.json", out)
+        actual = normalize_verified_certificate(out / "certificate.json", "C_PK_REPLAY")
+    assert actual == expected
