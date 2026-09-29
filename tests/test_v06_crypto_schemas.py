@@ -105,3 +105,44 @@ def test_v06_package_schema_requires_certificate_and_forbids_self_reference():
     self_bound["files"]["package_signature.json"] = {"sha256": "e" * 64, "size": 1}
     with pytest.raises(SchemaValidationError):
         validate_v06_package_manifest_shape(self_bound)
+
+
+def test_v06_schema_patterns_reject_trailing_newlines():
+    from pcs.schema_validation import (
+        validate_v06_normalized_decision_index_shape,
+        validate_v06_package_manifest_shape,
+    )
+
+    package = {
+        "package_format": "pcs-package-v2",
+        "canonical_json_profile": "pcs-jcs-rfc8785-v1",
+        "certificate_spec_version": "pcs-0.6",
+        "certificate_semantic_hash_format": "pcs-certificate-semantic-sha256-v2",
+        "certificate_integrity_hash_format": "pcs-certificate-integrity-sha256-v2",
+        "certificate_semantic_hash": "a" * 64,
+        "certificate_integrity_hash": "b" * 64,
+        "files": {"certificate.json": {"sha256": "c" * 64, "size": 1}},
+    }
+    bad_hash = deepcopy(package)
+    bad_hash["certificate_semantic_hash"] += "\\n"
+    with pytest.raises(SchemaValidationError):
+        validate_v06_package_manifest_shape(bad_hash)
+
+    index = {
+        "index_format": "pcs-normalized-decision-index-v2",
+        "canonical_json_profile": "pcs-jcs-rfc8785-v1",
+        "index_hash_format": "pcs-normalized-index-sha256-v2",
+        "certificate_semantic_hash": "a" * 64,
+        "certificate_integrity_hash": "b" * 64,
+        "entries": [{
+            "claim_id": "C1",
+            "path": "normalized/" + ("d" * 64) + ".json",
+            "decision": "COMPUTATIONALLY_SUPPORTED",
+            "wire_semantic_hash": "e" * 64,
+        }],
+        "index_semantic_hash": "f" * 64,
+    }
+    bad_path = deepcopy(index)
+    bad_path["entries"][0]["path"] += "\\n"
+    with pytest.raises(SchemaValidationError):
+        validate_v06_normalized_decision_index_shape(bad_path)
