@@ -43,7 +43,7 @@ _WRITE_METHODS = {
     "write_text",
     "write_bytes",
 }
-_SOURCE_SUFFIXES = {".py", ".ipynb"}
+_SOURCE_SUFFIXES = {".py", ".ipynb", ".r"}
 
 
 class V06WorkflowDiscoveryError(ValueError):
@@ -298,6 +298,7 @@ def _analyze_python_text(
         "parse_error": None,
         "imports": _imports(tree)[:64],
         "references": references,
+        "analysis_mode": "python_ast",
     }
 
 
@@ -364,6 +365,83 @@ def _analyze_notebook(path: Path) -> dict[str, Any]:
         "imports": sorted(imports)[:64],
         "references": references,
         "code_cells": code_cells,
+        "analysis_mode": "python_ast",
+    }
+
+
+def _r_line(source: str, offset: int) -> int:
+    return source.count("\n", 0, offset) + 1
+
+
+def _analyze_r_text(source: str) -> dict[str, Any]:
+    references: list[dict[str, Any]] = []
+    imports = sorted(
+        {
+            match.group(1)
+            for match in re.finditer(
+                r"\b(?:library|require)\s*\(\s*['\"]?([A-Za-z][A-Za-z0-9._]*)",
+                source,
+            )
+        }
+    )[:64]
+
+    patterns = [
+        (
+            "read",
+            "r.read",
+            re.compile(
+                r"\b(?:read\.csv|read\.table|readRDS|readr::read_csv|"
+                r"readr::read_tsv|data\.table::fread|fread|load)"
+                r"\s*\(\s*['\"]([^'\"]+)['\"]"
+            ),
+        ),
+        (
+            "write",
+            "r.write",
+            re.compile(
+                r"\b(?:write\.csv|write\.table|readr::write_csv|"
+                r"readr::write_tsv|data\.table::fwrite|fwrite|saveRDS)"
+                r"\s*\([^,\n]+,\s*['\"]([^'\"]+)['\"]"
+            ),
+        ),
+        (
+            "write",
+            "r.write.file",
+            re.compile(
+                r"\b(?:write\.csv|write\.table|saveRDS|save)"
+                r"\s*\([^\)]*?\bfile\s*=\s*['\"]([^'\"]+)['\"]"
+            ),
+        ),
+    ]
+    seen: set[tuple[str, str, int]] = set()
+    for kind, api, pattern in patterns:
+        for match in pattern.finditer(source):
+            path = match.group(1).replace("\\", "/")
+            line = _r_line(source, match.start())
+            key = (kind, path, line)
+            if key in seen:
+                continue
+            seen.add(key)
+            references.append(
+                {
+                    "kind": kind,
+                    "path": path,
+                    "api": api,
+                    "location": f"line:{line}",
+                    "resolution": "static_literal",
+                }
+            )
+            if len(references) >= MAX_REFERENCES_PER_SOURCE_V06:
+                break
+        if len(references) >= MAX_REFERENCES_PER_SOURCE_V06:
+            break
+
+    return {
+        "parse_ok": True,
+        "parse_error": None,
+        "imports": imports,
+        "references": references,
+        "analysis_mode": "r_literal_heuristic",
     }
 
 
@@ -461,11 +539,26 @@ def analyze_static_workflow_v06(
                     "parse_error": f"{type(exc).__name__}: {exc}",
                     "imports": [],
                     "references": [],
+                    "analysis_mode": "python_ast",
                 }
             source_kind = "python"
-        else:
+        elif suffix == ".ipynb":
             analysis = _analyze_notebook(source_path)
             source_kind = "jupyter"
+        else:
+            try:
+                analysis = _analyze_r_text(
+                    source_path.read_text(encoding="utf-8")
+                )
+            except (OSError, UnicodeDecodeError) as exc:
+                analysis = {
+                    "parse_ok": False,
+                    "parse_error": f"{type(exc).__name__}: {exc}",
+                    "imports": [],
+                    "references": [],
+                    "analysis_mode": "r_literal_heuristic",
+                }
+            source_kind = "r"
 
         if not analysis["parse_ok"]:
             unresolved.append(
@@ -521,7 +614,19 @@ def analyze_static_workflow_v06(
         if not reads and not writes:
             continue
 
-        confidence = 0.98 if not dynamic_refs and analysis["parse_ok"] else 0.90
+        if source_kind == "r":
+            confidence = 0.88
+            reason = (
+                "Conservative R literal-path heuristic resolved local artifact "
+                "references; R code was not executed and this inference remains "
+                "review-only under the default threshold."
+            )
+        else:
+            confidence = 0.98 if not dynamic_refs and analysis["parse_ok"] else 0.90
+            reason = (
+                "Python AST static analysis resolved local artifact paths; "
+                "user code was not executed."
+            )
         inference_id = f"W_STATIC_{item['artifact_id']}"
         sources.append(
             {
@@ -529,11 +634,9 @@ def analyze_static_workflow_v06(
                 "source_artifact_id": item["artifact_id"],
                 "source_path": item["path"],
                 "source_kind": source_kind,
+                "analysis_mode": analysis.get("analysis_mode"),
                 "confidence": confidence,
-                "reason": (
-                    "Static source analysis resolved literal local artifact paths; "
-                    "user code was not executed."
-                ),
+                "reason": reason,
                 "imports": analysis["imports"],
                 "resolved_references": resolved_refs,
                 "unresolved_reference_count": len(dynamic_refs),
@@ -588,6 +691,7 @@ def analyze_static_workflow_v06(
                     "user_code_executed": False,
                     "source_path": source["source_path"],
                     "source_kind": source["source_kind"],
+                    "analysis_mode": source.get("analysis_mode"),
                     "confidence": source["confidence"],
                     "imports": source["imports"][:16],
                     "resolved_references": [
