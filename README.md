@@ -139,6 +139,75 @@ end-to-end verifier.
 The receipt additionally binds `bundle_sha256`, the SHA-256 of the exact ZIP
 file supplied by the reviewer.
 
+## v0.6 MVP workflow
+
+The v0.6 path now supports the complete producer-to-reviewer loop.
+
+Producer:
+
+```bash
+pcs keygen \
+  --private-key organization-private.pem \
+  --public-key organization-public.pem
+
+pcs attest-v06 project/manifest.json \
+  -o study.pcs.zip \
+  --private-key organization-private.pem \
+  --public-key organization-public.pem
+```
+
+`attest-v06` performs the complete bounded workflow:
+
+```text
+manifest + source artifacts
+        ↓
+copy exact artifacts into package namespace
+        ↓
+run supported checks against the copied bytes
+        ↓
+build typed pcs-0.6 certificate
+        ↓
+recompute claim assessments
+        ↓
+derive normalized decision set
+        ↓
+sign certificate
+        ↓
+build + sign exact package manifest
+        ↓
+independently verify generated directory
+        ↓
+build deterministic ZIP
+        ↓
+verify exact candidate ZIP
+        ↓
+atomically publish study.pcs.zip
+```
+
+Reviewer:
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-organization-public.pem \
+  --expected-signer-fingerprint <trusted-fingerprint> \
+  --receipt verification-receipt.json
+```
+
+The initial MVP producer supports the built-in check types
+`csv_disjoint`, `reaction_balance`, `unit_compatible`,
+`pkpd_contract`, and `pkpd_reference_match`. External formal,
+empirical, statistical, and provenance evidence remain verifier-boundary work and
+are deliberately not auto-promoted to PASS by the producer.
+
+A successful PCS verification means the delivered package is authentic under the
+selected public key, byte-bound, structurally consistent, freshly replayed for the
+supported checks, and exactly agrees with its replay-derived normalized decisions.
+It does not mean every scientific claim passed: a valid PCS package can truthfully
+carry `FALSIFIED_OR_CHECK_FAILED`.
+
+Passing PCS checks does not establish biological adequacy, clinical validity,
+safety, efficacy, GxP validation, or regulatory acceptance.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
