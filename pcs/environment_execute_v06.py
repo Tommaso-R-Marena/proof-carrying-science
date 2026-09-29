@@ -315,13 +315,44 @@ class _OciBackend:
 
     def prepare_image(self, plan: dict[str, Any]) -> dict[str, Any]:
         containers = self.env.get("containers", [])
+        if self.image_ref and containers:
+            raise V06SandboxReplayError(
+                "a signed container contract must be rebuilt offline from its signed "
+                "Dockerfile; --image is only accepted when no container was signed"
+            )
         if not self.image_ref:
             if len(containers) != 1 or not containers[0].get("all_base_images_digest_pinned"):
                 raise V06SandboxReplayError("automatic replay requires one signed container with digest-pinned base(s), or explicit --image")
+            for stage in containers[0].get("stages", []):
+                reference = stage.get("reference") if isinstance(stage, dict) else None
+                if not isinstance(reference, str) or "@sha256:" not in reference:
+                    raise V06SandboxReplayError("signed container stage is not digest-pinned")
+                local = _run([self.runtime, "image", "inspect", reference], self.timeout)
+                if local.returncode != 0:
+                    raise V06SandboxReplayError(
+                        "signed base image is not already present locally; PCS refuses "
+                        "a registry pull during deterministic replay: " + reference
+                    )
             cf = self.root / _path(containers[0]["source_path"])
             text = cf.read_text(encoding="utf-8")
             if re.search(r"(?im)^\s*(ADD\s|#\s*syntax=)", text) or re.search(r"(?im)^\s*RUN\s+.*--network=(host|default)", text):
                 raise V06SandboxReplayError("container file uses a construct disallowed by offline sandbox reconstruction")
+            if re.search(r"(?im)^\s*RUN\s+.*--mount=type=(secret|ssh)\b", text):
+                raise V06SandboxReplayError("secret/SSH build mounts are forbidden during replay")
+            aliases=[]; stage_count=0
+            for raw in text.splitlines():
+                line=raw.strip()
+                fm=re.match(r"(?i)^FROM\s+(?:--platform=\S+\s+)?\S+(?:\s+AS\s+([A-Za-z0-9_.-]+))?", line)
+                if fm:
+                    if fm.group(1): aliases.append(fm.group(1))
+                    stage_count += 1
+                cm=re.match(r"(?i)^COPY\s+--from=([^\s]+)", line)
+                if cm:
+                    ref=cm.group(1)
+                    if not ((ref.isdigit() and int(ref) < stage_count) or ref in aliases):
+                        raise V06SandboxReplayError(
+                            "external COPY --from image is forbidden during offline replay: " + ref
+                        )
             tag = "pcs-replay-" + plan["semantic_sha256"][:20]
             pull = "--pull=false" if self.runtime_name == "docker" else "--pull=never"
             p = _run([self.runtime,"build","--network=none","--no-cache",pull,"-t",tag,"-f",str(cf),str(self.root)], self.timeout)
@@ -419,8 +450,16 @@ def execute_prepared_replay_workspace_v06(
         raise V06SandboxReplayError("unsupported prepared workspace")
 
     def bound_file(name_key: str, hash_key: str) -> bytes:
-        p = root / meta[name_key]; raw = p.read_bytes()
-        if p.is_symlink() or _sha(raw) != meta[hash_key]: raise V06SandboxReplayError(f"{name_key} hash mismatch")
+        relative = meta.get(name_key)
+        expected = meta.get(hash_key)
+        if not isinstance(relative, str) or not isinstance(expected, str):
+            raise V06SandboxReplayError(f"prepared workspace lacks bound {name_key}")
+        p = root / _path(relative)
+        if not p.is_file() or p.is_symlink():
+            raise V06SandboxReplayError(f"{name_key} is missing or unsafe")
+        raw = p.read_bytes()
+        if _sha(raw) != expected:
+            raise V06SandboxReplayError(f"{name_key} hash mismatch")
         return raw
 
     cert_raw = bound_file("signed_certificate","signed_certificate_sha256")
@@ -434,8 +473,12 @@ def execute_prepared_replay_workspace_v06(
     if env_raw != canonicalize_jcs(env).encode() + b"\n": raise V06SandboxReplayError("signed environment copy differs from certificate")
     if meta.get("sandbox_execution_available") is not True:
         raise V06SandboxReplayError("prepared workspace has no output-producing static workflow execution plan")
-    plan = strict_json_load(root / meta["sandbox_execution_plan"])
-    if _sha((root / meta["sandbox_execution_plan"]).read_bytes()) != meta["sandbox_execution_plan_sha256"]:
+    plan_relative = meta.get("sandbox_execution_plan")
+    if not isinstance(plan_relative, str):
+        raise V06SandboxReplayError("prepared workspace lacks sandbox execution plan")
+    plan_path = root / _path(plan_relative)
+    plan = strict_json_load(plan_path)
+    if plan_path.is_symlink() or _sha(plan_path.read_bytes()) != meta.get("sandbox_execution_plan_sha256"):
         raise V06SandboxReplayError("sandbox plan hash mismatch")
     fresh = build_sandbox_replay_plan_v06(cert,env)
     if fresh is None or canonicalize_jcs(fresh) != canonicalize_jcs(plan):
