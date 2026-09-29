@@ -19,6 +19,7 @@ from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
+from .normalized_wire import write_normalized_decision, NormalizationError
 
 
 def cmd_certify(args):
@@ -228,6 +229,27 @@ def cmd_freeze_intake(args):
     return 0
 
 
+
+def cmd_normalize_decision(args):
+    try:
+        result = write_normalized_decision(
+            args.certificate,
+            args.claim,
+            args.output,
+        )
+    except (OSError, json.JSONDecodeError, AssuranceError, NormalizationError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps({
+        "wrote": str(Path(args.output).resolve()),
+        "wire_format": result["wire_format"],
+        "claim_id": result["claim"]["id"],
+        "decision": result["decision"],
+        "wire_semantic_hash": result["wire_semantic_hash"],
+        "certificate_semantic_hash": result["source"]["certificate_semantic_hash"],
+    }, indent=2, sort_keys=True))
+    return 0
+
 def cmd_snapshot_env(args):
     try:
         result = write_environment(args.output)
@@ -346,6 +368,12 @@ def build_parser():
     fi.add_argument("-o", "--output", required=True, help="write the timestamped intake lock JSON")
     fi.add_argument("--force", action="store_true", help="explicitly replace an existing intake lock")
     fi.set_defaults(func=cmd_freeze_intake)
+
+    nd = sub.add_parser("normalize-decision", help="verify a certificate and export one claim-scoped normalized decision wire state")
+    nd.add_argument("certificate")
+    nd.add_argument("--claim", required=True, help="claim id to normalize")
+    nd.add_argument("-o", "--output", required=True, help="write pcs-normalized-decision-v1 JSON")
+    nd.set_defaults(func=cmd_normalize_decision)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
     se.add_argument("-o", "--output", required=True)
