@@ -120,3 +120,67 @@ def verify_jcs_signature(
         "errors": errors,
         "public_key_fingerprint": fingerprint,
     }
+
+
+def certificate_signature_payload_v06(certificate: dict[str, Any]) -> dict[str, Any]:
+    from .certificate_v06 import verify_certificate_hashes_v06
+
+    checked = verify_certificate_hashes_v06(certificate)
+    if not checked["valid"]:
+        raise V06SignatureError(
+            f"refusing certificate signature payload for invalid v0.6 certificate: {checked['errors']}"
+        )
+    return {
+        "spec_version": certificate.get("spec_version"),
+        "checker_version": certificate.get("checker_version"),
+        "canonical_json_profile": certificate.get("canonical_json_profile"),
+        "semantic_hash_format": certificate.get("semantic_hash_format"),
+        "integrity_hash_format": certificate.get("integrity_hash_format"),
+        "subject": certificate.get("subject"),
+        "semantic_hash": certificate.get("semantic_hash"),
+        "integrity_hash": certificate.get("integrity_hash"),
+    }
+
+
+def sign_certificate_v06(
+    certificate: dict[str, Any],
+    private_key: Ed25519PrivateKey,
+) -> dict[str, Any]:
+    from .crypto_domains_v06 import CERTIFICATE_SIGNATURE_DOMAIN
+
+    payload = certificate_signature_payload_v06(certificate)
+    return sign_jcs_payload(CERTIFICATE_SIGNATURE_DOMAIN, payload, private_key)
+
+
+def verify_certificate_signature_v06(
+    certificate: dict[str, Any],
+    record: dict[str, Any],
+    public_key: Ed25519PublicKey,
+    *,
+    expected_fingerprint: str | None = None,
+) -> dict[str, Any]:
+    from .crypto_domains_v06 import CERTIFICATE_SIGNATURE_DOMAIN
+
+    try:
+        expected_payload = certificate_signature_payload_v06(certificate)
+    except V06SignatureError as exc:
+        return {
+            "valid": False,
+            "errors": [str(exc)],
+            "public_key_fingerprint": public_key_fingerprint(public_key),
+        }
+
+    payload_envelope = record.get("payload")
+    if not isinstance(payload_envelope, dict) or payload_envelope.get("payload") != expected_payload:
+        return {
+            "valid": False,
+            "errors": ["signature payload does not match v0.6 certificate"],
+            "public_key_fingerprint": public_key_fingerprint(public_key),
+        }
+
+    return verify_jcs_signature(
+        record,
+        public_key,
+        expected_domain=CERTIFICATE_SIGNATURE_DOMAIN,
+        expected_fingerprint=expected_fingerprint,
+    )
