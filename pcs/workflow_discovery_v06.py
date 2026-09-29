@@ -10,7 +10,7 @@ from typing import Any
 WORKFLOW_DISCOVERY_FORMAT_V06 = "pcs-static-workflow-map-v1"
 MAX_SOURCE_INSPECT_BYTES_V06 = 2 * 1024 * 1024
 MAX_REFERENCES_PER_SOURCE_V06 = 128
-MAX_CONTRACT_REFERENCES_V06 = 48
+MAX_CONTRACT_REFERENCES_V06 = 8
 
 _READ_FUNCTIONS = {
     "read_csv",
@@ -516,7 +516,7 @@ def analyze_static_workflow_v06(
                     "source_path": source["source_path"],
                     "source_kind": source["source_kind"],
                     "confidence": source["confidence"],
-                    "imports": source["imports"],
+                    "imports": source["imports"][:16],
                     "resolved_references": [
                         {
                             "kind": ref["kind"],
