@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Package Manifest v2 canonicalization prototype",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "package_format",
+    "canonical_json_profile",
+    "certificate_spec_version",
+    "certificate_semantic_hash_format",
+    "certificate_integrity_hash_format",
+    "certificate_semantic_hash",
+    "certificate_integrity_hash",
+    "files"
+  ],
+  "properties": {
+    "package_format": {
+      "const": "pcs-package-v2"
+    },
+    "canonical_json_profile": {
+      "const": "pcs-jcs-rfc8785-v1"
+    },
+    "certificate_spec_version": {
+      "const": "pcs-0.6"
+    },
+    "certificate_semantic_hash_format": {
+      "const": "pcs-certificate-semantic-sha256-v2"
+    },
+    "certificate_integrity_hash_format": {
+      "const": "pcs-certificate-integrity-sha256-v2"
+    },
+    "certificate_semantic_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "certificate_integrity_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sha256",
+          "size"
+        ],
+        "properties": {
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}
