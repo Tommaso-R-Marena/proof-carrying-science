@@ -15,6 +15,7 @@ from .byte_contract_v06 import (
 from .normalized_set_v06 import verify_normalized_set_after_replay_v06
 from .replay_v06 import verify_certificate_replay_v06
 from .signing_v06 import verify_certificate_signature_v06
+from .workflow_replay_v06 import verify_static_workflow_replay_v06
 
 
 VERIFIER_FORMAT_V06 = "pcs-end-to-end-verifier-v06-v1"
@@ -59,8 +60,9 @@ def verify_end_to_end_v06(
     2. certificate hash/schema validity and its Ed25519 signature;
     3. exact signed package member set, byte sizes/hashes, certificate binding and
        package-manifest Ed25519 signature;
-    4. fresh replay of every certificate evidence item;
-    5. exact equality of the delivered normalized set with the set derived from
+    4. fresh static replay of any human-confirmed workflow dependency claims;
+    5. fresh replay of every certificate evidence item;
+    6. exact equality of the delivered normalized set with the set derived from
        that *same* replay result.
 
     This is the production executable composition point. It does not turn an
@@ -72,6 +74,7 @@ def verify_end_to_end_v06(
         "canonical_inputs": False,
         "certificate_signature": False,
         "package_binding": False,
+        "workflow_replay": False,
         "replay": False,
         "normalized_set": False,
     }
@@ -125,6 +128,18 @@ def verify_end_to_end_v06(
             stages=stages,
         )
     stages["package_binding"] = True
+
+    workflow_replay = verify_static_workflow_replay_v06(
+        certificate,
+        package_files,
+    )
+    if not workflow_replay["valid"]:
+        return _failed(
+            "workflow_replay",
+            list(workflow_replay["errors"]),
+            stages=stages,
+        )
+    stages["workflow_replay"] = True
 
     replay = verify_certificate_replay_v06(
         certificate,
@@ -181,6 +196,10 @@ def verify_end_to_end_v06(
         "public_key_fingerprint": package_check["public_key_fingerprint"],
         "normalized_index_semantic_hash": normalized["index_semantic_hash"],
         "verified_members": package_check["verified_members"],
+        "workflow_replay": {
+            "nodes_checked": workflow_replay["nodes_checked"],
+            "mode": workflow_replay["mode"],
+        },
         "claims": claims,
     }
     if (
