@@ -17,6 +17,7 @@ from .certificate_semantics_v06 import (
 
 
 SPEC_VERSION_V06 = "pcs-0.6"
+CHECKER_VERSION_V06 = "pcs-python-kernel/0.6.0-dev"
 
 
 class V06CertificateError(ValueError):
