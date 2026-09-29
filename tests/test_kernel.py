@@ -125,3 +125,57 @@ class SemanticBindingTests(unittest.TestCase):
             r=verify_certificate(cp)
             self.assertFalse(r['valid'])
             self.assertTrue(any('evidence replay claim binding mismatch: E1' in e for e in r['errors']),r['errors'])
+
+
+
+class FullRequiredEvidenceBindingTests(unittest.TestCase):
+    def test_one_matching_and_one_unrelated_required_evidence_is_rejected(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d)
+            src = json.loads(
+                (root / "examples/biopharma_demo/manifest.json").read_text(encoding="utf-8")
+            )
+            # E1 is the claim's original matching check. Add E3 as another
+            # required object and declare claim support, while retaining E3's
+            # different predicate. The old kernel accepted this because one
+            # required evidence object matched; the Lean refinement does not.
+            src["claims"][0]["required_evidence"] = ["E1", "E3"]
+            if src["claims"][0]["id"] not in src["checks"][2]["claim_ids"]:
+                src["checks"][2]["claim_ids"].append(src["claims"][0]["id"])
+            for name in ("train.csv", "test.csv", "model_spec.txt"):
+                (p / name).write_bytes(
+                    (root / "examples/biopharma_demo" / name).read_bytes()
+                )
+            mp = p / "manifest.json"
+            mp.write_text(json.dumps(src), encoding="utf-8")
+            with self.assertRaisesRegex(
+                AssuranceError, "required evidence E3 is not predicate-bound"
+            ):
+                build_certificate(mp, p / "out")
+
+    def test_untyped_noncomputational_claim_cannot_require_typed_check(self):
+        claim = {
+            "id": "F",
+            "kind": "formal",
+            "required_evidence": ["E"],
+            "assumptions": [],
+        }
+        evidence = {
+            "E": {
+                "id": "E",
+                "kind": "formal_proof",
+                "outcome": "PASS",
+                "check_spec": {
+                    "id": "E",
+                    "type": "pkpd_contract",
+                    "model_artifact": "m",
+                    "claim_ids": ["F"],
+                },
+            }
+        }
+        with self.assertRaisesRegex(
+            AssuranceError, "required evidence E is not predicate-bound"
+        ):
+            from pcs.kernel import _validate_claim_semantics
+            _validate_claim_semantics(claim, evidence)
