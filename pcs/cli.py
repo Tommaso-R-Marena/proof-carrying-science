@@ -20,6 +20,7 @@ from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
 from .normalized_wire import write_normalized_decision, validate_normalized_wire, verify_normalized_against_certificate, NormalizationError
+from .jsonio import StrictJSONError
 
 
 def cmd_certify(args):
@@ -240,7 +241,7 @@ def cmd_verify_normalized(args):
             if args.certificate
             else validate_normalized_wire(wire)
         )
-    except (OSError, json.JSONDecodeError, NormalizationError) as e:
+    except (OSError, json.JSONDecodeError, StrictJSONError, NormalizationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
