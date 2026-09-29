@@ -34,7 +34,8 @@ def package_files() -> dict[str, bytes]:
     return {
         "certificate.json": (GOLDEN / "certificate.json").read_bytes(),
         "artifacts/fixture.bin": (GOLDEN / "artifacts/fixture.bin").read_bytes(),
-        "normalized/C1.json": (GOLDEN / "normalized/C1.json").read_bytes(),
+        META["normalized_wire_path"]: (GOLDEN / META["normalized_wire_path"]).read_bytes(),
+        "normalized/index.json": (GOLDEN / "normalized/index.json").read_bytes(),
     }
 
 
@@ -51,7 +52,7 @@ def rehash(wire: dict) -> dict:
 def test_golden_normalized_wire_reproduces_exactly():
     wire = normalized()
     raw = normalized_wire_bytes_v06(wire)
-    assert raw == (GOLDEN / "normalized/C1.json").read_bytes()
+    assert raw == (GOLDEN / META["normalized_wire_path"]).read_bytes()
     assert wire["wire_semantic_hash"] == META["normalized_wire_semantic_hash"]
     assert wire["claim"]["predicate_commitment"] == META["predicate_commitment"]
     assert predicate_commitment_v06(certificate()["claims"][0]["predicate"]) == META[
@@ -60,7 +61,7 @@ def test_golden_normalized_wire_reproduces_exactly():
 
 
 def test_golden_normalized_wire_round_trip_from_bytes():
-    raw = (GOLDEN / "normalized/C1.json").read_bytes()
+    raw = (GOLDEN / META["normalized_wire_path"]).read_bytes()
     parsed = parse_normalized_wire_bytes_v06(raw)
     checked = verify_normalized_bytes_against_certificate_v06(
         raw,
@@ -73,7 +74,7 @@ def test_golden_normalized_wire_round_trip_from_bytes():
 
 
 def test_noncanonical_normalized_bytes_rejected():
-    raw = (GOLDEN / "normalized/C1.json").read_bytes()
+    raw = (GOLDEN / META["normalized_wire_path"]).read_bytes()
     with pytest.raises(V06NormalizationError, match="canonical JCS"):
         parse_normalized_wire_bytes_v06(raw + b"\n")
 
