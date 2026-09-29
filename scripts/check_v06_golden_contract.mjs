@@ -99,7 +99,12 @@ const certificate = parseCanonical("certificate.json");
 const certificateSignature = parseCanonical("certificate_signature.json");
 const manifest = parseCanonical("package_manifest.json");
 const packageSignature = parseCanonical("package_signature.json");
-const normalized = parseCanonical("normalized/C1.json");
+const normalizedIndex = parseCanonical("normalized/index.json");
+if (!Array.isArray(normalizedIndex.value.entries) || normalizedIndex.value.entries.length !== 1) {
+  fail("golden normalized index must contain exactly one entry");
+}
+const normalizedIndexEntry = normalizedIndex.value.entries[0];
+const normalized = parseCanonical(normalizedIndexEntry.path);
 const artifact = read("artifacts/fixture.bin");
 
 const rawHashes = {
@@ -108,6 +113,7 @@ const rawHashes = {
   package_manifest_byte_sha256: sha256(manifest.raw),
   package_signature_record_byte_sha256: sha256(packageSignature.raw),
   normalized_wire_byte_sha256: sha256(normalized.raw),
+  normalized_index_byte_sha256: sha256(normalizedIndex.raw),
   artifact_sha256: sha256(artifact),
 };
 for (const [field, actual] of Object.entries(rawHashes)) {
@@ -242,6 +248,40 @@ if (!canonicalEqual(expectedNormalized, normalizedWire)) {
   fail("normalized wire does not exactly equal certificate-derived projection");
 }
 
+const storageKey = sha256(Buffer.from(claim.id, "utf8")).slice(0, 24);
+const expectedWirePath = "normalized/" + storageKey + ".json";
+if (normalizedIndexEntry.path !== expectedWirePath || metadata.normalized_wire_path !== expectedWirePath) {
+  fail("normalized wire storage-key path mismatch");
+}
+const expectedIndex = {
+  index_format: "pcs-normalized-decision-index-v2",
+  canonical_json_profile: "pcs-jcs-rfc8785-v1",
+  index_hash_format: "pcs-normalized-index-sha256-v2",
+  certificate_semantic_hash: cert.semantic_hash,
+  certificate_integrity_hash: cert.integrity_hash,
+  entries: [
+    {
+      claim_id: claim.id,
+      path: expectedWirePath,
+      decision: expectedNormalized.decision,
+      wire_semantic_hash: expectedNormalized.wire_semantic_hash,
+    },
+  ],
+  index_semantic_hash: "",
+};
+const indexProjection = structuredClone(expectedIndex);
+delete indexProjection.index_semantic_hash;
+expectedIndex.index_semantic_hash = domainSha256(
+  "pcs-normalized-index-sha256-v2",
+  indexProjection
+);
+if (expectedIndex.index_semantic_hash !== metadata.normalized_index_semantic_hash) {
+  fail("normalized index semantic hash golden mismatch");
+}
+if (!canonicalEqual(expectedIndex, normalizedIndex.value)) {
+  fail("normalized index does not exactly equal certificate-derived claim index");
+}
+
 const packageManifest = manifest.value;
 if (packageManifest.package_format !== "pcs-package-v2") {
   fail("unexpected package format");
@@ -259,7 +299,8 @@ if (
 const signedMembers = {
   "certificate.json": certificate.raw,
   "artifacts/fixture.bin": artifact,
-  "normalized/C1.json": normalized.raw,
+  [expectedWirePath]: normalized.raw,
+  "normalized/index.json": normalizedIndex.raw,
 };
 const expectedNames = Object.keys(packageManifest.files).sort();
 const actualNames = Object.keys(signedMembers).sort();
@@ -293,5 +334,5 @@ if (
 
 console.log(
   "PASS v0.6 Node golden byte contract: canonical JSON, certificate domain hashes, " +
-    "2 Ed25519 signatures, exact package member set, normalized-wire derivation, sizes and SHA-256"
+    "2 Ed25519 signatures, exact package member set, normalized wire/index derivation, sizes and SHA-256"
 );
