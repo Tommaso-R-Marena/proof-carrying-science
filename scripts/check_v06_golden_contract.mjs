@@ -248,7 +248,7 @@ if (!canonicalEqual(expectedNormalized, normalizedWire)) {
   fail("normalized wire does not exactly equal certificate-derived projection");
 }
 
-const storageKey = sha256(Buffer.from(claim.id, "utf8")).slice(0, 24);
+const storageKey = sha256(Buffer.from(claim.id, "utf8"));
 const expectedWirePath = "normalized/" + storageKey + ".json";
 if (normalizedIndexEntry.path !== expectedWirePath || metadata.normalized_wire_path !== expectedWirePath) {
   fail("normalized wire storage-key path mismatch");
