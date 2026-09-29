@@ -60,6 +60,41 @@ snapshot check as data/model changes.
 See `STATIC_WORKFLOW_DISCOVERY_V06.md`.
 
 
+## Reproducibility environment capture
+
+Guided discovery now binds the computational environment needed to reconstruct the
+workflow:
+
+```text
+environment/dependency files
+        ↓
+static environment capture
+        ↓
+human review
+        ↓
+confirmed environment proposition
+        ↓
+signed certificate binding
+        ↓
+reviewer environment_replay
+        ↓
+workflow_replay
+        ↓
+scientific replay
+```
+
+The capture covers common Python/R dependency declarations and lockfiles,
+interpreter constraints, Conda/Nix specifications, and OCI/Docker container bases.
+Lock/hash/digest strength is surfaced through a descriptive hermeticity label rather
+than collapsed into a single “reproducible” boolean.
+
+`pcs-environment-plan.json` records the proposed reconstruction strategy. A
+review-before-run shell script can be generated with `pcs environment-plan-v06`,
+but the verification path never executes environment installation/build commands.
+
+The reviewer re-derives the environment proposition from exact delivered bytes
+before static workflow replay. See `docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
+
 ## Product loop
 
 The producer starts from the existing PCS project manifest format and exact source
