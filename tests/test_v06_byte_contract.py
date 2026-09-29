@@ -36,6 +36,7 @@ def _package_files() -> dict[str, bytes]:
     return {
         "certificate.json": _raw("certificate.json"),
         "artifacts/fixture.bin": _raw("artifacts/fixture.bin"),
+        "normalized/C1.json": _raw("normalized/C1.json"),
     }
 
 
@@ -46,6 +47,7 @@ def test_frozen_v06_byte_hashes_are_exact():
         "package_manifest.json": META["package_manifest_byte_sha256"],
         "package_signature.json": META["package_signature_record_byte_sha256"],
         "artifacts/fixture.bin": META["artifact_sha256"],
+        "normalized/C1.json": META["normalized_wire_byte_sha256"],
     }
     for rel, expected in checks.items():
         assert hashlib.sha256(_raw(rel)).hexdigest() == expected, rel
@@ -76,6 +78,7 @@ def test_frozen_v06_package_file_map_accepts_from_exact_bytes():
     assert result["verified_members"] == [
         "artifacts/fixture.bin",
         "certificate.json",
+        "normalized/C1.json",
     ]
 
 
