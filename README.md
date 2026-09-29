@@ -244,6 +244,35 @@ The verification receipt preserves both axes:
 reviewer's policy. Policy failure does not rewrite an otherwise valid scientific
 record as cryptographically invalid.
 
+### Real-world benchmark registry
+
+PCS v0.6 now includes a provenance-bound validation runner for public scientific
+examples:
+
+```bash
+pcs benchmark-v06 validation/real_world/registry.json \
+  -o real-world-validation.json
+```
+
+Each case declares its public source/citation, expected outcome, exact fixture
+SHA-256 values, executable PCS check, and interpretation. The runner refuses
+fixture-hash drift before replay, executes the same v0.6 replay kernel used by
+certificates, compares actual with predeclared expected outcome, and emits a
+deterministic report with registry and report semantic hashes.
+
+The initial registry contains five cases:
+
+- Haber-Bosch atom balance — expected PASS;
+- clean UCI Iris split — expected PASS;
+- one-row contaminated Iris split — expected FAIL;
+- Indometh `mg/L` vs `g/m^3` unit equivalence — expected PASS;
+- published IV Indometh subject 1 treated as exact single-exponential output —
+  expected FAIL.
+
+A direct checker-level execution on 2026-09-29 matched all 5 expected outcomes,
+including both negative controls. See
+`results/REAL_WORLD_VALIDATION_2026-09-29.md`.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
