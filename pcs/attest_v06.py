@@ -237,6 +237,21 @@ def _package_artifacts_v06(
                 f"artifact {artifact_id} changed while being read"
             )
 
+        metadata = artifact.get("metadata")
+        if isinstance(metadata, dict):
+            expected_hash = metadata.get("pcs_discovery_sha256")
+            expected_size = metadata.get("pcs_discovery_size")
+            if expected_hash is not None or expected_size is not None:
+                actual_hash = hashlib.sha256(raw).hexdigest()
+                if not isinstance(expected_hash, str) or not isinstance(expected_size, int):
+                    raise V06AttestationError(
+                        f"artifact {artifact_id} has incomplete PCS discovery snapshot metadata"
+                    )
+                if actual_hash != expected_hash or len(raw) != expected_size:
+                    raise V06AttestationError(
+                        f"artifact {artifact_id} changed after PCS discovery/confirmation"
+                    )
+
         storage_key = hashlib.sha256(artifact_id.encode("utf-8")).hexdigest()[:24]
         other = storage_keys.get(storage_key)
         if other is not None and other != artifact_id:
@@ -300,6 +315,14 @@ def build_attestation_directory_v06(
         raise V06AttestationError(str(exc)) from exc
     if not isinstance(manifest, dict):
         raise V06AttestationError("manifest root must be an object")
+
+    intake = manifest.get("pcs_intake")
+    if isinstance(intake, dict) and intake.get("format") == "pcs-manifest-draft-v1":
+        if intake.get("status") != "confirmed" or intake.get("requires_confirmation") is not False:
+            raise V06AttestationError(
+                "refusing to attest an unconfirmed PCS discovery draft; "
+                "review it and run pcs confirm-v06 first"
+            )
 
     private_key = _load_private_key_v06(private_key_path)
     try:
