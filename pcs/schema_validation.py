@@ -74,3 +74,7 @@ def validate_pilot_intake_lock_shape(value: Any) -> None:
 
 def validate_normalized_decision_shape(value: Any) -> None:
     validate_shape(value, "normalized_decision.schema.json", label="normalized decision wire")
+
+
+def validate_normalized_decision_index_shape(value: Any) -> None:
+    validate_shape(value, "normalized_decision_index.schema.json", label="normalized decision index")
