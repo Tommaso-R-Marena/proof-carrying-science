@@ -8,9 +8,12 @@ from pcs.crypto_domains_v06 import (
     CERTIFICATE_SIGNATURE_DOMAIN,
     PACKAGE_SIGNATURE_DOMAIN,
 )
+from pcs.certificate_v06 import finalize_certificate_hashes_v06
 from pcs.signing_v06 import (
     SIGNATURE_RECORD_FORMAT,
+    sign_certificate_v06,
     sign_jcs_payload,
+    verify_certificate_signature_v06,
     verify_jcs_signature,
 )
 
@@ -117,3 +120,70 @@ def test_wrong_public_key_and_pinned_fingerprint_fail_closed():
     )
     assert not pin_result["valid"]
     assert any("pinned expected fingerprint" in error for error in pin_result["errors"])
+
+
+V06_CERTIFICATE = finalize_certificate_hashes_v06(
+    {
+        "spec_version": "pcs-0.6",
+        "checker_version": "pcs-python-kernel/0.6.0-dev",
+        "canonical_json_profile": "pcs-jcs-rfc8785-v1",
+        "semantic_hash_format": "pcs-certificate-semantic-sha256-v2",
+        "integrity_hash_format": "pcs-certificate-integrity-sha256-v2",
+        "generated_at": "2026-09-29T00:00:00+00:00",
+        "subject": "signature fixture",
+        "assumptions": [],
+        "claims": [],
+        "artifacts": [],
+        "evidence": [],
+        "workflow": {"nodes": []},
+        "workflow_summary": {"node_count": 0, "topological_order": []},
+        "semantic_hash": "",
+        "integrity_hash": "",
+    }
+)
+
+
+def test_v06_certificate_signature_round_trip():
+    key = Ed25519PrivateKey.generate()
+    record = sign_certificate_v06(V06_CERTIFICATE, key)
+    result = verify_certificate_signature_v06(
+        V06_CERTIFICATE,
+        record,
+        key.public_key(),
+    )
+    assert result["valid"], result["errors"]
+
+
+def test_valid_signature_for_different_certificate_payload_is_rejected():
+    from copy import deepcopy
+
+    key = Ed25519PrivateKey.generate()
+    other_source = deepcopy(V06_CERTIFICATE)
+    other_source["subject"] = "other certificate"
+    other_source["semantic_hash"] = ""
+    other_source["integrity_hash"] = ""
+    other = finalize_certificate_hashes_v06(other_source)
+
+    record = sign_certificate_v06(other, key)
+    result = verify_certificate_signature_v06(
+        V06_CERTIFICATE,
+        record,
+        key.public_key(),
+    )
+    assert not result["valid"]
+    assert "signature payload does not match v0.6 certificate" in result["errors"]
+
+
+def test_certificate_signature_refuses_hash_invalid_certificate():
+    from copy import deepcopy
+
+    key = Ed25519PrivateKey.generate()
+    tampered = deepcopy(V06_CERTIFICATE)
+    tampered["subject"] = "tampered without rehash"
+
+    try:
+        sign_certificate_v06(tampered, key)
+    except Exception as exc:
+        assert "invalid v0.6 certificate" in str(exc)
+    else:
+        raise AssertionError("signing should refuse a hash-invalid v0.6 certificate")
