@@ -343,3 +343,41 @@ def test_environment_plan_cli_reads_discovery_and_writes_plan_and_script(tmp_pat
         ENVIRONMENT_REPLAY_PLAN_FORMAT_V06
     )
     assert "REVIEW BEFORE EXECUTION" in script.read_text(encoding="utf-8")
+
+
+
+def test_confirmation_replaces_browser_like_environment_preview_with_authoritative_capture(tmp_path):
+    project = tmp_path / "study"
+    init_project(project, template="pkpd", subject="browser-handoff")
+    (project / "requirements.txt").write_text(
+        "numpy==1.26.4 --hash=sha256:" + "a" * 64 + "\n",
+        encoding="utf-8",
+    )
+
+    report = discover_project_v06(project)
+    draft_obj = report["manifest_draft"]
+    # Simulate a lower-assurance browser preview carrying a wrong parsed version
+    # while preserving the exact environment source artifact bytes.
+    draft_obj["environment"]["python"]["dependencies"][0]["version"] = "9.9.9"
+    draft_obj["environment"]["python"]["dependencies"][0]["raw"] = "numpy==9.9.9"
+    draft = project / "pcs-manifest.draft.json"
+    draft.write_text(
+        json.dumps(draft_obj, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    confirmed_path = project / "manifest.json"
+    confirm_manifest_draft_v06(
+        draft,
+        confirmed_path,
+        project_root=project,
+    )
+    confirmed = json.loads(confirmed_path.read_text(encoding="utf-8"))
+
+    deps = confirmed["environment"]["python"]["dependencies"]
+    assert deps[0]["version"] == "1.26.4"
+    assert "numpy==1.26.4" in deps[0]["raw"]
+    assert confirmed["environment"]["human_confirmed"] is True
+    assert confirmed["pcs_intake"]["environment_hermeticity"] == (
+        "hash_pinned_dependencies"
+    )
