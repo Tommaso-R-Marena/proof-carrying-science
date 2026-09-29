@@ -306,6 +306,66 @@ pcs verify-receipt-v06 receipt.json \
 This signature attests to the review record. It does not make a false scientific
 claim true, elevate assurance, or replace package/replay verification.
 
+### Multi-reviewer quorum approval
+
+PCS v0.6 can aggregate multiple independently signed reviewer receipts without
+allowing those reviewers to alter the underlying PCS scientific verdict.
+
+A quorum policy may require both a total threshold and role-specific thresholds:
+
+```json
+{
+  "policy_version": "pcs-review-quorum-policy-v1",
+  "min_accepted_reviews": 2,
+  "required_roles": {
+    "computational": 1,
+    "domain": 1
+  },
+  "reviewers": [
+    {
+      "fingerprint": "<computational-reviewer-fingerprint>",
+      "role": "computational",
+      "required_policy_sha256": "<computational-policy-sha256>"
+    },
+    {
+      "fingerprint": "<domain-reviewer-fingerprint>",
+      "role": "domain",
+      "required_policy_sha256": "<domain-policy-sha256>"
+    }
+  ]
+}
+```
+
+Each counted review must have:
+
+- a valid reviewer Ed25519 receipt signature;
+- `pcs_valid: true`;
+- `reviewer_accepted: true`;
+- an authorized reviewer fingerprint;
+- the role-specific policy SHA-256 required for that reviewer;
+- the same exact reviewed subject commitments as every other counted review.
+
+PCS groups reviews by exact bundle SHA-256, certificate semantic/integrity hashes,
+and normalized-index semantic hash before evaluating quorum. Reviews from different
+scientific bundles can therefore never be combined into a 2-of-3 result.
+
+Duplicate reviewer identities are disqualified so one key cannot be counted twice.
+
+Portable inputs are supplied through a review-set file:
+
+```bash
+pcs verify-quorum-v06 \
+  --quorum-policy policies/review_quorum_v06.example.json \
+  --review-set review-set.json \
+  -o quorum-result.json
+```
+
+The result records the exact quorum-policy SHA-256, review-set SHA-256, reviewer
+roles, subject groups, accepted-review count, and selected scientific subject.
+
+This layer is governance over already verified reviewer receipts. It does not
+rewrite claim status or elevate PCS assurance classes.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
