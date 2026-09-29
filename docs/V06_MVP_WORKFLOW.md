@@ -12,7 +12,9 @@ scientific project directory
         ↓
 pcs discover-v06
         ↓
-local artifact inventory + supported-pattern recommendations
+local artifact inventory + supported scientific-check recommendations
+        ↓
+static Python/Jupyter artifact-dependency mapping
         ↓
 pcs-manifest.draft.json
         ↓
@@ -34,6 +36,28 @@ snapshot again before copying any artifact into the signed package.
 This protects the usability layer from becoming a hidden trust boundary: automated
 detectors may recommend a claim/check, but only an explicitly confirmed manifest can
 enter the assurance pipeline.
+
+### Static workflow mapping
+
+`discover-v06` also statically analyzes Python scripts and Jupyter code cells
+without executing them. Clean, fully resolved source graphs score 0.98 and can enter
+the draft under the default 0.95 workflow-confidence threshold. Partial or dynamic
+graphs score 0.90 and remain review-only by default.
+
+Resolved source files are themselves selected as signed artifacts when their workflow
+nodes are selected. If a static source node and a domain-specific recommendation
+would both claim to produce the same artifact, PCS keeps the source-derived producer
+and removes the duplicate semantic producer. If multiple source files appear to
+produce the same artifact, that output is marked unresolved and omitted from producer
+claims rather than guessed.
+
+Confirmation marks static workflow contracts as human-confirmed while explicitly
+limiting the confirmation scope to dependency inference, not source-code correctness
+or runtime behavior. Source-code changes after confirmation fail the same artifact
+snapshot check as data/model changes.
+
+See `STATIC_WORKFLOW_DISCOVERY_V06.md`.
+
 
 ## Product loop
 
