@@ -47,6 +47,7 @@ def main() -> int:
                 "tests/test_signing_v06.py",
                 "tests/test_v06_crypto_schemas.py",
                 "tests/test_certificate_v06.py",
+                "tests/test_package_v06.py",
             ],
         ),
         run(
