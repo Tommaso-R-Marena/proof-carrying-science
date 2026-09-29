@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Normalized Decision Wire v1",
+  "type": "object",
+  "required": ["wire_format","source","context","claim","evidence","decision","invariants","wire_semantic_hash"],
+  "properties": {
+    "wire_format": {"const": "pcs-normalized-decision-v1"},
+    "source": {
+      "type": "object",
+      "required": ["spec_version","checker_version","certificate_semantic_hash","claim_id"],
+      "properties": {
+        "spec_version": {"const": "pcs-0.5"},
+        "checker_version": {"const": "pcs-python-kernel/0.5.0"},
+        "certificate_semantic_hash": {"type": "string","pattern": "^[a-f0-9]{64}$"},
+        "claim_id": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"}
+      },
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id","statement"],
+        "properties": {
+          "id": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+          "statement": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "claim": {
+      "type": "object",
+      "required": ["id","kind","predicate_commitment","required_evidence","assumptions"],
+      "properties": {
+        "id": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+        "kind": {"enum": ["formal","computational","empirical","mixed"]},
+        "predicate_commitment": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string","pattern": "^pcs-predicate-sha256:[a-f0-9]{64}$"}
+          ]
+        },
+        "required_evidence": {
+          "type": "array",
+          "items": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"}
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id","kind","outcome","predicate_commitment"],
+        "properties": {
+          "id": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+          "kind": {"enum": ["formal_proof","computational_test","statistical_validation","empirical_validation","provenance"]},
+          "outcome": {"enum": ["PASS","FAIL","UNVERIFIED"]},
+          "predicate_commitment": {
+            "oneOf": [
+              {"type": "null"},
+              {"type": "string","pattern": "^pcs-predicate-sha256:[a-f0-9]{64}$"}
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decision": {
+      "enum": [
+        "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS",
+        "COMPUTATIONALLY_SUPPORTED",
+        "EMPIRICALLY_VALIDATED_WITHIN_SCOPE",
+        "MIXED_SUPPORT_UNDER_ASSUMPTIONS",
+        "OPEN",
+        "FALSIFIED_OR_CHECK_FAILED"
+      ]
+    },
+    "invariants": {
+      "type": "object",
+      "required": ["unique_evidence_ids","required_ids_unique","all_required_evidence_present","context_covers","required_evidence_bound"],
+      "properties": {
+        "unique_evidence_ids": {"const": true},
+        "required_ids_unique": {"const": true},
+        "all_required_evidence_present": {"const": true},
+        "context_covers": {"const": true},
+        "required_evidence_bound": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "wire_semantic_hash": {"type": "string","pattern": "^[a-f0-9]{64}$"}
+  },
+  "additionalProperties": false
+}
