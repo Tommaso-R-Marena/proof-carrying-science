@@ -157,6 +157,19 @@ Supported reconstruction strategies currently include:
 - renv restore;
 - Conda environment creation.
 
+## Authoritative confirmation recapture
+
+The browser Project Mapper may provide a lower-assurance environment preview, but
+that preview is never promoted directly into a signed environment proposition.
+
+At `confirm-v06`, PCS re-reads the already snapshotted, selected environment
+artifacts with the authoritative Python `capture_environment_v06` implementation
+and replaces the draft environment object with that fresh canonical capture before
+setting `human_confirmed = true`.
+
+This guarantees that browser → CLI onboarding and CLI-only onboarding converge on
+the same producer-side environment parser before attestation.
+
 ## Reviewer-side environment replay
 
 The end-to-end verifier order is:
