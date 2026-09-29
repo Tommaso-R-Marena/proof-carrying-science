@@ -564,6 +564,7 @@ def _conda_environment(
     py_versions: list[dict[str, str]] = []
     in_dependencies = False
     in_pip = False
+    pip_indent: int | None = None
     base_indent = None
     for line_no, raw in enumerate(text.splitlines(), start=1):
         stripped = raw.strip()
@@ -581,13 +582,14 @@ def _conda_environment(
             continue
         if stripped in ("- pip:", "pip:"):
             in_pip = True
+            pip_indent = indent
             continue
         if not stripped.startswith("-"):
             continue
         value = stripped[1:].strip()
         if not value:
             continue
-        if in_pip and indent > (base_indent or 0):
+        if in_pip and pip_indent is not None and indent > pip_indent:
             match = _REQUIREMENT_NAME.match(value)
             deps.append(
                 _dependency_record(
@@ -602,6 +604,7 @@ def _conda_environment(
             )
         else:
             in_pip = False
+            pip_indent = None
             name = re.split(r"[=<> ]", value, 1)[0]
             version = None
             exact = False
@@ -1022,6 +1025,15 @@ def capture_environment_v06(
         if kind and rel in inventory_by_path:
             add_source(rel, kind)
 
+    observed_dependency_records = len(dependencies)
+    if observed_dependency_records > MAX_DEPENDENCY_RECORDS_V06:
+        unresolved.append(
+            {
+                "type": "environment_dependency_record_limit",
+                "observed": observed_dependency_records,
+                "retained": MAX_DEPENDENCY_RECORDS_V06,
+            }
+        )
     dependencies = dependencies[:MAX_DEPENDENCY_RECORDS_V06]
     unresolved = unresolved[:MAX_UNRESOLVED_V06]
     sources.sort(key=lambda x: (x["path"], x["kind"]))
@@ -1078,6 +1090,10 @@ def capture_environment_v06(
         "summary": {
             "source_files": len(sources),
             "dependency_records": len(dependencies),
+            "dependency_records_observed": observed_dependency_records,
+            "dependency_records_truncated": (
+                observed_dependency_records > len(dependencies)
+            ),
             "python_dependency_records": sum(1 for d in dependencies if d["ecosystem"] == "python"),
             "r_dependency_records": sum(1 for d in dependencies if d["ecosystem"] == "r"),
             "conda_dependency_records": sum(1 for d in dependencies if d["ecosystem"] == "conda"),
