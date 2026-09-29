@@ -390,3 +390,25 @@ def verify_review_quorum_v06(
         "reviews": public_reviews,
         "failures": failures,
     }
+
+
+
+def write_review_quorum_result_v06(
+    result: dict[str, Any],
+    output_path: str | Path,
+    *,
+    overwrite: bool = False,
+) -> Path:
+    import json
+
+    output = Path(output_path).resolve()
+    if output.exists() and not overwrite:
+        raise V06ReviewQuorumError(
+            f"refusing to overwrite existing quorum result: {output}"
+        )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    return output
