@@ -19,7 +19,7 @@ from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
-from .normalized_wire import write_normalized_decision, NormalizationError
+from .normalized_wire import write_normalized_decision, validate_normalized_wire, NormalizationError
 
 
 def cmd_certify(args):
@@ -230,6 +230,19 @@ def cmd_freeze_intake(args):
 
 
 
+
+def cmd_verify_normalized(args):
+    try:
+        from .jsonio import strict_json_load
+        wire = strict_json_load(args.input)
+        result = validate_normalized_wire(wire)
+    except (OSError, json.JSONDecodeError, NormalizationError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["valid"] else 1
+
+
 def cmd_normalize_decision(args):
     try:
         result = write_normalized_decision(
@@ -374,6 +387,10 @@ def build_parser():
     nd.add_argument("--claim", required=True, help="claim id to normalize")
     nd.add_argument("-o", "--output", required=True, help="write pcs-normalized-decision-v1 JSON")
     nd.set_defaults(func=cmd_normalize_decision)
+
+    vn = sub.add_parser("verify-normalized", help="independently recompute a normalized decision wire state's invariants")
+    vn.add_argument("input")
+    vn.set_defaults(func=cmd_verify_normalized)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
     se.add_argument("-o", "--output", required=True)
