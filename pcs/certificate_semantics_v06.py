@@ -262,6 +262,14 @@ def validate_certificate_semantics_v06(certificate: dict[str, Any]) -> None:
                     f"claim {claim['id']} predicate references unknown artifact {artifact_id}"
                 )
 
+    environment = certificate.get("environment")
+    if environment is not None:
+        for artifact_id in environment["source_artifact_ids"]:
+            if artifact_id not in artifact_map:
+                raise V06CertificateSemanticsError(
+                    f"environment references unknown artifact {artifact_id}"
+                )
+
     expected_workflow_summary = workflow_summary_v06(
         certificate["workflow"],
         set(artifact_map),
