@@ -843,6 +843,16 @@ def confirm_manifest_draft_v06(
         }
         for row in verified
     ]
+    inventory_commitment = confirmed["pcs_intake"].get(
+        "inventory_commitment_sha256"
+    )
+    for artifact in confirmed.get("artifacts", []):
+        metadata = artifact.setdefault("metadata", {})
+        metadata["pcs_discovery_confirmed"] = True
+        if isinstance(inventory_commitment, str):
+            metadata["pcs_discovery_inventory_commitment_sha256"] = (
+                inventory_commitment
+            )
     output = _write_json(
         confirmed,
         output_path,
