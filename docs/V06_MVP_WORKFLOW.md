@@ -63,6 +63,35 @@ This is intentionally narrower than the certificate schema. External proof,
 empirical, statistical, and provenance evidence remain explicit boundaries and are
 not synthesized as verified PASS by the MVP producer.
 
+## Reviewer-controlled acceptance
+
+The reviewer may apply the external `pcs-acceptance-policy-v1` contract while
+verifying the delivered ZIP:
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-public.pem \
+  --expected-signer-fingerprint <trusted-fingerprint> \
+  --policy reviewer-policy.json \
+  --receipt verification-receipt.json
+```
+
+The receipt deliberately separates:
+
+```text
+valid     = PCS accepted the package, signatures, replay and normalized decisions
+accepted  = valid AND the external reviewer policy passed
+```
+
+This prevents reviewer preferences from rewriting the scientific record. For
+example, a package may remain `valid: true` while `accepted: false` because the
+reviewer requires `FORMALLY_VERIFIED_UNDER_ASSUMPTIONS` and the replayed claim is
+only `COMPUTATIONALLY_SUPPORTED`.
+
+Reviewer policy can require exact claim statuses, require authenticated delivery,
+and independently pin the signer fingerprint. The verification receipt records
+SHA-256 of the exact policy-file bytes used for that decision.
+
 ## Honest negative results
 
 PCS verification and scientific success are different axes.
