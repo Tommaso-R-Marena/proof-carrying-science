@@ -37,6 +37,8 @@ _PRIOR_FAILS = 1.0
 _PRIOR_OBSERVATIONS = 2.0
 _RIDGE = 1.0
 _MIN_DURATION_MS = 0.001
+_MIN_BANDIT_TOTAL_OBSERVATIONS = 20
+_MIN_BANDIT_TYPE_OBSERVATIONS = 3
 
 
 class V06SchedulerError(ValueError):
@@ -266,6 +268,34 @@ def _bandit_score(
     }
 
 
+
+def bandit_readiness_v06(
+    candidates: list[dict[str, Any]],
+    history: list[dict[str, Any]],
+) -> dict[str, Any]:
+    stats = history_stats_v06(history)
+    required_types = sorted({candidate["check_type"] for candidate in candidates})
+    total = int(sum(row["observations"] for row in stats.values()))
+    per_type = {
+        check_type: int(stats.get(check_type, {}).get("observations", 0))
+        for check_type in required_types
+    }
+    missing = {
+        check_type: count
+        for check_type, count in per_type.items()
+        if count < _MIN_BANDIT_TYPE_OBSERVATIONS
+    }
+    ready = total >= _MIN_BANDIT_TOTAL_OBSERVATIONS and not missing
+    return {
+        "ready": ready,
+        "total_observations": total,
+        "minimum_total_observations": _MIN_BANDIT_TOTAL_OBSERVATIONS,
+        "per_type_observations": per_type,
+        "minimum_per_type_observations": _MIN_BANDIT_TYPE_OBSERVATIONS,
+        "undercovered_types": missing,
+    }
+
+
 def plan_evidence_v06(
     evidence: list[dict[str, Any]],
     artifact_sizes: dict[str, int],
@@ -306,6 +336,15 @@ def plan_evidence_v06(
                 candidate["artifact_count"] = override["artifact_count"]
     stats = history_stats_v06(history)
     models = _bandit_models(history)
+    readiness = bandit_readiness_v06(candidates, history)
+    effective_strategy = strategy
+    fallback_reason = None
+    if strategy == "bandit" and not readiness["ready"]:
+        effective_strategy = "failure-per-second"
+        fallback_reason = (
+            "bandit cold-start guard: insufficient historical coverage; "
+            "using deterministic failure-per-second baseline"
+        )
 
     scored: dict[str, dict[str, float]] = {}
     for candidate in candidates:
@@ -363,14 +402,17 @@ def plan_evidence_v06(
             ),
         )
 
-    actual = sort_for(strategy)
+    actual = sort_for(effective_strategy)
     shadow = sort_for("bandit") if shadow_bandit and strategy != "bandit" else None
 
     return {
         "format": SCHEDULER_FORMAT_V06,
-        "strategy": strategy,
+        "requested_strategy": strategy,
+        "strategy": effective_strategy,
+        "fallback_reason": fallback_reason,
         "history_runs": len(history),
         "bandit_alpha": float(bandit_alpha),
+        "bandit_readiness": readiness,
         "all_mandatory_checks_execute": True,
         "scientific_verdict_uses_scheduler": False,
         "execution_order": [x["evidence_id"] for x in actual],
