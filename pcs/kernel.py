@@ -17,7 +17,7 @@ from .schema_validation import validate_manifest_shape, validate_certificate_sha
 from .jsonio import strict_json_load, StrictJSONError
 
 SPEC_VERSION = "pcs-0.5"
-CHECKER_VERSION = "pcs-python-kernel/0.5.0"
+CHECKER_VERSION = "pcs-python-kernel/0.5.1"
 
 
 class AssuranceError(ValueError):
