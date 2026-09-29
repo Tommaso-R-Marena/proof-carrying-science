@@ -26,15 +26,27 @@ from .signing_v06 import verify_certificate_signature_v06
 
 
 UTF8_BOM = b"\xef\xbb\xbf"
+MAX_CERTIFICATE_BYTES_V06 = 10 * 1024 * 1024
+MAX_SIGNATURE_RECORD_BYTES_V06 = 16 * 1024 * 1024
+MAX_PACKAGE_MANIFEST_BYTES_V06 = 10 * 1024 * 1024
 
 
 class V06ByteContractError(ValueError):
     pass
 
 
-def _parse_canonical_json_bytes(raw: bytes, *, label: str) -> Any:
+def _parse_canonical_json_bytes(
+    raw: bytes,
+    *,
+    label: str,
+    max_bytes: int,
+) -> Any:
     if not isinstance(raw, bytes):
         raise V06ByteContractError(f"{label} must be supplied as immutable bytes")
+    if len(raw) > max_bytes:
+        raise V06ByteContractError(
+            f"{label} exceeds byte limit: {len(raw)} > {max_bytes}"
+        )
     if raw.startswith(UTF8_BOM):
         raise V06ByteContractError(f"{label} must not contain a UTF-8 BOM")
     try:
@@ -44,7 +56,7 @@ def _parse_canonical_json_bytes(raw: bytes, *, label: str) -> Any:
     try:
         value = parse_jcs_json(text)
         canonical = canonicalize_jcs_bytes(value)
-    except CanonicalJSONError as exc:
+    except (CanonicalJSONError, RecursionError) as exc:
         raise V06ByteContractError(f"{label} is not valid strict JCS JSON: {exc}") from exc
     if canonical != raw:
         raise V06ByteContractError(
@@ -54,7 +66,11 @@ def _parse_canonical_json_bytes(raw: bytes, *, label: str) -> Any:
 
 
 def parse_certificate_bytes_v06(raw: bytes) -> dict[str, Any]:
-    value = _parse_canonical_json_bytes(raw, label="v0.6 certificate")
+    value = _parse_canonical_json_bytes(
+        raw,
+        label="v0.6 certificate",
+        max_bytes=MAX_CERTIFICATE_BYTES_V06,
+    )
     if not isinstance(value, dict):
         raise V06ByteContractError("v0.6 certificate root must be an object")
     checked = verify_certificate_hashes_v06(value)
@@ -67,7 +83,11 @@ def parse_certificate_bytes_v06(raw: bytes) -> dict[str, Any]:
 
 
 def parse_signature_record_bytes_v06(raw: bytes) -> dict[str, Any]:
-    value = _parse_canonical_json_bytes(raw, label="v0.6 signature record")
+    value = _parse_canonical_json_bytes(
+        raw,
+        label="v0.6 signature record",
+        max_bytes=MAX_SIGNATURE_RECORD_BYTES_V06,
+    )
     if not isinstance(value, dict):
         raise V06ByteContractError("v0.6 signature record root must be an object")
     try:
@@ -78,7 +98,11 @@ def parse_signature_record_bytes_v06(raw: bytes) -> dict[str, Any]:
 
 
 def parse_package_manifest_bytes_v06(raw: bytes) -> dict[str, Any]:
-    value = _parse_canonical_json_bytes(raw, label="v0.6 package manifest")
+    value = _parse_canonical_json_bytes(
+        raw,
+        label="v0.6 package manifest",
+        max_bytes=MAX_PACKAGE_MANIFEST_BYTES_V06,
+    )
     if not isinstance(value, dict):
         raise V06ByteContractError("v0.6 package manifest root must be an object")
     try:
