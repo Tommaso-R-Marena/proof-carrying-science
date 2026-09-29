@@ -19,6 +19,11 @@ from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
+from .verifier_io_v06 import (
+    V06VerifierIOError,
+    verify_package_directory_end_to_end_v06,
+    write_verification_receipt_v06,
+)
 
 
 def cmd_certify(args):
@@ -46,6 +51,31 @@ def cmd_verify(args):
         print(f"REJECT: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["valid"] else 1
+
+
+def cmd_verify_v06(args):
+    try:
+        result = verify_package_directory_end_to_end_v06(
+            args.package,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+        )
+        receipt_path = None
+        if args.receipt:
+            receipt_path = write_verification_receipt_v06(
+                result,
+                args.receipt,
+                overwrite=args.force_receipt,
+            )
+    except (OSError, V06VerifierIOError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    output = dict(result)
+    if receipt_path is not None:
+        output["receipt_written"] = str(receipt_path)
+    print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result["valid"] else 1
 
 
@@ -260,6 +290,24 @@ def build_parser():
     v = sub.add_parser("verify", help="independently verify an evidence certificate/package")
     v.add_argument("certificate")
     v.set_defaults(func=cmd_verify)
+
+    v6 = sub.add_parser(
+        "verify-v06",
+        help="end-to-end verify a PCS v0.6 package directory",
+    )
+    v6.add_argument("package", help="directory containing the delivered v0.6 package")
+    v6.add_argument("--public-key", required=True, help="trusted Ed25519 public key PEM")
+    v6.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    v6.add_argument("--receipt", help="write deterministic JSON verification receipt")
+    v6.add_argument(
+        "--force-receipt",
+        action="store_true",
+        help="explicitly replace an existing receipt",
+    )
+    v6.set_defaults(func=cmd_verify_v06)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")
