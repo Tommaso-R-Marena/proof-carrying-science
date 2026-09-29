@@ -19,7 +19,7 @@ from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
-from .normalized_wire import write_normalized_decision, validate_normalized_wire, NormalizationError
+from .normalized_wire import write_normalized_decision, validate_normalized_wire, verify_normalized_against_certificate, NormalizationError
 
 
 def cmd_certify(args):
@@ -235,7 +235,11 @@ def cmd_verify_normalized(args):
     try:
         from .jsonio import strict_json_load
         wire = strict_json_load(args.input)
-        result = validate_normalized_wire(wire)
+        result = (
+            verify_normalized_against_certificate(wire, args.certificate)
+            if args.certificate
+            else validate_normalized_wire(wire)
+        )
     except (OSError, json.JSONDecodeError, NormalizationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -390,6 +394,7 @@ def build_parser():
 
     vn = sub.add_parser("verify-normalized", help="independently recompute a normalized decision wire state's invariants")
     vn.add_argument("input")
+    vn.add_argument("--certificate", help="also require exact reproduction from this independently replay-verified source certificate")
     vn.set_defaults(func=cmd_verify_normalized)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
