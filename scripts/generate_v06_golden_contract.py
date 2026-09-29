@@ -15,10 +15,7 @@ from pcs.crypto_domains_v06 import (
     CERTIFICATE_SEMANTIC_DOMAIN,
 )
 from pcs.package_v06 import build_package_manifest_v06, sign_package_manifest_v06
-from pcs.normalized_wire_v06 import (
-    normalize_replayed_certificate_v06,
-    normalized_wire_bytes_v06,
-)
+from pcs.normalized_set_v06 import build_normalized_set_v06
 from pcs.signing import public_key_fingerprint
 from pcs.signing_v06 import sign_certificate_v06
 
@@ -101,8 +98,10 @@ def build() -> dict[str, bytes]:
     )
     certificate_bytes = canonicalize_jcs_bytes(certificate)
     certificate_signature = sign_certificate_v06(certificate, private_key)
-    normalized_wire = normalize_replayed_certificate_v06(certificate, {}, "C1")
-    normalized_wire_bytes = normalized_wire_bytes_v06(normalized_wire)
+    normalized_set = build_normalized_set_v06(certificate, {})
+    normalized_files = normalized_set["files"]
+    normalized_entry = normalized_set["index"]["entries"][0]
+    normalized_wire_bytes = normalized_files[normalized_entry["path"]]
 
     files = {
         "certificate.json": {
@@ -113,11 +112,12 @@ def build() -> dict[str, bytes]:
             "sha256": hashlib.sha256(ARTIFACT_BYTES).hexdigest(),
             "size": len(ARTIFACT_BYTES),
         },
-        "normalized/C1.json": {
-            "sha256": hashlib.sha256(normalized_wire_bytes).hexdigest(),
-            "size": len(normalized_wire_bytes),
-        },
     }
+    for rel, raw in normalized_files.items():
+        files[rel] = {
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "size": len(raw),
+        }
     manifest = build_package_manifest_v06(certificate, files)
     package_signature = sign_package_manifest_v06(manifest, private_key)
 
@@ -146,9 +146,16 @@ def build() -> dict[str, bytes]:
             package_signature_bytes
         ).hexdigest(),
         "package_signature_payload_sha256": package_signature["payload_sha256"],
+        "normalized_wire_path": normalized_entry["path"],
         "normalized_wire_byte_sha256": hashlib.sha256(normalized_wire_bytes).hexdigest(),
-        "normalized_wire_semantic_hash": normalized_wire["wire_semantic_hash"],
-        "predicate_commitment": normalized_wire["claim"]["predicate_commitment"],
+        "normalized_wire_semantic_hash": normalized_entry["wire_semantic_hash"],
+        "normalized_index_byte_sha256": hashlib.sha256(
+            normalized_files["normalized/index.json"]
+        ).hexdigest(),
+        "normalized_index_semantic_hash": normalized_set["index"]["index_semantic_hash"],
+        "predicate_commitment": __import__("json").loads(
+            normalized_wire_bytes.decode("utf-8")
+        )["claim"]["predicate_commitment"],
         "artifact_sha256": hashlib.sha256(ARTIFACT_BYTES).hexdigest(),
     }
     metadata_bytes = (
@@ -161,7 +168,7 @@ def build() -> dict[str, bytes]:
         "package_manifest.json": manifest_bytes,
         "package_signature.json": package_signature_bytes,
         "artifacts/fixture.bin": ARTIFACT_BYTES,
-        "normalized/C1.json": normalized_wire_bytes,
+        **normalized_files,
         "metadata.json": metadata_bytes,
     }
 
