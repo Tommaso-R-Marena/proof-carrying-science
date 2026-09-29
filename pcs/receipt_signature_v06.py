@@ -201,6 +201,11 @@ def verify_verification_receipt_signature_v06(
             "reviewer_public_key_fingerprint": recorded_fingerprint,
             "receipt_sha256": receipt_sha256,
             "bundle_sha256": expected_payload["bundle_sha256"],
+            "certificate_semantic_hash": expected_payload["certificate_semantic_hash"],
+            "certificate_integrity_hash": expected_payload["certificate_integrity_hash"],
+            "normalized_index_semantic_hash": expected_payload[
+                "normalized_index_semantic_hash"
+            ],
             "policy_sha256": expected_payload["policy_sha256"],
             "pcs_valid": expected_payload["valid"],
             "reviewer_accepted": expected_payload["accepted"],
@@ -213,6 +218,9 @@ def verify_verification_receipt_signature_v06(
             "reviewer_public_key_fingerprint": None,
             "receipt_sha256": None,
             "bundle_sha256": None,
+            "certificate_semantic_hash": None,
+            "certificate_integrity_hash": None,
+            "normalized_index_semantic_hash": None,
             "policy_sha256": None,
             "pcs_valid": None,
             "reviewer_accepted": None,
