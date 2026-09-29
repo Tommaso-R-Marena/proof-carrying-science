@@ -16,7 +16,11 @@ from .kernel import (
     _normalized_predicate_from_check,
     verify_certificate,
 )
-from .schema_validation import validate_normalized_decision_shape, SchemaValidationError
+from .schema_validation import (
+    validate_normalized_decision_shape,
+    validate_normalized_decision_index_shape,
+    SchemaValidationError,
+)
 
 
 WIRE_FORMAT = "pcs-normalized-decision-v1"
@@ -343,6 +347,7 @@ def write_normalized_set(
         "certificate_semantic_hash": cert.get("semantic_hash"),
         "entries": entries,
     }
+    validate_normalized_decision_index_shape(index)
     (out / "index.json").write_text(
         json.dumps(index, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -373,6 +378,10 @@ def verify_normalized_set(
             "entries": [],
         }
 
+    try:
+        validate_normalized_decision_index_shape(index)
+    except SchemaValidationError as exc:
+        errors.append(str(exc))
     if index.get("index_format") != NORMALIZED_INDEX_FORMAT:
         errors.append("unsupported normalized index format")
     if index.get("certificate_semantic_hash") != cert.get("semantic_hash"):
