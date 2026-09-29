@@ -70,3 +70,11 @@ def validate_pilot_intake_shape(value: Any) -> None:
 def validate_pilot_intake_lock_shape(value: Any) -> None:
     validate_shape(value, "pilot_intake_lock.schema.json", label="pilot intake lock")
     validate_pilot_intake_shape(value.get("intake") if isinstance(value, dict) else None)
+
+
+def validate_v06_hash_envelope_shape(value: Any) -> None:
+    validate_shape(value, "hash_envelope_v06.schema.json", label="v0.6 hash envelope")
+
+
+def validate_v06_signature_record_shape(value: Any) -> None:
+    validate_shape(value, "signature_record_v06.schema.json", label="v0.6 signature record")
