@@ -335,6 +335,7 @@ def cmd_discover_v06(args):
             root,
             subject=args.subject,
             minimum_confidence=args.minimum_confidence,
+            minimum_workflow_confidence=args.minimum_workflow_confidence,
         )
         written = write_discovery_outputs_v06(
             result,
@@ -667,6 +668,12 @@ def build_parser():
         type=float,
         default=0.95,
         help="minimum recommendation confidence auto-selected into the draft",
+    )
+    d6.add_argument(
+        "--minimum-workflow-confidence",
+        type=float,
+        default=0.90,
+        help="minimum confidence for static Python/notebook workflow nodes",
     )
     d6.add_argument(
         "--force",
