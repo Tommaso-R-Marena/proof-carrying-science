@@ -70,3 +70,7 @@ def validate_pilot_intake_shape(value: Any) -> None:
 def validate_pilot_intake_lock_shape(value: Any) -> None:
     validate_shape(value, "pilot_intake_lock.schema.json", label="pilot intake lock")
     validate_pilot_intake_shape(value.get("intake") if isinstance(value, dict) else None)
+
+
+def validate_normalized_decision_shape(value: Any) -> None:
+    validate_shape(value, "normalized_decision.schema.json", label="normalized decision wire")
