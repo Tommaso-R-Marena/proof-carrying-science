@@ -381,3 +381,23 @@ def test_confirmation_replaces_browser_like_environment_preview_with_authoritati
     assert confirmed["pcs_intake"]["environment_hermeticity"] == (
         "hash_pinned_dependencies"
     )
+
+
+
+def test_reconstruction_plan_shell_quotes_nested_environment_paths(tmp_path):
+    project = tmp_path / "project"
+    nested = project / "unsafe; dir"
+    nested.mkdir(parents=True)
+    req = nested / "requirements.txt"
+    req.write_text("numpy==1.26.4\n", encoding="utf-8")
+
+    result = capture_environment_v06(
+        project,
+        _inventory(project, ["unsafe; dir/requirements.txt"]),
+    )
+
+    command = result["replay_plan"]["steps"][0]["command_template"]
+    assert "unsafe; dir/requirements.txt" in command
+    assert "'unsafe; dir/requirements.txt'" in command
+    script = render_environment_replay_script_v06(result)
+    assert "-r 'unsafe; dir/requirements.txt'" in script
