@@ -156,7 +156,6 @@ def verify_package_directory_end_to_end_v06(
         expected_fingerprint=expected_fingerprint,
     )
     receipt = dict(result)
-    receipt["package_root"] = str(loaded["root"])
     receipt["public_key_fingerprint"] = result.get(
         "public_key_fingerprint", public_key_fingerprint(public_key)
     )
@@ -166,8 +165,14 @@ def verify_package_directory_end_to_end_v06(
 def write_verification_receipt_v06(
     receipt: dict[str, Any],
     output: str | Path,
+    *,
+    overwrite: bool = False,
 ) -> Path:
     path = Path(output).resolve()
+    if path.exists() and not overwrite:
+        raise V06VerifierIOError(
+            f"refusing to overwrite existing verification receipt: {path}"
+        )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
