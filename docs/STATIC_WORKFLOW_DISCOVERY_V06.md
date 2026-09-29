@@ -5,7 +5,7 @@ Status: **implemented on the v0.6 MVP branch; repository gate execution remains 
 ## Goal
 
 Guided project onboarding should not stop at filenames. PCS can now statically inspect
-Python scripts and Jupyter notebooks to draft a reviewable artifact-dependency graph
+Python scripts, Jupyter notebooks, and conservative R literal-path workflows to draft a reviewable artifact-dependency graph
 without executing user code.
 
 The intended producer journey is:
@@ -87,6 +87,18 @@ inferred.
 
 Reference locations retain the notebook cell index.
 
+## R analysis
+
+R files are inspected with a deliberately narrower literal-path heuristic rather
+than an R runtime or parser. Recognized patterns currently include direct literal
+paths in `read.csv`, `read.table`, `readRDS`, `readr::read_csv`,
+`readr::read_tsv`, `fread`, `load`, `write.csv`, `write.table`,
+`write_csv`, `write_tsv`, `fwrite`, `saveRDS`, and `save(..., file=...)`.
+
+R code is never executed. Because this is heuristic rather than AST-based, resolved
+R workflows receive confidence **0.88**, below the default 0.95 selection threshold.
+They are therefore review-only by default.
+
 ## Resolution and ambiguity
 
 A literal path is tested conservatively against:
@@ -112,8 +124,9 @@ The current CLI confidence convention is:
 
 - **0.98** — source parsed cleanly and every recognized reference for that source was
   statically resolved;
-- **0.90** — at least one useful local dependency was resolved, but parsing or
-  recognized references remain incomplete.
+- **0.90** — at least one useful Python/Jupyter dependency was resolved, but parsing
+  or recognized references remain incomplete;
+- **0.88** — conservative R literal-path heuristic.
 
 The default workflow-selection threshold is **0.95**.
 
@@ -163,6 +176,23 @@ The normalized workflow node contract carries the static inference as an externa
 proposition. Independent reviewers can therefore inspect both the exact source bytes
 and the human-confirmed dependency claim that was made about them.
 
+## Human-readable review artifact
+
+`pcs discover-v06` also writes `pcs-discovery-review.md` by default. The review
+contains:
+
+- a compact inventory/recommendation summary;
+- selected vs unselected scientific checks;
+- selected vs unselected static workflow inferences;
+- source read/write artifact lists;
+- unresolved review items;
+- a Mermaid workflow graph;
+- an explicit pre-confirmation checklist.
+
+The Markdown review is convenience output. The machine-readable
+`pcs-manifest.draft.json` and `pcs-discovery.json` remain the authoritative
+inputs for confirmation and audit.
+
 ## Browser Project Mapper
 
 The public local-only Project Mapper provides a complementary workflow view:
@@ -201,6 +231,7 @@ Those are separate assurance obligations.
 `tests/test_workflow_discovery_v06.py` covers:
 
 - Python literal reads/writes;
+- conservative R literal-path reads/writes and default review-only behavior;
 - top-level constant path expressions;
 - `Path(__file__).resolve().parent`;
 - keyword path arguments;
