@@ -5,6 +5,8 @@ import PCS.Normalized
 import PCS.Normalization
 import PCS.DecisionExtraction
 import PCS.SerializedBridge
+import PCS.Wire
+import PCS.WireVectors
 import PCS.PKPD
 import PCS.DecisionVectors
 import PCS.AcceptanceTests
@@ -63,3 +65,12 @@ decision-extraction, normalization, and normalized-state soundness theorems.
 
 #print axioms PCS.PKPD.canonical_pk_units_valid
 #print axioms PCS.PKPD.canonical_pd_units_valid
+
+
+#print axioms PCS.Wire.source_claim_identity
+#print axioms PCS.Wire.decoded_decision_matches_recorded
+#print axioms PCS.Wire.predicate_commitment_eq_preserved
+#print axioms PCS.Wire.wire_computational_sound
+#print axioms PCS.Wire.wire_formal_sound
+#print axioms PCS.Wire.wire_empirical_sound
+#print axioms PCS.Wire.wire_mixed_sound
