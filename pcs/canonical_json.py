@@ -153,10 +153,13 @@ def parse_jcs_json(text: str) -> Any:
         )
     except CanonicalJSONError:
         raise
-    except (json.JSONDecodeError, OverflowError, ValueError) as exc:
+    except (json.JSONDecodeError, OverflowError, ValueError, RecursionError) as exc:
         raise CanonicalJSONError(f"invalid JCS JSON: {exc}") from exc
 
-    canonicalize_jcs(value)
+    try:
+        canonicalize_jcs(value)
+    except RecursionError as exc:
+        raise CanonicalJSONError("JCS JSON nesting exceeds implementation limit") from exc
     return value
 
 
