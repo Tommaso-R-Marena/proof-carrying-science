@@ -112,6 +112,12 @@ The builder also refuses unsigned extras, symlinks, output inside the package
 directory, accidental overwrite, and apparent private-key material. Use `--force`
 only when intentionally replacing an existing delivery ZIP.
 
+Publication is failure-atomic: PCS writes the candidate ZIP to a temporary sibling,
+runs the extraction-free v0.6 verifier against those exact archive bytes, checks the
+verifier's `bundle_sha256` against the candidate, and only then atomically publishes
+the requested output path. A failed post-build verification deletes the candidate
+and leaves any previous output untouched.
+
 ### Verify the delivered v0.6 ZIP directly
 
 A reviewer does not need to extract the archive first:
