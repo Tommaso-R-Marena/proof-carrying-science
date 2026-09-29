@@ -342,6 +342,12 @@ def cmd_discover_v06(args):
             report_output=report_output,
             overwrite=args.force,
         )
+        draft_path = Path(written["manifest_draft"]).resolve()
+        project_root_flag = (
+            f" --project-root {root}"
+            if draft_path.parent != root
+            else ""
+        )
         response = {
             "format": result["format"],
             "project": str(root),
@@ -350,8 +356,8 @@ def cmd_discover_v06(args):
             **written,
             "next": (
                 f"Review {written['manifest_draft']}, then run "
-                f"pcs confirm-v06 {written['manifest_draft']} -o "
-                f"{root / 'manifest.json'}"
+                f"pcs confirm-v06 {written['manifest_draft']}"
+                f"{project_root_flag} -o {root / 'manifest.json'}"
             ),
         }
     except (OSError, V06DiscoveryError) as e:
