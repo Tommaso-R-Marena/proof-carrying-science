@@ -138,6 +138,49 @@ and invalidates the reviewer signature.
 This layer provides non-repudiable review provenance under the selected Ed25519
 key. It does not alter the underlying scientific decision.
 
+## Multi-reviewer quorum approval
+
+PCS v0.6 can aggregate independently signed reviewer receipts under a separate
+governance policy without changing the underlying PCS scientific verdict.
+
+Example:
+
+```bash
+pcs verify-quorum-v06 \
+  --quorum-policy policies/review_quorum_v06.example.json \
+  --review-set review-set.json \
+  -o quorum-result.json
+```
+
+A quorum policy can require both a total threshold and role-specific thresholds,
+for example two accepted reviews overall with at least one computational reviewer
+and one domain reviewer.
+
+Each authorized reviewer may be pinned to a distinct required reviewer-policy
+SHA-256. A review counts only if its receipt signature is valid, PCS itself was
+valid, that reviewer accepted the result, the reviewer identity is authorized, and
+the signed receipt used the policy required for that role.
+
+Quorum is evaluated independently for each exact reviewed subject tuple:
+
+```text
+bundle SHA-256
+certificate semantic hash
+certificate integrity hash
+normalized-index semantic hash
+```
+
+Reviews over different bundles or certificate/index commitments are never combined.
+Duplicate reviewer fingerprints are disqualified, so one signing identity cannot
+satisfy multiple seats.
+
+The quorum result binds the exact quorum-policy bytes and review-set bytes by
+SHA-256 and records the selected subject, accepted reviewer identities, role counts,
+non-counting reviews, and threshold failures.
+
+This is organizational approval over independent review records. It does not
+upgrade a PCS claim status or make failed science pass.
+
 ## Honest negative results
 
 PCS verification and scientific success are different axes.
