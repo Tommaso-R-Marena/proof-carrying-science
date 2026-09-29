@@ -118,7 +118,7 @@ def cmd_verify_v06_bundle(args):
     if receipt_path is not None:
         output["receipt_written"] = str(receipt_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
-    return 0 if result["valid"] else 1
+    return 0 if result.get("accepted", result["valid"]) else 1
 
 
 def cmd_bundle_v06(args):
