@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
 from .kernel import verify_certificate, CHECKER_VERSION
+from .normalized_wire import verify_normalized_set
 from .bundle import (
     MAX_BUNDLE_FILES,
     MAX_BUNDLE_TOTAL_UNCOMPRESSED,
@@ -154,6 +155,10 @@ def verify_bundle(
             if not package_manifest_result["valid"]:
                 errors.extend([f"package: {e}" for e in package_manifest_result["errors"]])
 
+            normalized_result = verify_normalized_set(root / "normalized", cert)
+            if normalized_result["present"] and not normalized_result["valid"]:
+                errors.extend([f"normalized: {e}" for e in normalized_result["errors"]])
+
             package_sig_result = None
             package_sig_path = root / "package_signature.json"
             package_signature_present = package_sig_path.is_file()
@@ -239,6 +244,7 @@ def verify_bundle(
                 "package_manifest": package_manifest_result,
                 "package_signature": package_sig_result,
                 "certificate_signature": cert_sig_result,
+                "normalized_decisions": normalized_result,
                 "signature": package_sig_result or cert_sig_result,
                 "policy": policy_result,
                 "interpretation": (
