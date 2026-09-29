@@ -143,7 +143,7 @@ def cmd_bundle(args):
             write_normalized_set(args.certificate, normalized_dir)
         build_package_manifest(package_root)
         result = create_reproducible_bundle(args.certificate, args.output)
-    except (OSError, json.JSONDecodeError, AssuranceError, PackageError, BundleSafetyError) as e:
+    except (OSError, json.JSONDecodeError, AssuranceError, PackageError, BundleSafetyError, NormalizationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
