@@ -29,6 +29,8 @@ EXCLUDED_PACKAGE_FILES_V06 = {"package_manifest.json", "package_signature.json"}
 MAX_PACKAGE_FILES_V06 = 1000
 MAX_PACKAGE_TOTAL_BYTES_V06 = 100 * 1024 * 1024
 MAX_PACKAGE_SINGLE_FILE_V06 = 50 * 1024 * 1024
+MAX_PACKAGE_MEMBER_NAME_BYTES_V06 = 1024
+MAX_PACKAGE_SEGMENT_BYTES_V06 = 255
 _PRIVATE_KEY_MARKERS_V06 = (
     b"-----BEGIN PRIVATE KEY-----",
     b"-----BEGIN ENCRYPTED PRIVATE KEY-----",
@@ -59,18 +61,33 @@ def validate_package_namespace_v06(files: dict[str, Any]) -> None:
     for name in names:
         if not isinstance(name, str) or not name:
             raise V06PackageError("v0.6 package member names must be non-empty strings")
+        if name in EXCLUDED_PACKAGE_FILES_V06:
+            raise V06PackageError(
+                f"self-referential v0.6 package member is not permitted: {name!r}"
+            )
+        if len(name.encode("utf-8")) > MAX_PACKAGE_MEMBER_NAME_BYTES_V06:
+            raise V06PackageError(f"v0.6 package member name is too long: {name!r}")
         if "\\" in name:
             raise V06PackageError(f"v0.6 package member uses backslash: {name!r}")
 
         path = PurePosixPath(name)
         canonical = path.as_posix()
-        if path.is_absolute() or canonical != name or name.endswith("/"):
+        if (
+            path.is_absolute()
+            or canonical in ("", ".")
+            or canonical != name
+            or name.endswith("/")
+        ):
             raise V06PackageError(f"non-canonical v0.6 package member: {name!r}")
         if any(part in ("", ".", "..") for part in path.parts):
             raise V06PackageError(f"unsafe v0.6 package member: {name!r}")
 
         portable_parts: list[str] = []
         for segment in path.parts:
+            if len(segment.encode("utf-8")) > MAX_PACKAGE_SEGMENT_BYTES_V06:
+                raise V06PackageError(
+                    f"v0.6 package member segment is too long: {segment!r}"
+                )
             nfc = unicodedata.normalize("NFC", segment)
             if segment != nfc:
                 raise V06PackageError(
@@ -87,7 +104,7 @@ def validate_package_namespace_v06(files: dict[str, Any]) -> None:
                 raise V06PackageError(
                     f"v0.6 package member has trailing space/dot: {segment!r}"
                 )
-            stem = segment.split(".", 1)[0].casefold()
+            stem = segment.split(".", 1)[0].rstrip(" .").casefold()
             if stem in _WINDOWS_RESERVED_V06:
                 raise V06PackageError(
                     f"v0.6 package member uses Windows-reserved filename: {segment!r}"
@@ -119,7 +136,10 @@ def _validate_package_manifest_contract_v06(manifest: dict[str, Any]) -> None:
         validate_v06_package_manifest_shape(manifest)
     except SchemaValidationError as exc:
         raise V06PackageError(str(exc)) from exc
-    validate_package_namespace_v06(manifest.get("files", {}))
+    files = manifest.get("files", {})
+    validate_package_namespace_v06(files)
+    if "certificate.json" not in files:
+        raise V06PackageError("v0.6 package manifest must bind certificate.json")
 
 
 def _load_certificate_file_v06(path: Path) -> dict[str, Any]:
