@@ -9,8 +9,9 @@ from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
 from pcs.byte_contract_v06 import parse_certificate_bytes_v06
-from pcs.canonical_json import canonicalize_jcs_bytes
+from pcs.canonical_json import canonicalize_jcs, canonicalize_jcs_bytes
 from pcs.certificate_v06 import finalize_certificate_hashes_v06
+from pcs.certificate_semantics_v06 import workflow_summary_v06
 from pcs.normalized_set_v06 import (
     INDEX_PATH_V06,
     index_semantic_hash_v06,
@@ -244,3 +245,120 @@ def test_end_to_end_executes_scientific_replay_once(monkeypatch):
 
     assert result["valid"], result["errors"]
     assert calls == 1
+
+
+
+def test_resigned_false_static_workflow_claim_fails_at_workflow_replay():
+    certificate = parse_certificate_bytes_v06(_raw("certificate.json"))
+    forged = deepcopy(certificate)
+
+    script = (
+        b"import pandas as pd\n"
+        b"df = pd.read_csv('input.csv')\n"
+        b"df.to_csv('output.csv', index=False)\n"
+    )
+    input_bytes = b"id,x\n1,1\n"
+    output_bytes = b"id,x\n1,1\n"
+    added = [
+        (
+            "wf_source",
+            "artifacts/wf_source/payload",
+            "pipeline.py",
+            "source-code",
+            script,
+        ),
+        (
+            "wf_input",
+            "artifacts/wf_input/payload",
+            "input.csv",
+            "tabular-data",
+            input_bytes,
+        ),
+        (
+            "wf_output",
+            "artifacts/wf_output/payload",
+            "output.csv",
+            "tabular-output",
+            output_bytes,
+        ),
+    ]
+    for ident, path, source_path, role, raw in added:
+        forged["artifacts"].append(
+            {
+                "id": ident,
+                "path": path,
+                "role": role,
+                "sha256": hashlib.sha256(raw).hexdigest(),
+                "media_type": "text/plain",
+                "source_path": source_path,
+            }
+        )
+
+    proposition = {
+        "inference_format": "pcs-static-workflow-map-v1",
+        "inference_id": "W_STATIC_wf_source",
+        "static_only": True,
+        "user_code_executed": False,
+        "human_confirmed": True,
+        "confirmation_scope": (
+            "Static dependency inference confirmed; this does not prove "
+            "source-code correctness or runtime behavior."
+        ),
+        "source_path": "pipeline.py",
+        "source_kind": "python",
+        "analysis_mode": "python_ast",
+        "dependency_claim_mode": "exact_resolved_set",
+        "confidence": 0.98,
+        "imports": ["pandas"],
+        "resolved_references": [],
+        "references_truncated": True,
+    }
+    forged["workflow"]["nodes"].append(
+        {
+            "id": "N_STATIC_wf_source",
+            "operation": "static_python_workflow",
+            "inputs": ["wf_input", "wf_source"],
+            # False edge: the source actually writes wf_output, not wf_input.
+            "outputs": ["wf_input"],
+            "contract": {
+                "type": "external",
+                "namespace": "pcs-manifest-workflow-contract-v1",
+                "proposition": canonicalize_jcs(proposition),
+            },
+        }
+    )
+    forged["workflow_summary"] = workflow_summary_v06(
+        forged["workflow"],
+        {artifact["id"] for artifact in forged["artifacts"]},
+    )
+    forged["semantic_hash"] = ""
+    forged["integrity_hash"] = ""
+    forged = finalize_certificate_hashes_v06(forged)
+
+    files = _golden_files()
+    files["artifacts/wf_source/payload"] = script
+    files["artifacts/wf_input/payload"] = input_bytes
+    files["artifacts/wf_output/payload"] = output_bytes
+
+    cert_bytes, cert_sig, manifest_bytes, package_sig = _signed_inputs(
+        forged,
+        files,
+    )
+    files["certificate.json"] = cert_bytes
+
+    result = _verify(
+        certificate_bytes=cert_bytes,
+        certificate_signature_bytes=cert_sig,
+        package_manifest_bytes=manifest_bytes,
+        package_signature_bytes=package_sig,
+        files=files,
+    )
+
+    assert result["valid"] is False
+    assert result["failed_stage"] == "workflow_replay"
+    assert result["stages"]["canonical_inputs"] is True
+    assert result["stages"]["certificate_signature"] is True
+    assert result["stages"]["package_binding"] is True
+    assert result["stages"]["workflow_replay"] is False
+    assert result["stages"]["replay"] is False
+    assert any("output set differs" in error for error in result["errors"])
