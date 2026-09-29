@@ -153,6 +153,15 @@ def _replay_one(
     }
 
 
+
+def replay_evidence_item_v06(
+    evidence: dict[str, Any],
+    artifact_paths: Mapping[str, Path],
+) -> dict[str, Any]:
+    """Replay one typed v0.6 evidence item against exact packaged artifact paths."""
+    return _replay_one(evidence, artifact_paths)
+
+
 def verify_certificate_replay_v06(
     certificate: dict[str, Any],
     package_files: Mapping[str, bytes],
