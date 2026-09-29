@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Normalized Decision Index v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "index_format",
+    "canonical_json_profile",
+    "index_hash_format",
+    "certificate_semantic_hash",
+    "certificate_integrity_hash",
+    "entries",
+    "index_semantic_hash"
+  ],
+  "properties": {
+    "index_format": {"const": "pcs-normalized-decision-index-v2"},
+    "canonical_json_profile": {"const": "pcs-jcs-rfc8785-v1"},
+    "index_hash_format": {"const": "pcs-normalized-index-sha256-v2"},
+    "certificate_semantic_hash": {"$ref": "#/$defs/sha256"},
+    "certificate_integrity_hash": {"$ref": "#/$defs/sha256"},
+    "entries": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {"$ref": "#/$defs/entry"}
+    },
+    "index_semantic_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "safeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "decision": {
+      "enum": [
+        "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS",
+        "COMPUTATIONALLY_SUPPORTED",
+        "EMPIRICALLY_VALIDATED_WITHIN_SCOPE",
+        "MIXED_SUPPORT_UNDER_ASSUMPTIONS",
+        "OPEN",
+        "FALSIFIED_OR_CHECK_FAILED"
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "path", "decision", "wire_semantic_hash"],
+      "properties": {
+        "claim_id": {"$ref": "#/$defs/safeId"},
+        "path": {
+          "type": "string",
+          "pattern": "^normalized/[a-f0-9]{24}\\.json$"
+        },
+        "decision": {"$ref": "#/$defs/decision"},
+        "wire_semantic_hash": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}
