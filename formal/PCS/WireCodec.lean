@@ -8,7 +8,7 @@ open PCS.Wire
 
 def expectedWireFormat : String := "pcs-normalized-decision-v1"
 def expectedSpecVersion : String := "pcs-0.5"
-def expectedCheckerVersion : String := "pcs-python-kernel/0.5.0"
+def expectedCheckerVersion : String := "pcs-python-kernel/0.5.1"
 
 structure RawSource where
   specVersion : String
