@@ -2,30 +2,32 @@
 
 ## Current verdict
 
-**ARISTOTLE RETURNED A CLEAN MACHINE-CHECKED PROOF SET; PCS-NAMESPACE PROMOTION AWAITS ONE FINAL REBUILD.**
+**MACHINE-CHECKED PASS — PCS DECISION AND NORMALIZED-STATE SOUNDNESS LAYER.**
 
 Pinned toolchain: `leanprover/lean4:v4.28.0`.
 
-On 2026-09-29, the frozen Aristotle handoff built successfully under Lean 4.28.0 with the designated normalization, decision-extraction, direct soundness, and normalized-state bridge proofs closed. The returned project reported:
+The production-shaped PCS formal library was independently rebuilt on 2026-09-29 in verification-only mode. No Lean source, theorem statement, lakefile, or toolchain change was required.
+
+Verified result:
 
 - `lake build` exit code 0;
-- 15 jobs built successfully;
+- 14 jobs built successfully;
+- Lean 4.28.0, commit `7e01a1bf5c70`;
 - no `sorry` or `admit`;
-- no `sorryAx`;
-- no project-specific axioms;
-- no theorem statement weakening or added preconditions.
+- no project `axiom`, `unsafe`, `implemented_by`, `extern`, or `native_decide` declaration;
+- compiled scan of 641 `PCS.*` declarations found no axiom, unsafe declaration, or `sorry`;
+- no `Aristotle` Lean library or namespace remains;
+- no theorem statement weakening or extra precondition was introduced.
 
-The returned staged proof modules have now been promoted, without changing theorem statements or proof bodies, into:
+The promoted proof modules are ordinary PCS modules:
 
 - `PCS.Normalization`;
 - `PCS.DecisionExtraction`;
 - `PCS.SerializedBridge`.
 
-The old `Aristotle/*` staging modules are removed on the promotion branch. Because this environment does not contain Lean, the namespace-promoted branch must receive one final independent `lake build` before merge.
+## Machine-checked theorem chain
 
-## Machine-checked result already established in the returned project
-
-The Aristotle-built project machine-checked the following substantive chain:
+The current verified layer establishes, for computational, formal, empirical, and mixed accepted statuses:
 
 ```text
 normalized/replayed evidence
@@ -39,43 +41,60 @@ decideClaim c es = accepted(L)
 Assures Γ L c es
 ```
 
-for computational, formal, empirical, and mixed accepted statuses.
+The extraction layer proves that accepted decisions have passed the required-evidence guards and contain witnesses of the required evidence class. The normalized-state bridge composes those results with explicit context and semantic binding carried by `Normalized.DecisionInput`.
 
-The extraction layer proves that any accepted decision has passed the required-evidence guards and exposes evidence witnesses of the correct class. The normalized-state bridge then composes those theorems with the explicit context and semantic-binding fields carried by `Normalized.DecisionInput`.
+## Axiom audit
 
-## Standard Lean dependencies
+The promoted direct soundness and normalized bridge theorems depend only on Lean's standard:
 
-The returned `#print axioms` audit reported only standard Lean foundations where used:
+- `propext`;
+- `Classical.choice`;
+- `Quot.sound`.
 
-- no axioms for the basic PCS kernel/context/PKPD facts;
-- `propext` for some Boolean-to-Proposition soundness helpers;
-- `propext` and `Quot.sound` for refinement/list membership lemmas;
-- `propext`, `Quot.sound`, and `Classical.choice` for the whole-claim extraction/soundness and normalized bridge.
+Across all 38 audited theorems, no `sorryAx` or PCS-specific axiom appears; several audited theorems depend on no axioms at all.
 
-No `sorryAx` and no PCS-specific axiom appeared.
+See:
 
-## What is still open
+`results/PROMOTION_VERIFICATION_2026-09-29.md`
 
-The formal result is not yet end-to-end serialized-package verification. Still open:
+## Correct public claim
+
+The precise current statement is:
+
+> **The PCS assurance decision and normalized-state soundness layer is machine-checked in Lean 4.28.0.**
+
+Do not state that the complete PCS product is formally verified end-to-end.
+
+## Remaining formal boundary
+
+Still open:
 
 - raw PCS JSON/ZIP bytes -> parsed/schema-valid Lean-level representation;
 - executable Python parser/replay/refinement -> `Normalized.DecisionInput`;
-- Python implementation refinement to the Lean decision function beyond frozen decision vectors;
+- Python implementation refinement to the Lean decision function beyond frozen cross-language decision vectors;
 - formal real-analysis/numerical semantics for PK exponential/Emax evaluation;
-- empirical adequacy or clinical validity of any PK/PD model.
+- empirical adequacy, clinical validity, or regulatory acceptance of scientific models.
 
-The correct current claim after the promotion branch independently rebuilds is:
+The next major theorem program is the serialized-package/executable-refinement bridge:
 
-> The PCS assurance decision and normalized-state soundness layer is machine-checked in Lean 4.28.0.
+```text
+raw package
+   ↓
+strict parse + schema + artifact/replay checks
+   ↓
+Normalized.DecisionInput
+   ↓
+machine-checked decision soundness
+   ↓
+Γ ; E ⊢ C @ L
+```
 
-Do not claim that the complete Python product or scientific model validity is formally verified end-to-end.
+## Reproduction gate
 
-## Final promotion reproduction
-
-From the repository root on branch `formal/aristotle-proof-promotion-2026-09-29`:
+From repository root:
 
 ```bash
 ./scripts/verify_lean.sh
 ```
 
-A successful run is required before merging the promotion branch.
+The script now uses token-safe grep patterns and rejects placeholders plus project-level `axiom`, `unsafe`, `implemented_by`, `extern`, and `native_decide` declarations.
