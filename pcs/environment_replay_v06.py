@@ -48,8 +48,8 @@ def environment_binding_v06(environment: dict[str, Any] | None) -> dict[str, Any
     if not isinstance(source_ids, list) or not all(isinstance(x, str) for x in source_ids):
         raise V06EnvironmentReplayError("environment source_artifact_ids must be strings")
     proposition = canonicalize_jcs(environment)
-    if len(proposition.encode("utf-8")) > 262144:
-        raise V06EnvironmentReplayError("environment proposition exceeds 256 KiB limit")
+    if len(proposition.encode("utf-8")) > 1048576:
+        raise V06EnvironmentReplayError("environment proposition exceeds 1 MiB limit")
     return {
         "format": ENVIRONMENT_BINDING_FORMAT_V06,
         "source_artifact_ids": list(source_ids),
