@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import tempfile
+import time
+from datetime import datetime, timezone
 from copy import deepcopy
 from pathlib import Path
 from typing import Any, Mapping
@@ -13,6 +15,11 @@ from .checks.splits import csv_key_disjoint
 from .checks.units import units_compatible
 from .decision import assess_claim
 from .package_v06 import MAX_PACKAGE_SINGLE_FILE_V06, MAX_PACKAGE_TOTAL_BYTES_V06
+from .scheduler_v06 import (
+    TELEMETRY_FORMAT_V06,
+    V06SchedulerError,
+    plan_evidence_v06,
+)
 
 
 class V06ReplayError(ValueError):
@@ -165,6 +172,12 @@ def replay_evidence_item_v06(
 def verify_certificate_replay_v06(
     certificate: dict[str, Any],
     package_files: Mapping[str, bytes],
+    *,
+    scheduler_strategy: str = "manifest",
+    scheduler_history: list[dict[str, Any]] | None = None,
+    bandit_alpha: float = 1.0,
+    shadow_bandit: bool = False,
+    telemetry_sink: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Replay all v0.6 built-in evidence and recompute claim decisions.
 
@@ -194,6 +207,36 @@ def verify_certificate_replay_v06(
 
     evidence_results: list[dict[str, Any]] = []
     replay_map: dict[str, dict[str, Any]] = {}
+    result_by_id: dict[str, dict[str, Any]] = {}
+
+    artifact_sizes = {
+        artifact_id: len(raw)
+        for artifact_id, raw in artifacts.items()
+    }
+    try:
+        schedule = plan_evidence_v06(
+            certificate["evidence"],
+            artifact_sizes,
+            strategy=scheduler_strategy,
+            history=scheduler_history or [],
+            bandit_alpha=bandit_alpha,
+            shadow_bandit=shadow_bandit,
+        )
+    except V06SchedulerError as exc:
+        return {
+            "valid": False,
+            "errors": [f"replay scheduler configuration invalid: {exc}"],
+            "evidence": [],
+            "claim_statuses": {},
+        }
+
+    evidence_by_id = {
+        evidence["id"]: evidence
+        for evidence in certificate["evidence"]
+    }
+    telemetry_checks: list[dict[str, Any]] = []
+    cumulative_ms = 0.0
+    first_failure: dict[str, Any] | None = None
 
     with tempfile.TemporaryDirectory(prefix="pcs-v06-replay-") as tmp:
         root = Path(tmp)
@@ -203,13 +246,57 @@ def verify_certificate_replay_v06(
             path.write_bytes(raw)
             artifact_paths[artifact_id] = path
 
-        for evidence in certificate["evidence"]:
+        candidate_by_id = {
+            candidate["evidence_id"]: candidate
+            for candidate in schedule["candidates"]
+        }
+
+        for execution_index, evidence_id in enumerate(schedule["execution_order"]):
+            evidence = evidence_by_id[evidence_id]
+            candidate = candidate_by_id[evidence_id]
+            wall_start = time.perf_counter_ns()
+            cpu_start = time.process_time_ns()
             result = _replay_one(evidence, artifact_paths)
-            evidence_results.append(result)
+            cpu_ns = time.process_time_ns() - cpu_start
+            wall_ns = time.perf_counter_ns() - wall_start
+            duration_ms = wall_ns / 1_000_000.0
+            cumulative_ms += duration_ms
+
+            result_by_id[evidence_id] = result
             replayed = deepcopy(evidence)
             replayed["kind"] = result["kind"]
             replayed["outcome"] = result["outcome"]
-            replay_map[evidence["id"]] = replayed
+            replay_map[evidence_id] = replayed
+
+            if result["outcome"] == "PASS":
+                failure_class = None
+            elif result["outcome"] == "UNVERIFIED":
+                failure_class = "unsupported_external"
+            elif isinstance(result.get("details"), dict) and result["details"].get("error"):
+                failure_class = f"exception:{result['details']['error']}"
+            else:
+                failure_class = "predicate_false"
+
+            telemetry_checks.append(
+                {
+                    "evidence_id": evidence_id,
+                    "check_type": evidence["check_spec"]["type"],
+                    "original_index": candidate["original_index"],
+                    "execution_index": execution_index,
+                    "artifact_count": candidate["artifact_count"],
+                    "input_bytes": candidate["input_bytes"],
+                    "outcome": result["outcome"],
+                    "failure_class": failure_class,
+                    "duration_ms": duration_ms,
+                    "cpu_ms": cpu_ns / 1_000_000.0,
+                }
+            )
+            if first_failure is None and result["outcome"] == "FAIL":
+                first_failure = {
+                    "evidence_id": evidence_id,
+                    "execution_index": execution_index,
+                    "time_to_first_failure_ms": cumulative_ms,
+                }
 
             if evidence["kind"] != result["kind"]:
                 errors.append(
@@ -232,6 +319,45 @@ def verify_certificate_replay_v06(
                     f"evidence {evidence['id']} checker differs from certificate checker_version"
                 )
 
+    # Preserve certificate order for all semantic consumers regardless of execution order.
+    evidence_results = [
+        result_by_id[evidence["id"]]
+        for evidence in certificate["evidence"]
+    ]
+
+    telemetry = {
+        "format": TELEMETRY_FORMAT_V06,
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "certificate_semantic_hash": certificate["semantic_hash"],
+        "checker_version": certificate["checker_version"],
+        "scheduler": {
+            "format": schedule["format"],
+            "strategy": schedule["strategy"],
+            "history_runs": schedule["history_runs"],
+            "bandit_alpha": schedule["bandit_alpha"],
+            "all_mandatory_checks_execute": schedule["all_mandatory_checks_execute"],
+            "scientific_verdict_uses_scheduler": schedule[
+                "scientific_verdict_uses_scheduler"
+            ],
+            "execution_order": schedule["execution_order"],
+            "shadow_bandit_order": schedule["shadow_bandit_order"],
+        },
+        "checks": telemetry_checks,
+        "summary": {
+            "check_count": len(telemetry_checks),
+            "fail_count": sum(1 for x in telemetry_checks if x["outcome"] == "FAIL"),
+            "unverified_count": sum(
+                1 for x in telemetry_checks if x["outcome"] == "UNVERIFIED"
+            ),
+            "total_duration_ms": sum(x["duration_ms"] for x in telemetry_checks),
+            "total_cpu_ms": sum(x["cpu_ms"] for x in telemetry_checks),
+            "first_failure": first_failure,
+        },
+    }
+    if telemetry_sink is not None:
+        telemetry_sink.clear()
+        telemetry_sink.update(telemetry)
+
     claim_statuses: dict[str, str] = {}
     for claim in certificate["claims"]:
         assessment = assess_claim(claim, replay_map)
@@ -249,4 +375,16 @@ def verify_certificate_replay_v06(
         "certificate_integrity_hash": certificate["integrity_hash"],
         "evidence": evidence_results,
         "claim_statuses": claim_statuses,
+        "scheduler": {
+            "format": schedule["format"],
+            "strategy": schedule["strategy"],
+            "history_runs": schedule["history_runs"],
+            "bandit_alpha": schedule["bandit_alpha"],
+            "all_mandatory_checks_execute": schedule["all_mandatory_checks_execute"],
+            "scientific_verdict_uses_scheduler": schedule[
+                "scientific_verdict_uses_scheduler"
+            ],
+            "execution_order": schedule["execution_order"],
+            "shadow_bandit_order": schedule["shadow_bandit_order"],
+        },
     }
