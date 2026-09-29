@@ -105,16 +105,15 @@ def validate_normalized_wire_v06(wire: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def normalize_replayed_certificate_v06(
+def normalize_claim_after_replay_v06(
     certificate: dict[str, Any],
-    package_files: Mapping[str, bytes],
+    replay: dict[str, Any],
     claim_id: str,
 ) -> dict[str, Any]:
-    replay = verify_certificate_replay_v06(certificate, package_files)
-    if not replay["valid"]:
+    if not replay.get("valid"):
         raise V06NormalizationError(
             "certificate must pass executable v0.6 replay before normalization: "
-            + "; ".join(replay["errors"])
+            + "; ".join(replay.get("errors", []))
         )
 
     claim_map = {claim["id"]: claim for claim in certificate["claims"]}
@@ -189,6 +188,15 @@ def normalize_replayed_certificate_v06(
             + "; ".join(checked["errors"])
         )
     return wire
+
+
+def normalize_replayed_certificate_v06(
+    certificate: dict[str, Any],
+    package_files: Mapping[str, bytes],
+    claim_id: str,
+) -> dict[str, Any]:
+    replay = verify_certificate_replay_v06(certificate, package_files)
+    return normalize_claim_after_replay_v06(certificate, replay, claim_id)
 
 
 def verify_normalized_against_certificate_v06(
