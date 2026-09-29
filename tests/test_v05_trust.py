@@ -269,3 +269,66 @@ def test_staged_symlink_to_external_file_is_refused():
             assert "staged symlinks" in str(exc)
         else:
             raise AssertionError("bundle writer should reject staged symlink")
+
+
+
+def test_attestation_packages_verified_normalized_decision_states():
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        _, _, pub, _, evidence, bundle = _signed_attestation(root)
+
+        index_path = evidence / "normalized" / "index.json"
+        assert index_path.is_file()
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        cert = json.loads((evidence / "certificate.json").read_text(encoding="utf-8"))
+        assert index["index_format"] == "pcs-normalized-decision-index-v1"
+        assert index["certificate_semantic_hash"] == cert["semantic_hash"]
+        assert [e["claim_id"] for e in index["entries"]] == [c["id"] for c in cert["claims"]]
+
+        verified = verify_bundle(bundle, public_key=pub, require_signature=True)
+        assert verified["valid"], verified["errors"]
+        assert verified["normalized_decisions"]["present"] is True
+        assert verified["normalized_decisions"]["valid"] is True
+        assert len(verified["normalized_decisions"]["entries"]) == len(cert["claims"])
+
+
+def test_validly_resigned_package_cannot_substitute_unrelated_normalized_state():
+    from pcs.bundle import create_reproducible_bundle
+    from pcs.normalized_wire import wire_semantic_hash
+    from pcs.package import build_package_manifest, sign_package_manifest
+
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        _, priv, pub, _, evidence, _ = _signed_attestation(root)
+
+        index_path = evidence / "normalized" / "index.json"
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        entry = index["entries"][0]
+        wire_path = evidence / "normalized" / entry["path"]
+        wire = json.loads(wire_path.read_text(encoding="utf-8"))
+
+        # Keep the wire internally coherent and preserve the recorded decision, but
+        # lie about which certificate state it came from.
+        wire["source"]["certificate_semantic_hash"] = "f" * 64
+        wire["wire_semantic_hash"] = wire_semantic_hash(wire)
+        wire_path.write_text(json.dumps(wire, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        entry["wire_semantic_hash"] = wire["wire_semantic_hash"]
+        index_path.write_text(json.dumps(index, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+        # Model a signer (or compromised signing process) that re-manifests and
+        # correctly re-signs the altered delivery. Cryptography alone should not
+        # make the false source relationship acceptable.
+        build_package_manifest(evidence)
+        sign_package_manifest(evidence / "package_manifest.json", priv, evidence / "package_signature.json")
+        forged = root / "resigned-normalized-substitution.zip"
+        create_reproducible_bundle(evidence / "certificate.json", forged)
+
+        result = verify_bundle(forged, public_key=pub, require_signature=True)
+        assert not result["valid"]
+        assert result["assurance_dimensions"]["signer_authenticity"] == "VERIFIED"
+        assert result["normalized_decisions"]["present"] is True
+        assert not result["normalized_decisions"]["valid"]
+        assert any(
+            "normalized wire does not exactly match source certificate normalization" in e
+            for e in result["normalized_decisions"]["errors"]
+        )
