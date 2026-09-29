@@ -155,6 +155,19 @@ def main() -> int:
         )
     )
 
+    demo_summary_path = demo_dir / "demo-summary.json"
+    normalized_refinement_ready = False
+    normalized_refinement_status = "MISSING"
+    if demo_summary_path.is_file():
+        try:
+            demo_summary = json.loads(demo_summary_path.read_text(encoding="utf-8"))
+            normalized_refinement_status = (
+                demo_summary.get("assurance_dimensions", {}).get("normalized_refinement", "MISSING")
+            )
+            normalized_refinement_ready = normalized_refinement_status == "PASS"
+        except Exception:
+            normalized_refinement_status = "INVALID_SUMMARY"
+
     placeholder_audit = _formal_placeholder_audit()
     (run_dir / "formal-placeholder-audit.json").write_text(
         json.dumps(placeholder_audit, indent=2, sort_keys=True) + "\n",
@@ -173,6 +186,7 @@ def main() -> int:
     python_ready = (
         not dirty
         and placeholder_audit["pass"]
+        and normalized_refinement_ready
         and all(
             step["exit_code"] == 0
             for step in steps
@@ -184,7 +198,7 @@ def main() -> int:
     release_pass = python_ready and (formal_ready if args.require_lean else True)
 
     result = {
-        "format": "pcs-release-gate-v1",
+        "format": "pcs-release-gate-v2",
         "recorded_at": datetime.now(timezone.utc).isoformat(),
         "repository": "Tommaso-R-Marena/proof-carrying-science",
         "commit": commit,
@@ -198,12 +212,14 @@ def main() -> int:
         "runtime_semantic_hash": runtime.get("semantic_hash"),
         "steps": steps,
         "formal_placeholder_audit": placeholder_audit,
+        "reference_normalized_refinement": normalized_refinement_status,
         "lean_build": lean_status,
         "python_pilot_release_ready": python_ready,
         "formal_kernel_machine_checked": formal_ready,
         "release_gate_pass": release_pass,
         "interpretation": (
-            "A passing Python pilot gate is execution evidence for this exact commit and environment; "
+            "A passing Python pilot gate requires the reference attestation's normalized-refinement handoff to verify; "
+            "it is execution evidence for this exact commit and environment; "
             "it is not a security proof, biological/clinical validation, regulatory approval, or a substitute "
             "for a successful Lean build when formal-kernel claims are made."
         ),
