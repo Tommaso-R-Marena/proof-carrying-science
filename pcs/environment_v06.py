@@ -12,7 +12,7 @@ ENVIRONMENT_CAPTURE_FORMAT_V06 = "pcs-environment-capture-v1"
 ENVIRONMENT_CONTRACT_NAMESPACE_V06 = "pcs-manifest-environment-contract-v1"
 ENVIRONMENT_REPLAY_PLAN_FORMAT_V06 = "pcs-environment-replay-plan-v1"
 MAX_ENVIRONMENT_SOURCE_BYTES_V06 = 8 * 1024 * 1024
-MAX_DEPENDENCY_RECORDS_V06 = 4096
+MAX_DEPENDENCY_RECORDS_V06 = 1000
 MAX_CONTAINER_STAGES_V06 = 64
 MAX_UNRESOLVED_V06 = 256
 
@@ -89,7 +89,7 @@ def _dependency_record(
     return {
         "ecosystem": ecosystem,
         "name": name,
-        "raw": raw[:2048],
+        "raw": raw[:512],
         "source_path": source_path,
         "source_kind": source_kind,
         "exact_pin": bool(exact_pin),
@@ -691,7 +691,7 @@ def _dockerfile(text: str, *, source_path: str) -> tuple[dict[str, Any], list[di
                 "renv::restore",
             )
         ):
-            package_commands.append(line[:2048])
+            package_commands.append(line[:512])
     if len(stages) > MAX_CONTAINER_STAGES_V06:
         unresolved.append(
             {
