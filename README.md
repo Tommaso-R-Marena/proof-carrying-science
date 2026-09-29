@@ -70,6 +70,7 @@ The command writes:
 my-project/
   pcs-manifest.draft.json
   pcs-discovery.json
+  pcs-discovery-review.md
 ```
 
 The draft is intentionally **not attestable**. Review or edit the proposed claims,
@@ -88,13 +89,15 @@ The discovery engine is a usability/recommendation layer, not a scientific verdi
 Confidence scores select only high-confidence supported patterns by default; the
 scientist remains responsible for the meaning of the confirmed claims.
 
-Static Python/Jupyter workflow discovery now complements the file-pattern detectors.
+Static Python/Jupyter workflow discovery plus conservative review-only R mapping now complements the file-pattern detectors.
 The CLI parses source with Python ASTs without importing or executing user code,
 resolves conservative local file reads/writes, drafts artifact-dependency workflow
 nodes, reports dynamic/ambiguous references instead of guessing, and keeps partial
 inferences below the default 0.95 auto-selection threshold. Confirmed workflow
 inferences are carried into the signed certificate as explicit static-only
 provenance.
+
+The Markdown review summarizes selected checks, source/artifact flow, unresolved items, and a Mermaid graph for human review before confirmation.
 
 See `docs/STATIC_WORKFLOW_DISCOVERY_V06.md`.
 
