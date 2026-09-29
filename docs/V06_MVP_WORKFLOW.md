@@ -93,7 +93,24 @@ review-before-run shell script can be generated with `pcs environment-plan-v06`,
 but the verification path never executes environment installation/build commands.
 
 The reviewer re-derives the environment proposition from exact delivered bytes
-before static workflow replay. See `docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
+before static workflow replay.
+
+After successful verification, the reviewer can prepare a non-executing local replay
+workspace:
+
+```bash
+pcs prepare-environment-v06 study.pcs.zip \
+  -o replay-workspace \
+  --public-key trusted-public.pem \
+  --expected-signer-fingerprint <fingerprint>
+```
+
+PCS rechecks the bundle identity, stages the exact signed `source_path` tree, writes
+the verification receipt, environment replay plan, and review-before-run script, then
+publishes the workspace only after staging completes. It still does not invoke package
+managers, container builders, notebooks, scripts, or project code.
+
+See `docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
 
 ## Product loop
 
