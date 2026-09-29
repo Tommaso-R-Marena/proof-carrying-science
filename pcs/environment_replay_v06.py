@@ -99,6 +99,10 @@ def _parse_binding(binding: dict[str, Any]) -> dict[str, Any]:
     return value
 
 
+def environment_from_binding_v06(binding: dict[str, Any]) -> dict[str, Any]:
+    return _parse_binding(binding)
+
+
 def _artifact_inventory(
     certificate: dict[str, Any],
     package_files: Mapping[str, bytes],
