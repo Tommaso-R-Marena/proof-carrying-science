@@ -19,6 +19,15 @@ from pcs.schema_validation import validate_v06_certificate_shape
 
 ROOT = Path(__file__).resolve().parents[1]
 
+PREDICATE = {
+    "type": "reaction_balance",
+    "reactants": [
+        {"formula": "H2", "coefficient": 2},
+        {"formula": "O2", "coefficient": 1},
+    ],
+    "products": [{"formula": "H2O", "coefficient": 2}],
+}
+
 BASE_CERTIFICATE = {
     "spec_version": SPEC_VERSION_V06,
     "checker_version": "pcs-python-kernel/0.6.0-dev",
@@ -28,26 +37,44 @@ BASE_CERTIFICATE = {
     "generated_at": "2026-09-29T00:00:00+00:00",
     "subject": "v0.6 canonical fixture",
     "mission_scope": "computational assurance; test fixture",
-    "assumptions": [{"id": "A1", "statement": "fixture assumption"}],
+    "assumptions": [
+        {"id": "A1", "statement": "fixture assumption", "scope": ["C1"]}
+    ],
     "claims": [
         {
             "id": "C1",
+            "statement": "The fixture reaction is atom-balanced.",
             "kind": "computational",
+            "predicate": PREDICATE,
             "required_evidence": ["E1"],
             "assumptions": ["A1"],
-            "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"},
+            "assessment": {
+                "status": "COMPUTATIONALLY_SUPPORTED",
+                "reason": "all declared computational checks passed",
+            },
         }
     ],
     "artifacts": [],
-    "evidence": [{"id": "E1", "kind": "computational_test", "outcome": "PASS"}],
+    "evidence": [
+        {
+            "id": "E1",
+            "kind": "computational_test",
+            "claim_ids": ["C1"],
+            "outcome": "PASS",
+            "checker": "pcs-python-kernel/0.6.0-dev",
+            "predicate": PREDICATE,
+            "artifact_ids": [],
+            "check_spec": PREDICATE,
+        }
+    ],
     "workflow": {"nodes": []},
     "workflow_summary": {"node_count": 0, "topological_order": []},
     "semantic_hash": "",
     "integrity_hash": "",
 }
 
-EXPECTED_SEMANTIC_HASH = "2b796888292f0eba69e2519a096b4882fd49024e29012c578e5913a6879daba0"
-EXPECTED_INTEGRITY_HASH = "f67f5a5a144a1db50985adba2b766b06b2df87bcb30af1ad8817779af39d8b57"
+EXPECTED_SEMANTIC_HASH = "ea49dee3044a7e50f0f38c272d589b01ad2fe274308bf2dcda904a4a4ea28d7a"
+EXPECTED_INTEGRITY_HASH = "a47acf203157f783f654320a5b80a8437cb70d5c43aeb723b1941e50689deeb9"
 
 
 def test_v06_certificate_hash_vector():
@@ -72,7 +99,7 @@ def test_v06_semantic_hash_ignores_generation_timestamp_but_integrity_binds_it()
 def test_v06_scientific_content_change_changes_both_hashes():
     first = finalize_certificate_hashes_v06(BASE_CERTIFICATE)
     changed = deepcopy(BASE_CERTIFICATE)
-    changed["claims"][0]["assessment"]["status"] = "OPEN"
+    changed["claims"][0]["statement"] = "A different machine-bound scientific statement."
     second = finalize_certificate_hashes_v06(changed)
 
     assert first["semantic_hash"] != second["semantic_hash"]
