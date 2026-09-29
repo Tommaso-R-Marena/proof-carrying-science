@@ -12,6 +12,7 @@ from pcs.normalized_wire import (
     _normalize_verified_object,
     normalize_verified_certificate,
     predicate_commitment,
+    validate_normalized_wire,
     wire_semantic_hash,
 )
 
@@ -175,3 +176,37 @@ def test_frozen_cross_language_wire_vector():
     assert wire["evidence"][0]["predicate_commitment"] == vector["predicate_commitment"]
     assert wire["decision"] == "COMPUTATIONALLY_SUPPORTED"
     assert wire["wire_semantic_hash"] == wire_semantic_hash(wire)
+
+
+def test_wire_verifier_rejects_rehashed_predicate_binding_tamper():
+    root = Path(__file__).resolve().parents[1]
+    fixture = json.loads((root / "tests/normalized_wire_vectors.json").read_text(encoding="utf-8"))
+    wire = json.loads(json.dumps(fixture["vectors"][0]["wire"]))
+    wire["evidence"][0]["predicate_commitment"] = "pcs-predicate-sha256:" + "1" * 64
+    wire["invariants"]["required_evidence_bound"] = True
+    wire["wire_semantic_hash"] = wire_semantic_hash(wire)
+    result = validate_normalized_wire(wire)
+    assert not result["valid"]
+    assert any("predicate commitment differs" in e for e in result["errors"])
+
+
+def test_wire_verifier_rejects_rehashed_decision_tamper():
+    root = Path(__file__).resolve().parents[1]
+    fixture = json.loads((root / "tests/normalized_wire_vectors.json").read_text(encoding="utf-8"))
+    wire = json.loads(json.dumps(fixture["vectors"][0]["wire"]))
+    wire["decision"] = "OPEN"
+    wire["wire_semantic_hash"] = wire_semantic_hash(wire)
+    result = validate_normalized_wire(wire)
+    assert not result["valid"]
+    assert any("normalized decision mismatch" in e for e in result["errors"])
+
+
+def test_wire_verifier_rejects_hash_tamper():
+    root = Path(__file__).resolve().parents[1]
+    fixture = json.loads((root / "tests/normalized_wire_vectors.json").read_text(encoding="utf-8"))
+    wire = json.loads(json.dumps(fixture["vectors"][0]["wire"]))
+    wire["source"]["claim_id"] = "OTHER"
+    result = validate_normalized_wire(wire)
+    assert not result["valid"]
+    assert "wire semantic hash mismatch" in result["errors"]
+    assert "source claim id does not match normalized claim id" in result["errors"]
