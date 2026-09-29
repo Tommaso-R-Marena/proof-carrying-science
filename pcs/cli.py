@@ -49,6 +49,15 @@ from .quorum_v06 import (
     verify_review_quorum_v06,
     write_review_quorum_result_v06,
 )
+from .scheduler_v06 import (
+    SCHEDULER_STRATEGIES_V06,
+    V06SchedulerError,
+    append_telemetry_history_v06,
+    load_telemetry_history_v06,
+    scheduler_report_v06,
+    write_scheduler_report_v06,
+    write_telemetry_v06,
+)
 
 
 def cmd_certify(args):
@@ -80,6 +89,41 @@ def cmd_verify(args):
 
 
 
+def _scheduler_context_from_args(args):
+    history = load_telemetry_history_v06(
+        getattr(args, "scheduler_history", None)
+    )
+    telemetry_sink = {}
+    return {
+        "scheduler_strategy": getattr(args, "scheduler", "manifest"),
+        "scheduler_history": history,
+        "bandit_alpha": getattr(args, "bandit_alpha", 1.0),
+        "shadow_bandit": getattr(args, "shadow_bandit", False),
+        "telemetry_sink": telemetry_sink,
+    }, telemetry_sink
+
+
+def _persist_scheduler_telemetry_from_args(args, telemetry):
+    written = None
+    appended = None
+    if not telemetry:
+        return written, appended
+    output = getattr(args, "scheduler_telemetry_out", None)
+    if output:
+        written = write_telemetry_v06(
+            telemetry,
+            output,
+            overwrite=getattr(args, "force_scheduler_telemetry", False),
+        )
+    append_path = getattr(args, "scheduler_telemetry_append", None)
+    if append_path:
+        appended = append_telemetry_history_v06(
+            telemetry,
+            append_path,
+        )
+    return written, appended
+
+
 def _sign_reviewer_receipt_from_args(args, receipt_path):
     reviewer_private_key = getattr(args, "reviewer_private_key", None)
     if not reviewer_private_key:
@@ -102,11 +146,17 @@ def _sign_reviewer_receipt_from_args(args, receipt_path):
 
 def cmd_verify_v06(args):
     try:
+        scheduler_kwargs, telemetry_sink = _scheduler_context_from_args(args)
         result = verify_package_directory_end_to_end_v06(
             args.package,
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
+            **scheduler_kwargs,
+        )
+        telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
+            args,
+            telemetry_sink,
         )
         receipt_path = None
         receipt_signature_path = None
@@ -125,6 +175,7 @@ def cmd_verify_v06(args):
         V06VerifierIOError,
         V06ReviewerPolicyError,
         V06ReceiptSignatureError,
+        V06SchedulerError,
     ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -134,17 +185,27 @@ def cmd_verify_v06(args):
         output["receipt_written"] = str(receipt_path)
     if receipt_signature_path is not None:
         output["receipt_signature_written"] = str(receipt_signature_path)
+    if telemetry_path is not None:
+        output["scheduler_telemetry_written"] = str(telemetry_path)
+    if telemetry_history_path is not None:
+        output["scheduler_history_appended"] = str(telemetry_history_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result.get("accepted", result["valid"]) else 1
 
 
 def cmd_verify_v06_bundle(args):
     try:
+        scheduler_kwargs, telemetry_sink = _scheduler_context_from_args(args)
         result = verify_package_zip_end_to_end_v06(
             args.bundle,
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
+            **scheduler_kwargs,
+        )
+        telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
+            args,
+            telemetry_sink,
         )
         receipt_path = None
         receipt_signature_path = None
@@ -164,6 +225,7 @@ def cmd_verify_v06_bundle(args):
         V06BundleVerificationError,
         V06ReviewerPolicyError,
         V06ReceiptSignatureError,
+        V06SchedulerError,
     ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -173,6 +235,10 @@ def cmd_verify_v06_bundle(args):
         output["receipt_written"] = str(receipt_path)
     if receipt_signature_path is not None:
         output["receipt_signature_written"] = str(receipt_signature_path)
+    if telemetry_path is not None:
+        output["scheduler_telemetry_written"] = str(telemetry_path)
+    if telemetry_history_path is not None:
+        output["scheduler_history_appended"] = str(telemetry_history_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result.get("accepted", result["valid"]) else 1
 
@@ -263,6 +329,29 @@ def cmd_benchmark_v06(args):
 
     print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if report["summary"]["unexpected"] == 0 else 1
+
+
+def cmd_scheduler_report_v06(args):
+    try:
+        history = load_telemetry_history_v06(args.history)
+        report = scheduler_report_v06(
+            history,
+            bandit_alpha=args.bandit_alpha,
+        )
+        if args.output:
+            written = write_scheduler_report_v06(
+                report,
+                args.output,
+                overwrite=args.force,
+            )
+            report = dict(report)
+            report["report_written"] = str(written)
+    except (OSError, V06SchedulerError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
 
 
 def cmd_inspect(args):
@@ -510,6 +599,40 @@ def build_parser():
         action="store_true",
         help="explicitly replace an existing reviewer receipt signature",
     )
+    v6.add_argument(
+        "--scheduler",
+        choices=SCHEDULER_STRATEGIES_V06,
+        default="manifest",
+        help="mandatory-check execution order; never changes scientific semantics",
+    )
+    v6.add_argument(
+        "--scheduler-history",
+        help="prior replay telemetry JSONL used only for scheduling",
+    )
+    v6.add_argument(
+        "--scheduler-telemetry-out",
+        help="write this run's observational replay telemetry JSON",
+    )
+    v6.add_argument(
+        "--scheduler-telemetry-append",
+        help="append this run's telemetry as one JSONL history record",
+    )
+    v6.add_argument(
+        "--force-scheduler-telemetry",
+        action="store_true",
+        help="explicitly replace an existing telemetry output file",
+    )
+    v6.add_argument(
+        "--shadow-bandit",
+        action="store_true",
+        help="record contextual-bandit recommendation without using it for execution order",
+    )
+    v6.add_argument(
+        "--bandit-alpha",
+        type=float,
+        default=1.0,
+        help="nonnegative LinUCB exploration coefficient",
+    )
     v6.set_defaults(func=cmd_verify_v06)
 
     v6b = sub.add_parser(
@@ -544,6 +667,40 @@ def build_parser():
         "--force-receipt-signature",
         action="store_true",
         help="explicitly replace an existing reviewer receipt signature",
+    )
+    v6b.add_argument(
+        "--scheduler",
+        choices=SCHEDULER_STRATEGIES_V06,
+        default="manifest",
+        help="mandatory-check execution order; never changes scientific semantics",
+    )
+    v6b.add_argument(
+        "--scheduler-history",
+        help="prior replay telemetry JSONL used only for scheduling",
+    )
+    v6b.add_argument(
+        "--scheduler-telemetry-out",
+        help="write this run's observational replay telemetry JSON",
+    )
+    v6b.add_argument(
+        "--scheduler-telemetry-append",
+        help="append this run's telemetry as one JSONL history record",
+    )
+    v6b.add_argument(
+        "--force-scheduler-telemetry",
+        action="store_true",
+        help="explicitly replace an existing telemetry output file",
+    )
+    v6b.add_argument(
+        "--shadow-bandit",
+        action="store_true",
+        help="record contextual-bandit recommendation without using it for execution order",
+    )
+    v6b.add_argument(
+        "--bandit-alpha",
+        type=float,
+        default=1.0,
+        help="nonnegative LinUCB exploration coefficient",
     )
     v6b.set_defaults(func=cmd_verify_v06_bundle)
 
@@ -627,6 +784,20 @@ def build_parser():
         help="explicitly replace an existing benchmark report",
     )
     bm6.set_defaults(func=cmd_benchmark_v06)
+
+    sr6 = sub.add_parser(
+        "scheduler-report-v06",
+        help="analyze chronological replay telemetry and compare scheduling strategies",
+    )
+    sr6.add_argument("history", help="replay telemetry JSONL history")
+    sr6.add_argument("-o", "--output", help="write scheduler analysis JSON")
+    sr6.add_argument("--bandit-alpha", type=float, default=1.0)
+    sr6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing scheduler report",
+    )
+    sr6.set_defaults(func=cmd_scheduler_report_v06)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")
