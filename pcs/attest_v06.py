@@ -49,6 +49,10 @@ from .verifier_io_v06 import (
     load_public_key_v06,
     verify_package_directory_end_to_end_v06,
 )
+from .environment_replay_v06 import (
+    V06EnvironmentReplayError,
+    environment_binding_v06,
+)
 
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
@@ -348,6 +352,14 @@ def build_attestation_directory_v06(
     artifacts_in = deepcopy(manifest.get("artifacts", []))
     checks_in = deepcopy(manifest.get("checks", []))
     workflow = _normalize_workflow_v06(deepcopy(manifest.get("workflow", {"nodes": []})))
+    try:
+        environment = environment_binding_v06(
+            deepcopy(manifest.get("environment"))
+            if manifest.get("environment") is not None
+            else None
+        )
+    except V06EnvironmentReplayError as exc:
+        raise V06AttestationError(str(exc)) from exc
 
     assumption_map_in = _id_map(assumptions_in, "assumption")
     claim_map_in = _id_map(claims_in, "claim")
@@ -508,6 +520,7 @@ def build_attestation_directory_v06(
         "evidence": evidence,
         "workflow": workflow,
         "workflow_summary": workflow_summary,
+        **({"environment": environment} if environment is not None else {}),
         "semantic_hash": "",
         "integrity_hash": "",
     }
