@@ -162,3 +162,16 @@ def test_unknown_claim_rejected():
     }
     with pytest.raises(NormalizationError, match="unknown claim id"):
         _normalize_verified_object(cert, "C")
+
+
+def test_frozen_cross_language_wire_vector():
+    root = Path(__file__).resolve().parents[1]
+    fixture = json.loads((root / "tests/normalized_wire_vectors.json").read_text(encoding="utf-8"))
+    assert fixture["format"] == "pcs-normalized-wire-vectors-v1"
+    vector = fixture["vectors"][0]
+    assert predicate_commitment(vector["full_python_predicate"]) == vector["predicate_commitment"]
+    wire = vector["wire"]
+    assert wire["claim"]["predicate_commitment"] == vector["predicate_commitment"]
+    assert wire["evidence"][0]["predicate_commitment"] == vector["predicate_commitment"]
+    assert wire["decision"] == "COMPUTATIONALLY_SUPPORTED"
+    assert wire["wire_semantic_hash"] == wire_semantic_hash(wire)
