@@ -25,6 +25,14 @@ structure RawClaim where
   assumptions : List String := []
   deriving DecidableEq, Repr
 
+structure RawInvariantSummary where
+  uniqueEvidenceIds : Bool
+  requiredIdsUnique : Bool
+  allRequiredEvidencePresent : Bool
+  contextCovers : Bool
+  requiredEvidenceBound : Bool
+  deriving DecidableEq, Repr
+
 structure RawEvidence where
   id : String
   kind : String
@@ -39,6 +47,7 @@ structure RawDecisionWire where
   claim : RawClaim
   evidence : List RawEvidence
   decision : String
+  invariants : RawInvariantSummary
   wireSemanticHash : String
   deriving DecidableEq, Repr
 
@@ -99,6 +108,13 @@ def decodeEvidenceList : List RawEvidence → Option (List WireEvidence)
       let tail ← decodeEvidenceList xs
       pure (head :: tail)
 
+/--
+Decode only structural/version/enum syntax into the typed wire.
+
+The recorded raw invariant booleans and wireSemanticHash are intentionally not
+trusted here. They are independently recomputed by the executable wire verifier;
+Lean's semantic bridge requires an explicit `WellFormed` proof instead.
+-/
 def decodeRawWire (raw : RawDecisionWire) : Option DecisionWire := do
   if raw.wireFormat != expectedWireFormat then none
   else if raw.source.specVersion != expectedSpecVersion then none
