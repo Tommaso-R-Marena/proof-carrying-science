@@ -99,6 +99,8 @@ provenance.
 
 The Markdown review summarizes selected checks, source/artifact flow, unresolved items, and a Mermaid graph for human review before confirmation.
 
+Reviewer verification independently reconstructs the delivered source tree and re-runs static workflow analysis on the exact packaged bytes. Human-confirmed workflow nodes therefore have to survive a dedicated `workflow_replay` stage before ordinary scientific evidence replay. Clean AST mappings use exact-set matching; partial/R/browser mappings use a weaker claimed-subset contract where every signed edge still must be rediscovered.
+
 See `docs/STATIC_WORKFLOW_DISCOVERY_V06.md`.
 
 ## v0.6 end-to-end reviewer verification
