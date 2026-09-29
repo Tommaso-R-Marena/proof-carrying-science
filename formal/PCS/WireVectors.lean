@@ -13,7 +13,7 @@ def pkpdWire : DecisionWire :=
   {
     source := {
       certificateSemanticHash :=
-        "b1f03d0f97df1e257cc00da492b91bf0f31df2f5b9562938d058df060c57d13e"
+        "345cf0e67ece949156d0ce7a5e35b4dbc4d22dc87855fcb7f76fea3ee9bf628a"
       claimId := "C_PK_REPLAY"
     }
     context := [
