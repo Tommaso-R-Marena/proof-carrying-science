@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import os
+import tempfile
 import zipfile
 from pathlib import Path
 from typing import Any
@@ -20,6 +22,10 @@ from .verifier_io_v06 import (
     V06VerifierIOError,
     load_package_directory_v06,
     verify_package_directory_end_to_end_v06,
+)
+from .verifier_zip_v06 import (
+    V06BundleVerificationError,
+    verify_package_zip_end_to_end_v06,
 )
 
 
@@ -151,8 +157,17 @@ def create_verified_bundle_v06(
         raise V06BundleBuildError("v0.6 bundle members exceed aggregate byte limit")
 
     out.parent.mkdir(parents=True, exist_ok=True)
+    temp_path: Path | None = None
     try:
-        with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_STORED) as zf:
+        with tempfile.NamedTemporaryFile(
+            prefix=f".{out.name}.",
+            suffix=".pcs-tmp",
+            dir=out.parent,
+            delete=False,
+        ) as tmp:
+            temp_path = Path(tmp.name)
+
+        with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_STORED) as zf:
             for name in sorted(members):
                 info = zipfile.ZipInfo(name, FIXED_ZIP_TIME_V06)
                 info.compress_type = zipfile.ZIP_STORED
@@ -169,20 +184,49 @@ def create_verified_bundle_v06(
                     members[name],
                     compress_type=zipfile.ZIP_STORED,
                 )
-    except (OSError, zipfile.BadZipFile) as exc:
-        try:
-            if out.exists():
-                out.unlink()
-        except OSError:
-            pass
+
+        post_build = verify_package_zip_end_to_end_v06(
+            temp_path,
+            public_key_path,
+            expected_fingerprint=expected_fingerprint,
+        )
+        if not post_build["valid"]:
+            raise V06BundleBuildError(
+                "refusing to publish v0.6 bundle that failed post-build "
+                f"verification: stage={post_build.get('failed_stage')} "
+                f"errors={post_build.get('errors', [])}"
+            )
+
+        candidate_sha256 = _sha256_path(temp_path)
+        if post_build.get("bundle_sha256") != candidate_sha256:
+            raise V06BundleBuildError(
+                "post-build verifier bundle SHA-256 disagrees with candidate bytes"
+            )
+
+        os.replace(temp_path, out)
+        temp_path = None
+
+    except (OSError, zipfile.BadZipFile, V06BundleVerificationError) as exc:
         raise V06BundleBuildError(
-            f"cannot create v0.6 bundle: {type(exc).__name__}: {exc}"
+            f"cannot create or verify v0.6 bundle: {type(exc).__name__}: {exc}"
         ) from exc
+    finally:
+        if temp_path is not None:
+            try:
+                temp_path.unlink(missing_ok=True)
+            except OSError:
+                pass
+
+    final_sha256 = _sha256_path(out)
+    if final_sha256 != candidate_sha256:
+        raise V06BundleBuildError(
+            "published v0.6 bundle bytes differ from the post-build verified candidate"
+        )
 
     return {
         "format": BUNDLE_FORMAT_V06,
         "bundle": str(out),
-        "bundle_sha256": _sha256_path(out),
+        "bundle_sha256": final_sha256,
         "archive_bytes": out.stat().st_size,
         "member_count": len(members),
         "members": sorted(members),
@@ -192,4 +236,5 @@ def create_verified_bundle_v06(
             "normalized_index_semantic_hash"
         ],
         "public_key_fingerprint": verification["public_key_fingerprint"],
+        "post_build_verified": True,
     }
