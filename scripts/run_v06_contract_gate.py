@@ -130,6 +130,13 @@ def main() -> int:
     )
     steps.append(
         _run(
+            "node_golden_byte_contract",
+            ["node", "scripts/check_v06_golden_contract.mjs"],
+            run_dir,
+        )
+    )
+    steps.append(
+        _run(
             "jcs_differential_stress",
             [
                 sys.executable,
@@ -192,7 +199,8 @@ def main() -> int:
             "PASS means this exact commit reproduced the frozen v0.6 bytes, passed strict "
             "Python/browser canonicalization and parsing checks, domain-separated crypto "
             "tests, package byte-map adversarial checks, randomized Python-Node differential "
-            "testing, the repository adversarial campaign, and the full Python suite. "
+            "testing, independent Node verification of the frozen certificate/package bytes, "
+            "the repository adversarial campaign, and the full Python suite. "
             "It is executable conformance evidence, not a proof of parser/SHA-256/Ed25519 "
             "correctness or scientific model adequacy."
         ),
