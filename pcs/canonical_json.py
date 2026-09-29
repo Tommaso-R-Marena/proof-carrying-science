@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 from hashlib import sha256
+from pathlib import Path
 from typing import Any
 
 
@@ -161,3 +162,18 @@ def parse_jcs_json(text: str) -> Any:
 
 def canonicalize_jcs_text(text: str) -> bytes:
     return canonicalize_jcs_bytes(parse_jcs_json(text))
+
+
+
+def load_jcs_json_file(path: str | Path) -> Any:
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        raise CanonicalJSONError(f"cannot read JCS JSON file: {type(exc).__name__}: {exc}") from exc
+    return parse_jcs_json(text)
+
+
+def write_jcs_json_file(path: str | Path, value: Any) -> None:
+    """Write the exact RFC 8785 UTF-8 bytes, with no BOM or trailing newline."""
+    target = Path(path)
+    target.write_bytes(canonicalize_jcs_bytes(value))
