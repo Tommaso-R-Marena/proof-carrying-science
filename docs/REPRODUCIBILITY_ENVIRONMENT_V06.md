@@ -291,8 +291,7 @@ environment. There is deliberately no unsandboxed fallback.
 If the signed environment includes exactly one container specification whose
 base stages are digest-pinned, PCS can rebuild it with an offline/no-pull OCI
 build. Otherwise the reviewer must provide an already-local image with
-\`--image\`. A signed container reference that cannot be related to the realized
-image fails the enforceable environment comparison.
+\`--image\`. When a container contract was signed, PCS requires an offline rebuild from that signed Dockerfile and refuses `--image` substitution. Every digest-pinned base must already exist in the local OCI image store; missing bases cause failure rather than a registry pull. External `COPY --from=` images, `ADD`, networked build steps, and secret/SSH build mounts are rejected. `--image` is accepted only when the producer did not sign a container contract.
 
 After execution, PCS writes:
 
