@@ -8,7 +8,7 @@ As of 2026-09-28 after ZIP namespace hardening:
 
 - 89 Python test functions are present under `tests/`.
 - 25 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
-- Lean sources target Lean 4.16.0 and contain no intentionally admitted `sorry` proofs.
+- Lean sources are currently pinned to Lean 4.28.0 for the Aristotle compatibility handoff and contain no intentionally admitted `sorry` proofs.
 
 Inventory counts are not execution results.
 
