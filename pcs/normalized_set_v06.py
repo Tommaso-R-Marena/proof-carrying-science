@@ -26,6 +26,7 @@ from .schema_validation import (
 INDEX_FORMAT_V06 = "pcs-normalized-decision-index-v2"
 INDEX_PATH_V06 = "normalized/index.json"
 MAX_NORMALIZED_INDEX_BYTES_V06 = 10 * 1024 * 1024
+MAX_NORMALIZED_SET_BYTES_V06 = 100 * 1024 * 1024
 UTF8_BOM = b"\xef\xbb\xbf"
 
 
@@ -34,7 +35,7 @@ class V06NormalizedSetError(ValueError):
 
 
 def normalized_storage_key_v06(claim_id: str) -> str:
-    return hashlib.sha256(claim_id.encode("utf-8")).hexdigest()[:24]
+    return hashlib.sha256(claim_id.encode("utf-8")).hexdigest()
 
 
 def normalized_wire_path_v06(claim_id: str) -> str:
@@ -101,10 +102,17 @@ def build_normalized_set_v06(
     entries: list[dict[str, Any]] = []
     files: dict[str, bytes] = {}
 
+    total_bytes = 0
     for claim in certificate["claims"]:
         claim_id = claim["id"]
         wire = normalize_claim_after_replay_v06(certificate, replay, claim_id)
         raw = normalized_wire_bytes_v06(wire)
+        total_bytes += len(raw)
+        if total_bytes > MAX_NORMALIZED_SET_BYTES_V06:
+            raise V06NormalizedSetError(
+                "normalized decision set exceeds aggregate byte limit: "
+                f"{total_bytes} > {MAX_NORMALIZED_SET_BYTES_V06}"
+            )
         path = normalized_wire_path_v06(claim_id)
         files[path] = raw
         entries.append(
@@ -133,7 +141,14 @@ def build_normalized_set_v06(
             + "; ".join(checked["errors"])
         )
 
-    files[INDEX_PATH_V06] = canonicalize_jcs_bytes(index)
+    index_bytes = canonicalize_jcs_bytes(index)
+    total_bytes += len(index_bytes)
+    if total_bytes > MAX_NORMALIZED_SET_BYTES_V06:
+        raise V06NormalizedSetError(
+            "normalized decision set exceeds aggregate byte limit after index: "
+            f"{total_bytes} > {MAX_NORMALIZED_SET_BYTES_V06}"
+        )
+    files[INDEX_PATH_V06] = index_bytes
     return {
         "index": index,
         "files": files,
