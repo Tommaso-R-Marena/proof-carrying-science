@@ -101,7 +101,10 @@ The producer:
 13. independently verifies the generated package directory;
 14. emits the deterministic delivery ZIP;
 15. independently verifies the exact candidate ZIP and its SHA-256;
-16. atomically publishes the bundle only after the post-build verification succeeds.
+16. atomically publishes the bundle only after the post-build verification succeeds;
+17. during independent verification, reconstructs delivered source artifacts and
+    replays any human-confirmed static workflow claims before scientific evidence
+    replay.
 
 A producer keypair mismatch, artifact path escape, predicate substitution, package
 tamper, normalized decision substitution, signer mismatch, or post-build archive
@@ -120,6 +123,22 @@ The producer currently supports these executable checks:
 This is intentionally narrower than the certificate schema. External proof,
 empirical, statistical, and provenance evidence remain explicit boundaries and are
 not synthesized as verified PASS by the MVP producer.
+
+### Reviewer workflow replay
+
+The reviewer does not trust producer-recorded static workflow edges. After exact
+package binding, `verify-v06` / `verify-v06-bundle` reconstruct project-relative
+source artifacts from the delivered package and rerun the static analyzer.
+
+A clean Python/Jupyter inference can carry `dependency_claim_mode:
+exact_resolved_set`; its complete input/output set must match fresh analysis.
+Partial, R, browser, or ambiguity-reduced inferences carry `claimed_subset`; every
+signed edge still must be rediscovered, but completeness is not claimed.
+
+A mismatch fails package verification at `workflow_replay` before scientific
+evidence replay. The exact receipt bytes subsequently bind that workflow-replay
+result, so an optional reviewer signature also authenticates the review record that
+contains it.
 
 ## Reviewer-controlled acceptance
 
