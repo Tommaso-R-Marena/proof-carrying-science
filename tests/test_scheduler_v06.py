@@ -203,7 +203,10 @@ def test_all_scheduler_strategies_preserve_scientific_replay_semantics():
         assert result["evidence"] == baseline["evidence"]
         assert sink["format"] == TELEMETRY_FORMAT_V06
         assert len(sink["checks"]) == len(cert["evidence"])
-        assert sorted(x["evidence_id"] for x in sink["checks"]) == ["E1", "E2", "E3"]
+        telemetry_ids = [x["evidence_id"] for x in sink["checks"]]
+        assert len(telemetry_ids) == 3
+        assert len(set(telemetry_ids)) == 3
+        assert all(x.startswith("sha256:") and len(x) == 71 for x in telemetry_ids)
         assert result["scheduler"]["all_mandatory_checks_execute"] is True
         assert result["scheduler"]["scientific_verdict_uses_scheduler"] is False
 
@@ -332,3 +335,22 @@ def test_cold_start_bandit_falls_back_without_changing_semantics():
     assert "cold-start guard" in result["scheduler"]["fallback_reason"]
     assert result["scheduler"]["all_mandatory_checks_execute"] is True
     assert result["scheduler"]["scientific_verdict_uses_scheduler"] is False
+
+
+
+def test_telemetry_redacts_evidence_ids_but_receipt_scheduler_keeps_audit_order():
+    cert = _multi_check_certificate()
+    sink = {}
+    result = verify_certificate_replay_v06(
+        cert,
+        {},
+        scheduler_strategy="manifest",
+        telemetry_sink=sink,
+    )
+
+    assert result["scheduler"]["execution_order"] == ["E1", "E2", "E3"]
+    assert sink["scheduler"]["execution_order"] != ["E1", "E2", "E3"]
+    assert all(
+        evidence_id.startswith("sha256:")
+        for evidence_id in sink["scheduler"]["execution_order"]
+    )
