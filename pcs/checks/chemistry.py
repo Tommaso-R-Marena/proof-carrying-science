@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 from collections import Counter
 
-_TOKEN = re.compile(r"([A-Z][a-z]?)(d*)")
+_TOKEN = re.compile(r"([A-Z][a-z]?)(\\d*)")
 
 
 def parse_formula(formula: str) -> Counter[str]:
