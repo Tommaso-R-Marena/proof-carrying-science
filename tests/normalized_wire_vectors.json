@@ -1,0 +1,58 @@
+{
+  "format": "pcs-normalized-wire-vectors-v1",
+  "vectors": [
+    {
+      "name": "pkpd_reference_replay_computational",
+      "full_python_predicate": {
+        "type": "pkpd_reference_match",
+        "model_artifact": "pk_model",
+        "output_artifact": "pk_predictions",
+        "time_column": "time",
+        "concentration_column": "concentration",
+        "effect_column": "effect",
+        "rel_tol": 1e-9,
+        "abs_tol": 1e-12
+      },
+      "predicate_commitment": "pcs-predicate-sha256:8cc9e0b74e7361040ed704b89f6753399f9c07573fe51198f0f093c6017f2c4c",
+      "wire": {
+        "wire_format": "pcs-normalized-decision-v1",
+        "source": {
+          "spec_version": "pcs-0.5",
+          "checker_version": "pcs-python-kernel/0.5.0",
+          "certificate_semantic_hash": "b1f03d0f97df1e257cc00da492b91bf0f31df2f5b9562938d058df060c57d13e",
+          "claim_id": "C_PK_REPLAY"
+        },
+        "context": [
+          {
+            "id": "A_PK_MODEL",
+            "statement": "The restricted one-compartment IV-bolus equation is the declared computational model; no claim of biological adequacy is made."
+          }
+        ],
+        "claim": {
+          "id": "C_PK_REPLAY",
+          "kind": "computational",
+          "predicate_commitment": "pcs-predicate-sha256:8cc9e0b74e7361040ed704b89f6753399f9c07573fe51198f0f093c6017f2c4c",
+          "required_evidence": ["E_PK_REPLAY"],
+          "assumptions": ["A_PK_MODEL"]
+        },
+        "evidence": [
+          {
+            "id": "E_PK_REPLAY",
+            "kind": "computational_test",
+            "outcome": "PASS",
+            "predicate_commitment": "pcs-predicate-sha256:8cc9e0b74e7361040ed704b89f6753399f9c07573fe51198f0f093c6017f2c4c"
+          }
+        ],
+        "decision": "COMPUTATIONALLY_SUPPORTED",
+        "invariants": {
+          "unique_evidence_ids": true,
+          "required_ids_unique": true,
+          "all_required_evidence_present": true,
+          "context_covers": true,
+          "required_evidence_bound": true
+        },
+        "wire_semantic_hash": "8ad40ede070c1dfb6846dd334eb5cb08d622233feb149eb7875ec432878ef188"
+      }
+    }
+  ]
+}
