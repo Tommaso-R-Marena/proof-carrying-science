@@ -649,6 +649,23 @@ environment_unspecified
 The generated reconstruction script is **review-before-run**. PCS verification never
 runs package managers, container builds, or project installation code automatically.
 
+After full bundle verification, a reviewer can materialize the exact signed
+project-relative artifact tree plus the bound environment plan and review-before-run
+script:
+
+```bash
+pcs prepare-environment-v06 study.pcs.zip \
+  -o replay-workspace \
+  --public-key trusted-public.pem \
+  --expected-signer-fingerprint <fingerprint>
+```
+
+Workspace preparation is still non-executing. The workspace includes
+`pcs-environment-workspace.json`, the verification receipt, exact signed source
+artifacts, `pcs-environment-plan.json`, and `reconstruct-environment.sh`. It is
+bound to the delivery bundle SHA-256, certificate hashes, normalized-index hash, and
+producer fingerprint.
+
 Confirmed guided manifests bind the environment source artifacts and canonical
 `pcs-environment-capture-v1` proposition into the signed certificate as
 `pcs-environment-binding-v1`.
