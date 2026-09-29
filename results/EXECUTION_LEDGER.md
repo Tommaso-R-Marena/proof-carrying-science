@@ -4,11 +4,11 @@ This file is the authoritative distinction between **repository inventory** and 
 
 ## Current inventory on `main`
 
-As of 2026-09-28 after ZIP namespace hardening:
+Draft PR #17 inventory as of 2026-09-29 after serialized-refinement hardening:
 
-- 89 Python test functions are present under `tests/`.
-- 25 adversarial attacks are encoded in `scripts/adversarial_campaign.py`.
-- Lean sources are currently pinned to Lean 4.28.0 for the Aristotle compatibility handoff and contain no intentionally admitted `sorry` proofs.
+- 112 Python test functions are present under `tests/` (inventory count; not yet executed together).
+- 28 adversarial attacks are encoded in `scripts/adversarial_campaign.py` (inventory count; not yet executed together).
+- The production `formal/PCS*` sources are pinned to Lean 4.28.0 and the decision/normalized-state layer has a retained successful machine-check. New unfinished PR #17 obligations are isolated under `formal/ProofTasks/` and are not imported into the production root.
 
 Inventory counts are not execution results.
 
@@ -35,7 +35,7 @@ The ZIP namespace validator added after the last full campaign was directly exer
 - `..` traversal;
 - backslash paths.
 
-Those focused checks passed, but they do not substitute for a full 66-test / 23-attack execution.
+Those focused checks passed, but they do not substitute for a full current 112-test / 28-attack execution.
 
 ## Hosted CI blocker
 
@@ -60,5 +60,7 @@ Do not promote the inventory counts into PASS claims until one environment execu
 When that happens, record the commit SHA, environment identity, commands, exit codes, and resulting counts here.
 
 ### Added since the last full retained execution
+
+PR #17 additionally adds claim-scoped normalized decision export/verification, exact source-certificate reproduction, full required-evidence predicate binding, normalized-state package integration, valid-re-signing substitution attacks, wire/codec formal layers, version-consistency tests, and normalized-refinement release gating.
 
 The current inventory additionally covers executable JSON Schema drift, duplicate-JSON parser differentials, pre-result pilot claim/assumption freezing, final delivered-bundle self-verification, signing-key overwrite/path safety, and additional cross-platform ZIP namespace attacks. These remain inventory until executed together from one commit.
