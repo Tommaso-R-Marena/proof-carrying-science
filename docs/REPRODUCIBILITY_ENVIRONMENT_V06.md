@@ -219,6 +219,40 @@ It does **not** mean:
 - the reconstructed workflow produces identical runtime behavior;
 - the scientific model is empirically valid.
 
+## Verified reviewer replay workspace
+
+A reviewer can prepare a local replay tree directly from a delivered PCS bundle:
+
+```bash
+pcs prepare-environment-v06 study.pcs.zip \
+  -o replay-workspace \
+  --public-key trusted-producer.pem \
+  --expected-signer-fingerprint <fingerprint>
+```
+
+PCS performs the complete v0.6 bundle verification first, including
+`environment_replay`, `workflow_replay`, scientific replay and normalized-set
+regeneration. Only a valid delivery may be materialized.
+
+The workspace preserves certificate `source_path` layout for signed project
+artifacts and writes:
+
+```text
+pcs-environment-workspace.json
+pcs-environment-plan.json
+reconstruct-environment.sh
+<signed project-relative artifacts...>
+```
+
+`pcs-environment-workspace.json` binds the prepared tree back to the delivery
+bundle SHA-256 and certificate semantic/integrity hashes and records which
+materialized artifacts were environment sources.
+
+Workspace preparation is still non-executing. A Dockerfile, setup hook, notebook,
+script or installer in the verified project is copied as data only. The generated
+reconstruction script must be reviewed and run explicitly by the reviewer if they
+choose to construct the environment.
+
 ## Trust boundary
 
 Environment capture and replay do not alter claim PASS/FAIL semantics. A valid
