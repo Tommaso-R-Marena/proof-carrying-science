@@ -273,6 +273,39 @@ A direct checker-level execution on 2026-09-29 matched all 5 expected outcomes,
 including both negative controls. See
 `results/REAL_WORLD_VALIDATION_2026-09-29.md`.
 
+### Reviewer-signed verification receipts
+
+A producer signature answers **who issued the scientific package**. A reviewer
+signature answers **who independently verified that exact delivery under that exact
+policy and accepted/rejected it**.
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key producer-public.pem \
+  --expected-signer-fingerprint <producer-fingerprint> \
+  --policy reviewer-policy.json \
+  --receipt receipt.json \
+  --reviewer-private-key reviewer-private.pem \
+  --receipt-signature receipt.sig.json
+```
+
+The reviewer signature binds the exact receipt bytes through
+`pcs-reviewer-receipt-ed25519-v1`. Its signed payload commits to the receipt
+SHA-256, bundle SHA-256, certificate semantic/integrity hashes, normalized-index
+hash, reviewer-policy SHA-256, PCS `valid`, and reviewer `accepted`.
+
+A later auditor can verify the review decision without rerunning PCS:
+
+```bash
+pcs verify-receipt-v06 receipt.json \
+  --signature receipt.sig.json \
+  --reviewer-public-key reviewer-public.pem \
+  --expected-reviewer-fingerprint <reviewer-fingerprint>
+```
+
+This signature attests to the review record. It does not make a false scientific
+claim true, elevate assurance, or replace package/replay verification.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
