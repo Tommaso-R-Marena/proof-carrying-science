@@ -8,10 +8,12 @@ The existing PCS decision and normalized-state soundness layer on `main` is alre
 machine-checked under Lean 4.28.0. Do not alter or weaken those existing theorem
 statements.
 
-New files on this branch:
+New formal modules on this branch:
 
 - `PCS/Wire.lean`
 - `PCS/WireVectors.lean`
+- `PCS/WireCodec.lean`
+- `PCS/WireCodecVectors.lean`
 
 The Python side now emits a claim-scoped `pcs-normalized-decision-v1` object only
 after independent certificate replay verification. Full Python predicates are
@@ -33,21 +35,27 @@ not projected away.
 5. Preserve these `WellFormed` fields:
    - source claim identity;
    - exact evidence scope;
+   - exact context/assumption scope;
    - unique decoded evidence IDs;
    - explicit context coverage;
    - required-evidence predicate binding;
    - recorded decision equality with `decideClaim`.
-6. Compile the frozen `PCS.WireVectors.pkpdWire` examples.
-7. Run `scripts/verify_lean.sh`.
-8. Capture `#print axioms` output for:
+6. Compile the frozen `PCS.WireVectors.pkpdWire` examples and the raw-string
+   `PCS.WireCodecVectors.rawPkpdWire` decoder examples.
+7. Confirm unknown wire-format/version/enum strings are rejected and that raw
+   recorded invariant booleans / wire hash are not treated as proofs of
+   `WellFormed`.
+8. Run `scripts/verify_lean.sh`.
+9. Capture `#print axioms` output for:
    - `PCS.Wire.source_claim_identity`
+   - `PCS.Wire.exact_context_scope_preserved`
    - `PCS.Wire.decoded_decision_matches_recorded`
    - `PCS.Wire.predicate_commitment_eq_preserved`
    - `PCS.Wire.wire_computational_sound`
    - `PCS.Wire.wire_formal_sound`
    - `PCS.Wire.wire_empirical_sound`
    - `PCS.Wire.wire_mixed_sound`
-9. Report the exact Lean version, build exit code, placeholder/forbidden-declaration
+10. Report the exact Lean version, build exit code, placeholder/forbidden-declaration
    audit, and any source changes required.
 
 ## Safety constraints
