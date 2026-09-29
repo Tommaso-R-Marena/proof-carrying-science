@@ -15,6 +15,7 @@ from pcs.discover_v06 import (
     discover_project_v06,
     write_discovery_outputs_v06,
 )
+from pcs.discovery_review_v06 import render_discovery_review_v06
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
 from pcs.verifier_zip_v06 import verify_package_zip_end_to_end_v06
@@ -310,6 +311,15 @@ def test_discover_and_confirm_cli_use_project_local_defaults(tmp_path):
     assert Path(discovered["discovery_report"]) == (
         project / "pcs-discovery.json"
     ).resolve()
+    assert Path(discovered["discovery_review"]) == (
+        project / "pcs-discovery-review.md"
+    ).resolve()
+    review_text = (project / "pcs-discovery-review.md").read_text(
+        encoding="utf-8"
+    )
+    assert "# PCS guided discovery review" in review_text
+    assert "## Scientific-check recommendations" in review_text
+    assert "pcs confirm-v06" in review_text
 
     confirm = _run(
         "confirm-v06",
@@ -319,3 +329,28 @@ def test_discover_and_confirm_cli_use_project_local_defaults(tmp_path):
     confirmed = json.loads(confirm.stdout)
     assert Path(confirmed["manifest"]) == (project / "manifest.json").resolve()
     assert confirmed["snapshot_verified"] == 2
+
+
+
+def test_discovery_review_matches_selected_workflow_and_unresolved_items(tmp_path):
+    project = tmp_path / "review-project"
+    project.mkdir()
+    (project / "train.csv").write_text("id,x\n1,1\n", encoding="utf-8")
+    (project / "test.csv").write_text("id,x\n2,2\n", encoding="utf-8")
+    (project / "analysis.py").write_text(
+        "import pandas as pd\n"
+        "df = pd.read_csv('train.csv')\n"
+        "df.to_csv('test.csv', index=False)\n",
+        encoding="utf-8",
+    )
+
+    report = discover_project_v06(project)
+    review = render_discovery_review_v06(report)
+
+    assert "## Static workflow inferences" in review
+    assert "analysis.py" in review
+    assert "train.csv" in review
+    assert "test.csv" in review
+    assert "graph LR" in review
+    assert "user code was not" in review.lower()
+    assert "pcs confirm-v06" in review
