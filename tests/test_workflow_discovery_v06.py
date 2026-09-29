@@ -410,3 +410,67 @@ def test_notebook_line_magics_do_not_force_false_parse_failure(tmp_path):
     assert source["reads"] == ["artifact_0"]
     assert source["writes"] == ["artifact_1"]
     assert source["confidence"] == 0.98
+
+
+
+def test_r_literal_workflow_is_discovered_but_review_only_by_default(tmp_path):
+    project = tmp_path / "r-project"
+    project.mkdir()
+    (project / "train.csv").write_text("id,x\n1,2\n", encoding="utf-8")
+    (project / "result.csv").write_text("id,x\n1,3\n", encoding="utf-8")
+    (project / "analysis.R").write_text(
+        "library(readr)\n"
+        "df <- read.csv('train.csv')\n"
+        "write.csv(df, 'result.csv', row.names=FALSE)\n",
+        encoding="utf-8",
+    )
+    inventory = _inventory_for(
+        project,
+        ["train.csv", "result.csv", "analysis.R"],
+    )
+
+    result = analyze_static_workflow_v06(project, inventory)
+
+    assert result["summary"]["source_files_with_resolved_dependencies"] == 1
+    source = result["sources"][0]
+    assert source["source_kind"] == "r"
+    assert source["analysis_mode"] == "r_literal_heuristic"
+    assert source["confidence"] == 0.88
+    assert source["reads"] == ["artifact_0"]
+    assert source["writes"] == ["artifact_1"]
+    assert "readr" in source["imports"]
+
+
+def test_r_workflow_enters_draft_only_when_threshold_is_explicitly_lowered(tmp_path):
+    project = tmp_path / "r-guided"
+    project.mkdir()
+    (project / "train.csv").write_text("id,x\n1,1\n", encoding="utf-8")
+    (project / "test.csv").write_text("id,x\n2,2\n", encoding="utf-8")
+    (project / "processed.csv").write_text("id,x\n1,1\n", encoding="utf-8")
+    (project / "analysis.R").write_text(
+        "df <- read.csv('train.csv')\n"
+        "write.csv(df, 'processed.csv', row.names=FALSE)\n",
+        encoding="utf-8",
+    )
+
+    default_report = discover_project_v06(project)
+    assert default_report["workflow_map"]["sources"][0]["confidence"] == 0.88
+    assert default_report["selected_workflow_inferences"] == []
+    assert "analysis.R" not in {
+        artifact["path"]
+        for artifact in default_report["manifest_draft"]["artifacts"]
+    }
+
+    opted_in = discover_project_v06(
+        project,
+        minimum_workflow_confidence=0.85,
+    )
+    assert len(opted_in["selected_workflow_inferences"]) == 1
+    assert "analysis.R" in {
+        artifact["path"]
+        for artifact in opted_in["manifest_draft"]["artifacts"]
+    }
+    assert any(
+        node["operation"] == "static_r_workflow"
+        for node in opted_in["manifest_draft"]["workflow"]["nodes"]
+    )
