@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof-Carrying Science Certificate v0.6 canonicalization prototype",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version",
+    "checker_version",
+    "canonical_json_profile",
+    "semantic_hash_format",
+    "integrity_hash_format",
+    "subject",
+    "assumptions",
+    "claims",
+    "artifacts",
+    "evidence",
+    "workflow",
+    "workflow_summary",
+    "semantic_hash",
+    "integrity_hash"
+  ],
+  "properties": {
+    "spec_version": {
+      "const": "pcs-0.6"
+    },
+    "checker_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical_json_profile": {
+      "const": "pcs-jcs-rfc8785-v1"
+    },
+    "semantic_hash_format": {
+      "const": "pcs-certificate-semantic-sha256-v2"
+    },
+    "integrity_hash_format": {
+      "const": "pcs-certificate-integrity-sha256-v2"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "mission_scope": {
+      "type": "string"
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "claims": {
+      "type": "array"
+    },
+    "artifacts": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "workflow": {
+      "type": "object"
+    },
+    "workflow_summary": {
+      "type": "object"
+    },
+    "semantic_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "integrity_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}
