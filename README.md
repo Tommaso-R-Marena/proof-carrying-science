@@ -208,6 +208,42 @@ carry `FALSIFIED_OR_CHECK_FAILED`.
 Passing PCS checks does not establish biological adequacy, clinical validity,
 safety, efficacy, GxP validation, or regulatory acceptance.
 
+### Reviewer-controlled acceptance policy
+
+PCS v0.6 keeps package/replay validity separate from reviewer acceptance.
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-public.pem \
+  --expected-signer-fingerprint <trusted-fingerprint> \
+  --policy reviewer-policy.json \
+  --receipt verification-receipt.json
+```
+
+The external policy uses the existing `pcs-acceptance-policy-v1` contract. It can
+require specific claim statuses, require authenticated delivery, and independently
+pin the expected signer fingerprint.
+
+The verification receipt preserves both axes:
+
+```json
+{
+  "valid": true,
+  "accepted": false,
+  "reviewer_policy": {
+    "applied": true,
+    "pass": false,
+    "policy_sha256": "<sha256-of-exact-policy-bytes>",
+    "failures": []
+  }
+}
+```
+
+`valid` answers whether PCS accepted the package/replay/normalized-decision chain.
+`accepted` answers whether that verified result also satisfies the receiving
+reviewer's policy. Policy failure does not rewrite an otherwise valid scientific
+record as cryptographically invalid.
+
 ## Pre-result pilot commitment
 
 A design partner can freeze the requested claims and assumptions before results are inspected:
