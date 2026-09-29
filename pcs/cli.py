@@ -80,6 +80,10 @@ from .environment_replay_v06 import (
     V06EnvironmentReplayError,
     environment_from_binding_v06,
 )
+from .environment_workspace_v06 import (
+    V06EnvironmentWorkspaceError,
+    prepare_verified_environment_workspace_v06,
+)
 
 
 def cmd_certify(args):
@@ -432,6 +436,22 @@ def _environment_from_document_v06(path: str | Path) -> dict:
     raise V06EnvironmentCaptureError(
         "input does not contain a PCS v0.6 environment capture or binding"
     )
+
+
+def cmd_prepare_environment_v06(args):
+    try:
+        result = prepare_verified_environment_workspace_v06(
+            args.bundle,
+            args.output,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+        )
+    except (OSError, V06EnvironmentWorkspaceError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
 
 
 def cmd_environment_plan_v06(args):
@@ -794,6 +814,19 @@ def build_parser():
         help="explicitly replace existing discovery outputs",
     )
     d6.set_defaults(func=cmd_discover_v06)
+
+    pew6 = sub.add_parser(
+        "prepare-environment-v06",
+        help="verify a v0.6 bundle and materialize a non-executed replay workspace",
+    )
+    pew6.add_argument("bundle", help="verified-delivery candidate .pcs.zip")
+    pew6.add_argument("-o", "--output", required=True, help="new replay workspace directory")
+    pew6.add_argument("--public-key", required=True, help="trusted producer Ed25519 public key PEM")
+    pew6.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted producer public-key fingerprint",
+    )
+    pew6.set_defaults(func=cmd_prepare_environment_v06)
 
     ep6 = sub.add_parser(
         "environment-plan-v06",
