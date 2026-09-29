@@ -73,7 +73,7 @@ def test_normalizer_rejects_repeated_required_evidence_ids():
     predicate = {"type": "unit_compatible", "left_unit": "mg", "right_unit": "g"}
     cert = {
         "spec_version": "pcs-0.5",
-        "checker_version": "pcs-python-kernel/0.5.0",
+        "checker_version": "pcs-python-kernel/0.5.1",
         "semantic_hash": "0" * 64,
         "assumptions": [],
         "claims": [{
@@ -108,7 +108,7 @@ def test_normalizer_requires_every_required_evidence_to_share_exact_predicate_co
     p1 = {"type": "unit_compatible", "left_unit": "mg", "right_unit": "g"}
     cert = {
         "spec_version": "pcs-0.5",
-        "checker_version": "pcs-python-kernel/0.5.0",
+        "checker_version": "pcs-python-kernel/0.5.1",
         "semantic_hash": "0" * 64,
         "assumptions": [],
         "claims": [{
@@ -156,7 +156,7 @@ def test_normalizer_requires_every_required_evidence_to_share_exact_predicate_co
 def test_unknown_claim_rejected():
     cert = {
         "spec_version": "pcs-0.5",
-        "checker_version": "pcs-python-kernel/0.5.0",
+        "checker_version": "pcs-python-kernel/0.5.1",
         "semantic_hash": "0" * 64,
         "assumptions": [],
         "claims": [],
@@ -251,3 +251,18 @@ def test_repository_pkpd_example_exactly_matches_frozen_wire_vector():
         build_certificate(root / "examples/pkpd_one_compartment/manifest.json", out)
         actual = normalize_verified_certificate(out / "certificate.json", "C_PK_REPLAY")
     assert actual == expected
+
+
+
+def test_verify_normalized_cli_handles_strict_json_error(capsys):
+    from types import SimpleNamespace
+    from pcs.cli import cmd_verify_normalized
+
+    with tempfile.TemporaryDirectory() as d:
+        p = Path(d) / "bad.json"
+        p.write_text('{"wire_format":"a","wire_format":"b"}', encoding="utf-8")
+        rc = cmd_verify_normalized(SimpleNamespace(input=str(p), certificate=None))
+        captured = capsys.readouterr()
+        assert rc == 2
+        assert "StrictJSONError" in captured.err
+        assert "duplicate JSON object key" in captured.err
