@@ -15,7 +15,7 @@ def rawPkpdWire : RawDecisionWire :=
       specVersion := expectedSpecVersion
       checkerVersion := expectedCheckerVersion
       certificateSemanticHash :=
-        "345cf0e67ece949156d0ce7a5e35b4dbc4d22dc87855fcb7f76fea3ee9bf628a"
+        "0fc13509d27c7b31e45ed9a841bfacddc9ca8a1a6c7e3a2af66e0b434cb36a8a"
       claimId := "C_PK_REPLAY"
     }
     context := pkpdWire.context
@@ -43,11 +43,11 @@ def rawPkpdWire : RawDecisionWire :=
       requiredEvidenceBound := true
     }
     wireSemanticHash :=
-      "f414d613bd01e6507d35c75e65f374a8db061438a16321064bb06c8fd45fc253"
+      "c5d3da1f6296a62e3affe9f7d43c3c8d50f51b0b99f75da459ca613d0e5580a7"
   }
 
 example : decodeRawWire rawPkpdWire = some pkpdWire := by
-  decide
+  rfl
 
 def badVersionWire : RawDecisionWire :=
   { rawPkpdWire with wireFormat := "pcs-normalized-decision-v999" }
