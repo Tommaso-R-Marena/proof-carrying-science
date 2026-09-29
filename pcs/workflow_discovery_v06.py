@@ -510,6 +510,7 @@ def analyze_static_workflow_v06(
                 "outputs": outputs,
                 "contract": {
                     "inference_format": WORKFLOW_DISCOVERY_FORMAT_V06,
+                    "inference_id": source["id"],
                     "static_only": True,
                     "user_code_executed": False,
                     "source_path": source["source_path"],
