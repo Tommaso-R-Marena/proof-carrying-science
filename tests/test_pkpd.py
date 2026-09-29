@@ -51,6 +51,15 @@ def test_pkpd_output_replay_accepts_reference(tmp_path):
     ok,details=verify_one_compartment_iv_output(spec(),p); assert ok; assert details["row_count"]==4
 
 
+def test_pkpd_output_replay_does_not_depend_on_libm_exp(tmp_path, monkeypatch):
+    import pcs.adapters.pkpd as pkpd
+    p=tmp_path/"pred.csv"; write_predictions(p)
+    baseline=verify_one_compartment_iv_output(spec(),p)
+    monkeypatch.setattr(pkpd.math, "exp", lambda _x: (_ for _ in ()).throw(AssertionError("libm exp used")))
+    replay=verify_one_compartment_iv_output(spec(),p)
+    assert replay == baseline
+
+
 def test_pkpd_output_replay_rejects_tamper(tmp_path):
     p=tmp_path/"pred.csv"; write_predictions(p,tamper=True)
     ok,details=verify_one_compartment_iv_output(spec(),p); assert not ok; assert details["mismatches"]
