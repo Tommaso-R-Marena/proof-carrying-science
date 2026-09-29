@@ -692,6 +692,12 @@ def analyze_static_workflow_v06(
                     "source_path": source["source_path"],
                     "source_kind": source["source_kind"],
                     "analysis_mode": source.get("analysis_mode"),
+                    "dependency_claim_mode": (
+                        "exact_resolved_set"
+                        if source["source_kind"] in {"python", "jupyter"}
+                        and source["confidence"] == 0.98
+                        else "claimed_subset"
+                    ),
                     "confidence": source["confidence"],
                     "imports": source["imports"][:16],
                     "resolved_references": [
