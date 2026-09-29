@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from .canonical_json import JCS_PROFILE
+from .canonical_json import JCS_PROFILE, load_jcs_json_file, write_jcs_json_file
 from .crypto_domains_v06 import (
     CERTIFICATE_INTEGRITY_DOMAIN,
     CERTIFICATE_SEMANTIC_DOMAIN,
@@ -85,3 +85,23 @@ def verify_certificate_hashes_v06(certificate: dict[str, Any]) -> dict[str, Any]
         "semantic_hash": expected_semantic,
         "integrity_hash": expected_integrity,
     }
+
+
+
+def write_certificate_v06(path: str, certificate: dict[str, Any]) -> None:
+    checked = verify_certificate_hashes_v06(certificate)
+    if not checked["valid"]:
+        raise V06CertificateError(
+            f"refusing to write invalid v0.6 certificate: {checked['errors']}"
+        )
+    write_jcs_json_file(path, certificate)
+
+
+def load_certificate_v06(path: str) -> dict[str, Any]:
+    value = load_jcs_json_file(path)
+    if not isinstance(value, dict):
+        raise V06CertificateError("v0.6 certificate root must be an object")
+    checked = verify_certificate_hashes_v06(value)
+    if not checked["valid"]:
+        raise V06CertificateError(f"invalid v0.6 certificate: {checked['errors']}")
+    return value
