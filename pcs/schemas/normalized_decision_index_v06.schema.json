@@ -52,7 +52,7 @@
         "claim_id": {"$ref": "#/$defs/safeId"},
         "path": {
           "type": "string",
-          "pattern": "^normalized/[a-f0-9]{24}\\.json$"
+          "pattern": "^normalized/[a-f0-9]{64}\\.json$"
         },
         "decision": {"$ref": "#/$defs/decision"},
         "wire_semantic_hash": {"$ref": "#/$defs/sha256"}
