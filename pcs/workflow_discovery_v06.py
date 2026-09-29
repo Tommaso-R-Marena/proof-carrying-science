@@ -79,6 +79,10 @@ def _string_expr(node: ast.AST | None, env: dict[str, str]) -> str | None:
             else:
                 return None
         return "".join(out)
+    if isinstance(node, ast.Attribute) and node.attr == "parent":
+        base = _string_expr(node.value, env)
+        if base is not None:
+            return PurePosixPath(base).parent.as_posix()
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
         left = _string_expr(node.left, env)
         right = _string_expr(node.right, env)
@@ -94,6 +98,12 @@ def _string_expr(node: ast.AST | None, env: dict[str, str]) -> str | None:
         tail = name.rsplit(".", 1)[-1]
         if tail in {"Path", "PurePath", "PurePosixPath", "str"} and node.args:
             return _string_expr(node.args[0], env)
+        if tail in {"resolve", "absolute"} and isinstance(node.func, ast.Attribute):
+            return _string_expr(node.func.value, env)
+        if name.endswith("os.path.dirname") and node.args:
+            base = _string_expr(node.args[0], env)
+            if base is not None:
+                return PurePosixPath(base).parent.as_posix()
         if name.endswith("os.path.join") or name == "join":
             parts = [_string_expr(arg, env) for arg in node.args]
             if parts and all(part is not None for part in parts):
@@ -104,8 +114,11 @@ def _string_expr(node: ast.AST | None, env: dict[str, str]) -> str | None:
     return None
 
 
-def _static_env(tree: ast.AST) -> dict[str, str]:
-    env: dict[str, str] = {}
+def _static_env(
+    tree: ast.AST,
+    initial: dict[str, str] | None = None,
+) -> dict[str, str]:
+    env: dict[str, str] = dict(initial or {})
     body = getattr(tree, "body", [])
     for stmt in body:
         target: ast.AST | None = None
@@ -131,6 +144,17 @@ def _imports(tree: ast.AST) -> list[str]:
     return sorted(out)
 
 
+def _keyword_string(
+    call: ast.Call,
+    names: set[str],
+    env: dict[str, str],
+) -> str | None:
+    for kw in call.keywords:
+        if kw.arg in names:
+            return _string_expr(kw.value, env)
+    return None
+
+
 def _mode_from_open(call: ast.Call, env: dict[str, str]) -> str:
     mode = "r"
     if len(call.args) >= 2:
@@ -147,17 +171,46 @@ def _path_from_call(call: ast.Call, env: dict[str, str]) -> tuple[str | None, st
     tail = name.rsplit(".", 1)[-1]
 
     if tail == "open":
-        path = _string_expr(call.args[0], env) if call.args else None
-        mode = _mode_from_open(call, env)
+        receiver_path = (
+            _string_expr(call.func.value, env)
+            if isinstance(call.func, ast.Attribute)
+            else None
+        )
+        if receiver_path is not None:
+            path = receiver_path
+            mode = (
+                _string_expr(call.args[0], env)
+                if call.args
+                else _keyword_string(call, {"mode"}, env)
+            ) or "r"
+        else:
+            path = (
+                _string_expr(call.args[0], env)
+                if call.args
+                else _keyword_string(call, {"file", "path"}, env)
+            )
+            mode = _mode_from_open(call, env)
         kind = "write" if any(flag in mode for flag in ("w", "a", "x", "+")) else "read"
         return kind, path
 
     if tail in _READ_FUNCTIONS:
-        path = _string_expr(call.args[0], env) if call.args else None
+        path = (
+            _string_expr(call.args[0], env)
+            if call.args
+            else _keyword_string(
+                call,
+                {"filepath_or_buffer", "path", "path_or_buf", "io", "fname", "file"},
+                env,
+            )
+        )
         return "read", path
 
     if tail in _WRITE_FUNCTIONS:
-        path = _string_expr(call.args[0], env) if call.args else None
+        path = (
+            _string_expr(call.args[0], env)
+            if call.args
+            else _keyword_string(call, {"file", "fname", "path"}, env)
+        )
         return "write", path
 
     if isinstance(call.func, ast.Attribute):
@@ -165,6 +218,12 @@ def _path_from_call(call: ast.Call, env: dict[str, str]) -> tuple[str | None, st
             path = _string_expr(call.args[0], env) if call.args else None
             if tail in {"write_text", "write_bytes"}:
                 path = _string_expr(call.func.value, env)
+            elif path is None:
+                path = _keyword_string(
+                    call,
+                    {"path", "path_or_buf", "excel_writer", "fname"},
+                    env,
+                )
             return "write", path
         if tail in _READ_METHODS:
             return "read", _string_expr(call.func.value, env)
@@ -176,6 +235,7 @@ def _analyze_python_text(
     source: str,
     *,
     location_prefix: str = "",
+    source_literal: str | None = None,
 ) -> dict[str, Any]:
     try:
         tree = ast.parse(source)
@@ -187,7 +247,10 @@ def _analyze_python_text(
             "references": [],
         }
 
-    env = _static_env(tree)
+    env = _static_env(
+        tree,
+        {"__file__": source_literal} if source_literal is not None else None,
+    )
     references: list[dict[str, Any]] = []
     seen: set[tuple[str, str, int]] = set()
     for node in ast.walk(tree):
@@ -273,8 +336,17 @@ def _analyze_notebook(path: Path) -> dict[str, Any]:
             source = "".join(str(x) for x in source)
         if not isinstance(source, str):
             continue
+        source_lines = source.splitlines(keepends=True)
+        sanitized = "".join(
+            (
+                "\n" if line.endswith("\n") else ""
+            )
+            if line.lstrip().startswith(("%", "!"))
+            else line
+            for line in source_lines
+        )
         result = _analyze_python_text(
-            source,
+            sanitized,
             location_prefix=f"cell[{index}]:",
         )
         if result["parse_ok"]:
@@ -380,7 +452,8 @@ def analyze_static_workflow_v06(
         if suffix == ".py":
             try:
                 analysis = _analyze_python_text(
-                    source_path.read_text(encoding="utf-8")
+                    source_path.read_text(encoding="utf-8"),
+                    source_literal=item["path"],
                 )
             except (OSError, UnicodeDecodeError) as exc:
                 analysis = {
