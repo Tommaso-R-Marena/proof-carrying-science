@@ -261,3 +261,17 @@ def test_certificate_byte_contract_rejects_non_bytes_input():
     )
     assert not result["valid"]
     assert any("immutable bytes" in error for error in result["errors"])
+
+
+def test_package_contract_rejects_non_string_member_key_cleanly():
+    files = _package_files()
+    files[7] = b"bad key"
+    result = verify_package_file_map_v06(
+        _raw("package_manifest.json"),
+        _raw("certificate.json"),
+        _raw("package_signature.json"),
+        files,
+        _public_key(),
+    )
+    assert not result["valid"]
+    assert result["errors"] == ["v0.6 package file-map keys must be strings"]
