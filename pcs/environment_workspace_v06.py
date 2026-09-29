@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import unicodedata
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -30,6 +31,14 @@ class V06EnvironmentWorkspaceError(ValueError):
     pass
 
 
+_WINDOWS_FORBIDDEN = set('<>:"|?*')
+_WINDOWS_RESERVED = {
+    "con", "prn", "aux", "nul",
+    *(f"com{i}" for i in range(1, 10)),
+    *(f"lpt{i}" for i in range(1, 10)),
+}
+
+
 def _safe_source_path(value: str) -> PurePosixPath:
     if not isinstance(value, str) or not value or "\\" in value:
         raise V06EnvironmentWorkspaceError(
@@ -45,7 +54,37 @@ def _safe_source_path(value: str) -> PurePosixPath:
         raise V06EnvironmentWorkspaceError(
             f"unsafe project-relative source path: {value!r}"
         )
+    for segment in path.parts:
+        if unicodedata.normalize("NFC", segment) != segment:
+            raise V06EnvironmentWorkspaceError(
+                f"non-NFC project-relative source path: {value!r}"
+            )
+        if any(
+            ord(ch) < 32
+            or ord(ch) == 127
+            or ch in _WINDOWS_FORBIDDEN
+            for ch in segment
+        ):
+            raise V06EnvironmentWorkspaceError(
+                f"non-portable project-relative source path: {value!r}"
+            )
+        if segment.endswith((" ", ".")):
+            raise V06EnvironmentWorkspaceError(
+                f"non-portable project-relative source path: {value!r}"
+            )
+        stem = segment.split(".", 1)[0].rstrip(" .").casefold()
+        if stem in _WINDOWS_RESERVED:
+            raise V06EnvironmentWorkspaceError(
+                f"Windows-reserved project-relative source path: {value!r}"
+            )
     return path
+
+
+def _portable_key(value: str) -> str:
+    return "/".join(
+        unicodedata.normalize("NFC", part).casefold()
+        for part in PurePosixPath(value).parts
+    )
 
 
 def _write_workspace_file(root: Path, relative: str, raw: bytes) -> None:
@@ -142,6 +181,7 @@ def prepare_verified_environment_workspace_v06(
         # preserves Docker build contexts and gives the reviewer the same relative
         # layout used by workflow/environment replay.
         seen_paths: set[str] = set()
+        portable_paths: dict[str, str] = {}
         for artifact in certificate.get("artifacts", []):
             if not isinstance(artifact, dict):
                 continue
@@ -153,6 +193,14 @@ def prepare_verified_environment_workspace_v06(
                 raise V06EnvironmentWorkspaceError(
                     f"duplicate source_path in certificate: {source_path!r}"
                 )
+            portable_key = _portable_key(source_path)
+            other = portable_paths.get(portable_key)
+            if other is not None and other != source_path:
+                raise V06EnvironmentWorkspaceError(
+                    f"cross-platform source_path collision: "
+                    f"{other!r} vs {source_path!r}"
+                )
+            portable_paths[portable_key] = source_path
             seen_paths.add(source_path)
 
             package_path = artifact.get("path")
@@ -191,11 +239,21 @@ def prepare_verified_environment_workspace_v06(
         except (V06EnvironmentCaptureError, OSError) as exc:
             raise V06EnvironmentWorkspaceError(str(exc)) from exc
 
+        receipt_path = staging / "pcs-verification-receipt.json"
+        receipt_path.write_text(
+            json.dumps(verified, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+
         metadata = {
             "format": ENVIRONMENT_WORKSPACE_FORMAT_V06,
             "bundle_sha256": loaded["bundle_sha256"],
             "certificate_semantic_hash": certificate["semantic_hash"],
             "certificate_integrity_hash": certificate["integrity_hash"],
+            "normalized_index_semantic_hash": verified.get(
+                "normalized_index_semantic_hash"
+            ),
+            "public_key_fingerprint": verified.get("public_key_fingerprint"),
             "environment_hermeticity": environment.get("hermeticity"),
             "environment_semantic_sha256": environment.get("semantic_sha256"),
             "environment_source_artifact_ids": list(
@@ -204,6 +262,16 @@ def prepare_verified_environment_workspace_v06(
             "materialized_artifacts": materialized,
             "replay_plan": plan_path.name,
             "review_before_run_script": script_path.name,
+            "verification_receipt": receipt_path.name,
+            "replay_plan_sha256": hashlib.sha256(
+                plan_path.read_bytes()
+            ).hexdigest(),
+            "review_before_run_script_sha256": hashlib.sha256(
+                script_path.read_bytes()
+            ).hexdigest(),
+            "verification_receipt_sha256": hashlib.sha256(
+                receipt_path.read_bytes()
+            ).hexdigest(),
             "automatic_execution_permitted_by_pcs": False,
             "warning": (
                 "Review reconstruct-environment.sh before execution. Environment "
@@ -217,6 +285,13 @@ def prepare_verified_environment_workspace_v06(
             encoding="utf-8",
         )
 
+        if load_package_zip_v06(bundle).get("bundle_sha256") != verified.get(
+            "bundle_sha256"
+        ):
+            raise V06EnvironmentWorkspaceError(
+                "bundle bytes changed during workspace staging"
+            )
+
         staging.replace(destination)
     except Exception:
         shutil.rmtree(staging, ignore_errors=True)
@@ -228,6 +303,11 @@ def prepare_verified_environment_workspace_v06(
         "workspace": str(destination),
         "bundle_sha256": loaded["bundle_sha256"],
         "certificate_semantic_hash": certificate["semantic_hash"],
+        "certificate_integrity_hash": certificate["integrity_hash"],
+        "normalized_index_semantic_hash": verified.get(
+            "normalized_index_semantic_hash"
+        ),
+        "public_key_fingerprint": verified.get("public_key_fingerprint"),
         "environment_hermeticity": environment.get("hermeticity"),
         "materialized_artifact_count": len(materialized),
         "environment_source_count": len(binding.get("source_artifact_ids", [])),
