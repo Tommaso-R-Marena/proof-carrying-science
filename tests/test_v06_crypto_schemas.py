@@ -76,3 +76,32 @@ def test_v06_signature_schema_rejects_malformed_base64_length():
     bad["signature"] = "AAAA"
     with pytest.raises(SchemaValidationError):
         validate_v06_signature_record_shape(bad)
+
+
+
+def test_v06_package_schema_requires_certificate_and_forbids_self_reference():
+    from pcs.schema_validation import validate_v06_package_manifest_shape
+
+    base = {
+        "package_format": "pcs-package-v2",
+        "canonical_json_profile": "pcs-jcs-rfc8785-v1",
+        "certificate_spec_version": "pcs-0.6",
+        "certificate_semantic_hash_format": "pcs-certificate-semantic-sha256-v2",
+        "certificate_integrity_hash_format": "pcs-certificate-integrity-sha256-v2",
+        "certificate_semantic_hash": "a" * 64,
+        "certificate_integrity_hash": "b" * 64,
+        "files": {
+            "certificate.json": {"sha256": "c" * 64, "size": 1},
+        },
+    }
+    validate_v06_package_manifest_shape(base)
+
+    missing = deepcopy(base)
+    missing["files"] = {"artifact.txt": {"sha256": "d" * 64, "size": 1}}
+    with pytest.raises(SchemaValidationError):
+        validate_v06_package_manifest_shape(missing)
+
+    self_bound = deepcopy(base)
+    self_bound["files"]["package_signature.json"] = {"sha256": "e" * 64, "size": 1}
+    with pytest.raises(SchemaValidationError):
+        validate_v06_package_manifest_shape(self_bound)
