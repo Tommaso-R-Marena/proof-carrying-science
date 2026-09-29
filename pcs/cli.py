@@ -44,6 +44,11 @@ from .receipt_signature_v06 import (
     sign_verification_receipt_v06,
     verify_verification_receipt_signature_v06,
 )
+from .quorum_v06 import (
+    V06ReviewQuorumError,
+    verify_review_quorum_v06,
+    write_review_quorum_result_v06,
+)
 
 
 def cmd_certify(args):
@@ -181,6 +186,29 @@ def cmd_verify_receipt_v06(args):
     )
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result["valid"] else 1
+
+
+
+def cmd_verify_quorum_v06(args):
+    try:
+        result = verify_review_quorum_v06(
+            args.quorum_policy,
+            args.review_set,
+        )
+        if args.output:
+            written = write_review_quorum_result_v06(
+                result,
+                args.output,
+                overwrite=args.force,
+            )
+            result = dict(result)
+            result["result_written"] = str(written)
+    except (OSError, V06ReviewQuorumError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["pass"] else 1
 
 
 def cmd_bundle_v06(args):
@@ -535,6 +563,20 @@ def build_parser():
         help="pin the accepted reviewer public-key SHA-256 fingerprint",
     )
     vr6.set_defaults(func=cmd_verify_receipt_v06)
+
+    vq6 = sub.add_parser(
+        "verify-quorum-v06",
+        help="verify role-aware multi-reviewer quorum over signed v0.6 receipts",
+    )
+    vq6.add_argument("--quorum-policy", required=True, help="review quorum policy JSON")
+    vq6.add_argument("--review-set", required=True, help="portable review-set JSON")
+    vq6.add_argument("-o", "--output", help="write deterministic quorum result JSON")
+    vq6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing quorum result",
+    )
+    vq6.set_defaults(func=cmd_verify_quorum_v06)
 
     b6 = sub.add_parser(
         "bundle-v06",
