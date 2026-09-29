@@ -12,7 +12,7 @@ _BASE = {
     "mol": ({"N": 1}, 1.0), "mmol": ({"N": 1}, 1e-3), "umol": ({"N": 1}, 1e-6),
     "M": ({"N": 1, "L": -3}, 1e3), "mM": ({"N": 1, "L": -3}, 1.0),
 }
-_TERM = re.compile(r"^([A-Za-z0-9]+)(?:^(-?d+))?$")
+_TERM = re.compile(r"^([A-Za-z0-9]+)(?:\^(-?\d+))?$")
 
 
 def _parse_product(text: str) -> tuple[dict[str, int], float]:
