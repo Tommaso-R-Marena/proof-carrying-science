@@ -158,6 +158,53 @@ A discovery draft remains non-attestable.
 Changing a selected script, notebook, input, or output after confirmation therefore
 fails closed before the package is signed.
 
+## Independent reviewer replay
+
+Static workflow provenance is not accepted merely because the producer signed it.
+
+The end-to-end v0.6 verifier now has a dedicated `workflow_replay` stage between
+package binding and scientific evidence replay:
+
+```text
+canonical bytes
+  → producer signature
+  → exact package binding
+  → static workflow replay
+  → scientific evidence replay
+  → normalized decision regeneration
+```
+
+For packages containing human-confirmed static workflow nodes, the reviewer:
+
+1. reads the exact source/data artifact bytes from the signed package;
+2. validates the signed project-relative `source_path` values;
+3. reconstructs a temporary project tree from those delivered bytes;
+4. reruns the static Python/Jupyter/R analysis;
+5. checks that each signed workflow node is reproduced by fresh analysis;
+6. rejects any signed artifact edge that fresh analysis does not rediscover.
+
+The signed contract declares one of two dependency claim modes:
+
+- `exact_resolved_set` — used for clean Python/Jupyter AST analysis with no
+  ambiguous producer. The complete signed input/output set must exactly equal the
+  freshly rediscovered set.
+- `claimed_subset` — used for partial, R, browser-heuristic, or ambiguity-reduced
+  mappings. Every signed input/output edge must be freshly rediscovered, but PCS
+  does not claim that the signed set is complete.
+
+In both modes, the source artifact itself must be an input, the source kind/path and
+operation must match fresh analysis, and every sampled signed reference must be
+rediscovered.
+
+This means a signing-key holder cannot make a false static dependency acceptable
+simply by editing the certificate, recomputing hashes, rebuilding the package
+manifest, and re-signing it. A false edge fails at `workflow_replay` before the
+scientific evidence stage.
+
+This still does **not** prove that the program was executed, that a branch was
+reachable, or that the program is correct. It independently checks the narrower
+static dependency claim made by PCS.
+
 ## Signed provenance
 
 Selected source-code artifacts are packaged and signed like other scientific
