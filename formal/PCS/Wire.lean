@@ -55,7 +55,7 @@ structure DecisionWire where
   claim : WireClaim
   evidence : List WireEvidence
   recordedDecision : DecisionStatus
-  deriving Repr
+  deriving DecidableEq, Repr
 
 def decodePredicateCommitment : Option PredicateCommitment → Option Predicate
   | none => none
