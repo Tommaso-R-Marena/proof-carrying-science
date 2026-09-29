@@ -1,0 +1,48 @@
+{
+  "format": "pcs-jcs-vectors-v1",
+  "canonicalization": "RFC8785-JCS",
+  "vectors": [
+    {
+      "name": "rfc8785_core",
+      "input_json": "{\"numbers\":[333333333.33333329,1E30,4.50,2e-3,0.000000000000000000000000001],\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\",\"literals\":[null,true,false]}",
+      "canonical": "{\"literals\":[null,true,false],\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27],\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\"}",
+      "sha256": "2d5e01a318d0f0879ab568c4be289c8b1f64ef8921a53c6277d5e069978baacb"
+    },
+    {
+      "name": "utf16_property_order",
+      "input_json": "{\"€\":\"Euro Sign\",\"\\r\":\"Carriage Return\",\"דּ\":\"Hebrew Letter Dalet With Dagesh\",\"1\":\"One\",\"😀\":\"Emoji: Grinning Face\",\"\\u0080\":\"Control\",\"ö\":\"Latin Small Letter O With Diaeresis\"}",
+      "canonical": "{\"\\r\":\"Carriage Return\",\"1\":\"One\",\"\":\"Control\",\"ö\":\"Latin Small Letter O With Diaeresis\",\"€\":\"Euro Sign\",\"😀\":\"Emoji: Grinning Face\",\"דּ\":\"Hebrew Letter Dalet With Dagesh\"}",
+      "sha256": "5e321556d22018a9656991a9e94f77ec175fa193e52a2429d312f8419ec8b08c"
+    },
+    {
+      "name": "nested_sorting",
+      "input_json": "{\"z\":[{\"β\":2,\"a\":1},{\"😀\":3,\"€\":2,\"a\":1}],\"a\":{\"b\":2,\"a\":1}}",
+      "canonical": "{\"a\":{\"a\":1,\"b\":2},\"z\":[{\"a\":1,\"β\":2},{\"a\":1,\"€\":2,\"😀\":3}]}",
+      "sha256": "77141fab2ff6adb75e084bf450aaca424af4a7277cceb92cba6a8957ab8e4683"
+    },
+    {
+      "name": "number_notation_boundaries",
+      "input_json": "[0,-0,-0.0,1.0,1e-7,1e-6,0.000001,0.0000012,1e20,1e21,1e22,1e-27]",
+      "canonical": "[0,0,0,1,1e-7,0.000001,0.000001,0.0000012,100000000000000000000,1e+21,1e+22,1e-27]",
+      "sha256": "3df9ee0a5276a08690099bee3b9b1e3cb043324b5a993daceb2808cb10237086"
+    },
+    {
+      "name": "unicode_preservation",
+      "input_json": "{\"decomposed\":\"é\",\"composed\":\"é\",\"slash\":\"/\",\"controls\":\"\\b\\t\\n\\f\\r\"}",
+      "canonical": "{\"composed\":\"é\",\"controls\":\"\\b\\t\\n\\f\\r\",\"decomposed\":\"é\",\"slash\":\"/\"}",
+      "sha256": "76878a6560a6a723d0b7c8d86bc2ba18f3cdb18294182fb4c3cd6896e9a32941"
+    },
+    {
+      "name": "integer_float_equivalence",
+      "input_json": "{\"integer\":1,\"float\":1.0,\"negativeZero\":-0.0}",
+      "canonical": "{\"float\":1,\"integer\":1,\"negativeZero\":0}",
+      "sha256": "51ee817c5dcf423275dfbac6c85a449e1d2146135c9914d7c517cafcc06f6030"
+    },
+    {
+      "name": "rfc_number_edges",
+      "input_json": "[5e-324,-5e-324,1.7976931348623157e308,-1.7976931348623157e308,9007199254740992,295147905179352830000,9.999999999999997e22,1e23,1.0000000000000001e23,999999999999999700000,999999999999999900000,1e21,9.999999999999997e-7,0.000001,333333333.3333332,333333333.33333325,333333333.3333333,333333333.3333334,333333333.33333343,-0.0000033333333333333333,1424953923781206.2]",
+      "canonical": "[5e-324,-5e-324,1.7976931348623157e+308,-1.7976931348623157e+308,9007199254740992,295147905179352830000,9.999999999999997e+22,1e+23,1.0000000000000001e+23,999999999999999700000,999999999999999900000,1e+21,9.999999999999997e-7,0.000001,333333333.3333332,333333333.33333325,333333333.3333333,333333333.3333334,333333333.33333343,-0.0000033333333333333333,1424953923781206.2]",
+      "sha256": "fda34eabe5d748145898e96f351341d682060f698d6a201c97e4638416f5abe6"
+    }
+  ]
+}
