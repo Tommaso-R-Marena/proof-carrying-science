@@ -77,6 +77,8 @@ def main() -> int:
         "valid": verification["valid"],
         "assurance_dimensions": verification["assurance_dimensions"],
         "claim_statuses": verification["certificate"]["claim_statuses"],
+        "normalized_refinement": verification["assurance_dimensions"].get("normalized_refinement"),
+        "normalized_decisions": verification.get("normalized_decisions"),
         "pilot_intake_lock": str(intake_lock),
         "errors": verification["errors"],
     }
