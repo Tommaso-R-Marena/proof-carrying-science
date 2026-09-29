@@ -124,7 +124,7 @@ def test_v06_schema_patterns_reject_trailing_newlines():
         "files": {"certificate.json": {"sha256": "c" * 64, "size": 1}},
     }
     bad_hash = deepcopy(package)
-    bad_hash["certificate_semantic_hash"] += "\\n"
+    bad_hash["certificate_semantic_hash"] += "\n"
     with pytest.raises(SchemaValidationError):
         validate_v06_package_manifest_shape(bad_hash)
 
@@ -143,6 +143,6 @@ def test_v06_schema_patterns_reject_trailing_newlines():
         "index_semantic_hash": "f" * 64,
     }
     bad_path = deepcopy(index)
-    bad_path["entries"][0]["path"] += "\\n"
+    bad_path["entries"][0]["path"] += "\n"
     with pytest.raises(SchemaValidationError):
         validate_v06_normalized_decision_index_shape(bad_path)
