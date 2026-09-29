@@ -16,6 +16,10 @@ from .package_v06 import (
     MAX_PACKAGE_TOTAL_BYTES_V06,
 )
 from .schema_validation import SchemaValidationError, validate_manifest_shape
+from .workflow_discovery_v06 import (
+    WORKFLOW_DISCOVERY_FORMAT_V06,
+    analyze_static_workflow_v06,
+)
 
 
 DISCOVERY_FORMAT_V06 = "pcs-project-discovery-v1"
@@ -490,16 +494,35 @@ def _selected_manifest(
     inventory: list[dict[str, Any]],
     recommendations: list[dict[str, Any]],
     minimum_confidence: float,
+    workflow_map: dict[str, Any],
+    minimum_workflow_confidence: float,
 ) -> dict[str, Any]:
     selected = [
         rec for rec in recommendations
         if float(rec["confidence"]) >= minimum_confidence
     ]
+    selected_workflow_inferences = {
+        source["id"]
+        for source in workflow_map.get("sources", [])
+        if float(source.get("confidence", 0.0)) >= minimum_workflow_confidence
+    }
+    selected_workflow_nodes = [
+        node
+        for node in workflow_map.get("nodes", [])
+        if isinstance(node.get("contract"), dict)
+        and node["contract"].get("inference_id") in selected_workflow_inferences
+    ]
+
     artifact_ids = {
         artifact_id
         for rec in selected
         for artifact_id in rec.get("artifact_ids", [])
     }
+    artifact_ids.update(
+        artifact_id
+        for node in selected_workflow_nodes
+        for artifact_id in node.get("inputs", []) + node.get("outputs", [])
+    )
     inventory_by_id = {x["artifact_id"]: x for x in inventory}
 
     claims = _dedupe_by_id(
@@ -519,12 +542,35 @@ def _selected_manifest(
             if assumption_id in claim.get("assumptions", [])
         ]
 
-    workflow_nodes = _dedupe_by_id(
+    semantic_workflow_nodes = _dedupe_by_id(
         [
             rec["workflow_node"]
             for rec in selected
             if isinstance(rec.get("workflow_node"), dict)
         ]
+    )
+
+    # Static source analysis is a stronger provenance statement about which source
+    # appears to read/write an artifact. Avoid creating two workflow producers for
+    # the same output when a domain recommendation already describes that relation.
+    static_outputs = {
+        artifact_id
+        for node in selected_workflow_nodes
+        for artifact_id in node.get("outputs", [])
+    }
+    adjusted_semantic_nodes: list[dict[str, Any]] = []
+    for node in semantic_workflow_nodes:
+        adjusted = json.loads(json.dumps(node))
+        adjusted["outputs"] = [
+            artifact_id
+            for artifact_id in adjusted.get("outputs", [])
+            if artifact_id not in static_outputs
+        ]
+        if adjusted["outputs"]:
+            adjusted_semantic_nodes.append(adjusted)
+
+    workflow_nodes = _dedupe_by_id(
+        [*selected_workflow_nodes, *adjusted_semantic_nodes]
     )
 
     manifest = {
@@ -546,6 +592,11 @@ def _selected_manifest(
             "selected_recommendations": [rec["id"] for rec in selected],
             "recommendation_count": len(recommendations),
             "selected_recommendation_count": len(selected),
+            "workflow_discovery_format": workflow_map.get("format"),
+            "minimum_workflow_confidence": minimum_workflow_confidence,
+            "selected_workflow_inferences": sorted(selected_workflow_inferences),
+            "workflow_inference_count": len(workflow_map.get("sources", [])),
+            "selected_workflow_inference_count": len(selected_workflow_inferences),
         },
     }
     return manifest
@@ -556,12 +607,17 @@ def discover_project_v06(
     *,
     subject: str | None = None,
     minimum_confidence: float = 0.95,
+    minimum_workflow_confidence: float = 0.90,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
     if not root.is_dir():
         raise V06DiscoveryError(f"project root is not a directory: {root}")
     if not 0.0 <= minimum_confidence <= 1.0:
         raise V06DiscoveryError("minimum_confidence must be between 0 and 1")
+    if not 0.0 <= minimum_workflow_confidence <= 1.0:
+        raise V06DiscoveryError(
+            "minimum_workflow_confidence must be between 0 and 1"
+        )
 
     inventory: list[dict[str, Any]] = []
     skipped: list[dict[str, str]] = []
@@ -640,12 +696,16 @@ def discover_project_v06(
         key=lambda x: (-float(x["confidence"]), x["id"]),
     )
 
+    workflow_map = analyze_static_workflow_v06(root, inventory)
+
     manifest = _selected_manifest(
         root=root,
         subject=subject or root.name,
         inventory=inventory,
         recommendations=recommendations,
         minimum_confidence=minimum_confidence,
+        workflow_map=workflow_map,
+        minimum_workflow_confidence=minimum_workflow_confidence,
     )
     try:
         validate_manifest_shape(manifest)
@@ -654,7 +714,7 @@ def discover_project_v06(
             f"internal discovery generated invalid manifest draft: {exc}"
         ) from exc
 
-    unresolved = []
+    unresolved = list(workflow_map.get("unresolved", []))
     if not manifest["claims"]:
         unresolved.append(
             {
@@ -702,6 +762,10 @@ def discover_project_v06(
         "skipped": skipped,
         "recommendations": recommendations,
         "selected_recommendations": manifest["pcs_intake"]["selected_recommendations"],
+        "workflow_map": workflow_map,
+        "selected_workflow_inferences": manifest["pcs_intake"][
+            "selected_workflow_inferences"
+        ],
         "unresolved": unresolved,
         "summary": {
             "files_inventoried": len(inventory),
@@ -712,6 +776,12 @@ def discover_project_v06(
             "claims_drafted": len(manifest["claims"]),
             "checks_drafted": len(manifest["checks"]),
             "artifacts_selected": len(manifest["artifacts"]),
+            "workflow_sources_analyzed": workflow_map["summary"][
+                "source_files_considered"
+            ],
+            "workflow_nodes_drafted": len(manifest["workflow"]["nodes"]),
+            "workflow_edges_inferred": workflow_map["summary"]["workflow_edges"],
+            "workflow_unresolved_items": workflow_map["summary"]["unresolved_items"],
         },
         "manifest_draft": manifest,
     }
@@ -835,6 +905,18 @@ def confirm_manifest_draft_v06(
     confirmed = json.loads(json.dumps(manifest))
     confirmed["pcs_intake"]["status"] = "confirmed"
     confirmed["pcs_intake"]["requires_confirmation"] = False
+    confirmed["pcs_intake"]["workflow_inferences_confirmed"] = True
+    for node in confirmed.get("workflow", {}).get("nodes", []):
+        contract = node.get("contract")
+        if (
+            isinstance(contract, dict)
+            and contract.get("inference_format") == WORKFLOW_DISCOVERY_FORMAT_V06
+        ):
+            contract["human_confirmed"] = True
+            contract["confirmation_scope"] = (
+                "Static dependency inference confirmed; this does not prove "
+                "source-code correctness or runtime behavior."
+            )
     confirmed["pcs_intake"]["confirmed_artifacts"] = [
         {
             "id": row["id"],
