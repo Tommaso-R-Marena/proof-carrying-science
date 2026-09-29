@@ -607,7 +607,7 @@ def discover_project_v06(
     *,
     subject: str | None = None,
     minimum_confidence: float = 0.95,
-    minimum_workflow_confidence: float = 0.90,
+    minimum_workflow_confidence: float = 0.95,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
     if not root.is_dir():
