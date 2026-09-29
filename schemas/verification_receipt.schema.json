@@ -99,7 +99,8 @@
           "enum": [
             "PASS",
             "FAIL",
-            "NOT_PRESENT"
+            "NOT_PRESENT",
+            "REQUIRED_MISSING"
           ]
         }
       },
@@ -127,7 +128,10 @@
       ]
     },
     "normalized_decisions": {
-      "type": "object"
+      "type": [
+        "object",
+        "null"
+      ]
     },
     "certificate_signature": {
       "type": [
