@@ -163,9 +163,11 @@ def test_one_byte_receipt_change_breaks_reviewer_signature(tmp_path):
     )
     sign_verification_receipt_v06(receipt, private_key, signature)
 
-    raw = bytearray(receipt.read_bytes())
-    raw[-2] = ord(" ")
-    receipt.write_bytes(bytes(raw))
+    raw = receipt.read_bytes()
+    assert b'"format": "x"' in raw
+    tampered = raw.replace(b'"format": "x"', b'"format": "y"', 1)
+    assert len(tampered) == len(raw)
+    receipt.write_bytes(tampered)
 
     checked = verify_verification_receipt_signature_v06(
         receipt,
