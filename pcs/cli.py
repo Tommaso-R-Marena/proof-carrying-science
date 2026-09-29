@@ -19,7 +19,7 @@ from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
-from .normalized_wire import write_normalized_decision, validate_normalized_wire, verify_normalized_against_certificate, NormalizationError
+from .normalized_wire import write_normalized_decision, write_normalized_set, validate_normalized_wire, verify_normalized_against_certificate, NormalizationError
 from .jsonio import StrictJSONError
 
 
@@ -137,7 +137,11 @@ def cmd_bundle(args):
             print(json.dumps(integrity, indent=2, sort_keys=True), file=sys.stderr)
             print("REJECT: refusing to bundle an invalid certificate", file=sys.stderr)
             return 2
-        build_package_manifest(Path(args.certificate).resolve().parent)
+        package_root = Path(args.certificate).resolve().parent
+        normalized_dir = package_root / "normalized"
+        if not normalized_dir.exists():
+            write_normalized_set(args.certificate, normalized_dir)
+        build_package_manifest(package_root)
         result = create_reproducible_bundle(args.certificate, args.output)
     except (OSError, json.JSONDecodeError, AssuranceError, PackageError, BundleSafetyError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
