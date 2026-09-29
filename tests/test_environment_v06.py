@@ -13,6 +13,7 @@ from pcs.discover_v06 import (
     discover_project_v06,
     write_discovery_outputs_v06,
 )
+from pcs.environment_replay_v06 import environment_binding_v06
 from pcs.environment_v06 import (
     ENVIRONMENT_CAPTURE_FORMAT_V06,
     ENVIRONMENT_REPLAY_PLAN_FORMAT_V06,
@@ -401,3 +402,61 @@ def test_reconstruction_plan_shell_quotes_nested_environment_paths(tmp_path):
     assert "'unsafe; dir/requirements.txt'" in command
     script = render_environment_replay_script_v06(result)
     assert "-r 'unsafe; dir/requirements.txt'" in script
+
+
+
+def test_conda_pip_subsection_does_not_absorb_later_conda_dependency(tmp_path):
+    project = tmp_path / "conda"
+    project.mkdir()
+    (project / "environment.yml").write_text(
+        "name: demo\n"
+        "dependencies:\n"
+        "  - python=3.12\n"
+        "  - pip:\n"
+        "    - scipy==1.12.0\n"
+        "  - numpy=1.26.4\n",
+        encoding="utf-8",
+    )
+    result = capture_environment_v06(
+        project,
+        _inventory(project, ["environment.yml"]),
+    )
+
+    conda = {d["name"]: d for d in result["conda"]["dependencies"]}
+    python = {d["name"]: d for d in result["python"]["dependencies"]}
+    assert "numpy" in conda
+    assert conda["numpy"]["version"] == "1.26.4"
+    assert "scipy" in python
+    assert python["scipy"]["version"] == "1.12.0"
+
+
+def test_large_dependency_set_is_bounded_and_explicitly_truncated(tmp_path):
+    project = tmp_path / "large-env"
+    project.mkdir()
+    lines = [
+        f"package{i}==1.0.{i} --hash=sha256:" + ("%064x" % i)
+        for i in range(400)
+    ]
+    (project / "requirements.txt").write_text(
+        "\n".join(lines) + "\n",
+        encoding="utf-8",
+    )
+    environment = capture_environment_v06(
+        project,
+        _inventory(project, ["requirements.txt"]),
+    )
+
+    assert environment["summary"]["dependency_records_observed"] == 256
+    assert environment["summary"]["dependency_records"] == 256
+    # Per-parser bound is explicit even when the source contains more records.
+    assert any(
+        item["type"] in {
+            "dependency_record_limit",
+            "environment_dependency_record_limit",
+        }
+        for item in environment["unresolved"]
+    )
+    environment["human_confirmed"] = True
+    environment["confirmation_scope"] = "reviewed"
+    binding = environment_binding_v06(environment)
+    assert len(binding["contract"]["proposition"].encode("utf-8")) <= 262144
