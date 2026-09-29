@@ -941,9 +941,40 @@ def confirm_manifest_draft_v06(
     confirmed["pcs_intake"]["workflow_inferences_confirmed"] = True
 
     # The browser Project Mapper intentionally uses lower-assurance heuristics.
-    # Confirmation is the authoritative handoff: regenerate the environment
-    # contract from the exact snapshotted artifact bytes before marking it
-    # reviewed, instead of trusting a draft/browser environment proposition.
+    # Confirmation is the authoritative handoff. First rescan the project for
+    # environment declarations so a newly added lockfile/container spec cannot
+    # be silently omitted from the reviewed artifact set.
+    authoritative_rescan = discover_project_v06(
+        root,
+        subject=manifest.get("subject"),
+        minimum_confidence=1.0,
+        minimum_workflow_confidence=1.0,
+    )
+    rescanned_environment_paths = {
+        source["path"]
+        for source in authoritative_rescan["environment_capture"].get(
+            "sources", []
+        )
+        if isinstance(source, dict) and isinstance(source.get("path"), str)
+    }
+    reviewed_artifact_paths = {
+        artifact["path"]
+        for artifact in manifest.get("artifacts", [])
+        if isinstance(artifact, dict) and isinstance(artifact.get("path"), str)
+    }
+    newly_unreviewed_environment_paths = sorted(
+        rescanned_environment_paths - reviewed_artifact_paths
+    )
+    if newly_unreviewed_environment_paths:
+        raise V06DiscoveryError(
+            "cannot confirm manifest: new or previously unselected environment "
+            "source files are present; rerun pcs discover-v06 and review them: "
+            f"{newly_unreviewed_environment_paths}"
+        )
+
+    # Regenerate the authoritative environment contract from the exact
+    # snapshotted, reviewed artifact IDs so certificate cross-references remain
+    # stable even when the draft originated in the browser mapper.
     environment_inventory = []
     for artifact in confirmed.get("artifacts", []):
         metadata = artifact.get("metadata", {})
