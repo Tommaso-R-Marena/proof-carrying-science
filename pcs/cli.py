@@ -32,6 +32,7 @@ from .bundle_v06 import (
     V06BundleBuildError,
     create_verified_bundle_v06,
 )
+from .attest_v06 import V06AttestationError, attest_v06
 
 
 def cmd_certify(args):
@@ -122,6 +123,24 @@ def cmd_bundle_v06(args):
             overwrite=args.force,
         )
     except (OSError, V06BundleBuildError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_attest_v06(args):
+    try:
+        result = attest_v06(
+            args.manifest,
+            args.output,
+            args.private_key,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            overwrite=args.force,
+        )
+    except (OSError, V06AttestationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -394,6 +413,25 @@ def build_parser():
         help="explicitly replace an existing output ZIP",
     )
     b6.set_defaults(func=cmd_bundle_v06)
+
+    a6 = sub.add_parser(
+        "attest-v06",
+        help="produce a complete signed, replayed, self-verified PCS v0.6 bundle",
+    )
+    a6.add_argument("manifest", help="PCS project manifest JSON")
+    a6.add_argument("-o", "--output", required=True, help="output v0.6 delivery ZIP")
+    a6.add_argument("--private-key", required=True, help="Ed25519 private signing key PEM")
+    a6.add_argument("--public-key", required=True, help="matching trusted Ed25519 public key PEM")
+    a6.add_argument(
+        "--expected-signer-fingerprint",
+        help="optionally pin the expected raw-public-key SHA-256 fingerprint",
+    )
+    a6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing output ZIP after the replacement self-verifies",
+    )
+    a6.set_defaults(func=cmd_attest_v06)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")
