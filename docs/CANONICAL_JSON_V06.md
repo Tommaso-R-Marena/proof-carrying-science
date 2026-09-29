@@ -30,6 +30,7 @@ JCS supplies the cross-language properties PCS needs: the I-JSON data model, ECM
 - Frozen vectors: `tests/canonical_json_vectors.json`
 - Python tests: `tests/test_canonical_json_v06.py`
 - Cross-language Node gate: `scripts/check_jcs_cross_language.mjs`
+- Deterministic differential stress harness: `scripts/stress_jcs_against_node.py`
 
 The frozen suite includes the RFC 8785 core example, UTF-16 property ordering, nested objects, integer/float equivalence, negative zero, Unicode normalization preservation, notation boundaries, and the RFC Appendix B number edge cases. During development the Python number serializer was additionally compared against Node/V8 over 20,000 random finite IEEE-754 values with no mismatch.
 
@@ -43,10 +44,10 @@ Planned domain identifiers:
 - `pcs-certificate-integrity-sha256-v2`
 - `pcs-runtime-semantic-sha256-v2`
 - `pcs-intake-semantic-sha256-v2`
-- `pcs-ed25519-v2`
-- `pcs-package-ed25519-v2`
+- `pcs-certificate-signature-v2`
+- `pcs-package-signature-v2`
 
-Each domain will bind an explicit format/version field inside the JCS payload. SHA-256 is computed over the domain payload's JCS bytes; Ed25519 signs the versioned signature payload's JCS bytes. v0.5 verification remains unchanged.
+Each domain binds an explicit format/version field inside the JCS payload. The research implementation is `pcs/crypto_domains_v06.py`: SHA-256 uses a `pcs-jcs-sha256-v1` envelope and Ed25519 payload bytes use a `pcs-jcs-ed25519-payload-v1` envelope. v0.5 verification remains unchanged.
 
 ## Boundary
 
@@ -68,8 +69,7 @@ A verifier MUST select hash/signature semantics from the explicit format/spec ve
 
 ## Remaining integration work
 
-1. Define concrete v0.6 schema payloads for each hash/signature domain.
-2. Add downgrade/cross-version confusion attacks.
-3. Integrate the Node cross-language gate into release verification where Node is available.
-4. Decide whether Lean consumes canonical bytes directly or a separately checked digest/decoder relation.
-5. Keep v0.6 changes off the v0.5 release path until all new vectors and downgrade tests are frozen.
+1. Define concrete v0.6 certificate/package schemas that consume the new domain envelopes.
+2. Integrate the Node cross-language gate into release verification where Node is available.
+3. Decide whether Lean consumes canonical bytes directly or a separately checked digest/decoder relation.
+4. Keep v0.6 changes off the v0.5 release path until the new certificate/package vectors are frozen.
