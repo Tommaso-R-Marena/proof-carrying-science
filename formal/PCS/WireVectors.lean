@@ -58,3 +58,24 @@ example :
   decide
 
 end PCS.WireVectors
+
+
+def pkpdWireWellFormed : WellFormed pkpdWire := by
+  constructor
+  · rfl
+  · rfl
+  · rfl
+  · simp [UniqueEvidenceIds, decodedEvidence, decodeEvidence, pkpdWire]
+  · simp [ContextCovers, decodedContext, decodeAssumption, decodeClaim, pkpdWire]
+  · simp [RequiredEvidenceBound, requiredEvidenceFor, decodedEvidence,
+      decodeEvidence, decodeClaim, decodePredicateCommitment, pkpdWire,
+      pkpdPredicateCommitment]
+  · decide
+
+example :
+    Assures
+      (decodedContext pkpdWire)
+      AssuranceLevel.computational
+      (decodeClaim pkpdWire.claim)
+      (decodedEvidence pkpdWire) := by
+  exact wire_computational_sound pkpdWire pkpdWireWellFormed rfl
