@@ -98,3 +98,10 @@ def test_cross_language_node_vectors_when_node_available():
         check=False,
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+
+def test_pathological_json_nesting_rejected_cleanly():
+    text = "[" * 5000 + "0" + "]" * 5000
+    with pytest.raises(CanonicalJSONError):
+        parse_jcs_json(text)
