@@ -33,6 +33,7 @@ from .bundle_v06 import (
     create_verified_bundle_v06,
 )
 from .attest_v06 import V06AttestationError, attest_v06
+from .policy_v06 import V06ReviewerPolicyError
 
 
 def cmd_certify(args):
@@ -69,6 +70,7 @@ def cmd_verify_v06(args):
             args.package,
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
+            policy_path=args.policy,
         )
         receipt_path = None
         if args.receipt:
@@ -77,7 +79,7 @@ def cmd_verify_v06(args):
                 args.receipt,
                 overwrite=args.force_receipt,
             )
-    except (OSError, V06VerifierIOError) as e:
+    except (OSError, V06VerifierIOError, V06ReviewerPolicyError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -85,7 +87,7 @@ def cmd_verify_v06(args):
     if receipt_path is not None:
         output["receipt_written"] = str(receipt_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
-    return 0 if result["valid"] else 1
+    return 0 if result.get("accepted", result["valid"]) else 1
 
 
 def cmd_verify_v06_bundle(args):
@@ -94,6 +96,7 @@ def cmd_verify_v06_bundle(args):
             args.bundle,
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
+            policy_path=args.policy,
         )
         receipt_path = None
         if args.receipt:
@@ -102,7 +105,12 @@ def cmd_verify_v06_bundle(args):
                 args.receipt,
                 overwrite=args.force_receipt,
             )
-    except (OSError, V06VerifierIOError, V06BundleVerificationError) as e:
+    except (
+        OSError,
+        V06VerifierIOError,
+        V06BundleVerificationError,
+        V06ReviewerPolicyError,
+    ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -370,6 +378,10 @@ def build_parser():
         "--expected-signer-fingerprint",
         help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
     )
+    v6.add_argument(
+        "--policy",
+        help="external reviewer acceptance-policy JSON; does not change PCS validity",
+    )
     v6.add_argument("--receipt", help="write deterministic JSON verification receipt")
     v6.add_argument(
         "--force-receipt",
@@ -387,6 +399,10 @@ def build_parser():
     v6b.add_argument(
         "--expected-signer-fingerprint",
         help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    v6b.add_argument(
+        "--policy",
+        help="external reviewer acceptance-policy JSON; does not change PCS validity",
     )
     v6b.add_argument("--receipt", help="write deterministic JSON verification receipt")
     v6b.add_argument(
