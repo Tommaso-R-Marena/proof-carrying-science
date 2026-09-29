@@ -20,6 +20,11 @@ from .workflow_discovery_v06 import (
     WORKFLOW_DISCOVERY_FORMAT_V06,
     analyze_static_workflow_v06,
 )
+from .environment_v06 import (
+    ENVIRONMENT_CAPTURE_FORMAT_V06,
+    capture_environment_v06,
+    environment_artifact_ids_v06,
+)
 
 
 DISCOVERY_FORMAT_V06 = "pcs-project-discovery-v1"
@@ -496,6 +501,7 @@ def _selected_manifest(
     minimum_confidence: float,
     workflow_map: dict[str, Any],
     minimum_workflow_confidence: float,
+    environment_capture: dict[str, Any],
 ) -> dict[str, Any]:
     selected = [
         rec for rec in recommendations
@@ -523,6 +529,7 @@ def _selected_manifest(
         for node in selected_workflow_nodes
         for artifact_id in node.get("inputs", []) + node.get("outputs", [])
     )
+    artifact_ids.update(environment_artifact_ids_v06(environment_capture))
     inventory_by_id = {x["artifact_id"]: x for x in inventory}
 
     claims = _dedupe_by_id(
@@ -583,6 +590,15 @@ def _selected_manifest(
         ],
         "checks": checks,
         "workflow": {"nodes": workflow_nodes},
+        "environment": {
+            **json.loads(json.dumps(environment_capture)),
+            "human_confirmed": False,
+            "confirmation_scope": (
+                "Environment capture is a static declaration and reconstruction plan; "
+                "it does not prove package availability, installer correctness, ABI "
+                "compatibility, or successful environment reconstruction."
+            ),
+        },
         "pcs_intake": {
             "format": MANIFEST_DRAFT_FORMAT_V06,
             "status": "draft",
@@ -597,6 +613,11 @@ def _selected_manifest(
             "selected_workflow_inferences": sorted(selected_workflow_inferences),
             "workflow_inference_count": len(workflow_map.get("sources", [])),
             "selected_workflow_inference_count": len(selected_workflow_inferences),
+            "environment_capture_format": environment_capture.get("format"),
+            "environment_source_artifacts": environment_artifact_ids_v06(
+                environment_capture
+            ),
+            "environment_hermeticity": environment_capture.get("hermeticity"),
         },
     }
     return manifest
@@ -697,6 +718,7 @@ def discover_project_v06(
     )
 
     workflow_map = analyze_static_workflow_v06(root, inventory)
+    environment_capture = capture_environment_v06(root, inventory)
 
     manifest = _selected_manifest(
         root=root,
@@ -706,6 +728,7 @@ def discover_project_v06(
         minimum_confidence=minimum_confidence,
         workflow_map=workflow_map,
         minimum_workflow_confidence=minimum_workflow_confidence,
+        environment_capture=environment_capture,
     )
     try:
         validate_manifest_shape(manifest)
@@ -715,6 +738,7 @@ def discover_project_v06(
         ) from exc
 
     unresolved = list(workflow_map.get("unresolved", []))
+    unresolved.extend(environment_capture.get("unresolved", []))
     if not manifest["claims"]:
         unresolved.append(
             {
@@ -766,6 +790,7 @@ def discover_project_v06(
         "selected_workflow_inferences": manifest["pcs_intake"][
             "selected_workflow_inferences"
         ],
+        "environment_capture": environment_capture,
         "unresolved": unresolved,
         "summary": {
             "files_inventoried": len(inventory),
@@ -782,6 +807,14 @@ def discover_project_v06(
             "workflow_nodes_drafted": len(manifest["workflow"]["nodes"]),
             "workflow_edges_inferred": workflow_map["summary"]["workflow_edges"],
             "workflow_unresolved_items": workflow_map["summary"]["unresolved_items"],
+            "environment_sources": environment_capture["summary"]["source_files"],
+            "environment_dependencies": environment_capture["summary"][
+                "dependency_records"
+            ],
+            "environment_unresolved_items": environment_capture["summary"][
+                "unresolved_items"
+            ],
+            "environment_hermeticity": environment_capture["hermeticity"],
         },
         "manifest_draft": manifest,
     }
@@ -906,6 +939,19 @@ def confirm_manifest_draft_v06(
     confirmed["pcs_intake"]["status"] = "confirmed"
     confirmed["pcs_intake"]["requires_confirmation"] = False
     confirmed["pcs_intake"]["workflow_inferences_confirmed"] = True
+    environment = confirmed.get("environment")
+    if isinstance(environment, dict):
+        if environment.get("format") != ENVIRONMENT_CAPTURE_FORMAT_V06:
+            raise V06DiscoveryError(
+                "cannot confirm manifest: unsupported environment capture format"
+            )
+        environment["human_confirmed"] = True
+        environment["confirmation_scope"] = (
+            "Environment declarations, lockfiles, interpreter constraints, container "
+            "specifications, and reconstruction plan reviewed as static reproducibility "
+            "metadata. Confirmation does not prove successful installation or execution."
+        )
+        confirmed["pcs_intake"]["environment_confirmed"] = True
     for node in confirmed.get("workflow", {}).get("nodes", []):
         contract = node.get("contract")
         if (
