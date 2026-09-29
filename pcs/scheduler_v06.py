@@ -38,6 +38,12 @@ _PRIOR_FAILS = 1.0
 _PRIOR_OBSERVATIONS = 2.0
 _RIDGE = 1.0
 _MIN_DURATION_MS = 0.001
+_MAX_HISTORY_BYTES = 64 * 1024 * 1024
+_MAX_HISTORY_RUNS = 100_000
+_MAX_CHECKS_PER_RUN = 10_000
+_MAX_DURATION_MS = 24 * 60 * 60 * 1000
+_MAX_INPUT_BYTES = 1 << 50
+_MAX_ARTIFACT_COUNT = 100_000
 _MIN_BANDIT_TOTAL_OBSERVATIONS = 20
 _MIN_BANDIT_TYPE_OBSERVATIONS = 3
 
@@ -86,17 +92,45 @@ def _history_checks(history: Iterable[dict[str, Any]]) -> Iterable[dict[str, Any
         if run.get("format") != TELEMETRY_FORMAT_V06:
             continue
         checks = run.get("checks")
-        if not isinstance(checks, list):
+        if not isinstance(checks, list) or len(checks) > _MAX_CHECKS_PER_RUN:
             continue
         for check in checks:
             if not isinstance(check, dict):
                 continue
-            if not isinstance(check.get("check_type"), str):
+            check_type = check.get("check_type")
+            if (
+                not isinstance(check_type, str)
+                or not check_type
+                or len(check_type) > 128
+            ):
                 continue
             duration = check.get("duration_ms")
             if not isinstance(duration, (int, float)) or isinstance(duration, bool):
                 continue
-            if duration < 0:
+            duration = float(duration)
+            if (
+                not math.isfinite(duration)
+                or duration < 0
+                or duration > _MAX_DURATION_MS
+            ):
+                continue
+            input_bytes = check.get("input_bytes", 0)
+            artifact_count = check.get("artifact_count", 0)
+            if (
+                not isinstance(input_bytes, int)
+                or isinstance(input_bytes, bool)
+                or input_bytes < 0
+                or input_bytes > _MAX_INPUT_BYTES
+            ):
+                continue
+            if (
+                not isinstance(artifact_count, int)
+                or isinstance(artifact_count, bool)
+                or artifact_count < 0
+                or artifact_count > _MAX_ARTIFACT_COUNT
+            ):
+                continue
+            if check.get("outcome") not in {"PASS", "FAIL", "UNVERIFIED"}:
                 continue
             yield check
 
@@ -573,11 +607,49 @@ def scheduler_report_v06(
     }
 
 
+def _strict_json_object_line(line: str, *, line_no: int) -> dict[str, Any]:
+    def reject_duplicates(pairs):
+        out = {}
+        for key, value in pairs:
+            if key in out:
+                raise V06SchedulerError(
+                    f"duplicate telemetry JSON key at line {line_no}: {key!r}"
+                )
+            out[key] = value
+        return out
+
+    try:
+        value = json.loads(
+            line,
+            object_pairs_hook=reject_duplicates,
+            parse_constant=lambda token: (_ for _ in ()).throw(
+                V06SchedulerError(
+                    f"non-finite telemetry JSON number at line {line_no}: {token}"
+                )
+            ),
+        )
+    except json.JSONDecodeError as exc:
+        raise V06SchedulerError(
+            f"invalid telemetry JSONL at line {line_no}: {exc}"
+        ) from exc
+    if not isinstance(value, dict):
+        raise V06SchedulerError(
+            f"telemetry history line {line_no} must be a JSON object"
+        )
+    return value
+
+
 def load_telemetry_history_v06(path: str | Path | None) -> list[dict[str, Any]]:
     if path is None:
         return []
     p = Path(path)
     try:
+        size = p.stat().st_size
+        if size > _MAX_HISTORY_BYTES:
+            raise V06SchedulerError(
+                f"replay telemetry history exceeds byte limit: "
+                f"{size} > {_MAX_HISTORY_BYTES}"
+            )
         lines = p.read_text(encoding="utf-8").splitlines()
     except OSError as exc:
         raise V06SchedulerError(
@@ -587,17 +659,21 @@ def load_telemetry_history_v06(path: str | Path | None) -> list[dict[str, Any]]:
     for line_no, line in enumerate(lines, start=1):
         if not line.strip():
             continue
-        try:
-            value = json.loads(line)
-        except json.JSONDecodeError as exc:
-            raise V06SchedulerError(
-                f"invalid telemetry JSONL at line {line_no}: {exc}"
-            ) from exc
-        if not isinstance(value, dict) or value.get("format") != TELEMETRY_FORMAT_V06:
+        value = _strict_json_object_line(line, line_no=line_no)
+        if value.get("format") != TELEMETRY_FORMAT_V06:
             raise V06SchedulerError(
                 f"telemetry history line {line_no} has unsupported format"
             )
+        checks = value.get("checks")
+        if not isinstance(checks, list) or len(checks) > _MAX_CHECKS_PER_RUN:
+            raise V06SchedulerError(
+                f"telemetry history line {line_no} has invalid check list"
+            )
         out.append(value)
+        if len(out) > _MAX_HISTORY_RUNS:
+            raise V06SchedulerError(
+                f"replay telemetry history exceeds run limit: {_MAX_HISTORY_RUNS}"
+            )
     return out
 
 
