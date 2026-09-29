@@ -101,6 +101,23 @@ pcs normalize-decision evidence/certificate.json \
 The output is validated against
 `pcs/schemas/normalized_decision.schema.json`.
 
+A reviewer can independently recompute the wire invariants:
+
+```bash
+pcs verify-normalized normalized-C_PK_REPLAY.json
+```
+
+and can additionally require that the wire be reproduced *exactly* from a
+specific independently replay-verified source certificate:
+
+```bash
+pcs verify-normalized normalized-C_PK_REPLAY.json \
+  --certificate evidence/certificate.json
+```
+
+The second form prevents an internally self-consistent wire object from being
+silently substituted for the state actually derived from the cited certificate.
+
 ## Scope and non-claim
 
 This wire format does not prove that Python's JSON parser, SHA-256
