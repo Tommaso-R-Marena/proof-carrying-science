@@ -263,7 +263,7 @@
       "additionalProperties": false,
       "required": ["type", "validator", "predicate"],
       "properties": {
-        "type": {"enum": ["external_formal_proof", "external_empirical_validation", "provenance_record"]},
+        "type": {"enum": ["external_formal_proof", "external_empirical_validation", "external_statistical_validation", "provenance_record"]},
         "validator": {"type": "string", "minLength": 1, "maxLength": 512},
         "predicate": {"$ref": "#/$defs/predicate"}
       }
