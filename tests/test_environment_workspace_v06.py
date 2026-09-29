@@ -180,3 +180,32 @@ def test_prepare_environment_cli_creates_verified_nonexecuted_workspace(tmp_path
     assert Path(result["workspace"]) == workspace.resolve()
     assert (workspace / "pcs-environment-workspace.json").exists()
     assert not (workspace / "SHOULD_NOT_EXIST").exists()
+
+
+
+def test_prepare_environment_workspace_rejects_bundle_swap_after_verification(
+    tmp_path,
+    monkeypatch,
+):
+    import pcs.environment_workspace_v06 as workspace_mod
+
+    bundle, public, fingerprint, _ = _bundle(tmp_path)
+    original = workspace_mod.load_package_zip_v06
+
+    def swapped(path):
+        loaded = dict(original(path))
+        loaded["bundle_sha256"] = "0" * 64
+        return loaded
+
+    monkeypatch.setattr(workspace_mod, "load_package_zip_v06", swapped)
+
+    with pytest.raises(
+        V06EnvironmentWorkspaceError,
+        match="changed after verification",
+    ):
+        prepare_verified_environment_workspace_v06(
+            bundle,
+            tmp_path / "swapped-workspace",
+            public,
+            expected_fingerprint=fingerprint,
+        )
