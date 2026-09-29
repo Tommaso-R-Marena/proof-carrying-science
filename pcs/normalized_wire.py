@@ -242,6 +242,44 @@ def normalize_verified_certificate(
     return _normalize_verified_object(cert, claim_id)
 
 
+
+def verify_normalized_against_certificate(
+    wire: dict[str, Any],
+    certificate_path: str | Path,
+) -> dict[str, Any]:
+    """Check both internal wire invariants and exact derivation from a verified certificate."""
+    internal = validate_normalized_wire(wire)
+    errors = list(internal["errors"])
+    if not internal["valid"]:
+        return {
+            **internal,
+            "source_certificate_match": False,
+        }
+
+    claim_id = wire.get("source", {}).get("claim_id")
+    try:
+        expected = normalize_verified_certificate(certificate_path, claim_id)
+    except (NormalizationError, OSError) as exc:
+        errors.append(f"cannot reproduce wire from source certificate: {exc}")
+        return {
+            **internal,
+            "valid": False,
+            "errors": errors,
+            "source_certificate_match": False,
+        }
+
+    source_match = expected == wire
+    if not source_match:
+        errors.append("normalized wire does not exactly match source certificate normalization")
+
+    return {
+        **internal,
+        "valid": not errors,
+        "errors": errors,
+        "source_certificate_match": source_match,
+        "source_certificate_semantic_hash": expected["source"]["certificate_semantic_hash"],
+    }
+
 def write_normalized_decision(
     certificate_path: str | Path,
     claim_id: str,
