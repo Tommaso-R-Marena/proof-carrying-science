@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -104,6 +105,10 @@ def test_discover_confirm_attest_is_complete_product_onboarding_path(tmp_path):
     confirmed_obj = json.loads(manifest.read_text(encoding="utf-8"))
     assert confirmed_obj["pcs_intake"]["status"] == "confirmed"
     assert confirmed_obj["pcs_intake"]["requires_confirmation"] is False
+    assert all(
+        artifact["metadata"]["pcs_discovery_confirmed"] is True
+        for artifact in confirmed_obj["artifacts"]
+    )
 
     private, public, fingerprint = _keys(tmp_path)
     bundle = tmp_path / "guided-study.pcs.zip"
@@ -125,6 +130,22 @@ def test_discover_confirm_attest_is_complete_product_onboarding_path(tmp_path):
     assert checked["valid"], checked["errors"]
     statuses = {x["claim_id"]: x["decision"] for x in checked["claims"]}
     assert set(statuses.values()) == {"COMPUTATIONALLY_SUPPORTED"}
+
+    with zipfile.ZipFile(bundle, "r") as zf:
+        certificate = json.loads(zf.read("certificate.json").decode("utf-8"))
+    assert all(
+        artifact.get("metadata", {}).get("pcs_discovery_confirmed") is True
+        for artifact in certificate["artifacts"]
+    )
+    assert all(
+        isinstance(
+            artifact.get("metadata", {}).get(
+                "pcs_discovery_inventory_commitment_sha256"
+            ),
+            str,
+        )
+        for artifact in certificate["artifacts"]
+    )
 
 
 def test_artifact_change_after_confirmation_is_rejected_at_attestation(tmp_path):
