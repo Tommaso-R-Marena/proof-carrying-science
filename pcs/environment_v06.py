@@ -473,7 +473,11 @@ def _description(
     text: str,
     *,
     source_path: str,
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+) -> tuple[
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+    list[dict[str, str]],
+]:
     fields: dict[str, str] = {}
     current = None
     for raw in text.splitlines():
@@ -486,6 +490,19 @@ def _description(
         current = key.strip()
         fields[current] = value.strip()
     deps = []
+    r_versions: list[dict[str, str]] = []
+    depends_value = fields.get("Depends", "")
+    for part in depends_value.split(","):
+        dep = part.strip()
+        if dep.startswith("R ") or dep.startswith("R("):
+            match = re.search(r"R\s*\(([^\)]+)\)", dep)
+            if match:
+                r_versions.append(
+                    {
+                        "source_path": source_path,
+                        "value": match.group(1).strip(),
+                    }
+                )
     for field in ("Depends", "Imports", "Suggests", "LinkingTo"):
         value = fields.get(field)
         if not value:
@@ -520,7 +537,7 @@ def _description(
                 "limit": MAX_DEPENDENCY_RECORDS_V06,
             }
         )
-    return deps, unresolved
+    return deps, unresolved, r_versions
 
 
 def _python_version_text(text: str, *, source_path: str) -> list[dict[str, str]]:
@@ -981,9 +998,10 @@ def capture_environment_v06(
             unresolved.extend(issues)
         elif name == "DESCRIPTION":
             add_source(rel, "r_description")
-            deps, issues = _description(text, source_path=rel)
+            deps, issues, r_declared = _description(text, source_path=rel)
             dependencies.extend(deps)
             unresolved.extend(issues)
+            r_versions.extend(r_declared)
         elif name in ("Dockerfile", "Containerfile"):
             add_source(rel, "containerfile")
             container, issues = _dockerfile(text, source_path=rel)
