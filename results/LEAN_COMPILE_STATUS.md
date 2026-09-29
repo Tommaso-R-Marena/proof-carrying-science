@@ -2,22 +2,37 @@
 
 ## Verdict
 
-**RETURNED ARISTOTLE PROJECT: MACHINE-CHECKED PASS.**
+**MACHINE-CHECKED PASS.**
 
-**PCS-NAMESPACE PROMOTION BRANCH: FINAL REBUILD PENDING.**
+Production-shaped branch:
 
-Toolchain used by the successful returned build:
+`formal/aristotle-proof-promotion-2026-09-29`
+
+Toolchain:
 
 ```text
 leanprover/lean4:v4.28.0
 Lean 4.28.0
-commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b
+commit 7e01a1bf5c70
 ```
 
-The returned Aristotle project completed `lake build` successfully with 15 jobs. Its placeholder audit found no `sorry` or `admit`, and its axiom audit found no `sorryAx` or project-specific axiom.
+Independent verification-only rebuild:
 
-The proofs have been namespace-promoted into ordinary `PCS/*` modules on branch:
+- `lake build`: exit code 0;
+- `Build completed successfully (14 jobs).`;
+- no warnings or errors;
+- no Lean source or theorem statement changes required.
 
-`formal/aristotle-proof-promotion-2026-09-29`
+Independent source and compiled-declaration audits found:
 
-The promotion only changes module/namespace wiring; theorem statements and proof bodies are preserved. One final build of that production-shaped branch is required before merge and before updating the main release verdict.
+- no `sorry` or `admit`;
+- no PCS-specific axiom;
+- no `unsafe`, `implemented_by`, `extern`, or `native_decide`;
+- no `sorryAx`;
+- all 641 compiled `PCS.*` declarations free of axiom/unsafe/sorry declarations.
+
+The promoted soundness and normalized bridge theorems depend only on standard Lean foundations `propext`, `Classical.choice`, and `Quot.sound`.
+
+Full record:
+
+`results/PROMOTION_VERIFICATION_2026-09-29.md`
