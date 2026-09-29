@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import math
+from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
 from typing import Any
 
@@ -116,6 +117,21 @@ def _load_spec(path: str | Path) -> dict[str, Any]:
     return obj
 
 
+def _decimal(value: Any) -> Decimal:
+    """Convert a validated numeric value through its canonical decimal spelling.
+
+    PCS certificates commit replay diagnostics into their semantic hash. Using
+    platform libm for transcendental calculations made those diagnostics vary by
+    a few ulps across environments. Decimal with an explicit precision keeps the
+    narrow analytic PK/PD replay deterministic for fixed input bytes.
+    """
+    return Decimal(str(value))
+
+
+def _decimal_isclose(a: Decimal, b: Decimal, *, rel_tol: Decimal, abs_tol: Decimal) -> bool:
+    return abs(a - b) <= max(abs_tol, rel_tol * max(abs(a), abs(b)))
+
+
 def verify_one_compartment_iv_output(
     spec: dict[str, Any],
     csv_path: str | Path,
@@ -132,65 +148,95 @@ def verify_one_compartment_iv_output(
     if rel_tol < 0 or abs_tol < 0 or not math.isfinite(rel_tol) or not math.isfinite(abs_tol):
         return False, {"contract_valid": True, "error": "invalid tolerance"}
 
-    time_scale = contract["time_si_scale"]
-    conc_scale = contract["concentration_si_scale"]
-    kel_si = contract["derived"]["kel_per_s"]
-    c0_si = contract["derived"]["c0_kg_per_m3"]
     pd = contract.get("pd")
-
     mismatches: list[dict[str, float | int | str]] = []
     row_count = 0
-    max_abs = 0.0
-    max_rel = 0.0
-    max_effect_abs = 0.0
-    max_effect_rel = 0.0
 
     try:
-        with Path(csv_path).open("r", encoding="utf-8", newline="") as fh:
-            reader = csv.DictReader(fh)
-            required = {time_column, concentration_column}
-            if pd is not None:
-                required.add(effect_column)
-            if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
-                raise ValueError(f"CSV must contain columns {sorted(required)!r}")
-            for i, row in enumerate(reader, start=2):
-                t = float(row[time_column])
-                observed = float(row[concentration_column])
-                if not (math.isfinite(t) and math.isfinite(observed)):
-                    raise ValueError(f"row {i} contains non-finite PK numeric values")
-                if t < 0:
-                    raise ValueError(f"row {i} has negative time")
-                t_si = t * time_scale
-                expected_si = c0_si * math.exp(-kel_si * t_si)
-                expected = expected_si / conc_scale
-                abs_err = abs(observed - expected)
-                rel_err = abs_err / max(abs(expected), abs_tol if abs_tol > 0 else 1e-300)
-                max_abs = max(max_abs, abs_err)
-                max_rel = max(max_rel, rel_err)
-                row_count += 1
-                if not math.isclose(observed, expected, rel_tol=rel_tol, abs_tol=abs_tol):
-                    if len(mismatches) < 10:
-                        mismatches.append({"row": i, "field": concentration_column, "observed": observed, "expected": expected, "abs_error": abs_err, "rel_error": rel_err})
+        # Fixed precision and Decimal.exp deliberately remove platform libm from
+        # certificate semantics. Inputs still cross the explicit JSON/CSV parser
+        # TCB, but identical parsed values now yield identical replay diagnostics.
+        with localcontext() as ctx:
+            ctx.prec = 50
+            time_scale = _decimal(contract["time_si_scale"])
+            conc_scale = _decimal(contract["concentration_si_scale"])
+            kel_si = _decimal(contract["derived"]["kel_per_s"])
+            c0_si = _decimal(contract["derived"]["c0_kg_per_m3"])
+            rel_tol_d = _decimal(rel_tol)
+            abs_tol_d = _decimal(abs_tol)
+            rel_floor = abs_tol_d if abs_tol_d > 0 else Decimal("1e-300")
 
+            if pd is not None:
+                e0_si = _decimal(pd["e0"]["si_value"])
+                emax_si = _decimal(pd["emax"]["si_value"])
+                ec50_si = _decimal(pd["ec50"]["si_value"])
+                effect_scale = _decimal(pd["effect_si_scale"])
+
+            max_abs = Decimal(0)
+            max_rel = Decimal(0)
+            max_effect_abs = Decimal(0)
+            max_effect_rel = Decimal(0)
+
+            with Path(csv_path).open("r", encoding="utf-8", newline="") as fh:
+                reader = csv.DictReader(fh)
+                required = {time_column, concentration_column}
                 if pd is not None:
-                    observed_effect = float(row[effect_column])
-                    if not math.isfinite(observed_effect):
-                        raise ValueError(f"row {i} contains non-finite PD effect")
-                    e0_si = pd["e0"]["si_value"]
-                    emax_si = pd["emax"]["si_value"]
-                    ec50_si = pd["ec50"]["si_value"]
-                    expected_effect_si = e0_si + emax_si * expected_si / (ec50_si + expected_si)
-                    expected_effect = expected_effect_si / pd["effect_si_scale"]
-                    eff_abs = abs(observed_effect - expected_effect)
-                    eff_rel = eff_abs / max(abs(expected_effect), abs_tol if abs_tol > 0 else 1e-300)
-                    max_effect_abs = max(max_effect_abs, eff_abs)
-                    max_effect_rel = max(max_effect_rel, eff_rel)
-                    if not math.isclose(observed_effect, expected_effect, rel_tol=rel_tol, abs_tol=abs_tol):
+                    required.add(effect_column)
+                if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
+                    raise ValueError(f"CSV must contain columns {sorted(required)!r}")
+
+                for i, row in enumerate(reader, start=2):
+                    t = Decimal(row[time_column])
+                    observed = Decimal(row[concentration_column])
+                    if not (t.is_finite() and observed.is_finite()):
+                        raise ValueError(f"row {i} contains non-finite PK numeric values")
+                    if t < 0:
+                        raise ValueError(f"row {i} has negative time")
+
+                    t_si = t * time_scale
+                    expected_si = c0_si * (-kel_si * t_si).exp()
+                    expected = expected_si / conc_scale
+                    abs_err = abs(observed - expected)
+                    rel_err = abs_err / max(abs(expected), rel_floor)
+                    max_abs = max(max_abs, abs_err)
+                    max_rel = max(max_rel, rel_err)
+                    row_count += 1
+
+                    if not _decimal_isclose(observed, expected, rel_tol=rel_tol_d, abs_tol=abs_tol_d):
                         if len(mismatches) < 10:
-                            mismatches.append({"row": i, "field": effect_column, "observed": observed_effect, "expected": expected_effect, "abs_error": eff_abs, "rel_error": eff_rel})
+                            mismatches.append({
+                                "row": i,
+                                "field": concentration_column,
+                                "observed": float(observed),
+                                "expected": float(expected),
+                                "abs_error": float(abs_err),
+                                "rel_error": float(rel_err),
+                            })
+
+                    if pd is not None:
+                        observed_effect = Decimal(row[effect_column])
+                        if not observed_effect.is_finite():
+                            raise ValueError(f"row {i} contains non-finite PD effect")
+                        expected_effect_si = e0_si + emax_si * expected_si / (ec50_si + expected_si)
+                        expected_effect = expected_effect_si / effect_scale
+                        eff_abs = abs(observed_effect - expected_effect)
+                        eff_rel = eff_abs / max(abs(expected_effect), rel_floor)
+                        max_effect_abs = max(max_effect_abs, eff_abs)
+                        max_effect_rel = max(max_effect_rel, eff_rel)
+                        if not _decimal_isclose(observed_effect, expected_effect, rel_tol=rel_tol_d, abs_tol=abs_tol_d):
+                            if len(mismatches) < 10:
+                                mismatches.append({
+                                    "row": i,
+                                    "field": effect_column,
+                                    "observed": float(observed_effect),
+                                    "expected": float(expected_effect),
+                                    "abs_error": float(eff_abs),
+                                    "rel_error": float(eff_rel),
+                                })
+
             if row_count == 0:
                 raise ValueError("prediction CSV has no data rows")
-    except (OSError, ValueError, OverflowError, ZeroDivisionError) as exc:
+    except (OSError, ValueError, OverflowError, ZeroDivisionError, InvalidOperation) as exc:
         return False, {
             "contract_valid": True,
             "error": type(exc).__name__,
@@ -212,10 +258,10 @@ def verify_one_compartment_iv_output(
         "effect_column": effect_column if pd is not None else None,
         "rel_tol": rel_tol,
         "abs_tol": abs_tol,
-        "max_concentration_abs_error": max_abs,
-        "max_concentration_rel_error": max_rel,
-        "max_effect_abs_error": max_effect_abs if pd is not None else None,
-        "max_effect_rel_error": max_effect_rel if pd is not None else None,
+        "max_concentration_abs_error": float(max_abs),
+        "max_concentration_rel_error": float(max_rel),
+        "max_effect_abs_error": float(max_effect_abs) if pd is not None else None,
+        "max_effect_rel_error": float(max_effect_rel) if pd is not None else None,
         "mismatch_count_reported": len(mismatches),
         "mismatches": mismatches,
         "scope": "PK/PD output replay against restricted analytic equations; not empirical model validation",
