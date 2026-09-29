@@ -3,6 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
+import hashlib
+import json
 
 from .decision import assess_claim
 from .hashing import sha256_json
@@ -18,6 +20,7 @@ from .schema_validation import validate_normalized_decision_shape, SchemaValidat
 
 
 WIRE_FORMAT = "pcs-normalized-decision-v1"
+NORMALIZED_INDEX_FORMAT = "pcs-normalized-decision-index-v1"
 PREDICATE_COMMITMENT_PREFIX = "pcs-predicate-sha256:"
 
 
@@ -294,3 +297,157 @@ def write_normalized_decision(
 
     out.write_text(json.dumps(wire, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return wire
+
+
+def write_normalized_set(
+    certificate_path: str | Path,
+    output_dir: str | Path,
+) -> dict[str, Any]:
+    """Verify once, then emit one portable normalized wire file per certificate claim."""
+    cert_path = Path(certificate_path).resolve()
+    verification = verify_certificate(cert_path)
+    if not verification["valid"]:
+        raise NormalizationError(
+            "certificate must independently replay-verify before normalized-set export: "
+            + "; ".join(verification["errors"])
+        )
+    cert = strict_json_load(cert_path)
+    out = Path(output_dir).resolve()
+    if out.exists():
+        if not out.is_dir():
+            raise NormalizationError(f"normalized output is not a directory: {out}")
+        if any(out.iterdir()):
+            raise NormalizationError(f"normalized output directory must be empty: {out}")
+    else:
+        out.mkdir(parents=True, exist_ok=False)
+
+    entries: list[dict[str, Any]] = []
+    for claim in cert.get("claims", []):
+        claim_id = claim["id"]
+        wire = _normalize_verified_object(cert, claim_id)
+        storage_key = hashlib.sha256(claim_id.encode("utf-8")).hexdigest()[:24]
+        rel = f"{storage_key}.json"
+        path = out / rel
+        path.write_text(json.dumps(wire, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        entries.append(
+            {
+                "claim_id": claim_id,
+                "path": rel,
+                "decision": wire["decision"],
+                "wire_semantic_hash": wire["wire_semantic_hash"],
+            }
+        )
+
+    index = {
+        "index_format": NORMALIZED_INDEX_FORMAT,
+        "certificate_semantic_hash": cert.get("semantic_hash"),
+        "entries": entries,
+    }
+    (out / "index.json").write_text(
+        json.dumps(index, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return index
+
+
+def verify_normalized_set(
+    normalized_dir: str | Path,
+    certificate_path: str | Path,
+) -> dict[str, Any]:
+    """Verify a delivered normalized index and exact wire derivation from its certificate."""
+    root = Path(normalized_dir).resolve()
+    cert_path = Path(certificate_path).resolve()
+    errors: list[str] = []
+    index_path = root / "index.json"
+    if not index_path.is_file():
+        return {"present": False, "valid": True, "errors": [], "entries": []}
+
+    try:
+        index = strict_json_load(index_path)
+        cert = strict_json_load(cert_path)
+    except Exception as exc:
+        return {
+            "present": True,
+            "valid": False,
+            "errors": [f"cannot parse normalized index/certificate: {type(exc).__name__}: {exc}"],
+            "entries": [],
+        }
+
+    if index.get("index_format") != NORMALIZED_INDEX_FORMAT:
+        errors.append("unsupported normalized index format")
+    if index.get("certificate_semantic_hash") != cert.get("semantic_hash"):
+        errors.append("normalized index certificate semantic hash mismatch")
+
+    entries = index.get("entries")
+    if not isinstance(entries, list):
+        return {
+            "present": True,
+            "valid": False,
+            "errors": errors + ["normalized index entries must be an array"],
+            "entries": [],
+        }
+
+    cert_claim_ids = [c.get("id") for c in cert.get("claims", [])]
+    entry_claim_ids = [e.get("claim_id") for e in entries if isinstance(e, dict)]
+    if entry_claim_ids != cert_claim_ids:
+        errors.append("normalized index claim order/scope differs from certificate claims")
+    if len(entry_claim_ids) != len(set(entry_claim_ids)):
+        errors.append("normalized index contains duplicate claim ids")
+
+    results: list[dict[str, Any]] = []
+    seen_paths: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            errors.append("normalized index entry must be an object")
+            continue
+        rel = entry.get("path")
+        claim_id = entry.get("claim_id")
+        if not isinstance(rel, str) or not rel or "/" in rel or "\\" in rel or rel in {".", ".."}:
+            errors.append(f"unsafe normalized wire path for claim {claim_id}: {rel!r}")
+            continue
+        if rel in seen_paths:
+            errors.append(f"duplicate normalized wire path: {rel}")
+            continue
+        seen_paths.add(rel)
+        path = (root / rel).resolve()
+        try:
+            path.relative_to(root)
+        except ValueError:
+            errors.append(f"normalized wire escapes normalized directory: {rel!r}")
+            continue
+        if not path.is_file():
+            errors.append(f"normalized wire missing for claim {claim_id}: {rel}")
+            continue
+        try:
+            wire = strict_json_load(path)
+        except Exception as exc:
+            errors.append(f"cannot parse normalized wire {rel}: {type(exc).__name__}: {exc}")
+            continue
+
+        result = verify_normalized_against_certificate(wire, cert_path)
+        results.append({"claim_id": claim_id, "path": rel, **result})
+        if not result["valid"]:
+            errors.extend([f"normalized {claim_id}: {e}" for e in result["errors"]])
+        if wire.get("source", {}).get("claim_id") != claim_id:
+            errors.append(f"normalized index claim id differs from wire source: {claim_id}")
+        if wire.get("decision") != entry.get("decision"):
+            errors.append(f"normalized index decision mismatch for claim {claim_id}")
+        if wire.get("wire_semantic_hash") != entry.get("wire_semantic_hash"):
+            errors.append(f"normalized index wire hash mismatch for claim {claim_id}")
+
+    expected_files = {"index.json"} | {
+        e.get("path") for e in entries if isinstance(e, dict) and isinstance(e.get("path"), str)
+    }
+    actual_files = {p.name for p in root.iterdir() if p.is_file()}
+    if actual_files != expected_files:
+        errors.append(
+            f"normalized directory file set mismatch: expected={sorted(expected_files)} actual={sorted(actual_files)}"
+        )
+
+    return {
+        "present": True,
+        "valid": not errors,
+        "errors": errors,
+        "certificate_semantic_hash": index.get("certificate_semantic_hash"),
+        "entries": results,
+    }
