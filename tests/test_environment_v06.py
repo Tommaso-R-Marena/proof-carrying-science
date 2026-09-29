@@ -460,3 +460,31 @@ def test_large_dependency_set_is_bounded_and_explicitly_truncated(tmp_path):
     environment["confirmation_scope"] = "reviewed"
     binding = environment_binding_v06(environment)
     assert len(binding["contract"]["proposition"].encode("utf-8")) <= 262144
+
+
+
+def test_confirmation_rejects_new_environment_source_added_after_discovery(tmp_path):
+    project = tmp_path / "study-new-env"
+    init_project(project, template="pkpd", subject="new-env-after-discovery")
+    report = discover_project_v06(project)
+    draft = project / "pcs-manifest.draft.json"
+    write_discovery_outputs_v06(
+        report,
+        manifest_output=draft,
+        report_output=project / "pcs-discovery.json",
+    )
+
+    (project / "requirements.txt").write_text(
+        "numpy==1.26.4\n",
+        encoding="utf-8",
+    )
+
+    import pytest
+    from pcs.discover_v06 import V06DiscoveryError
+
+    with pytest.raises(V06DiscoveryError, match="rerun pcs discover-v06"):
+        confirm_manifest_draft_v06(
+            draft,
+            project / "manifest.json",
+            project_root=project,
+        )
