@@ -19,6 +19,7 @@ V06_TESTS = [
     "tests/test_crypto_domains_v06.py",
     "tests/test_v06_crypto_schemas.py",
     "tests/test_certificate_v06.py",
+    "tests/test_certificate_semantics_v06.py",
     "tests/test_signing_v06.py",
     "tests/test_package_v06.py",
     "tests/test_v06_byte_contract.py",
