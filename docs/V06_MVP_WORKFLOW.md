@@ -92,6 +92,52 @@ Reviewer policy can require exact claim statuses, require authenticated delivery
 and independently pin the signer fingerprint. The verification receipt records
 SHA-256 of the exact policy-file bytes used for that decision.
 
+## Reviewer-signed audit receipts
+
+The producer and reviewer use separate trust identities.
+
+```text
+producer Ed25519 key
+    ↓
+signs scientific certificate + package manifest
+
+reviewer verification + reviewer policy
+    ↓
+deterministic receipt bytes
+
+reviewer Ed25519 key
+    ↓
+signs exact receipt hash + package/policy/verdict commitments
+```
+
+The reviewer may create the signed audit record in the same verification command:
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key producer-public.pem \
+  --policy reviewer-policy.json \
+  --receipt receipt.json \
+  --reviewer-private-key reviewer-private.pem \
+  --receipt-signature receipt.sig.json
+```
+
+Independent receipt audit is a separate operation:
+
+```bash
+pcs verify-receipt-v06 receipt.json \
+  --signature receipt.sig.json \
+  --reviewer-public-key reviewer-public.pem \
+  --expected-reviewer-fingerprint <reviewer-fingerprint>
+```
+
+The signed payload binds the exact receipt SHA-256 plus the delivered bundle hash,
+policy hash, certificate commitments, normalized-index commitment, PCS validity,
+and reviewer acceptance. Changing a single byte of the receipt changes its hash
+and invalidates the reviewer signature.
+
+This layer provides non-repudiable review provenance under the selected Ed25519
+key. It does not alter the underlying scientific decision.
+
 ## Honest negative results
 
 PCS verification and scientific success are different axes.
