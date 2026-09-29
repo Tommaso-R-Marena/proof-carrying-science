@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Normalized Decision Index v1",
+  "type": "object",
+  "required": ["index_format","certificate_semantic_hash","entries"],
+  "properties": {
+    "index_format": {"const": "pcs-normalized-decision-index-v1"},
+    "certificate_semantic_hash": {"type": "string","pattern": "^[a-f0-9]{64}$"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id","path","decision","wire_semantic_hash"],
+        "properties": {
+          "claim_id": {"type": "string","pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+          "path": {"type": "string","pattern": "^[a-f0-9]{24}\\.json$"},
+          "decision": {
+            "enum": [
+              "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS",
+              "COMPUTATIONALLY_SUPPORTED",
+              "EMPIRICALLY_VALIDATED_WITHIN_SCOPE",
+              "MIXED_SUPPORT_UNDER_ASSUMPTIONS",
+              "OPEN",
+              "FALSIFIED_OR_CHECK_FAILED"
+            ]
+          },
+          "wire_semantic_hash": {"type": "string","pattern": "^[a-f0-9]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
