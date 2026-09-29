@@ -156,6 +156,10 @@ def verify_bundle(
                 errors.extend([f"package: {e}" for e in package_manifest_result["errors"]])
 
             normalized_result = verify_normalized_set(root / "normalized", cert)
+            certificate_obj = strict_json_load(cert)
+            normalized_required = certificate_obj.get("checker_version") == "pcs-python-kernel/0.5.1"
+            if normalized_required and not normalized_result["present"]:
+                errors.append("normalized: pcs-python-kernel/0.5.1 bundle requires normalized decision artifacts")
             if normalized_result["present"] and not normalized_result["valid"]:
                 errors.extend([f"normalized: {e}" for e in normalized_result["errors"]])
 
@@ -223,7 +227,9 @@ def verify_bundle(
                     "NOT_APPLIED" if policy_result is None else "PASS" if policy_result["pass"] else "FAIL"
                 ),
                 "normalized_refinement": (
-                    "NOT_PRESENT"
+                    "REQUIRED_MISSING"
+                    if normalized_required and not normalized_result["present"]
+                    else "NOT_PRESENT"
                     if not normalized_result["present"]
                     else "PASS"
                     if normalized_result["valid"]
