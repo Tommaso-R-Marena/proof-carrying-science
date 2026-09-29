@@ -90,6 +90,8 @@ def test_v06_bundle_builder_is_byte_for_byte_reproducible(tmp_path):
     assert a["bundle_sha256"] == b["bundle_sha256"]
     assert a["bundle_sha256"] == hashlib.sha256(first.read_bytes()).hexdigest()
     assert a["format"] == "pcs-v06-zip-stored-v1"
+    assert a["post_build_verified"] is True
+    assert b["post_build_verified"] is True
     assert a["members"] == sorted(
         [
             "certificate.json",
@@ -255,3 +257,42 @@ def test_v06_bundle_builder_rejects_private_key_material_even_when_resigned(tmp_
         )
 
     assert not bundle.exists()
+
+
+
+def test_v06_bundle_builder_postbuild_failure_is_atomic(tmp_path, monkeypatch):
+    import pcs.bundle_v06 as bundle_v06
+
+    package = _copy_package(tmp_path)
+    public_key = tmp_path / "public.pem"
+    bundle = tmp_path / "delivery.zip"
+    _write_public_key(public_key)
+    bundle.write_bytes(b"previous-good-bundle")
+
+    def reject_candidate(*args, **kwargs):
+        return {
+            "valid": False,
+            "failed_stage": "normalized_set",
+            "errors": ["forced post-build rejection"],
+        }
+
+    monkeypatch.setattr(
+        bundle_v06,
+        "verify_package_zip_end_to_end_v06",
+        reject_candidate,
+    )
+
+    with pytest.raises(
+        V06BundleBuildError,
+        match="failed post-build verification",
+    ):
+        create_verified_bundle_v06(
+            package,
+            bundle,
+            public_key,
+            expected_fingerprint=META["public_key_fingerprint"],
+            overwrite=True,
+        )
+
+    assert bundle.read_bytes() == b"previous-good-bundle"
+    assert not list(tmp_path.glob(".delivery.zip.*.pcs-tmp"))
