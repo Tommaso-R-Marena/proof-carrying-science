@@ -94,29 +94,40 @@ def _normalized_predicate_from_check(check: dict) -> dict | None:
 
 
 def _validate_claim_semantics(claim: dict, evidence_map: dict[str, dict]) -> None:
+    """Require exact semantic binding for every evidence object named as required.
+
+    This deliberately matches the Lean refinement invariant
+    `RequiredEvidenceBound`: once a claim says evidence is required, that evidence
+    must be about the same machine-readable predicate as the claim. Allowing one
+    matching check plus unrelated required checks would make Python certificate
+    validity weaker than the machine-checked bridge.
+    """
     kind = claim.get("kind")
     if kind not in _CLAIM_KINDS:
         raise AssuranceError(f"claim {claim.get('id')} has unsupported kind {kind!r}")
+
     predicate = claim.get("predicate")
-    if predicate is None:
-        # v0.4 permits untyped claims for formal/empirical research, but a built-in
-        # computational claim must be machine-bound to its check semantics.
-        if kind == "computational":
-            raise AssuranceError(f"computational claim {claim.get('id')} requires a machine-readable predicate")
-        return
-    if not isinstance(predicate, dict) or not predicate.get("type"):
+    if predicate is None and kind == "computational":
+        raise AssuranceError(
+            f"computational claim {claim.get('id')} requires a machine-readable predicate"
+        )
+    if predicate is not None and (
+        not isinstance(predicate, dict) or not predicate.get("type")
+    ):
         raise AssuranceError(f"claim {claim.get('id')} has invalid predicate")
-    matched = False
+
     for eid in claim.get("required_evidence", []):
         e = evidence_map.get(eid)
         if not e:
+            # Missing required evidence is rejected elsewhere; keep this routine
+            # focused on the semantic relation when an object is present.
             continue
-        ep = _normalized_predicate_from_check(e.get("check_spec", {}))
-        if ep == predicate:
-            matched = True
-            break
-    if kind == "computational" and not matched:
-        raise AssuranceError(f"computational claim {claim.get('id')} predicate is not bound to any required evidence check")
+        evidence_predicate = _normalized_predicate_from_check(e.get("check_spec", {}))
+        if evidence_predicate != predicate:
+            raise AssuranceError(
+                f"claim {claim.get('id')} required evidence {eid} is not "
+                "predicate-bound to the claim"
+            )
 
 
 def validate_workflow(workflow: dict, artifact_ids: set[str]) -> dict:
