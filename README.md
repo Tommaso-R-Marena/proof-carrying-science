@@ -1,4 +1,4 @@
-# Proof-Carrying Science — Founding Architecture v0.5
+# Proof-Carrying Science — Founding Architecture v0.5.1
 
 > **Pre-publication / private founding build.** PCS is maintained in its own standalone repository and deliberately isolated from constituent research projects so those works can be published on their own terms first. See `docs/PUBLICATION_FIREWALL.md`.
 
@@ -16,7 +16,7 @@ The formal target is the conditional assurance judgment `Γ ; E ⊢ C @ L`: unde
 
 PCS deliberately does **not** equate formal or computational verification with scientific truth. A program can satisfy a formal specification while the underlying biological model is still empirically inadequate.
 
-## v0.5 launch-candidate capabilities
+## v0.5.1 launch-candidate capabilities
 
 The executable reference kernel can:
 
@@ -42,7 +42,7 @@ The executable reference kernel can:
 - generate a complete evidence package, HTML report, optional signature, and deterministic ZIP with one command;
 - validate and replay a restricted one-compartment IV-bolus PK + direct-Emax PD workflow.
 
-The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
+The PCS assurance decision and normalized-state soundness layer is **machine-checked in Lean 4.28.0**. This does not yet prove the raw JSON/ZIP → Python replay → normalized-state path end-to-end; the Python parser, domain checkers, hashing/crypto, and serialization/refinement path remain explicit parts of the executable TCB. v0.5.1 adds a claim-scoped normalized decision handoff so that remaining boundary is small, versioned, and independently testable. See `docs/LEAN_KERNEL_STATUS.md` and `docs/NORMALIZED_WIRE_V1.md`.
 
 ## Pre-result pilot commitment
 
@@ -127,11 +127,11 @@ python scripts/run_reference_demo.py --output demo-run
 
 This creates and verifies a signed synthetic PK/PD evidence bundle using an external reviewer policy.
 
-## Aristotle / Lean handoff
+## Lean / next proof target
 
-The formal project is currently pinned to `leanprover/lean4:v4.28.0`, matching the most recent directly observed Aristotle backend default found during the 2026-09-28 compatibility audit. Aristotle-specific unfinished obligations are isolated under `formal/Aristotle/`; they are not imported into the no-placeholder core until solved and compiled.
+The formal project is pinned to `leanprover/lean4:v4.28.0`. The production decision and normalized-state soundness theorems have been independently rebuilt successfully under that toolchain, with no placeholders or PCS-specific axioms. The current draft proof target is the finite normalized-wire checker on branch `formal/serialized-refinement-v1`; unfinished obligations remain isolated under `formal/ProofTasks/` and are not imported into the clean production root.
 
-See `formal/ARISTOTLE_PROJECT_PROMPT.md` for the ready-to-run project prompt.
+See `formal/WIRE_CHECK_ARISTOTLE_PROMPT.md` for the focused next proof pass.
 
 ## Initial assurance checks
 
@@ -187,11 +187,11 @@ Long-term product architecture: **open checker + open certificate format + domai
 
 > **The producer of a claim is not the trust boundary. Independently checkable evidence is.**
 
-Today, the Python checker is part of the TCB. The research program is to shrink that boundary by moving core acceptance semantics into a machine-checked small kernel and making domain-specific evidence producers independently checkable wherever practical.
+Today, the Python parser/replay/crypto/normalization path remains part of the TCB. Core acceptance semantics and normalized-state soundness are already machine-checked; the active research program is to shrink the remaining serialized/executable refinement boundary and make domain-specific evidence producers independently checkable wherever practical.
 
 ## Current limitations
 
-- Lean source exists but a successful Lean 4.28 build is still open.
+- The decision/normalized-state Lean layer is machine-checked, but raw serialized-package parsing/replay → typed normalized state is not yet proved end-to-end.
 - No arbitrary Python/R/C++ correctness theorem is claimed.
 - The PK/PD adapter is intentionally restricted and synthetic-first.
 - Chemical parsing is intentionally narrow.
