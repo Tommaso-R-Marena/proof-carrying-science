@@ -78,3 +78,7 @@ def validate_v06_hash_envelope_shape(value: Any) -> None:
 
 def validate_v06_signature_record_shape(value: Any) -> None:
     validate_shape(value, "signature_record_v06.schema.json", label="v0.6 signature record")
+
+
+def validate_v06_certificate_shape(value: Any) -> None:
+    validate_shape(value, "certificate_v06.schema.json", label="v0.6 certificate")
