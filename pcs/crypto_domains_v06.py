@@ -12,6 +12,8 @@ CERTIFICATE_SEMANTIC_DOMAIN = "pcs-certificate-semantic-sha256-v2"
 CERTIFICATE_INTEGRITY_DOMAIN = "pcs-certificate-integrity-sha256-v2"
 RUNTIME_SEMANTIC_DOMAIN = "pcs-runtime-semantic-sha256-v2"
 INTAKE_SEMANTIC_DOMAIN = "pcs-intake-semantic-sha256-v2"
+PREDICATE_COMMITMENT_DOMAIN = "pcs-predicate-sha256-v2"
+NORMALIZED_DECISION_DOMAIN = "pcs-normalized-decision-sha256-v2"
 
 CERTIFICATE_SIGNATURE_DOMAIN = "pcs-certificate-signature-v2"
 PACKAGE_SIGNATURE_DOMAIN = "pcs-package-signature-v2"
@@ -22,6 +24,8 @@ HASH_DOMAINS = frozenset(
         CERTIFICATE_INTEGRITY_DOMAIN,
         RUNTIME_SEMANTIC_DOMAIN,
         INTAKE_SEMANTIC_DOMAIN,
+        PREDICATE_COMMITMENT_DOMAIN,
+        NORMALIZED_DECISION_DOMAIN,
     }
 )
 SIGNATURE_DOMAINS = frozenset(
