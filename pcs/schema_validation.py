@@ -90,3 +90,11 @@ def validate_v06_package_manifest_shape(value: Any) -> None:
 
 def validate_v06_normalized_decision_shape(value: Any) -> None:
     validate_shape(value, "normalized_decision_v06.schema.json", label="v0.6 normalized decision")
+
+
+def validate_v06_normalized_decision_index_shape(value: Any) -> None:
+    validate_shape(
+        value,
+        "normalized_decision_index_v06.schema.json",
+        label="v0.6 normalized decision index",
+    )
