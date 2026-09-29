@@ -99,6 +99,7 @@ const certificate = parseCanonical("certificate.json");
 const certificateSignature = parseCanonical("certificate_signature.json");
 const manifest = parseCanonical("package_manifest.json");
 const packageSignature = parseCanonical("package_signature.json");
+const normalized = parseCanonical("normalized/C1.json");
 const artifact = read("artifacts/fixture.bin");
 
 const rawHashes = {
@@ -106,6 +107,7 @@ const rawHashes = {
   certificate_signature_record_byte_sha256: sha256(certificateSignature.raw),
   package_manifest_byte_sha256: sha256(manifest.raw),
   package_signature_record_byte_sha256: sha256(packageSignature.raw),
+  normalized_wire_byte_sha256: sha256(normalized.raw),
   artifact_sha256: sha256(artifact),
 };
 for (const [field, actual] of Object.entries(rawHashes)) {
@@ -176,6 +178,70 @@ if (
   fail("certificate signature payload golden digest mismatch");
 }
 
+const normalizedWire = normalized.value;
+const claim = cert.claims.find((item) => item.id === "C1");
+if (!claim) fail("golden certificate lacks claim C1");
+const evidenceById = new Map(cert.evidence.map((item) => [item.id, item]));
+const assumptionById = new Map(cert.assumptions.map((item) => [item.id, item]));
+
+const predicateCommitment =
+  "pcs-predicate-sha256-v2:" +
+  domainSha256("pcs-predicate-sha256-v2", claim.predicate);
+if (predicateCommitment !== metadata.predicate_commitment) {
+  fail("predicate commitment golden mismatch");
+}
+
+const expectedNormalized = {
+  wire_format: "pcs-normalized-decision-v2",
+  canonical_json_profile: "pcs-jcs-rfc8785-v1",
+  wire_hash_format: "pcs-normalized-decision-sha256-v2",
+  predicate_hash_format: "pcs-predicate-sha256-v2",
+  source: {
+    spec_version: cert.spec_version,
+    checker_version: cert.checker_version,
+    certificate_semantic_hash: cert.semantic_hash,
+    certificate_integrity_hash: cert.integrity_hash,
+    claim_id: claim.id,
+  },
+  context: claim.assumptions.map((id) => ({
+    id,
+    statement: assumptionById.get(id)?.statement,
+  })),
+  claim: {
+    id: claim.id,
+    kind: claim.kind,
+    predicate_commitment: predicateCommitment,
+    required_evidence: claim.required_evidence,
+    assumptions: claim.assumptions,
+  },
+  evidence: claim.required_evidence.map((id) => {
+    const item = evidenceById.get(id);
+    if (!item) fail("missing required evidence " + id);
+    return {
+      id: item.id,
+      kind: item.kind,
+      outcome: item.outcome,
+      predicate_commitment:
+        "pcs-predicate-sha256-v2:" +
+        domainSha256("pcs-predicate-sha256-v2", item.predicate),
+    };
+  }),
+  decision: claim.assessment.status,
+  wire_semantic_hash: "",
+};
+const normalizedProjection = structuredClone(expectedNormalized);
+delete normalizedProjection.wire_semantic_hash;
+expectedNormalized.wire_semantic_hash = domainSha256(
+  "pcs-normalized-decision-sha256-v2",
+  normalizedProjection
+);
+if (expectedNormalized.wire_semantic_hash !== metadata.normalized_wire_semantic_hash) {
+  fail("normalized wire semantic hash golden mismatch");
+}
+if (!canonicalEqual(expectedNormalized, normalizedWire)) {
+  fail("normalized wire does not exactly equal certificate-derived projection");
+}
+
 const packageManifest = manifest.value;
 if (packageManifest.package_format !== "pcs-package-v2") {
   fail("unexpected package format");
@@ -193,6 +259,7 @@ if (
 const signedMembers = {
   "certificate.json": certificate.raw,
   "artifacts/fixture.bin": artifact,
+  "normalized/C1.json": normalized.raw,
 };
 const expectedNames = Object.keys(packageManifest.files).sort();
 const actualNames = Object.keys(signedMembers).sort();
@@ -226,5 +293,5 @@ if (
 
 console.log(
   "PASS v0.6 Node golden byte contract: canonical JSON, certificate domain hashes, " +
-    "2 Ed25519 signatures, exact package member set, sizes and SHA-256"
+    "2 Ed25519 signatures, exact package member set, normalized-wire derivation, sizes and SHA-256"
 );
