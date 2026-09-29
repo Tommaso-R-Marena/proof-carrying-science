@@ -4,10 +4,12 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
+
 from pcs.attest_v06 import attest_v06
 from pcs.canonical_json import canonicalize_jcs
 from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06, write_discovery_outputs_v06
-from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, execute_prepared_replay_workspace_v06
+from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, V06SandboxReplayError, execute_prepared_replay_workspace_v06
 from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
@@ -140,3 +142,39 @@ def test_realized_dependency_version_drift_fails_contract_comparison(tmp_path):
     assert row["expected"] == "1.0"
     assert row["realized"] == "2.0"
     assert row["status"] == "version_mismatch"
+
+
+def test_workspace_control_path_escape_is_rejected(tmp_path):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    meta_path = workspace / "pcs-environment-workspace.json"
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    meta["signed_certificate"] = "../outside.json"
+    meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(V06SandboxReplayError, match="unsafe project-relative path"):
+        execute_prepared_replay_workspace_v06(
+            workspace,
+            tmp_path / "result",
+            public,
+            expected_fingerprint=fingerprint,
+            _backend_factory=_FakeBackend,
+        )
+
+
+def test_tampered_execution_plan_is_rederived_from_signed_certificate(tmp_path):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    meta_path = workspace / "pcs-environment-workspace.json"
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    plan_path = workspace / meta["sandbox_execution_plan"]
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan["sandbox_policy"]["network"] = "host"
+    plan_path.write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    meta["sandbox_execution_plan_sha256"] = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+    meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(V06SandboxReplayError, match="differs from signed certificate"):
+        execute_prepared_replay_workspace_v06(
+            workspace,
+            tmp_path / "result",
+            public,
+            expected_fingerprint=fingerprint,
+            _backend_factory=_FakeBackend,
+        )
