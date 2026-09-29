@@ -56,6 +56,10 @@ def render_discovery_review_v06(report: dict[str, Any]) -> str:
         f"- Workflow nodes drafted: **{summary.get('workflow_nodes_drafted', 0)}**",
         f"- Workflow edges inferred: **{summary.get('workflow_edges_inferred', 0)}**",
         f"- Unresolved workflow items: **{summary.get('workflow_unresolved_items', 0)}**",
+        f"- Environment source files: **{summary.get('environment_sources', 0)}**",
+        f"- Environment dependency records: **{summary.get('environment_dependencies', 0)}**",
+        f"- Environment hermeticity: **{_md_escape(summary.get('environment_hermeticity', 'environment_unspecified'))}**",
+        f"- Unresolved environment items: **{summary.get('environment_unresolved_items', 0)}**",
         "",
         "## Scientific-check recommendations",
         "",
@@ -106,6 +110,59 @@ def render_discovery_review_v06(report: dict[str, Any]) -> str:
     else:
         lines.append("- No static Python/Jupyter workflow dependency was resolved.")
 
+    environment = report.get("environment_capture", {})
+    lines.extend(["", "## Reproducibility environment", ""])
+    if isinstance(environment, dict) and environment.get("format") == "pcs-environment-capture-v1":
+        lines.extend(
+            [
+                f"- Hermeticity: **{_md_escape(environment.get('hermeticity', 'environment_unspecified'))}**",
+                f"- Environment files bound: **{len(environment.get('source_artifact_ids', []))}**",
+                f"- Python dependencies captured: **{len(environment.get('python', {}).get('dependencies', []))}**",
+                f"- R dependencies captured: **{len(environment.get('r', {}).get('dependencies', []))}**",
+                f"- Conda dependencies captured: **{len(environment.get('conda', {}).get('dependencies', []))}**",
+                f"- Container specifications: **{len(environment.get('containers', []))}**",
+                f"- Environment unresolved items: **{len(environment.get('unresolved', []))}**",
+                "",
+                "Interpreter constraints:",
+            ]
+        )
+        py_constraints = environment.get("python", {}).get("interpreter_constraints", [])
+        r_constraints = environment.get("r", {}).get("interpreter_constraints", [])
+        if py_constraints or r_constraints:
+            for item in py_constraints:
+                lines.append(
+                    f"- Python: {_md_escape(item.get('value', ''))} "
+                    f"({_md_escape(item.get('source_path', ''))})"
+                )
+            for item in r_constraints:
+                lines.append(
+                    f"- R: {_md_escape(item.get('value', ''))} "
+                    f"({_md_escape(item.get('source_path', ''))})"
+                )
+        else:
+            lines.append("- No interpreter version constraint detected.")
+        plan = environment.get("replay_plan", {})
+        lines.extend(["", "Proposed reconstruction steps:"])
+        if isinstance(plan, dict) and plan.get("steps"):
+            for step in plan["steps"]:
+                lines.append(
+                    f"- **{_md_escape(step.get('kind', 'step'))}**: "
+                    f"{_md_escape(step.get('command_template', ''))}"
+                )
+        else:
+            lines.append("- No reconstructable environment strategy detected.")
+        lines.extend(
+            [
+                "",
+                "> Environment confirmation binds static declarations and exact environment",
+                "> source bytes. It does not prove dependency availability, installer",
+                "> correctness, ABI compatibility, successful container builds, or runtime",
+                "> equivalence on another machine.",
+            ]
+        )
+    else:
+        lines.append("- No PCS v0.6 environment capture is present.")
+
     fence = chr(96) * 3
     lines.extend(["", "## Workflow graph", "", fence + "mermaid", "graph LR"])
     selected_sources = [
@@ -151,8 +208,9 @@ def render_discovery_review_v06(report: dict[str, Any]) -> str:
             "1. confirm each selected scientific claim says what you intend;",
             "2. confirm each selected workflow edge matches the intended artifact flow;",
             "3. inspect unresolved or dynamic references instead of guessing;",
-            "4. remove any source or check recommendation you do not want to attest;",
-            "5. only then run pcs confirm-v06.",
+            "4. review interpreter constraints, lockfiles, container bases, and the proposed environment reconstruction plan;",
+            "5. remove any source, check, or environment claim you do not want to attest;",
+            "6. only then run pcs confirm-v06.",
             "",
             "The CLI re-hashes selected artifacts at confirmation, and attest-v06",
             "checks the same snapshots again before signing.",
