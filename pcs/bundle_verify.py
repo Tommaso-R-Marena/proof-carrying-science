@@ -222,6 +222,13 @@ def verify_bundle(
                 "reviewer_policy": (
                     "NOT_APPLIED" if policy_result is None else "PASS" if policy_result["pass"] else "FAIL"
                 ),
+                "normalized_refinement": (
+                    "NOT_PRESENT"
+                    if not normalized_result["present"]
+                    else "PASS"
+                    if normalized_result["valid"]
+                    else "FAIL"
+                ),
             }
 
             receipt = {
