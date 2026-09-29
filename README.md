@@ -79,6 +79,39 @@ For reviewer deployments, pin `--expected-signer-fingerprint` rather than trusti
 an arbitrary public key delivered inside the same package.
 
 
+### Build a deterministic v0.6 delivery bundle
+
+A complete, already-signed v0.6 package directory can be converted into the
+canonical delivery ZIP with:
+
+```bash
+pcs bundle-v06 package-directory \
+  -o delivery.zip \
+  --public-key trusted-public-key.pem \
+  --expected-signer-fingerprint <sha256-of-trusted-ed25519-public-key>
+```
+
+The builder first runs the full v0.6 end-to-end verifier. It refuses to emit an
+archive unless the directory passes signature verification, exact package binding,
+fresh scientific replay, and normalized-set regeneration.
+
+The emitted archive contains exactly the manifest-signed members plus:
+
+```text
+certificate_signature.json
+package_manifest.json
+package_signature.json
+```
+
+ZIP bytes are deterministic: members are sorted, stored without compression, use a
+fixed 1980 timestamp, fixed Unix file mode and fixed ZIP version metadata, with no
+extra fields or comments. Rebuilding the same verified package therefore produces
+the same ZIP bytes and SHA-256.
+
+The builder also refuses unsigned extras, symlinks, output inside the package
+directory, accidental overwrite, and apparent private-key material. Use `--force`
+only when intentionally replacing an existing delivery ZIP.
+
 ### Verify the delivered v0.6 ZIP directly
 
 A reviewer does not need to extract the archive first:
