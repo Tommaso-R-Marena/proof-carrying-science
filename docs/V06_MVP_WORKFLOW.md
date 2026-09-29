@@ -2,6 +2,39 @@
 
 Status: **first complete producer-to-reviewer product path**.
 
+## Guided project intake
+
+The recommended producer journey now starts from an existing scientific directory,
+not a hand-written PCS schema:
+
+```text
+scientific project directory
+        ↓
+pcs discover-v06
+        ↓
+local artifact inventory + supported-pattern recommendations
+        ↓
+pcs-manifest.draft.json
+        ↓
+human review/edit
+        ↓
+pcs confirm-v06
+        ↓
+snapshot-bound manifest.json
+        ↓
+pcs attest-v06
+```
+
+Discovery never authorizes attestation. A draft carries
+`pcs_intake.status = "draft"` and `requires_confirmation = true`; `attest-v06`
+rejects it. Confirmation re-hashes all selected artifacts, changes the intake status
+to `confirmed`, and records the reviewed artifact snapshot. Attestation checks that
+snapshot again before copying any artifact into the signed package.
+
+This protects the usability layer from becoming a hidden trust boundary: automated
+detectors may recommend a claim/check, but only an explicitly confirmed manifest can
+enter the assurance pipeline.
+
 ## Product loop
 
 The producer starts from the existing PCS project manifest format and exact source
