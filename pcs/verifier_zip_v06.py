@@ -321,6 +321,11 @@ def verify_package_zip_end_to_end_v06(
     *,
     expected_fingerprint: str | None = None,
     policy_path: str | Path | None = None,
+    scheduler_strategy: str = "manifest",
+    scheduler_history: list[dict[str, Any]] | None = None,
+    bandit_alpha: float = 1.0,
+    shadow_bandit: bool = False,
+    telemetry_sink: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     loaded = load_package_zip_v06(bundle)
     public_key = load_public_key_v06(public_key_path)
@@ -332,6 +337,11 @@ def verify_package_zip_end_to_end_v06(
         package_files=loaded["package_files"],
         public_key=public_key,
         expected_fingerprint=expected_fingerprint,
+        scheduler_strategy=scheduler_strategy,
+        scheduler_history=scheduler_history,
+        bandit_alpha=bandit_alpha,
+        shadow_bandit=shadow_bandit,
+        telemetry_sink=telemetry_sink,
     )
     receipt = dict(result)
     receipt["bundle_sha256"] = loaded["bundle_sha256"]
