@@ -5,4 +5,7 @@ import PCS.Refinement
 import PCS.DecisionVectors
 import PCS.AcceptanceTests
 import PCS.Normalized
+import PCS.Normalization
+import PCS.DecisionExtraction
+import PCS.SerializedBridge
 import PCS.Audit

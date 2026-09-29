@@ -1,6 +1,6 @@
 import PCS.Refinement
 
-namespace PCS.Aristotle.Normalization
+namespace PCS.Normalization
 
 open PCS.Decision
 open PCS.Refinement
@@ -18,7 +18,8 @@ theorem uniqueEvidenceIds_implies_required_unambiguous
     {c : Claim} {es : List Evidence}
     (h : UniqueEvidenceIds es) :
     RequiredIdsUnambiguous c es := by
-  sorry
+  intro eid _ e₁ h₁ e₂ h₂ hid₁ hid₂
+  exact h e₁ h₁ e₂ h₂ (hid₁.trans hid₂.symm)
 
 /-- If a normalized evidence object is selected by requiredEvidenceFor,
     its ID is explicitly required by the claim. -/
@@ -26,20 +27,23 @@ theorem selected_evidence_id_required
     {c : Claim} {es : List Evidence} {e : Evidence}
     (h : e ∈ requiredEvidenceFor c es) :
     e.id ∈ c.requiredEvidence := by
-  sorry
+  exact (mem_requiredEvidenceFor_iff.mp h).2
 
 /-- Every selected required evidence object is part of the original evidence list. -/
 theorem selected_evidence_in_source
     {c : Claim} {es : List Evidence} {e : Evidence}
     (h : e ∈ requiredEvidenceFor c es) :
     e ∈ es := by
-  sorry
+  exact (mem_requiredEvidenceFor_iff.mp h).1
 
 /-- No missing required evidence means every required ID has a witness. -/
 theorem no_missingRequiredEvidence_has_witness
     {c : Claim} {es : List Evidence}
     (h : missingRequiredEvidence c es = false) :
     ∀ eid ∈ c.requiredEvidence, ∃ e ∈ es, e.id = eid := by
-  sorry
+  intro eid heid
+  simp only [missingRequiredEvidence, List.any_eq_false, Bool.not_eq_true',
+    beq_iff_eq] at h
+  simpa using h eid heid
 
-end PCS.Aristotle.Normalization
+end PCS.Normalization

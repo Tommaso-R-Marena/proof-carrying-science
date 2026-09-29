@@ -2,6 +2,9 @@ import PCS.Core
 import PCS.Decision
 import PCS.Refinement
 import PCS.Normalized
+import PCS.Normalization
+import PCS.DecisionExtraction
+import PCS.SerializedBridge
 import PCS.PKPD
 import PCS.DecisionVectors
 import PCS.AcceptanceTests
@@ -9,10 +12,8 @@ import PCS.AcceptanceTests
 /-!
 Audit surface for the PCS formal kernel.
 
-These commands are intentionally kept in source so a successful Lean build reports
-the axiom dependencies of the main soundness/refinement statements. After Aristotle
-closes the staged obligations, add the promoted direct decision/normalized bridge
-theorems here as well.
+A successful build prints the axiom dependencies of the main assurance,
+decision-extraction, normalization, and normalized-state soundness theorems.
 -/
 
 #print axioms PCS.formal_assurance_has_checked_formal_proof
@@ -40,6 +41,25 @@ theorems here as well.
 #print axioms PCS.Normalized.context_available
 #print axioms PCS.Normalized.binding_available
 #print axioms PCS.Normalized.evidence_ids_unique
+
+#print axioms PCS.Normalization.uniqueEvidenceIds_implies_required_unambiguous
+#print axioms PCS.Normalization.selected_evidence_id_required
+#print axioms PCS.Normalization.selected_evidence_in_source
+#print axioms PCS.Normalization.no_missingRequiredEvidence_has_witness
+
+#print axioms PCS.DecisionExtraction.decideClaim_computational_extract
+#print axioms PCS.DecisionExtraction.decideClaim_formal_extract
+#print axioms PCS.DecisionExtraction.decideClaim_empirical_extract
+#print axioms PCS.DecisionExtraction.decideClaim_mixed_extract
+#print axioms PCS.DecisionExtraction.decideClaim_computational_sound
+#print axioms PCS.DecisionExtraction.decideClaim_formal_sound
+#print axioms PCS.DecisionExtraction.decideClaim_empirical_sound
+#print axioms PCS.DecisionExtraction.decideClaim_mixed_sound
+
+#print axioms PCS.SerializedBridge.normalized_computational_sound
+#print axioms PCS.SerializedBridge.normalized_formal_sound
+#print axioms PCS.SerializedBridge.normalized_empirical_sound
+#print axioms PCS.SerializedBridge.normalized_mixed_sound
 
 #print axioms PCS.PKPD.canonical_pk_units_valid
 #print axioms PCS.PKPD.canonical_pd_units_valid
