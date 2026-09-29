@@ -14,7 +14,7 @@ from .kernel import (
     _normalized_predicate_from_check,
     verify_certificate,
 )
-from .schema_validation import validate_normalized_decision_shape
+from .schema_validation import validate_normalized_decision_shape, SchemaValidationError
 
 
 WIRE_FORMAT = "pcs-normalized-decision-v1"
@@ -48,6 +48,78 @@ def _wire_projection(value: dict[str, Any]) -> dict[str, Any]:
 def wire_semantic_hash(value: dict[str, Any]) -> str:
     return sha256_json(_wire_projection(value))
 
+
+
+def validate_normalized_wire(wire: dict[str, Any]) -> dict[str, Any]:
+    """Independently recompute the semantic invariants of a normalized wire object."""
+    errors: list[str] = []
+    try:
+        validate_normalized_decision_shape(wire)
+    except SchemaValidationError as exc:
+        return {"valid": False, "errors": [str(exc)]}
+
+    supplied_hash = wire.get("wire_semantic_hash")
+    expected_hash = wire_semantic_hash(wire)
+    if supplied_hash != expected_hash:
+        errors.append("wire semantic hash mismatch")
+
+    claim = wire.get("claim", {})
+    source = wire.get("source", {})
+    if source.get("claim_id") != claim.get("id"):
+        errors.append("source claim id does not match normalized claim id")
+
+    required_ids = list(claim.get("required_evidence", []))
+    evidence = list(wire.get("evidence", []))
+    evidence_ids = [e.get("id") for e in evidence]
+    if len(evidence_ids) != len(set(evidence_ids)):
+        errors.append("normalized evidence ids are not unique")
+    if len(required_ids) != len(set(required_ids)):
+        errors.append("normalized required evidence ids are not unique")
+    if evidence_ids != required_ids:
+        errors.append("normalized evidence scope is not exactly the required evidence list")
+
+    assumption_ids = list(claim.get("assumptions", []))
+    context_ids = [a.get("id") for a in wire.get("context", [])]
+    if len(context_ids) != len(set(context_ids)):
+        errors.append("normalized context assumption ids are not unique")
+    if len(assumption_ids) != len(set(assumption_ids)):
+        errors.append("normalized claim assumption ids are not unique")
+    if context_ids != assumption_ids:
+        errors.append("normalized context is not exactly the claim assumption list")
+
+    claim_commitment = claim.get("predicate_commitment")
+    for e in evidence:
+        if e.get("predicate_commitment") != claim_commitment:
+            errors.append(
+                f"normalized evidence {e.get('id')} predicate commitment differs from claim"
+            )
+
+    evidence_map = {e["id"]: e for e in evidence if isinstance(e.get("id"), str)}
+    fresh = assess_claim(claim, evidence_map)
+    if fresh.get("status") != wire.get("decision"):
+        errors.append(
+            f"normalized decision mismatch: recorded={wire.get('decision')} recomputed={fresh.get('status')}"
+        )
+
+    expected_invariants = {
+        "unique_evidence_ids": len(evidence_ids) == len(set(evidence_ids)),
+        "required_ids_unique": len(required_ids) == len(set(required_ids)),
+        "all_required_evidence_present": all(eid in evidence_map for eid in required_ids),
+        "context_covers": all(aid in set(context_ids) for aid in assumption_ids),
+        "required_evidence_bound": all(
+            e.get("predicate_commitment") == claim_commitment for e in evidence
+        ),
+    }
+    if wire.get("invariants") != expected_invariants:
+        errors.append("recorded invariant summary does not match recomputed invariants")
+
+    return {
+        "valid": not errors,
+        "errors": errors,
+        "wire_semantic_hash": supplied_hash,
+        "recomputed_decision": fresh.get("status"),
+        "claim_id": claim.get("id"),
+    }
 
 def _normalize_verified_object(cert: dict[str, Any], claim_id: str) -> dict[str, Any]:
     claims = {c["id"]: c for c in cert.get("claims", [])}
@@ -136,7 +208,11 @@ def _normalize_verified_object(cert: dict[str, Any], claim_id: str) -> dict[str,
         "wire_semantic_hash": "",
     }
     wire["wire_semantic_hash"] = wire_semantic_hash(wire)
-    validate_normalized_decision_shape(wire)
+    validation = validate_normalized_wire(wire)
+    if not validation["valid"]:
+        raise NormalizationError(
+            "internal normalized wire invariant failure: " + "; ".join(validation["errors"])
+        )
     return wire
 
 
