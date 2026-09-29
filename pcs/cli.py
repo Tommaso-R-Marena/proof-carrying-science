@@ -39,6 +39,11 @@ from .benchmark_v06 import (
     run_benchmark_registry_v06,
     write_benchmark_report_v06,
 )
+from .receipt_signature_v06 import (
+    V06ReceiptSignatureError,
+    sign_verification_receipt_v06,
+    verify_verification_receipt_signature_v06,
+)
 
 
 def cmd_certify(args):
@@ -69,6 +74,27 @@ def cmd_verify(args):
     return 0 if result["valid"] else 1
 
 
+
+def _sign_reviewer_receipt_from_args(args, receipt_path):
+    reviewer_private_key = getattr(args, "reviewer_private_key", None)
+    if not reviewer_private_key:
+        return None
+    if receipt_path is None:
+        raise V06ReceiptSignatureError(
+            "--reviewer-private-key requires --receipt so exact receipt bytes can be signed"
+        )
+    signature_output = getattr(args, "receipt_signature", None)
+    if not signature_output:
+        signature_output = str(receipt_path) + ".sig.json"
+    sign_verification_receipt_v06(
+        receipt_path,
+        reviewer_private_key,
+        signature_output,
+        overwrite=getattr(args, "force_receipt_signature", False),
+    )
+    return Path(signature_output).resolve()
+
+
 def cmd_verify_v06(args):
     try:
         result = verify_package_directory_end_to_end_v06(
@@ -78,19 +104,31 @@ def cmd_verify_v06(args):
             policy_path=args.policy,
         )
         receipt_path = None
+        receipt_signature_path = None
         if args.receipt:
             receipt_path = write_verification_receipt_v06(
                 result,
                 args.receipt,
                 overwrite=args.force_receipt,
             )
-    except (OSError, V06VerifierIOError, V06ReviewerPolicyError) as e:
+        receipt_signature_path = _sign_reviewer_receipt_from_args(
+            args,
+            receipt_path,
+        )
+    except (
+        OSError,
+        V06VerifierIOError,
+        V06ReviewerPolicyError,
+        V06ReceiptSignatureError,
+    ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
     output = dict(result)
     if receipt_path is not None:
         output["receipt_written"] = str(receipt_path)
+    if receipt_signature_path is not None:
+        output["receipt_signature_written"] = str(receipt_signature_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result.get("accepted", result["valid"]) else 1
 
@@ -104,17 +142,23 @@ def cmd_verify_v06_bundle(args):
             policy_path=args.policy,
         )
         receipt_path = None
+        receipt_signature_path = None
         if args.receipt:
             receipt_path = write_verification_receipt_v06(
                 result,
                 args.receipt,
                 overwrite=args.force_receipt,
             )
+        receipt_signature_path = _sign_reviewer_receipt_from_args(
+            args,
+            receipt_path,
+        )
     except (
         OSError,
         V06VerifierIOError,
         V06BundleVerificationError,
         V06ReviewerPolicyError,
+        V06ReceiptSignatureError,
     ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -122,8 +166,21 @@ def cmd_verify_v06_bundle(args):
     output = dict(result)
     if receipt_path is not None:
         output["receipt_written"] = str(receipt_path)
+    if receipt_signature_path is not None:
+        output["receipt_signature_written"] = str(receipt_signature_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result.get("accepted", result["valid"]) else 1
+
+
+def cmd_verify_receipt_v06(args):
+    result = verify_verification_receipt_signature_v06(
+        args.receipt,
+        args.signature,
+        args.reviewer_public_key,
+        expected_reviewer_fingerprint=args.expected_reviewer_fingerprint,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["valid"] else 1
 
 
 def cmd_bundle_v06(args):
@@ -412,6 +469,19 @@ def build_parser():
         action="store_true",
         help="explicitly replace an existing receipt",
     )
+    v6.add_argument(
+        "--reviewer-private-key",
+        help="Ed25519 private key used to sign the exact verification receipt bytes",
+    )
+    v6.add_argument(
+        "--receipt-signature",
+        help="reviewer signature output; default is <receipt>.sig.json",
+    )
+    v6.add_argument(
+        "--force-receipt-signature",
+        action="store_true",
+        help="explicitly replace an existing reviewer receipt signature",
+    )
     v6.set_defaults(func=cmd_verify_v06)
 
     v6b = sub.add_parser(
@@ -434,7 +504,37 @@ def build_parser():
         action="store_true",
         help="explicitly replace an existing receipt",
     )
+    v6b.add_argument(
+        "--reviewer-private-key",
+        help="Ed25519 private key used to sign the exact verification receipt bytes",
+    )
+    v6b.add_argument(
+        "--receipt-signature",
+        help="reviewer signature output; default is <receipt>.sig.json",
+    )
+    v6b.add_argument(
+        "--force-receipt-signature",
+        action="store_true",
+        help="explicitly replace an existing reviewer receipt signature",
+    )
     v6b.set_defaults(func=cmd_verify_v06_bundle)
+
+    vr6 = sub.add_parser(
+        "verify-receipt-v06",
+        help="verify an independent reviewer Ed25519 signature over exact v0.6 receipt bytes",
+    )
+    vr6.add_argument("receipt", help="verification receipt JSON")
+    vr6.add_argument("--signature", required=True, help="reviewer receipt signature JSON")
+    vr6.add_argument(
+        "--reviewer-public-key",
+        required=True,
+        help="trusted reviewer Ed25519 public key PEM",
+    )
+    vr6.add_argument(
+        "--expected-reviewer-fingerprint",
+        help="pin the accepted reviewer public-key SHA-256 fingerprint",
+    )
+    vr6.set_defaults(func=cmd_verify_receipt_v06)
 
     b6 = sub.add_parser(
         "bundle-v06",
