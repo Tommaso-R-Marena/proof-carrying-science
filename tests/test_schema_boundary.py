@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from pcs.kernel import build_certificate, verify_certificate, AssuranceError
+from pcs.kernel import build_certificate, verify_certificate, AssuranceError, CHECKER_VERSION
 from pcs.policy import validate_policy, PolicyError
 from pcs.schema_validation import (
     validate_verification_receipt_shape,
@@ -52,7 +52,7 @@ def test_policy_schema_rejects_unknown_fields():
 def test_verification_receipt_requires_timestamp():
     receipt = {
         "verification_receipt_format": "pcs-bundle-verification-v1",
-        "verifier_version": "pcs-python-kernel/0.5.0",
+        "verifier_version": CHECKER_VERSION,
         "valid": True,
         "bundle_sha256": "0" * 64,
         "verification_inputs": {
@@ -81,6 +81,8 @@ def test_packaged_schemas_match_repository_canonical_copies():
         "verification_receipt.schema.json",
         "pilot_intake.schema.json",
         "pilot_intake_lock.schema.json",
+        "normalized_decision.schema.json",
+        "normalized_decision_index.schema.json",
     ]
     for name in names:
         assert (root / "schemas" / name).read_bytes() == (root / "pcs" / "schemas" / name).read_bytes()
