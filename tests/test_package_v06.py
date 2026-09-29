@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
 
+import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from pcs.certificate_v06 import finalize_certificate_hashes_v06
@@ -12,6 +13,8 @@ from pcs.package_v06 import (
     sign_package_manifest_v06,
     verify_package_manifest_v06,
     verify_package_signature_v06,
+    validate_package_namespace_v06,
+    V06PackageError,
 )
 from pcs.signing_v06 import sign_jcs_payload
 
@@ -113,3 +116,63 @@ def test_public_and_packaged_v06_package_schemas_match():
     assert (ROOT / "schemas/package_manifest_v06.schema.json").read_bytes() == (
         ROOT / "pcs/schemas/package_manifest_v06.schema.json"
     ).read_bytes()
+
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "../escape",
+        "/absolute",
+        "./dot",
+        "a//b",
+        "a\\b",
+        "C:/drive",
+        "CON.txt",
+        "aux",
+        "trail.",
+        "trail ",
+        "control\x1fchar",
+        "delete\x7fchar",
+        "e\u0301.txt",
+    ],
+)
+def test_v06_package_namespace_rejects_nonportable_member_names(name: str):
+    with pytest.raises(V06PackageError):
+        validate_package_namespace_v06({name: {"sha256": "a" * 64, "size": 1}})
+
+
+def test_v06_package_namespace_rejects_casefold_collision():
+    with pytest.raises(V06PackageError, match="cross-platform"):
+        validate_package_namespace_v06(
+            {
+                "Artifact.txt": {"sha256": "a" * 64, "size": 1},
+                "artifact.txt": {"sha256": "b" * 64, "size": 1},
+            }
+        )
+
+
+def test_v06_package_namespace_rejects_file_parent_collision():
+    with pytest.raises(V06PackageError, match="is parent"):
+        validate_package_namespace_v06(
+            {
+                "artifacts": {"sha256": "a" * 64, "size": 1},
+                "artifacts/x/payload": {"sha256": "b" * 64, "size": 2},
+            }
+        )
+
+
+def test_v06_package_builder_and_signer_refuse_unsafe_namespace():
+    key = Ed25519PrivateKey.generate()
+    cert = certificate()
+    with pytest.raises(V06PackageError):
+        build_package_manifest_v06(
+            cert,
+            {"../escape": {"sha256": "a" * 64, "size": 1}},
+        )
+
+    safe = build_package_manifest_v06(cert, FILES)
+    unsafe = deepcopy(safe)
+    unsafe["files"]["../escape"] = {"sha256": "c" * 64, "size": 1}
+    with pytest.raises(V06PackageError):
+        sign_package_manifest_v06(unsafe, key)
