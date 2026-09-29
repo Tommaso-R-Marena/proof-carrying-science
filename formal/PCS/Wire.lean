@@ -131,8 +131,8 @@ theorem exact_context_scope_preserved {w : DecisionWire} (h : WellFormed w) :
 
 theorem decoded_decision_matches_recorded
     (w : DecisionWire) (h : WellFormed w) :
-    decide (toDecisionInput w h) = w.recordedDecision := by
-  simpa [decide, toDecisionInput] using h.decision
+    PCS.Normalized.decide (toDecisionInput w h) = w.recordedDecision := by
+  simpa [PCS.Normalized.decide, toDecisionInput] using h.decision
 
 /-- Exact predicate-commitment equality is preserved by decoding. -/
 theorem predicate_commitment_eq_preserved
