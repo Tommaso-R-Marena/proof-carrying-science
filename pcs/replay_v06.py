@@ -26,6 +26,10 @@ class V06ReplayError(ValueError):
     pass
 
 
+def _telemetry_evidence_id(evidence_id: str) -> str:
+    return "sha256:" + hashlib.sha256(evidence_id.encode("utf-8")).hexdigest()
+
+
 def _artifact_bytes(
     certificate: dict[str, Any],
     package_files: Mapping[str, bytes],
@@ -279,7 +283,7 @@ def verify_certificate_replay_v06(
 
             telemetry_checks.append(
                 {
-                    "evidence_id": evidence_id,
+                    "evidence_id": _telemetry_evidence_id(evidence_id),
                     "check_type": evidence["check_spec"]["type"],
                     "original_index": candidate["original_index"],
                     "execution_index": execution_index,
@@ -293,7 +297,7 @@ def verify_certificate_replay_v06(
             )
             if first_failure is None and result["outcome"] == "FAIL":
                 first_failure = {
-                    "evidence_id": evidence_id,
+                    "evidence_id": _telemetry_evidence_id(evidence_id),
                     "execution_index": execution_index,
                     "time_to_first_failure_ms": cumulative_ms,
                 }
@@ -342,8 +346,18 @@ def verify_certificate_replay_v06(
             "scientific_verdict_uses_scheduler": schedule[
                 "scientific_verdict_uses_scheduler"
             ],
-            "execution_order": schedule["execution_order"],
-            "shadow_bandit_order": schedule["shadow_bandit_order"],
+            "execution_order": [
+                _telemetry_evidence_id(x)
+                for x in schedule["execution_order"]
+            ],
+            "shadow_bandit_order": (
+                [
+                    _telemetry_evidence_id(x)
+                    for x in schedule["shadow_bandit_order"]
+                ]
+                if schedule["shadow_bandit_order"] is not None
+                else None
+            ),
         },
         "checks": telemetry_checks,
         "summary": {
