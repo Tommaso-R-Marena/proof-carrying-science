@@ -25,6 +25,13 @@ from .verifier_io_v06 import (
 
 BUNDLE_FORMAT_V06 = "pcs-v06-zip-stored-v1"
 FIXED_ZIP_TIME_V06 = (1980, 1, 1, 0, 0, 0)
+_PRIVATE_KEY_MARKERS_V06 = (
+    b"-----BEGIN PRIVATE KEY-----",
+    b"-----BEGIN ENCRYPTED PRIVATE KEY-----",
+    b"-----BEGIN OPENSSH PRIVATE KEY-----",
+    b"-----BEGIN RSA PRIVATE KEY-----",
+    b"-----BEGIN EC PRIVATE KEY-----",
+)
 
 
 class V06BundleBuildError(ValueError):
@@ -135,6 +142,10 @@ def create_verified_bundle_v06(
             raise V06BundleBuildError(
                 f"v0.6 bundle member exceeds byte limit: {name!r}"
             )
+        if any(marker in raw for marker in _PRIVATE_KEY_MARKERS_V06):
+            raise V06BundleBuildError(
+                f"refusing apparent private-key material in v0.6 bundle member: {name!r}"
+            )
         total += len(raw)
     if total > MAX_PACKAGE_TOTAL_BYTES_V06 + sum(len(x) for x in control_bytes.values()):
         raise V06BundleBuildError("v0.6 bundle members exceed aggregate byte limit")
@@ -146,7 +157,11 @@ def create_verified_bundle_v06(
                 info = zipfile.ZipInfo(name, FIXED_ZIP_TIME_V06)
                 info.compress_type = zipfile.ZIP_STORED
                 info.create_system = 3
+                info.create_version = 20
+                info.extract_version = 20
+                info.flag_bits = 0
                 info.external_attr = 0o100644 << 16
+                info.internal_attr = 0
                 info.extra = b""
                 info.comment = b""
                 zf.writestr(
