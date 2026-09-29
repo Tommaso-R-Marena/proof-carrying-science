@@ -337,3 +337,76 @@ def test_source_change_after_confirmation_is_rejected_before_signing(tmp_path):
             private,
             public,
         )
+
+
+
+def test_static_python_handles_dunder_file_parent_keyword_paths_and_path_open(tmp_path):
+    project = tmp_path / "project"
+    scripts = project / "scripts"
+    data = project / "data"
+    scripts.mkdir(parents=True)
+    data.mkdir()
+    (data / "input.csv").write_text("id,x\n1,2\n", encoding="utf-8")
+    (data / "output.csv").write_text("id,x\n1,3\n", encoding="utf-8")
+    (scripts / "pipeline.py").write_text(
+        "from pathlib import Path\n"
+        "import pandas as pd\n"
+        "ROOT = Path(__file__).resolve().parent.parent\n"
+        "INP = ROOT / 'data' / 'input.csv'\n"
+        "OUT = ROOT / 'data' / 'output.csv'\n"
+        "df = pd.read_csv(filepath_or_buffer=INP)\n"
+        "with OUT.open('w') as fh:\n"
+        "    fh.write('placeholder')\n",
+        encoding="utf-8",
+    )
+    inventory = _inventory_for(
+        project,
+        ["data/input.csv", "data/output.csv", "scripts/pipeline.py"],
+    )
+
+    result = analyze_static_workflow_v06(project, inventory)
+
+    assert result["summary"]["source_files_with_resolved_dependencies"] == 1
+    source = result["sources"][0]
+    assert source["reads"] == ["artifact_0"]
+    assert source["writes"] == ["artifact_1"]
+
+
+def test_notebook_line_magics_do_not_force_false_parse_failure(tmp_path):
+    project = tmp_path / "project"
+    project.mkdir()
+    (project / "train.csv").write_text("id,x\n1,2\n", encoding="utf-8")
+    (project / "result.csv").write_text("id,x\n1,3\n", encoding="utf-8")
+    notebook = {
+        "cells": [
+            {
+                "cell_type": "code",
+                "metadata": {},
+                "source": [
+                    "%matplotlib inline\n",
+                    "!echo local-shell-command-not-executed\n",
+                    "import pandas as pd\n",
+                    "df = pd.read_csv('train.csv')\n",
+                    "df.to_csv('result.csv', index=False)\n",
+                ],
+                "outputs": [],
+                "execution_count": None,
+            }
+        ],
+        "metadata": {},
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+    (project / "analysis.ipynb").write_text(json.dumps(notebook), encoding="utf-8")
+    inventory = _inventory_for(
+        project,
+        ["train.csv", "result.csv", "analysis.ipynb"],
+    )
+
+    result = analyze_static_workflow_v06(project, inventory)
+
+    assert result["summary"]["source_files_with_resolved_dependencies"] == 1
+    source = result["sources"][0]
+    assert source["reads"] == ["artifact_0"]
+    assert source["writes"] == ["artifact_1"]
+    assert source["confidence"] == 0.98
