@@ -333,6 +333,72 @@ def campaign() -> dict:
             return False,"post-hoc claim rewrite with same ID was accepted"
     run("posthoc_claim_rewrite_after_intake_freeze",posthoc_intake_claim_rewrite)
 
+
+    def partial_required_evidence_binding():
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d); m=json.loads(MANIFEST.read_text())
+            for name in ("train.csv","test.csv","model_spec.txt"):
+                (p/name).write_bytes((MANIFEST.parent/name).read_bytes())
+            # Preserve the original matching E1 but add an unrelated E3 as
+            # another declared requirement. Older semantics accepted this
+            # because at least one required check matched the predicate.
+            m["claims"][0]["required_evidence"]=["E1","E3"]
+            if "C1" not in m["checks"][2]["claim_ids"]:
+                m["checks"][2]["claim_ids"].append("C1")
+            mp=p/"manifest.json"; mp.write_text(json.dumps(m))
+            try:
+                build_certificate(mp,p/"out")
+            except AssuranceError as e:
+                return ("required evidence E3 is not predicate-bound" in str(e),str(e))
+            return False,"certificate accepted partially bound required evidence"
+    run("partial_required_evidence_predicate_binding",partial_required_evidence_binding)
+
+    def normalized_wire_rehashed_decision_forge():
+        from pcs.normalized_wire import normalize_verified_certificate, validate_normalized_wire, wire_semantic_hash
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d); build_certificate(PKPD_MANIFEST,p/"evidence")
+            wire=normalize_verified_certificate(p/"evidence/certificate.json","C_PK_REPLAY")
+            wire["decision"]="OPEN"
+            wire["wire_semantic_hash"]=wire_semantic_hash(wire)
+            r=validate_normalized_wire(wire)
+            return (
+                (not r["valid"]) and any("normalized decision mismatch" in e for e in r["errors"]),
+                r["errors"],
+            )
+    run("normalized_wire_rehashed_decision_forge",normalized_wire_rehashed_decision_forge)
+
+    def normalized_wire_resigned_source_substitution():
+        from pcs.bundle import create_reproducible_bundle
+        from pcs.normalized_wire import wire_semantic_hash
+        from pcs.package import sign_package_manifest
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d); project=p/"project"; init_project(project)
+            priv,pub=p/"priv.pem",p/"pub.pem"; generate_keypair(priv,pub)
+            attest(project/"manifest.json",p/"evidence",private_key=priv,public_key=pub)
+            evidence=p/"evidence"
+            index_path=evidence/"normalized/index.json"
+            index=json.loads(index_path.read_text())
+            entry=index["entries"][0]
+            wire_path=evidence/"normalized"/entry["path"]
+            wire=json.loads(wire_path.read_text())
+            wire["source"]["certificate_semantic_hash"]="f"*64
+            wire["wire_semantic_hash"]=wire_semantic_hash(wire)
+            wire_path.write_text(json.dumps(wire,indent=2,sort_keys=True)+"\n")
+            entry["wire_semantic_hash"]=wire["wire_semantic_hash"]
+            index_path.write_text(json.dumps(index,indent=2,sort_keys=True)+"\n")
+            build_package_manifest(evidence)
+            sign_package_manifest(evidence/"package_manifest.json",priv,evidence/"package_signature.json")
+            forged=p/"resigned-normalized-substitution.zip"
+            create_reproducible_bundle(evidence/"certificate.json",forged)
+            r=verify_bundle(forged,public_key=pub,require_signature=True)
+            return (
+                (not r["valid"])
+                and r["assurance_dimensions"].get("signer_authenticity")=="VERIFIED"
+                and r["assurance_dimensions"].get("normalized_refinement")=="FAIL",
+                r["errors"],
+            )
+    run("normalized_wire_resigned_source_substitution",normalized_wire_resigned_source_substitution)
+
     total=len(results); rejected=sum(x["rejected"] for x in results)
     return {"campaign":"pcs-v0.5-foundational-attacks","attacks":total,"rejected":rejected,"false_accepts":total-rejected,"results":results}
 
