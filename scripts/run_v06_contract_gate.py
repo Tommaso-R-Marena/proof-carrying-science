@@ -23,6 +23,7 @@ V06_TESTS = [
     "tests/test_replay_v06.py",
     "tests/test_normalized_wire_v06.py",
     "tests/test_normalized_set_v06.py",
+    "tests/test_verifier_v06.py",
     "tests/test_signing_v06.py",
     "tests/test_package_v06.py",
     "tests/test_v06_byte_contract.py",
