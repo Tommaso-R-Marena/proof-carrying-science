@@ -24,6 +24,10 @@ from .verifier_io_v06 import (
     verify_package_directory_end_to_end_v06,
     write_verification_receipt_v06,
 )
+from .verifier_zip_v06 import (
+    V06BundleVerificationError,
+    verify_package_zip_end_to_end_v06,
+)
 
 
 def cmd_certify(args):
@@ -69,6 +73,31 @@ def cmd_verify_v06(args):
                 overwrite=args.force_receipt,
             )
     except (OSError, V06VerifierIOError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    output = dict(result)
+    if receipt_path is not None:
+        output["receipt_written"] = str(receipt_path)
+    print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["valid"] else 1
+
+
+def cmd_verify_v06_bundle(args):
+    try:
+        result = verify_package_zip_end_to_end_v06(
+            args.bundle,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+        )
+        receipt_path = None
+        if args.receipt:
+            receipt_path = write_verification_receipt_v06(
+                result,
+                args.receipt,
+                overwrite=args.force_receipt,
+            )
+    except (OSError, V06VerifierIOError, V06BundleVerificationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -308,6 +337,24 @@ def build_parser():
         help="explicitly replace an existing receipt",
     )
     v6.set_defaults(func=cmd_verify_v06)
+
+    v6b = sub.add_parser(
+        "verify-v06-bundle",
+        help="safely verify a PCS v0.6 ZIP bundle without extracting it",
+    )
+    v6b.add_argument("bundle", help="delivered PCS v0.6 ZIP archive")
+    v6b.add_argument("--public-key", required=True, help="trusted Ed25519 public key PEM")
+    v6b.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    v6b.add_argument("--receipt", help="write deterministic JSON verification receipt")
+    v6b.add_argument(
+        "--force-receipt",
+        action="store_true",
+        help="explicitly replace an existing receipt",
+    )
+    v6b.set_defaults(func=cmd_verify_v06_bundle)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")
