@@ -5,6 +5,8 @@ namespace PCS.WireVectors
 open PCS
 open PCS.Decision
 open PCS.Wire
+open PCS.Refinement
+open PCS.Normalization
 
 def pkpdPredicateCommitment : String :=
   "pcs-predicate-sha256:8cc9e0b74e7361040ed704b89f6753399f9c07573fe51198f0f093c6017f2c4c"
@@ -13,7 +15,7 @@ def pkpdWire : DecisionWire :=
   {
     source := {
       certificateSemanticHash :=
-        "345cf0e67ece949156d0ce7a5e35b4dbc4d22dc87855fcb7f76fea3ee9bf628a"
+        "0fc13509d27c7b31e45ed9a841bfacddc9ca8a1a6c7e3a2af66e0b434cb36a8a"
       claimId := "C_PK_REPLAY"
     }
     context := [
@@ -48,17 +50,14 @@ example : evidenceIds pkpdWire = pkpdWire.claim.requiredEvidence := by
   decide
 
 example :
-    (decodeClaim pkpdWire.claim).predicate =
-      (decodeEvidence pkpdWire.evidence.head!).predicate := by
+    pkpdWire.evidence.head?.map (fun e => (decodeEvidence e).predicate) =
+      some (decodeClaim pkpdWire.claim).predicate := by
   decide
 
 example :
     decideClaim (decodeClaim pkpdWire.claim) (decodedEvidence pkpdWire) =
       DecisionStatus.computational := by
   decide
-
-end PCS.WireVectors
-
 
 def pkpdWireWellFormed : WellFormed pkpdWire := by
   constructor
@@ -79,3 +78,5 @@ example :
       (decodeClaim pkpdWire.claim)
       (decodedEvidence pkpdWire) := by
   exact wire_computational_sound pkpdWire pkpdWireWellFormed rfl
+
+end PCS.WireVectors
