@@ -15,7 +15,7 @@ def rawPkpdWire : RawDecisionWire :=
       specVersion := expectedSpecVersion
       checkerVersion := expectedCheckerVersion
       certificateSemanticHash :=
-        "b1f03d0f97df1e257cc00da492b91bf0f31df2f5b9562938d058df060c57d13e"
+        "345cf0e67ece949156d0ce7a5e35b4dbc4d22dc87855fcb7f76fea3ee9bf628a"
       claimId := "C_PK_REPLAY"
     }
     context := pkpdWire.context
@@ -36,7 +36,7 @@ def rawPkpdWire : RawDecisionWire :=
     ]
     decision := "COMPUTATIONALLY_SUPPORTED"
     wireSemanticHash :=
-      "8ad40ede070c1dfb6846dd334eb5cb08d622233feb149eb7875ec432878ef188"
+      "f414d613bd01e6507d35c75e65f374a8db061438a16321064bb06c8fd45fc253"
   }
 
 example : decodeRawWire rawPkpdWire = some pkpdWire := by
