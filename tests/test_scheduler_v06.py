@@ -105,71 +105,42 @@ def _multi_check_certificate() -> dict:
 
 
 def _history() -> list[dict]:
-    return [
-        {
-            "format": TELEMETRY_FORMAT_V06,
-            "recorded_at": "2026-09-29T00:00:00+00:00",
-            "certificate_semantic_hash": "a" * 64,
-            "checker_version": "pcs-python-kernel/0.6.0-dev",
-            "scheduler": {
-                "strategy": "manifest",
-                "execution_order": ["old-unit", "old-reaction"],
-            },
-            "checks": [
-                {
-                    "evidence_id": "old-unit",
-                    "check_type": "unit_compatible",
-                    "artifact_count": 0,
-                    "input_bytes": 0,
-                    "outcome": "PASS",
-                    "duration_ms": 10.0,
-                    "cpu_ms": 9.0,
+    runs = []
+    for i in range(10):
+        runs.append(
+            {
+                "format": TELEMETRY_FORMAT_V06,
+                "recorded_at": f"2026-09-29T00:{i:02d}:00+00:00",
+                "certificate_semantic_hash": f"{i:064x}",
+                "checker_version": "pcs-python-kernel/0.6.0-dev",
+                "scheduler": {
+                    "strategy": "manifest",
+                    "execution_order": [f"old-unit-{i}", f"old-reaction-{i}"],
                 },
-                {
-                    "evidence_id": "old-reaction",
-                    "check_type": "reaction_balance",
-                    "artifact_count": 0,
-                    "input_bytes": 0,
-                    "outcome": "FAIL",
-                    "duration_ms": 1.0,
-                    "cpu_ms": 0.8,
-                },
-            ],
-            "summary": {},
-        },
-        {
-            "format": TELEMETRY_FORMAT_V06,
-            "recorded_at": "2026-09-29T00:01:00+00:00",
-            "certificate_semantic_hash": "b" * 64,
-            "checker_version": "pcs-python-kernel/0.6.0-dev",
-            "scheduler": {
-                "strategy": "manifest",
-                "execution_order": ["old-unit-2", "old-reaction-2"],
-            },
-            "checks": [
-                {
-                    "evidence_id": "old-unit-2",
-                    "check_type": "unit_compatible",
-                    "artifact_count": 0,
-                    "input_bytes": 0,
-                    "outcome": "PASS",
-                    "duration_ms": 12.0,
-                    "cpu_ms": 11.0,
-                },
-                {
-                    "evidence_id": "old-reaction-2",
-                    "check_type": "reaction_balance",
-                    "artifact_count": 0,
-                    "input_bytes": 0,
-                    "outcome": "FAIL",
-                    "duration_ms": 1.2,
-                    "cpu_ms": 1.0,
-                },
-            ],
-            "summary": {},
-        },
-    ]
-
+                "checks": [
+                    {
+                        "evidence_id": f"old-unit-{i}",
+                        "check_type": "unit_compatible",
+                        "artifact_count": 0,
+                        "input_bytes": 0,
+                        "outcome": "PASS",
+                        "duration_ms": 10.0 + i * 0.1,
+                        "cpu_ms": 9.0 + i * 0.1,
+                    },
+                    {
+                        "evidence_id": f"old-reaction-{i}",
+                        "check_type": "reaction_balance",
+                        "artifact_count": 0,
+                        "input_bytes": 0,
+                        "outcome": "FAIL",
+                        "duration_ms": 1.0 + i * 0.01,
+                        "cpu_ms": 0.8 + i * 0.01,
+                    },
+                ],
+                "summary": {},
+            }
+        )
+    return runs
 
 def _write_public_key(path: Path) -> None:
     key = Ed25519PublicKey.from_public_bytes(
@@ -247,6 +218,9 @@ def test_bandit_learns_to_prioritize_failure_prone_cheap_reaction_check():
         bandit_alpha=1.0,
     )
 
+    assert plan["bandit_readiness"]["ready"] is True
+    assert plan["requested_strategy"] == "bandit"
+    assert plan["strategy"] == "bandit"
     assert plan["execution_order"][0] == "E2"
     assert plan["candidates"][1]["check_type"] == "reaction_balance"
     assert plan["candidates"][1]["scores"]["bandit_score"] > 0
@@ -279,8 +253,8 @@ def test_telemetry_history_round_trip_and_chronological_report(tmp_path):
     assert report["format"] == "pcs-scheduler-report-v1"
     summary = report["chronological_counterfactuals"]["summary"]
     assert set(summary) == set(SCHEDULER_STRATEGIES_V06)
-    assert summary["manifest"]["evaluated_runs"] == 2
-    assert summary["bandit"]["evaluated_runs"] == 2
+    assert summary["manifest"]["evaluated_runs"] == 10
+    assert summary["bandit"]["evaluated_runs"] == 10
 
 
 def test_write_telemetry_refuses_accidental_overwrite(tmp_path):
@@ -339,3 +313,22 @@ def test_cli_can_emit_and_append_scheduler_telemetry_then_report_it(tmp_path):
     report_obj = json.loads(report.read_text(encoding="utf-8"))
     assert report_obj["format"] == "pcs-scheduler-report-v1"
     assert report_obj["history_runs"] == 1
+
+
+
+def test_cold_start_bandit_falls_back_without_changing_semantics():
+    cert = _multi_check_certificate()
+    result = verify_certificate_replay_v06(
+        cert,
+        {},
+        scheduler_strategy="bandit",
+        scheduler_history=[],
+    )
+
+    assert result["valid"], result["errors"]
+    assert result["scheduler"]["requested_strategy"] == "bandit"
+    assert result["scheduler"]["strategy"] == "failure-per-second"
+    assert result["scheduler"]["bandit_readiness"]["ready"] is False
+    assert "cold-start guard" in result["scheduler"]["fallback_reason"]
+    assert result["scheduler"]["all_mandatory_checks_execute"] is True
+    assert result["scheduler"]["scientific_verdict_uses_scheduler"] is False
