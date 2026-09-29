@@ -15,8 +15,9 @@ pcs discover-v06
 local artifact inventory + supported scientific-check recommendations
         ↓
 static Python/Jupyter artifact-dependency mapping
++ review-only R literal-path mapping
         ↓
-pcs-manifest.draft.json
+pcs-manifest.draft.json + pcs-discovery-review.md
         ↓
 human review/edit
         ↓
