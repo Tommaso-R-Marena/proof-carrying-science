@@ -23,7 +23,7 @@ class V06WorkflowReplayError(ValueError):
 
 
 def _safe_source_path(value: str) -> None:
-    if not isinstance(value, str) or not value or "\\\\" in value:
+    if not isinstance(value, str) or not value or "\\" in value:
         raise V06WorkflowReplayError(f"unsafe workflow source path: {value!r}")
     path = PurePosixPath(value)
     if (
