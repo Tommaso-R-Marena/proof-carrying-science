@@ -35,6 +35,13 @@ def rawPkpdWire : RawDecisionWire :=
       }
     ]
     decision := "COMPUTATIONALLY_SUPPORTED"
+    invariants := {
+      uniqueEvidenceIds := true
+      requiredIdsUnique := true
+      allRequiredEvidencePresent := true
+      contextCovers := true
+      requiredEvidenceBound := true
+    }
     wireSemanticHash :=
       "f414d613bd01e6507d35c75e65f374a8db061438a16321064bb06c8fd45fc253"
   }
