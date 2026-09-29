@@ -2,8 +2,12 @@ import PCS.Core
 
 namespace PCS.Decision
 
-/-- Boolean check for a single computational evidence object.
-    Operational replay establishes the evidence outcome before this layer runs. -/
+/-- Narrow Boolean helper for a single computational-test evidence object.
+    Operational replay establishes the evidence outcome before this layer runs.
+
+    This helper intentionally recognizes only `computationalTest`. The whole-claim
+    `decideClaim` rule is the normative status decision and additionally permits a
+    stronger `formalProof` to support a computational claim. -/
 def computationalEvidenceAccepts (c : Claim) (e : Evidence) : Bool :=
   if c.kind = ClaimKind.computational then
     if e.kind = EvidenceKind.computationalTest then
