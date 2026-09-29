@@ -939,19 +939,49 @@ def confirm_manifest_draft_v06(
     confirmed["pcs_intake"]["status"] = "confirmed"
     confirmed["pcs_intake"]["requires_confirmation"] = False
     confirmed["pcs_intake"]["workflow_inferences_confirmed"] = True
-    environment = confirmed.get("environment")
-    if isinstance(environment, dict):
-        if environment.get("format") != ENVIRONMENT_CAPTURE_FORMAT_V06:
-            raise V06DiscoveryError(
-                "cannot confirm manifest: unsupported environment capture format"
-            )
-        environment["human_confirmed"] = True
-        environment["confirmation_scope"] = (
-            "Environment declarations, lockfiles, interpreter constraints, container "
-            "specifications, and reconstruction plan reviewed as static reproducibility "
-            "metadata. Confirmation does not prove successful installation or execution."
+
+    # The browser Project Mapper intentionally uses lower-assurance heuristics.
+    # Confirmation is the authoritative handoff: regenerate the environment
+    # contract from the exact snapshotted artifact bytes before marking it
+    # reviewed, instead of trusting a draft/browser environment proposition.
+    environment_inventory = []
+    for artifact in confirmed.get("artifacts", []):
+        metadata = artifact.get("metadata", {})
+        expected_hash = metadata.get("pcs_discovery_sha256")
+        expected_size = metadata.get("pcs_discovery_size")
+        if not isinstance(expected_hash, str) or not isinstance(expected_size, int):
+            continue
+        environment_inventory.append(
+            {
+                "artifact_id": artifact["id"],
+                "path": artifact["path"],
+                "size": expected_size,
+                "sha256": expected_hash,
+                "media_type": artifact.get("media_type", "application/octet-stream"),
+                "role": artifact.get("role", "scientific-artifact"),
+            }
         )
-        confirmed["pcs_intake"]["environment_confirmed"] = True
+    fresh_environment = capture_environment_v06(root, environment_inventory)
+    fresh_environment["human_confirmed"] = True
+    fresh_environment["confirmation_scope"] = (
+        "Authoritative PCS environment capture regenerated from the exact "
+        "snapshotted environment-source bytes at confirmation. This binds static "
+        "dependency, lockfile, interpreter, container/environment declarations and "
+        "the reconstruction plan; it does not prove successful installation, ABI "
+        "equivalence, dependency availability, or runtime execution."
+    )
+    confirmed["environment"] = fresh_environment
+    confirmed["pcs_intake"]["environment_confirmed"] = True
+    confirmed["pcs_intake"]["environment_capture_format"] = fresh_environment[
+        "format"
+    ]
+    confirmed["pcs_intake"]["environment_source_artifacts"] = (
+        environment_artifact_ids_v06(fresh_environment)
+    )
+    confirmed["pcs_intake"]["environment_hermeticity"] = fresh_environment.get(
+        "hermeticity"
+    )
+
     for node in confirmed.get("workflow", {}).get("nodes", []):
         contract = node.get("contract")
         if (
