@@ -121,3 +121,29 @@ The executable contract does **not** prove the correctness of UTF-8 decoding,
 the JSON parser, RFC 8785 implementation, SHA-256, Ed25519, JSON Schema engine,
 or scientific replay. Those remain explicit formal/TCB targets rather than hidden
 inside the acceptance claim.
+
+
+## Typed scientific certificate layer
+
+The v0.6 certificate is no longer an arbitrary nested JSON envelope. The certificate
+schema now gives exact shapes to assumptions, claims, predicates, evidence,
+artifacts and workflow nodes, and `pcs/certificate_semantics_v06.py` enforces the
+cross-object invariants JSON Schema cannot express.
+
+In particular:
+
+- claim, assumption, artifact, evidence and workflow-node IDs are unique;
+- claim/assumption scope is bidirectional;
+- claim/evidence support binding is bidirectional;
+- every claim has an explicit typed predicate;
+- every required evidence object carries the exact same predicate as its claim;
+- evidence predicates are derived exactly from their check specifications;
+- built-in evidence artifact bindings are exact;
+- claim assessments are recomputed by the pure decision kernel;
+- artifact paths are canonical relative paths;
+- workflow artifact references, single-producer semantics, acyclicity and the
+  topological summary are recomputed.
+
+This is still a structural/logical consistency layer. It does not turn a recorded
+PASS into a scientifically established PASS; domain replay remains a distinct
+verification boundary.
