@@ -14,9 +14,35 @@ class SchemaValidationError(ValueError):
 _SCHEMA_PACKAGE = "pcs.schemas"
 
 
+def _anchor_patterns(node: Any) -> Any:
+    """Make terminal-$ JSON Schema patterns true full-string matches.
+
+    Python regex $ also matches immediately before one trailing newline, so a
+    pattern such as ^[a-f0-9]{64}$ would otherwise accept a 64-hex digest plus
+    a trailing newline. PCS schemas intend end-of-string matching, so translate
+    an unescaped terminal $ to Python \\Z when schemas are loaded.
+    """
+    if isinstance(node, dict):
+        out: dict[str, Any] = {}
+        for key, value in node.items():
+            if (
+                key == "pattern"
+                and isinstance(value, str)
+                and value.endswith("$")
+                and not value.endswith("\\$")
+            ):
+                out[key] = value[:-1] + "\\Z"
+            else:
+                out[key] = _anchor_patterns(value)
+        return out
+    if isinstance(node, list):
+        return [_anchor_patterns(value) for value in node]
+    return node
+
+
 def _load_schema(name: str) -> dict[str, Any]:
     resource = files(_SCHEMA_PACKAGE).joinpath(name)
-    return json.loads(resource.read_text(encoding="utf-8"))
+    return _anchor_patterns(json.loads(resource.read_text(encoding="utf-8")))
 
 
 def validate_shape(value: Any, schema_name: str, *, label: str) -> None:
