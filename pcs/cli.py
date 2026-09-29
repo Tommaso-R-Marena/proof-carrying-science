@@ -672,7 +672,7 @@ def build_parser():
     d6.add_argument(
         "--minimum-workflow-confidence",
         type=float,
-        default=0.90,
+        default=0.95,
         help="minimum confidence for static Python/notebook workflow nodes",
     )
     d6.add_argument(
