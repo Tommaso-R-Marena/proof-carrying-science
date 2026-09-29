@@ -32,6 +32,7 @@ V06_TESTS = [
     "tests/test_receipt_signature_v06.py",
     "tests/test_quorum_v06.py",
     "tests/test_scheduler_v06.py",
+    "tests/test_discover_v06.py",
     "tests/test_benchmark_v06.py",
     "tests/test_signing_v06.py",
     "tests/test_package_v06.py",
