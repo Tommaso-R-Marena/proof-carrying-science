@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+from .jsonio import strict_json_load, StrictJSONError
+
 from .kernel import build_certificate, verify_certificate, AssuranceError
 from .hashing import sha256_file
 from .impact import impact_from_artifacts
@@ -67,6 +69,16 @@ from .discover_v06 import (
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
+)
+from .environment_v06 import (
+    V06EnvironmentCaptureError,
+    environment_replay_plan_v06,
+    write_environment_replay_plan_v06,
+    write_environment_replay_script_v06,
+)
+from .environment_replay_v06 import (
+    V06EnvironmentReplayError,
+    environment_from_binding_v06,
 )
 
 
@@ -340,6 +352,11 @@ def cmd_discover_v06(args):
             if args.review
             else root / "pcs-discovery-review.md"
         )
+        environment_plan_output = (
+            Path(args.environment_plan).resolve()
+            if args.environment_plan
+            else root / "pcs-environment-plan.json"
+        )
         result = discover_project_v06(
             root,
             subject=args.subject,
@@ -358,6 +375,12 @@ def cmd_discover_v06(args):
             overwrite=args.force,
         )
         written["discovery_review"] = str(review_path)
+        environment_plan_path = write_environment_replay_plan_v06(
+            result["environment_capture"],
+            environment_plan_output,
+            overwrite=args.force,
+        )
+        written["environment_plan"] = str(environment_plan_path)
         draft_path = Path(written["manifest_draft"]).resolve()
         project_root_flag = (
             f" --project-root {root}"
@@ -376,11 +399,78 @@ def cmd_discover_v06(args):
                 f"{project_root_flag} -o {root / 'manifest.json'}"
             ),
         }
-    except (OSError, V06DiscoveryError, V06DiscoveryReviewError) as e:
+    except (
+        OSError,
+        V06DiscoveryError,
+        V06DiscoveryReviewError,
+        V06EnvironmentCaptureError,
+    ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
     print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def _environment_from_document_v06(path: str | Path) -> dict:
+    value = strict_json_load(path)
+    if not isinstance(value, dict):
+        raise V06EnvironmentCaptureError("environment input root must be an object")
+    if isinstance(value.get("environment_capture"), dict):
+        return value["environment_capture"]
+    environment = value.get("environment")
+    if isinstance(environment, dict):
+        if environment.get("format") == "pcs-environment-capture-v1":
+            return environment
+        if environment.get("format") == "pcs-environment-binding-v1":
+            try:
+                return environment_from_binding_v06(environment)
+            except V06EnvironmentReplayError as exc:
+                raise V06EnvironmentCaptureError(str(exc)) from exc
+    if value.get("format") == "pcs-environment-capture-v1":
+        return value
+    raise V06EnvironmentCaptureError(
+        "input does not contain a PCS v0.6 environment capture or binding"
+    )
+
+
+def cmd_environment_plan_v06(args):
+    try:
+        environment = _environment_from_document_v06(args.input)
+        plan = environment_replay_plan_v06(environment)
+        result = {
+            "format": plan["format"],
+            "hermeticity": plan["hermeticity"],
+            "required_tools": plan["required_tools"],
+            "steps": plan["steps"],
+            "automatic_execution_permitted_by_pcs": plan[
+                "automatic_execution_permitted_by_pcs"
+            ],
+            "reason": plan["reason"],
+        }
+        if args.output:
+            path = write_environment_replay_plan_v06(
+                environment,
+                args.output,
+                overwrite=args.force,
+            )
+            result["plan_written"] = str(path)
+        if args.script:
+            script = write_environment_replay_script_v06(
+                environment,
+                args.script,
+                overwrite=args.force,
+            )
+            result["review_before_run_script_written"] = str(script)
+    except (
+        OSError,
+        StrictJSONError,
+        V06EnvironmentCaptureError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
     return 0
 
 
@@ -681,6 +771,10 @@ def build_parser():
         "--review",
         help="human-readable discovery review Markdown; defaults inside project",
     )
+    d6.add_argument(
+        "--environment-plan",
+        help="environment replay-plan JSON; defaults inside project",
+    )
     d6.add_argument("--subject", help="override the discovered project subject")
     d6.add_argument(
         "--minimum-confidence",
@@ -700,6 +794,26 @@ def build_parser():
         help="explicitly replace existing discovery outputs",
     )
     d6.set_defaults(func=cmd_discover_v06)
+
+    ep6 = sub.add_parser(
+        "environment-plan-v06",
+        help="inspect or materialize a v0.6 reproducibility-environment reconstruction plan",
+    )
+    ep6.add_argument(
+        "input",
+        help="pcs-discovery.json, manifest.json, certificate.json, or environment capture JSON",
+    )
+    ep6.add_argument("-o", "--output", help="write replay-plan JSON")
+    ep6.add_argument(
+        "--script",
+        help="write a review-before-run shell script; PCS never executes it automatically",
+    )
+    ep6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace existing plan/script outputs",
+    )
+    ep6.set_defaults(func=cmd_environment_plan_v06)
 
     c6 = sub.add_parser(
         "confirm-v06",
