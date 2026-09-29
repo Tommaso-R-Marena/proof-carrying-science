@@ -354,3 +354,76 @@ def test_telemetry_redacts_evidence_ids_but_receipt_scheduler_keeps_audit_order(
         evidence_id.startswith("sha256:")
         for evidence_id in sink["scheduler"]["execution_order"]
     )
+
+
+
+def test_telemetry_history_rejects_nonfinite_json_and_duplicate_keys(tmp_path):
+    nonfinite = tmp_path / "nonfinite.jsonl"
+    nonfinite.write_text(
+        '{"format":"pcs-replay-telemetry-v1","checks":[{"check_type":"unit_compatible","duration_ms":NaN,"input_bytes":0,"artifact_count":0,"outcome":"PASS"}]}\n',
+        encoding="utf-8",
+    )
+    try:
+        load_telemetry_history_v06(nonfinite)
+    except Exception as exc:
+        assert "non-finite telemetry JSON number" in str(exc)
+    else:
+        raise AssertionError("non-finite telemetry history was accepted")
+
+    duplicate = tmp_path / "duplicate.jsonl"
+    duplicate.write_text(
+        '{"format":"pcs-replay-telemetry-v1","format":"pcs-replay-telemetry-v1","checks":[]}\n',
+        encoding="utf-8",
+    )
+    try:
+        load_telemetry_history_v06(duplicate)
+    except Exception as exc:
+        assert "duplicate telemetry JSON key" in str(exc)
+    else:
+        raise AssertionError("duplicate-key telemetry history was accepted")
+
+
+def test_invalid_in_memory_telemetry_rows_do_not_poison_bandit():
+    cert = _multi_check_certificate()
+    poisoned = _history()
+    poisoned.append(
+        {
+            "format": TELEMETRY_FORMAT_V06,
+            "checks": [
+                {
+                    "evidence_id": "poison",
+                    "check_type": "unit_compatible",
+                    "artifact_count": 0,
+                    "input_bytes": 0,
+                    "outcome": "FAIL",
+                    "duration_ms": float("nan"),
+                    "cpu_ms": 0.0,
+                },
+                {
+                    "evidence_id": "oversize",
+                    "check_type": "reaction_balance",
+                    "artifact_count": 0,
+                    "input_bytes": 1 << 60,
+                    "outcome": "FAIL",
+                    "duration_ms": 0.00001,
+                    "cpu_ms": 0.0,
+                },
+            ],
+        }
+    )
+
+    clean = plan_evidence_v06(
+        cert["evidence"],
+        {},
+        strategy="bandit",
+        history=_history(),
+    )
+    attacked = plan_evidence_v06(
+        cert["evidence"],
+        {},
+        strategy="bandit",
+        history=poisoned,
+    )
+
+    assert attacked["execution_order"] == clean["execution_order"]
+    assert attacked["bandit_readiness"] == clean["bandit_readiness"]
