@@ -46,3 +46,20 @@ def test_attestation_rejects_final_bundle_that_fails_post_bundle_verification(mo
                 private_key=private_key,
                 public_key=public_key,
             )
+
+
+
+def test_attestation_wraps_normalized_export_failure(monkeypatch):
+    from pcs.normalized_wire import NormalizationError
+
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        project = root / "project"
+        init_project(project)
+
+        def fail_normalization(*args, **kwargs):
+            raise NormalizationError("injected normalization failure")
+
+        monkeypatch.setattr(attest_module, "write_normalized_set", fail_normalization)
+        with pytest.raises(AttestationError, match="normalized decision export failed"):
+            attest(project / "manifest.json", root / "evidence")
