@@ -38,19 +38,56 @@ def build() -> dict[str, bytes]:
             "generated_at": "2026-09-29T00:00:00+00:00",
             "subject": "PCS v0.6 byte-contract golden fixture",
             "mission_scope": "cross-language byte-contract fixture",
-            "assumptions": [{"id": "A1", "statement": "fixture assumption"}],
+            "assumptions": [
+                {"id": "A1", "statement": "fixture assumption", "scope": ["C1"]}
+            ],
             "claims": [
                 {
                     "id": "C1",
+                    "statement": "The fixture reaction is atom-balanced.",
                     "kind": "computational",
+                    "predicate": {
+                        "type": "reaction_balance",
+                        "reactants": [
+                            {"formula": "H2", "coefficient": 2},
+                            {"formula": "O2", "coefficient": 1},
+                        ],
+                        "products": [{"formula": "H2O", "coefficient": 2}],
+                    },
                     "required_evidence": ["E1"],
                     "assumptions": ["A1"],
-                    "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"},
+                    "assessment": {
+                        "status": "COMPUTATIONALLY_SUPPORTED",
+                        "reason": "all declared computational checks passed",
+                    },
                 }
             ],
             "artifacts": [],
             "evidence": [
-                {"id": "E1", "kind": "computational_test", "outcome": "PASS"}
+                {
+                    "id": "E1",
+                    "kind": "computational_test",
+                    "claim_ids": ["C1"],
+                    "outcome": "PASS",
+                    "checker": "pcs-python-kernel/0.6.0-dev",
+                    "predicate": {
+                        "type": "reaction_balance",
+                        "reactants": [
+                            {"formula": "H2", "coefficient": 2},
+                            {"formula": "O2", "coefficient": 1},
+                        ],
+                        "products": [{"formula": "H2O", "coefficient": 2}],
+                    },
+                    "artifact_ids": [],
+                    "check_spec": {
+                        "type": "reaction_balance",
+                        "reactants": [
+                            {"formula": "H2", "coefficient": 2},
+                            {"formula": "O2", "coefficient": 1},
+                        ],
+                        "products": [{"formula": "H2O", "coefficient": 2}],
+                    },
+                }
             ],
             "workflow": {"nodes": []},
             "workflow_summary": {"node_count": 0, "topological_order": []},
