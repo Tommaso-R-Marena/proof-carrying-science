@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
+import os
 from pathlib import Path
 
 import pytest
@@ -10,8 +12,10 @@ from pcs.certificate_v06 import finalize_certificate_hashes_v06
 from pcs.crypto_domains_v06 import CERTIFICATE_SIGNATURE_DOMAIN
 from pcs.package_v06 import (
     build_package_manifest_v06,
+    build_package_manifest_from_directory_v06,
     sign_package_manifest_v06,
     verify_package_manifest_v06,
+    verify_package_directory_v06,
     verify_package_signature_v06,
     validate_package_namespace_v06,
     V06PackageError,
@@ -176,3 +180,119 @@ def test_v06_package_builder_and_signer_refuse_unsafe_namespace():
     unsafe["files"]["../escape"] = {"sha256": "c" * 64, "size": 1}
     with pytest.raises(V06PackageError):
         sign_package_manifest_v06(unsafe, key)
+
+
+
+def _stage_v06_package(root: Path) -> dict:
+    cert = certificate()
+    (root / "certificate.json").write_text(
+        json.dumps(cert, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    artifact = root / "artifacts" / "abc" / "payload"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_bytes(b"fixture bytes\n")
+    return cert
+
+
+def test_v06_directory_manifest_round_trip(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    manifest = build_package_manifest_from_directory_v06(tmp_path)
+    assert set(manifest["files"]) == {"certificate.json", "artifacts/abc/payload"}
+
+    result = verify_package_directory_v06(tmp_path, manifest)
+    assert result["valid"], result["errors"]
+
+
+def test_v06_directory_verifier_detects_artifact_tamper(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    manifest = build_package_manifest_from_directory_v06(tmp_path)
+    (tmp_path / "artifacts" / "abc" / "payload").write_bytes(b"tampered bytes\n")
+
+    result = verify_package_directory_v06(tmp_path, manifest)
+    assert not result["valid"]
+    assert any("package hash mismatch" in error for error in result["errors"])
+
+
+def test_v06_directory_verifier_detects_missing_and_unexpected_files(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    manifest = build_package_manifest_from_directory_v06(tmp_path)
+
+    (tmp_path / "artifacts" / "abc" / "payload").unlink()
+    (tmp_path / "unexpected.txt").write_text("unexpected", encoding="utf-8")
+    result = verify_package_directory_v06(tmp_path, manifest)
+
+    assert not result["valid"]
+    assert any("files missing" in error for error in result["errors"])
+    assert any("unexpected v0.6 package files" in error for error in result["errors"])
+
+
+def test_v06_directory_verifier_detects_certificate_content_tamper(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    manifest = build_package_manifest_from_directory_v06(tmp_path)
+
+    cert_path = tmp_path / "certificate.json"
+    raw = json.loads(cert_path.read_text(encoding="utf-8"))
+    raw["subject"] = "tampered without rehash"
+    cert_path.write_text(json.dumps(raw, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    result = verify_package_directory_v06(tmp_path, manifest)
+    assert not result["valid"]
+    assert any(
+        "certificate" in error.lower() or "hash mismatch" in error.lower()
+        for error in result["errors"]
+    )
+
+
+def test_v06_directory_builder_excludes_manifest_and_signature_files(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    (tmp_path / "package_manifest.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "package_signature.json").write_text("{}", encoding="utf-8")
+
+    manifest = build_package_manifest_from_directory_v06(tmp_path)
+    assert "package_manifest.json" not in manifest["files"]
+    assert "package_signature.json" not in manifest["files"]
+
+
+def test_v06_directory_builder_refuses_private_key_material(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    (tmp_path / "oops.pem").write_bytes(
+        b"prefix\n-----BEGIN PRIVATE KEY-----\nnot-a-real-key\n"
+    )
+    with pytest.raises(V06PackageError, match="private-key"):
+        build_package_manifest_from_directory_v06(tmp_path)
+
+
+def test_v06_directory_builder_refuses_nonportable_case_collision(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    (tmp_path / "Artifact.txt").write_text("one", encoding="utf-8")
+    try:
+        (tmp_path / "artifact.txt").write_text("two", encoding="utf-8")
+    except OSError:
+        pytest.skip("filesystem does not permit case-distinct fixture names")
+
+    with pytest.raises(V06PackageError, match="cross-platform"):
+        build_package_manifest_from_directory_v06(tmp_path)
+
+
+def test_v06_directory_builder_refuses_symlink(tmp_path: Path):
+    _stage_v06_package(tmp_path)
+    target = tmp_path / "target.txt"
+    target.write_text("target", encoding="utf-8")
+    link = tmp_path / "linked.txt"
+    try:
+        os.symlink(target, link)
+    except (OSError, NotImplementedError):
+        pytest.skip("symlinks are unavailable in this environment")
+
+    with pytest.raises(V06PackageError, match="symlinks"):
+        build_package_manifest_from_directory_v06(tmp_path)
+
+
+def test_v06_directory_builder_enforces_single_file_limit(tmp_path: Path, monkeypatch):
+    import pcs.package_v06 as package_v06
+
+    _stage_v06_package(tmp_path)
+    monkeypatch.setattr(package_v06, "MAX_PACKAGE_SINGLE_FILE_V06", 4)
+    with pytest.raises(V06PackageError, match="too large"):
+        build_package_manifest_from_directory_v06(tmp_path)
