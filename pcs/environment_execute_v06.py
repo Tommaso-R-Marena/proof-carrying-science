@@ -382,9 +382,10 @@ class _OciBackend:
 
     def execute_node(self, node: dict[str, Any]) -> dict[str, Any]:
         src = "/workspace/" + node["source_path"]
-        if node["source_kind"] == "python": return self.command([self.python(),"-I","-B",src])
+        if node["source_kind"] == "python":
+            return self.command([self.python(),"-B",src])
         if node["source_kind"] == "jupyter":
-            return self.command([self.python(),"-I","-B","-m","jupyter","nbconvert","--to","notebook","--execute",src,"--output","/tmp/pcs.ipynb"])
+            return self.command([self.python(),"-B","-m","jupyter","nbconvert","--to","notebook","--execute",src,"--output","/tmp/pcs.ipynb"])
         return self.command(["Rscript","--vanilla",src])
 
     def capture_environment(self) -> dict[str, Any]:
