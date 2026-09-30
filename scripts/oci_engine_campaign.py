@@ -21,7 +21,7 @@ from pcs.signing import generate_keypair
 FORMAT = "pcs-oci-engine-boundary-v1"
 BASE_TAG = "docker.io/library/python:3.12-slim-bookworm"
 
-ANALYSIS = """from decimal import Decimal, getcontext
+ANALYSIS = r"""from decimal import Decimal, getcontext
 from pathlib import Path
 
 getcontext().prec = 40
@@ -66,6 +66,7 @@ def image_index_digest(tag: str) -> str:
 
 
 def produce(output: Path) -> dict[str, Any]:
+    compile(ANALYSIS, "analysis.py", "exec")
     output.mkdir(parents=True, exist_ok=False)
     run(["docker", "pull", BASE_TAG])
     digest = image_index_digest(BASE_TAG)
