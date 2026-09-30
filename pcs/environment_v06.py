@@ -659,19 +659,27 @@ def _dockerfile(text: str, *, source_path: str) -> tuple[dict[str, Any], list[di
         match = _FROM.match(line)
         if match:
             ref = match.group(1)
+            platform_match = re.match(
+                r"(?i)^FROM\s+--platform=(\S+)\s+",
+                line,
+            )
+            platform_value = (
+                platform_match.group(1) if platform_match is not None else None
+            )
             dynamic = "$" in ref
             digest_pinned = "@sha256:" in ref and not dynamic
             tag = None
             if not digest_pinned and ":" in ref.rsplit("/", 1)[-1]:
                 tag = ref.rsplit(":", 1)[-1]
-            stages.append(
-                {
-                    "reference": ref,
-                    "digest_pinned": digest_pinned,
-                    "tag": tag,
-                    "dynamic": dynamic,
-                }
-            )
+            stage = {
+                "reference": ref,
+                "digest_pinned": digest_pinned,
+                "tag": tag,
+                "dynamic": dynamic,
+            }
+            if platform_value is not None:
+                stage["platform"] = platform_value
+            stages.append(stage)
             if dynamic:
                 unresolved.append(
                     {
@@ -679,6 +687,15 @@ def _dockerfile(text: str, *, source_path: str) -> tuple[dict[str, Any], list[di
                         "source_path": source_path,
                         "line": line_no,
                         "reference": ref[:512],
+                    }
+                )
+            if isinstance(platform_value, str) and "$" in platform_value:
+                unresolved.append(
+                    {
+                        "type": "dynamic_container_platform",
+                        "source_path": source_path,
+                        "line": line_no,
+                        "platform": platform_value[:512],
                     }
                 )
         upper = line.upper()
