@@ -531,6 +531,11 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
         str(x["host"].get("machine") or x["host"].get("docker_architecture") or "").lower()
         for x in machine_summaries
     }
+    host_os_releases = {
+        str(x["host"].get("os_release", {}).get("PRETTY_NAME") or "").strip()
+        for x in machine_summaries
+        if str(x["host"].get("os_release", {}).get("PRETTY_NAME") or "").strip()
+    }
     has_x64 = any(x in {"x86_64", "amd64"} or "x86" in x for x in architectures)
     has_arm64 = any(x in {"aarch64", "arm64"} or "arm" in x for x in architectures)
 
@@ -606,6 +611,7 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
     assertions = {
         "at_least_two_independent_machines": machine_count >= 2,
         "amd64_and_arm64_observed": has_x64 and has_arm64,
+        "distinct_host_os_releases_observed": len(host_os_releases) >= 2,
         "baseline_valid_on_every_machine": all_valid("baseline_locked_bookworm"),
         "baseline_cross_machine_byte_identical": one_output_hash("baseline_locked_bookworm"),
         "baseline_realized_environment_differs_across_architecture": (
@@ -640,6 +646,7 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
         "machine_count": machine_count,
         "machines": machines,
         "architectures": sorted(architectures),
+        "host_os_releases": sorted(host_os_releases),
         "comparisons": comparisons,
         "assertions": assertions,
         "success": success,
