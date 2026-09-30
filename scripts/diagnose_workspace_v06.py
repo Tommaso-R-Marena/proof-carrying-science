@@ -1,19 +1,31 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import tempfile
 from pathlib import Path
 
 from pcs.attest_v06 import attest_v06
+from pcs.byte_contract_v06 import parse_certificate_bytes_v06
 from pcs.discover_v06 import (
     confirm_manifest_draft_v06,
     discover_project_v06,
     write_discovery_outputs_v06,
 )
+from pcs.environment_execute_v06 import build_sandbox_replay_plan_v06
+from pcs.environment_replay_v06 import environment_from_binding_v06
+from pcs.environment_v06 import (
+    write_environment_replay_plan_v06,
+    write_environment_replay_script_v06,
+)
 from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
+from pcs.verifier_zip_v06 import (
+    load_package_zip_v06,
+    verify_package_zip_end_to_end_v06,
+)
 
 
 def scaffold(root: Path) -> Path:
@@ -46,7 +58,12 @@ def discover(project: Path) -> Path:
 
 def confirm(project: Path, draft: Path) -> Path:
     manifest = project / "manifest.json"
-    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
+    confirm_manifest_draft_v06(
+        draft,
+        manifest,
+        project_root=project,
+        overwrite=True,
+    )
     return manifest
 
 
@@ -71,7 +88,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "stage",
-        choices=["import", "scaffold", "discover", "confirm", "attest", "prepare"],
+        choices=[
+            "import", "scaffold", "discover", "confirm", "attest",
+            "verify", "load", "environment", "replay-plan",
+            "sandbox-plan", "prepare",
+        ],
     )
     args = parser.parse_args()
 
@@ -99,6 +120,67 @@ def main() -> int:
         bundle, public, fingerprint = attest(root, manifest)
         if args.stage == "attest":
             print(json.dumps({"stage": "attest", "ok": bundle.is_file()}))
+            return 0
+
+        verified = verify_package_zip_end_to_end_v06(
+            bundle,
+            public,
+            expected_fingerprint=fingerprint,
+        )
+        if verified.get("valid") is not True:
+            raise RuntimeError(f"zip verification failed: {verified}")
+        if args.stage == "verify":
+            print(json.dumps({"stage": "verify", "ok": True}))
+            return 0
+
+        loaded = load_package_zip_v06(bundle)
+        if loaded.get("bundle_sha256") != verified.get("bundle_sha256"):
+            raise RuntimeError("bundle hash changed after verification")
+        if args.stage == "load":
+            print(json.dumps({"stage": "load", "ok": True}))
+            return 0
+
+        certificate = parse_certificate_bytes_v06(loaded["certificate_bytes"])
+        binding = certificate.get("environment")
+        if not isinstance(binding, dict):
+            raise RuntimeError("signed certificate lacks environment binding")
+        environment = environment_from_binding_v06(binding)
+        if args.stage == "environment":
+            print(json.dumps({
+                "stage": "environment",
+                "ok": True,
+                "hermeticity": environment.get("hermeticity"),
+            }))
+            return 0
+
+        plan_path = write_environment_replay_plan_v06(
+            environment,
+            root / "pcs-environment-plan.json",
+        )
+        script_path = write_environment_replay_script_v06(
+            environment,
+            root / "reconstruct-environment.sh",
+        )
+        if args.stage == "replay-plan":
+            print(json.dumps({
+                "stage": "replay-plan",
+                "ok": plan_path.is_file() and script_path.is_file(),
+            }))
+            return 0
+
+        sandbox_plan = build_sandbox_replay_plan_v06(certificate, environment)
+        if args.stage == "sandbox-plan":
+            print(json.dumps({
+                "stage": "sandbox-plan",
+                "ok": True,
+                "available": sandbox_plan is not None,
+                "sha256": (
+                    hashlib.sha256(
+                        json.dumps(sandbox_plan, sort_keys=True).encode("utf-8")
+                    ).hexdigest()
+                    if sandbox_plan is not None else None
+                ),
+            }))
             return 0
 
         result = prepare_verified_environment_workspace_v06(
