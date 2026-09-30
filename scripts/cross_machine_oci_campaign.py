@@ -482,12 +482,26 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
                     "host_machine": machine["host"].get("machine"),
                     "docker_architecture": machine["host"].get("docker_architecture"),
                     "valid": row.get("valid"),
+                    "prepared_valid": row.get("prepared_valid"),
                     "output_sha256": row.get("realized_predictions_sha256"),
                     "output_matches_producer": row.get("output_matches_producer"),
                     "realized_environment_semantic_sha256": row.get("realized_environment_semantic_sha256"),
                     "dependency_tree_sha256": row.get("dependency_tree_sha256"),
                     "container_image_digest": row.get("container_image_digest"),
                     "platform": row.get("platform"),
+                    "environment_contract_match": (
+                        row.get("execution_result", {}).get("environment_contract_match")
+                        if isinstance(row.get("execution_result"), dict) else None
+                    ),
+                    "determinism_confirmed": (
+                        row.get("execution_result", {}).get("determinism_confirmed")
+                        if isinstance(row.get("execution_result"), dict) else None
+                    ),
+                    "determinism_status": (
+                        row.get("determinism", {}).get("status")
+                        if isinstance(row.get("determinism"), dict) else None
+                    ),
+                    "verdict": row.get("verdict"),
                     "exception": row.get("exception"),
                 }
             )
@@ -564,6 +578,31 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
         provenance_changed = provenance_changed and bool(base and full and base != full)
         os_changed = os_changed and bool(base and bull and base != bull)
 
+    positive_variants = [
+        "baseline_locked_bookworm",
+        "lock_range_bookworm",
+        "os_bullseye_locked",
+        "provenance_full_bookworm",
+    ]
+    component_assertions = {
+        "all_positive_prepared_valid": all(
+            len(rows(v)) == machine_count and all(x.get("prepared_valid") is True for x in rows(v))
+            for v in positive_variants
+        ),
+        "all_positive_environment_contracts_match": all(
+            len(rows(v)) == machine_count and all(x.get("environment_contract_match") is True for x in rows(v))
+            for v in positive_variants
+        ),
+        "all_positive_determinism_confirmed": all(
+            len(rows(v)) == machine_count and all(x.get("determinism_confirmed") is True for x in rows(v))
+            for v in positive_variants
+        ),
+        "all_positive_outputs_match_producer": all(
+            len(rows(v)) == machine_count and all(x.get("output_matches_producer") is True for x in rows(v))
+            for v in positive_variants
+        ),
+    }
+
     assertions = {
         "at_least_two_independent_machines": machine_count >= 2,
         "amd64_and_arm64_observed": has_x64 and has_arm64,
@@ -592,6 +631,7 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
             and all(missing_base_attacks)
         ),
     }
+    assertions.update(component_assertions)
     success = all(assertions.values())
 
     aggregate_value = {
