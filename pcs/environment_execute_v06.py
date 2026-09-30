@@ -593,11 +593,18 @@ class _OciBackend:
                         )
             tag = "pcs-replay-" + plan["semantic_sha256"][:20]
             pull = "--pull=false" if self.runtime_name == "docker" else "--pull=never"
-            p = _run([
+            build_cmd = [
                 self.runtime, "build", "--network=none", "--no-cache", pull,
                 "--build-arg", "SOURCE_DATE_EPOCH=0",
-                "-t", tag, "-f", str(cf), str(self.root)
-            ], self.timeout)
+            ]
+            if self.runtime_name == "docker":
+                # BuildKit attestations may encode fresh build metadata even when
+                # the filesystem/config inputs are otherwise identical. Disable
+                # those unsigned attestations so the locally realized image
+                # identity can itself be a reproducible replay observation.
+                build_cmd += ["--provenance=false", "--sbom=false"]
+            build_cmd += ["-t", tag, "-f", str(cf), str(self.root)]
+            p = _run(build_cmd, self.timeout)
             if p.returncode: raise V06SandboxReplayError("offline OCI build failed: " + p.stderr.decode(errors="replace")[:4096])
             self.image_ref = tag; self.built_image = True
         self.image_meta = self.inspect(); return self.image_meta
