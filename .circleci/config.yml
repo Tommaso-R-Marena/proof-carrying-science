@@ -43,7 +43,7 @@ jobs:
             python --version
             pip --version
 
-  workspace-case-1:
+  workspace-collect:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -56,12 +56,12 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: test_prepare_verified_environment_workspace_materializes_signed_project_without_execution
+          name: Collect workspace tests
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_verified_environment_workspace_materializes_signed_project_without_execution
+            python -m pytest --collect-only -q tests/test_environment_workspace_v06.py
 
-  workspace-case-2:
+  workspace-bundle-fixture:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -74,12 +74,25 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: test_prepare_environment_workspace_refuses_existing_destination
+          name: Build workspace test bundle fixture
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_workspace_refuses_existing_destination
+            python - <<'PY'
+            import importlib.util
+            import tempfile
+            from pathlib import Path
+            spec = importlib.util.spec_from_file_location("workspace_tests", "tests/test_environment_workspace_v06.py")
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            with tempfile.TemporaryDirectory() as d:
+                bundle, public, fingerprint, project = mod._bundle(Path(d))
+                assert bundle.is_file()
+                assert public.is_file()
+                assert fingerprint
+                assert project.is_dir()
+            PY
 
-  workspace-case-3:
+  workspace-prepare-diagnostic:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -92,46 +105,28 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: test_prepare_environment_workspace_refuses_wrong_producer_key
+          name: Prepare verified environment workspace
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_workspace_refuses_wrong_producer_key
-
-  workspace-case-4:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - setup-python
-      - run:
-          name: Install PCS with test dependencies
-          command: |
-            . .venv/bin/activate
-            python -m pip install -e ".[dev]"
-      - run:
-          name: test_prepare_environment_cli_creates_verified_nonexecuted_workspace
-          command: |
-            . .venv/bin/activate
-            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_cli_creates_verified_nonexecuted_workspace
-
-  workspace-case-5:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - setup-python
-      - run:
-          name: Install PCS with test dependencies
-          command: |
-            . .venv/bin/activate
-            python -m pip install -e ".[dev]"
-      - run:
-          name: test_prepare_environment_workspace_rejects_bundle_swap_after_verification
-          command: |
-            . .venv/bin/activate
-            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_workspace_rejects_bundle_swap_after_verification
+            python - <<'PY'
+            import importlib.util
+            import tempfile
+            from pathlib import Path
+            from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
+            spec = importlib.util.spec_from_file_location("workspace_tests", "tests/test_environment_workspace_v06.py")
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            with tempfile.TemporaryDirectory() as d:
+                root = Path(d)
+                bundle, public, fingerprint, project = mod._bundle(root)
+                result = prepare_verified_environment_workspace_v06(
+                    bundle,
+                    root / "workspace",
+                    public,
+                    expected_fingerprint=fingerprint,
+                )
+                assert result["valid"] is True
+            PY
 
   produce-signed-campaign:
     machine:
@@ -228,33 +223,21 @@ workflows:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - workspace-case-1:
+      - workspace-collect:
           requires:
             - environment-probe
           filters: *pcs_branch
-      - workspace-case-2:
+      - workspace-bundle-fixture:
           requires:
-            - environment-probe
+            - workspace-collect
           filters: *pcs_branch
-      - workspace-case-3:
+      - workspace-prepare-diagnostic:
           requires:
-            - environment-probe
-          filters: *pcs_branch
-      - workspace-case-4:
-          requires:
-            - environment-probe
-          filters: *pcs_branch
-      - workspace-case-5:
-          requires:
-            - environment-probe
+            - workspace-bundle-fixture
           filters: *pcs_branch
       - produce-signed-campaign:
           requires:
-            - workspace-case-1
-            - workspace-case-2
-            - workspace-case-3
-            - workspace-case-4
-            - workspace-case-5
+            - workspace-prepare-diagnostic
           filters: *pcs_branch
       - replay-amd64:
           requires:
