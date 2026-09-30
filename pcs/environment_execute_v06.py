@@ -233,11 +233,6 @@ def _version_tuple(v: str) -> tuple[int, ...] | None:
     return tuple(int(x) for x in m.group(1).split(".")) if m else None
 
 
-def _version_tuple(v: str) -> tuple[int, ...] | None:
-    m = re.match(r"^\s*(\d+(?:\.\d+)*)", v)
-    return tuple(int(x) for x in m.group(1).split(".")) if m else None
-
-
 def _pad_versions(a: tuple[int, ...], b: tuple[int, ...]) -> tuple[tuple[int, ...], tuple[int, ...]]:
     width = max(len(a), len(b))
     return a + (0,) * (width - len(a)), b + (0,) * (width - len(b))
