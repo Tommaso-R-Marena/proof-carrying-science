@@ -79,6 +79,8 @@ class _FakeBackend:
                  "r":{"version":None,"packages":[],"executable_sha256":None},
                  "conda":{"packages":[]},"platform":{"probe":"Linux test","image_os":"linux","image_architecture":"amd64"},
                  "container_image":self.image_meta,
+                 "container_image_digest":self.image_meta["image_id"],
+                 "container_image_digest_kind":"oci_image_id",
                  "dependency_tree_sha256":hashlib.sha256(canonicalize_jcs(tree).encode()).hexdigest()}
         value["semantic_sha256"] = hashlib.sha256(canonicalize_jcs(value).encode()).hexdigest()
         return value
@@ -108,6 +110,8 @@ def test_replay_removes_stale_output_recreates_exact_bytes_and_captures_realized
     assert receipt["environment_comparison"]["enforceable_contract_match"] is True
     assert receipt["environment_comparison"]["interpreter_binary_hash"]["python_sha256"] == "a"*64
     assert realized["platform"]["image_architecture"] == "amd64"
+    assert realized["container_image_digest"] == "sha256:" + "f" * 64
+    assert realized["container_image_digest_kind"] == "oci_image_id"
     assert len(realized["dependency_tree_sha256"]) == 64
     assert (out / "outputs" / "replayed.txt").read_text(encoding="utf-8") == "HELLO\n"
     assert (workspace / "replayed.txt").read_text(encoding="utf-8") == "HELLO\n"
