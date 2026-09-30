@@ -51,12 +51,12 @@ jobs:
       - checkout
       - install-pcs
       - run:
-          name: Import workspace module
+          name: Workspace diagnostic import
           command: |
             . .venv/bin/activate
             python scripts/diagnose_workspace_v06.py import
 
-  workspace-bundle:
+  workspace-scaffold:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -64,10 +64,49 @@ jobs:
       - checkout
       - install-pcs
       - run:
-          name: Build signed diagnostic bundle
+          name: Workspace diagnostic scaffold
           command: |
             . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py bundle
+            python scripts/diagnose_workspace_v06.py scaffold
+
+  workspace-discover:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic discover
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py discover
+
+  workspace-confirm:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic confirm
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py confirm
+
+  workspace-attest:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic attest
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py attest
 
   workspace-prepare:
     machine:
@@ -77,7 +116,7 @@ jobs:
       - checkout
       - install-pcs
       - run:
-          name: Prepare verified workspace
+          name: Workspace diagnostic prepare
           command: |
             . .venv/bin/activate
             python scripts/diagnose_workspace_v06.py prepare
@@ -181,13 +220,25 @@ workflows:
           requires:
             - environment-probe
           filters: *pcs_branch
-      - workspace-bundle:
+      - workspace-scaffold:
           requires:
             - workspace-import
           filters: *pcs_branch
+      - workspace-discover:
+          requires:
+            - workspace-scaffold
+          filters: *pcs_branch
+      - workspace-confirm:
+          requires:
+            - workspace-discover
+          filters: *pcs_branch
+      - workspace-attest:
+          requires:
+            - workspace-confirm
+          filters: *pcs_branch
       - workspace-prepare:
           requires:
-            - workspace-bundle
+            - workspace-attest
           filters: *pcs_branch
       - produce-signed-campaign:
           requires:
