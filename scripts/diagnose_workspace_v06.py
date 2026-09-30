@@ -16,7 +16,7 @@ from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
 
 
-def build_fixture(root: Path) -> tuple[Path, Path, str, Path]:
+def scaffold(root: Path) -> Path:
     project = root / "study"
     init_project(project, template="pkpd", subject="environment-workspace-diagnostic")
     (project / "requirements.txt").write_text(
@@ -30,7 +30,10 @@ def build_fixture(root: Path) -> tuple[Path, Path, str, Path]:
         "COPY . .\n",
         encoding="utf-8",
     )
+    return project
 
+
+def discover(project: Path) -> Path:
     report = discover_project_v06(project)
     draft = project / "pcs-manifest.draft.json"
     write_discovery_outputs_v06(
@@ -38,9 +41,16 @@ def build_fixture(root: Path) -> tuple[Path, Path, str, Path]:
         manifest_output=draft,
         report_output=project / "pcs-discovery.json",
     )
+    return draft
+
+
+def confirm(project: Path, draft: Path) -> Path:
     manifest = project / "manifest.json"
     confirm_manifest_draft_v06(draft, manifest, project_root=project)
+    return manifest
 
+
+def attest(root: Path, manifest: Path) -> tuple[Path, Path, str]:
     private = root / "private.pem"
     public = root / "public.pem"
     fingerprint = generate_keypair(private, public)["fingerprint"]
@@ -54,12 +64,15 @@ def build_fixture(root: Path) -> tuple[Path, Path, str, Path]:
     )
     if result.get("valid") is not True:
         raise RuntimeError(f"attestation failed: {result}")
-    return bundle, public, fingerprint, project
+    return bundle, public, fingerprint
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["import", "bundle", "prepare"])
+    parser.add_argument(
+        "stage",
+        choices=["import", "scaffold", "discover", "confirm", "attest", "prepare"],
+    )
     args = parser.parse_args()
 
     if args.stage == "import":
@@ -68,14 +81,24 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix="pcs-workspace-diagnostic-") as tmp:
         root = Path(tmp)
-        bundle, public, fingerprint, project = build_fixture(root)
-        if args.stage == "bundle":
-            print(json.dumps({
-                "stage": "bundle",
-                "ok": True,
-                "bundle_exists": bundle.is_file(),
-                "project_exists": project.is_dir(),
-            }))
+        project = scaffold(root)
+        if args.stage == "scaffold":
+            print(json.dumps({"stage": "scaffold", "ok": project.is_dir()}))
+            return 0
+
+        draft = discover(project)
+        if args.stage == "discover":
+            print(json.dumps({"stage": "discover", "ok": draft.is_file()}))
+            return 0
+
+        manifest = confirm(project, draft)
+        if args.stage == "confirm":
+            print(json.dumps({"stage": "confirm", "ok": manifest.is_file()}))
+            return 0
+
+        bundle, public, fingerprint = attest(root, manifest)
+        if args.stage == "attest":
+            print(json.dumps({"stage": "attest", "ok": bundle.is_file()}))
             return 0
 
         result = prepare_verified_environment_workspace_v06(
