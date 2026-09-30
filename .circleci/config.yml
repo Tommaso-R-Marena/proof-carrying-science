@@ -43,7 +43,7 @@ jobs:
             python --version
             pip --version
 
-  regression-gate:
+  test-environment-execute:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -56,10 +56,64 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: Run replay regression gate
+          name: Test environment executor
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_execute_v06.py tests/test_environment_workspace_v06.py tests/test_environment_replay_v06.py tests/test_workflow_replay_v06.py
+            python -m pytest -q tests/test_environment_execute_v06.py
+
+  test-environment-workspace:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-python
+      - run:
+          name: Install PCS with test dependencies
+          command: |
+            . .venv/bin/activate
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Test environment workspace
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_workspace_v06.py
+
+  test-environment-replay:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-python
+      - run:
+          name: Install PCS with test dependencies
+          command: |
+            . .venv/bin/activate
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Test environment replay
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_replay_v06.py
+
+  test-workflow-replay:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-python
+      - run:
+          name: Install PCS with test dependencies
+          command: |
+            . .venv/bin/activate
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Test workflow replay
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_workflow_replay_v06.py
 
   produce-signed-campaign:
     machine:
@@ -156,13 +210,28 @@ workflows:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - regression-gate:
+      - test-environment-execute:
+          requires:
+            - environment-probe
+          filters: *pcs_branch
+      - test-environment-workspace:
+          requires:
+            - environment-probe
+          filters: *pcs_branch
+      - test-environment-replay:
+          requires:
+            - environment-probe
+          filters: *pcs_branch
+      - test-workflow-replay:
           requires:
             - environment-probe
           filters: *pcs_branch
       - produce-signed-campaign:
           requires:
-            - regression-gate
+            - test-environment-execute
+            - test-environment-workspace
+            - test-environment-replay
+            - test-workflow-replay
           filters: *pcs_branch
       - replay-amd64:
           requires:
