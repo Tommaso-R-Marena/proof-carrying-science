@@ -32,14 +32,15 @@ from .verifier_zip_v06 import (
 
 ENVIRONMENT_WORKSPACE_FORMAT_V06 = "pcs-environment-workspace-v1"
 SIGNED_CERTIFICATE_FILE_V06 = "pcs-signed-certificate.json"
-CERTIFICATE_SIGNATURE_FILE_V06 = "pcs-certificate-signature.json"
 _WORKSPACE_CONTROL_PATHS_V06 = {
     "pcs-environment-workspace.json",
     "pcs-environment-plan.json",
     "pcs-verification-receipt.json",
     "reconstruct-environment.sh",
     SIGNED_CERTIFICATE_FILE_V06,
-    CERTIFICATE_SIGNATURE_FILE_V06,
+    "pcs-signed-certificate-signature.json",
+    "pcs-signed-environment.json",
+    "pcs-execution-plan.json",
 }
 
 
@@ -292,13 +293,6 @@ def prepare_verified_environment_workspace_v06(
             encoding="utf-8",
         )
 
-        signed_certificate_path = staging / SIGNED_CERTIFICATE_FILE_V06
-        signed_certificate_path.write_bytes(loaded["certificate_bytes"])
-        certificate_signature_path = staging / CERTIFICATE_SIGNATURE_FILE_V06
-        certificate_signature_path.write_bytes(
-            loaded["certificate_signature_bytes"]
-        )
-
         metadata = {
             "format": ENVIRONMENT_WORKSPACE_FORMAT_V06,
             "bundle_sha256": loaded["bundle_sha256"],
@@ -340,8 +334,6 @@ def prepare_verified_environment_workspace_v06(
             "replay_plan": plan_path.name,
             "review_before_run_script": script_path.name,
             "verification_receipt": receipt_path.name,
-            "signed_certificate": signed_certificate_path.name,
-            "certificate_signature": certificate_signature_path.name,
             "replay_plan_sha256": hashlib.sha256(
                 plan_path.read_bytes()
             ).hexdigest(),
@@ -351,18 +343,12 @@ def prepare_verified_environment_workspace_v06(
             "verification_receipt_sha256": hashlib.sha256(
                 receipt_path.read_bytes()
             ).hexdigest(),
-            "signed_certificate_sha256": hashlib.sha256(
-                signed_certificate_path.read_bytes()
-            ).hexdigest(),
-            "certificate_signature_sha256": hashlib.sha256(
-                certificate_signature_path.read_bytes()
-            ).hexdigest(),
             "automatic_execution_permitted_by_pcs": False,
             "warning": (
                 "Review reconstruct-environment.sh before execution. Environment "
                 "installation/build commands may access the network and execute "
                 "project or dependency build/install code. PCS did not execute them. "
-                "Use pcs execute-replay-v06 explicitly to run the prepared workflow "
+                "Use pcs execute-environment-v06 explicitly to run the prepared workflow "
                 "inside the fail-closed OCI sandbox."
             ),
         }
@@ -410,5 +396,4 @@ def prepare_verified_environment_workspace_v06(
         ),
         "automatic_execution_permitted_by_pcs": False,
         "signed_certificate": str(destination / SIGNED_CERTIFICATE_FILE_V06),
-        "certificate_signature": str(destination / CERTIFICATE_SIGNATURE_FILE_V06),
     }
