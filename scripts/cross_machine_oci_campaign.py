@@ -315,25 +315,29 @@ def replay_one(source: Path, result_root: Path, meta: dict[str, Any]) -> dict[st
     variant_id = meta["id"]
     target = result_root / variant_id
     target.mkdir(parents=True)
-    pre_pull(meta)
-    workspace = target / "workspace"
-    public = source / variant_id / "producer-public.pem"
-    bundle = source / variant_id / "study.pcs.zip"
-    fingerprint = meta["producer_public_key_fingerprint"]
-    prepared = prepare_verified_environment_workspace_v06(
-        bundle,
-        workspace,
-        public,
-        expected_fingerprint=fingerprint,
-    )
-    execution_dir = target / "replay"
     record: dict[str, Any] = {
         "variant": variant_id,
-        "prepared_valid": prepared.get("valid"),
+        "prepared_valid": False,
         "expected_contract_valid": meta.get("expected_contract_valid"),
         "expected_predictions_sha256": meta["expected_predictions_sha256"],
     }
     try:
+        # Pre-pulling is deliberately outside the PCS deterministic replay itself.
+        # PCS subsequently refuses network access/pulls and verifies that the exact
+        # digest-pinned signed base is already present.
+        pre_pull(meta)
+        workspace = target / "workspace"
+        public = source / variant_id / "producer-public.pem"
+        bundle = source / variant_id / "study.pcs.zip"
+        fingerprint = meta["producer_public_key_fingerprint"]
+        prepared = prepare_verified_environment_workspace_v06(
+            bundle,
+            workspace,
+            public,
+            expected_fingerprint=fingerprint,
+        )
+        record["prepared_valid"] = bool(prepared.get("valid"))
+        execution_dir = target / "replay"
         result = execute_prepared_replay_workspace_v06(
             workspace,
             execution_dir,
@@ -365,12 +369,12 @@ def replay_one(source: Path, result_root: Path, meta: dict[str, Any]) -> dict[st
                 record["realized_predictions_sha256"] == meta["expected_predictions_sha256"]
             )
     except Exception as exc:
+        # Architecture/platform probes are part of the falsification matrix.
+        # Record failures per variant instead of aborting the entire machine.
         record["valid"] = False
         record["exception"] = f"{type(exc).__name__}: {exc}"
     json_write(target / "summary.json", record)
     return record
-
-
 def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
     if shutil.which("docker") is None:
         raise RuntimeError("Docker is required")
@@ -459,6 +463,7 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
             continue
         if isinstance(value, dict) and value.get("format") == FORMAT and value.get("phase") == "consumer":
             machine_summaries.append(value)
+
     machines = [x["host"]["machine_id"] for x in machine_summaries]
     by_variant: dict[str, list[dict[str, Any]]] = {}
     for machine in machine_summaries:
@@ -472,38 +477,128 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
                     "valid": row.get("valid"),
                     "output_sha256": row.get("realized_predictions_sha256"),
                     "output_matches_producer": row.get("output_matches_producer"),
+                    "realized_environment_semantic_sha256": row.get("realized_environment_semantic_sha256"),
                     "dependency_tree_sha256": row.get("dependency_tree_sha256"),
                     "container_image_digest": row.get("container_image_digest"),
                     "platform": row.get("platform"),
                     "exception": row.get("exception"),
                 }
             )
-    comparisons = {}
+
+    comparisons: dict[str, Any] = {}
     for variant, rows in sorted(by_variant.items()):
         hashes = sorted({r["output_sha256"] for r in rows if isinstance(r.get("output_sha256"), str)})
+        env_hashes = sorted(
+            {
+                r["realized_environment_semantic_sha256"]
+                for r in rows
+                if isinstance(r.get("realized_environment_semantic_sha256"), str)
+            }
+        )
         comparisons[variant] = {
             "machines": len(rows),
             "valid_runs": sum(1 for r in rows if r.get("valid") is True),
             "unique_output_hashes": len(hashes),
             "output_hashes": hashes,
+            "unique_realized_environment_hashes": len(env_hashes),
+            "realized_environment_hashes": env_hashes,
             "rows": rows,
         }
 
-    aggregate = {
-        "format": FORMAT,
-        "phase": "aggregate",
-        "machine_count": len(machine_summaries),
-        "machines": machines,
-        "comparisons": comparisons,
-        "baseline_cross_machine_byte_identical": (
-            comparisons.get("baseline_locked_bookworm", {}).get("unique_output_hashes") == 1
-            and comparisons.get("baseline_locked_bookworm", {}).get("machines", 0) >= 2
+    machine_count = len(machine_summaries)
+    architectures = {
+        str(x["host"].get("machine") or x["host"].get("docker_architecture") or "").lower()
+        for x in machine_summaries
+    }
+    has_x64 = any(x in {"x86_64", "amd64"} or "x86" in x for x in architectures)
+    has_arm64 = any(x in {"aarch64", "arm64"} or "arm" in x for x in architectures)
+
+    def rows(variant: str) -> list[dict[str, Any]]:
+        return comparisons.get(variant, {}).get("rows", [])
+
+    def all_valid(variant: str) -> bool:
+        r = rows(variant)
+        return len(r) == machine_count and machine_count >= 2 and all(x.get("valid") is True for x in r)
+
+    def one_output_hash(variant: str) -> bool:
+        c = comparisons.get(variant, {})
+        return c.get("machines") == machine_count and c.get("unique_output_hashes") == 1
+
+    def all_invalid(variant: str) -> bool:
+        r = rows(variant)
+        return len(r) == machine_count and machine_count >= 2 and all(x.get("valid") is False for x in r)
+
+    provenance_attacks = [
+        bool(x.get("provenance_substitution_attack", {}).get("rejected"))
+        for x in machine_summaries
+    ]
+    missing_base_attacks = [
+        bool(x.get("missing_signed_base_attack", {}).get("rejected"))
+        for x in machine_summaries
+    ]
+
+    # Confirm that changing the signed container base really changed provenance
+    # while leaving the scientific output byte-identical.
+    provenance_changed = True
+    os_changed = True
+    for machine in machines:
+        def digest_for(variant: str) -> str | None:
+            return next(
+                (
+                    row.get("container_image_digest")
+                    for row in rows(variant)
+                    if row.get("machine_id") == machine
+                ),
+                None,
+            )
+        base = digest_for("baseline_locked_bookworm")
+        full = digest_for("provenance_full_bookworm")
+        bull = digest_for("os_bullseye_locked")
+        provenance_changed = provenance_changed and bool(base and full and base != full)
+        os_changed = os_changed and bool(base and bull and base != bull)
+
+    assertions = {
+        "at_least_two_independent_machines": machine_count >= 2,
+        "amd64_and_arm64_observed": has_x64 and has_arm64,
+        "baseline_valid_on_every_machine": all_valid("baseline_locked_bookworm"),
+        "baseline_cross_machine_byte_identical": one_output_hash("baseline_locked_bookworm"),
+        "baseline_realized_environment_differs_across_architecture": (
+            comparisons.get("baseline_locked_bookworm", {}).get("unique_realized_environment_hashes", 0) >= 2
+        ),
+        "range_lock_valid_on_every_machine": all_valid("lock_range_bookworm"),
+        "range_lock_output_byte_identical": one_output_hash("lock_range_bookworm"),
+        "impossible_exact_lock_rejected_on_every_machine": all_invalid("lock_bad_bookworm"),
+        "container_os_variant_valid_on_every_machine": all_valid("os_bullseye_locked"),
+        "container_os_variant_output_byte_identical": one_output_hash("os_bullseye_locked"),
+        "container_os_variant_changes_image_identity": os_changed,
+        "provenance_variant_valid_on_every_machine": all_valid("provenance_full_bookworm"),
+        "provenance_variant_output_byte_identical": one_output_hash("provenance_full_bookworm"),
+        "provenance_variant_changes_image_identity": provenance_changed,
+        "reviewer_supplied_image_substitution_rejected": (
+            len(provenance_attacks) == machine_count
+            and machine_count >= 2
+            and all(provenance_attacks)
+        ),
+        "missing_signed_base_refuses_registry_pull": (
+            len(missing_base_attacks) == machine_count
+            and machine_count >= 2
+            and all(missing_base_attacks)
         ),
     }
-    json_write(output, aggregate)
-    return aggregate
+    success = all(assertions.values())
 
-
+    aggregate_value = {
+        "format": FORMAT,
+        "phase": "aggregate",
+        "machine_count": machine_count,
+        "machines": machines,
+        "architectures": sorted(architectures),
+        "comparisons": comparisons,
+        "assertions": assertions,
+        "success": success,
+    }
+    json_write(output, aggregate_value)
+    return aggregate_value
 def main() -> int:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
@@ -525,6 +620,8 @@ def main() -> int:
     else:
         value = aggregate(Path(args.input).resolve(), Path(args.output).resolve())
     print(json.dumps(value, indent=2, sort_keys=True))
+    if args.command == "aggregate" and value.get("success") is not True:
+        return 1
     return 0
 
 
