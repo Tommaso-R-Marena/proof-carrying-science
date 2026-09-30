@@ -32,7 +32,7 @@ def _workspace(tmp_path: Path) -> tuple[Path, Path, str]:
     draft = project / "pcs-manifest.draft.json"
     write_discovery_outputs_v06(report, manifest_output=draft, report_output=project / "pcs-discovery.json")
     manifest = project / "manifest.json"
-    confirm_manifest_draft_v06(draft, manifest, project_root=project)
+    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
     private = tmp_path / "private.pem"; public = tmp_path / "public.pem"
     fingerprint = generate_keypair(private, public)["fingerprint"]
     bundle = tmp_path / "study.pcs.zip"
