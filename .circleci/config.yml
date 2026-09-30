@@ -237,6 +237,29 @@ jobs:
             python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode enforceable-contract
 
 
+  aggregate-evidence:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - install-pcs
+      - run:
+          name: Aggregate and assert cross-machine OCI evidence
+          command: |
+            . .venv/bin/activate
+            python scripts/cross_machine_oci_campaign.py aggregate --input /tmp/pcs-cross-machine/results --output /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+            cat /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+          destination: circleci-cross-machine-summary.json
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/results
+          destination: machine-results
+
+
 workflows:
   pcs-cross-machine-oci:
     jobs:
@@ -308,6 +331,11 @@ workflows:
             - replay-arm64
           filters: *pcs_branch
       - env-06:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - aggregate-evidence:
           requires:
             - replay-amd64
             - replay-arm64
