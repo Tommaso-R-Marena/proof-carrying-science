@@ -95,8 +95,19 @@ def _workflow_contract(node: dict[str, Any]) -> dict[str, Any] | None:
         raise V06SandboxReplayError(f"invalid workflow proposition: {exc}") from exc
     if not isinstance(value, dict) or canonicalize_jcs(value) != raw:
         raise V06SandboxReplayError("workflow proposition is not canonical JCS")
+
+    # The v0.6 workflow namespace also carries signed semantic/domain workflow
+    # contracts (for example PK/PD equation contracts). Those are evidence, not
+    # executable source-analysis claims. Only propositions explicitly produced
+    # by the static workflow mapper are eligible to become sandbox execution
+    # nodes. This prevents semantic contracts from being misclassified as code.
+    if value.get("inference_format") != "pcs-static-workflow-map-v1":
+        return None
+
     if value.get("human_confirmed") is not True or value.get("static_only") is not True:
         raise V06SandboxReplayError("workflow proposition is not confirmed static analysis")
+    if value.get("user_code_executed") is not False:
+        raise V06SandboxReplayError("workflow proposition must state user_code_executed=false")
     if value.get("source_kind") not in {"python", "jupyter", "r"}:
         raise V06SandboxReplayError("workflow source kind is not executable")
     return value
