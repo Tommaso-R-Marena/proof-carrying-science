@@ -325,6 +325,18 @@ remain unchanged, the exact output namespace is respected when the static
 workflow contract claimed an exact set, and every enforceable environment
 expectation matches.
 
+Replay-created symbolic links are rejected before host-side hashing or output
+copying, so executed code cannot use a symlink as a post-container read primitive.
+Prepared-workspace control paths are confined to the workspace, the signed
+certificate is re-verified immediately before execution, and the sandbox plan is
+re-derived from the signed certificate rather than trusted from local metadata.
+
+For realized dependency comparison, unconditional exact pins require exact
+installed versions. Recognized range/caret/tilde/wildcard constraints are compared
+to installed versions. Conditional marker dependencies are reported explicitly as
+conditional rather than incorrectly promoted to unconditional requirements; marker
+evaluation is not yet part of the v0.6 realized-environment comparator.
+
 ### Determinism boundary
 
 The runner removes common nondeterminism by fixing process environment/thread
