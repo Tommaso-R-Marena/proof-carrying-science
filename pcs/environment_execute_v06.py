@@ -513,6 +513,10 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
             "kind": realized.get("container_image_digest_kind"),
             "image_metadata": realized.get("container_image"),
         },
+        "oci_runtime": {
+            "status": "observed_not_signed",
+            "value": realized.get("oci_runtime"),
+        },
         "dependency_tree_fingerprint": {"status": "observed_not_signed", "sha256": realized.get("dependency_tree_sha256")},
         "enforceable_contract_match": bool(ok),
     }
@@ -637,6 +641,39 @@ class _OciBackend:
             return self.command([self.python(),"-B","-m","jupyter","nbconvert","--to","notebook","--execute",src,"--output","/tmp/pcs.ipynb"])
         return self.command(["Rscript","--vanilla",src])
 
+    def runtime_identity(self) -> dict[str, Any]:
+        version_probe = _run([self.runtime, "--version"], min(self.timeout, 60))
+        version_output = (
+            version_probe.stdout.decode(errors="replace").strip()[:512]
+            if version_probe.returncode == 0
+            else None
+        )
+        rootless = None
+        if self.runtime_name == "podman":
+            info_probe = _run(
+                [self.runtime, "info", "--format", "json"],
+                min(self.timeout, 60),
+            )
+            if info_probe.returncode == 0:
+                try:
+                    info = json.loads(info_probe.stdout.decode())
+                except json.JSONDecodeError:
+                    info = {}
+                host = info.get("host") if isinstance(info, dict) else None
+                security = host.get("security") if isinstance(host, dict) else None
+                if isinstance(security, dict) and isinstance(
+                    security.get("rootless"), bool
+                ):
+                    rootless = security["rootless"]
+        return {
+            "name": self.runtime_name,
+            "version_output": version_output,
+            "client_effective_uid": (
+                os.geteuid() if hasattr(os, "geteuid") else None
+            ),
+            "podman_rootless": rootless,
+        }
+
     def capture_environment(self) -> dict[str, Any]:
         try:
             pyexe = self.python()
@@ -714,6 +751,7 @@ class _OciBackend:
                  "r": {"version": rv, "packages": rpackages, "executable_sha256": rm.group(1).lower() if rm else None},
                  "conda": {"packages": conda, "explicit": conda_explicit}, "platform": {"probe": plat,
                  "image_os": self.image_meta.get("os"), "image_architecture": self.image_meta.get("architecture")},
+                 "oci_runtime": self.runtime_identity(),
                  "container_image": self.image_meta,
                  "container_image_digest": image_digest,
                  "container_image_digest_kind": image_digest_kind,
@@ -753,6 +791,7 @@ def _determinism_projection_v06(
             "executable_sha256": realized.get("r", {}).get("executable_sha256"),
         },
         "platform": realized.get("platform"),
+        "oci_runtime": realized.get("oci_runtime"),
         "outputs": sorted(
             [
                 {
