@@ -43,7 +43,7 @@ jobs:
             python --version
             pip --version
 
-  test-environment-execute:
+  workspace-case-1:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -56,12 +56,12 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: Test environment executor
+          name: test_prepare_verified_environment_workspace_materializes_signed_project_without_execution
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_execute_v06.py
+            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_verified_environment_workspace_materializes_signed_project_without_execution
 
-  test-environment-workspace:
+  workspace-case-2:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -74,12 +74,12 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: Test environment workspace
+          name: test_prepare_environment_workspace_refuses_existing_destination
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_workspace_v06.py
+            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_workspace_refuses_existing_destination
 
-  test-environment-replay:
+  workspace-case-3:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -92,12 +92,12 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: Test environment replay
+          name: test_prepare_environment_workspace_refuses_wrong_producer_key
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_replay_v06.py
+            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_workspace_refuses_wrong_producer_key
 
-  test-workflow-replay:
+  workspace-case-4:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -110,10 +110,28 @@ jobs:
             . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: Test workflow replay
+          name: test_prepare_environment_cli_creates_verified_nonexecuted_workspace
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_workflow_replay_v06.py
+            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_cli_creates_verified_nonexecuted_workspace
+
+  workspace-case-5:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-python
+      - run:
+          name: Install PCS with test dependencies
+          command: |
+            . .venv/bin/activate
+            python -m pip install -e ".[dev]"
+      - run:
+          name: test_prepare_environment_workspace_rejects_bundle_swap_after_verification
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_workspace_v06.py::test_prepare_environment_workspace_rejects_bundle_swap_after_verification
 
   produce-signed-campaign:
     machine:
@@ -210,28 +228,33 @@ workflows:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - test-environment-execute:
+      - workspace-case-1:
           requires:
             - environment-probe
           filters: *pcs_branch
-      - test-environment-workspace:
+      - workspace-case-2:
           requires:
             - environment-probe
           filters: *pcs_branch
-      - test-environment-replay:
+      - workspace-case-3:
           requires:
             - environment-probe
           filters: *pcs_branch
-      - test-workflow-replay:
+      - workspace-case-4:
+          requires:
+            - environment-probe
+          filters: *pcs_branch
+      - workspace-case-5:
           requires:
             - environment-probe
           filters: *pcs_branch
       - produce-signed-campaign:
           requires:
-            - test-environment-execute
-            - test-environment-workspace
-            - test-environment-replay
-            - test-workflow-replay
+            - workspace-case-1
+            - workspace-case-2
+            - workspace-case-3
+            - workspace-case-4
+            - workspace-case-5
           filters: *pcs_branch
       - replay-amd64:
           requires:
