@@ -255,6 +255,66 @@ jobs:
           path: /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64
           destination: circleci-ubuntu24-arm64
 
+  aggregate-core:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - install-pcs
+      - run:
+          name: Check aggregate group core
+          command: |
+            . .venv/bin/activate
+            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group core
+
+  aggregate-locks:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - install-pcs
+      - run:
+          name: Check aggregate group locks
+          command: |
+            . .venv/bin/activate
+            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group locks
+
+  aggregate-variants:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - install-pcs
+      - run:
+          name: Check aggregate group variants
+          command: |
+            . .venv/bin/activate
+            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group variants
+
+  aggregate-attacks:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - install-pcs
+      - run:
+          name: Check aggregate group attacks
+          command: |
+            . .venv/bin/activate
+            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group attacks
+
   aggregate-evidence:
     machine:
       image: ubuntu-2404:2026.05.1
@@ -337,8 +397,30 @@ workflows:
           requires:
             - produce-signed-campaign
           filters: *pcs_branch
-      - aggregate-evidence:
+      - aggregate-core:
           requires:
             - replay-amd64
             - replay-arm64
+          filters: *pcs_branch
+      - aggregate-locks:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - aggregate-variants:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - aggregate-attacks:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - aggregate-evidence:
+          requires:
+            - aggregate-core
+            - aggregate-locks
+            - aggregate-variants
+            - aggregate-attacks
           filters: *pcs_branch
