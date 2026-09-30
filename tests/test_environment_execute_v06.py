@@ -9,7 +9,7 @@ import pytest
 from pcs.attest_v06 import attest_v06
 from pcs.canonical_json import canonicalize_jcs
 from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06, write_discovery_outputs_v06
-from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, V06SandboxReplayError, execute_prepared_replay_workspace_v06
+from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, V06SandboxReplayError, compare_realized_environment_v06, execute_prepared_replay_workspace_v06
 from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
@@ -205,3 +205,90 @@ def test_replay_created_symlink_output_is_rejected_without_following_it(tmp_path
     assert receipt["unsafe_symlinks"] == ["replayed.txt"]
     assert receipt["verdict"]["filesystem_contains_no_symlinks"] is False
     assert not (out / "outputs" / "replayed.txt").exists()
+
+
+def test_realized_range_constraint_is_enforced():
+    environment = {
+        "python": {
+            "dependencies": [
+                {
+                    "name": "demo",
+                    "raw": "demo>=1.0,<2.0",
+                    "exact_pin": False,
+                    "version": None,
+                }
+            ],
+            "interpreter_constraints": [{"value": ">=3.11,<3.13"}],
+        },
+        "r": {"dependencies": [], "interpreter_constraints": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    realized = {
+        "python": {
+            "version": "3.12.2",
+            "executable_sha256": "a" * 64,
+            "packages": [{"name": "demo", "version": "1.7.0"}],
+        },
+        "r": {"version": None, "executable_sha256": None, "packages": []},
+        "conda": {"packages": []},
+        "platform": {"probe": "linux"},
+        "container_image": {},
+        "dependency_tree_sha256": "b" * 64,
+    }
+    comparison = compare_realized_environment_v06(
+        environment,
+        realized,
+        container_status={"status": "not_declared"},
+    )
+    assert comparison["enforceable_contract_match"] is True
+    assert comparison["signed_non_exact_dependencies"][0]["status"] == "constraint_match"
+
+    realized["python"]["packages"][0]["version"] = "2.0.0"
+    comparison = compare_realized_environment_v06(
+        environment,
+        realized,
+        container_status={"status": "not_declared"},
+    )
+    assert comparison["enforceable_contract_match"] is False
+    assert comparison["signed_non_exact_dependencies"][0]["status"] == "constraint_mismatch"
+
+
+def test_conditional_exact_dependency_is_not_misapplied_as_unconditional():
+    environment = {
+        "python": {
+            "dependencies": [
+                {
+                    "name": "win-only",
+                    "raw": 'win-only==1.0; sys_platform == "win32"',
+                    "exact_pin": True,
+                    "version": "1.0",
+                }
+            ],
+            "interpreter_constraints": [],
+        },
+        "r": {"dependencies": [], "interpreter_constraints": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    realized = {
+        "python": {
+            "version": "3.12.2",
+            "executable_sha256": "a" * 64,
+            "packages": [],
+        },
+        "r": {"version": None, "executable_sha256": None, "packages": []},
+        "conda": {"packages": []},
+        "platform": {"probe": "linux"},
+        "container_image": {},
+        "dependency_tree_sha256": "b" * 64,
+    }
+    comparison = compare_realized_environment_v06(
+        environment,
+        realized,
+        container_status={"status": "not_declared"},
+    )
+    assert comparison["enforceable_contract_match"] is True
+    assert comparison["signed_non_exact_dependencies"][0]["status"] == (
+        "conditional_marker_not_evaluated"
+    )
