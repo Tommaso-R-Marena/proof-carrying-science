@@ -179,6 +179,35 @@ jobs:
           path: /tmp/pcs-runtime-boundary/r-results/arm64
           destination: r-runtime/arm64
 
+  replay-r-podman-amd64:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
+      - run:
+          name: Install Podman
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y podman uidmap
+            sudo podman --version
+      - run:
+          name: Replay R-native bundle with rootful Podman
+          command: |
+            mkdir -p /tmp/pcs-runtime-boundary/r-results
+            sudo "$PWD/.venv/bin/python" scripts/r_runtime_campaign.py replay               --input /tmp/pcs-runtime-boundary/r-bundle               --output /tmp/pcs-runtime-boundary/r-results/podman-amd64               --machine-id circleci-r-podman-amd64               --runtime podman
+            sudo chmod -R a+rX /tmp/pcs-runtime-boundary/r-results/podman-amd64
+      - persist_to_workspace:
+          root: /tmp/pcs-runtime-boundary
+          paths:
+            - r-results/podman-amd64
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/r-results/podman-amd64
+          destination: r-runtime/podman-amd64
+
   aggregate-r-runtime:
     machine:
       image: ubuntu-2404:2026.05.1
@@ -240,10 +269,15 @@ workflows:
           requires:
             - produce-r-runtime
           filters: *pcs_branch
+      - replay-r-podman-amd64:
+          requires:
+            - produce-r-runtime
+          filters: *pcs_branch
       - aggregate-r-runtime:
           requires:
             - replay-r-amd64
             - replay-r-arm64
+            - replay-r-podman-amd64
           filters: *pcs_branch
       - runtime-boundaries-complete:
           requires:
