@@ -1,0 +1,157 @@
+version: 2.1
+
+jobs:
+  produce-signed-campaign:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Record producer identity
+          command: |
+            uname -a
+            cat /etc/os-release
+            docker version
+            docker buildx version
+            python3 --version
+      - run:
+          name: Set up PCS
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Replay regression gate
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_execute_v06.py tests/test_environment_workspace_v06.py tests/test_environment_replay_v06.py tests/test_workflow_replay_v06.py
+      - run:
+          name: Produce signed campaign
+          command: |
+            mkdir -p /tmp/pcs-cross-machine
+            . .venv/bin/activate
+            python scripts/cross_machine_oci_campaign.py produce --output /tmp/pcs-cross-machine/bundles
+      - persist_to_workspace:
+          root: /tmp/pcs-cross-machine
+          paths:
+            - bundles
+
+  replay-amd64:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Record amd64 identity
+          command: |
+            uname -a
+            cat /etc/os-release
+            docker version
+            python3 --version
+      - run:
+          name: Set up PCS verifier
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e .
+      - run:
+          name: Replay on amd64
+          command: |
+            mkdir -p /tmp/pcs-cross-machine/results
+            . .venv/bin/activate
+            python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-amd64 --machine-id circleci-ubuntu24-amd64
+      - persist_to_workspace:
+          root: /tmp/pcs-cross-machine
+          paths:
+            - results/circleci-ubuntu24-amd64
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/results/circleci-ubuntu24-amd64
+          destination: circleci-ubuntu24-amd64
+
+  replay-arm64:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Record arm64 identity
+          command: |
+            uname -a
+            cat /etc/os-release
+            docker version
+            python3 --version
+      - run:
+          name: Set up PCS verifier
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e .
+      - run:
+          name: Replay on arm64
+          command: |
+            mkdir -p /tmp/pcs-cross-machine/results
+            . .venv/bin/activate
+            python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64 --machine-id circleci-ubuntu24-arm64
+      - persist_to_workspace:
+          root: /tmp/pcs-cross-machine
+          paths:
+            - results/circleci-ubuntu24-arm64
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64
+          destination: circleci-ubuntu24-arm64
+
+  aggregate-evidence:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Set up evidence reader
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e .
+      - run:
+          name: Assert evidence
+          command: |
+            . .venv/bin/activate
+            python scripts/cross_machine_oci_campaign.py aggregate --input /tmp/pcs-cross-machine/results --output /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+            cat /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+          destination: circleci-cross-machine-summary.json
+
+workflows:
+  pcs-cross-machine-oci:
+    jobs:
+      - produce-signed-campaign:
+          filters: &pcs_branch
+            branches:
+              only: v06/replay-normalized-wire-v2
+      - replay-amd64:
+          requires:
+            - produce-signed-campaign
+          filters: *pcs_branch
+      - replay-arm64:
+          requires:
+            - produce-signed-campaign
+          filters: *pcs_branch
+      - aggregate-evidence:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
