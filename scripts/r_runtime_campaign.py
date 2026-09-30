@@ -198,6 +198,7 @@ def replay(source: Path, output: Path, machine_id: str, runtime: str = "docker")
         "r_package_count": len(rinfo.get("packages", [])),
         "dependency_tree_sha256": realized.get("dependency_tree_sha256"),
         "realized_environment_semantic_sha256": realized.get("semantic_sha256"),
+        "core_oci_runtime": realized.get("oci_runtime"),
         "container_image_digest": realized.get("container_image_digest"),
         "expected_predictions_sha256": meta["expected_predictions_sha256"],
         "realized_predictions_sha256": sha256_file(predictions) if predictions.is_file() else None,
@@ -253,6 +254,15 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
         "scientific_output_byte_identical_across_r_hosts": len(hashes) == 1 and bool(hashes),
         "all_r_outputs_match_signed_producer": bool(rows) and all(
             x.get("output_matches_producer") is True for x in rows
+        ),
+        "pcs_core_runtime_identity_matches_campaign_runtime": bool(rows) and all(
+            x.get("core_oci_runtime", {}).get("name") == x.get("runtime")
+            for x in rows
+        ),
+        "pcs_core_observed_rootful_podman_for_r": any(
+            x.get("runtime") == "podman"
+            and x.get("core_oci_runtime", {}).get("podman_rootless") is False
+            for x in rows
         ),
     }
     value = {
