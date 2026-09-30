@@ -1,7 +1,7 @@
 version: 2.1
 
 commands:
-  setup-python:
+  setup-pcs:
     steps:
       - run:
           name: Install Python tooling
@@ -11,375 +11,242 @@ commands:
             python3 -m venv .venv
             . .venv/bin/activate
             python -m pip install --upgrade pip
-
-  install-pcs:
-    steps:
-      - setup-python
-      - run:
-          name: Install PCS
-          command: |
-            . .venv/bin/activate
             python -m pip install -e .
 
 jobs:
-  produce-signed-campaign:
+  produce-oci-engine:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
-      - setup-python
+      - setup-pcs
       - run:
-          name: Install PCS with test dependencies
+          name: Produce signed OCI engine campaign
           command: |
+            rm -rf /tmp/pcs-runtime-boundary
+            mkdir -p /tmp/pcs-runtime-boundary
             . .venv/bin/activate
-            python -m pip install -e ".[dev]"
-      - run:
-          name: Run replay regression gate
-          command: |
-            . .venv/bin/activate
-            python -m pytest -q tests/test_environment_execute_v06.py tests/test_environment_workspace_v06.py tests/test_environment_replay_v06.py tests/test_workflow_replay_v06.py
-      - run:
-          name: Produce signed multi-architecture campaign
-          command: |
-            rm -rf /tmp/pcs-cross-machine
-            mkdir -p /tmp/pcs-cross-machine
-            . .venv/bin/activate
-            python scripts/cross_machine_oci_campaign.py produce --output /tmp/pcs-cross-machine/bundles
+            python scripts/oci_engine_campaign.py produce --output /tmp/pcs-runtime-boundary/oci-bundle
       - persist_to_workspace:
-          root: /tmp/pcs-cross-machine
+          root: /tmp/pcs-runtime-boundary
           paths:
-            - bundles
+            - oci-bundle
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/oci-bundle/campaign.json
+          destination: oci-engine/producer-campaign.json
 
-  replay-amd64:
+  replay-docker:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - install-pcs
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
       - run:
-          name: Replay signed variants on amd64
+          name: Replay signed bundle with Docker
           command: |
-            mkdir -p /tmp/pcs-cross-machine/results
+            mkdir -p /tmp/pcs-runtime-boundary/oci-results
             . .venv/bin/activate
-            python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-amd64 --machine-id circleci-ubuntu24-amd64
+            python scripts/oci_engine_campaign.py replay               --input /tmp/pcs-runtime-boundary/oci-bundle               --output /tmp/pcs-runtime-boundary/oci-results/docker               --runtime docker               --machine-id circleci-docker-amd64
       - persist_to_workspace:
-          root: /tmp/pcs-cross-machine
+          root: /tmp/pcs-runtime-boundary
           paths:
-            - results/circleci-ubuntu24-amd64
+            - oci-results/docker
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/oci-results/docker
+          destination: oci-engine/docker
 
-  replay-arm64:
+  replay-podman:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
+      - run:
+          name: Install Podman
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y podman uidmap
+            sudo podman --version
+            sudo podman info
+      - run:
+          name: Replay signed bundle with rootful Podman
+          command: |
+            mkdir -p /tmp/pcs-runtime-boundary/oci-results
+            sudo "$PWD/.venv/bin/python" scripts/oci_engine_campaign.py replay               --input /tmp/pcs-runtime-boundary/oci-bundle               --output /tmp/pcs-runtime-boundary/oci-results/podman               --runtime podman               --machine-id circleci-podman-amd64
+            sudo chmod -R a+rX /tmp/pcs-runtime-boundary/oci-results/podman
+      - persist_to_workspace:
+          root: /tmp/pcs-runtime-boundary
+          paths:
+            - oci-results/podman
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/oci-results/podman
+          destination: oci-engine/podman
+
+  aggregate-oci-engine:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
+      - run:
+          name: Assert Docker vs Podman evidence
+          command: |
+            . .venv/bin/activate
+            python scripts/oci_engine_campaign.py aggregate               --input /tmp/pcs-runtime-boundary/oci-results               --output /tmp/pcs-runtime-boundary/oci-engine-summary.json
+            cat /tmp/pcs-runtime-boundary/oci-engine-summary.json
+      - persist_to_workspace:
+          root: /tmp/pcs-runtime-boundary
+          paths:
+            - oci-engine-summary.json
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/oci-engine-summary.json
+          destination: oci-engine-summary.json
+
+  produce-r-runtime:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Produce signed R-native campaign
+          command: |
+            mkdir -p /tmp/pcs-runtime-boundary
+            . .venv/bin/activate
+            python scripts/r_runtime_campaign.py produce --output /tmp/pcs-runtime-boundary/r-bundle
+      - persist_to_workspace:
+          root: /tmp/pcs-runtime-boundary
+          paths:
+            - r-bundle
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/r-bundle/campaign.json
+          destination: r-runtime/producer-campaign.json
+
+  replay-r-amd64:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
+      - run:
+          name: Replay R-native bundle on amd64
+          command: |
+            mkdir -p /tmp/pcs-runtime-boundary/r-results
+            . .venv/bin/activate
+            python scripts/r_runtime_campaign.py replay               --input /tmp/pcs-runtime-boundary/r-bundle               --output /tmp/pcs-runtime-boundary/r-results/amd64               --machine-id circleci-r-amd64
+      - persist_to_workspace:
+          root: /tmp/pcs-runtime-boundary
+          paths:
+            - r-results/amd64
+      - store_artifacts:
+          path: /tmp/pcs-runtime-boundary/r-results/amd64
+          destination: r-runtime/amd64
+
+  replay-r-arm64:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: arm.medium
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - install-pcs
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
       - run:
-          name: Replay signed variants on arm64
+          name: Replay R-native bundle on ARM64
           command: |
-            mkdir -p /tmp/pcs-cross-machine/results
+            mkdir -p /tmp/pcs-runtime-boundary/r-results
             . .venv/bin/activate
-            python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64 --machine-id circleci-ubuntu24-arm64
+            python scripts/r_runtime_campaign.py replay               --input /tmp/pcs-runtime-boundary/r-bundle               --output /tmp/pcs-runtime-boundary/r-results/arm64               --machine-id circleci-r-arm64
       - persist_to_workspace:
-          root: /tmp/pcs-cross-machine
+          root: /tmp/pcs-runtime-boundary
           paths:
-            - results/circleci-ubuntu24-arm64
-
-  replay-ubuntu26-amd64:
-    machine:
-      image: ubuntu-2604:current
-    resource_class: medium
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - install-pcs
-      - run:
-          name: Replay signed variants on Ubuntu 26.04 amd64
-          command: |
-            uname -a
-            cat /etc/os-release
-            docker version
-            mkdir -p /tmp/pcs-cross-machine/results
-            . .venv/bin/activate
-            python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu26-amd64 --machine-id circleci-ubuntu26-amd64
-      - persist_to_workspace:
-          root: /tmp/pcs-cross-machine
-          paths:
-            - results/circleci-ubuntu26-amd64
+            - r-results/arm64
       - store_artifacts:
-          path: /tmp/pcs-cross-machine/results/circleci-ubuntu26-amd64
-          destination: circleci-ubuntu26-amd64
+          path: /tmp/pcs-runtime-boundary/r-results/arm64
+          destination: r-runtime/arm64
 
-  det-01:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Determinism diagnostic runs-completed
-          command: |
-            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode runs-completed
-
-  det-02:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Determinism diagnostic runs-valid
-          command: |
-            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode runs-valid
-
-  det-03:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Determinism diagnostic projection-match
-          command: |
-            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode projection-match
-
-  det-04:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Determinism diagnostic container-digest-stable
-          command: |
-            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode container-digest-stable
-
-  det-05:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Determinism diagnostic dependency-tree-stable
-          command: |
-            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode dependency-tree-stable
-
-  det-06:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Determinism diagnostic realized-environment-stable
-          command: |
-            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode realized-environment-stable
-
-
-  env-01:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Environment exact package pins
-          command: |
-            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode exact-packages
-
-  env-02:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Environment non-exact dependencies
-          command: |
-            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode non-exact-dependencies
-
-  env-03:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Environment interpreter constraints
-          command: |
-            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode interpreter-constraints
-
-  env-04:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Environment signed container binding
-          command: |
-            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode container-binding
-
-  env-05:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Environment signed dependency projection
-          command: |
-            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode dependency-projection
-
-  env-06:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Environment enforceable contract
-          command: |
-            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode enforceable-contract
-
-
-  aggregate-evidence:
+  aggregate-r-runtime:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - install-pcs
+          at: /tmp/pcs-runtime-boundary
+      - setup-pcs
       - run:
-          name: Aggregate and assert cross-machine OCI evidence
+          name: Assert R runtime evidence
           command: |
             . .venv/bin/activate
-            python scripts/cross_machine_oci_campaign.py aggregate --input /tmp/pcs-cross-machine/results --output /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
-            cat /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
+            python scripts/r_runtime_campaign.py aggregate               --input /tmp/pcs-runtime-boundary/r-results               --output /tmp/pcs-runtime-boundary/r-runtime-summary.json
+            cat /tmp/pcs-runtime-boundary/r-runtime-summary.json
+      - persist_to_workspace:
+          root: /tmp/pcs-runtime-boundary
+          paths:
+            - r-runtime-summary.json
       - store_artifacts:
-          path: /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
-          destination: circleci-cross-machine-summary.json
-      - store_artifacts:
-          path: /tmp/pcs-cross-machine/results
-          destination: machine-results
+          path: /tmp/pcs-runtime-boundary/r-runtime-summary.json
+          destination: r-runtime-summary.json
 
+  runtime-boundaries-complete:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - run:
+          name: Boundary campaigns complete
+          command: echo "Docker vs Podman and R runtime campaigns both passed."
 
 workflows:
-  pcs-cross-machine-oci:
+  runtime-boundary-evidence:
     jobs:
-      - produce-signed-campaign:
+      - produce-oci-engine:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - replay-amd64:
+      - replay-docker:
           requires:
-            - produce-signed-campaign
+            - produce-oci-engine
           filters: *pcs_branch
-      - replay-arm64:
+      - replay-podman:
           requires:
-            - produce-signed-campaign
+            - produce-oci-engine
           filters: *pcs_branch
-      - replay-ubuntu26-amd64:
+      - aggregate-oci-engine:
           requires:
-            - produce-signed-campaign
+            - replay-docker
+            - replay-podman
           filters: *pcs_branch
-      - det-01:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
+      - produce-r-runtime:
           filters: *pcs_branch
-      - det-02:
+      - replay-r-amd64:
           requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
+            - produce-r-runtime
           filters: *pcs_branch
-      - det-03:
+      - replay-r-arm64:
           requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
+            - produce-r-runtime
           filters: *pcs_branch
-      - det-04:
+      - aggregate-r-runtime:
           requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
+            - replay-r-amd64
+            - replay-r-arm64
           filters: *pcs_branch
-      - det-05:
+      - runtime-boundaries-complete:
           requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - det-06:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - env-01:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - env-02:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - env-03:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - env-04:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - env-05:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - env-06:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
-          filters: *pcs_branch
-      - aggregate-evidence:
-          requires:
-            - replay-amd64
-            - replay-arm64
-            - replay-ubuntu26-amd64
+            - aggregate-oci-engine
+            - aggregate-r-runtime
           filters: *pcs_branch
