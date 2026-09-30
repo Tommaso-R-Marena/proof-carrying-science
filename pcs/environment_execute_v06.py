@@ -524,6 +524,12 @@ class _OciBackend:
                 raise V06SandboxReplayError("automatic replay requires one signed container with digest-pinned base(s), or explicit --image")
             for stage in containers[0].get("stages", []):
                 reference = stage.get("reference") if isinstance(stage, dict) else None
+                platform_value = stage.get("platform") if isinstance(stage, dict) else None
+                if isinstance(platform_value, str) and "$" in platform_value:
+                    raise V06SandboxReplayError(
+                        "dynamic container platform is incompatible with deterministic replay: "
+                        + platform_value
+                    )
                 if not isinstance(reference, str) or "@sha256:" not in reference:
                     raise V06SandboxReplayError("signed container stage is not digest-pinned")
                 local = _run([self.runtime, "image", "inspect", reference], self.timeout)
