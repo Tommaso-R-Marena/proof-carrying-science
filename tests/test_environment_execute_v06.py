@@ -108,6 +108,11 @@ def test_replay_removes_stale_output_recreates_exact_bytes_and_captures_realized
     assert receipt["preexisting_outputs"][0]["preexisting_signed_output_removed"] is True
     assert receipt["workflow_outputs"][0]["status"] == "match"
     assert receipt["environment_comparison"]["enforceable_contract_match"] is True
+    assert receipt["determinism"]["runs_requested"] == 2
+    assert receipt["determinism"]["runs_completed"] == 2
+    assert receipt["determinism"]["confirmed"] is True
+    assert receipt["verdict"]["deterministic_replay_confirmed"] is True
+    assert result["determinism_confirmed"] is True
     assert receipt["environment_comparison"]["interpreter_binary_hash"]["python_sha256"] == "a"*64
     assert realized["platform"]["image_architecture"] == "amd64"
     assert realized["container_image_digest"] == "sha256:" + "f" * 64
@@ -115,6 +120,37 @@ def test_replay_removes_stale_output_recreates_exact_bytes_and_captures_realized
     assert len(realized["dependency_tree_sha256"]) == 64
     assert (out / "outputs" / "replayed.txt").read_text(encoding="utf-8") == "HELLO\n"
     assert (workspace / "replayed.txt").read_text(encoding="utf-8") == "HELLO\n"
+
+
+def test_independent_repeat_detects_realized_environment_divergence(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            self.instance_number = type(self).instances
+
+        def capture_environment(self):
+            value = super().capture_environment()
+            if self.instance_number >= 2:
+                value["python"]["executable_sha256"] = "b" * 64
+                value["semantic_sha256"] = hashlib.sha256(
+                    canonicalize_jcs(value).encode()
+                ).hexdigest()
+            return value
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert result["determinism_confirmed"] is False
+    assert receipt["determinism"]["status"] == "divergence_detected"
+    assert receipt["determinism"]["runs_completed"] == 2
+    assert receipt["determinism"]["runs"][1]["valid"] is True
+    assert (
+        receipt["determinism"]["runs"][1]["matches_primary_projection"]
+        is False
+    )
+    assert receipt["verdict"]["deterministic_replay_confirmed"] is False
 
 
 def test_stale_signed_output_cannot_mask_missing_reexecution_output(tmp_path):
