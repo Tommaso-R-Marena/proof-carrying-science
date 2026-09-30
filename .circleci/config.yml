@@ -108,6 +108,71 @@ jobs:
             . .venv/bin/activate
             python scripts/diagnose_workspace_v06.py attest
 
+  workspace-verify:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic verify
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py verify
+
+  workspace-load:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic load
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py load
+
+  workspace-environment:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic environment
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py environment
+
+  workspace-replay-plan:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic replay-plan
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py replay-plan
+
+  workspace-sandbox-plan:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
+      - run:
+          name: Workspace diagnostic sandbox-plan
+          command: |
+            . .venv/bin/activate
+            python scripts/diagnose_workspace_v06.py sandbox-plan
+
   workspace-prepare:
     machine:
       image: ubuntu-2404:2026.05.1
@@ -236,9 +301,29 @@ workflows:
           requires:
             - workspace-confirm
           filters: *pcs_branch
-      - workspace-prepare:
+      - workspace-verify:
           requires:
             - workspace-attest
+          filters: *pcs_branch
+      - workspace-load:
+          requires:
+            - workspace-verify
+          filters: *pcs_branch
+      - workspace-environment:
+          requires:
+            - workspace-load
+          filters: *pcs_branch
+      - workspace-replay-plan:
+          requires:
+            - workspace-environment
+          filters: *pcs_branch
+      - workspace-sandbox-plan:
+          requires:
+            - workspace-replay-plan
+          filters: *pcs_branch
+      - workspace-prepare:
+          requires:
+            - workspace-sandbox-plan
           filters: *pcs_branch
       - produce-signed-campaign:
           requires:
