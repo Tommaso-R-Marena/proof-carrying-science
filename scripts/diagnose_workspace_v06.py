@@ -46,7 +46,7 @@ def discover(project: Path) -> Path:
 
 def confirm(project: Path, draft: Path) -> Path:
     manifest = project / "manifest.json"
-    confirm_manifest_draft_v06(draft, manifest, project_root=project)
+    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
     return manifest
 
 
