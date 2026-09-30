@@ -692,11 +692,51 @@ def _container_status(env: dict[str, Any], backend: Any, image_arg: str | None) 
             "signed_digests": sorted(signed), "realized_image": backend.image_meta, "offline_build": False}
 
 
+def _determinism_projection_v06(
+    realized: dict[str, Any],
+    outputs: list[dict[str, Any]],
+) -> dict[str, Any]:
+    value = {
+        "realized_environment_semantic_sha256": realized.get("semantic_sha256"),
+        "dependency_tree_sha256": realized.get("dependency_tree_sha256"),
+        "container_image_digest": realized.get("container_image_digest"),
+        "python": {
+            "version": realized.get("python", {}).get("version"),
+            "executable_sha256": realized.get("python", {}).get("executable_sha256"),
+        },
+        "r": {
+            "version": realized.get("r", {}).get("version"),
+            "executable_sha256": realized.get("r", {}).get("executable_sha256"),
+        },
+        "platform": realized.get("platform"),
+        "outputs": sorted(
+            [
+                {
+                    "artifact_id": row.get("artifact_id"),
+                    "source_path": row.get("source_path"),
+                    "realized_sha256": row.get("realized_sha256"),
+                    "realized_size": row.get("realized_size"),
+                    "status": row.get("status"),
+                }
+                for row in outputs
+            ],
+            key=lambda row: (
+                str(row.get("source_path")),
+                str(row.get("artifact_id")),
+            ),
+        ),
+    }
+    value["semantic_sha256"] = _semantic(value)
+    return value
+
+
 def execute_prepared_replay_workspace_v06(
     workspace: str | Path, output: str | Path, public_key_path: str | Path, *,
     expected_fingerprint: str | None = None, runtime: str = "auto", image: str | None = None,
     timeout_seconds: int = 300, memory: str = "2g", cpus: float = 1.0,
+    determinism_runs: int = 2,
     _backend_factory: Callable[..., Any] | None = None,
+    _determinism_child: bool = False,
 ) -> dict[str, Any]:
     root = Path(workspace).resolve(); dest = Path(output).resolve()
     if not root.is_dir() or root.is_symlink():
@@ -720,6 +760,17 @@ def execute_prepared_replay_workspace_v06(
     ):
         raise V06SandboxReplayError(
             "memory must be a positive Docker/Podman size such as 512m or 2g"
+        )
+    if not isinstance(determinism_runs, int):
+        raise V06SandboxReplayError("determinism_runs must be an integer")
+    if _determinism_child:
+        if determinism_runs != 1:
+            raise V06SandboxReplayError(
+                "internal determinism child must execute exactly one run"
+            )
+    elif not (2 <= determinism_runs <= 5):
+        raise V06SandboxReplayError(
+            "deterministic replay requires between 2 and 5 independent runs"
         )
     meta = strict_json_load(root / "pcs-environment-workspace.json")
     if not isinstance(meta, dict) or meta.get("format") != "pcs-environment-workspace-v1":
@@ -845,13 +896,105 @@ def execute_prepared_replay_workspace_v06(
         outputs_ok=len(outputs)==len(output_ids) and all(x["status"]=="match" for x in outputs)
         namespace_ok=not plan["exact_output_namespace_claimed"] or not extras
         filesystem_safe=not unsafe_links
-        valid=nodes_ok and outputs_ok and not mutations and namespace_ok and filesystem_safe and comparison["enforceable_contract_match"]
+        primary_valid=nodes_ok and outputs_ok and not mutations and namespace_ok and filesystem_safe and comparison["enforceable_contract_match"]
         realized_path=staging/"pcs-realized-environment.json"
         realized_path.write_text(json.dumps(realized,indent=2,sort_keys=True)+"\n",encoding="utf-8")
         for o in outputs:
             p=sandbox/_path(o["source_path"])
             if not p.is_symlink() and p.is_file():
                 q=staging/"outputs"/_path(o["source_path"]); q.parent.mkdir(parents=True,exist_ok=True); q.write_bytes(p.read_bytes())
+
+        primary_projection = _determinism_projection_v06(realized, outputs)
+        determinism = {
+            "runs_requested": determinism_runs,
+            "runs_completed": 1,
+            "confirmed": bool(_determinism_child),
+            "status": (
+                "single_internal_run"
+                if _determinism_child
+                else "not_evaluated_primary_invalid"
+                if not primary_valid
+                else "pending"
+            ),
+            "runs": [
+                {
+                    "run": 1,
+                    "valid": primary_valid,
+                    "projection_sha256": primary_projection["semantic_sha256"],
+                    "realized_environment_semantic_sha256": realized.get("semantic_sha256"),
+                    "dependency_tree_sha256": realized.get("dependency_tree_sha256"),
+                    "container_image_digest": realized.get("container_image_digest"),
+                }
+            ],
+        }
+
+        if not _determinism_child and primary_valid:
+            # The primary backend is no longer needed. Closing it before repeat
+            # runs ensures a signed-container replay is rebuilt independently
+            # rather than accidentally reusing the primary build.
+            if backend is not None:
+                backend.close()
+                backend = None
+
+            confirmed = True
+            for run_index in range(2, determinism_runs + 1):
+                repeat_dest = temp / f"determinism-run-{run_index}"
+                repeat_result = execute_prepared_replay_workspace_v06(
+                    root,
+                    repeat_dest,
+                    public_key_path,
+                    expected_fingerprint=expected_fingerprint,
+                    runtime=runtime,
+                    image=image,
+                    timeout_seconds=timeout_seconds,
+                    memory=memory,
+                    cpus=cpus,
+                    determinism_runs=1,
+                    _backend_factory=_backend_factory,
+                    _determinism_child=True,
+                )
+                repeat_receipt = strict_json_load(
+                    repeat_dest / "pcs-replay-execution.json"
+                )
+                repeat_realized = strict_json_load(
+                    repeat_dest / "pcs-realized-environment.json"
+                )
+                repeat_outputs = repeat_receipt.get("workflow_outputs", [])
+                repeat_projection = _determinism_projection_v06(
+                    repeat_realized,
+                    repeat_outputs if isinstance(repeat_outputs, list) else [],
+                )
+                same_projection = (
+                    repeat_projection["semantic_sha256"]
+                    == primary_projection["semantic_sha256"]
+                )
+                run_valid = bool(repeat_result.get("valid"))
+                determinism["runs"].append(
+                    {
+                        "run": run_index,
+                        "valid": run_valid,
+                        "projection_sha256": repeat_projection["semantic_sha256"],
+                        "realized_environment_semantic_sha256": repeat_realized.get("semantic_sha256"),
+                        "dependency_tree_sha256": repeat_realized.get("dependency_tree_sha256"),
+                        "container_image_digest": repeat_realized.get("container_image_digest"),
+                        "matches_primary_projection": same_projection,
+                    }
+                )
+                determinism["runs_completed"] += 1
+                if not run_valid or not same_projection:
+                    confirmed = False
+
+            determinism["confirmed"] = confirmed
+            determinism["status"] = (
+                "confirmed"
+                if confirmed
+                else "divergence_detected"
+            )
+
+        deterministic_ok = bool(
+            _determinism_child or determinism["confirmed"]
+        )
+        valid = primary_valid and deterministic_ok
         receipt={"format":SANDBOX_REPLAY_RECEIPT_FORMAT_V06,"valid":valid,"bundle_sha256":meta.get("bundle_sha256"),
                  "certificate_semantic_hash":cert.get("semantic_hash"),"certificate_integrity_hash":cert.get("integrity_hash"),
                  "producer_public_key_fingerprint":verified.get("public_key_fingerprint"),
@@ -859,11 +1002,12 @@ def execute_prepared_replay_workspace_v06(
                  "sandbox_runtime":getattr(backend,"runtime_name",runtime),"sandbox_policy":plan["sandbox_policy"],
                  "preexisting_outputs":removed,"workflow_execution":runs,"workflow_outputs":outputs,
                  "non_output_artifact_mutations":mutations,"unsafe_symlinks":unsafe_links,"extra_files":extras,"environment_comparison":comparison,
-                 "realized_environment_sha256":_sha(realized_path.read_bytes()),
+                 "realized_environment_sha256":_sha(realized_path.read_bytes()),"determinism":determinism,
                  "verdict":{"all_nodes_exited_zero":nodes_ok,"all_signed_outputs_reproduced_exactly":outputs_ok,
                  "signed_non_outputs_unchanged":not mutations,"exact_output_namespace_satisfied":namespace_ok,
                  "filesystem_contains_no_symlinks":filesystem_safe,
-                 "enforceable_environment_contract_match":comparison["enforceable_contract_match"]},
+                 "enforceable_environment_contract_match":comparison["enforceable_contract_match"],
+                 "deterministic_replay_confirmed":deterministic_ok},
                  "trust_boundary":"OCI runtime/host kernel/language introspection/SHA-256 remain trusted; unsigned realized fields are observations, not retroactive producer promises."}
         receipt["semantic_sha256"]=_semantic(receipt)
         (staging/"pcs-replay-execution.json").write_text(json.dumps(receipt,indent=2,sort_keys=True)+"\n",encoding="utf-8")
@@ -871,7 +1015,8 @@ def execute_prepared_replay_workspace_v06(
         return {"valid":valid,"format":SANDBOX_REPLAY_RECEIPT_FORMAT_V06,"output":str(dest),
                 "realized_environment":str(dest/"pcs-realized-environment.json"),
                 "execution_receipt":str(dest/"pcs-replay-execution.json"),"workflow_nodes_executed":len(runs),
-                "workflow_outputs_checked":len(outputs),"environment_contract_match":comparison["enforceable_contract_match"]}
+                "workflow_outputs_checked":len(outputs),"environment_contract_match":comparison["enforceable_contract_match"],
+                "determinism_confirmed":determinism["confirmed"],"determinism_runs_completed":determinism["runs_completed"]}
     except Exception:
         shutil.rmtree(staging,ignore_errors=True); raise
     finally:
