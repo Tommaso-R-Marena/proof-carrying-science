@@ -9,7 +9,7 @@ import pytest
 from pcs.attest_v06 import attest_v06
 from pcs.canonical_json import canonicalize_jcs
 from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06, write_discovery_outputs_v06
-from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, V06SandboxReplayError, compare_realized_environment_v06, execute_prepared_replay_workspace_v06
+from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, V06SandboxReplayError, build_sandbox_replay_plan_v06, compare_realized_environment_v06, execute_prepared_replay_workspace_v06
 from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
 from pcs.scaffold import init_project
 from pcs.signing import generate_keypair
@@ -384,3 +384,73 @@ def test_conditional_exact_dependency_is_not_misapplied_as_unconditional():
     assert comparison["signed_non_exact_dependencies"][0]["status"] == (
         "conditional_marker_not_evaluated"
     )
+
+
+def test_semantic_workflow_contract_is_not_misclassified_as_executable():
+    semantic = {
+        "equations": ["C(t)=C0*exp(-kt)"],
+        "validation_scope": "computational replay only",
+    }
+    certificate = {
+        "artifacts": [],
+        "workflow": {
+            "nodes": [
+                {
+                    "id": "N_SEMANTIC",
+                    "inputs": [],
+                    "outputs": [],
+                    "contract": {
+                        "type": "external",
+                        "namespace": "pcs-manifest-workflow-contract-v1",
+                        "proposition": canonicalize_jcs(semantic),
+                    },
+                }
+            ]
+        },
+    }
+    environment = {
+        "semantic_sha256": "a" * 64,
+        "python": {"dependencies": []},
+        "r": {"dependencies": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    assert build_sandbox_replay_plan_v06(certificate, environment) is None
+
+
+def test_static_workflow_contract_without_confirmation_still_fails_closed():
+    static_claim = {
+        "inference_format": "pcs-static-workflow-map-v1",
+        "inference_id": "W_STATIC_A",
+        "static_only": True,
+        "user_code_executed": False,
+        "source_path": "analysis.py",
+        "source_kind": "python",
+        "dependency_claim_mode": "claimed_subset",
+    }
+    certificate = {
+        "artifacts": [],
+        "workflow": {
+            "nodes": [
+                {
+                    "id": "N_STATIC_A",
+                    "inputs": [],
+                    "outputs": [],
+                    "contract": {
+                        "type": "external",
+                        "namespace": "pcs-manifest-workflow-contract-v1",
+                        "proposition": canonicalize_jcs(static_claim),
+                    },
+                }
+            ]
+        },
+    }
+    environment = {
+        "semantic_sha256": "a" * 64,
+        "python": {"dependencies": []},
+        "r": {"dependencies": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    with pytest.raises(V06SandboxReplayError, match="not confirmed static analysis"):
+        build_sandbox_replay_plan_v06(certificate, environment)
