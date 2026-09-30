@@ -43,90 +43,44 @@ jobs:
             python --version
             pip --version
 
-  workspace-collect:
+  workspace-import:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
-      - setup-python
+      - install-pcs
       - run:
-          name: Install PCS with test dependencies
+          name: Import workspace module
           command: |
             . .venv/bin/activate
-            python -m pip install -e ".[dev]"
-      - run:
-          name: Collect workspace tests
-          command: |
-            . .venv/bin/activate
-            python -m pytest --collect-only -q tests/test_environment_workspace_v06.py
+            python scripts/diagnose_workspace_v06.py import
 
-  workspace-bundle-fixture:
+  workspace-bundle:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
-      - setup-python
+      - install-pcs
       - run:
-          name: Install PCS with test dependencies
+          name: Build signed diagnostic bundle
           command: |
             . .venv/bin/activate
-            python -m pip install -e ".[dev]"
-      - run:
-          name: Build workspace test bundle fixture
-          command: |
-            . .venv/bin/activate
-            python - <<'PY'
-            import importlib.util
-            import tempfile
-            from pathlib import Path
-            spec = importlib.util.spec_from_file_location("workspace_tests", "tests/test_environment_workspace_v06.py")
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-            with tempfile.TemporaryDirectory() as d:
-                bundle, public, fingerprint, project = mod._bundle(Path(d))
-                assert bundle.is_file()
-                assert public.is_file()
-                assert fingerprint
-                assert project.is_dir()
-            PY
+            python scripts/diagnose_workspace_v06.py bundle
 
-  workspace-prepare-diagnostic:
+  workspace-prepare:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
-      - setup-python
+      - install-pcs
       - run:
-          name: Install PCS with test dependencies
+          name: Prepare verified workspace
           command: |
             . .venv/bin/activate
-            python -m pip install -e ".[dev]"
-      - run:
-          name: Prepare verified environment workspace
-          command: |
-            . .venv/bin/activate
-            python - <<'PY'
-            import importlib.util
-            import tempfile
-            from pathlib import Path
-            from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
-            spec = importlib.util.spec_from_file_location("workspace_tests", "tests/test_environment_workspace_v06.py")
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-            with tempfile.TemporaryDirectory() as d:
-                root = Path(d)
-                bundle, public, fingerprint, project = mod._bundle(root)
-                result = prepare_verified_environment_workspace_v06(
-                    bundle,
-                    root / "workspace",
-                    public,
-                    expected_fingerprint=fingerprint,
-                )
-                assert result["valid"] is True
-            PY
+            python scripts/diagnose_workspace_v06.py prepare
 
   produce-signed-campaign:
     machine:
@@ -223,21 +177,21 @@ workflows:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - workspace-collect:
+      - workspace-import:
           requires:
             - environment-probe
           filters: *pcs_branch
-      - workspace-bundle-fixture:
+      - workspace-bundle:
           requires:
-            - workspace-collect
+            - workspace-import
           filters: *pcs_branch
-      - workspace-prepare-diagnostic:
+      - workspace-prepare:
           requires:
-            - workspace-bundle-fixture
+            - workspace-bundle
           filters: *pcs_branch
       - produce-signed-campaign:
           requires:
-            - workspace-prepare-diagnostic
+            - workspace-prepare
           filters: *pcs_branch
       - replay-amd64:
           requires:
