@@ -63,8 +63,6 @@ jobs:
       - run:
           name: Replay signed variants on amd64
           command: |
-            uname -a
-            docker version
             mkdir -p /tmp/pcs-cross-machine/results
             . .venv/bin/activate
             python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-amd64 --machine-id circleci-ubuntu24-amd64
@@ -72,9 +70,6 @@ jobs:
           root: /tmp/pcs-cross-machine
           paths:
             - results/circleci-ubuntu24-amd64
-      - store_artifacts:
-          path: /tmp/pcs-cross-machine/results/circleci-ubuntu24-amd64
-          destination: circleci-ubuntu24-amd64
 
   replay-arm64:
     machine:
@@ -88,8 +83,6 @@ jobs:
       - run:
           name: Replay signed variants on arm64
           command: |
-            uname -a
-            docker version
             mkdir -p /tmp/pcs-cross-machine/results
             . .venv/bin/activate
             python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64 --machine-id circleci-ubuntu24-arm64
@@ -97,11 +90,8 @@ jobs:
           root: /tmp/pcs-cross-machine
           paths:
             - results/circleci-ubuntu24-arm64
-      - store_artifacts:
-          path: /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64
-          destination: circleci-ubuntu24-arm64
 
-  diag-01:
+  det-01:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -109,11 +99,11 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-cross-machine
       - run:
-          name: Positive replay diagnostic environment-contract
+          name: Determinism diagnostic runs-completed
           command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode environment-contract
+            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode runs-completed
 
-  diag-02:
+  det-02:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -121,11 +111,11 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-cross-machine
       - run:
-          name: Positive replay diagnostic determinism
+          name: Determinism diagnostic runs-valid
           command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode determinism
+            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode runs-valid
 
-  diag-03:
+  det-03:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -133,11 +123,11 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-cross-machine
       - run:
-          name: Positive replay diagnostic nodes
+          name: Determinism diagnostic projection-match
           command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode nodes
+            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode projection-match
 
-  diag-04:
+  det-04:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -145,11 +135,11 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-cross-machine
       - run:
-          name: Positive replay diagnostic outputs
+          name: Determinism diagnostic container-digest-stable
           command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode outputs
+            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode container-digest-stable
 
-  diag-05:
+  det-05:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -157,11 +147,11 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-cross-machine
       - run:
-          name: Positive replay diagnostic non-output-integrity
+          name: Determinism diagnostic dependency-tree-stable
           command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode non-output-integrity
+            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode dependency-tree-stable
 
-  diag-06:
+  det-06:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -169,81 +159,9 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-cross-machine
       - run:
-          name: Positive replay diagnostic namespace
+          name: Determinism diagnostic realized-environment-stable
           command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode namespace
-
-  diag-07:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Positive replay diagnostic symlinks
-          command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode symlinks
-
-  diag-08:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Positive replay diagnostic container-binding
-          command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode container-binding
-
-  diag-09:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Positive replay diagnostic interpreter
-          command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode interpreter
-
-  diag-10:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Positive replay diagnostic exact-packages
-          command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode exact-packages
-
-  diag-11:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Positive replay diagnostic loose-packages
-          command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode loose-packages
-
-  diag-12:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-cross-machine
-      - run:
-          name: Positive replay diagnostic dependency-projection
-          command: |
-            python scripts/check_positive_replay_field.py --input /tmp/pcs-cross-machine/results --mode dependency-projection
+            python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode realized-environment-stable
 
 
 workflows:
@@ -261,62 +179,32 @@ workflows:
           requires:
             - produce-signed-campaign
           filters: *pcs_branch
-      - diag-01:
+      - det-01:
           requires:
             - replay-amd64
             - replay-arm64
           filters: *pcs_branch
-      - diag-02:
+      - det-02:
           requires:
             - replay-amd64
             - replay-arm64
           filters: *pcs_branch
-      - diag-03:
+      - det-03:
           requires:
             - replay-amd64
             - replay-arm64
           filters: *pcs_branch
-      - diag-04:
+      - det-04:
           requires:
             - replay-amd64
             - replay-arm64
           filters: *pcs_branch
-      - diag-05:
+      - det-05:
           requires:
             - replay-amd64
             - replay-arm64
           filters: *pcs_branch
-      - diag-06:
-          requires:
-            - replay-amd64
-            - replay-arm64
-          filters: *pcs_branch
-      - diag-07:
-          requires:
-            - replay-amd64
-            - replay-arm64
-          filters: *pcs_branch
-      - diag-08:
-          requires:
-            - replay-amd64
-            - replay-arm64
-          filters: *pcs_branch
-      - diag-09:
-          requires:
-            - replay-amd64
-            - replay-arm64
-          filters: *pcs_branch
-      - diag-10:
-          requires:
-            - replay-amd64
-            - replay-arm64
-          filters: *pcs_branch
-      - diag-11:
-          requires:
-            - replay-amd64
-            - replay-arm64
-          filters: *pcs_branch
-      - diag-12:
+      - det-06:
           requires:
             - replay-amd64
             - replay-arm64
