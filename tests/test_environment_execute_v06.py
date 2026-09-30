@@ -178,3 +178,30 @@ def test_tampered_execution_plan_is_rederived_from_signed_certificate(tmp_path):
             expected_fingerprint=fingerprint,
             _backend_factory=_FakeBackend,
         )
+
+
+def test_replay_created_symlink_output_is_rejected_without_following_it(tmp_path):
+    class Backend(_FakeBackend):
+        def execute_node(self, node):
+            for output in node["outputs"]:
+                p = self.root / output["source_path"]
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.symlink_to("input.txt")
+            empty = hashlib.sha256(b"").hexdigest()
+            return {
+                "command": ["fake", node["source_path"]],
+                "exit_code": 0,
+                "stdout": "",
+                "stderr": "",
+                "stdout_sha256": empty,
+                "stderr_sha256": empty,
+                "stdout_truncated": False,
+                "stderr_truncated": False,
+            }
+
+    _, out, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert receipt["workflow_outputs"][0]["status"] == "unsafe_symlink"
+    assert receipt["unsafe_symlinks"] == ["replayed.txt"]
+    assert receipt["verdict"]["filesystem_contains_no_symlinks"] is False
+    assert not (out / "outputs" / "replayed.txt").exists()
