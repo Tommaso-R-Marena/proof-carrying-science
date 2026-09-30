@@ -108,6 +108,12 @@ def test_replay_removes_stale_output_recreates_exact_bytes_and_captures_realized
     assert receipt["preexisting_outputs"][0]["preexisting_signed_output_removed"] is True
     assert receipt["workflow_outputs"][0]["status"] == "match"
     assert receipt["environment_comparison"]["enforceable_contract_match"] is True
+    assert (
+        receipt["environment_comparison"][
+            "signed_dependency_projection_fingerprint"
+        ]["match"]
+        is True
+    )
     assert receipt["determinism"]["runs_requested"] == 2
     assert receipt["determinism"]["runs_completed"] == 2
     assert receipt["determinism"]["confirmed"] is True
@@ -182,6 +188,12 @@ def test_realized_dependency_version_drift_fails_contract_comparison(tmp_path):
     assert row["expected"] == "1.0"
     assert row["realized"] == "2.0"
     assert row["status"] == "version_mismatch"
+    assert (
+        receipt["environment_comparison"][
+            "signed_dependency_projection_fingerprint"
+        ]["match"]
+        is False
+    )
 
 
 def test_workspace_control_path_escape_is_rejected(tmp_path):
