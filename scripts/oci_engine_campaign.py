@@ -191,6 +191,7 @@ def replay(source: Path, output: Path, runtime: str, machine_id: str) -> dict[st
         "container_image_digest_kind": realized.get("container_image_digest_kind"),
         "dependency_tree_sha256": realized.get("dependency_tree_sha256"),
         "realized_environment_semantic_sha256": realized.get("semantic_sha256"),
+        "core_oci_runtime": realized.get("oci_runtime"),
         "python_executable_sha256": realized.get("python", {}).get("executable_sha256"),
         "verdict": receipt.get("verdict"),
         "determinism": receipt.get("determinism"),
@@ -233,6 +234,15 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
             docker and podman
             and docker.get("output_matches_producer") is True
             and podman.get("output_matches_producer") is True
+        ),
+        "pcs_core_captured_correct_runtime_names": bool(
+            docker and podman
+            and docker.get("core_oci_runtime", {}).get("name") == "docker"
+            and podman.get("core_oci_runtime", {}).get("name") == "podman"
+        ),
+        "pcs_core_observed_rootful_podman": bool(
+            podman
+            and podman.get("core_oci_runtime", {}).get("podman_rootless") is False
         ),
     }
     value = {
