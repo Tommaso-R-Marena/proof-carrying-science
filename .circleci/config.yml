@@ -91,6 +91,32 @@ jobs:
           paths:
             - results/circleci-ubuntu24-arm64
 
+  replay-ubuntu22-amd64:
+    machine:
+      image: ubuntu-2204:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - install-pcs
+      - run:
+          name: Replay signed variants on Ubuntu 22.04 amd64
+          command: |
+            uname -a
+            cat /etc/os-release
+            docker version
+            mkdir -p /tmp/pcs-cross-machine/results
+            . .venv/bin/activate
+            python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu22-amd64 --machine-id circleci-ubuntu22-amd64
+      - persist_to_workspace:
+          root: /tmp/pcs-cross-machine
+          paths:
+            - results/circleci-ubuntu22-amd64
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/results/circleci-ubuntu22-amd64
+          destination: circleci-ubuntu22-amd64
+
   det-01:
     docker:
       - image: cimg/python:3.12
@@ -275,68 +301,85 @@ workflows:
           requires:
             - produce-signed-campaign
           filters: *pcs_branch
+      - replay-ubuntu22-amd64:
+          requires:
+            - produce-signed-campaign
+          filters: *pcs_branch
       - det-01:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - det-02:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - det-03:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - det-04:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - det-05:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - det-06:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - env-01:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - env-02:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - env-03:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - env-04:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - env-05:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - env-06:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
       - aggregate-evidence:
           requires:
             - replay-amd64
             - replay-arm64
+            - replay-ubuntu22-amd64
           filters: *pcs_branch
