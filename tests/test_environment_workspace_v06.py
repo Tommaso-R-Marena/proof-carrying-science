@@ -57,7 +57,7 @@ def _bundle(tmp_path: Path) -> tuple[Path, Path, str, Path]:
         report_output=project / "pcs-discovery.json",
     )
     manifest = project / "manifest.json"
-    confirm_manifest_draft_v06(draft, manifest, project_root=project)
+    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
 
     private, public, fingerprint = _keys(tmp_path)
     bundle = tmp_path / "study.pcs.zip"
