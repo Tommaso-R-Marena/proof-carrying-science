@@ -150,12 +150,21 @@ def _norm_name(name: str) -> str:
     return re.sub(r"[-_.]+", "-", name).lower()
 
 
+def _is_conditional_dependency(dep: dict[str, Any]) -> bool:
+    raw = dep.get("raw")
+    return isinstance(raw, str) and ";" in raw
+
+
 def _exact_pins(env: dict[str, Any]) -> dict[str, dict[str, str]]:
     out = {"python": {}, "r": {}, "conda": {}}
     for eco in out:
         sec = env.get(eco, {})
         for dep in sec.get("dependencies", []) if isinstance(sec, dict) else []:
-            if not isinstance(dep, dict) or dep.get("exact_pin") is not True:
+            if (
+                not isinstance(dep, dict)
+                or dep.get("exact_pin") is not True
+                or _is_conditional_dependency(dep)
+            ):
                 continue
             n, v = dep.get("name"), dep.get("version")
             if isinstance(n, str) and isinstance(v, str):
@@ -224,21 +233,109 @@ def _version_tuple(v: str) -> tuple[int, ...] | None:
     return tuple(int(x) for x in m.group(1).split(".")) if m else None
 
 
+def _version_tuple(v: str) -> tuple[int, ...] | None:
+    m = re.match(r"^\s*(\d+(?:\.\d+)*)", v)
+    return tuple(int(x) for x in m.group(1).split(".")) if m else None
+
+
+def _pad_versions(a: tuple[int, ...], b: tuple[int, ...]) -> tuple[tuple[int, ...], tuple[int, ...]]:
+    width = max(len(a), len(b))
+    return a + (0,) * (width - len(a)), b + (0,) * (width - len(b))
+
+
+def _compare_version(realized: str, op: str, wanted: str) -> bool | None:
+    a, b = _version_tuple(realized), _version_tuple(wanted)
+    if a is None or b is None:
+        return None
+    a, b = _pad_versions(a, b)
+    cmpv = (a > b) - (a < b)
+    return {
+        "==": cmpv == 0,
+        "!=": cmpv != 0,
+        ">=": cmpv >= 0,
+        "<=": cmpv <= 0,
+        ">": cmpv > 0,
+        "<": cmpv < 0,
+    }[op]
+
+
 def _constraint(realized: str | None, spec: str) -> str:
-    if not realized: return "mismatch"
-    if re.fullmatch(r"\d+(?:\.\d+){1,2}", spec.strip()):
-        want = _version_tuple(spec); got = _version_tuple(realized)
+    if not realized:
+        return "mismatch"
+    value = spec.strip()
+    if not value or value == "*":
+        return "match"
+    if re.fullmatch(r"\d+(?:\.\d+){0,2}(?:\.\*)?", value):
+        if value.endswith(".*"):
+            prefix = value[:-2].split(".")
+            got = realized.split(".")
+            return "match" if got[:len(prefix)] == prefix else "mismatch"
+        want = _version_tuple(value); got = _version_tuple(realized)
         return "match" if got and want and got[:len(want)] == want else "mismatch"
-    for part in [x.strip() for x in spec.split(",") if x.strip()]:
-        m = re.match(r"^(==|>=|<=|>|<)\s*(\d+(?:\.\d+)*)$", part)
-        if not m: return "unsupported_constraint"
-        op, wanted = m.groups(); a, b = _version_tuple(realized), _version_tuple(wanted)
-        if a is None or b is None: return "unsupported_constraint"
-        width = max(len(a), len(b)); a += (0,) * (width-len(a)); b += (0,) * (width-len(b))
-        cmpv = (a > b) - (a < b)
-        if not {"==":cmpv==0,">=":cmpv>=0,"<=":cmpv<=0,">":cmpv>0,"<":cmpv<0}[op]:
+
+    if value.startswith("^"):
+        base = value[1:].strip()
+        parts = _version_tuple(base)
+        if not parts:
+            return "unsupported_constraint"
+        if parts[0] != 0:
+            upper = (parts[0] + 1, 0)
+        elif len(parts) >= 2 and parts[1] != 0:
+            upper = (0, parts[1] + 1)
+        elif len(parts) >= 3:
+            upper = (0, 0, parts[2] + 1)
+        else:
+            upper = (1, 0)
+        lower_ok = _compare_version(realized, ">=", base)
+        upper_ok = _compare_version(realized, "<", ".".join(map(str, upper)))
+        return "match" if lower_ok and upper_ok else "mismatch"
+
+    if value.startswith("~=") or (
+        value.startswith("~") and not value.startswith("~=")
+    ):
+        base = value[2:].strip() if value.startswith("~=") else value[1:].strip()
+        parts = _version_tuple(base)
+        if not parts:
+            return "unsupported_constraint"
+        if len(parts) >= 3:
+            upper = (parts[0], parts[1] + 1)
+        else:
+            upper = (parts[0] + 1, 0)
+        lower_ok = _compare_version(realized, ">=", base)
+        upper_ok = _compare_version(realized, "<", ".".join(map(str, upper)))
+        return "match" if lower_ok and upper_ok else "mismatch"
+
+    matches = list(re.finditer(r"(==|!=|>=|<=|>|<)\s*(\d+(?:\.\d+)*)", value))
+    if not matches:
+        return "unsupported_constraint"
+    residue = re.sub(r"(==|!=|>=|<=|>|<)\s*\d+(?:\.\d+)*", "", value)
+    if residue.replace(",", "").strip():
+        return "unsupported_constraint"
+    for match in matches:
+        verdict = _compare_version(realized, match.group(1), match.group(2))
+        if verdict is None:
+            return "unsupported_constraint"
+        if not verdict:
             return "mismatch"
     return "match"
+
+
+def _declared_constraint(dep: dict[str, Any]) -> str | None:
+    raw = dep.get("raw")
+    name = dep.get("name")
+    if not isinstance(raw, str) or not isinstance(name, str):
+        return None
+    if ";" in raw:
+        return None
+    r_match = re.search(r"\(([^()]+)\)\s*$", raw)
+    if r_match:
+        return r_match.group(1).strip()
+    tail = raw[len(name):].strip() if raw.lower().startswith(name.lower()) else ""
+    if tail.startswith("["):
+        closing = tail.find("]")
+        if closing >= 0:
+            tail = tail[closing + 1:].strip()
+    return tail or None
 
 
 def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, Any],
@@ -254,13 +351,35 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
             ok = ok and status == "match"
         section = env.get(eco, {})
         for dep in section.get("dependencies", []) if isinstance(section, dict) else []:
-            if not isinstance(dep, dict) or dep.get("exact_pin") is True or not isinstance(dep.get("name"), str):
+            if not isinstance(dep, dict) or not isinstance(dep.get("name"), str):
+                continue
+            if dep.get("exact_pin") is True and not _is_conditional_dependency(dep):
                 continue
             name = _norm_name(dep["name"]); got = maps[eco].get(name)
-            status = "present_spec_not_exactly_enforced" if got is not None else "missing"
+            if _is_conditional_dependency(dep):
+                status = "conditional_marker_not_evaluated"
+                passed = True
+            else:
+                spec = _declared_constraint(dep)
+                if got is None:
+                    status = "missing"
+                    passed = False
+                elif spec is None:
+                    status = "present"
+                    passed = True
+                else:
+                    compared = _constraint(got, spec)
+                    status = (
+                        "constraint_match"
+                        if compared == "match"
+                        else "constraint_mismatch"
+                        if compared == "mismatch"
+                        else "present_constraint_not_supported"
+                    )
+                    passed = compared != "mismatch"
             loose.append({"ecosystem": eco, "name": name, "declared": dep.get("raw"),
                           "realized": got, "status": status})
-            ok = ok and got is not None
+            ok = ok and passed
     interps = []
     for eco in ("python", "r"):
         got = realized.get(eco, {}).get("version")
