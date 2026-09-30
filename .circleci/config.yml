@@ -1,21 +1,63 @@
 version: 2.1
 
+commands:
+  install-podman:
+    steps:
+      - run:
+          name: Install Podman
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y podman uidmap
+            podman --version
+
 jobs:
-  podman-probe:
+  podman-rootless-info:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
+      - install-podman
       - run:
-          name: Install and exercise Podman
+          name: Rootless Podman info
+          command: podman info
+
+  podman-rootful-info:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-podman
+      - run:
+          name: Rootful Podman info
+          command: sudo podman info
+
+  podman-rootless-basic:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-podman
+      - run:
+          name: Rootless basic run
           command: |
-            sudo apt-get update
-            sudo apt-get install -y podman uidmap
-            podman --version
-            podman info
             podman pull docker.io/library/python:3.12-slim-bookworm
-            podman run --rm --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory 512m --cpus 1 --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m docker.io/library/python:3.12-slim-bookworm python -c 'import platform; print(platform.python_version())'
+            podman run --rm --network=none docker.io/library/python:3.12-slim-bookworm python -c 'import platform; print(platform.python_version())'
+
+  podman-rootful-hardened:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-podman
+      - run:
+          name: Rootful hardened run
+          command: |
+            sudo podman pull docker.io/library/python:3.12-slim-bookworm
+            sudo podman run --rm --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory 512m --cpus 1 --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m docker.io/library/python:3.12-slim-bookworm python -c 'import platform; print(platform.python_version())'
 
   r-image-probe:
     machine:
@@ -26,8 +68,6 @@ jobs:
       - run:
           name: Probe multi-arch R image
           command: |
-            docker version
-            docker buildx version
             docker pull r-base:latest
             docker buildx imagetools inspect r-base:latest
             docker run --rm --network=none r-base:latest Rscript --vanilla -e 'cat(as.character(getRversion()))'
@@ -36,5 +76,8 @@ jobs:
 workflows:
   runtime-boundary-probe:
     jobs:
-      - podman-probe
+      - podman-rootless-info
+      - podman-rootful-info
+      - podman-rootless-basic
+      - podman-rootful-hardened
       - r-image-probe
