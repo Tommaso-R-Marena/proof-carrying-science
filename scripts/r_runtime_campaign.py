@@ -149,10 +149,14 @@ def produce(output: Path) -> dict[str, Any]:
             pass
 
 
-def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
+def replay(source: Path, output: Path, machine_id: str, runtime: str = "docker") -> dict[str, Any]:
+    if runtime not in {"docker", "podman"}:
+        raise ValueError("runtime must be docker or podman")
+    if shutil.which(runtime) is None:
+        raise RuntimeError(f"{runtime} is unavailable")
     meta = json.loads((source / "campaign.json").read_text(encoding="utf-8"))
     output.mkdir(parents=True, exist_ok=False)
-    run(["docker", "pull", meta["image_ref"]])
+    run([runtime, "pull", meta["image_ref"]])
 
     workspace = output / "workspace"
     prepared = prepare_verified_environment_workspace_v06(
@@ -167,7 +171,7 @@ def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
         replay_dir,
         source / "producer-public.pem",
         expected_fingerprint=meta["producer_public_key_fingerprint"],
-        runtime="docker",
+        runtime=runtime,
         determinism_runs=3,
     )
     receipt = json.loads((replay_dir / "pcs-replay-execution.json").read_text(encoding="utf-8"))
@@ -179,6 +183,8 @@ def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
         "format": FORMAT,
         "phase": "consumer",
         "machine_id": machine_id,
+        "runtime": runtime,
+        "runtime_version": run([runtime, "--version"]).stdout.strip(),
         "host_platform": platform.platform(),
         "host_machine": platform.machine(),
         "prepared_valid": prepared.get("valid"),
@@ -215,8 +221,10 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
             rows.append(value)
     hashes = {x.get("realized_predictions_sha256") for x in rows if x.get("realized_predictions_sha256")}
     architectures = {str(x.get("host_machine") or "").lower() for x in rows}
+    runtimes = {str(x.get("runtime") or "").lower() for x in rows}
     assertions = {
         "at_least_two_r_replay_hosts": len(rows) >= 2,
+        "docker_and_podman_r_replay_observed": {"docker", "podman"}.issubset(runtimes),
         "amd64_and_arm64_r_replay_observed": (
             any("x86" in x or x == "amd64" for x in architectures)
             and any("arm" in x or "aarch64" in x for x in architectures)
@@ -252,6 +260,7 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
         "phase": "aggregate",
         "rows": rows,
         "architectures": sorted(architectures),
+        "runtimes": sorted(runtimes),
         "assertions": assertions,
         "success": all(assertions.values()),
     }
@@ -268,6 +277,7 @@ def main() -> int:
     r.add_argument("--input", required=True)
     r.add_argument("--output", required=True)
     r.add_argument("--machine-id", required=True)
+    r.add_argument("--runtime", choices=["docker", "podman"], default="docker")
     a = sub.add_parser("aggregate")
     a.add_argument("--input", required=True)
     a.add_argument("--output", required=True)
@@ -276,7 +286,12 @@ def main() -> int:
     if args.command == "produce":
         value = produce(Path(args.output).resolve())
     elif args.command == "replay":
-        value = replay(Path(args.input).resolve(), Path(args.output).resolve(), args.machine_id)
+        value = replay(
+            Path(args.input).resolve(),
+            Path(args.output).resolve(),
+            args.machine_id,
+            args.runtime,
+        )
     else:
         value = aggregate(Path(args.input).resolve(), Path(args.output).resolve())
     print(json.dumps(value, indent=2, sort_keys=True))
