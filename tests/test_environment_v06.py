@@ -207,6 +207,25 @@ def test_hash_pinned_requirements_are_stronger_than_loose_requirements(tmp_path)
     ]
 
 
+
+def test_static_container_platform_is_bound_into_environment_contract(tmp_path):
+    project = tmp_path / "container-platform"
+    project.mkdir()
+    digest = "a" * 64
+    (project / "Dockerfile").write_text(
+        f"FROM --platform=linux/amd64 python:3.12-slim@sha256:{digest}\n",
+        encoding="utf-8",
+    )
+    result = capture_environment_v06(
+        project,
+        _inventory(project, ["Dockerfile"]),
+    )
+
+    stage = result["containers"][0]["stages"][0]
+    assert stage["platform"] == "linux/amd64"
+    assert stage["digest_pinned"] is True
+
+
 def test_dynamic_container_base_is_reported_not_upgraded_to_digest_pinned(tmp_path):
     project = tmp_path / "container"
     project.mkdir()
