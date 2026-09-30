@@ -22,179 +22,25 @@ commands:
             python -m pip install -e .
 
 jobs:
-  environment-probe:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - run:
-          name: Probe CircleCI machine
-          command: |
-            uname -a
-            cat /etc/os-release
-            docker version
-            docker buildx version
-      - setup-python
-      - run:
-          name: Probe Python
-          command: |
-            . .venv/bin/activate
-            python --version
-            pip --version
-
-  workspace-import:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic import
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py import
-
-  workspace-scaffold:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic scaffold
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py scaffold
-
-  workspace-discover:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic discover
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py discover
-
-  workspace-confirm:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic confirm
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py confirm
-
-  workspace-attest:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic attest
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py attest
-
-  workspace-verify:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic verify
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py verify
-
-  workspace-load:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic load
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py load
-
-  workspace-environment:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic environment
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py environment
-
-  workspace-replay-plan:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic replay-plan
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py replay-plan
-
-  workspace-sandbox-plan:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic sandbox-plan
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py sandbox-plan
-
-  workspace-prepare:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - install-pcs
-      - run:
-          name: Workspace diagnostic prepare
-          command: |
-            . .venv/bin/activate
-            python scripts/diagnose_workspace_v06.py prepare
-
   produce-signed-campaign:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
-      - install-pcs
+      - setup-python
       - run:
-          name: Produce signed campaign
+          name: Install PCS with test dependencies
+          command: |
+            . .venv/bin/activate
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run replay regression gate
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_execute_v06.py tests/test_environment_workspace_v06.py tests/test_environment_replay_v06.py tests/test_workflow_replay_v06.py
+      - run:
+          name: Produce signed multi-architecture campaign
           command: |
             rm -rf /tmp/pcs-cross-machine
             mkdir -p /tmp/pcs-cross-machine
@@ -215,7 +61,7 @@ jobs:
           at: /tmp/pcs-cross-machine
       - install-pcs
       - run:
-          name: Replay on amd64
+          name: Replay signed variants on amd64
           command: |
             uname -a
             docker version
@@ -240,7 +86,7 @@ jobs:
           at: /tmp/pcs-cross-machine
       - install-pcs
       - run:
-          name: Replay on arm64
+          name: Replay signed variants on arm64
           command: |
             uname -a
             docker version
@@ -255,7 +101,7 @@ jobs:
           path: /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64
           destination: circleci-ubuntu24-arm64
 
-  aggregate-core:
+  materialize-summary:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -265,130 +111,213 @@ jobs:
           at: /tmp/pcs-cross-machine
       - install-pcs
       - run:
-          name: Check aggregate group core
+          name: Materialize aggregate evidence without masking failed assertions
           command: |
             . .venv/bin/activate
-            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group core
+            python scripts/cross_machine_oci_campaign.py aggregate --input /tmp/pcs-cross-machine/results --output /tmp/pcs-cross-machine/cross-machine-summary.json || test -f /tmp/pcs-cross-machine/cross-machine-summary.json
+            cat /tmp/pcs-cross-machine/cross-machine-summary.json
+      - persist_to_workspace:
+          root: /tmp/pcs-cross-machine
+          paths:
+            - cross-machine-summary.json
+      - store_artifacts:
+          path: /tmp/pcs-cross-machine/cross-machine-summary.json
+          destination: cross-machine-summary.json
 
-  aggregate-locks:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
+  assert-01:
+    docker:
+      - image: cimg/python:3.12
     steps:
-      - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
-      - install-pcs
       - run:
-          name: Check aggregate group locks
+          name: at_least_two_independent_machines
           command: |
-            . .venv/bin/activate
-            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group locks
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="at_least_two_independent_machines"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
 
-  aggregate-variants:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
+  assert-02:
+    docker:
+      - image: cimg/python:3.12
     steps:
-      - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
-      - install-pcs
       - run:
-          name: Check aggregate group variants
+          name: amd64_and_arm64_observed
           command: |
-            . .venv/bin/activate
-            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group variants
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="amd64_and_arm64_observed"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
 
-  aggregate-attacks:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
+  assert-03:
+    docker:
+      - image: cimg/python:3.12
     steps:
-      - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
-      - install-pcs
       - run:
-          name: Check aggregate group attacks
+          name: baseline_valid_on_every_machine
           command: |
-            . .venv/bin/activate
-            PYTHONPATH=scripts python scripts/check_cross_machine_group.py --input /tmp/pcs-cross-machine/results --group attacks
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="baseline_valid_on_every_machine"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-04:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: baseline_cross_machine_byte_identical
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="baseline_cross_machine_byte_identical"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-05:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: baseline_realized_environment_differs_across_architecture
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="baseline_realized_environment_differs_across_architecture"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-06:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: range_lock_valid_on_every_machine
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="range_lock_valid_on_every_machine"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-07:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: range_lock_output_byte_identical
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="range_lock_output_byte_identical"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-08:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: impossible_exact_lock_rejected_on_every_machine
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="impossible_exact_lock_rejected_on_every_machine"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-09:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: container_os_variant_valid_on_every_machine
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="container_os_variant_valid_on_every_machine"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-10:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: container_os_variant_output_byte_identical
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="container_os_variant_output_byte_identical"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-11:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: container_os_variant_changes_image_identity
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="container_os_variant_changes_image_identity"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-12:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: provenance_variant_valid_on_every_machine
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="provenance_variant_valid_on_every_machine"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-13:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: provenance_variant_output_byte_identical
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="provenance_variant_output_byte_identical"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-14:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: provenance_variant_changes_image_identity
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="provenance_variant_changes_image_identity"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-15:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: reviewer_supplied_image_substitution_rejected
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="reviewer_supplied_image_substitution_rejected"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
+
+  assert-16:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: missing_signed_base_refuses_registry_pull
+          command: |
+            python -c 'import json,sys; p="/tmp/pcs-cross-machine/cross-machine-summary.json"; d=json.load(open(p)); k="missing_signed_base_refuses_registry_pull"; v=d["assertions"].get(k); print(json.dumps({"assertion":k,"observed":v},indent=2)); sys.exit(0 if v is True else 1)'
 
   aggregate-evidence:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
+    docker:
+      - image: cimg/python:3.12
     steps:
-      - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
-      - install-pcs
       - run:
-          name: Assert cross-machine evidence
+          name: Confirm all aggregate assertions
           command: |
-            . .venv/bin/activate
-            python scripts/cross_machine_oci_campaign.py aggregate --input /tmp/pcs-cross-machine/results --output /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
-            cat /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
-      - store_artifacts:
-          path: /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
-          destination: circleci-cross-machine-summary.json
+            python -c 'import json,sys; d=json.load(open("/tmp/pcs-cross-machine/cross-machine-summary.json")); print(json.dumps(d,indent=2,sort_keys=True)); sys.exit(0 if d.get("success") is True else 1)'
 
 workflows:
   pcs-cross-machine-oci:
     jobs:
-      - environment-probe:
+      - produce-signed-campaign:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - workspace-import:
-          requires:
-            - environment-probe
-          filters: *pcs_branch
-      - workspace-scaffold:
-          requires:
-            - workspace-import
-          filters: *pcs_branch
-      - workspace-discover:
-          requires:
-            - workspace-scaffold
-          filters: *pcs_branch
-      - workspace-confirm:
-          requires:
-            - workspace-discover
-          filters: *pcs_branch
-      - workspace-attest:
-          requires:
-            - workspace-confirm
-          filters: *pcs_branch
-      - workspace-verify:
-          requires:
-            - workspace-attest
-          filters: *pcs_branch
-      - workspace-load:
-          requires:
-            - workspace-verify
-          filters: *pcs_branch
-      - workspace-environment:
-          requires:
-            - workspace-load
-          filters: *pcs_branch
-      - workspace-replay-plan:
-          requires:
-            - workspace-environment
-          filters: *pcs_branch
-      - workspace-sandbox-plan:
-          requires:
-            - workspace-replay-plan
-          filters: *pcs_branch
-      - workspace-prepare:
-          requires:
-            - workspace-sandbox-plan
-          filters: *pcs_branch
-      - produce-signed-campaign:
-          requires:
-            - workspace-prepare
-          filters: *pcs_branch
       - replay-amd64:
           requires:
             - produce-signed-campaign
@@ -397,30 +326,91 @@ workflows:
           requires:
             - produce-signed-campaign
           filters: *pcs_branch
-      - aggregate-core:
+      - materialize-summary:
           requires:
             - replay-amd64
             - replay-arm64
           filters: *pcs_branch
-      - aggregate-locks:
+      - assert-01:
           requires:
-            - replay-amd64
-            - replay-arm64
+            - materialize-summary
           filters: *pcs_branch
-      - aggregate-variants:
+      - assert-02:
           requires:
-            - replay-amd64
-            - replay-arm64
+            - materialize-summary
           filters: *pcs_branch
-      - aggregate-attacks:
+      - assert-03:
           requires:
-            - replay-amd64
-            - replay-arm64
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-04:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-05:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-06:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-07:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-08:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-09:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-10:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-11:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-12:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-13:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-14:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-15:
+          requires:
+            - materialize-summary
+          filters: *pcs_branch
+      - assert-16:
+          requires:
+            - materialize-summary
           filters: *pcs_branch
       - aggregate-evidence:
           requires:
-            - aggregate-core
-            - aggregate-locks
-            - aggregate-variants
-            - aggregate-attacks
+            - assert-01
+            - assert-02
+            - assert-03
+            - assert-04
+            - assert-05
+            - assert-06
+            - assert-07
+            - assert-08
+            - assert-09
+            - assert-10
+            - assert-11
+            - assert-12
+            - assert-13
+            - assert-14
+            - assert-15
+            - assert-16
           filters: *pcs_branch
