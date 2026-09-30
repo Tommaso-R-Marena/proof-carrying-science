@@ -474,7 +474,12 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
             "comparison": platform_comparison,
             "value": realized.get("platform"),
         },
-        "container_image_digest": {"status": "observed_not_signed", "value": realized.get("container_image")},
+        "container_image_digest": {
+            "status": "observed_not_signed",
+            "value": realized.get("container_image_digest"),
+            "kind": realized.get("container_image_digest_kind"),
+            "image_metadata": realized.get("container_image"),
+        },
         "dependency_tree_fingerprint": {"status": "observed_not_signed", "sha256": realized.get("dependency_tree_sha256")},
         "enforceable_contract_match": bool(ok),
     }
@@ -595,24 +600,74 @@ class _OciBackend:
             pyv = json.loads(py["stdout"])
         rp = self.command(["sh","-c","command -v Rscript >/dev/null && Rscript --vanilla -e 'cat(as.character(getRversion()))' || true"])
         rv = rp["stdout"].strip() or None
-        rpk = self.command(["sh","-c","command -v Rscript >/dev/null || exit 0; Rscript --vanilla -e 'p<-installed.packages()[,c(\"Package\",\"Version\"),drop=FALSE]; write.table(p,sep=\"\\t\",row.names=FALSE,col.names=FALSE,quote=FALSE)'"])
+        rpk = self.command(["sh","-c","command -v Rscript >/dev/null || exit 0; Rscript --vanilla -e 'p<-installed.packages()[,c(\"Package\",\"Version\",\"Depends\",\"Imports\",\"LinkingTo\"),drop=FALSE]; write.table(p,sep=\"\\t\",row.names=FALSE,col.names=FALSE,quote=FALSE,na=\"\")'"])
         rpackages=[]
         for line in rpk["stdout"].splitlines()[:MAX_PACKAGES_V06]:
-            parts=line.split("\t",1)
-            if len(parts)==2: rpackages.append({"name":parts[0],"version":parts[1]})
+            parts=line.split("\t")
+            if len(parts)>=2:
+                rpackages.append({
+                    "name":parts[0],
+                    "version":parts[1],
+                    "depends":parts[2] if len(parts)>2 and parts[2] else None,
+                    "imports":parts[3] if len(parts)>3 and parts[3] else None,
+                    "linking_to":parts[4] if len(parts)>4 and parts[4] else None,
+                })
         rhash = self.command(["sh","-c","p=$(command -v Rscript 2>/dev/null || true); test -n \"$p\" && (sha256sum \"$p\" 2>/dev/null || shasum -a 256 \"$p\" 2>/dev/null) | head -n1 || true"])["stdout"]
         rm = re.search(r"\b([0-9a-fA-F]{64})\b", rhash)
         con = self.command(["sh","-c","command -v conda >/dev/null && conda list --json || printf '[]'"])
         try: conda_raw = json.loads(con["stdout"])
         except json.JSONDecodeError: conda_raw = []
-        conda = [{"name":x.get("name"),"version":x.get("version")} for x in conda_raw[:MAX_PACKAGES_V06] if isinstance(x,dict)]
+        conda = [
+            {
+                "name":x.get("name"),
+                "version":x.get("version"),
+                "build":x.get("build_string") or x.get("build"),
+                "channel":x.get("channel"),
+            }
+            for x in conda_raw[:MAX_PACKAGES_V06]
+            if isinstance(x,dict)
+        ]
+        conda_explicit_probe = self.command([
+            "sh","-c",
+            "command -v conda >/dev/null && conda list --explicit 2>/dev/null || true",
+        ])
+        conda_explicit = sorted(
+            line.strip()
+            for line in conda_explicit_probe["stdout"].splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        )[:MAX_PACKAGES_V06]
         plat = self.command(["sh","-c","uname -srm; cat /etc/os-release 2>/dev/null || true"])["stdout"][:16384]
-        tree = {"python": pyv.get("packages", []), "r": rpackages, "conda": conda}
+        repo_digests = self.image_meta.get("repo_digests") or []
+        manifest_digest = next(
+            (
+                item.rsplit("@", 1)[1]
+                for item in repo_digests
+                if isinstance(item, str) and "@sha256:" in item
+            ),
+            None,
+        )
+        image_digest = manifest_digest or self.image_meta.get("image_id")
+        image_digest_kind = (
+            "oci_repo_manifest_digest"
+            if manifest_digest is not None
+            else "oci_image_id"
+            if image_digest is not None
+            else None
+        )
+        tree = {
+            "python": pyv.get("packages", []),
+            "r": rpackages,
+            "conda": conda,
+            "conda_explicit": conda_explicit,
+        }
         value = {"format": REALIZED_ENVIRONMENT_FORMAT_V06, "python": pyv,
                  "r": {"version": rv, "packages": rpackages, "executable_sha256": rm.group(1).lower() if rm else None},
-                 "conda": {"packages": conda}, "platform": {"probe": plat,
+                 "conda": {"packages": conda, "explicit": conda_explicit}, "platform": {"probe": plat,
                  "image_os": self.image_meta.get("os"), "image_architecture": self.image_meta.get("architecture")},
-                 "container_image": self.image_meta, "dependency_tree_sha256": _semantic(tree)}
+                 "container_image": self.image_meta,
+                 "container_image_digest": image_digest,
+                 "container_image_digest_kind": image_digest_kind,
+                 "dependency_tree_sha256": _semantic(tree)}
         value["semantic_sha256"] = _semantic(value); return value
 
     def close(self) -> None:
