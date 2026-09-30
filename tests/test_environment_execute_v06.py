@@ -159,6 +159,46 @@ def test_independent_repeat_detects_realized_environment_divergence(tmp_path):
     assert receipt["verdict"]["deterministic_replay_confirmed"] is False
 
 
+def test_repeat_operational_failure_is_recorded_and_fails_closed(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            self.instance_number = type(self).instances
+
+        def prepare_image(self, plan):
+            if self.instance_number >= 2:
+                raise V06SandboxReplayError("simulated repeat sandbox failure")
+            return super().prepare_image(plan)
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert result["determinism_confirmed"] is False
+    assert result["determinism_runs_attempted"] == 2
+    assert result["determinism_runs_completed"] == 1
+    assert receipt["determinism"]["status"] == "divergence_detected"
+    assert receipt["determinism"]["runs"][1]["status"] == "operational_failure"
+    assert "simulated repeat sandbox failure" in receipt["determinism"]["runs"][1]["error"]
+
+
+def test_public_replay_requires_at_least_two_runs(tmp_path):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    with pytest.raises(
+        V06SandboxReplayError,
+        match="requires between 2 and 5 independent runs",
+    ):
+        execute_prepared_replay_workspace_v06(
+            workspace,
+            tmp_path / "result",
+            public,
+            expected_fingerprint=fingerprint,
+            determinism_runs=1,
+            _backend_factory=_FakeBackend,
+        )
+
+
 def test_stale_signed_output_cannot_mask_missing_reexecution_output(tmp_path):
     class Backend(_FakeBackend): write_mode = "missing"
     _, _, result, receipt, _ = _execute(tmp_path, Backend)
