@@ -150,9 +150,29 @@ def _norm_name(name: str) -> str:
     return re.sub(r"[-_.]+", "-", name).lower()
 
 
-def _is_conditional_dependency(dep: dict[str, Any]) -> bool:
+def _dependency_mode(dep: dict[str, Any]) -> str:
     raw = dep.get("raw")
-    return isinstance(raw, str) and ";" in raw
+    source_kind = str(dep.get("source_kind") or "")
+    if source_kind.startswith("pyproject_optional:") or source_kind == "description:suggests":
+        return "optional"
+    if source_kind in {"poetry_lock", "uv_lock"}:
+        return "lock_may_be_platform_conditional"
+    if isinstance(raw, str):
+        if ";" in raw:
+            return "conditional"
+        try:
+            parsed = json.loads(raw)
+        except (json.JSONDecodeError, TypeError):
+            parsed = None
+        if isinstance(parsed, dict) and any(
+            parsed.get(key) for key in ("markers", "marker")
+        ):
+            return "conditional"
+    return "required"
+
+
+def _is_conditional_dependency(dep: dict[str, Any]) -> bool:
+    return _dependency_mode(dep) != "required"
 
 
 def _exact_pins(env: dict[str, Any]) -> dict[str, dict[str, str]]:
@@ -351,27 +371,37 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
             if dep.get("exact_pin") is True and not _is_conditional_dependency(dep):
                 continue
             name = _norm_name(dep["name"]); got = maps[eco].get(name)
-            if _is_conditional_dependency(dep):
-                status = "conditional_marker_not_evaluated"
+            mode = _dependency_mode(dep)
+            spec = _declared_constraint(dep)
+            if mode != "required" and got is None:
+                status = (
+                    "optional_not_present"
+                    if mode == "optional"
+                    else "lock_entry_not_active"
+                    if mode == "lock_may_be_platform_conditional"
+                    else "conditional_marker_not_evaluated"
+                )
+                passed = True
+            elif got is None:
+                status = "missing"
+                passed = False
+            elif spec is None:
+                status = (
+                    "present_optional_or_conditional"
+                    if mode != "required"
+                    else "present"
+                )
                 passed = True
             else:
-                spec = _declared_constraint(dep)
-                if got is None:
-                    status = "missing"
-                    passed = False
-                elif spec is None:
-                    status = "present"
-                    passed = True
-                else:
-                    compared = _constraint(got, spec)
-                    status = (
-                        "constraint_match"
-                        if compared == "match"
-                        else "constraint_mismatch"
-                        if compared == "mismatch"
-                        else "present_constraint_not_supported"
-                    )
-                    passed = compared != "mismatch"
+                compared = _constraint(got, spec)
+                status = (
+                    "constraint_match"
+                    if compared == "match"
+                    else "constraint_mismatch"
+                    if compared == "mismatch"
+                    else "present_constraint_not_supported"
+                )
+                passed = compared != "mismatch"
             loose.append({"ecosystem": eco, "name": name, "declared": dep.get("raw"),
                           "realized": got, "status": status})
             ok = ok and passed
@@ -383,8 +413,50 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
                 status = _constraint(got, item["value"]); ok = ok and status == "match"
                 interps.append({"ecosystem": eco, "constraint": item["value"], "realized": got, "status": status})
     signed_containers = env.get("containers", [])
+    platform_comparison = {"status": "not_declared", "expected": None, "realized": None}
     if signed_containers:
         ok = ok and container_status.get("status") in {"derived_from_signed_contract", "image_digest_matches_signed_reference"}
+        declared_platforms = {
+            stage.get("platform")
+            for container in signed_containers
+            if isinstance(container, dict)
+            for stage in container.get("stages", [])
+            if isinstance(stage, dict)
+            and isinstance(stage.get("platform"), str)
+            and "$" not in stage["platform"]
+        }
+        if declared_platforms:
+            realized_image = realized.get("container_image", {})
+            realized_platform = None
+            if isinstance(realized_image, dict):
+                os_name = realized_image.get("os")
+                arch = realized_image.get("architecture")
+                if isinstance(os_name, str) and isinstance(arch, str):
+                    realized_platform = f"{os_name}/{arch}"
+            expected_platform = (
+                next(iter(declared_platforms))
+                if len(declared_platforms) == 1
+                else None
+            )
+            if expected_platform is None:
+                platform_comparison = {
+                    "status": "conflicting_signed_platforms",
+                    "expected": sorted(declared_platforms),
+                    "realized": realized_platform,
+                }
+                ok = False
+            else:
+                status = (
+                    "match"
+                    if realized_platform == expected_platform
+                    else "mismatch"
+                )
+                platform_comparison = {
+                    "status": status,
+                    "expected": expected_platform,
+                    "realized": realized_platform,
+                }
+                ok = ok and status == "match"
     out = {
         "signed_exact_packages": rows,
         "signed_non_exact_dependencies": loose,
@@ -393,7 +465,15 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
         "interpreter_binary_hash": {"status": "observed_not_signed",
             "python_sha256": realized.get("python", {}).get("executable_sha256"),
             "r_sha256": realized.get("r", {}).get("executable_sha256")},
-        "os_architecture": {"status": "observed_not_signed", "value": realized.get("platform")},
+        "os_architecture": {
+            "status": (
+                "compared_to_signed_container_platform"
+                if platform_comparison["status"] != "not_declared"
+                else "observed_not_signed"
+            ),
+            "comparison": platform_comparison,
+            "value": realized.get("platform"),
+        },
         "container_image_digest": {"status": "observed_not_signed", "value": realized.get("container_image")},
         "dependency_tree_fingerprint": {"status": "observed_not_signed", "sha256": realized.get("dependency_tree_sha256")},
         "enforceable_contract_match": bool(ok),
