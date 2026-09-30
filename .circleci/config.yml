@@ -1,37 +1,77 @@
 version: 2.1
 
-jobs:
-  produce-signed-campaign:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
+commands:
+  setup-python:
     steps:
-      - checkout
       - run:
-          name: Record producer identity
-          command: |
-            uname -a
-            cat /etc/os-release
-            docker version
-            docker buildx version
-            python3 --version
-      - run:
-          name: Set up PCS
+          name: Install Python tooling
           command: |
             sudo apt-get update
             sudo apt-get install -y python3 python3-venv python3-pip
             python3 -m venv .venv
             . .venv/bin/activate
             python -m pip install --upgrade pip
+
+  install-pcs:
+    steps:
+      - setup-python
+      - run:
+          name: Install PCS
+          command: |
+            . .venv/bin/activate
+            python -m pip install -e .
+
+jobs:
+  environment-probe:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Probe CircleCI machine
+          command: |
+            uname -a
+            cat /etc/os-release
+            docker version
+            docker buildx version
+      - setup-python
+      - run:
+          name: Probe Python
+          command: |
+            . .venv/bin/activate
+            python --version
+            pip --version
+
+  regression-gate:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-python
+      - run:
+          name: Install PCS with test dependencies
+          command: |
+            . .venv/bin/activate
             python -m pip install -e ".[dev]"
       - run:
-          name: Replay regression gate
+          name: Run replay regression gate
           command: |
             . .venv/bin/activate
             python -m pytest -q tests/test_environment_execute_v06.py tests/test_environment_workspace_v06.py tests/test_environment_replay_v06.py tests/test_workflow_replay_v06.py
+
+  produce-signed-campaign:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - install-pcs
       - run:
           name: Produce signed campaign
           command: |
+            rm -rf /tmp/pcs-cross-machine
             mkdir -p /tmp/pcs-cross-machine
             . .venv/bin/activate
             python scripts/cross_machine_oci_campaign.py produce --output /tmp/pcs-cross-machine/bundles
@@ -48,25 +88,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
-      - run:
-          name: Record amd64 identity
-          command: |
-            uname -a
-            cat /etc/os-release
-            docker version
-            python3 --version
-      - run:
-          name: Set up PCS verifier
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y python3 python3-venv python3-pip
-            python3 -m venv .venv
-            . .venv/bin/activate
-            python -m pip install --upgrade pip
-            python -m pip install -e .
+      - install-pcs
       - run:
           name: Replay on amd64
           command: |
+            uname -a
+            docker version
             mkdir -p /tmp/pcs-cross-machine/results
             . .venv/bin/activate
             python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-amd64 --machine-id circleci-ubuntu24-amd64
@@ -86,25 +113,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
-      - run:
-          name: Record arm64 identity
-          command: |
-            uname -a
-            cat /etc/os-release
-            docker version
-            python3 --version
-      - run:
-          name: Set up PCS verifier
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y python3 python3-venv python3-pip
-            python3 -m venv .venv
-            . .venv/bin/activate
-            python -m pip install --upgrade pip
-            python -m pip install -e .
+      - install-pcs
       - run:
           name: Replay on arm64
           command: |
+            uname -a
+            docker version
             mkdir -p /tmp/pcs-cross-machine/results
             . .venv/bin/activate
             python scripts/cross_machine_oci_campaign.py replay --input /tmp/pcs-cross-machine/bundles --output /tmp/pcs-cross-machine/results/circleci-ubuntu24-arm64 --machine-id circleci-ubuntu24-arm64
@@ -124,17 +138,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/pcs-cross-machine
+      - install-pcs
       - run:
-          name: Set up evidence reader
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y python3 python3-venv python3-pip
-            python3 -m venv .venv
-            . .venv/bin/activate
-            python -m pip install --upgrade pip
-            python -m pip install -e .
-      - run:
-          name: Assert evidence
+          name: Assert cross-machine evidence
           command: |
             . .venv/bin/activate
             python scripts/cross_machine_oci_campaign.py aggregate --input /tmp/pcs-cross-machine/results --output /tmp/pcs-cross-machine/circleci-cross-machine-summary.json
@@ -146,10 +152,18 @@ jobs:
 workflows:
   pcs-cross-machine-oci:
     jobs:
-      - produce-signed-campaign:
+      - environment-probe:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
+      - regression-gate:
+          requires:
+            - environment-probe
+          filters: *pcs_branch
+      - produce-signed-campaign:
+          requires:
+            - regression-gate
+          filters: *pcs_branch
       - replay-amd64:
           requires:
             - produce-signed-campaign
