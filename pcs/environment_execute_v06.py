@@ -457,8 +457,30 @@ def compare_realized_environment_v06(env: dict[str, Any], realized: dict[str, An
                     "realized": realized_platform,
                 }
                 ok = ok and status == "match"
+    expected_projection = sorted(
+        f"{row['ecosystem']}:{_norm_name(row['name'])}=={row['expected']}"
+        for row in rows
+    )
+    realized_projection = sorted(
+        f"{row['ecosystem']}:{_norm_name(row['name'])}=={row['realized']}"
+        for row in rows
+        if isinstance(row.get("realized"), str)
+    )
+    projection_match = expected_projection == realized_projection
+    if rows:
+        ok = ok and projection_match
+
     out = {
         "signed_exact_packages": rows,
+        "signed_dependency_projection_fingerprint": {
+            "status": "compared_to_signed_exact_dependencies" if rows else "not_declared",
+            "enforced": bool(rows),
+            "expected_sha256": _semantic(expected_projection),
+            "realized_sha256": _semantic(realized_projection),
+            "match": projection_match if rows else None,
+            "expected_entries": len(expected_projection),
+            "realized_entries": len(realized_projection),
+        },
         "signed_non_exact_dependencies": loose,
         "interpreter_constraints": interps,
         "container": container_status,
@@ -560,7 +582,11 @@ class _OciBackend:
                         )
             tag = "pcs-replay-" + plan["semantic_sha256"][:20]
             pull = "--pull=false" if self.runtime_name == "docker" else "--pull=never"
-            p = _run([self.runtime,"build","--network=none","--no-cache",pull,"-t",tag,"-f",str(cf),str(self.root)], self.timeout)
+            p = _run([
+                self.runtime, "build", "--network=none", "--no-cache", pull,
+                "--build-arg", "SOURCE_DATE_EPOCH=0",
+                "-t", tag, "-f", str(cf), str(self.root)
+            ], self.timeout)
             if p.returncode: raise V06SandboxReplayError("offline OCI build failed: " + p.stderr.decode(errors="replace")[:4096])
             self.image_ref = tag; self.built_image = True
         self.image_meta = self.inspect(); return self.image_meta
