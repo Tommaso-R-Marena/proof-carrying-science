@@ -880,7 +880,9 @@ def execute_prepared_replay_workspace_v06(
         factory = _backend_factory or _OciBackend
         backend = factory(runtime=runtime,sandbox_root=sandbox,signed_environment=env,image=image,
                           timeout_seconds=timeout_seconds,memory=memory,cpus=cpus)
-        backend.prepare_image(plan); runs=[]
+        backend.prepare_image(plan)
+        sandbox_runtime_name = getattr(backend, "runtime_name", runtime)
+        runs=[]
         for n in plan["nodes"]:
             r=backend.execute_node(n); runs.append({"node_id":n["id"],**r})
             if r["exit_code"] != 0: break
@@ -933,6 +935,7 @@ def execute_prepared_replay_workspace_v06(
         primary_projection = _determinism_projection_v06(realized, outputs)
         determinism = {
             "runs_requested": determinism_runs,
+            "runs_attempted": 1,
             "runs_completed": 1,
             "confirmed": bool(_determinism_child),
             "status": (
@@ -964,51 +967,64 @@ def execute_prepared_replay_workspace_v06(
 
             confirmed = True
             for run_index in range(2, determinism_runs + 1):
+                determinism["runs_attempted"] += 1
                 repeat_dest = temp / f"determinism-run-{run_index}"
-                repeat_result = execute_prepared_replay_workspace_v06(
-                    root,
-                    repeat_dest,
-                    public_key_path,
-                    expected_fingerprint=expected_fingerprint,
-                    runtime=runtime,
-                    image=image,
-                    timeout_seconds=timeout_seconds,
-                    memory=memory,
-                    cpus=cpus,
-                    determinism_runs=1,
-                    _backend_factory=_backend_factory,
-                    _determinism_child=True,
-                )
-                repeat_receipt = strict_json_load(
-                    repeat_dest / "pcs-replay-execution.json"
-                )
-                repeat_realized = strict_json_load(
-                    repeat_dest / "pcs-realized-environment.json"
-                )
-                repeat_outputs = repeat_receipt.get("workflow_outputs", [])
-                repeat_projection = _determinism_projection_v06(
-                    repeat_realized,
-                    repeat_outputs if isinstance(repeat_outputs, list) else [],
-                )
-                same_projection = (
-                    repeat_projection["semantic_sha256"]
-                    == primary_projection["semantic_sha256"]
-                )
-                run_valid = bool(repeat_result.get("valid"))
-                determinism["runs"].append(
-                    {
-                        "run": run_index,
-                        "valid": run_valid,
-                        "projection_sha256": repeat_projection["semantic_sha256"],
-                        "realized_environment_semantic_sha256": repeat_realized.get("semantic_sha256"),
-                        "dependency_tree_sha256": repeat_realized.get("dependency_tree_sha256"),
-                        "container_image_digest": repeat_realized.get("container_image_digest"),
-                        "matches_primary_projection": same_projection,
-                    }
-                )
-                determinism["runs_completed"] += 1
-                if not run_valid or not same_projection:
+                try:
+                    repeat_result = execute_prepared_replay_workspace_v06(
+                        root,
+                        repeat_dest,
+                        public_key_path,
+                        expected_fingerprint=expected_fingerprint,
+                        runtime=runtime,
+                        image=image,
+                        timeout_seconds=timeout_seconds,
+                        memory=memory,
+                        cpus=cpus,
+                        determinism_runs=1,
+                        _backend_factory=_backend_factory,
+                        _determinism_child=True,
+                    )
+                    repeat_receipt = strict_json_load(
+                        repeat_dest / "pcs-replay-execution.json"
+                    )
+                    repeat_realized = strict_json_load(
+                        repeat_dest / "pcs-realized-environment.json"
+                    )
+                    repeat_outputs = repeat_receipt.get("workflow_outputs", [])
+                    repeat_projection = _determinism_projection_v06(
+                        repeat_realized,
+                        repeat_outputs if isinstance(repeat_outputs, list) else [],
+                    )
+                    same_projection = (
+                        repeat_projection["semantic_sha256"]
+                        == primary_projection["semantic_sha256"]
+                    )
+                    run_valid = bool(repeat_result.get("valid"))
+                    determinism["runs"].append(
+                        {
+                            "run": run_index,
+                            "valid": run_valid,
+                            "projection_sha256": repeat_projection["semantic_sha256"],
+                            "realized_environment_semantic_sha256": repeat_realized.get("semantic_sha256"),
+                            "dependency_tree_sha256": repeat_realized.get("dependency_tree_sha256"),
+                            "container_image_digest": repeat_realized.get("container_image_digest"),
+                            "matches_primary_projection": same_projection,
+                        }
+                    )
+                    determinism["runs_completed"] += 1
+                    if not run_valid or not same_projection:
+                        confirmed = False
+                except (OSError, ValueError) as exc:
                     confirmed = False
+                    determinism["runs"].append(
+                        {
+                            "run": run_index,
+                            "valid": False,
+                            "status": "operational_failure",
+                            "error": f"{type(exc).__name__}: {exc}",
+                            "matches_primary_projection": False,
+                        }
+                    )
 
             determinism["confirmed"] = confirmed
             determinism["status"] = (
@@ -1025,7 +1041,7 @@ def execute_prepared_replay_workspace_v06(
                  "certificate_semantic_hash":cert.get("semantic_hash"),"certificate_integrity_hash":cert.get("integrity_hash"),
                  "producer_public_key_fingerprint":verified.get("public_key_fingerprint"),
                  "environment_semantic_sha256":env.get("semantic_sha256"),"sandbox_replay_plan_sha256":plan.get("semantic_sha256"),
-                 "sandbox_runtime":getattr(backend,"runtime_name",runtime),"sandbox_policy":plan["sandbox_policy"],
+                 "sandbox_runtime":sandbox_runtime_name,"sandbox_policy":plan["sandbox_policy"],
                  "preexisting_outputs":removed,"workflow_execution":runs,"workflow_outputs":outputs,
                  "non_output_artifact_mutations":mutations,"unsafe_symlinks":unsafe_links,"extra_files":extras,"environment_comparison":comparison,
                  "realized_environment_sha256":_sha(realized_path.read_bytes()),"determinism":determinism,
@@ -1042,7 +1058,8 @@ def execute_prepared_replay_workspace_v06(
                 "realized_environment":str(dest/"pcs-realized-environment.json"),
                 "execution_receipt":str(dest/"pcs-replay-execution.json"),"workflow_nodes_executed":len(runs),
                 "workflow_outputs_checked":len(outputs),"environment_contract_match":comparison["enforceable_contract_match"],
-                "determinism_confirmed":determinism["confirmed"],"determinism_runs_completed":determinism["runs_completed"]}
+                "determinism_confirmed":determinism["confirmed"],"determinism_runs_attempted":determinism["runs_attempted"],
+                "determinism_runs_completed":determinism["runs_completed"]}
     except Exception:
         shutil.rmtree(staging,ignore_errors=True); raise
     finally:
