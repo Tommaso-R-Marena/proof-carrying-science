@@ -355,6 +355,13 @@ def replay_one(source: Path, result_root: Path, meta: dict[str, Any]) -> dict[st
             record["determinism"] = receipt.get("determinism")
             record["environment_comparison"] = receipt.get("environment_comparison")
             record["workflow_outputs"] = receipt.get("workflow_outputs")
+            record["verdict"] = receipt.get("verdict")
+            record["workflow_execution"] = receipt.get("workflow_execution")
+            record["non_output_artifact_mutations"] = receipt.get(
+                "non_output_artifact_mutations"
+            )
+            record["unsafe_symlinks"] = receipt.get("unsafe_symlinks")
+            record["extra_files"] = receipt.get("extra_files")
         if realized_path.is_file():
             realized = json.loads(realized_path.read_text(encoding="utf-8"))
             record["realized_environment_semantic_sha256"] = realized.get("semantic_sha256")
