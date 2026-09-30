@@ -444,8 +444,28 @@ def execute_prepared_replay_workspace_v06(
     _backend_factory: Callable[..., Any] | None = None,
 ) -> dict[str, Any]:
     root = Path(workspace).resolve(); dest = Path(output).resolve()
-    if not root.is_dir() or root.is_symlink(): raise V06SandboxReplayError("workspace must be a regular directory")
-    if dest.exists(): raise V06SandboxReplayError(f"output already exists: {dest}")
+    if not root.is_dir() or root.is_symlink():
+        raise V06SandboxReplayError("workspace must be a regular directory")
+    if dest.exists():
+        raise V06SandboxReplayError(f"output already exists: {dest}")
+    try:
+        dest.relative_to(root)
+    except ValueError:
+        pass
+    else:
+        raise V06SandboxReplayError(
+            "execution output must not be created inside the prepared workspace"
+        )
+    if not isinstance(timeout_seconds, int) or not (1 <= timeout_seconds <= 86400):
+        raise V06SandboxReplayError("timeout_seconds must be an integer from 1 to 86400")
+    if not isinstance(cpus, (int, float)) or not (0 < float(cpus) <= 64):
+        raise V06SandboxReplayError("cpus must be greater than 0 and at most 64")
+    if not isinstance(memory, str) or not re.fullmatch(
+        r"[1-9][0-9]*(?:[kKmMgGtT](?:[bB])?)?", memory
+    ):
+        raise V06SandboxReplayError(
+            "memory must be a positive Docker/Podman size such as 512m or 2g"
+        )
     meta = strict_json_load(root / "pcs-environment-workspace.json")
     if not isinstance(meta, dict) or meta.get("format") != "pcs-environment-workspace-v1":
         raise V06SandboxReplayError("unsupported prepared workspace")
@@ -492,7 +512,27 @@ def execute_prepared_replay_workspace_v06(
     backend = None
     try:
         arts = _artifacts(cert); materialized = {}
-        recorded = {x["artifact_id"]:x for x in meta["materialized_artifacts"]}
+        rows = meta.get("materialized_artifacts")
+        if not isinstance(rows, list):
+            raise V06SandboxReplayError(
+                "prepared workspace materialized_artifacts must be an array"
+            )
+        recorded = {}
+        for row in rows:
+            if not isinstance(row, dict) or not isinstance(row.get("artifact_id"), str):
+                raise V06SandboxReplayError(
+                    "prepared workspace contains an invalid artifact-ledger row"
+                )
+            aid = row["artifact_id"]
+            if aid in recorded:
+                raise V06SandboxReplayError(
+                    f"prepared workspace contains duplicate artifact-ledger id {aid!r}"
+                )
+            recorded[aid] = row
+        if set(recorded) != set(arts):
+            raise V06SandboxReplayError(
+                "prepared workspace artifact ledger differs from signed certificate"
+            )
         for aid,a in arts.items():
             p = root / _path(a["source_path"]); raw = p.read_bytes()
             if p.is_symlink() or _sha(raw) != a["sha256"]: raise V06SandboxReplayError(f"signed artifact drift: {a['source_path']}")
