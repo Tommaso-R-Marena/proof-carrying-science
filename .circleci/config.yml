@@ -164,6 +164,79 @@ jobs:
             python scripts/check_determinism_component.py --input /tmp/pcs-cross-machine/results --mode realized-environment-stable
 
 
+  env-01:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Environment exact package pins
+          command: |
+            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode exact-packages
+
+  env-02:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Environment non-exact dependencies
+          command: |
+            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode non-exact-dependencies
+
+  env-03:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Environment interpreter constraints
+          command: |
+            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode interpreter-constraints
+
+  env-04:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Environment signed container binding
+          command: |
+            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode container-binding
+
+  env-05:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Environment signed dependency projection
+          command: |
+            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode dependency-projection
+
+  env-06:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-cross-machine
+      - run:
+          name: Environment enforceable contract
+          command: |
+            python scripts/check_environment_component.py --input /tmp/pcs-cross-machine/results --mode enforceable-contract
+
+
 workflows:
   pcs-cross-machine-oci:
     jobs:
@@ -205,6 +278,36 @@ workflows:
             - replay-arm64
           filters: *pcs_branch
       - det-06:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - env-01:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - env-02:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - env-03:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - env-04:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - env-05:
+          requires:
+            - replay-amd64
+            - replay-arm64
+          filters: *pcs_branch
+      - env-06:
           requires:
             - replay-amd64
             - replay-arm64
