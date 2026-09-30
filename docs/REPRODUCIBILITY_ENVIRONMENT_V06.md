@@ -267,13 +267,13 @@ promotion.
 
 A prepared workspace can now be executed explicitly:
 
-\`\`\`bash
+```bash
 pcs execute-environment-v06 replay-workspace \
   -o realized-replay \
   --public-key trusted-producer.pem \
   --expected-signer-fingerprint <fingerprint> \
   --runs 2
-\`\`\`
+```
 
 The execution stage re-verifies the producer-signed certificate, re-derives the
 execution plan from the signed workflow/environment contract, validates every
@@ -292,16 +292,16 @@ environment. There is deliberately no unsandboxed fallback.
 If the signed environment includes exactly one container specification whose
 base stages are digest-pinned, PCS can rebuild it with an offline/no-pull OCI
 build. Otherwise the reviewer must provide an already-local image with
-\`--image\`. When a container contract was signed, PCS requires an offline rebuild from that signed Dockerfile and refuses `--image` substitution. Every digest-pinned base must already exist in the local OCI image store; missing bases cause failure rather than a registry pull. External `COPY --from=` images, `ADD`, networked build steps, and secret/SSH build mounts are rejected. `--image` is accepted only when the producer did not sign a container contract.
+`--image`. When a container contract was signed, PCS requires an offline rebuild from that signed Dockerfile and refuses `--image` substitution. Every digest-pinned base must already exist in the local OCI image store; missing bases cause failure rather than a registry pull. External `COPY --from=` images, `ADD`, networked build steps, and secret/SSH build mounts are rejected. `--image` is accepted only when the producer did not sign a container contract.
 
 After execution, PCS writes:
 
-\`\`\`text
+```text
 realized-replay/
   pcs-realized-environment.json
   pcs-replay-execution.json
   outputs/<reproduced workflow outputs...>
-\`\`\`
+```
 
 The realized-environment record captures Python and R interpreter versions,
 installed Python/R/Conda package versions, Python/R interpreter executable
@@ -317,7 +317,7 @@ dependency declarations must at least be present and are labeled as not exactly
 version-enforced. Values that the existing static contract never promised
 (interpreter binary hash, full realized dependency-tree fingerprint, final OCI
 image digest, and complete OS/kernel identity) are captured as
-\`observed_not_signed\`; PCS does not retroactively mislabel them as producer
+`observed_not_signed`; PCS does not retroactively mislabel them as producer
 commitments.
 
 A replay receipt is valid only when every selected workflow node exits zero,
