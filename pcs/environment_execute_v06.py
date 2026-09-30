@@ -514,11 +514,19 @@ def execute_prepared_replay_workspace_v06(
         realized=backend.capture_environment()
         cstatus=_container_status(env,backend,image)
         comparison=compare_realized_environment_v06(env,realized,container_status=cstatus)
+        unsafe_links=sorted(
+            p.relative_to(sandbox).as_posix()
+            for p in sandbox.rglob("*")
+            if p.is_symlink()
+        )
         outputs=[]
         for n in plan["nodes"]:
             for o in n["outputs"]:
                 p=sandbox/_path(o["source_path"])
-                if not p.is_file(): status="missing"; digest=None; size=None
+                if p.is_symlink():
+                    status="unsafe_symlink"; digest=None; size=None
+                elif not p.is_file():
+                    status="missing"; digest=None; size=None
                 else:
                     raw=p.read_bytes(); digest=_sha(raw); size=len(raw)
                     status="match" if digest==o["sha256"] and (o.get("size") is None or size==o["size"]) else "mismatch"
@@ -527,19 +535,26 @@ def execute_prepared_replay_workspace_v06(
         for aid,item in materialized.items():
             if aid in output_ids: continue
             p=sandbox/_path(item["source_path"])
-            if not p.is_file() or _sha(p.read_bytes()) != item["sha256"]:
+            if p.is_symlink() or not p.is_file() or _sha(p.read_bytes()) != item["sha256"]:
                 mutations.append({"artifact_id":aid,"source_path":item["source_path"],"status":"mutated_or_missing"})
         known={x["source_path"] for x in materialized.values()}
-        extras=sorted(p.relative_to(sandbox).as_posix() for p in sandbox.rglob("*") if p.is_file() and p.relative_to(sandbox).as_posix() not in known)
+        extras=sorted(
+            p.relative_to(sandbox).as_posix()
+            for p in sandbox.rglob("*")
+            if not p.is_symlink()
+            and p.is_file()
+            and p.relative_to(sandbox).as_posix() not in known
+        )
         nodes_ok=len(runs)==len(plan["nodes"]) and all(x["exit_code"]==0 for x in runs)
         outputs_ok=len(outputs)==len(output_ids) and all(x["status"]=="match" for x in outputs)
         namespace_ok=not plan["exact_output_namespace_claimed"] or not extras
-        valid=nodes_ok and outputs_ok and not mutations and namespace_ok and comparison["enforceable_contract_match"]
+        filesystem_safe=not unsafe_links
+        valid=nodes_ok and outputs_ok and not mutations and namespace_ok and filesystem_safe and comparison["enforceable_contract_match"]
         realized_path=staging/"pcs-realized-environment.json"
         realized_path.write_text(json.dumps(realized,indent=2,sort_keys=True)+"\n",encoding="utf-8")
         for o in outputs:
             p=sandbox/_path(o["source_path"])
-            if p.is_file():
+            if not p.is_symlink() and p.is_file():
                 q=staging/"outputs"/_path(o["source_path"]); q.parent.mkdir(parents=True,exist_ok=True); q.write_bytes(p.read_bytes())
         receipt={"format":SANDBOX_REPLAY_RECEIPT_FORMAT_V06,"valid":valid,"bundle_sha256":meta.get("bundle_sha256"),
                  "certificate_semantic_hash":cert.get("semantic_hash"),"certificate_integrity_hash":cert.get("integrity_hash"),
@@ -547,10 +562,11 @@ def execute_prepared_replay_workspace_v06(
                  "environment_semantic_sha256":env.get("semantic_sha256"),"sandbox_replay_plan_sha256":plan.get("semantic_sha256"),
                  "sandbox_runtime":getattr(backend,"runtime_name",runtime),"sandbox_policy":plan["sandbox_policy"],
                  "preexisting_outputs":removed,"workflow_execution":runs,"workflow_outputs":outputs,
-                 "non_output_artifact_mutations":mutations,"extra_files":extras,"environment_comparison":comparison,
+                 "non_output_artifact_mutations":mutations,"unsafe_symlinks":unsafe_links,"extra_files":extras,"environment_comparison":comparison,
                  "realized_environment_sha256":_sha(realized_path.read_bytes()),
                  "verdict":{"all_nodes_exited_zero":nodes_ok,"all_signed_outputs_reproduced_exactly":outputs_ok,
                  "signed_non_outputs_unchanged":not mutations,"exact_output_namespace_satisfied":namespace_ok,
+                 "filesystem_contains_no_symlinks":filesystem_safe,
                  "enforceable_environment_contract_match":comparison["enforceable_contract_match"]},
                  "trust_boundary":"OCI runtime/host kernel/language introspection/SHA-256 remain trusted; unsigned realized fields are observations, not retroactive producer promises."}
         receipt["semantic_sha256"]=_semantic(receipt)
