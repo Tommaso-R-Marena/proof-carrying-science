@@ -470,6 +470,7 @@ def cmd_execute_environment_v06(args):
             timeout_seconds=args.timeout_seconds,
             memory=args.memory,
             cpus=args.cpus,
+            determinism_runs=args.runs,
         )
     except (OSError, ValueError, V06VerifierIOError, V06SandboxReplayError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
@@ -865,6 +866,15 @@ def build_parser():
     sew6.add_argument("--timeout-seconds", type=int, default=300)
     sew6.add_argument("--memory", default="2g")
     sew6.add_argument("--cpus", type=float, default=1.0)
+    sew6.add_argument(
+        "--runs",
+        type=int,
+        default=2,
+        help=(
+            "independent fresh replay runs used to test deterministic outputs "
+            "and realized environment; must be 2-5"
+        ),
+    )
     sew6.set_defaults(func=cmd_execute_environment_v06)
 
     ep6 = sub.add_parser(
