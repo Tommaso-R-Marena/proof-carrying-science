@@ -271,7 +271,8 @@ A prepared workspace can now be executed explicitly:
 pcs execute-environment-v06 replay-workspace \
   -o realized-replay \
   --public-key trusted-producer.pem \
-  --expected-signer-fingerprint <fingerprint>
+  --expected-signer-fingerprint <fingerprint> \
+  --runs 2
 \`\`\`
 
 The execution stage re-verifies the producer-signed certificate, re-derives the
@@ -342,10 +343,25 @@ evaluation is not yet part of the v0.6 realized-environment comparator.
 The runner removes common nondeterminism by fixing process environment/thread
 counts, disabling network access, starting from clean signed inputs, removing
 pre-existing outputs, applying fixed resource limits, and comparing exact output
-bytes. v0.6 does **not** virtualize the host kernel's wall clock or entropy
-source. Therefore the receipt reports those limits explicitly instead of
-claiming universal deterministic behavior for programs that intentionally read
-time, entropy, hardware-specific state, or other kernel facilities.
+bytes.
+
+PCS now tests determinism empirically rather than inferring it from those controls.
+By default `execute-environment-v06` performs **two independent fresh replays**.
+After the primary replay, PCS closes the primary sandbox/image, starts again from
+the signed prepared workspace, and compares a canonical determinism projection
+across runs. That projection binds the realized-environment semantic hash,
+dependency-tree fingerprint, container image digest, Python/R interpreter
+versions and binary hashes, platform observation, and every regenerated output's
+artifact ID, path, SHA-256, size, and status. A repeat that fails independently or
+differs from the primary projection makes the overall replay receipt invalid.
+Reviewers can request 2-5 runs with `--runs`.
+
+This is repeated-execution evidence, not a proof that arbitrary software is
+mathematically deterministic. v0.6 does **not** virtualize the host kernel's wall
+clock or entropy source. Therefore the receipt reports those limits explicitly
+instead of claiming universal deterministic behavior for programs that
+intentionally read time, entropy, hardware-specific state, or other kernel
+facilities.
 
 The OCI runtime, host kernel, language/package introspection APIs, local image
 store/build engine, and SHA-256 implementation remain in the execution TCB.
