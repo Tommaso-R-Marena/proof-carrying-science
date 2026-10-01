@@ -24,7 +24,7 @@ def resolve(root: Path) -> tuple[list[Path], str]:
     run([
         "python","-m","pip","download","--disable-pip-version-check",
         "--only-binary=:all:","--no-deps","--dest",str(wheelhouse),
-        "--platform","manylinux2014_x86_64","--implementation","cp",
+        "--platform","manylinux_2_28_x86_64","--implementation","cp",
         "--python-version","312","--abi","cp312","numpy>=2.1,<3",
     ])
     x86 = sorted(wheelhouse.glob("numpy-*-x86_64*.whl"))
@@ -37,7 +37,7 @@ def resolve(root: Path) -> tuple[list[Path], str]:
     run([
         "python","-m","pip","download","--disable-pip-version-check",
         "--only-binary=:all:","--no-deps","--dest",str(wheelhouse),
-        "--platform","manylinux2014_aarch64","--implementation","cp",
+        "--platform","manylinux_2_28_aarch64","--implementation","cp",
         "--python-version","312","--abi","cp312",f"numpy=={version}",
     ])
     wheels = sorted(wheelhouse.glob("numpy-*.whl"))
