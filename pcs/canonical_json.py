@@ -91,6 +91,13 @@ def _serialize_number(value: int | float) -> str:
     return f"{sign}{mantissa}e{exponent_sign}{exponent}"
 
 
+def canonical_number_text(value: int | float) -> str:
+    """Return the exact PCS/JCS spelling of one finite JSON number."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise CanonicalJSONError("JCS number must be an int or float")
+    return _serialize_number(value)
+
+
 def canonicalize_jcs(value: Any) -> str:
     """Return RFC 8785 canonical JSON text for an already-parsed JSON value."""
     if value is None:
