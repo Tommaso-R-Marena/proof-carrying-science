@@ -26,11 +26,14 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def download_arch_wheel(wheelhouse: Path, arch: str) -> Path:
+def pypi_release() -> dict:
     import json
     api = f"https://pypi.org/pypi/numpy/{NUMPY_VERSION}/json"
     with urllib.request.urlopen(api, timeout=60) as response:
-        release = json.load(response)
+        return json.load(response)
+
+
+def wheel_candidate(release: dict, arch: str) -> dict:
     needle = f"manylinux_2_28_{arch}"
     candidates = [
         item
@@ -45,7 +48,11 @@ def download_arch_wheel(wheelhouse: Path, arch: str) -> Path:
         raise RuntimeError(
             f"expected one wheel for {arch}, got {[x.get('filename') for x in candidates]}"
         )
-    item = candidates[0]
+    return candidates[0]
+
+
+def download_arch_wheel(wheelhouse: Path, arch: str) -> Path:
+    item = wheel_candidate(pypi_release(), arch)
     target = wheelhouse / item["filename"]
     with urllib.request.urlopen(item["url"], timeout=120) as response:
         target.write_bytes(response.read())
@@ -119,11 +126,24 @@ def build(root: Path) -> dict[str, str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["resolve", "build"])
+    parser.add_argument("stage", choices=["api", "x86", "arm", "resolve", "build"])
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix="pcs-wheel-probe-") as td:
         root = Path(td)
-        if args.stage == "resolve":
+        if args.stage == "api":
+            release = pypi_release()
+            print({"urls": len(release.get("urls", []))})
+        elif args.stage == "x86":
+            wheelhouse = root / "wheelhouse"
+            wheelhouse.mkdir()
+            wheel = download_arch_wheel(wheelhouse, "x86_64")
+            print({"wheel": wheel.name, "sha256": _sha256(wheel)})
+        elif args.stage == "arm":
+            wheelhouse = root / "wheelhouse"
+            wheelhouse.mkdir()
+            wheel = download_arch_wheel(wheelhouse, "aarch64")
+            print({"wheel": wheel.name, "sha256": _sha256(wheel)})
+        elif args.stage == "resolve":
             wheels, version = resolve(root)
             print({"version": version, "wheels": [x.name for x in wheels]})
         else:
