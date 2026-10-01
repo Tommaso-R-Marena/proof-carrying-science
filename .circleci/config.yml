@@ -33,7 +33,7 @@ jobs:
           name: Test restoration binding and realized native fingerprints
           command: |
             . .venv/bin/activate
-            python -m pytest -q               tests/test_environment_v06.py::test_vendored_python_wheels_are_signed_environment_sources               tests/test_environment_v06.py::test_vendored_r_repository_payloads_are_signed_environment_sources               tests/test_environment_v06.py::test_discovery_promotes_vendored_restoration_artifacts_into_manifest               tests/test_environment_execute_v06.py
+            python -m pytest -q tests/test_environment_v06.py::test_vendored_python_wheels_are_signed_environment_sources tests/test_environment_v06.py::test_vendored_r_repository_payloads_are_signed_environment_sources tests/test_environment_v06.py::test_discovery_promotes_vendored_restoration_artifacts_into_manifest tests/test_environment_execute_v06.py
 
   produce-python-wheel:
     machine:
@@ -48,14 +48,11 @@ jobs:
             rm -rf /tmp/pcs-restoration
             mkdir -p /tmp/pcs-restoration
             . .venv/bin/activate
-            python scripts/python_hash_wheel_abi_campaign.py produce               --output /tmp/pcs-restoration/python-bundle
+            python scripts/python_hash_wheel_abi_campaign.py produce --output /tmp/pcs-restoration/python-bundle
       - persist_to_workspace:
           root: /tmp/pcs-restoration
           paths:
             - python-bundle
-      - store_artifacts:
-          path: /tmp/pcs-restoration/python-bundle/campaign.json
-          destination: python-wheel/producer-campaign.json
 
   replay-python-amd64:
     machine:
@@ -67,17 +64,12 @@ jobs:
           at: /tmp/pcs-restoration
       - setup-pcs
       - run:
-          name: Restore signed NumPy wheel and replay on amd64
+          name: Restore signed NumPy wheel and preserve evidence on amd64
           command: |
             mkdir -p /tmp/pcs-restoration/python-results
             . .venv/bin/activate
-            set +e
-            python scripts/python_hash_wheel_abi_campaign.py replay --input /tmp/pcs-restoration/python-bundle --output /tmp/pcs-restoration/python-results/amd64 --machine-id circleci-python-wheel-amd64
-            code=$?
-            set -e
+            python scripts/python_hash_wheel_abi_campaign.py replay --input /tmp/pcs-restoration/python-bundle --output /tmp/pcs-restoration/python-results/amd64 --machine-id circleci-python-wheel-amd64 || true
             test -f /tmp/pcs-restoration/python-results/amd64/summary.json
-            cat /tmp/pcs-restoration/python-results/amd64/summary.json
-            exit 0
       - persist_to_workspace:
           root: /tmp/pcs-restoration
           paths:
@@ -96,17 +88,12 @@ jobs:
           at: /tmp/pcs-restoration
       - setup-pcs
       - run:
-          name: Restore signed NumPy wheel and replay on ARM64
+          name: Restore signed NumPy wheel and preserve evidence on ARM64
           command: |
             mkdir -p /tmp/pcs-restoration/python-results
             . .venv/bin/activate
-            set +e
-            python scripts/python_hash_wheel_abi_campaign.py replay --input /tmp/pcs-restoration/python-bundle --output /tmp/pcs-restoration/python-results/arm64 --machine-id circleci-python-wheel-arm64
-            code=$?
-            set -e
+            python scripts/python_hash_wheel_abi_campaign.py replay --input /tmp/pcs-restoration/python-bundle --output /tmp/pcs-restoration/python-results/arm64 --machine-id circleci-python-wheel-arm64 || true
             test -f /tmp/pcs-restoration/python-results/arm64/summary.json
-            cat /tmp/pcs-restoration/python-results/arm64/summary.json
-            exit 0
       - persist_to_workspace:
           root: /tmp/pcs-restoration
           paths:
@@ -128,12 +115,7 @@ jobs:
           name: Assert hash-locked wheel and ABI evidence
           command: |
             . .venv/bin/activate
-            python scripts/python_hash_wheel_abi_campaign.py aggregate               --input /tmp/pcs-restoration/python-results               --output /tmp/pcs-restoration/python-wheel-summary.json
-            cat /tmp/pcs-restoration/python-wheel-summary.json
-      - persist_to_workspace:
-          root: /tmp/pcs-restoration
-          paths:
-            - python-wheel-summary.json
+            python scripts/python_hash_wheel_abi_campaign.py aggregate --input /tmp/pcs-restoration/python-results --output /tmp/pcs-restoration/python-wheel-summary.json
       - store_artifacts:
           path: /tmp/pcs-restoration/python-wheel-summary.json
           destination: python-wheel-summary.json
@@ -150,14 +132,11 @@ jobs:
           command: |
             mkdir -p /tmp/pcs-restoration
             . .venv/bin/activate
-            python scripts/r_renv_restore_campaign.py produce               --output /tmp/pcs-restoration/r-bundle
+            python scripts/r_renv_restore_campaign.py produce --output /tmp/pcs-restoration/r-bundle
       - persist_to_workspace:
           root: /tmp/pcs-restoration
           paths:
             - r-bundle
-      - store_artifacts:
-          path: /tmp/pcs-restoration/r-bundle/campaign.json
-          destination: r-renv/producer-campaign.json
 
   replay-r-renv-amd64:
     machine:
@@ -173,14 +152,11 @@ jobs:
           command: |
             mkdir -p /tmp/pcs-restoration/r-results
             . .venv/bin/activate
-            python scripts/r_renv_restore_campaign.py replay               --input /tmp/pcs-restoration/r-bundle               --output /tmp/pcs-restoration/r-results/amd64               --machine-id circleci-renv-amd64
+            python scripts/r_renv_restore_campaign.py replay --input /tmp/pcs-restoration/r-bundle --output /tmp/pcs-restoration/r-results/amd64 --machine-id circleci-renv-amd64
       - persist_to_workspace:
           root: /tmp/pcs-restoration
           paths:
             - r-results/amd64
-      - store_artifacts:
-          path: /tmp/pcs-restoration/r-results/amd64
-          destination: r-renv/amd64
 
   replay-r-renv-arm64:
     machine:
@@ -196,14 +172,11 @@ jobs:
           command: |
             mkdir -p /tmp/pcs-restoration/r-results
             . .venv/bin/activate
-            python scripts/r_renv_restore_campaign.py replay               --input /tmp/pcs-restoration/r-bundle               --output /tmp/pcs-restoration/r-results/arm64               --machine-id circleci-renv-arm64
+            python scripts/r_renv_restore_campaign.py replay --input /tmp/pcs-restoration/r-bundle --output /tmp/pcs-restoration/r-results/arm64 --machine-id circleci-renv-arm64
       - persist_to_workspace:
           root: /tmp/pcs-restoration
           paths:
             - r-results/arm64
-      - store_artifacts:
-          path: /tmp/pcs-restoration/r-results/arm64
-          destination: r-renv/arm64
 
   aggregate-r-renv:
     machine:
@@ -218,18 +191,12 @@ jobs:
           name: Assert offline renv restoration evidence
           command: |
             . .venv/bin/activate
-            python scripts/r_renv_restore_campaign.py aggregate               --input /tmp/pcs-restoration/r-results               --output /tmp/pcs-restoration/r-renv-summary.json
-            cat /tmp/pcs-restoration/r-renv-summary.json
-      - persist_to_workspace:
-          root: /tmp/pcs-restoration
-          paths:
-            - r-renv-summary.json
+            python scripts/r_renv_restore_campaign.py aggregate --input /tmp/pcs-restoration/r-results --output /tmp/pcs-restoration/r-renv-summary.json
       - store_artifacts:
           path: /tmp/pcs-restoration/r-renv-summary.json
           destination: r-renv-summary.json
 
-
-  diagnose-python-valid:
+  check-python-valid:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -237,10 +204,9 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: Python replay validity
-          command: python scripts/python_hash_wheel_abi_campaign.py check --input /tmp/pcs-restoration/python-results --assertion all_replays_valid
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion valid
 
-  diagnose-python-contract:
+  check-python-contract:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -248,10 +214,9 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: Python environment contracts
-          command: python scripts/python_hash_wheel_abi_campaign.py check --input /tmp/pcs-restoration/python-results --assertion all_environment_contracts_match
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion contract
 
-  diagnose-python-determinism:
+  check-python-determinism:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -259,10 +224,9 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: Python deterministic replay
-          command: python scripts/python_hash_wheel_abi_campaign.py check --input /tmp/pcs-restoration/python-results --assertion all_three_run_deterministic
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion determinism
 
-  diagnose-python-restored-version:
+  check-python-version:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -270,10 +234,9 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: Python restored NumPy version
-          command: python scripts/python_hash_wheel_abi_campaign.py check --input /tmp/pcs-restoration/python-results --assertion restored_package_version_matches_lock
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion version
 
-  diagnose-python-native-hash:
+  check-python-native:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -281,10 +244,9 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: Python native extension hashes
-          command: python scripts/python_hash_wheel_abi_campaign.py check --input /tmp/pcs-restoration/python-results --assertion native_extension_hash_captured_on_every_host
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion native
 
-  diagnose-python-output:
+  check-python-output:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -292,84 +254,67 @@ jobs:
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: Python output reproduction
-          command: python scripts/python_hash_wheel_abi_campaign.py check --input /tmp/pcs-restoration/python-results --assertion all_outputs_match_signed_producer
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion output
 
-  diagnose-r-valid:
+  check-r-valid:
     docker:
       - image: cimg/python:3.12
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: R replay validity
-          command: |
-            python - <<'PY'
-            import json, pathlib, sys
-            rows=[json.load(open(p)) for p in pathlib.Path("/tmp/pcs-restoration/r-results").rglob("summary.json")]
-            ok=len(rows)>=2 and all(r.get("valid") is True for r in rows)
-            print({"rows":len(rows),"valid":[r.get("valid") for r in rows]})
-            raise SystemExit(0 if ok else 1)
-            PY
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion valid
 
-  diagnose-r-restored-version:
+  check-r-contract:
     docker:
       - image: cimg/python:3.12
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: R restored digest version
-          command: |
-            python - <<'PY'
-            import json, pathlib
-            rows=[json.load(open(p)) for p in pathlib.Path("/tmp/pcs-restoration/r-results").rglob("summary.json")]
-            ok=len(rows)>=2 and all(r.get("realized_digest_version")==r.get("expected_digest_version") for r in rows)
-            print([(r.get("expected_digest_version"),r.get("realized_digest_version")) for r in rows])
-            raise SystemExit(0 if ok else 1)
-            PY
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion contract
 
-  diagnose-r-artifacts:
+  check-r-determinism:
     docker:
       - image: cimg/python:3.12
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: R signed restoration payload count
-          command: |
-            python - <<'PY'
-            import json, pathlib
-            rows=[json.load(open(p)) for p in pathlib.Path("/tmp/pcs-restoration/r-results").rglob("summary.json")]
-            vals=[r.get("restoration_artifacts_signed") for r in rows]
-            print(vals)
-            raise SystemExit(0 if len(rows)>=2 and all(isinstance(v,int) and v>=3 for v in vals) else 1)
-            PY
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion determinism
 
-  diagnose-r-output:
+  check-r-version:
     docker:
       - image: cimg/python:3.12
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/pcs-restoration
       - run:
-          name: R output reproduction
-          command: |
-            python - <<'PY'
-            import json, pathlib
-            rows=[json.load(open(p)) for p in pathlib.Path("/tmp/pcs-restoration/r-results").rglob("summary.json")]
-            vals=[r.get("output_matches_producer") for r in rows]
-            print(vals)
-            raise SystemExit(0 if len(rows)>=2 and all(v is True for v in vals) else 1)
-            PY
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion version
 
-  restoration-boundaries-complete:
+  check-r-artifacts:
     docker:
-      - image: cimg/base:current
+      - image: cimg/python:3.12
     steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
       - run:
-          name: Restoration campaigns complete
-          command: echo "Hash-locked wheel, ABI variation, and offline renv restoration all passed."
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion artifacts
+
+  check-r-output:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion output
 
 workflows:
   restoration-and-abi-evidence:
@@ -379,91 +324,62 @@ workflows:
             branches:
               only: v06/replay-normalized-wire-v2
       - produce-python-wheel:
-          requires:
-            - restoration-regression
+          requires: [restoration-regression]
           filters: *pcs_branch
       - replay-python-amd64:
-          requires:
-            - produce-python-wheel
+          requires: [produce-python-wheel]
           filters: *pcs_branch
       - replay-python-arm64:
-          requires:
-            - produce-python-wheel
-          filters: *pcs_branch
-      - diagnose-python-valid:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
-          filters: *pcs_branch
-      - diagnose-python-contract:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
-          filters: *pcs_branch
-      - diagnose-python-determinism:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
-          filters: *pcs_branch
-      - diagnose-python-restored-version:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
-          filters: *pcs_branch
-      - diagnose-python-native-hash:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
-          filters: *pcs_branch
-      - diagnose-python-output:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
+          requires: [produce-python-wheel]
           filters: *pcs_branch
       - aggregate-python-wheel:
-          requires:
-            - replay-python-amd64
-            - replay-python-arm64
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-valid:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-contract:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-determinism:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-version:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-native:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-output:
+          requires: [replay-python-amd64, replay-python-arm64]
           filters: *pcs_branch
       - produce-r-renv:
-          requires:
-            - restoration-regression
+          requires: [restoration-regression]
           filters: *pcs_branch
       - replay-r-renv-amd64:
-          requires:
-            - produce-r-renv
+          requires: [produce-r-renv]
           filters: *pcs_branch
       - replay-r-renv-arm64:
-          requires:
-            - produce-r-renv
-          filters: *pcs_branch
-      - diagnose-r-valid:
-          requires:
-            - replay-r-renv-amd64
-            - replay-r-renv-arm64
-          filters: *pcs_branch
-      - diagnose-r-restored-version:
-          requires:
-            - replay-r-renv-amd64
-            - replay-r-renv-arm64
-          filters: *pcs_branch
-      - diagnose-r-artifacts:
-          requires:
-            - replay-r-renv-amd64
-            - replay-r-renv-arm64
-          filters: *pcs_branch
-      - diagnose-r-output:
-          requires:
-            - replay-r-renv-amd64
-            - replay-r-renv-arm64
+          requires: [produce-r-renv]
           filters: *pcs_branch
       - aggregate-r-renv:
-          requires:
-            - replay-r-renv-amd64
-            - replay-r-renv-arm64
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
           filters: *pcs_branch
-      - restoration-boundaries-complete:
-          requires:
-            - aggregate-python-wheel
-            - aggregate-r-renv
+      - check-r-valid:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-contract:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-determinism:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-version:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-artifacts:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-output:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
           filters: *pcs_branch
