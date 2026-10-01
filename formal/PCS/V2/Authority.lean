@@ -76,8 +76,11 @@ def transcriptExecutor (t : AuthorityTranscript) : Executor := fun req =>
     | none => ⟨.provenance, .unverified⟩
     | some obs => ⟨obs.kind, obs.outcome⟩
 
+def authorityUnicode : UnicodeOps :=
+  { nfc := id, casefold := fun s => String.map Char.toLower s }
+
 def transcriptOracles (t : AuthorityTranscript) : Oracles :=
-  { unicode := PCS.V2.Vectors.asciiUnicode,
+  { unicode := authorityUnicode,
     ed25519 := PCS.V2.Ed25519.verify,
     capture := fun _ => t.environmentCapture,
     workflow := fun _ _ => t.workflowOk,
