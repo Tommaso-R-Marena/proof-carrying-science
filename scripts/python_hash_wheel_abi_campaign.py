@@ -24,20 +24,23 @@ from pcs.signing import generate_keypair
 
 FORMAT = "pcs-python-hash-wheel-abi-v1"
 BASE_TAG = "docker.io/library/python:3.12-slim-bookworm"
-PACKAGE_SPEC = "orjson>=3.10,<4"
+PACKAGE_SPEC = "numpy>=2.1,<3"
 
-ANALYSIS = r'''from pathlib import Path
-import orjson
+ANALYSIS = r'''import json
+from pathlib import Path
+import numpy as np
 
-payload = orjson.loads(Path("native_input.json").read_bytes())
-values = [int(x) for x in payload["values"]]
+payload = json.loads(Path("native_input.json").read_text(encoding="utf-8"))
+values = np.asarray(payload["values"], dtype=np.float64)
 result = {
-    "count": len(values),
-    "sum": sum(values),
-    "squares": [x * x for x in values],
+    "count": int(values.size),
+    "sum": f"{float(values.sum()):.12f}",
+    "dot": f"{float(np.dot(values, values)):.12f}",
+    "mean": f"{float(values.mean()):.12f}",
 }
-Path("native_output.json").write_bytes(
-    orjson.dumps(result, option=orjson.OPT_SORT_KEYS | orjson.OPT_APPEND_NEWLINE)
+Path("native_output.json").write_text(
+    json.dumps(result, sort_keys=True, separators=(",", ":")) + "\n",
+    encoding="utf-8",
 )
 '''
 
@@ -95,9 +98,9 @@ def download_wheel(wheelhouse: Path, platform_tag: str, spec: str) -> None:
 
 
 def wheel_version(path: Path) -> str:
-    m = re.match(r"(?i)^orjson-([0-9][^-]*)-", path.name)
+    m = re.match(r"(?i)^numpy-([0-9][^-]*)-", path.name)
     if not m:
-        raise RuntimeError(f"unexpected orjson wheel filename: {path.name}")
+        raise RuntimeError(f"unexpected numpy wheel filename: {path.name}")
     return m.group(1)
 
 
@@ -133,7 +136,7 @@ def produce(output: Path) -> dict[str, Any]:
         wheelhouse = project / "wheelhouse"
         wheelhouse.mkdir()
         download_wheel(wheelhouse, "manylinux2014_x86_64", PACKAGE_SPEC)
-        x86_wheels = sorted(wheelhouse.glob("orjson-*-x86_64*.whl"))
+        x86_wheels = sorted(wheelhouse.glob("numpy-*-x86_64*.whl"))
         if len(x86_wheels) != 1:
             raise RuntimeError(f"expected one x86_64 wheel, got {x86_wheels}")
         version = wheel_version(x86_wheels[0])
@@ -141,16 +144,16 @@ def produce(output: Path) -> dict[str, Any]:
         download_wheel(
             wheelhouse,
             "manylinux2014_aarch64",
-            f"orjson=={version}",
+            f"numpy=={version}",
         )
-        wheels = sorted(wheelhouse.glob("orjson-*.whl"))
+        wheels = sorted(wheelhouse.glob("numpy-*.whl"))
         if len(wheels) != 2:
             raise RuntimeError(f"expected two architecture wheels, got {[x.name for x in wheels]}")
         if {wheel_version(x) for x in wheels} != {version}:
             raise RuntimeError("architecture wheels resolved different versions")
 
         hashes = [sha256_file(w) for w in wheels]
-        lock_lines = [f"orjson=={version} \\"]
+        lock_lines = [f"numpy=={version} \\"]
         for index, digest in enumerate(hashes):
             suffix = " \\" if index < len(hashes) - 1 else ""
             lock_lines.append(f"    --hash=sha256:{digest}{suffix}")
@@ -250,7 +253,7 @@ def produce(output: Path) -> dict[str, Any]:
             "base_image_ref": image_ref,
             "base_image_index_digest": base_digest,
             "python_version": pyver,
-            "package": "orjson",
+            "package": "numpy",
             "package_version": version,
             "wheel_files": [
                 {
@@ -303,13 +306,13 @@ def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
     native = [
         row
         for row in realized.get("python", {}).get("native_extensions", [])
-        if str(row.get("package", "")).lower() == "orjson"
+        if str(row.get("package", "")).lower() == "numpy"
     ]
     package = next(
         (
             row
             for row in realized.get("python", {}).get("packages", [])
-            if str(row.get("name", "")).lower() == "orjson"
+            if str(row.get("name", "")).lower() == "numpy"
         ),
         None,
     )
