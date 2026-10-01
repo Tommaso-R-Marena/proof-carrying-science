@@ -12,8 +12,10 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from pcs.lean_authority_v06 import (
     V06LeanAuthorityError,
     build_authority_transcript_v06,
+    enforce_lean_authority_v06,
     resolve_lean_authority_v06,
 )
+import pcs.lean_authority_v06 as authority_mod
 from pcs.verifier_io_v06 import verify_package_directory_end_to_end_v06
 
 
@@ -86,6 +88,104 @@ def test_authority_transcript_rejects_incomplete_observation_set():
 def test_explicit_missing_authority_fails_closed(tmp_path: Path):
     with pytest.raises(V06LeanAuthorityError, match="does not exist"):
         resolve_lean_authority_v06(tmp_path / "missing-authority")
+
+
+
+
+def _dummy_context() -> dict:
+    return {
+        "certificate": {
+            "semantic_hash": "ab" * 32,
+            "checker_version": "pcs-python-kernel/0.6.0-dev",
+            "environment": None,
+            "evidence": [],
+        },
+        "environment_replay": {
+            "valid": True,
+            "_authority_fresh_capture": None,
+        },
+        "workflow_replay": {"valid": True},
+        "replay": {"valid": True, "evidence": []},
+    }
+
+
+def test_lean_rejection_overrides_successful_python_precheck(monkeypatch):
+    monkeypatch.setattr(
+        authority_mod,
+        "run_lean_authority_v06",
+        lambda **kwargs: {
+            "format": "pcs-lean-authority-result-v1",
+            "required": True,
+            "accepted": False,
+            "verdict": "REJECT",
+            "mode": "test",
+            "authority_sha256": "00" * 32,
+            "observation_transcript_sha256": "11" * 32,
+            "certificate_semantic_hash": "ab" * 32,
+        },
+    )
+    key = Ed25519PublicKey.from_public_bytes(bytes(range(32)))
+    result = enforce_lean_authority_v06(
+        {
+            "format": "pcs-end-to-end-verifier-v06-v1",
+            "authority_required": True,
+            "authoritative": False,
+            "valid": True,
+            "failed_stage": None,
+            "errors": [],
+            "stages": {"normalized_set": True},
+        },
+        authority_context=_dummy_context(),
+        certificate_signature_bytes=b"{}",
+        package_manifest_bytes=b"{}",
+        package_signature_bytes=b"{}",
+        package_files={},
+        public_key=key,
+        expected_fingerprint=None,
+    )
+    assert result["valid"] is False
+    assert result["authoritative"] is False
+    assert result["failed_stage"] == "lean_authority"
+    assert result["stages"]["lean_authority"] is False
+
+
+def test_lean_acceptance_is_the_only_authoritative_success(monkeypatch):
+    monkeypatch.setattr(
+        authority_mod,
+        "run_lean_authority_v06",
+        lambda **kwargs: {
+            "format": "pcs-lean-authority-result-v1",
+            "required": True,
+            "accepted": True,
+            "verdict": "ACCEPT",
+            "mode": "test",
+            "authority_sha256": "00" * 32,
+            "observation_transcript_sha256": "11" * 32,
+            "certificate_semantic_hash": "ab" * 32,
+        },
+    )
+    key = Ed25519PublicKey.from_public_bytes(bytes(range(32)))
+    result = enforce_lean_authority_v06(
+        {
+            "format": "pcs-end-to-end-verifier-v06-v1",
+            "authority_required": True,
+            "authoritative": False,
+            "valid": True,
+            "failed_stage": None,
+            "errors": [],
+            "stages": {"normalized_set": True},
+        },
+        authority_context=_dummy_context(),
+        certificate_signature_bytes=b"{}",
+        package_manifest_bytes=b"{}",
+        package_signature_bytes=b"{}",
+        package_files={},
+        public_key=key,
+        expected_fingerprint=None,
+    )
+    assert result["valid"] is True
+    assert result["authoritative"] is True
+    assert result["stages"]["lean_authority"] is True
 
 
 @pytest.mark.skipif(
