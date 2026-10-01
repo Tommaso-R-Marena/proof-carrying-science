@@ -50,13 +50,29 @@ def digest(p):
         return h.hexdigest()
     except Exception: return None
 pkgs=[]
+native=[]
 for d in md.distributions():
     n=d.metadata.get("Name") or getattr(d,"name",None)
-    if n: pkgs.append({"name":str(n),"version":str(d.version),"requires":sorted(str(x) for x in (d.requires or []))[:256]})
+    if n:
+        name=str(n)
+        version=str(d.version)
+        pkgs.append({"name":name,"version":version,"requires":sorted(str(x) for x in (d.requires or []))[:256]})
+        for entry in (d.files or []):
+            rel=str(entry).replace("\\","/")
+            lower=rel.lower()
+            if not lower.endswith((".so",".pyd",".dll",".dylib")):
+                continue
+            try: located=d.locate_file(entry)
+            except Exception: continue
+            sha=digest(located)
+            if sha:
+                native.append({"package":name,"version":version,"path":rel,"sha256":sha})
 pkgs.sort(key=lambda x:(x["name"].lower().replace("_","-"),x["version"]))
+native.sort(key=lambda x:(x["package"].lower().replace("_","-"),x["version"],x["path"]))
 print(json.dumps({"implementation":platform.python_implementation(),"version":platform.python_version(),
 "executable":sys.executable,"executable_sha256":digest(sys.executable),"packages":pkgs[:5000],
-"packages_truncated":len(pkgs)>5000},sort_keys=True,separators=(",",":")))
+"packages_truncated":len(pkgs)>5000,"native_extensions":native[:2000],
+"native_extensions_truncated":len(native)>2000},sort_keys=True,separators=(",",":")))
 """
 
 
@@ -743,6 +759,7 @@ class _OciBackend:
         )
         tree = {
             "python": pyv.get("packages", []),
+            "python_native_extensions": pyv.get("native_extensions", []),
             "r": rpackages,
             "conda": conda,
             "conda_explicit": conda_explicit,
