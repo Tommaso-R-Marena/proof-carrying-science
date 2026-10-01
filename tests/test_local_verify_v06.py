@@ -19,7 +19,7 @@ def test_trust_profile_reduces_bundle_verification_to_one_call(tmp_path):
     trust.write_text(json.dumps({
         "format": "pcs-verifier-trust-v1",
         "public_key": str(public),
-        "expected_signer_fingerprint": first["signer_fingerprint"],
+        "expected_signer_fingerprint": first["public_key_fingerprint"],
     }), encoding="utf-8")
     result = verify_local_bundle_v06(bundle, trust, receipt=tmp_path / "receipt.json")
     assert result["valid"] is True
