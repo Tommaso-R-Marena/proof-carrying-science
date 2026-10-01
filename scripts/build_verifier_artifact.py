@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -21,12 +22,34 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def _build_lean_authority() -> Path:
+    lake = shutil.which("lake")
+    if lake is None:
+        raise SystemExit(
+            "Lean authority is mandatory for the standalone verifier; install Lean/Lake first"
+        )
+    formal = ROOT / "formal"
+    proc = subprocess.run(
+        [lake, "build", "pcs-lean-authority"],
+        cwd=formal,
+        check=False,
+    )
+    if proc.returncode:
+        raise SystemExit(proc.returncode)
+    name = "pcs-lean-authority.exe" if sys.platform == "win32" else "pcs-lean-authority"
+    built = formal / ".lake" / "build" / "bin" / name
+    if not built.is_file():
+        raise SystemExit(f"expected Lean authority executable not found: {built}")
+    return built
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description="Build a single-file PCS v0.6 reviewer verifier with PyInstaller.")
     p.add_argument("-o", "--output", default="dist/pcs-verifier-v06")
     args = p.parse_args()
     if importlib.util.find_spec("PyInstaller") is None:
         raise SystemExit("PyInstaller is required: python -m pip install -e '.[standalone]'")
+    authority = _build_lean_authority()
     target = Path(args.output).resolve()
     target.parent.mkdir(parents=True, exist_ok=True)
     name = target.name
@@ -40,6 +63,7 @@ def main() -> int:
         "--workpath", str(work),
         "--specpath", str(work),
         "--collect-data", "pcs.schemas",
+        "--add-binary", f"{authority}{os.pathsep}.",
         str(ROOT / "scripts" / "verifier_launcher.py"),
     ]
     proc = subprocess.run(cmd, cwd=ROOT, check=False)
@@ -55,6 +79,9 @@ def main() -> int:
         "platform": sys.platform,
         "python": sys.version.split()[0],
         "entrypoint": "pcs.verifier_entrypoint:main",
+        "lean_authority_embedded": True,
+        "lean_authority_sha256": sha256(authority),
+        "lean_authority_protocol": "pcs-lean-authority-observations-v1",
     }
     manifest_path = built.with_name(built.name + ".manifest.json")
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
