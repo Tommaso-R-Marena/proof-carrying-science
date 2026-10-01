@@ -325,14 +325,18 @@ with independent replay; it does not suppress or relabel failed science.
 
 ## Current formal boundary
 
-The executable v0.6 producer/reviewer path is not yet the same thing as the existing
-Lean raw-wire-to-`Assures` theorem stack, which was proved over the older v0.5/v1
-wire. Porting that proof onto the exact v0.6/v2 representation remains separate
-formalization work.
+The exact PCS v0.6/v2 package/archive assurance layer is now machine-checked in Lean
+4.28.0 under explicit external contracts. The v0.6/v2 representation bridge is
+integrated, and authoritative production validity is gated on compiled Lean
+acceptance rather than Python-only acceptance.
 
-Likewise, arbitrary Python/R/C++ programs, Ed25519 implementation correctness,
-SHA-256 correctness against the mathematical standard, and ZIP parsing are not
-claimed as formally verified.
+The remaining named boundaries are narrower: faithful raw-ZIP decoding and
+materialization into the exact bytes Lean checks; environment-capture semantics;
+workflow-oracle semantics; replay faithfulness for checks other than the internally
+verified `reaction_balance` path; independent SHA-256 and Ed25519
+specification-equivalence proofs; Ed25519 unforgeability for the trusted key; and
+formal numerical semantics for floating-point PK/PD checks. Arbitrary scientific
+Python/R/C++ programs are not claimed as formally verified.
 
 ## MVP criterion
 
