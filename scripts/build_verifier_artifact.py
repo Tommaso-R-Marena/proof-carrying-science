@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import shutil
 import subprocess
@@ -24,12 +25,13 @@ def main() -> int:
     p = argparse.ArgumentParser(description="Build a single-file PCS v0.6 reviewer verifier with PyInstaller.")
     p.add_argument("-o", "--output", default="dist/pcs-verifier-v06")
     args = p.parse_args()
-    if shutil.which("pyinstaller") is None:
+    if importlib.util.find_spec("PyInstaller") is None:
         raise SystemExit("PyInstaller is required: python -m pip install -e '.[standalone]'")
     target = Path(args.output).resolve()
     target.parent.mkdir(parents=True, exist_ok=True)
     name = target.name
     work = ROOT / "build" / "pcs-verifier-v06"
+    work.mkdir(parents=True, exist_ok=True)
     dist = target.parent
     cmd = [
         sys.executable, "-m", "PyInstaller",
