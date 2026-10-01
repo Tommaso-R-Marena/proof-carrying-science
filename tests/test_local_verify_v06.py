@@ -10,7 +10,7 @@ def test_trust_profile_reduces_bundle_verification_to_one_call(tmp_path):
     report = build_golden_examples(tmp_path / "golden")
     case = next(c for c in report["cases"] if c["name"] == "pkpd-supported")
     project = tmp_path / "golden" / "pkpd-supported"
-    public = project / "demo-public.pem"
+    public = tmp_path / "golden" / "demo-public.pem"
     trust = tmp_path / "trust.json"
     # The deterministic demo key fingerprint is recovered from a successful result.
     bundle = tmp_path / "golden" / case["bundle"]
