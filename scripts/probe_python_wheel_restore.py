@@ -25,12 +25,12 @@ def resolve(root: Path) -> tuple[list[Path], str]:
         "python","-m","pip","download","--disable-pip-version-check",
         "--only-binary=:all:","--no-deps","--dest",str(wheelhouse),
         "--platform","manylinux2014_x86_64","--implementation","cp",
-        "--python-version","312","--abi","cp312","orjson>=3.10,<4",
+        "--python-version","312","--abi","cp312","numpy>=2.1,<3",
     ])
-    x86 = sorted(wheelhouse.glob("orjson-*-x86_64*.whl"))
+    x86 = sorted(wheelhouse.glob("numpy-*-x86_64*.whl"))
     if len(x86) != 1:
         raise RuntimeError(f"expected one x86 wheel, got {[x.name for x in x86]}")
-    m = re.match(r"(?i)^orjson-([0-9][^-]*)-", x86[0].name)
+    m = re.match(r"(?i)^numpy-([0-9][^-]*)-", x86[0].name)
     if not m:
         raise RuntimeError(f"cannot parse version from {x86[0].name}")
     version = m.group(1)
@@ -38,16 +38,16 @@ def resolve(root: Path) -> tuple[list[Path], str]:
         "python","-m","pip","download","--disable-pip-version-check",
         "--only-binary=:all:","--no-deps","--dest",str(wheelhouse),
         "--platform","manylinux2014_aarch64","--implementation","cp",
-        "--python-version","312","--abi","cp312",f"orjson=={version}",
+        "--python-version","312","--abi","cp312",f"numpy=={version}",
     ])
-    wheels = sorted(wheelhouse.glob("orjson-*.whl"))
+    wheels = sorted(wheelhouse.glob("numpy-*.whl"))
     if len(wheels) != 2:
         raise RuntimeError(f"expected two wheels, got {[x.name for x in wheels]}")
     return wheels, version
 
 
 def write_lock(root: Path, wheels: list[Path], version: str) -> Path:
-    lines = [f"orjson=={version} \\"]
+    lines = [f"numpy=={version} \\"]
     for index, wheel in enumerate(wheels):
         digest = hashlib.sha256(wheel.read_bytes()).hexdigest()
         suffix = " \\" if index < len(wheels) - 1 else ""
@@ -87,7 +87,7 @@ def build(root: Path) -> dict[str, str]:
     ])
     observed = run([
         "docker","run","--rm","--network=none","pcs-wheel-probe",
-        "python","-c","import orjson; print(orjson.__version__)",
+        "python","-c","import numpy; print(numpy.__version__)",
     ]).stdout.strip()
     if observed != version:
         raise RuntimeError(f"installed {observed}, expected {version}")
