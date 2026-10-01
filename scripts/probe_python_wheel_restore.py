@@ -5,6 +5,7 @@ import hashlib
 import re
 import subprocess
 import tempfile
+import urllib.request
 from pathlib import Path
 
 
@@ -18,33 +19,55 @@ def run(argv: list[str]) -> subprocess.CompletedProcess[str]:
     return p
 
 
+NUMPY_VERSION = "2.5.3"
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def download_arch_wheel(wheelhouse: Path, arch: str) -> Path:
+    import json
+    api = f"https://pypi.org/pypi/numpy/{NUMPY_VERSION}/json"
+    with urllib.request.urlopen(api, timeout=60) as response:
+        release = json.load(response)
+    needle = f"manylinux_2_28_{arch}"
+    candidates = [
+        item
+        for item in release.get("urls", [])
+        if item.get("packagetype") == "bdist_wheel"
+        and isinstance(item.get("filename"), str)
+        and item["filename"].startswith(f"numpy-{NUMPY_VERSION}-")
+        and "cp312-cp312" in item["filename"]
+        and needle in item["filename"]
+    ]
+    if len(candidates) != 1:
+        raise RuntimeError(
+            f"expected one wheel for {arch}, got {[x.get('filename') for x in candidates]}"
+        )
+    item = candidates[0]
+    target = wheelhouse / item["filename"]
+    with urllib.request.urlopen(item["url"], timeout=120) as response:
+        target.write_bytes(response.read())
+    expected = item.get("digests", {}).get("sha256")
+    observed = _sha256(target)
+    if observed != expected:
+        raise RuntimeError(
+            f"PyPI digest mismatch for {target.name}: expected={expected} observed={observed}"
+        )
+    return target
+
+
 def resolve(root: Path) -> tuple[list[Path], str]:
     wheelhouse = root / "wheelhouse"
     wheelhouse.mkdir(parents=True, exist_ok=True)
-    run([
-        "python","-m","pip","download","--disable-pip-version-check",
-        "--only-binary=:all:","--no-deps","--dest",str(wheelhouse),
-        "--platform","manylinux_2_28_x86_64","--implementation","cp",
-        "--python-version","312","--abi","cp312","numpy>=2.1,<3",
-    ])
-    x86 = sorted(wheelhouse.glob("numpy-*-x86_64*.whl"))
-    if len(x86) != 1:
-        raise RuntimeError(f"expected one x86 wheel, got {[x.name for x in x86]}")
-    m = re.match(r"(?i)^numpy-([0-9][^-]*)-", x86[0].name)
-    if not m:
-        raise RuntimeError(f"cannot parse version from {x86[0].name}")
-    version = m.group(1)
-    run([
-        "python","-m","pip","download","--disable-pip-version-check",
-        "--only-binary=:all:","--no-deps","--dest",str(wheelhouse),
-        "--platform","manylinux_2_28_aarch64","--implementation","cp",
-        "--python-version","312","--abi","cp312",f"numpy=={version}",
-    ])
-    wheels = sorted(wheelhouse.glob("numpy-*.whl"))
-    if len(wheels) != 2:
-        raise RuntimeError(f"expected two wheels, got {[x.name for x in wheels]}")
-    return wheels, version
-
+    wheels = sorted(
+        [
+            download_arch_wheel(wheelhouse, "x86_64"),
+            download_arch_wheel(wheelhouse, "aarch64"),
+        ]
+    )
+    return wheels, NUMPY_VERSION
 
 def write_lock(root: Path, wheels: list[Path], version: str) -> Path:
     lines = [f"numpy=={version} \\"]
