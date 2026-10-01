@@ -21,6 +21,10 @@ jobs:
         run: pytest -q
       - name: Frozen adversarial campaign
         run: python scripts/adversarial_campaign.py
+      - name: v0.6 golden demo and hardening campaign
+        run: |
+          python scripts/run_golden_examples_v06.py -o golden-demo-ci
+          python scripts/adversarial_v06_hardening.py
       - name: Reference certificate round trip
         run: |
           pcs certify examples/biopharma_demo/manifest.json -o evidence
