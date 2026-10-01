@@ -30,6 +30,8 @@ def _failed(
 ) -> dict[str, Any]:
     return {
         "format": VERIFIER_FORMAT_V06,
+        "authority_required": True,
+        "authoritative": False,
         "valid": False,
         "failed_stage": stage,
         "errors": errors,
@@ -54,7 +56,13 @@ def verify_end_to_end_v06(
     telemetry_sink: dict[str, Any] | None = None,
     authority_context_sink: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Verify one complete PCS v0.6 package through the executable trust chain.
+    """Run the Python v0.6 precheck over one complete package.
+
+    Public production verification is authoritative only after
+    `enforce_lean_authority_v06` conjoins this precheck with the Lean v0.6/v2
+    acceptance result. This function remains separately callable for testing and
+    external-oracle execution, but its successful result is explicitly marked
+    `authoritative: false`.
 
     Acceptance requires, in order:
 
@@ -214,6 +222,8 @@ def verify_end_to_end_v06(
 
     result = {
         "format": VERIFIER_FORMAT_V06,
+        "authority_required": True,
+        "authoritative": False,
         "valid": True,
         "failed_stage": None,
         "errors": [],
