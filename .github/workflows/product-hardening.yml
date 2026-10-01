@@ -1,0 +1,32 @@
+name: PCS Product Hardening
+
+on:
+  push:
+    branches:
+      - product/p0-p1-demo-hardening
+  pull_request:
+    paths:
+      - 'pcs/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - '.github/workflows/product-hardening.yml'
+
+jobs:
+  p0-p1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PCS test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Focused P0/P1 tests
+        run: python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py
+      - name: Golden examples
+        run: python scripts/run_golden_examples_v06.py -o golden-demo-gha
+      - name: Adversarial hardening campaign
+        run: python scripts/adversarial_v06_hardening.py
