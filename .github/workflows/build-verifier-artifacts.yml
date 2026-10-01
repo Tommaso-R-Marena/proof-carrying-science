@@ -15,6 +15,15 @@ on:
       - 'scripts/verifier_launcher.py'
       - 'pyproject.toml'
       - '.github/workflows/build-verifier-artifacts.yml'
+  pull_request:
+    paths:
+      - 'pcs/**'
+      - 'formal/**'
+      - 'scripts/build_verifier_artifact.py'
+      - 'scripts/smoke_standalone_verifier_v06.py'
+      - 'scripts/verifier_launcher.py'
+      - 'pyproject.toml'
+      - '.github/workflows/build-verifier-artifacts.yml'
 
 jobs:
   build:
