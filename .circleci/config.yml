@@ -14,273 +14,259 @@ commands:
             python -m pip install -e .
 
 jobs:
-  produce-oci-engine:
+  restoration-regression:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
-      - setup-pcs
       - run:
-          name: Produce signed OCI engine campaign
-          command: |
-            rm -rf /tmp/pcs-runtime-boundary
-            mkdir -p /tmp/pcs-runtime-boundary
-            . .venv/bin/activate
-            python scripts/oci_engine_campaign.py produce --output /tmp/pcs-runtime-boundary/oci-bundle
-      - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
-          paths:
-            - oci-bundle
-      - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/oci-bundle/campaign.json
-          destination: oci-engine/producer-campaign.json
-
-  replay-docker:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
-      - setup-pcs
-      - run:
-          name: Replay signed bundle with Docker
-          command: |
-            mkdir -p /tmp/pcs-runtime-boundary/oci-results
-            . .venv/bin/activate
-            python scripts/oci_engine_campaign.py replay               --input /tmp/pcs-runtime-boundary/oci-bundle               --output /tmp/pcs-runtime-boundary/oci-results/docker               --runtime docker               --machine-id circleci-docker-amd64
-      - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
-          paths:
-            - oci-results/docker
-      - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/oci-results/docker
-          destination: oci-engine/docker
-
-  replay-podman:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
-      - setup-pcs
-      - run:
-          name: Install Podman
+          name: Install test environment
           command: |
             sudo apt-get update
-            sudo apt-get install -y podman uidmap
-            sudo podman --version
-            sudo podman info
+            sudo apt-get install -y python3 python3-venv python3-pip
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
       - run:
-          name: Replay signed bundle with rootful Podman
+          name: Run restoration and executor regressions
           command: |
-            mkdir -p /tmp/pcs-runtime-boundary/oci-results
-            sudo "$PWD/.venv/bin/python" scripts/oci_engine_campaign.py replay               --input /tmp/pcs-runtime-boundary/oci-bundle               --output /tmp/pcs-runtime-boundary/oci-results/podman               --runtime podman               --machine-id circleci-podman-amd64
-            sudo chmod -R a+rX /tmp/pcs-runtime-boundary/oci-results/podman
-      - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
-          paths:
-            - oci-results/podman
-      - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/oci-results/podman
-          destination: oci-engine/podman
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_v06.py tests/test_environment_execute_v06.py
 
-  aggregate-oci-engine:
+  produce-python-wheel:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Produce signed hash-locked wheel campaign
+          command: |
+            rm -rf /tmp/pcs-restoration
+            mkdir -p /tmp/pcs-restoration
+            . .venv/bin/activate
+            python scripts/python_hash_wheel_abi_campaign.py produce               --output /tmp/pcs-restoration/python-bundle
+      - persist_to_workspace:
+          root: /tmp/pcs-restoration
+          paths:
+            - python-bundle
+      - store_artifacts:
+          path: /tmp/pcs-restoration/python-bundle/campaign.json
+          destination: python-wheel/producer-campaign.json
+
+  replay-python-amd64:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
+          at: /tmp/pcs-restoration
       - setup-pcs
       - run:
-          name: Assert Docker vs Podman evidence
+          name: Restore signed wheels and replay on amd64
           command: |
+            mkdir -p /tmp/pcs-restoration/python-results
             . .venv/bin/activate
-            python scripts/oci_engine_campaign.py aggregate               --input /tmp/pcs-runtime-boundary/oci-results               --output /tmp/pcs-runtime-boundary/oci-engine-summary.json
-            cat /tmp/pcs-runtime-boundary/oci-engine-summary.json
+            python scripts/python_hash_wheel_abi_campaign.py replay               --input /tmp/pcs-restoration/python-bundle               --output /tmp/pcs-restoration/python-results/amd64               --machine-id circleci-python-wheel-amd64
       - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
+          root: /tmp/pcs-restoration
           paths:
-            - oci-engine-summary.json
+            - python-results/amd64
       - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/oci-engine-summary.json
-          destination: oci-engine-summary.json
+          path: /tmp/pcs-restoration/python-results/amd64
+          destination: python-wheel/amd64
 
-  produce-r-runtime:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - setup-pcs
-      - run:
-          name: Produce signed R-native campaign
-          command: |
-            mkdir -p /tmp/pcs-runtime-boundary
-            . .venv/bin/activate
-            python scripts/r_runtime_campaign.py produce --output /tmp/pcs-runtime-boundary/r-bundle
-      - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
-          paths:
-            - r-bundle
-      - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/r-bundle/campaign.json
-          destination: r-runtime/producer-campaign.json
-
-  replay-r-amd64:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
-      - setup-pcs
-      - run:
-          name: Replay R-native bundle on amd64
-          command: |
-            mkdir -p /tmp/pcs-runtime-boundary/r-results
-            . .venv/bin/activate
-            python scripts/r_runtime_campaign.py replay               --input /tmp/pcs-runtime-boundary/r-bundle               --output /tmp/pcs-runtime-boundary/r-results/amd64               --machine-id circleci-r-amd64
-      - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
-          paths:
-            - r-results/amd64
-      - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/r-results/amd64
-          destination: r-runtime/amd64
-
-  replay-r-arm64:
+  replay-python-arm64:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: arm.medium
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
+          at: /tmp/pcs-restoration
       - setup-pcs
       - run:
-          name: Replay R-native bundle on ARM64
+          name: Restore signed wheels and replay on ARM64
           command: |
-            mkdir -p /tmp/pcs-runtime-boundary/r-results
+            mkdir -p /tmp/pcs-restoration/python-results
             . .venv/bin/activate
-            python scripts/r_runtime_campaign.py replay               --input /tmp/pcs-runtime-boundary/r-bundle               --output /tmp/pcs-runtime-boundary/r-results/arm64               --machine-id circleci-r-arm64
+            python scripts/python_hash_wheel_abi_campaign.py replay               --input /tmp/pcs-restoration/python-bundle               --output /tmp/pcs-restoration/python-results/arm64               --machine-id circleci-python-wheel-arm64
       - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
+          root: /tmp/pcs-restoration
+          paths:
+            - python-results/arm64
+      - store_artifacts:
+          path: /tmp/pcs-restoration/python-results/arm64
+          destination: python-wheel/arm64
+
+  aggregate-python-wheel:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - setup-pcs
+      - run:
+          name: Assert hash-locked wheel and ABI evidence
+          command: |
+            . .venv/bin/activate
+            python scripts/python_hash_wheel_abi_campaign.py aggregate               --input /tmp/pcs-restoration/python-results               --output /tmp/pcs-restoration/python-wheel-summary.json
+            cat /tmp/pcs-restoration/python-wheel-summary.json
+      - persist_to_workspace:
+          root: /tmp/pcs-restoration
+          paths:
+            - python-wheel-summary.json
+      - store_artifacts:
+          path: /tmp/pcs-restoration/python-wheel-summary.json
+          destination: python-wheel-summary.json
+
+  produce-r-renv:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Produce signed offline renv campaign
+          command: |
+            mkdir -p /tmp/pcs-restoration
+            . .venv/bin/activate
+            python scripts/r_renv_restore_campaign.py produce               --output /tmp/pcs-restoration/r-bundle
+      - persist_to_workspace:
+          root: /tmp/pcs-restoration
+          paths:
+            - r-bundle
+      - store_artifacts:
+          path: /tmp/pcs-restoration/r-bundle/campaign.json
+          destination: r-renv/producer-campaign.json
+
+  replay-r-renv-amd64:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - setup-pcs
+      - run:
+          name: Restore renv lock and replay on amd64
+          command: |
+            mkdir -p /tmp/pcs-restoration/r-results
+            . .venv/bin/activate
+            python scripts/r_renv_restore_campaign.py replay               --input /tmp/pcs-restoration/r-bundle               --output /tmp/pcs-restoration/r-results/amd64               --machine-id circleci-renv-amd64
+      - persist_to_workspace:
+          root: /tmp/pcs-restoration
+          paths:
+            - r-results/amd64
+      - store_artifacts:
+          path: /tmp/pcs-restoration/r-results/amd64
+          destination: r-renv/amd64
+
+  replay-r-renv-arm64:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - setup-pcs
+      - run:
+          name: Restore renv lock and replay on ARM64
+          command: |
+            mkdir -p /tmp/pcs-restoration/r-results
+            . .venv/bin/activate
+            python scripts/r_renv_restore_campaign.py replay               --input /tmp/pcs-restoration/r-bundle               --output /tmp/pcs-restoration/r-results/arm64               --machine-id circleci-renv-arm64
+      - persist_to_workspace:
+          root: /tmp/pcs-restoration
           paths:
             - r-results/arm64
       - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/r-results/arm64
-          destination: r-runtime/arm64
+          path: /tmp/pcs-restoration/r-results/arm64
+          destination: r-renv/arm64
 
-  replay-r-podman-amd64:
+  aggregate-r-renv:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
+          at: /tmp/pcs-restoration
       - setup-pcs
       - run:
-          name: Install Podman
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y podman uidmap
-            sudo podman --version
-      - run:
-          name: Replay R-native bundle with rootful Podman
-          command: |
-            mkdir -p /tmp/pcs-runtime-boundary/r-results
-            sudo "$PWD/.venv/bin/python" scripts/r_runtime_campaign.py replay               --input /tmp/pcs-runtime-boundary/r-bundle               --output /tmp/pcs-runtime-boundary/r-results/podman-amd64               --machine-id circleci-r-podman-amd64               --runtime podman
-            sudo chmod -R a+rX /tmp/pcs-runtime-boundary/r-results/podman-amd64
-      - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
-          paths:
-            - r-results/podman-amd64
-      - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/r-results/podman-amd64
-          destination: r-runtime/podman-amd64
-
-  aggregate-r-runtime:
-    machine:
-      image: ubuntu-2404:2026.05.1
-    resource_class: medium
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp/pcs-runtime-boundary
-      - setup-pcs
-      - run:
-          name: Assert R runtime evidence
+          name: Assert offline renv restoration evidence
           command: |
             . .venv/bin/activate
-            python scripts/r_runtime_campaign.py aggregate               --input /tmp/pcs-runtime-boundary/r-results               --output /tmp/pcs-runtime-boundary/r-runtime-summary.json
-            cat /tmp/pcs-runtime-boundary/r-runtime-summary.json
+            python scripts/r_renv_restore_campaign.py aggregate               --input /tmp/pcs-restoration/r-results               --output /tmp/pcs-restoration/r-renv-summary.json
+            cat /tmp/pcs-restoration/r-renv-summary.json
       - persist_to_workspace:
-          root: /tmp/pcs-runtime-boundary
+          root: /tmp/pcs-restoration
           paths:
-            - r-runtime-summary.json
+            - r-renv-summary.json
       - store_artifacts:
-          path: /tmp/pcs-runtime-boundary/r-runtime-summary.json
-          destination: r-runtime-summary.json
+          path: /tmp/pcs-restoration/r-renv-summary.json
+          destination: r-renv-summary.json
 
-  runtime-boundaries-complete:
+  restoration-boundaries-complete:
     docker:
       - image: cimg/base:current
     steps:
       - run:
-          name: Boundary campaigns complete
-          command: echo "Docker vs Podman and R runtime campaigns both passed."
+          name: Restoration campaigns complete
+          command: echo "Python hash-locked wheel, ABI, and R renv restoration campaigns passed."
 
 workflows:
-  runtime-boundary-evidence:
+  restoration-and-abi-evidence:
     jobs:
-      - produce-oci-engine:
+      - restoration-regression:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
-      - replay-docker:
+      - produce-python-wheel:
           requires:
-            - produce-oci-engine
+            - restoration-regression
           filters: *pcs_branch
-      - replay-podman:
+      - replay-python-amd64:
           requires:
-            - produce-oci-engine
+            - produce-python-wheel
           filters: *pcs_branch
-      - aggregate-oci-engine:
+      - replay-python-arm64:
           requires:
-            - replay-docker
-            - replay-podman
+            - produce-python-wheel
           filters: *pcs_branch
-      - produce-r-runtime:
-          filters: *pcs_branch
-      - replay-r-amd64:
+      - aggregate-python-wheel:
           requires:
-            - produce-r-runtime
+            - replay-python-amd64
+            - replay-python-arm64
           filters: *pcs_branch
-      - replay-r-arm64:
+      - produce-r-renv:
           requires:
-            - produce-r-runtime
+            - restoration-regression
           filters: *pcs_branch
-      - replay-r-podman-amd64:
+      - replay-r-renv-amd64:
           requires:
-            - produce-r-runtime
+            - produce-r-renv
           filters: *pcs_branch
-      - aggregate-r-runtime:
+      - replay-r-renv-arm64:
           requires:
-            - replay-r-amd64
-            - replay-r-arm64
-            - replay-r-podman-amd64
+            - produce-r-renv
           filters: *pcs_branch
-      - runtime-boundaries-complete:
+      - aggregate-r-renv:
           requires:
-            - aggregate-oci-engine
-            - aggregate-r-runtime
+            - replay-r-renv-amd64
+            - replay-r-renv-arm64
+          filters: *pcs_branch
+      - restoration-boundaries-complete:
+          requires:
+            - aggregate-python-wheel
+            - aggregate-r-renv
           filters: *pcs_branch
