@@ -39,7 +39,8 @@ def main() -> int:
         "--distpath", str(dist),
         "--workpath", str(work),
         "--specpath", str(work),
-        str(ROOT / "pcs" / "verifier_entrypoint.py"),
+        "--collect-data", "pcs.schemas",
+        str(ROOT / "scripts" / "verifier_launcher.py"),
     ]
     proc = subprocess.run(cmd, cwd=ROOT, check=False)
     if proc.returncode:
