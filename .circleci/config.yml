@@ -126,23 +126,7 @@ jobs:
           name: Verify and prepare Python bundle on ARM64
           command: |
             . .venv/bin/activate
-            python - <<'PY'
-            import json
-            from pathlib import Path
-            from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
-
-            source = Path("/tmp/pcs-restoration/python-bundle")
-            meta = json.loads((source / "campaign.json").read_text(encoding="utf-8"))
-            prepared = prepare_verified_environment_workspace_v06(
-                source / "study.pcs.zip",
-                Path("/tmp/pcs-restoration/python-arm64-prepare-diagnostic"),
-                source / "producer-public.pem",
-                expected_fingerprint=meta["producer_public_key_fingerprint"],
-            )
-            if prepared.get("valid") is not True:
-                raise SystemExit(f"ARM64 prepare rejected: {prepared}")
-            print("ARM64 authority-gated prepare passed")
-            PY
+            python -c 'import json; from pathlib import Path; from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06; source=Path("/tmp/pcs-restoration/python-bundle"); meta=json.loads((source/"campaign.json").read_text(encoding="utf-8")); prepared=prepare_verified_environment_workspace_v06(source/"study.pcs.zip", Path("/tmp/pcs-restoration/python-arm64-prepare-diagnostic"), source/"producer-public.pem", expected_fingerprint=meta["producer_public_key_fingerprint"]); assert prepared.get("valid") is True, prepared; print("ARM64 authority-gated prepare passed")'
 
   replay-python-amd64:
     machine:
