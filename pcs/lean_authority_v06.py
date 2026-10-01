@@ -93,10 +93,9 @@ def resolve_lean_authority_v06(explicit: str | Path | None = None) -> dict[str, 
         driver = root / "formal" / "PCSAuthority.lean"
         if lake and driver.is_file():
             return {
-                "mode": "repository-source",
+                "mode": "repository-build",
                 "lake": Path(lake).resolve(),
                 "formal_root": root / "formal",
-                "driver": driver,
             }
 
     raise V06LeanAuthorityError(
@@ -232,29 +231,44 @@ def run_lean_authority_v06(
         if expected_fingerprint:
             args.append(expected_fingerprint)
 
-        if resolved["mode"] == "repository-source":
-            cmd = [
-                str(resolved["lake"]),
-                "env",
-                "lean",
-                "--run",
-                str(resolved["driver"]),
-                *args,
-            ]
-            cwd = resolved["formal_root"]
-            authority_sha256 = hashlib.sha256(
-                Path(resolved["driver"]).read_bytes()
-            ).hexdigest()
+        if resolved["mode"] == "repository-build":
+            try:
+                built = subprocess.run(
+                    [str(resolved["lake"]), "build", "pcs-lean-authority"],
+                    cwd=resolved["formal_root"],
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_seconds,
+                    check=False,
+                )
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                raise V06LeanAuthorityError(
+                    f"Lean authority build failed: {type(exc).__name__}: {exc}"
+                ) from exc
+            if built.returncode != 0:
+                detail = (built.stderr or built.stdout).strip()
+                raise V06LeanAuthorityError(
+                    f"Lean authority build failed with exit code {built.returncode}: {detail}"
+                )
+            root = _repo_root()
+            if root is None:
+                raise V06LeanAuthorityError("repository root disappeared during authority build")
+            executable = _repo_authority_path(root)
+            if executable is None:
+                raise V06LeanAuthorityError(
+                    "Lean authority build succeeded but executable was not found"
+                )
+            executed_mode = "repository-built-binary"
         else:
             executable = Path(resolved["path"])
-            cmd = [str(executable), *args]
-            cwd = None
-            authority_sha256 = _sha256_file(executable)
+            executed_mode = resolved["mode"]
 
+        cmd = [str(executable), *args]
+        authority_sha256 = _sha256_file(executable)
         try:
             proc = subprocess.run(
                 cmd,
-                cwd=cwd,
+                cwd=None,
                 capture_output=True,
                 text=True,
                 timeout=timeout_seconds,
@@ -280,7 +294,7 @@ def run_lean_authority_v06(
         "required": True,
         "accepted": verdict == "ACCEPT",
         "verdict": verdict,
-        "mode": resolved["mode"],
+        "mode": executed_mode,
         "authority_sha256": authority_sha256,
         "observation_transcript_sha256": hashlib.sha256(transcript_bytes).hexdigest(),
         "certificate_semantic_hash": certificate["semantic_hash"],
