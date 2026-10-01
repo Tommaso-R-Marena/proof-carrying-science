@@ -176,6 +176,60 @@ verifier's `bundle_sha256` against the candidate, and only then atomically publi
 the requested output path. A failed post-build verification deletes the candidate
 and leaves any previous output untouched.
 
+### Fast reviewer path: one command with a pinned trust profile
+
+For demos and deployments, reviewers can store the producer key, fingerprint, and
+optional reviewer policy once in a local trust profile:
+
+```json
+{
+  "format": "pcs-verifier-trust-v1",
+  "public_key": "trusted-producer.pem",
+  "expected_signer_fingerprint": "<64-hex-ed25519-fingerprint>",
+  "policy": "reviewer-policy.json"
+}
+```
+
+Then verification is one command:
+
+```bash
+pcs verify-local-v06 study.pcs.zip --trust trust.json --receipt receipt.json
+```
+
+The separate `pcs-verifier-v06` entry point exposes the same narrow reviewer
+surface. A single-file executable can be built with:
+
+```bash
+python -m pip install -e '.[standalone]'
+python scripts/build_verifier_artifact.py -o dist/pcs-verifier-v06
+```
+
+The builder emits the executable plus a SHA-256 manifest. The trust profile remains
+external to the delivered scientific bundle, so an attacker cannot select their own
+trusted key by modifying the bundle.
+
+### Three canonical deterministic demos
+
+Run all three end-to-end v0.6 examples with:
+
+```bash
+python scripts/run_golden_examples_v06.py -o golden-demo-run
+```
+
+The harness produces a positive PK/PD replay, a valid bundle carrying an intentionally
+failed PK/PD claim, and an environment-bound discovery/confirmation/replay case. It
+uses a deterministic **demo-only** key so repeated builds can be checked for identical
+bundle SHA-256 values; that key must never be trusted for real publication.
+
+The focused v0.6 attack campaign is:
+
+```bash
+python scripts/adversarial_v06_hardening.py
+```
+
+It targets archive namespace ambiguity, unsigned extras, signed-byte tampering,
+environment-source drift, and forged environment propositions at the replay boundary.
+
 ### Verify the delivered v0.6 ZIP directly
 
 A reviewer does not need to extract the archive first:
