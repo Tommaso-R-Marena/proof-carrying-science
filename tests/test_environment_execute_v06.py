@@ -454,3 +454,62 @@ def test_static_workflow_contract_without_confirmation_still_fails_closed():
     }
     with pytest.raises(V06SandboxReplayError, match="not confirmed static analysis"):
         build_sandbox_replay_plan_v06(certificate, environment)
+
+
+def test_repeat_records_but_tolerates_unsigned_local_image_identity_drift(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            suffix = format(type(self).instances, "064x")
+            self.image_meta = {
+                "image_id": "sha256:" + suffix,
+                "repo_digests": [],
+                "os": "linux",
+                "architecture": "amd64",
+            }
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+
+    assert result["valid"] is True
+    assert result["determinism_confirmed"] is True
+    assert receipt["determinism"]["confirmed"] is True
+    assert receipt["determinism"]["runs"][1]["matches_primary_projection"] is True
+    observations = receipt["determinism"]["unsigned_observations"]
+    assert observations["container_image_digest_stable"] is False
+    assert observations["full_realized_environment_hash_stable"] is False
+    assert (
+        observations[
+            "container_image_identity_drift_does_not_by_itself_invalidate"
+        ]
+        is True
+    )
+
+
+def test_repeat_dependency_tree_drift_still_fails_determinism(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            self.instance_number = type(self).instances
+
+        def capture_environment(self):
+            value = super().capture_environment()
+            if self.instance_number >= 2:
+                value["dependency_tree_sha256"] = "b" * 64
+                value["semantic_sha256"] = hashlib.sha256(
+                    canonicalize_jcs(value).encode()
+                ).hexdigest()
+            return value
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+
+    assert result["valid"] is False
+    assert result["determinism_confirmed"] is False
+    assert receipt["determinism"]["status"] == "divergence_detected"
+    assert receipt["determinism"]["runs"][1]["valid"] is True
+    assert receipt["determinism"]["runs"][1]["matches_primary_projection"] is False
