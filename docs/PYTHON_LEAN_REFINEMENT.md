@@ -1,5 +1,11 @@
 # Python ↔ Lean Decision-Kernel Refinement
 
+Status: **historical design note**. The decision-kernel and serialized-representation
+milestones described below have since been integrated into the PCS v0.6/v2 Lean
+layer. For the current theorem chain and remaining trusted boundaries, use
+`docs/LEAN_KERNEL_STATUS.md` and `formal/PCS_FULL_FORMALIZATION_REPORT.md` as the
+authoritative references.
+
 ## Goal
 
 PCS now separates **evidence establishment** from **claim-status decision**.
@@ -42,7 +48,7 @@ The Lean layer currently defines:
 
 Python tests execute all vectors on every test run.
 
-The next Lean milestone is an executable whole-claim decision function whose concrete examples reproduce these same vectors, followed by a theorem connecting each accepted Lean decision class to `Assures`.
+This was the next Lean milestone when this note was written. It has since been completed and incorporated into the current decision/normalized-state theorem chain.
 
 ## Refinement theorem target
 
@@ -57,7 +63,7 @@ LeanDecision(c, E) = accepted(L)
 
 This theorem is **one-way soundness**, not completeness. PCS may conservatively leave a claim OPEN even when stronger evidence exists outside the supported decision procedure.
 
-A later implementation-refinement result should connect serialized PCS certificate objects to the Lean datatypes and prove that the Python-normalized decision input decodes to the same Lean state. Until that bridge is proved and machine checked, Python remains part of the executable trusted computing base.
+That serialized implementation-refinement bridge has since been proved for the current v0.6/v2 representation. The deployed high-assurance path now gates authoritative validity on compiled Lean acceptance; the remaining operational and semantic boundaries are listed in the current status/report files referenced above.
 
 ## Why the split matters
 
