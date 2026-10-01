@@ -5,6 +5,10 @@ from typing import Any
 
 from .decision import assess_claim
 from .schema_validation import SchemaValidationError, validate_v06_certificate_shape
+from .numeric_contract_v06 import (
+    V06NumericContractError,
+    canonical_nonnegative_number_text_v06,
+)
 
 
 class V06CertificateSemanticsError(ValueError):
@@ -48,6 +52,28 @@ def _safe_relative_path(value: str, *, label: str) -> None:
         or any(part in ("", ".", "..") for part in path.parts)
     ):
         raise V06CertificateSemanticsError(f"{label} is not a canonical relative path: {value!r}")
+
+
+def _validate_predicate_numeric_contract_v06(
+    predicate: dict[str, Any],
+    *,
+    label: str,
+) -> None:
+    if predicate.get("type") != "pkpd_reference_match":
+        return
+    for key in ("rel_tol", "abs_tol"):
+        value = predicate.get(key)
+        try:
+            canonical = canonical_nonnegative_number_text_v06(
+                value,
+                label=f"{label}.{key}",
+            )
+        except V06NumericContractError as exc:
+            raise V06CertificateSemanticsError(str(exc)) from exc
+        if canonical != value:
+            raise V06CertificateSemanticsError(
+                f"{label}.{key} must use canonical numeric text {canonical!r}"
+            )
 
 
 def predicate_from_check_spec(check_spec: dict[str, Any]) -> dict[str, Any]:
@@ -189,6 +215,10 @@ def validate_certificate_semantics_v06(certificate: dict[str, Any]) -> None:
     for evidence_item in evidence:
         _validate_evidence_kind(evidence_item)
         derived_predicate = predicate_from_check_spec(evidence_item["check_spec"])
+        _validate_predicate_numeric_contract_v06(
+            derived_predicate,
+            label=f"evidence {evidence_item['id']} predicate",
+        )
         if evidence_item["predicate"] != derived_predicate:
             raise V06CertificateSemanticsError(
                 f"evidence {evidence_item['id']} predicate differs from its check specification"
@@ -220,6 +250,10 @@ def validate_certificate_semantics_v06(certificate: dict[str, Any]) -> None:
                 )
 
     for claim in claims:
+        _validate_predicate_numeric_contract_v06(
+            claim["predicate"],
+            label=f"claim {claim['id']} predicate",
+        )
         for assumption_id in claim["assumptions"]:
             assumption = assumption_map.get(assumption_id)
             if assumption is None:
