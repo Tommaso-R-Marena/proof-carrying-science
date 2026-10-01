@@ -285,15 +285,21 @@ def run_lean_authority_v06(
             f"Lean authority failed with exit code {proc.returncode}: {detail}"
         )
     verdict = proc.stdout.strip()
-    if verdict not in {"ACCEPT", "REJECT"}:
-        raise V06LeanAuthorityError(
-            f"Lean authority returned an invalid verdict: {verdict!r}"
-        )
+    accepted = verdict == "ACCEPT"
+    rejecting_stage = None
+    if not accepted:
+        if verdict.startswith("REJECT:") and len(verdict) > len("REJECT:"):
+            rejecting_stage = verdict.split(":", 1)[1]
+        else:
+            raise V06LeanAuthorityError(
+                f"Lean authority returned an invalid verdict: {verdict!r}"
+            )
     return {
         "format": LEAN_AUTHORITY_RESULT_FORMAT_V06,
         "required": True,
-        "accepted": verdict == "ACCEPT",
-        "verdict": verdict,
+        "accepted": accepted,
+        "verdict": "ACCEPT" if accepted else "REJECT",
+        "rejecting_stage": rejecting_stage,
         "mode": executed_mode,
         "authority_sha256": authority_sha256,
         "observation_transcript_sha256": hashlib.sha256(transcript_bytes).hexdigest(),
@@ -348,7 +354,7 @@ def enforce_lean_authority_v06(
         result["valid"] = False
         result["failed_stage"] = "lean_authority"
         result["errors"] = [
-            "Lean authority rejected the exact package bytes and external observation transcript"
+            f"Lean authority rejected at stage {authority.get('rejecting_stage')!r} over the exact package bytes and external observation transcript"
         ]
         return result
     stages["lean_authority"] = True
