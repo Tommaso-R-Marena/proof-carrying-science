@@ -1,5 +1,6 @@
 import PCS.V2.Archive
 import PCS.V2.Chemistry
+import PCS.V2.TCB
 
 /-!
 # Lean-authoritative production acceptance
@@ -76,8 +77,12 @@ def transcriptExecutor (t : AuthorityTranscript) : Executor := fun req =>
     | none => ⟨.provenance, .unverified⟩
     | some obs => ⟨obs.kind, obs.outcome⟩
 
+/-- Namespace portability is already fail-closed in the Python archive precheck.
+    The Lean authority therefore uses identity Unicode operations and independently
+    checks all byte/hash/signature/member-set invariants. Unicode table equivalence
+    remains an explicit portability boundary, not a scientific-soundness claim. -/
 def authorityUnicode : UnicodeOps :=
-  { nfc := id, casefold := fun s => String.map Char.toLower s }
+  { nfc := id, casefold := id }
 
 def transcriptOracles (t : AuthorityTranscript) : Oracles :=
   { unicode := authorityUnicode,
