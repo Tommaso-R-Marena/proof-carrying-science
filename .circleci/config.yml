@@ -208,6 +208,24 @@ jobs:
           path: /tmp/pcs-restoration/r-renv-summary.json
           destination: r-renv-summary.json
 
+
+  formal-wire-lean:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install Lean 4 toolchain manager
+          command: |
+            curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+            echo 'export PATH="$HOME/.elan/bin:$PATH"' >> "$BASH_ENV"
+      - run:
+          name: Build production formal root and audit trust escapes
+          command: |
+            source "$BASH_ENV"
+            ./scripts/verify_lean.sh
+
   restoration-boundaries-complete:
     docker:
       - image: cimg/base:current
@@ -219,6 +237,13 @@ jobs:
 workflows:
   restoration-and-abi-evidence:
     jobs:
+
+      - formal-wire-lean:
+          filters:
+            branches:
+              only:
+                - main
+                - formal/integrate-wire-v1-main
       - restoration-regression:
           filters: &pcs_branch
             branches:
