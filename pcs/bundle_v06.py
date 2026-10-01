@@ -27,6 +27,7 @@ from .verifier_zip_v06 import (
     V06BundleVerificationError,
     verify_package_zip_end_to_end_v06,
 )
+from .lean_authority_v06 import V06LeanAuthorityError
 
 
 BUNDLE_FORMAT_V06 = "pcs-v06-zip-stored-v1"
@@ -96,7 +97,7 @@ def create_verified_bundle_v06(
             public_key_path,
             expected_fingerprint=expected_fingerprint,
         )
-    except V06VerifierIOError as exc:
+    except (V06VerifierIOError, V06LeanAuthorityError) as exc:
         raise V06BundleBuildError(str(exc)) from exc
 
     if not verification["valid"]:
@@ -206,7 +207,7 @@ def create_verified_bundle_v06(
         os.replace(temp_path, out)
         temp_path = None
 
-    except (OSError, zipfile.BadZipFile, V06BundleVerificationError) as exc:
+    except (OSError, zipfile.BadZipFile, V06BundleVerificationError, V06LeanAuthorityError) as exc:
         raise V06BundleBuildError(
             f"cannot create or verify v0.6 bundle: {type(exc).__name__}: {exc}"
         ) from exc
