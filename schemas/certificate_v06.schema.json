@@ -292,12 +292,10 @@
           "maxLength": 256
         },
         "rel_tol": {
-          "type": "number",
-          "minimum": 0
+          "$ref": "#/$defs/canonicalNonnegativeNumberText"
         },
         "abs_tol": {
-          "type": "number",
-          "minimum": 0
+          "$ref": "#/$defs/canonicalNonnegativeNumberText"
         }
       }
     },
@@ -417,13 +415,21 @@
         }
       }
     },
+    "canonicalNonnegativeNumberText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^(?:0|[1-9][0-9]*(?:\\.[0-9]+)?|0\\.[0-9]+|[1-9](?:\\.[0-9]+)?e[+-]?[0-9]+)$"
+    },
     "metadataScalar": {
       "type": [
         "string",
-        "number",
+        "integer",
         "boolean",
         "null"
-      ]
+      ],
+      "minimum": -9007199254740992,
+      "maximum": 9007199254740992
     },
     "artifact": {
       "type": "object",

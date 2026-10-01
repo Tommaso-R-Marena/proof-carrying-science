@@ -36,6 +36,7 @@ def load_trust_profile_v06(path: str | Path) -> dict[str, Any]:
         "public_key": str((base / public_key).resolve()),
         "expected_signer_fingerprint": fingerprint.lower(),
         "policy": None,
+        "lean_authority": None,
         "profile": str(source),
     }
     policy = value.get("policy")
@@ -43,7 +44,12 @@ def load_trust_profile_v06(path: str | Path) -> dict[str, Any]:
         if not isinstance(policy, str) or not policy:
             raise V06LocalVerifyError("trust profile policy must be a relative path string")
         resolved["policy"] = str((base / policy).resolve())
-    for key in ("public_key", "policy"):
+    lean_authority = value.get("lean_authority")
+    if lean_authority is not None:
+        if not isinstance(lean_authority, str) or not lean_authority:
+            raise V06LocalVerifyError("trust profile lean_authority must be a relative path string")
+        resolved["lean_authority"] = str((base / lean_authority).resolve())
+    for key in ("public_key", "policy", "lean_authority"):
         candidate = resolved.get(key)
         if candidate and not Path(candidate).is_file():
             raise V06LocalVerifyError(f"trust profile {key} does not exist: {candidate}")
@@ -56,6 +62,7 @@ def verify_local_bundle_v06(
     *,
     receipt: str | Path | None = None,
     overwrite_receipt: bool = False,
+    lean_authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     trust = load_trust_profile_v06(trust_profile)
     result = verify_package_zip_end_to_end_v06(
@@ -63,6 +70,7 @@ def verify_local_bundle_v06(
         trust["public_key"],
         expected_fingerprint=trust["expected_signer_fingerprint"],
         policy_path=trust["policy"],
+        lean_authority_path=(lean_authority_path or trust["lean_authority"]),
     )
     out = dict(result)
     out["trust_profile"] = trust["profile"]

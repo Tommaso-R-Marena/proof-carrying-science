@@ -1,6 +1,7 @@
 import PCS.V2.TCB
 import PCS.V2.Vectors
 import PCS.V2.Archive
+import PCS.V2.Authority
 import PCS.V2.SHA256Padding
 import PCS.V2.Chemistry
 import PCS.V2.ChemistryVectors
@@ -62,6 +63,8 @@ dependencies of the flagship theorem and of the main intermediate theorems.
 #print axioms PCS.V2.Reproducibility.acceptance_reproducible
 #print axioms PCS.V2.Reproducibility.wire_reuse_same_certificate
 #print axioms PCS.V2.TCB.production_accept_implies_scientific_assurance
+#print axioms PCS.V2.Authority.acceptPCSWithTranscript_implies_acceptPCS
+#print axioms PCS.V2.Authority.gatedProduction_refinesLean
 -- SHA-256 implementation structure
 #print axioms PCS.V2.SHA256.be64_injective
 #print axioms PCS.V2.SHA256.pad_injective

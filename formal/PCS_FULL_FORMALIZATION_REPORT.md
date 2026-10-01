@@ -377,12 +377,21 @@ does not imply byte reproducibility, so PCS must never conflate the two.
 
 ## G. Open gaps (exact statements still needed)
 
-1. **Production ↔ Lean.** `ProductionRefinesLean production O zip T`, that is,
-   `∀ raw, production raw = true → (acceptArchive O zip T raw).isSome`. There are two
-   ways to discharge it. One is to make production call the Lean checker (compiled
-   `acceptArchive`) as its accept gate. The other is a refinement proof of
-   `verify_end_to_end_v06` against `acceptPCS`, which would need a Python semantics.
-   The current evidence is differential tests only.
+1. **Production ↔ Lean is now architecturally narrowed.** The high-assurance
+   production path no longer promotes Python-only acceptance. Python performs its
+   fail-closed archive/precheck and external replay/capture/workflow stages, writes a
+   canonical observation transcript bound to the certificate semantic hash and
+   checker version, and authoritative `valid: true` requires the compiled Lean
+   authority to accept the exact decoded package-member bytes plus that transcript.
+   `PCS.V2.Authority.gatedProduction_refinesLean` proves the abstract
+   `precheck ∧ LeanAccept` construction satisfies `ProductionRefinesLean`; and
+   `acceptPCSWithTranscript_implies_acceptPCS` proves transcript-gated acceptance is
+   genuine `acceptPCS` acceptance for the selected oracles. This deliberately avoids
+   a whole-Python-semantics refinement proof. It does **not** prove the operational
+   Python ZIP decoder/materializer/process invocation correct: raw ZIP →
+   decoded-member fidelity remains the `ZipDecoderFaithful` boundary, and the
+   transcript's scientific meaning remains governed by `CaptureSound`,
+   `ReplayFaithful`, and the workflow-oracle boundary.
 2. **SHA-256 spec faithfulness.** `∀ m, PCS.V2.SHA256.sha256 m = FIPS180_4.SHA256 m`
    against an independent, mathematically stated FIPS 180-4 specification (for
    example one stated over bit-vectors or `ZMod (2^32)`). What is proved so far is
@@ -419,10 +428,10 @@ does not imply byte reproducibility, so PCS must never conflate the two.
 
 | Metric | Value |
 |---|---|
-| v0.6 Lean files (`formal/PCS/V2/`) | 30 (4 added in this pass: `Archive.lean`, `SHA256Padding.lean`, `Chemistry.lean`, `ChemistryVectors.lean`) |
+| v0.6 Lean files (`formal/PCS/V2/`) | 31, including the production authority bridge `Authority.lean` |
 | v0.6 Lean declarations (top-level `theorem/def/structure/…`) | 710 |
-| v0.6 theorems | 279 (this pass: +46) |
-| files touched in this pass | Lean, new: `V2/Archive.lean`, `V2/SHA256Padding.lean`, `V2/Chemistry.lean`, `V2/ChemistryVectors.lean`. Lean, edited: `PCS.lean`, `V2/Audit.lean`, `V2/TCB.lean` (comment), `tools/LeanVerifyDir.lean`. Production: `pcs/checks/chemistry.py`. Tests: `tests/test_formal_v2_regressions.py`, `tests/test_formal_v2_differential.py`. Plus this report. |
+| v0.6 theorems | 281 source declarations after adding the two authority-bridge theorems; hosted compilation remains the acceptance criterion |
+| authority integration files | `V2/Authority.lean`, `PCSAuthority.lean`, `pcs/lean_authority_v06.py`, verifier/CLI propagation, standalone embedding, authority tests, and hosted packaging gates |
 | `sorry`/`admit` in the PCS library | 0 |
 | project-specific axioms | 0 |
 | Lean executable vectors (`#guard`) | 39 in total. `Vectors`: 27 (SHA-256/SHA-512/Ed25519 known-answer and negative vectors, canonical base64, golden-package acceptance, and 17 adversarial package rejections). `ChemistryVectors`: 12 (tokenizer, executor, and golden acceptance with the chemistry replayed in Lean). |
@@ -430,6 +439,10 @@ does not imply byte reproducibility, so PCS must never conflate the two.
 | formal-regression tests | 10, all passing (3 added in this pass) |
 | full Python suite | **PASS** in the hosted `formal-v06-integration` CircleCI gate after integration repair. |
 | formerly failing regression group | 99 / 99 passing locally across `test_package_v06`, `test_signing_v06`, `test_kernel`, `test_discover_v06`, `test_environment_v06`, and `test_workflow_discovery_v06`. |
+
+Lean-authoritative production note: source-level metrics above are updated by this
+authority branch; the final evidence line should be read together with the hosted
+Lean/full-Python/standalone gates for the branch or merge commit.
 
 Post-integration repair of the 13 pre-existing failures preserved production safety
 behavior rather than weakening it:

@@ -180,6 +180,7 @@ def verify_environment_replay_v06(
             "hermeticity": None,
             "source_files_checked": 0,
             "replay_plan": None,
+            "_authority_fresh_capture": None,
         }
 
     try:
@@ -237,6 +238,7 @@ def verify_environment_replay_v06(
                 "unresolved_items", 0
             ),
             "replay_plan": fresh.get("replay_plan"),
+            "_authority_fresh_capture": fresh,
         }
     except (V06EnvironmentReplayError, OSError, ValueError) as exc:
         return {
@@ -248,4 +250,5 @@ def verify_environment_replay_v06(
             "dependency_records": 0,
             "unresolved_items": 0,
             "replay_plan": None,
+            "_authority_fresh_capture": None,
         }

@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - 'pcs/**'
+      - 'formal/**'
       - 'scripts/**'
       - 'tests/**'
       - 'pyproject.toml'
@@ -24,8 +25,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e '.[dev]'
+      - name: Install Lean toolchain
+        shell: bash
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build mandatory Lean authority
+        shell: bash
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd formal
+          lake build pcs-lean-authority
       - name: Focused P0/P1 tests
-        run: python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py
+        run: python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py
       - name: Golden examples
         run: python scripts/run_golden_examples_v06.py -o golden-demo-gha
       - name: Adversarial hardening campaign

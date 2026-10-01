@@ -53,6 +53,12 @@ from .environment_replay_v06 import (
     V06EnvironmentReplayError,
     environment_binding_v06,
 )
+from .lean_authority_v06 import V06LeanAuthorityError
+from .numeric_contract_v06 import (
+    V06NumericContractError,
+    canonical_nonnegative_number_text_v06,
+    normalize_certificate_metadata_scalar_v06,
+)
 
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
@@ -153,9 +159,27 @@ def _check_spec_from_manifest(check: dict[str, Any]) -> dict[str, Any]:
         "time_column": check.get("time_column", "time"),
         "concentration_column": check.get("concentration_column", "concentration"),
         "effect_column": check.get("effect_column", "effect"),
-        "rel_tol": check.get("rel_tol", 1e-9),
-        "abs_tol": check.get("abs_tol", 1e-12),
+        "rel_tol": canonical_nonnegative_number_text_v06(
+            check.get("rel_tol", 1e-9), label=f"check {check.get('id')} rel_tol"
+        ),
+        "abs_tol": canonical_nonnegative_number_text_v06(
+            check.get("abs_tol", 1e-12), label=f"check {check.get('id')} abs_tol"
+        ),
     }
+
+
+def _normalize_predicate_v06(value: Any, *, label: str) -> Any:
+    if not isinstance(value, dict):
+        return deepcopy(value)
+    out = deepcopy(value)
+    if out.get("type") == "pkpd_reference_match":
+        out["rel_tol"] = canonical_nonnegative_number_text_v06(
+            out.get("rel_tol", 1e-9), label=f"{label} rel_tol"
+        )
+        out["abs_tol"] = canonical_nonnegative_number_text_v06(
+            out.get("abs_tol", 1e-12), label=f"{label} abs_tol"
+        )
+    return out
 
 
 def _workflow_contract_v06(value: Any) -> dict[str, Any]:
@@ -279,7 +303,20 @@ def _package_artifacts_v06(
             "storage_key": storage_key,
         }
         if "metadata" in artifact:
-            packaged_artifact["metadata"] = deepcopy(artifact["metadata"])
+            raw_metadata = artifact["metadata"]
+            if not isinstance(raw_metadata, dict):
+                raise V06AttestationError(
+                    f"artifact {artifact_id} metadata must be an object"
+                )
+            try:
+                packaged_artifact["metadata"] = {
+                    key: normalize_certificate_metadata_scalar_v06(
+                        value, label=f"artifact {artifact_id} metadata.{key}"
+                    )
+                    for key, value in raw_metadata.items()
+                }
+            except V06NumericContractError as exc:
+                raise V06AttestationError(str(exc)) from exc
 
         packaged.append(packaged_artifact)
         paths[artifact_id] = target
@@ -296,6 +333,7 @@ def build_attestation_directory_v06(
     *,
     expected_fingerprint: str | None = None,
     generated_at: str | None = None,
+    lean_authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build one complete signed v0.6 evidence directory from a PCS manifest."""
     manifest_path = Path(manifest_path).resolve()
@@ -387,7 +425,10 @@ def build_attestation_directory_v06(
                     f"check {check_id} references unknown claim {claim_id}"
                 )
 
-        spec = _check_spec_from_manifest(check)
+        try:
+            spec = _check_spec_from_manifest(check)
+        except V06NumericContractError as exc:
+            raise V06AttestationError(str(exc)) from exc
         artifact_refs = artifact_ids_from_predicate(spec)
         for artifact_id in artifact_refs:
             if artifact_id not in artifact_ids:
@@ -433,7 +474,18 @@ def build_attestation_directory_v06(
                 )
             required_items.append(item)
 
-        predicate = deepcopy(raw_claim.get("predicate"))
+        raw_predicate = raw_claim.get("predicate")
+        try:
+            predicate = (
+                _normalize_predicate_v06(
+                    raw_predicate,
+                    label=f"claim {claim_id} predicate",
+                )
+                if raw_predicate is not None
+                else None
+            )
+        except V06NumericContractError as exc:
+            raise V06AttestationError(str(exc)) from exc
         if predicate is None:
             if not required_items:
                 raise V06AttestationError(
@@ -580,8 +632,9 @@ def build_attestation_directory_v06(
             out,
             public_key_path,
             expected_fingerprint=public_fingerprint,
+            lean_authority_path=lean_authority_path,
         )
-    except V06VerifierIOError as exc:
+    except (V06VerifierIOError, V06LeanAuthorityError) as exc:
         raise V06AttestationError(str(exc)) from exc
     if not final["valid"]:
         raise V06AttestationError(
@@ -610,6 +663,7 @@ def attest_v06(
     *,
     expected_fingerprint: str | None = None,
     overwrite: bool = False,
+    lean_authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Produce one self-verified v0.6 delivery ZIP from a project manifest."""
     output = Path(output_bundle).resolve()
@@ -636,6 +690,7 @@ def attest_v06(
             private_key_path,
             public_key_path,
             expected_fingerprint=expected_fingerprint,
+            lean_authority_path=lean_authority_path,
         )
 
         try:
@@ -645,6 +700,7 @@ def attest_v06(
                 public_key_path,
                 expected_fingerprint=built["public_key_fingerprint"],
                 overwrite=overwrite,
+                lean_authority_path=lean_authority_path,
             )
         except V06BundleBuildError as exc:
             raise V06AttestationError(str(exc)) from exc

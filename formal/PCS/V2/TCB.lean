@@ -12,9 +12,13 @@ Every external dependency of the v0.6 assurance chain is either
   only in the theorems that need it.
 
 `TCBItem`/`tcbStatus` is the machine-readable inventory used by the report.
-`production_accept_implies_scientific_assurance` states the one remaining
-correspondence gap — the Python verifier is not the Lean checker — as an explicit
-refinement hypothesis `ProductionRefinesLean`.
+`production_accept_implies_scientific_assurance` retains the general
+`ProductionRefinesLean` contract for an arbitrary external production verifier.
+The deployed high-assurance path no longer treats Python-only acceptance as
+authoritative: `PCS.V2.Authority` gates production on Lean acceptance and proves
+the corresponding conjunction pattern refines Lean. Raw ZIP decoding,
+materialization/invocation, and external replay/capture meaning remain explicit
+implementation or semantic boundaries.
 -/
 
 namespace PCS.V2.TCB

@@ -660,11 +660,11 @@ Long-term product architecture: **open checker + open certificate format + domai
 
 > **The producer of a claim is not the trust boundary. Independently checkable evidence is.**
 
-Today, the Python checker is part of the TCB. The research program is to shrink that boundary by moving core acceptance semantics into a machine-checked small kernel and making domain-specific evidence producers independently checkable wherever practical.
+The v0.6 production verification path is **Lean-authoritative**: Python performs archive I/O and the external replay/capture/workflow stages, but a result is not authoritative or PCS-valid until the compiled Lean v0.6/v2 authority accepts the exact decoded member bytes together with a certificate-bound canonical observation transcript. The Python stages therefore remain part of the external-computation TCB where explicitly modeled, but Python-only acceptance is no longer sufficient.
 
 ## Current limitations
 
-- The exact Lean 4.28 v0.6/v2 assurance layer is integrated and builds successfully; production↔Lean refinement, ZIP-decoder faithfulness, capture soundness, non-chemistry replay faithfulness, cryptographic unforgeability, and independent SHA-256/Ed25519 spec correspondence remain explicit boundaries.
+- The exact Lean 4.28 v0.6/v2 assurance layer is integrated. Production now gates authoritative validity on Lean acceptance, avoiding a whole-Python-semantics equivalence claim. ZIP-decoder/materialization fidelity, process invocation, capture/workflow semantics, non-chemistry replay faithfulness, cryptographic unforgeability, and independent SHA-256/Ed25519 spec correspondence remain explicit boundaries.
 - No arbitrary Python/R/C++ correctness theorem is claimed.
 - The PK/PD adapter is intentionally restricted and synthetic-first.
 - Chemical parsing is intentionally narrow.

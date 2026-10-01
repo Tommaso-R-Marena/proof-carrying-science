@@ -15,6 +15,7 @@ import PCS.WireCodecVectors
 import PCS.WireCheck
 import PCS.Audit
 import PCS.V2.Archive
+import PCS.V2.Authority
 import PCS.V2.Audit
 import PCS.V2.Base64
 import PCS.V2.Binding

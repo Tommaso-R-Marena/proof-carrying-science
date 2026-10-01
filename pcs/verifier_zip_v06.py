@@ -23,6 +23,7 @@ from .verifier_io_v06 import (
 )
 from .verifier_v06 import verify_end_to_end_v06
 from .policy_v06 import apply_reviewer_policy_v06
+from .lean_authority_v06 import enforce_lean_authority_v06
 
 
 MAX_ARCHIVE_ENTRIES_V06 = MAX_PACKAGE_FILES_V06 + 128
@@ -326,9 +327,11 @@ def verify_package_zip_end_to_end_v06(
     bandit_alpha: float = 1.0,
     shadow_bandit: bool = False,
     telemetry_sink: dict[str, Any] | None = None,
+    lean_authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     loaded = load_package_zip_v06(bundle)
     public_key = load_public_key_v06(public_key_path)
+    authority_context: dict[str, Any] = {}
     result = verify_end_to_end_v06(
         certificate_bytes=loaded["certificate_bytes"],
         certificate_signature_bytes=loaded["certificate_signature_bytes"],
@@ -342,6 +345,18 @@ def verify_package_zip_end_to_end_v06(
         bandit_alpha=bandit_alpha,
         shadow_bandit=shadow_bandit,
         telemetry_sink=telemetry_sink,
+        authority_context_sink=authority_context,
+    )
+    result = enforce_lean_authority_v06(
+        result,
+        authority_context=authority_context,
+        certificate_signature_bytes=loaded["certificate_signature_bytes"],
+        package_manifest_bytes=loaded["package_manifest_bytes"],
+        package_signature_bytes=loaded["package_signature_bytes"],
+        package_files=loaded["package_files"],
+        public_key=public_key,
+        expected_fingerprint=expected_fingerprint,
+        authority_path=lean_authority_path,
     )
     receipt = dict(result)
     receipt["bundle_sha256"] = loaded["bundle_sha256"]

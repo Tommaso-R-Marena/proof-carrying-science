@@ -28,6 +28,7 @@ from .verifier_zip_v06 import (
     load_package_zip_v06,
     verify_package_zip_end_to_end_v06,
 )
+from .lean_authority_v06 import V06LeanAuthorityError
 
 
 ENVIRONMENT_WORKSPACE_FORMAT_V06 = "pcs-environment-workspace-v1"
@@ -146,7 +147,7 @@ def prepare_verified_environment_workspace_v06(
             public_key_path,
             expected_fingerprint=expected_fingerprint,
         )
-    except (V06BundleVerificationError, OSError, ValueError) as exc:
+    except (V06BundleVerificationError, V06LeanAuthorityError, OSError, ValueError) as exc:
         raise V06EnvironmentWorkspaceError(str(exc)) from exc
 
     if not verified.get("valid"):

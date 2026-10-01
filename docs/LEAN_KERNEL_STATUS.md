@@ -69,7 +69,7 @@ Do not state that every production/runtime/cryptographic component is unconditio
 
 The representation bridge is now integrated. The remaining named boundaries are:
 
-- production-Python acceptance -> Lean acceptance (`ProductionRefinesLean`), currently supported by differential tests rather than a Python-semantics refinement proof;
+- authoritative production validity is now gated on compiled Lean acceptance; the whole-Python-semantics equivalence problem is therefore avoided rather than claimed proved. The remaining operational bridge is the faithful handoff from Python ZIP decoding/materialization/process invocation to the exact member bytes Lean checks;
 - raw ZIP bytes -> semantic archive members (`ZipDecoderFaithful`);
 - environment-capture rules -> `Describes` (`CaptureSound`);
 - replay faithfulness for `unit_compatible`, `csv_disjoint`, PK/PD checks, and external validators;
@@ -82,8 +82,9 @@ The current high-assurance chain is:
 
 ```text
 raw archive bytes
-   ↓ ZIP decoder                        explicit contract
+   ↓ Python ZIP decoder                 explicit contract
 decoded archive members
+   ↓ exact isolated handoff to Lean    production gate; invocation/materialization TCB
    ↓ archive partition / signed set    machine-checked
 canonical certificate/package/index
    ↓ hashes + signatures + replay      machine-checked wiring;
@@ -92,6 +93,10 @@ normalized v0.6/v2 decisions
    ↓
 ScientificAssurance / scoped Assures   machine-checked
 ```
+
+The production gate also emits the SHA-256 of the authority executable and the
+canonical observation transcript into the verification result/receipt. A missing,
+crashing, malformed, or rejecting authority cannot yield authoritative PCS validity.
 
 For the exact theorem statements and TCB inventory, see `formal/PCS_FULL_FORMALIZATION_REPORT.md`.
 
