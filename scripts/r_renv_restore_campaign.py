@@ -388,6 +388,8 @@ def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
         "determinism_confirmed": result.get("determinism_confirmed"),
         "determinism_runs_completed": result.get("determinism_runs_completed"),
         "expected_r_version": meta["r_version"],
+        "base_image_digest_package_absent": meta.get("base_image_digest_package_absent"),
+        "restoration_artifacts_signed": meta.get("restoration_artifacts_signed"),
         "realized_r_version": realized.get("r", {}).get("version"),
         "expected_digest_version": meta["digest_version"],
         "realized_digest_version": digest_pkg.get("version") if digest_pkg else None,
@@ -428,6 +430,14 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
         "all_three_run_deterministic": len(rows) >= 2 and all(
             row.get("determinism_confirmed") is True
             and row.get("determinism_runs_completed") == 3
+            for row in rows
+        ),
+        "base_image_did_not_supply_digest": len(rows) >= 2 and all(
+            row.get("base_image_digest_package_absent") is True for row in rows
+        ),
+        "signed_local_r_repository_payloads_present": len(rows) >= 2 and all(
+            isinstance(row.get("restoration_artifacts_signed"), int)
+            and row.get("restoration_artifacts_signed") >= 3
             for row in rows
         ),
         "r_version_matches_signed_lock": len(rows) >= 2 and all(
