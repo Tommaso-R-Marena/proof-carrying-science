@@ -795,13 +795,26 @@ def _determinism_projection_v06(
     realized: dict[str, Any],
     outputs: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    value = {
-        "realized_environment_semantic_sha256": realized.get("semantic_sha256"),
+    # Determinism is judged on semantically relevant replay state, not on the
+    # unsigned local OCI image identity produced by a particular builder.
+    #
+    # Rebuilding the same signed Dockerfile from the same signed package bytes
+    # can legitimately yield different local image IDs because OCI layer/config
+    # metadata may contain builder-generated timestamps or other unsigned
+    # metadata. PCS still records those identities below as observations, but
+    # they do not by themselves invalidate a replay when the signed contract,
+    # dependency/native tree, interpreters, platform/runtime, and signed outputs
+    # are identical.
+    semantic_basis = {
         "dependency_tree_sha256": realized.get("dependency_tree_sha256"),
-        "container_image_digest": realized.get("container_image_digest"),
         "python": {
+            "implementation": realized.get("python", {}).get("implementation"),
             "version": realized.get("python", {}).get("version"),
             "executable_sha256": realized.get("python", {}).get("executable_sha256"),
+            "packages_truncated": realized.get("python", {}).get("packages_truncated"),
+            "native_extensions_truncated": realized.get("python", {}).get(
+                "native_extensions_truncated"
+            ),
         },
         "r": {
             "version": realized.get("r", {}).get("version"),
@@ -826,9 +839,15 @@ def _determinism_projection_v06(
             ),
         ),
     }
-    value["semantic_sha256"] = _semantic(value)
-    return value
-
+    return {
+        "semantic_basis": semantic_basis,
+        "semantic_sha256": _semantic(semantic_basis),
+        "observations": {
+            "realized_environment_semantic_sha256": realized.get("semantic_sha256"),
+            "container_image_digest": realized.get("container_image_digest"),
+            "container_image_digest_kind": realized.get("container_image_digest_kind"),
+        },
+    }
 
 def execute_prepared_replay_workspace_v06(
     workspace: str | Path, output: str | Path, public_key_path: str | Path, *,
@@ -1106,6 +1125,28 @@ def execute_prepared_replay_workspace_v06(
                 if confirmed
                 else "divergence_detected"
             )
+
+        image_digests = [
+            row.get("container_image_digest")
+            for row in determinism["runs"]
+            if row.get("status") != "operational_failure"
+        ]
+        realized_hashes = [
+            row.get("realized_environment_semantic_sha256")
+            for row in determinism["runs"]
+            if row.get("status") != "operational_failure"
+        ]
+        determinism["unsigned_observations"] = {
+            "container_image_digests": image_digests,
+            "container_image_digest_stable": (
+                len(set(image_digests)) <= 1 if image_digests else None
+            ),
+            "realized_environment_semantic_sha256_values": realized_hashes,
+            "full_realized_environment_hash_stable": (
+                len(set(realized_hashes)) <= 1 if realized_hashes else None
+            ),
+            "container_image_identity_drift_does_not_by_itself_invalidate": True,
+        }
 
         deterministic_ok = bool(
             _determinism_child or determinism["confirmed"]
