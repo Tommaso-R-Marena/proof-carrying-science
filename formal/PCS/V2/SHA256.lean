@@ -128,7 +128,7 @@ decreasing_by simp; omega
     `chunks(...).foldl compress` specification. -/
 theorem compressBlocks_eq_chunks_foldl : ∀ (l : List UInt8) (hs : List UInt32),
     compressBlocks l hs = (chunks l).foldl compress hs
-  | [], hs => by rfl
+  | [], hs => by simp [compressBlocks, chunks]
   | a :: l, hs => by
       rw [compressBlocks.eq_def, chunks.eq_def]
       simp only [List.foldl_cons]
