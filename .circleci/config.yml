@@ -222,7 +222,9 @@ workflows:
       - restoration-regression:
           filters: &pcs_branch
             branches:
-              only: v06/replay-normalized-wire-v2
+              only:
+                - main
+                - release/main-wiring
       - produce-python-wheel:
           requires: [restoration-regression]
           filters: *pcs_branch
