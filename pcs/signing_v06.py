@@ -29,6 +29,24 @@ class V06SignatureError(ValueError):
     pass
 
 
+def decode_canonical_signature_b64(text: Any) -> bytes:
+    """Decode a base64 Ed25519 signature, accepting only its canonical spelling.
+
+    ``base64.b64decode(..., validate=True)`` ignores the unused low bits of the
+    final base64 symbol, so a 64-byte signature has 16 distinct textual
+    spellings (for example ``...AQ==`` and ``...AR==``).  Each spelling yields a
+    different, still canonical-JCS, signature-record byte string that verified.
+    PCS requires one accepted byte representation per signed object, so only
+    the spelling produced by ``base64.b64encode`` is accepted.
+    """
+    if not isinstance(text, str):
+        raise V06SignatureError("signature must be a base64 string")
+    raw = base64.b64decode(text, validate=True)
+    if base64.b64encode(raw).decode("ascii") != text:
+        raise V06SignatureError("non-canonical base64 signature encoding")
+    return raw
+
+
 def sign_jcs_payload(
     domain: str,
     payload: Any,
@@ -108,7 +126,7 @@ def verify_jcs_signature(
 
     if canonical is not None:
         try:
-            raw_signature = base64.b64decode(record.get("signature", ""), validate=True)
+            raw_signature = decode_canonical_signature_b64(record.get("signature", ""))
             public_key.verify(raw_signature, canonical)
         except Exception as exc:
             errors.append(

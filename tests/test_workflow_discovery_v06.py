@@ -219,7 +219,7 @@ def test_guided_discovery_merges_static_workflow_with_pkpd_checks_without_duplic
         encoding="utf-8",
     )
 
-    report = discover_project_v06(project)
+    report = discover_project_v06(project, minimum_workflow_confidence=0.90)
     manifest = report["manifest_draft"]
 
     assert report["summary"]["workflow_sources_analyzed"] == 1
@@ -255,7 +255,7 @@ def test_confirmed_static_workflow_provenance_survives_full_attestation(tmp_path
         encoding="utf-8",
     )
 
-    report = discover_project_v06(project)
+    report = discover_project_v06(project, minimum_workflow_confidence=0.90)
     draft = project / "pcs-manifest.draft.json"
     write_discovery_outputs_v06(
         report,
@@ -267,6 +267,7 @@ def test_confirmed_static_workflow_provenance_survives_full_attestation(tmp_path
         draft,
         manifest,
         project_root=project,
+        overwrite=True,
     )
 
     confirmed = json.loads(manifest.read_text(encoding="utf-8"))
@@ -311,7 +312,7 @@ def test_source_change_after_confirmation_is_rejected_before_signing(tmp_path):
         "df.to_csv('predictions.csv', index=False)\n",
         encoding="utf-8",
     )
-    report = discover_project_v06(project)
+    report = discover_project_v06(project, minimum_workflow_confidence=0.90)
     draft = project / "pcs-manifest.draft.json"
     write_discovery_outputs_v06(
         report,
@@ -319,7 +320,7 @@ def test_source_change_after_confirmation_is_rejected_before_signing(tmp_path):
         report_output=project / "pcs-discovery.json",
     )
     manifest = project / "manifest.json"
-    confirm_manifest_draft_v06(draft, manifest, project_root=project)
+    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
 
     script.write_text(
         script.read_text(encoding="utf-8") + "\nprint('changed')\n",

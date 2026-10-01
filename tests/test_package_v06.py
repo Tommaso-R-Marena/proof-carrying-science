@@ -308,7 +308,7 @@ def test_v06_directory_builder_enforces_single_file_limit(tmp_path: Path, monkey
 
 def test_v06_package_manifest_requires_certificate_member():
     cert = certificate()
-    with pytest.raises(V06PackageError, match="must bind certificate.json"):
+    with pytest.raises(V06PackageError, match=r"certificate\.json.*required property"):
         build_package_manifest_v06(
             cert,
             {"artifact.txt": {"sha256": "a" * 64, "size": 1}},
@@ -320,5 +320,5 @@ def test_v06_signer_rejects_manifest_that_self_binds_signature_file():
     manifest = build_package_manifest_v06(certificate(), FILES)
     bad = deepcopy(manifest)
     bad["files"]["package_signature.json"] = {"sha256": "c" * 64, "size": 10}
-    with pytest.raises(V06PackageError, match="self-referential"):
+    with pytest.raises(V06PackageError, match=r"package_signature\.json.*should not be valid"):
         sign_package_manifest_v06(bad, key)

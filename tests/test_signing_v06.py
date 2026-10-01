@@ -96,7 +96,7 @@ def test_legacy_signature_format_is_not_accepted_as_v06():
         expected_domain=CERTIFICATE_SIGNATURE_DOMAIN,
     )
     assert not result["valid"]
-    assert "unsupported v0.6 signature record format" in result["errors"]
+    assert any("signature_format" in error for error in result["errors"])
 
 
 def test_wrong_public_key_and_pinned_fingerprint_fail_closed():

@@ -2,7 +2,11 @@ from __future__ import annotations
 import re
 from collections import Counter
 
-_TOKEN = re.compile(r"([A-Z][a-z]?)(\d*)")
+# ASCII digits only.  ``\d`` in a ``str`` pattern also matches every Unicode decimal
+# digit (e.g. U+0662 ARABIC-INDIC DIGIT TWO), and ``int()`` converts them, so the
+# formula "H\u0662" used to mean H2 to Python while being ungrammatical for every
+# ASCII-based reading (including the Lean replay executor `PCS.V2.Chemistry`).
+_TOKEN = re.compile(r"([A-Z][a-z]?)([0-9]*)")
 
 
 def parse_formula(formula: str) -> Counter[str]:
@@ -27,7 +31,8 @@ def _side(entries: list[dict]) -> Counter[str]:
     total: Counter[str] = Counter()
     for entry in entries:
         coeff = entry.get("coefficient", 1)
-        if not isinstance(coeff, int) or coeff <= 0:
+        # ``bool`` is a subclass of ``int``: ``true`` must not mean coefficient 1.
+        if isinstance(coeff, bool) or not isinstance(coeff, int) or coeff <= 0:
             raise ValueError("reaction coefficients must be positive integers")
         for element, count in parse_formula(entry["formula"]).items():
             total[element] += coeff * count
