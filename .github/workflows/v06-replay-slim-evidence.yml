@@ -1,0 +1,31 @@
+name: PCS v0.6 replay slim evidence
+
+on:
+  push:
+    branches:
+      - v06/replay-normalized-wire-v2
+
+permissions:
+  contents: read
+
+jobs:
+  replay-regressions:
+    runs-on: ubuntu-slim
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install PCS
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Run replay evidence regressions
+        run: |
+          python -m pytest -q \
+            tests/test_environment_execute_v06.py \
+            tests/test_environment_workspace_v06.py \
+            tests/test_environment_replay_v06.py \
+            tests/test_workflow_replay_v06.py

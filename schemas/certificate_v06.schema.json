@@ -1,0 +1,733 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof-Carrying Science Certificate v0.6 typed scientific contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version",
+    "checker_version",
+    "canonical_json_profile",
+    "semantic_hash_format",
+    "integrity_hash_format",
+    "generated_at",
+    "subject",
+    "mission_scope",
+    "assumptions",
+    "claims",
+    "artifacts",
+    "evidence",
+    "workflow",
+    "workflow_summary",
+    "semantic_hash",
+    "integrity_hash"
+  ],
+  "properties": {
+    "spec_version": {
+      "const": "pcs-0.6"
+    },
+    "checker_version": {
+      "type": "string",
+      "pattern": "^pcs-python-kernel/0\\.6\\.[0-9]+(?:-[A-Za-z0-9._-]+)?$"
+    },
+    "canonical_json_profile": {
+      "const": "pcs-jcs-rfc8785-v1"
+    },
+    "semantic_hash_format": {
+      "const": "pcs-certificate-semantic-sha256-v2"
+    },
+    "integrity_hash_format": {
+      "const": "pcs-certificate-integrity-sha256-v2"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "mission_scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192
+    },
+    "assumptions": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/assumption"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "workflow": {
+      "$ref": "#/$defs/workflow"
+    },
+    "workflow_summary": {
+      "$ref": "#/$defs/workflowSummary"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "integrity_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "environment": {
+      "$ref": "#/$defs/environmentBinding"
+    }
+  },
+  "$defs": {
+    "safeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "idArray": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/safeId"
+      }
+    },
+    "externalPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "namespace",
+        "proposition"
+      ],
+      "properties": {
+        "type": {
+          "const": "external"
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "proposition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        }
+      }
+    },
+    "csvDisjointPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "left_artifact",
+        "right_artifact",
+        "key"
+      ],
+      "properties": {
+        "type": {
+          "const": "csv_disjoint"
+        },
+        "left_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "right_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "stoichTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formula",
+        "coefficient"
+      ],
+      "properties": {
+        "formula": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "coefficient": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        }
+      }
+    },
+    "reactionBalancePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "reactants",
+        "products"
+      ],
+      "properties": {
+        "type": {
+          "const": "reaction_balance"
+        },
+        "reactants": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/stoichTerm"
+          }
+        },
+        "products": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/stoichTerm"
+          }
+        }
+      }
+    },
+    "unitCompatiblePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "left_unit",
+        "right_unit"
+      ],
+      "properties": {
+        "type": {
+          "const": "unit_compatible"
+        },
+        "left_unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "right_unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "pkpdContractPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "model_artifact"
+      ],
+      "properties": {
+        "type": {
+          "const": "pkpd_contract"
+        },
+        "model_artifact": {
+          "$ref": "#/$defs/safeId"
+        }
+      }
+    },
+    "pkpdReferencePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "model_artifact",
+        "output_artifact",
+        "time_column",
+        "concentration_column",
+        "effect_column",
+        "rel_tol",
+        "abs_tol"
+      ],
+      "properties": {
+        "type": {
+          "const": "pkpd_reference_match"
+        },
+        "model_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "output_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "time_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "concentration_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "effect_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "rel_tol": {
+          "type": "number",
+          "minimum": 0
+        },
+        "abs_tol": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "predicate": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/csvDisjointPredicate"
+        },
+        {
+          "$ref": "#/$defs/reactionBalancePredicate"
+        },
+        {
+          "$ref": "#/$defs/unitCompatiblePredicate"
+        },
+        {
+          "$ref": "#/$defs/pkpdContractPredicate"
+        },
+        {
+          "$ref": "#/$defs/pkpdReferencePredicate"
+        },
+        {
+          "$ref": "#/$defs/externalPredicate"
+        }
+      ]
+    },
+    "assumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "scope"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/safeId"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        },
+        "rationale": {
+          "type": "string",
+          "maxLength": 16384
+        },
+        "scope": {
+          "$ref": "#/$defs/idArray"
+        }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS",
+            "COMPUTATIONALLY_SUPPORTED",
+            "EMPIRICALLY_VALIDATED_WITHIN_SCOPE",
+            "MIXED_SUPPORT_UNDER_ASSUMPTIONS",
+            "OPEN",
+            "FALSIFIED_OR_CHECK_FAILED"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "kind",
+        "predicate",
+        "required_evidence",
+        "assumptions",
+        "assessment"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/safeId"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        },
+        "kind": {
+          "enum": [
+            "formal",
+            "computational",
+            "empirical",
+            "mixed"
+          ]
+        },
+        "predicate": {
+          "$ref": "#/$defs/predicate"
+        },
+        "required_evidence": {
+          "$ref": "#/$defs/idArray"
+        },
+        "assumptions": {
+          "$ref": "#/$defs/idArray"
+        },
+        "assessment": {
+          "$ref": "#/$defs/assessment"
+        }
+      }
+    },
+    "metadataScalar": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "role",
+        "sha256",
+        "media_type"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/safeId"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "source_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "storage_key": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{24}$"
+        },
+        "metadata": {
+          "type": "object",
+          "maxProperties": 64,
+          "additionalProperties": {
+            "$ref": "#/$defs/metadataScalar"
+          }
+        }
+      }
+    },
+    "builtinCheckSpec": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/csvDisjointPredicate"
+        },
+        {
+          "$ref": "#/$defs/reactionBalancePredicate"
+        },
+        {
+          "$ref": "#/$defs/unitCompatiblePredicate"
+        },
+        {
+          "$ref": "#/$defs/pkpdContractPredicate"
+        },
+        {
+          "$ref": "#/$defs/pkpdReferencePredicate"
+        }
+      ]
+    },
+    "externalCheckSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "validator",
+        "predicate"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "external_formal_proof",
+            "external_empirical_validation",
+            "external_statistical_validation",
+            "provenance_record"
+          ]
+        },
+        "validator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "predicate": {
+          "$ref": "#/$defs/predicate"
+        }
+      }
+    },
+    "checkSpec": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/builtinCheckSpec"
+        },
+        {
+          "$ref": "#/$defs/externalCheckSpec"
+        }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "claim_ids",
+        "outcome",
+        "checker",
+        "predicate",
+        "artifact_ids",
+        "check_spec"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/safeId"
+        },
+        "kind": {
+          "enum": [
+            "formal_proof",
+            "computational_test",
+            "statistical_validation",
+            "empirical_validation",
+            "provenance"
+          ]
+        },
+        "claim_ids": {
+          "$ref": "#/$defs/idArray"
+        },
+        "outcome": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNVERIFIED"
+          ]
+        },
+        "checker": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "predicate": {
+          "$ref": "#/$defs/predicate"
+        },
+        "artifact_ids": {
+          "$ref": "#/$defs/idArray"
+        },
+        "check_spec": {
+          "$ref": "#/$defs/checkSpec"
+        }
+      }
+    },
+    "workflowContract": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "none"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "namespace",
+            "proposition"
+          ],
+          "properties": {
+            "type": {
+              "const": "external"
+            },
+            "namespace": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "proposition": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 16384
+            }
+          }
+        }
+      ]
+    },
+    "workflowNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "operation",
+        "inputs",
+        "outputs",
+        "contract"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/safeId"
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "inputs": {
+          "$ref": "#/$defs/idArray"
+        },
+        "outputs": {
+          "$ref": "#/$defs/idArray"
+        },
+        "contract": {
+          "$ref": "#/$defs/workflowContract"
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodes"
+      ],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "$ref": "#/$defs/workflowNode"
+          }
+        }
+      }
+    },
+    "workflowSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_count",
+        "topological_order"
+      ],
+      "properties": {
+        "node_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "topological_order": {
+          "$ref": "#/$defs/idArray"
+        }
+      }
+    },
+    "environmentContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "namespace",
+        "proposition"
+      ],
+      "properties": {
+        "type": {
+          "const": "external"
+        },
+        "namespace": {
+          "const": "pcs-manifest-environment-contract-v1"
+        },
+        "proposition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1048576
+        }
+      }
+    },
+    "environmentBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "source_artifact_ids",
+        "contract"
+      ],
+      "properties": {
+        "format": {
+          "const": "pcs-environment-binding-v1"
+        },
+        "source_artifact_ids": {
+          "$ref": "#/$defs/idArray"
+        },
+        "contract": {
+          "$ref": "#/$defs/environmentContract"
+        }
+      }
+    }
+  }
+}

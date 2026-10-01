@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS v0.6 JCS SHA-256 envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "domain",
+    "payload"
+  ],
+  "properties": {
+    "format": {
+      "const": "pcs-jcs-sha256-v1"
+    },
+    "domain": {
+      "enum": [
+        "pcs-certificate-semantic-sha256-v2",
+        "pcs-certificate-integrity-sha256-v2",
+        "pcs-runtime-semantic-sha256-v2",
+        "pcs-intake-semantic-sha256-v2",
+        "pcs-predicate-sha256-v2",
+        "pcs-normalized-decision-sha256-v2",
+        "pcs-normalized-index-sha256-v2"
+      ]
+    },
+    "payload": {}
+  }
+}

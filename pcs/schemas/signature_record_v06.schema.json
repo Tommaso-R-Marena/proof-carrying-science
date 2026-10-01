@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS v0.6 JCS Ed25519 signature record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "signature_format",
+    "algorithm",
+    "public_key_fingerprint",
+    "payload_sha256",
+    "payload",
+    "signature"
+  ],
+  "properties": {
+    "signature_format": {
+      "const": "pcs-ed25519-jcs-v2"
+    },
+    "algorithm": {
+      "const": "Ed25519"
+    },
+    "public_key_fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "domain",
+        "payload"
+      ],
+      "properties": {
+        "format": {
+          "const": "pcs-jcs-ed25519-payload-v1"
+        },
+        "domain": {
+          "enum": [
+            "pcs-certificate-signature-v2",
+            "pcs-package-signature-v2"
+          ]
+        },
+        "payload": {}
+      }
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{86}==$"
+    }
+  }
+}

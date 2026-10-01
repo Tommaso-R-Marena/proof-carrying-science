@@ -43,3 +43,28 @@ jobs:
       - name: Reject admitted proofs
         run: |
           ! grep -R --line-number --fixed-strings 'sorry' formal/PCS.lean formal/PCS
+
+
+  v06-byte-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install PCS and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Frozen v0.6 cross-language byte-contract gate
+        run: python scripts/run_v06_contract_gate.py
+      - name: Upload frozen gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pcs-v06-byte-contract-gate
+          path: results/v06-contract-runs/
+          if-no-files-found: warn

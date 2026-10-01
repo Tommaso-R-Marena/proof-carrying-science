@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+from .jsonio import strict_json_load, StrictJSONError
+
 from .kernel import build_certificate, verify_certificate, AssuranceError
 from .hashing import sha256_file
 from .impact import impact_from_artifacts
@@ -19,6 +21,73 @@ from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
 from .intake import freeze_intake_file, PilotIntakeError
+from .verifier_io_v06 import (
+    V06VerifierIOError,
+    verify_package_directory_end_to_end_v06,
+    write_verification_receipt_v06,
+)
+from .verifier_zip_v06 import (
+    V06BundleVerificationError,
+    verify_package_zip_end_to_end_v06,
+)
+from .bundle_v06 import (
+    V06BundleBuildError,
+    create_verified_bundle_v06,
+)
+from .attest_v06 import V06AttestationError, attest_v06
+from .policy_v06 import V06ReviewerPolicyError
+from .benchmark_v06 import (
+    V06BenchmarkError,
+    run_benchmark_registry_v06,
+    write_benchmark_report_v06,
+)
+from .receipt_signature_v06 import (
+    V06ReceiptSignatureError,
+    sign_verification_receipt_v06,
+    verify_verification_receipt_signature_v06,
+)
+from .quorum_v06 import (
+    V06ReviewQuorumError,
+    verify_review_quorum_v06,
+    write_review_quorum_result_v06,
+)
+from .scheduler_v06 import (
+    SCHEDULER_STRATEGIES_V06,
+    V06SchedulerError,
+    append_telemetry_history_v06,
+    load_telemetry_history_v06,
+    scheduler_report_v06,
+    write_scheduler_report_v06,
+    write_telemetry_v06,
+)
+from .discover_v06 import (
+    V06DiscoveryError,
+    confirm_manifest_draft_v06,
+    discover_project_v06,
+    write_discovery_outputs_v06,
+)
+from .discovery_review_v06 import (
+    V06DiscoveryReviewError,
+    write_discovery_review_v06,
+)
+from .environment_v06 import (
+    V06EnvironmentCaptureError,
+    environment_replay_plan_v06,
+    write_environment_replay_plan_v06,
+    write_environment_replay_script_v06,
+)
+from .environment_replay_v06 import (
+    V06EnvironmentReplayError,
+    environment_from_binding_v06,
+)
+from .environment_workspace_v06 import (
+    V06EnvironmentWorkspaceError,
+    prepare_verified_environment_workspace_v06,
+)
+from .environment_execute_v06 import (
+    V06SandboxReplayError,
+    execute_prepared_replay_workspace_v06,
+)
 
 
 def cmd_certify(args):
@@ -47,6 +116,481 @@ def cmd_verify(args):
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["valid"] else 1
+
+
+
+def _scheduler_context_from_args(args):
+    history = load_telemetry_history_v06(
+        getattr(args, "scheduler_history", None)
+    )
+    telemetry_sink = {}
+    return {
+        "scheduler_strategy": getattr(args, "scheduler", "manifest"),
+        "scheduler_history": history,
+        "bandit_alpha": getattr(args, "bandit_alpha", 1.0),
+        "shadow_bandit": getattr(args, "shadow_bandit", False),
+        "telemetry_sink": telemetry_sink,
+    }, telemetry_sink
+
+
+def _persist_scheduler_telemetry_from_args(args, telemetry):
+    written = None
+    appended = None
+    if not telemetry:
+        return written, appended
+    output = getattr(args, "scheduler_telemetry_out", None)
+    if output:
+        written = write_telemetry_v06(
+            telemetry,
+            output,
+            overwrite=getattr(args, "force_scheduler_telemetry", False),
+        )
+    append_path = getattr(args, "scheduler_telemetry_append", None)
+    if append_path:
+        appended = append_telemetry_history_v06(
+            telemetry,
+            append_path,
+        )
+    return written, appended
+
+
+def _sign_reviewer_receipt_from_args(args, receipt_path):
+    reviewer_private_key = getattr(args, "reviewer_private_key", None)
+    if not reviewer_private_key:
+        return None
+    if receipt_path is None:
+        raise V06ReceiptSignatureError(
+            "--reviewer-private-key requires --receipt so exact receipt bytes can be signed"
+        )
+    signature_output = getattr(args, "receipt_signature", None)
+    if not signature_output:
+        signature_output = str(receipt_path) + ".sig.json"
+    sign_verification_receipt_v06(
+        receipt_path,
+        reviewer_private_key,
+        signature_output,
+        overwrite=getattr(args, "force_receipt_signature", False),
+    )
+    return Path(signature_output).resolve()
+
+
+def cmd_verify_v06(args):
+    try:
+        scheduler_kwargs, telemetry_sink = _scheduler_context_from_args(args)
+        result = verify_package_directory_end_to_end_v06(
+            args.package,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            policy_path=args.policy,
+            **scheduler_kwargs,
+        )
+        telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
+            args,
+            telemetry_sink,
+        )
+        receipt_path = None
+        receipt_signature_path = None
+        if args.receipt:
+            receipt_path = write_verification_receipt_v06(
+                result,
+                args.receipt,
+                overwrite=args.force_receipt,
+            )
+        receipt_signature_path = _sign_reviewer_receipt_from_args(
+            args,
+            receipt_path,
+        )
+    except (
+        OSError,
+        V06VerifierIOError,
+        V06ReviewerPolicyError,
+        V06ReceiptSignatureError,
+        V06SchedulerError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    output = dict(result)
+    if receipt_path is not None:
+        output["receipt_written"] = str(receipt_path)
+    if receipt_signature_path is not None:
+        output["receipt_signature_written"] = str(receipt_signature_path)
+    if telemetry_path is not None:
+        output["scheduler_telemetry_written"] = str(telemetry_path)
+    if telemetry_history_path is not None:
+        output["scheduler_history_appended"] = str(telemetry_history_path)
+    print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result.get("accepted", result["valid"]) else 1
+
+
+def cmd_verify_v06_bundle(args):
+    try:
+        scheduler_kwargs, telemetry_sink = _scheduler_context_from_args(args)
+        result = verify_package_zip_end_to_end_v06(
+            args.bundle,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            policy_path=args.policy,
+            **scheduler_kwargs,
+        )
+        telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
+            args,
+            telemetry_sink,
+        )
+        receipt_path = None
+        receipt_signature_path = None
+        if args.receipt:
+            receipt_path = write_verification_receipt_v06(
+                result,
+                args.receipt,
+                overwrite=args.force_receipt,
+            )
+        receipt_signature_path = _sign_reviewer_receipt_from_args(
+            args,
+            receipt_path,
+        )
+    except (
+        OSError,
+        V06VerifierIOError,
+        V06BundleVerificationError,
+        V06ReviewerPolicyError,
+        V06ReceiptSignatureError,
+        V06SchedulerError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    output = dict(result)
+    if receipt_path is not None:
+        output["receipt_written"] = str(receipt_path)
+    if receipt_signature_path is not None:
+        output["receipt_signature_written"] = str(receipt_signature_path)
+    if telemetry_path is not None:
+        output["scheduler_telemetry_written"] = str(telemetry_path)
+    if telemetry_history_path is not None:
+        output["scheduler_history_appended"] = str(telemetry_history_path)
+    print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result.get("accepted", result["valid"]) else 1
+
+
+def cmd_verify_receipt_v06(args):
+    result = verify_verification_receipt_signature_v06(
+        args.receipt,
+        args.signature,
+        args.reviewer_public_key,
+        expected_reviewer_fingerprint=args.expected_reviewer_fingerprint,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["valid"] else 1
+
+
+
+def cmd_verify_quorum_v06(args):
+    try:
+        result = verify_review_quorum_v06(
+            args.quorum_policy,
+            args.review_set,
+        )
+        if args.output:
+            written = write_review_quorum_result_v06(
+                result,
+                args.output,
+                overwrite=args.force,
+            )
+            result = dict(result)
+            result["result_written"] = str(written)
+    except (OSError, V06ReviewQuorumError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["pass"] else 1
+
+
+def cmd_bundle_v06(args):
+    try:
+        result = create_verified_bundle_v06(
+            args.package,
+            args.output,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            overwrite=args.force,
+        )
+    except (OSError, V06BundleBuildError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_attest_v06(args):
+    try:
+        result = attest_v06(
+            args.manifest,
+            args.output,
+            args.private_key,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            overwrite=args.force,
+        )
+    except (OSError, V06AttestationError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_discover_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        manifest_output = (
+            Path(args.output).resolve()
+            if args.output
+            else root / "pcs-manifest.draft.json"
+        )
+        report_output = (
+            Path(args.report).resolve()
+            if args.report
+            else root / "pcs-discovery.json"
+        )
+        review_output = (
+            Path(args.review).resolve()
+            if args.review
+            else root / "pcs-discovery-review.md"
+        )
+        environment_plan_output = (
+            Path(args.environment_plan).resolve()
+            if args.environment_plan
+            else root / "pcs-environment-plan.json"
+        )
+        result = discover_project_v06(
+            root,
+            subject=args.subject,
+            minimum_confidence=args.minimum_confidence,
+            minimum_workflow_confidence=args.minimum_workflow_confidence,
+        )
+        written = write_discovery_outputs_v06(
+            result,
+            manifest_output=manifest_output,
+            report_output=report_output,
+            overwrite=args.force,
+        )
+        review_path = write_discovery_review_v06(
+            result,
+            review_output,
+            overwrite=args.force,
+        )
+        written["discovery_review"] = str(review_path)
+        environment_plan_path = write_environment_replay_plan_v06(
+            result["environment_capture"],
+            environment_plan_output,
+            overwrite=args.force,
+        )
+        written["environment_plan"] = str(environment_plan_path)
+        draft_path = Path(written["manifest_draft"]).resolve()
+        project_root_flag = (
+            f" --project-root {root}"
+            if draft_path.parent != root
+            else ""
+        )
+        response = {
+            "format": result["format"],
+            "project": str(root),
+            "summary": result["summary"],
+            "unresolved": result["unresolved"],
+            **written,
+            "next": (
+                f"Review {written['manifest_draft']}, then run "
+                f"pcs confirm-v06 {written['manifest_draft']}"
+                f"{project_root_flag} -o {root / 'manifest.json'}"
+            ),
+        }
+    except (
+        OSError,
+        V06DiscoveryError,
+        V06DiscoveryReviewError,
+        V06EnvironmentCaptureError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def _environment_from_document_v06(path: str | Path) -> dict:
+    value = strict_json_load(path)
+    if not isinstance(value, dict):
+        raise V06EnvironmentCaptureError("environment input root must be an object")
+    if isinstance(value.get("environment_capture"), dict):
+        return value["environment_capture"]
+    environment = value.get("environment")
+    if isinstance(environment, dict):
+        if environment.get("format") == "pcs-environment-capture-v1":
+            return environment
+        if environment.get("format") == "pcs-environment-binding-v1":
+            try:
+                return environment_from_binding_v06(environment)
+            except V06EnvironmentReplayError as exc:
+                raise V06EnvironmentCaptureError(str(exc)) from exc
+    if value.get("format") == "pcs-environment-capture-v1":
+        return value
+    raise V06EnvironmentCaptureError(
+        "input does not contain a PCS v0.6 environment capture or binding"
+    )
+
+
+def cmd_prepare_environment_v06(args):
+    try:
+        result = prepare_verified_environment_workspace_v06(
+            args.bundle,
+            args.output,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+        )
+    except (OSError, V06EnvironmentWorkspaceError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_execute_environment_v06(args):
+    try:
+        result = execute_prepared_replay_workspace_v06(
+            args.workspace,
+            args.output,
+            args.public_key,
+            expected_fingerprint=args.expected_signer_fingerprint,
+            runtime=args.runtime,
+            image=args.image,
+            timeout_seconds=args.timeout_seconds,
+            memory=args.memory,
+            cpus=args.cpus,
+            determinism_runs=args.runs,
+        )
+    except (OSError, ValueError, V06VerifierIOError, V06SandboxReplayError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["valid"] else 1
+
+
+def cmd_environment_plan_v06(args):
+    try:
+        environment = _environment_from_document_v06(args.input)
+        plan = environment_replay_plan_v06(environment)
+        result = {
+            "format": plan["format"],
+            "hermeticity": plan["hermeticity"],
+            "required_tools": plan["required_tools"],
+            "steps": plan["steps"],
+            "automatic_execution_permitted_by_pcs": plan[
+                "automatic_execution_permitted_by_pcs"
+            ],
+            "reason": plan["reason"],
+        }
+        if args.output:
+            path = write_environment_replay_plan_v06(
+                environment,
+                args.output,
+                overwrite=args.force,
+            )
+            result["plan_written"] = str(path)
+        if args.script:
+            script = write_environment_replay_script_v06(
+                environment,
+                args.script,
+                overwrite=args.force,
+            )
+            result["review_before_run_script_written"] = str(script)
+    except (
+        OSError,
+        StrictJSONError,
+        V06EnvironmentCaptureError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_confirm_v06(args):
+    try:
+        draft = Path(args.draft).resolve()
+        root = (
+            Path(args.project_root).resolve()
+            if args.project_root
+            else draft.parent
+        )
+        output = (
+            Path(args.output).resolve()
+            if args.output
+            else root / "manifest.json"
+        )
+        result = confirm_manifest_draft_v06(
+            draft,
+            output,
+            project_root=root,
+            overwrite=args.force,
+            allow_empty=args.allow_empty,
+        )
+        result["next"] = (
+            f"pcs attest-v06 {result['manifest']} -o study.pcs.zip "
+            "--private-key <private.pem> --public-key <public.pem>"
+        )
+    except (OSError, V06DiscoveryError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_benchmark_v06(args):
+    try:
+        report = run_benchmark_registry_v06(args.registry)
+        if args.output:
+            out = write_benchmark_report_v06(
+                report,
+                args.output,
+                overwrite=args.force,
+            )
+            report = dict(report)
+            report["report_written"] = str(out)
+    except (OSError, V06BenchmarkError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if report["summary"]["unexpected"] == 0 else 1
+
+
+def cmd_scheduler_report_v06(args):
+    try:
+        history = load_telemetry_history_v06(args.history)
+        report = scheduler_report_v06(
+            history,
+            bandit_alpha=args.bandit_alpha,
+        )
+        if args.output:
+            written = write_scheduler_report_v06(
+                report,
+                args.output,
+                overwrite=args.force,
+            )
+            report = dict(report)
+            report["report_written"] = str(written)
+    except (OSError, V06SchedulerError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
 
 
 def cmd_inspect(args):
@@ -260,6 +804,353 @@ def build_parser():
     v = sub.add_parser("verify", help="independently verify an evidence certificate/package")
     v.add_argument("certificate")
     v.set_defaults(func=cmd_verify)
+
+    d6 = sub.add_parser(
+        "discover-v06",
+        help="scan a scientific project and draft a reviewable PCS v0.6 manifest",
+    )
+    d6.add_argument("project", help="scientific project directory to inspect locally")
+    d6.add_argument("-o", "--output", help="manifest draft path; defaults inside project")
+    d6.add_argument("--report", help="discovery report path; defaults inside project")
+    d6.add_argument(
+        "--review",
+        help="human-readable discovery review Markdown; defaults inside project",
+    )
+    d6.add_argument(
+        "--environment-plan",
+        help="environment replay-plan JSON; defaults inside project",
+    )
+    d6.add_argument("--subject", help="override the discovered project subject")
+    d6.add_argument(
+        "--minimum-confidence",
+        type=float,
+        default=0.95,
+        help="minimum recommendation confidence auto-selected into the draft",
+    )
+    d6.add_argument(
+        "--minimum-workflow-confidence",
+        type=float,
+        default=0.95,
+        help="minimum confidence for static Python/notebook workflow nodes",
+    )
+    d6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace existing discovery outputs",
+    )
+    d6.set_defaults(func=cmd_discover_v06)
+
+    pew6 = sub.add_parser(
+        "prepare-environment-v06",
+        help="verify a v0.6 bundle and materialize a non-executed replay workspace",
+    )
+    pew6.add_argument("bundle", help="verified-delivery candidate .pcs.zip")
+    pew6.add_argument("-o", "--output", required=True, help="new replay workspace directory")
+    pew6.add_argument("--public-key", required=True, help="trusted producer Ed25519 public key PEM")
+    pew6.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted producer public-key fingerprint",
+    )
+    pew6.set_defaults(func=cmd_prepare_environment_v06)
+
+    sew6 = sub.add_parser(
+        "execute-environment-v06",
+        help="sandbox-execute a prepared replay workspace and capture realized environment/output state",
+    )
+    sew6.add_argument("workspace", help="workspace created by prepare-environment-v06")
+    sew6.add_argument("-o", "--output", required=True, help="new realized replay result directory")
+    sew6.add_argument("--public-key", required=True, help="trusted producer Ed25519 public key PEM")
+    sew6.add_argument("--expected-signer-fingerprint", help="pin the accepted producer public-key fingerprint")
+    sew6.add_argument("--runtime", choices=["auto", "docker", "podman"], default="auto")
+    sew6.add_argument("--image", help="existing local OCI image; required when no signed digest-pinned container can be rebuilt offline")
+    sew6.add_argument("--timeout-seconds", type=int, default=300)
+    sew6.add_argument("--memory", default="2g")
+    sew6.add_argument("--cpus", type=float, default=1.0)
+    sew6.add_argument(
+        "--runs",
+        type=int,
+        default=2,
+        help=(
+            "independent fresh replay runs used to test deterministic outputs "
+            "and realized environment; must be 2-5"
+        ),
+    )
+    sew6.set_defaults(func=cmd_execute_environment_v06)
+
+    ep6 = sub.add_parser(
+        "environment-plan-v06",
+        help="inspect or materialize a v0.6 reproducibility-environment reconstruction plan",
+    )
+    ep6.add_argument(
+        "input",
+        help="pcs-discovery.json, manifest.json, certificate.json, or environment capture JSON",
+    )
+    ep6.add_argument("-o", "--output", help="write replay-plan JSON")
+    ep6.add_argument(
+        "--script",
+        help="write a review-before-run shell script; PCS never executes it automatically",
+    )
+    ep6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace existing plan/script outputs",
+    )
+    ep6.set_defaults(func=cmd_environment_plan_v06)
+
+    c6 = sub.add_parser(
+        "confirm-v06",
+        help="confirm a reviewed PCS discovery draft and freeze its artifact snapshot",
+    )
+    c6.add_argument("draft", help="pcs-manifest.draft.json generated by discover-v06")
+    c6.add_argument("-o", "--output", help="confirmed manifest; defaults to project/manifest.json")
+    c6.add_argument(
+        "--project-root",
+        help="project root when the draft is stored elsewhere",
+    )
+    c6.add_argument(
+        "--allow-empty",
+        action="store_true",
+        help="explicitly confirm a draft with no supported claims/checks",
+    )
+    c6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing confirmed manifest",
+    )
+    c6.set_defaults(func=cmd_confirm_v06)
+
+    v6 = sub.add_parser(
+        "verify-v06",
+        help="end-to-end verify a PCS v0.6 package directory",
+    )
+    v6.add_argument("package", help="directory containing the delivered v0.6 package")
+    v6.add_argument("--public-key", required=True, help="trusted Ed25519 public key PEM")
+    v6.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    v6.add_argument(
+        "--policy",
+        help="external reviewer acceptance-policy JSON; does not change PCS validity",
+    )
+    v6.add_argument("--receipt", help="write deterministic JSON verification receipt")
+    v6.add_argument(
+        "--force-receipt",
+        action="store_true",
+        help="explicitly replace an existing receipt",
+    )
+    v6.add_argument(
+        "--reviewer-private-key",
+        help="Ed25519 private key used to sign the exact verification receipt bytes",
+    )
+    v6.add_argument(
+        "--receipt-signature",
+        help="reviewer signature output; default is <receipt>.sig.json",
+    )
+    v6.add_argument(
+        "--force-receipt-signature",
+        action="store_true",
+        help="explicitly replace an existing reviewer receipt signature",
+    )
+    v6.add_argument(
+        "--scheduler",
+        choices=SCHEDULER_STRATEGIES_V06,
+        default="manifest",
+        help="mandatory-check execution order; never changes scientific semantics",
+    )
+    v6.add_argument(
+        "--scheduler-history",
+        help="prior replay telemetry JSONL used only for scheduling",
+    )
+    v6.add_argument(
+        "--scheduler-telemetry-out",
+        help="write this run's observational replay telemetry JSON",
+    )
+    v6.add_argument(
+        "--scheduler-telemetry-append",
+        help="append this run's telemetry as one JSONL history record",
+    )
+    v6.add_argument(
+        "--force-scheduler-telemetry",
+        action="store_true",
+        help="explicitly replace an existing telemetry output file",
+    )
+    v6.add_argument(
+        "--shadow-bandit",
+        action="store_true",
+        help="record contextual-bandit recommendation without using it for execution order",
+    )
+    v6.add_argument(
+        "--bandit-alpha",
+        type=float,
+        default=1.0,
+        help="nonnegative LinUCB exploration coefficient",
+    )
+    v6.set_defaults(func=cmd_verify_v06)
+
+    v6b = sub.add_parser(
+        "verify-v06-bundle",
+        help="safely verify a PCS v0.6 ZIP bundle without extracting it",
+    )
+    v6b.add_argument("bundle", help="delivered PCS v0.6 ZIP archive")
+    v6b.add_argument("--public-key", required=True, help="trusted Ed25519 public key PEM")
+    v6b.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    v6b.add_argument(
+        "--policy",
+        help="external reviewer acceptance-policy JSON; does not change PCS validity",
+    )
+    v6b.add_argument("--receipt", help="write deterministic JSON verification receipt")
+    v6b.add_argument(
+        "--force-receipt",
+        action="store_true",
+        help="explicitly replace an existing receipt",
+    )
+    v6b.add_argument(
+        "--reviewer-private-key",
+        help="Ed25519 private key used to sign the exact verification receipt bytes",
+    )
+    v6b.add_argument(
+        "--receipt-signature",
+        help="reviewer signature output; default is <receipt>.sig.json",
+    )
+    v6b.add_argument(
+        "--force-receipt-signature",
+        action="store_true",
+        help="explicitly replace an existing reviewer receipt signature",
+    )
+    v6b.add_argument(
+        "--scheduler",
+        choices=SCHEDULER_STRATEGIES_V06,
+        default="manifest",
+        help="mandatory-check execution order; never changes scientific semantics",
+    )
+    v6b.add_argument(
+        "--scheduler-history",
+        help="prior replay telemetry JSONL used only for scheduling",
+    )
+    v6b.add_argument(
+        "--scheduler-telemetry-out",
+        help="write this run's observational replay telemetry JSON",
+    )
+    v6b.add_argument(
+        "--scheduler-telemetry-append",
+        help="append this run's telemetry as one JSONL history record",
+    )
+    v6b.add_argument(
+        "--force-scheduler-telemetry",
+        action="store_true",
+        help="explicitly replace an existing telemetry output file",
+    )
+    v6b.add_argument(
+        "--shadow-bandit",
+        action="store_true",
+        help="record contextual-bandit recommendation without using it for execution order",
+    )
+    v6b.add_argument(
+        "--bandit-alpha",
+        type=float,
+        default=1.0,
+        help="nonnegative LinUCB exploration coefficient",
+    )
+    v6b.set_defaults(func=cmd_verify_v06_bundle)
+
+    vr6 = sub.add_parser(
+        "verify-receipt-v06",
+        help="verify an independent reviewer Ed25519 signature over exact v0.6 receipt bytes",
+    )
+    vr6.add_argument("receipt", help="verification receipt JSON")
+    vr6.add_argument("--signature", required=True, help="reviewer receipt signature JSON")
+    vr6.add_argument(
+        "--reviewer-public-key",
+        required=True,
+        help="trusted reviewer Ed25519 public key PEM",
+    )
+    vr6.add_argument(
+        "--expected-reviewer-fingerprint",
+        help="pin the accepted reviewer public-key SHA-256 fingerprint",
+    )
+    vr6.set_defaults(func=cmd_verify_receipt_v06)
+
+    vq6 = sub.add_parser(
+        "verify-quorum-v06",
+        help="verify role-aware multi-reviewer quorum over signed v0.6 receipts",
+    )
+    vq6.add_argument("--quorum-policy", required=True, help="review quorum policy JSON")
+    vq6.add_argument("--review-set", required=True, help="portable review-set JSON")
+    vq6.add_argument("-o", "--output", help="write deterministic quorum result JSON")
+    vq6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing quorum result",
+    )
+    vq6.set_defaults(func=cmd_verify_quorum_v06)
+
+    b6 = sub.add_parser(
+        "bundle-v06",
+        help="create a deterministic verified PCS v0.6 ZIP bundle",
+    )
+    b6.add_argument("package", help="complete PCS v0.6 package directory")
+    b6.add_argument("-o", "--output", required=True, help="output ZIP path")
+    b6.add_argument("--public-key", required=True, help="trusted Ed25519 public key PEM")
+    b6.add_argument(
+        "--expected-signer-fingerprint",
+        help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
+    )
+    b6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing output ZIP",
+    )
+    b6.set_defaults(func=cmd_bundle_v06)
+
+    a6 = sub.add_parser(
+        "attest-v06",
+        help="produce a complete signed, replayed, self-verified PCS v0.6 bundle",
+    )
+    a6.add_argument("manifest", help="PCS project manifest JSON")
+    a6.add_argument("-o", "--output", required=True, help="output v0.6 delivery ZIP")
+    a6.add_argument("--private-key", required=True, help="Ed25519 private signing key PEM")
+    a6.add_argument("--public-key", required=True, help="matching trusted Ed25519 public key PEM")
+    a6.add_argument(
+        "--expected-signer-fingerprint",
+        help="optionally pin the expected raw-public-key SHA-256 fingerprint",
+    )
+    a6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing output ZIP after the replacement self-verifies",
+    )
+    a6.set_defaults(func=cmd_attest_v06)
+
+    bm6 = sub.add_parser(
+        "benchmark-v06",
+        help="run a provenance-bound PCS v0.6 real-world benchmark registry",
+    )
+    bm6.add_argument("registry", help="benchmark registry JSON")
+    bm6.add_argument("-o", "--output", help="write deterministic benchmark report JSON")
+    bm6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing benchmark report",
+    )
+    bm6.set_defaults(func=cmd_benchmark_v06)
+
+    sr6 = sub.add_parser(
+        "scheduler-report-v06",
+        help="analyze chronological replay telemetry and compare scheduling strategies",
+    )
+    sr6.add_argument("history", help="replay telemetry JSONL history")
+    sr6.add_argument("-o", "--output", help="write scheduler analysis JSON")
+    sr6.add_argument("--bandit-alpha", type=float, default=1.0)
+    sr6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing scheduler report",
+    )
+    sr6.set_defaults(func=cmd_scheduler_report_v06)
 
     i = sub.add_parser("inspect", help="human-readable certificate summary")
     i.add_argument("certificate")

@@ -1,0 +1,26 @@
+{
+  "policy_version": "pcs-review-quorum-policy-v1",
+  "min_accepted_reviews": 2,
+  "required_roles": {
+    "computational": 1,
+    "domain": 1
+  },
+  "expected_bundle_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "reviewers": [
+    {
+      "fingerprint": "fdf72a088f18f7399e8c52bce448441501f759a595a86980e5d9a422a01e5d55",
+      "role": "computational",
+      "required_policy_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "fingerprint": "ed23d853125a3acff2782dddf84e018ebc85942ebf328ff1287202a479964207",
+      "role": "domain",
+      "required_policy_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "fingerprint": "defe6330f78fcc11efd0fb28614f0d29d7b60d6e66c25c1c5b0f98fe505fc8bb",
+      "role": "statistical",
+      "required_policy_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}

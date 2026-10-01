@@ -36,13 +36,432 @@ The executable reference kernel can:
 - evaluate reviewer-supplied acceptance policies that remain external to producer bundles;
 - create deterministic evidence ZIPs;
 - safely unpack and independently verify evidence ZIPs with path-traversal, namespace-collision, portability, and size limits;
-- emit reviewer verification receipts binding exact bundle/policy bytes and assurance dimensions;\n- enforce claim-status gates in CI;
+- emit reviewer verification receipts binding exact bundle/policy bytes and assurance dimensions;
+- enforce claim-status gates in CI;
 - scaffold a bounded PK/PD pilot project;
 - perform an environment/reference self-check;
 - generate a complete evidence package, HTML report, optional signature, and deterministic ZIP with one command;
 - validate and replay a restricted one-compartment IV-bolus PK + direct-Emax PD workflow.
 
 The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
+
+
+## Guided v0.6 project onboarding
+
+Scientists no longer need to hand-author a PCS manifest from scratch.
+
+```bash
+pcs discover-v06 ./my-project
+```
+
+PCS scans the project locally, safely inventories regular files, excludes key
+material and common build/environment directories, snapshots SHA-256/size metadata,
+and detects supported patterns such as:
+
+- restricted one-compartment IV-bolus + direct-Emax model JSON;
+- matching `time,concentration,effect` prediction tables;
+- named train/test/validation CSV splits with a shared subject/sample identifier;
+- reaction JSON with reactants/products;
+- explicit left-unit/right-unit compatibility specifications.
+
+The command writes:
+
+```text
+my-project/
+  pcs-manifest.draft.json
+  pcs-discovery.json
+  pcs-discovery-review.md
+```
+
+The draft is intentionally **not attestable**. Review or edit the proposed claims,
+assumptions, checks, artifact selection, and workflow first, then explicitly confirm:
+
+```bash
+pcs confirm-v06 ./my-project/pcs-manifest.draft.json
+```
+
+This writes `my-project/manifest.json` only after re-hashing every selected
+artifact against the discovery snapshot. `attest-v06` independently checks the
+same snapshot again, so a file changed after human confirmation cannot be silently
+signed.
+
+The discovery engine is a usability/recommendation layer, not a scientific verdict.
+Confidence scores select only high-confidence supported patterns by default; the
+scientist remains responsible for the meaning of the confirmed claims.
+
+Static Python/Jupyter workflow discovery plus conservative review-only R mapping now complements the file-pattern detectors.
+The CLI parses source with Python ASTs without importing or executing user code,
+resolves conservative local file reads/writes, drafts artifact-dependency workflow
+nodes, reports dynamic/ambiguous references instead of guessing, and keeps partial
+inferences below the default 0.95 auto-selection threshold. Confirmed workflow
+inferences are carried into the signed certificate as explicit static-only
+provenance.
+
+The Markdown review summarizes selected checks, source/artifact flow, unresolved items, and a Mermaid graph for human review before confirmation.
+
+Reviewer verification independently reconstructs the delivered source tree and re-runs static workflow analysis on the exact packaged bytes. Human-confirmed workflow nodes therefore have to survive a dedicated `workflow_replay` stage before ordinary scientific evidence replay. Clean AST mappings use exact-set matching; partial/R/browser mappings use a weaker claimed-subset contract where every signed edge still must be rediscovered.
+
+See `docs/STATIC_WORKFLOW_DISCOVERY_V06.md`.
+
+## v0.6 end-to-end reviewer verification
+
+The v0.6 research line exposes one fail-closed reviewer command for a delivered
+package directory:
+
+```bash
+pcs verify-v06 delivered-package \
+  --public-key trusted-reviewer-key.pem \
+  --expected-signer-fingerprint <sha256-of-trusted-ed25519-public-key> \
+  --receipt verification-receipt.json
+```
+
+The command verifies, in order:
+
+1. exact canonical JCS bytes for the certificate, signatures and manifest;
+2. the certificate Ed25519 signature;
+3. the exact signed package member set, sizes, SHA-256 hashes and certificate binding;
+4. fresh replay of all supported scientific evidence;
+5. exact equality of the delivered normalized decision set with the replay-derived set.
+
+Exit codes are stable:
+
+- `0`: the complete v0.6 verification chain accepted;
+- `1`: the package was read successfully but verification rejected it;
+- `2`: an operational/input error prevented verification.
+
+Verification receipts are deterministic JSON derived from the verification result.
+Existing receipt files are not overwritten unless `--force-receipt` is supplied
+explicitly.
+
+For reviewer deployments, pin `--expected-signer-fingerprint` rather than trusting
+an arbitrary public key delivered inside the same package.
+
+
+### Build a deterministic v0.6 delivery bundle
+
+A complete, already-signed v0.6 package directory can be converted into the
+canonical delivery ZIP with:
+
+```bash
+pcs bundle-v06 package-directory \
+  -o delivery.zip \
+  --public-key trusted-public-key.pem \
+  --expected-signer-fingerprint <sha256-of-trusted-ed25519-public-key>
+```
+
+The builder first runs the full v0.6 end-to-end verifier. It refuses to emit an
+archive unless the directory passes signature verification, exact package binding,
+fresh scientific replay, and normalized-set regeneration.
+
+The emitted archive contains exactly the manifest-signed members plus:
+
+```text
+certificate_signature.json
+package_manifest.json
+package_signature.json
+```
+
+ZIP bytes are deterministic: members are sorted, stored without compression, use a
+fixed 1980 timestamp, fixed Unix file mode and fixed ZIP version metadata, with no
+extra fields or comments. Rebuilding the same verified package therefore produces
+the same ZIP bytes and SHA-256.
+
+The builder also refuses unsigned extras, symlinks, output inside the package
+directory, accidental overwrite, and apparent private-key material. Use `--force`
+only when intentionally replacing an existing delivery ZIP.
+
+Publication is failure-atomic: PCS writes the candidate ZIP to a temporary sibling,
+runs the extraction-free v0.6 verifier against those exact archive bytes, checks the
+verifier's `bundle_sha256` against the candidate, and only then atomically publishes
+the requested output path. A failed post-build verification deletes the candidate
+and leaves any previous output untouched.
+
+### Verify the delivered v0.6 ZIP directly
+
+A reviewer does not need to extract the archive first:
+
+```bash
+pcs verify-v06-bundle delivered-package.zip \
+  --public-key trusted-reviewer-key.pem \
+  --expected-signer-fingerprint <sha256-of-trusted-ed25519-public-key> \
+  --receipt verification-receipt.json
+```
+
+The v0.6 ZIP verifier never calls `extractall` or writes archive members to a
+temporary filesystem. It validates the archive namespace, rejects traversal,
+duplicate and cross-platform-colliding names, symlinks, encrypted members,
+unsupported compression methods and resource-limit violations, then streams each
+member under bounded uncompressed-size limits and sends the exact bytes to the
+end-to-end verifier.
+
+The receipt additionally binds `bundle_sha256`, the SHA-256 of the exact ZIP
+file supplied by the reviewer.
+
+## v0.6 MVP workflow
+
+The v0.6 path now supports the complete producer-to-reviewer loop.
+
+Producer:
+
+```bash
+pcs keygen \
+  --private-key organization-private.pem \
+  --public-key organization-public.pem
+
+pcs attest-v06 project/manifest.json \
+  -o study.pcs.zip \
+  --private-key organization-private.pem \
+  --public-key organization-public.pem
+```
+
+`attest-v06` performs the complete bounded workflow:
+
+```text
+manifest + source artifacts
+        ↓
+copy exact artifacts into package namespace
+        ↓
+run supported checks against the copied bytes
+        ↓
+build typed pcs-0.6 certificate
+        ↓
+recompute claim assessments
+        ↓
+derive normalized decision set
+        ↓
+sign certificate
+        ↓
+build + sign exact package manifest
+        ↓
+independently verify generated directory
+        ↓
+build deterministic ZIP
+        ↓
+verify exact candidate ZIP
+        ↓
+atomically publish study.pcs.zip
+```
+
+Reviewer:
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-organization-public.pem \
+  --expected-signer-fingerprint <trusted-fingerprint> \
+  --receipt verification-receipt.json
+```
+
+The initial MVP producer supports the built-in check types
+`csv_disjoint`, `reaction_balance`, `unit_compatible`,
+`pkpd_contract`, and `pkpd_reference_match`. External formal,
+empirical, statistical, and provenance evidence remain verifier-boundary work and
+are deliberately not auto-promoted to PASS by the producer.
+
+A successful PCS verification means the delivered package is authentic under the
+selected public key, byte-bound, structurally consistent, freshly replayed for the
+supported checks, and exactly agrees with its replay-derived normalized decisions.
+It does not mean every scientific claim passed: a valid PCS package can truthfully
+carry `FALSIFIED_OR_CHECK_FAILED`.
+
+Passing PCS checks does not establish biological adequacy, clinical validity,
+safety, efficacy, GxP validation, or regulatory acceptance.
+
+### Reviewer-controlled acceptance policy
+
+PCS v0.6 keeps package/replay validity separate from reviewer acceptance.
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-public.pem \
+  --expected-signer-fingerprint <trusted-fingerprint> \
+  --policy reviewer-policy.json \
+  --receipt verification-receipt.json
+```
+
+The external policy uses the existing `pcs-acceptance-policy-v1` contract. It can
+require specific claim statuses, require authenticated delivery, and independently
+pin the expected signer fingerprint.
+
+The verification receipt preserves both axes:
+
+```json
+{
+  "valid": true,
+  "accepted": false,
+  "reviewer_policy": {
+    "applied": true,
+    "pass": false,
+    "policy_sha256": "<sha256-of-exact-policy-bytes>",
+    "failures": []
+  }
+}
+```
+
+`valid` answers whether PCS accepted the package/replay/normalized-decision chain.
+`accepted` answers whether that verified result also satisfies the receiving
+reviewer's policy. Policy failure does not rewrite an otherwise valid scientific
+record as cryptographically invalid.
+
+### Real-world benchmark registry
+
+PCS v0.6 now includes a provenance-bound validation runner for public scientific
+examples:
+
+```bash
+pcs benchmark-v06 validation/real_world/registry.json \
+  -o real-world-validation.json
+```
+
+Each case declares its public source/citation, expected outcome, exact fixture
+SHA-256 values, executable PCS check, and interpretation. The runner refuses
+fixture-hash drift before replay, executes the same v0.6 replay kernel used by
+certificates, compares actual with predeclared expected outcome, and emits a
+deterministic report with registry and report semantic hashes.
+
+The initial registry contains five cases:
+
+- Haber-Bosch atom balance — expected PASS;
+- clean UCI Iris split — expected PASS;
+- one-row contaminated Iris split — expected FAIL;
+- Indometh `mg/L` vs `g/m^3` unit equivalence — expected PASS;
+- published IV Indometh subject 1 treated as exact single-exponential output —
+  expected FAIL.
+
+A direct checker-level execution on 2026-09-29 matched all 5 expected outcomes,
+including both negative controls. See
+`results/REAL_WORLD_VALIDATION_2026-09-29.md`.
+
+### Reviewer-signed verification receipts
+
+A producer signature answers **who issued the scientific package**. A reviewer
+signature answers **who independently verified that exact delivery under that exact
+policy and accepted/rejected it**.
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key producer-public.pem \
+  --expected-signer-fingerprint <producer-fingerprint> \
+  --policy reviewer-policy.json \
+  --receipt receipt.json \
+  --reviewer-private-key reviewer-private.pem \
+  --receipt-signature receipt.sig.json
+```
+
+The reviewer signature binds the exact receipt bytes through
+`pcs-reviewer-receipt-ed25519-v1`. Its signed payload commits to the receipt
+SHA-256, bundle SHA-256, certificate semantic/integrity hashes, normalized-index
+hash, reviewer-policy SHA-256, PCS `valid`, and reviewer `accepted`.
+
+A later auditor can verify the review decision without rerunning PCS:
+
+```bash
+pcs verify-receipt-v06 receipt.json \
+  --signature receipt.sig.json \
+  --reviewer-public-key reviewer-public.pem \
+  --expected-reviewer-fingerprint <reviewer-fingerprint>
+```
+
+This signature attests to the review record. It does not make a false scientific
+claim true, elevate assurance, or replace package/replay verification.
+
+### Multi-reviewer quorum approval
+
+PCS v0.6 can aggregate multiple independently signed reviewer receipts without
+allowing those reviewers to alter the underlying PCS scientific verdict.
+
+A quorum policy may require both a total threshold and role-specific thresholds:
+
+```json
+{
+  "policy_version": "pcs-review-quorum-policy-v1",
+  "min_accepted_reviews": 2,
+  "required_roles": {
+    "computational": 1,
+    "domain": 1
+  },
+  "reviewers": [
+    {
+      "fingerprint": "<computational-reviewer-fingerprint>",
+      "role": "computational",
+      "required_policy_sha256": "<computational-policy-sha256>"
+    },
+    {
+      "fingerprint": "<domain-reviewer-fingerprint>",
+      "role": "domain",
+      "required_policy_sha256": "<domain-policy-sha256>"
+    }
+  ]
+}
+```
+
+Each counted review must have:
+
+- a valid reviewer Ed25519 receipt signature;
+- `pcs_valid: true`;
+- `reviewer_accepted: true`;
+- an authorized reviewer fingerprint;
+- the role-specific policy SHA-256 required for that reviewer;
+- the same exact reviewed subject commitments as every other counted review.
+
+PCS groups reviews by exact bundle SHA-256, certificate semantic/integrity hashes,
+and normalized-index semantic hash before evaluating quorum. Reviews from different
+scientific bundles can therefore never be combined into a 2-of-3 result.
+
+Duplicate reviewer identities are disqualified so one key cannot be counted twice.
+
+Portable inputs are supplied through a review-set file:
+
+```bash
+pcs verify-quorum-v06 \
+  --quorum-policy policies/review_quorum_v06.example.json \
+  --review-set review-set.json \
+  -o quorum-result.json
+```
+
+The result records the exact quorum-policy SHA-256, review-set SHA-256, reviewer
+roles, subject groups, accepted-review count, and selected scientific subject.
+
+This layer is governance over already verified reviewer receipts. It does not
+rewrite claim status or elevate PCS assurance classes.
+
+### Adaptive replay scheduling
+
+PCS v0.6 now includes a telemetry-driven ordering layer for mandatory replay checks.
+It can run deterministic baselines or a contextual LinUCB-style bandit, but the
+scheduler never changes which evidence is required or how a scientific check is
+evaluated.
+
+Recommended initial deployment is shadow mode:
+
+```bash
+pcs verify-v06-bundle study.pcs.zip \
+  --public-key trusted-public.pem \
+  --scheduler manifest \
+  --shadow-bandit \
+  --scheduler-history scheduler-history.jsonl \
+  --scheduler-telemetry-append scheduler-history.jsonl
+```
+
+Analyze accumulated history with:
+
+```bash
+pcs scheduler-report-v06 scheduler-history.jsonl \
+  -o scheduler-report.json
+```
+
+Implemented strategies are `manifest`, `cheapest-first`,
+`failure-rate-first`, `failure-per-second`, and `bandit`.
+
+Active bandit ordering has a cold-start guard: it falls back to the deterministic
+failure-per-second baseline until there are at least 20 eligible observations
+overall and 3 observations for every check type in the current package.
+
+All mandatory checks still execute and replay results are reconstructed in
+certificate order before claim assessment. Persisted telemetry hashes evidence IDs
+and contains timing/size/outcome metadata only; it is not part of scientific truth
+semantics.
+
+See `docs/ADAPTIVE_SCHEDULER_V06.md`.
 
 ## Pre-result pilot commitment
 
@@ -199,3 +618,72 @@ Today, the Python checker is part of the TCB. The research program is to shrink 
 - No GxP validation or regulator endorsement is claimed.
 
 For launch work, start with `docs/FOUNDING_OFFER.md`, `docs/DESIGN_PARTNER_PILOT.md`, `docs/PILOT_OPERATIONS_RUNBOOK.md`, `docs/DATA_HANDLING_FOR_PILOTS.md`, and `docs/LAUNCH_READINESS_SCORECARD.md`.
+
+
+## Reproducibility environment capture
+
+Guided v0.6 onboarding now captures the declared software environment alongside
+scientific artifacts and static workflow provenance.
+
+```bash
+pcs discover-v06 ./my-project
+pcs environment-plan-v06 ./my-project/pcs-discovery.json \
+  -o environment-plan.json \
+  --script reconstruct-environment.sh
+```
+
+The environment layer recognizes Python/R dependency declarations, common lockfiles,
+Python/R interpreter constraints, Conda/Nix environment specifications, and
+Dockerfile/Containerfile base-image pinning. It distinguishes loose declarations
+from stronger lock/hash/digest evidence and emits one of:
+
+```text
+strongly_pinned
+container_base_pinned
+locked_application_dependencies
+hash_pinned_dependencies
+declared_dependencies
+environment_unspecified
+```
+
+The generated reconstruction script is **review-before-run**. PCS verification never
+runs package managers, container builds, or project installation code automatically.
+
+After full bundle verification, a reviewer can materialize the exact signed
+project-relative artifact tree plus the bound environment plan and review-before-run
+script:
+
+```bash
+pcs prepare-environment-v06 study.pcs.zip \
+  -o replay-workspace \
+  --public-key trusted-public.pem \
+  --expected-signer-fingerprint <fingerprint>
+```
+
+Workspace preparation is still non-executing. The workspace includes
+`pcs-environment-workspace.json`, the verification receipt, exact signed source
+artifacts, `pcs-environment-plan.json`, and `reconstruct-environment.sh`. It is
+bound to the delivery bundle SHA-256, certificate hashes, normalized-index hash, and
+producer fingerprint.
+
+Confirmed guided manifests bind the environment source artifacts and canonical
+`pcs-environment-capture-v1` proposition into the signed certificate as
+`pcs-environment-binding-v1`.
+
+Independent verification now executes:
+
+```text
+package_binding
+→ environment_replay
+→ workflow_replay
+→ scientific replay
+→ normalized_set
+```
+
+`environment_replay` reconstructs the exact delivered environment source tree and
+freshly regenerates the environment capture. A fully re-hashed and re-signed false
+dependency/interpreter/container claim is therefore expected to fail before workflow
+or scientific replay.
+
+Normative boundary and supported formats:
+`docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
