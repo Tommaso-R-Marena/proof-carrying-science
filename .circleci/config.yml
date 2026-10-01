@@ -14,7 +14,7 @@ commands:
             python -m pip install -e .
 
 jobs:
-  test-environment-contracts:
+  restoration-test-1:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -30,10 +30,52 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install -e ".[dev]"
       - run:
-          name: Test environment capture and restoration binding
+          name: test_vendored_python_wheels_are_signed_environment_sources
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_v06.py
+            python -m pytest -q tests/test_environment_v06.py::test_vendored_python_wheels_are_signed_environment_sources
+
+  restoration-test-2:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install test environment
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python3 python3-venv python3-pip
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: test_vendored_r_repository_payloads_are_signed_environment_sources
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_v06.py::test_vendored_r_repository_payloads_are_signed_environment_sources
+
+  restoration-test-3:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install test environment
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python3 python3-venv python3-pip
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: test_discovery_promotes_vendored_restoration_artifacts_into_manifest
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_v06.py::test_discovery_promotes_vendored_restoration_artifacts_into_manifest
 
   test-environment-executor:
     machine:
@@ -248,15 +290,21 @@ jobs:
 workflows:
   restoration-and-abi-evidence:
     jobs:
-      - test-environment-contracts:
+      - restoration-test-1:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
+      - restoration-test-2:
+          filters: *pcs_branch
+      - restoration-test-3:
+          filters: *pcs_branch
       - test-environment-executor:
           filters: *pcs_branch
       - produce-python-wheel:
           requires:
-            - test-environment-contracts
+            - restoration-test-1
+            - restoration-test-2
+            - restoration-test-3
             - test-environment-executor
           filters: *pcs_branch
       - replay-python-amd64:
@@ -274,7 +322,9 @@ workflows:
           filters: *pcs_branch
       - produce-r-renv:
           requires:
-            - test-environment-contracts
+            - restoration-test-1
+            - restoration-test-2
+            - restoration-test-3
             - test-environment-executor
           filters: *pcs_branch
       - replay-r-renv-amd64:
