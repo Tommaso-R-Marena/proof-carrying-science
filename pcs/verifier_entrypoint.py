@@ -14,6 +14,10 @@ def main() -> None:
     )
     parser.add_argument("bundle")
     parser.add_argument("--trust", required=True, help="pcs-verifier-trust-v1 JSON")
+    parser.add_argument(
+        "--lean-authority",
+        help="receiver-owned pcs-lean-authority executable; defaults to embedded authority",
+    )
     parser.add_argument("--receipt", help="write deterministic verification receipt JSON")
     parser.add_argument("--force-receipt", action="store_true")
     args = parser.parse_args()
@@ -23,6 +27,7 @@ def main() -> None:
             args.trust,
             receipt=args.receipt,
             overwrite_receipt=args.force_receipt,
+            lean_authority_path=args.lean_authority,
         )
     except Exception as exc:
         print(f"ERROR: {type(exc).__name__}: {exc}", file=sys.stderr)
