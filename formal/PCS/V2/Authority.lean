@@ -101,6 +101,38 @@ def acceptPCSWithTranscript (t : AuthorityTranscript) (T : TrustAnchor)
   | none => none
   | some r => if transcriptCovers t r then some r else none
 
+/-- Fail-closed diagnostic mirror of `acceptPCSWithTranscript`.  This is not an
+    alternate verifier: `ACCEPT` is returned exactly when the same stage predicates
+    used by the authority succeed; every other result names the first rejecting stage. -/
+def diagnosePCSWithTranscript (t : AuthorityTranscript) (T : TrustAnchor)
+    (inp : PackageInput) : String :=
+  let O := transcriptOracles t
+  match verifyPackage O.unicode O.ed25519 T.pk T.expected inp with
+  | none => "package"
+  | some pr =>
+    match decodeCertModel pr.cert with
+    | none => "certificate_model"
+    | some m =>
+      match envStage O.capture pr.cert m inp.files with
+      | none => "environment"
+      | some _ =>
+        if O.workflow (.obj pr.cert.members) inp.files then
+          match artifactTable m inp.files with
+          | none => "artifact_table"
+          | some table =>
+            if replayOK O.exec pr.cert m table then
+              match verifyNormalizedSet inp.files with
+              | none => "normalized_set"
+              | some (i, ps) =>
+                if normalizedOK pr.cert m i ps then
+                  let r : AcceptedResult :=
+                    { pkg := pr, model := m, table := table, env := (envStage O.capture pr.cert m inp.files).getD none,
+                      index := i, claims := ps }
+                  if transcriptCovers t r then "ACCEPT" else "transcript_binding"
+                else "normalized"
+            else "replay"
+        else "workflow"
+
 theorem acceptPCSWithTranscript_implies_acceptPCS {t : AuthorityTranscript} {T : TrustAnchor}
     {inp : PackageInput} {r : AcceptedResult}
     (h : acceptPCSWithTranscript t T inp = some r) :
