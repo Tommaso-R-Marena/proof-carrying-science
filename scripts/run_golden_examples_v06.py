@@ -19,6 +19,7 @@ DEMO_KEY_SEED = hashlib.sha256(b"PCS deterministic golden examples v1 - NOT A SE
 
 
 def _write_demo_keypair(root: Path) -> tuple[Path, Path, str]:
+    root.mkdir(parents=True, exist_ok=True)
     private = Ed25519PrivateKey.from_private_bytes(DEMO_KEY_SEED)
     public = private.public_key()
     private_path = root / "demo-private.pem"
@@ -65,7 +66,7 @@ def _run_case(root: Path, name: str, mutate=None, *, discover=False) -> dict:
             overwrite=True,
         )
 
-    private, public, fingerprint = _write_demo_keypair(project)
+    private, public, fingerprint = _write_demo_keypair(root)
     bundle = root / f"{name}.pcs.zip"
     produced = attest_v06(
         manifest,
@@ -96,11 +97,13 @@ def _run_case(root: Path, name: str, mutate=None, *, discover=False) -> dict:
     }
 
 
-def build_golden_examples(output: str | Path) -> dict:
+def build_golden_examples(output: str | Path, *, force: bool = False) -> dict:
     out = Path(output).resolve()
-    if out.exists():
+    if out.exists() and any(out.iterdir()):
+        if not force:
+            raise FileExistsError(f"golden-example output directory is not empty: {out}")
         shutil.rmtree(out)
-    out.mkdir(parents=True)
+    out.mkdir(parents=True, exist_ok=True)
 
     positive = _run_case(out, "pkpd-supported")
 
@@ -152,8 +155,9 @@ def build_golden_examples(output: str | Path) -> dict:
 def main() -> int:
     p = argparse.ArgumentParser(description="Build and independently verify the three canonical PCS v0.6 demo cases.")
     p.add_argument("-o", "--output", default="golden-demo-run")
+    p.add_argument("--force", action="store_true", help="replace an existing non-empty output directory")
     args = p.parse_args()
-    report = build_golden_examples(args.output)
+    report = build_golden_examples(args.output, force=args.force)
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0
 
