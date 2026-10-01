@@ -19,7 +19,7 @@ from .canonical_json import canonicalize_jcs_bytes
 LEAN_AUTHORITY_TRANSCRIPT_FORMAT_V06 = "pcs-lean-authority-observations-v1"
 LEAN_AUTHORITY_RESULT_FORMAT_V06 = "pcs-lean-authority-result-v1"
 LEAN_AUTHORITY_ENV_V06 = "PCS_LEAN_AUTHORITY_BIN"
-LEAN_AUTHORITY_TIMEOUT_SECONDS_V06 = 300
+LEAN_AUTHORITY_TIMEOUT_SECONDS_V06 = 900
 
 
 class V06LeanAuthorityError(RuntimeError):

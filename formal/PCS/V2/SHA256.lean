@@ -114,9 +114,34 @@ def compress (hs : List UInt32) (block : List UInt8) : List UInt32 :=
 def wordBytes (x : UInt32) : List UInt8 :=
   [(x >>> 24).toUInt8, (x >>> 16).toUInt8, (x >>> 8).toUInt8, x.toUInt8]
 
-/-- SHA-256 of a byte list. -/
+/-- Tail-recursive block compression.  Unlike `chunks l |>.foldl`, this does
+    not retain a second whole-message list of 64-byte blocks while hashing large
+    artifacts. -/
+def compressBlocks : List UInt8 → List UInt32 → List UInt32
+  | [], hs => hs
+  | a :: l, hs =>
+      compressBlocks ((a :: l).drop 64) (compress hs ((a :: l).take 64))
+termination_by l => l.length
+decreasing_by simp; omega
+
+/-- The tail-recursive block fold is extensionally identical to the original
+    `chunks(...).foldl compress` specification. -/
+theorem compressBlocks_eq_chunks_foldl : ∀ (l : List UInt8) (hs : List UInt32),
+    compressBlocks l hs = (chunks l).foldl compress hs
+  | [], hs => by simp [compressBlocks, chunks]
+  | a :: l, hs => by
+      rw [compressBlocks.eq_def, chunks.eq_def]
+      simp only [List.foldl_cons]
+      exact compressBlocks_eq_chunks_foldl ((a :: l).drop 64)
+        (compress hs ((a :: l).take 64))
+termination_by l hs => l.length
+decreasing_by simp; omega
+
+/-- SHA-256 of a byte list.  Runtime evaluation uses the tail-recursive block fold;
+    `compressBlocks_eq_chunks_foldl` fixes its semantics to the original direct
+    FIPS transcription. -/
 def sha256 (msg : List UInt8) : List UInt8 :=
-  ((chunks (pad msg)).foldl compress H0).flatMap wordBytes
+  (compressBlocks (pad msg) H0).flatMap wordBytes
 
 /-- Lower-case hex SHA-256, i.e. Python `hashlib.sha256(b).hexdigest()`. -/
 def sha256Hex (msg : ByteArray) : String := PCS.V2.Hex.hexEncode (sha256 msg.data.toList)
@@ -185,6 +210,7 @@ theorem foldl_compress_length : ∀ (bs : List (List UInt8)) (hs : List UInt32),
 
 theorem sha256_length (msg : List UInt8) : (sha256 msg).length = 32 := by
   unfold sha256
+  rw [compressBlocks_eq_chunks_foldl]
   have h8 := foldl_compress_length (chunks (pad msg)) H0 (by simp [H0])
   generalize (chunks (pad msg)).foldl compress H0 = hs at h8
   match hs, h8 with

@@ -81,8 +81,11 @@ theorem sha256_collision_is_block_collision {m₁ m₂ : List UInt8} (h₁ : m�
     (h₂ : m₂.length < 2 ^ 61) (hne : m₁ ≠ m₂) (h : sha256 m₁ = sha256 m₂) :
     chunks (pad m₁) ≠ chunks (pad m₂) ∧
       ((chunks (pad m₁)).foldl compress H0).flatMap wordBytes =
-        ((chunks (pad m₂)).foldl compress H0).flatMap wordBytes :=
-  ⟨fun hc => hne (chunks_pad_injective h₁ h₂ hc), h⟩
+        ((chunks (pad m₂)).foldl compress H0).flatMap wordBytes := by
+  have hblocks := h
+  unfold sha256 at hblocks
+  rw [compressBlocks_eq_chunks_foldl, compressBlocks_eq_chunks_foldl] at hblocks
+  exact ⟨fun hc => hne (chunks_pad_injective h₁ h₂ hc), hblocks⟩
 
 /-! ## Block parsing and message schedule -/
 

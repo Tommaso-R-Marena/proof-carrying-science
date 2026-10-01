@@ -1,6 +1,8 @@
 version: 2.1
 
 commands:
+  # Every restoration producer and consumer crosses an authority-gated v0.6
+  # attestation/verification boundary, so Lean is part of the shared setup.
   setup-pcs:
     steps:
       - run:
@@ -12,6 +14,14 @@ commands:
             . .venv/bin/activate
             python -m pip install --upgrade pip
             python -m pip install -e .
+      - run:
+          name: Build mandatory Lean authority
+          command: |
+            curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+            echo 'export PATH="$HOME/.elan/bin:$PATH"' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            cd formal
+            lake build pcs-lean-authority
 
 jobs:
   product-demo-hardening:
@@ -322,6 +332,7 @@ workflows:
               only:
                 - formal/v06-e2e-refinement
                 - formal/lean-authoritative-production
+                - fix/restoration-shared-lean
 
   product-demo-hardening:
     jobs:
@@ -332,6 +343,7 @@ workflows:
                 - main
                 - product/p0-p1-demo-hardening
                 - formal/lean-authoritative-production
+                - fix/restoration-shared-lean
 
   restoration-and-abi-evidence:
     jobs:
@@ -343,6 +355,7 @@ workflows:
                 - main
                 - formal/integrate-wire-v1-main
                 - formal/lean-authoritative-production
+                - fix/restoration-shared-lean
       - restoration-regression:
           filters: &pcs_branch
             branches:
@@ -350,6 +363,7 @@ workflows:
                 - main
                 - release/main-wiring
                 - fix/restoration-lean-authority
+                - fix/restoration-shared-lean
       - produce-python-wheel:
           requires: [restoration-regression]
           filters: *pcs_branch
