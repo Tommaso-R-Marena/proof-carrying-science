@@ -11,10 +11,10 @@ dependencies = ["cryptography>=42", "jsonschema>=4.23"]
 license = {text = "Apache-2.0"}
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest>=8"]\nstandalone = ["pyinstaller>=6.11"]
 
 [project.scripts]
-pcs = "pcs.cli:main"
+pcs = "pcs.cli:main"\npcs-verifier-v06 = "pcs.verifier_entrypoint:main"
 
 [tool.setuptools.packages.find]
 include = ["pcs*"]
