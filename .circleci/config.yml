@@ -98,6 +98,58 @@ jobs:
             . .venv/bin/activate
             python -m pytest -q tests/test_environment_execute_v06.py
 
+  probe-python-wheel-restore:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Probe dual-architecture wheel resolution and offline restore
+          command: |
+            set -eu
+            rm -rf /tmp/wheel-probe
+            mkdir -p /tmp/wheel-probe/wheelhouse
+            . .venv/bin/activate
+            python -m pip download --disable-pip-version-check --only-binary=:all: --no-deps               --dest /tmp/wheel-probe/wheelhouse               --platform manylinux2014_x86_64 --implementation cp --python-version 312 --abi cp312               'orjson>=3.10,<4'
+            VERSION=$(python - <<'PY'
+            import re
+            from pathlib import Path
+            wheels=list(Path("/tmp/wheel-probe/wheelhouse").glob("orjson-*.whl"))
+            assert len(wheels)==1, wheels
+            m=re.match(r"orjson-([0-9][^-]*)-",wheels[0].name,re.I)
+            assert m, wheels[0].name
+            print(m.group(1))
+            PY
+            )
+            python -m pip download --disable-pip-version-check --only-binary=:all: --no-deps               --dest /tmp/wheel-probe/wheelhouse               --platform manylinux2014_aarch64 --implementation cp --python-version 312 --abi cp312               "orjson==$VERSION"
+            python - <<'PY'
+            from pathlib import Path
+            import hashlib,re
+            wheels=sorted(Path("/tmp/wheel-probe/wheelhouse").glob("orjson-*.whl"))
+            assert len(wheels)==2, [x.name for x in wheels]
+            versions={re.match(r"orjson-([0-9][^-]*)-",w.name,re.I).group(1) for w in wheels}
+            assert len(versions)==1, versions
+            lines=[f"orjson=={next(iter(versions))} \\"]
+            for i,w in enumerate(wheels):
+                h=hashlib.sha256(w.read_bytes()).hexdigest()
+                lines.append(f"    --hash=sha256:{h}" + (" \\" if i < len(wheels)-1 else ""))
+            Path("/tmp/wheel-probe/requirements.lock").write_text("\n".join(lines)+"\n")
+            PY
+            docker pull python:3.12-slim-bookworm
+            DIGEST=$(docker buildx imagetools inspect python:3.12-slim-bookworm | awk '/^Digest:/ {print $2; exit}')
+            cat > /tmp/wheel-probe/Dockerfile <<EOF
+            FROM docker.io/library/python@$DIGEST
+            ENV PYTHONDONTWRITEBYTECODE=1 PIP_DISABLE_PIP_VERSION_CHECK=1
+            COPY wheelhouse /wheelhouse
+            COPY requirements.lock /requirements.lock
+            RUN python -m pip install --no-compile --no-index --find-links=/wheelhouse --require-hashes -r /requirements.lock
+            EOF
+            docker pull "docker.io/library/python@$DIGEST"
+            docker build --network=none --no-cache --pull=false --provenance=false --sbom=false               -t pcs-wheel-probe /tmp/wheel-probe
+            docker run --rm --network=none pcs-wheel-probe               python -c 'import orjson; print(orjson.__version__)'
+
   produce-python-wheel:
     machine:
       image: ubuntu-2404:2026.05.1
@@ -300,12 +352,16 @@ workflows:
           filters: *pcs_branch
       - test-environment-executor:
           filters: *pcs_branch
-      - produce-python-wheel:
+      - probe-python-wheel-restore:
           requires:
             - restoration-test-1
             - restoration-test-2
             - restoration-test-3
             - test-environment-executor
+          filters: *pcs_branch
+      - produce-python-wheel:
+          requires:
+            - probe-python-wheel-restore
           filters: *pcs_branch
       - replay-python-amd64:
           requires:
