@@ -88,6 +88,10 @@ from .environment_execute_v06 import (
     V06SandboxReplayError,
     execute_prepared_replay_workspace_v06,
 )
+from .local_verify_v06 import (
+    V06LocalVerifyError,
+    verify_local_bundle_v06,
+)
 
 
 def cmd_certify(args):
@@ -270,6 +274,21 @@ def cmd_verify_v06_bundle(args):
     if telemetry_history_path is not None:
         output["scheduler_history_appended"] = str(telemetry_history_path)
     print(json.dumps(output, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result.get("accepted", result["valid"]) else 1
+
+
+def cmd_verify_local_v06(args):
+    try:
+        result = verify_local_bundle_v06(
+            args.bundle,
+            args.trust,
+            receipt=args.receipt,
+            overwrite_receipt=args.force_receipt,
+        )
+    except (OSError, StrictJSONError, V06LocalVerifyError, V06BundleVerificationError, V06ReviewerPolicyError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result.get("accepted", result["valid"]) else 1
 
 
@@ -1056,6 +1075,16 @@ def build_parser():
         help="nonnegative LinUCB exploration coefficient",
     )
     v6b.set_defaults(func=cmd_verify_v06_bundle)
+
+    vl6 = sub.add_parser(
+        "verify-local-v06",
+        help="one-command v0.6 bundle verification using a pinned trust-profile JSON",
+    )
+    vl6.add_argument("bundle", help="delivered PCS v0.6 ZIP archive")
+    vl6.add_argument("--trust", required=True, help="pcs-verifier-trust-v1 JSON; paths are relative to the profile")
+    vl6.add_argument("--receipt", help="write deterministic verification receipt JSON")
+    vl6.add_argument("--force-receipt", action="store_true")
+    vl6.set_defaults(func=cmd_verify_local_v06)
 
     vr6 = sub.add_parser(
         "verify-receipt-v06",

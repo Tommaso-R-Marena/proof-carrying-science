@@ -1,0 +1,44 @@
+name: Build PCS Reviewer Verifiers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: pcs-verifier-v06-linux
+          - os: windows-latest
+            artifact: pcs-verifier-v06-windows
+          - os: macos-latest
+            artifact: pcs-verifier-v06-macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install standalone build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[standalone]'
+      - name: Build single-file reviewer verifier
+        run: python scripts/build_verifier_artifact.py -o dist/pcs-verifier-v06
+      - name: Smoke-test verifier help
+        shell: bash
+        run: |
+          if [ -f dist/pcs-verifier-v06.exe ]; then
+            dist/pcs-verifier-v06.exe --help
+          else
+            dist/pcs-verifier-v06 --help
+          fi
+      - name: Upload verifier and SHA-256 manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            dist/pcs-verifier-v06*
+          if-no-files-found: error

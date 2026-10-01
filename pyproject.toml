@@ -12,9 +12,11 @@ license = {text = "Apache-2.0"}
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+standalone = ["pyinstaller>=6.11"]
 
 [project.scripts]
 pcs = "pcs.cli:main"
+pcs-verifier-v06 = "pcs.verifier_entrypoint:main"
 
 [tool.setuptools.packages.find]
 include = ["pcs*"]
