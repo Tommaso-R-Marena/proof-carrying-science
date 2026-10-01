@@ -28,9 +28,11 @@ def main (args : List String) : IO UInt32 := do
     match fromArchiveEntries entries with
     | none => IO.println "REJECT"; return 0
     | some inp =>
-      match acceptPCSWithTranscript transcript { pk, expected } inp with
-      | some _ => IO.println "ACCEPT"
-      | none => IO.println "REJECT"
+      let stage := diagnosePCSWithTranscript transcript { pk, expected } inp
+      if stage = "ACCEPT" then
+        IO.println "ACCEPT"
+      else
+        IO.println ("REJECT:" ++ stage)
       return 0
   | _ =>
     IO.eprintln "usage: pcs-lean-authority <package-dir> <pk-b64> <observations.json> [fingerprint]"
