@@ -428,18 +428,22 @@ does not imply byte reproducibility, so PCS must never conflate the two.
 | Lean executable vectors (`#guard`) | 39 in total. `Vectors`: 27 (SHA-256/SHA-512/Ed25519 known-answer and negative vectors, canonical base64, golden-package acceptance, and 17 adversarial package rejections). `ChemistryVectors`: 12 (tokenizer, executor, and golden acceptance with the chemistry replayed in Lean). |
 | differential production-vs-Lean cases | 19 (golden + 17 mutations + wrong key), all passing. 6 mutations were added in this pass. |
 | formal-regression tests | 10, all passing (3 added in this pass) |
-| full Python suite (`PYTHONPATH=. pytest`) | 417 passed, 13 failed. See the note below. |
+| full Python suite | **PASS** in the hosted `formal-v06-integration` CircleCI gate after integration repair. |
+| formerly failing regression group | 99 / 99 passing locally across `test_package_v06`, `test_signing_v06`, `test_kernel`, `test_discover_v06`, `test_environment_v06`, and `test_workflow_discovery_v06`. |
 
-Note on the 13 failing Python tests: they also failed **before** any change in this
-pass, and no file they exercise was modified here. They fall into three groups.
-- **Wording of error messages.** `test_package_v06` (2) and `test_signing_v06` (1)
-  expect a custom error message. JSON-Schema validation now rejects the same input
-  first, with a different message. Rejection still happens.
-- **Example and fixture layout.** `test_kernel` (2) expects an `artifacts/train/…`
-  layout that this snapshot's `examples/biopharma_demo` does not have.
-- **Discovery overwrite guard.** `test_discover_v06` (2), `test_environment_v06` (3)
-  and `test_workflow_discovery_v06` (3) stop at the discovery module's
-  "refusing to overwrite existing confirmed manifest" guard. That module is not part of
-  the verifier and was not touched.
-Separately, `test_v06_byte_contract` starts a subprocess that needs `PYTHONPATH=.`.
-With that variable set it passes, and it is not among the 13.
+Post-integration repair of the 13 pre-existing failures preserved production safety
+behavior rather than weakening it:
+- **Error-message expectations (3).** Tests now accept the current JSON-Schema-first
+  rejection path; invalid inputs are still rejected.
+- **Example/fixture layout (2).** Kernel tests were made self-contained rather than
+  depending on a mutable example-folder layout.
+- **Overwrite-guard cases (7).** Tests that intentionally replace a confirmed manifest
+  now pass `overwrite=True`; the production refusal-by-default guard remains intact.
+- **Workflow-selection threshold (1).** The static-workflow test now explicitly uses
+  the documented `minimum_workflow_confidence=0.90` threshold. Production inference
+  behavior was not loosened.
+
+The exact integrated branch then passed `./scripts/verify_lean.sh`, the full Python
+suite, and all 19 Python↔Lean differential cases in CircleCI before merge. The merge
+commit `91b35d4d81a6e77ea8d20b221b555aafe5988e32` subsequently passed the normal
+mainline formal, product-hardening, and restoration/ABI gates.
