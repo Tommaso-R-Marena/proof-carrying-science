@@ -316,6 +316,107 @@ jobs:
       - run:
           command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion output
 
+  check-python-det-child-valid:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion determinism --determinism-component child_valid
+
+  check-python-det-container-digest:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion determinism --determinism-component container_digest
+
+  check-python-det-dependency-tree:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion determinism --determinism-component dependency_tree
+
+  check-python-det-realized-environment:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion determinism --determinism-component realized_environment
+
+  check-python-det-projection:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign python --assertion determinism --determinism-component projection
+
+  check-r-det-child-valid:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion determinism --determinism-component child_valid
+
+  check-r-det-container-digest:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion determinism --determinism-component container_digest
+
+  check-r-det-dependency-tree:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion determinism --determinism-component dependency_tree
+
+  check-r-det-realized-environment:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion determinism --determinism-component realized_environment
+
+  check-r-det-projection:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - run:
+          command: python scripts/check_restoration_diagnostic.py --root /tmp/pcs-restoration --campaign r --assertion determinism --determinism-component projection
+
+
 workflows:
   restoration-and-abi-evidence:
     jobs:
@@ -381,5 +482,35 @@ workflows:
           requires: [replay-r-renv-amd64, replay-r-renv-arm64]
           filters: *pcs_branch
       - check-r-output:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-python-det-child-valid:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-det-container-digest:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-det-dependency-tree:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-det-realized-environment:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-python-det-projection:
+          requires: [replay-python-amd64, replay-python-arm64]
+          filters: *pcs_branch
+      - check-r-det-child-valid:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-det-container-digest:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-det-dependency-tree:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-det-realized-environment:
+          requires: [replay-r-renv-amd64, replay-r-renv-arm64]
+          filters: *pcs_branch
+      - check-r-det-projection:
           requires: [replay-r-renv-amd64, replay-r-renv-arm64]
           filters: *pcs_branch
