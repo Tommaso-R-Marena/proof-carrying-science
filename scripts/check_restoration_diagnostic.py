@@ -78,22 +78,62 @@ def check_r(root: Path, assertion: str) -> bool:
     raise ValueError(assertion)
 
 
+
+def check_determinism_component(root: Path, campaign: str, component: str) -> bool:
+    rows = _rows(root, "python-results" if campaign == "python" else "r-results")
+    if len(rows) < 2:
+        return False
+    for row in rows:
+        det = row.get("determinism")
+        if not isinstance(det, dict):
+            return False
+        runs = det.get("runs")
+        if not isinstance(runs, list) or len(runs) != 3:
+            return False
+        if component == "child_valid":
+            if not all(run.get("valid") is True for run in runs):
+                return False
+        elif component == "container_digest":
+            values = [run.get("container_image_digest") for run in runs]
+            if len(set(values)) != 1:
+                return False
+        elif component == "dependency_tree":
+            values = [run.get("dependency_tree_sha256") for run in runs]
+            if len(set(values)) != 1:
+                return False
+        elif component == "realized_environment":
+            values = [run.get("realized_environment_semantic_sha256") for run in runs]
+            if len(set(values)) != 1:
+                return False
+        elif component == "projection":
+            values = [run.get("projection_sha256") for run in runs]
+            if len(set(values)) != 1:
+                return False
+        else:
+            raise ValueError(component)
+    return True
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", required=True)
     parser.add_argument("--campaign", choices=["python", "r"], required=True)
     parser.add_argument("--assertion", required=True)
+    parser.add_argument("--determinism-component", choices=["child_valid","container_digest","dependency_tree","realized_environment","projection"])
     args = parser.parse_args()
     root = Path(args.root)
     rows = _rows(root, "python-results" if args.campaign == "python" else "r-results")
-    ok = (
-        check_python(root, args.assertion)
-        if args.campaign == "python"
-        else check_r(root, args.assertion)
-    )
+    if args.determinism_component:
+        ok = check_determinism_component(root, args.campaign, args.determinism_component)
+    else:
+        ok = (
+            check_python(root, args.assertion)
+            if args.campaign == "python"
+            else check_r(root, args.assertion)
+        )
     print(json.dumps({
         "campaign": args.campaign,
         "assertion": args.assertion,
+        "determinism_component": args.determinism_component,
         "ok": ok,
         "rows": rows,
     }, indent=2, sort_keys=True))
