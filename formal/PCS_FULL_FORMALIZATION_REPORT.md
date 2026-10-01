@@ -235,7 +235,7 @@ Python verifier = Lean checker                               CONDITIONAL (Produc
 
 ## D. Axiom audit
 
-Running `lake env lean PCS/V2/Audit.lean` prints the axioms for 65 v0.6 theorems.
+Running `lake env lean PCS/V2/Audit.lean` prints the axioms for 67 v0.6 theorems.
 Every one of them uses only a subset of `{propext, Classical.choice, Quot.sound}`. The
 results are as follows (abbreviated: `[pcq]` = `[propext, Classical.choice, Quot.sound]`,
 `[pq]` = `[propext, Quot.sound]`, `[p]` = `[propext]`).
@@ -429,8 +429,8 @@ does not imply byte reproducibility, so PCS must never conflate the two.
 | Metric | Value |
 |---|---|
 | v0.6 Lean files (`formal/PCS/V2/`) | 31, including the production authority bridge `Authority.lean` |
-| v0.6 Lean declarations (top-level `theorem/def/structure/…`) | 710 |
-| v0.6 theorems | 281 source declarations after adding the two authority-bridge theorems; hosted compilation remains the acceptance criterion |
+| v0.6 Lean declarations (top-level `theorem/def/structure/…`) | 712 |
+| v0.6 theorems | 282 source declarations, including the authority bridge and the proved tail-recursive SHA-256 block-fold equivalence; hosted compilation remains the acceptance criterion |
 | authority integration files | `V2/Authority.lean`, `PCSAuthority.lean`, `pcs/lean_authority_v06.py`, verifier/CLI propagation, standalone embedding, authority tests, and hosted packaging gates |
 | `sorry`/`admit` in the PCS library | 0 |
 | project-specific axioms | 0 |
