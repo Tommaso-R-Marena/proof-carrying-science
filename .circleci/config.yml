@@ -254,6 +254,39 @@ jobs:
             source "$BASH_ENV"
             ./scripts/verify_lean.sh
 
+  formal-v06-integration:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install Python and PCS test environment
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python3 python3-venv python3-pip
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Install Lean 4 toolchain manager
+          command: |
+            curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+            echo 'export PATH="$HOME/.elan/bin:$PATH"' >> "$BASH_ENV"
+      - run:
+          name: Build and audit complete v0.6/v2 formal layer
+          command: |
+            source "$BASH_ENV"
+            ./scripts/verify_lean.sh
+      - run:
+          name: Run full Python suite and Lean/Python differential gates
+          command: |
+            source "$BASH_ENV"
+            . .venv/bin/activate
+            python -m pytest -q
+            python -m pytest -q tests/test_formal_v2_regressions.py tests/test_formal_v2_differential.py
+
   restoration-boundaries-complete:
     docker:
       - image: cimg/base:current
@@ -263,6 +296,14 @@ jobs:
           command: echo "Python hash-locked wheel restoration, native ABI variation, and offline R renv restoration all passed."
 
 workflows:
+  formal-v06-integration:
+    jobs:
+      - formal-v06-integration:
+          filters:
+            branches:
+              only:
+                - formal/v06-e2e-refinement
+
   product-demo-hardening:
     jobs:
       - product-demo-hardening:

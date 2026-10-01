@@ -291,6 +291,7 @@ def test_guided_discovery_selects_environment_sources_and_confirmation_binds_the
         draft,
         confirmed_path,
         project_root=project,
+        overwrite=True,
     )
     confirmed = json.loads(confirmed_path.read_text(encoding="utf-8"))
     assert confirmed["environment"]["human_confirmed"] is True
@@ -314,7 +315,7 @@ def test_full_attestation_binds_environment_and_verifier_replays_it(tmp_path):
         report_output=project / "pcs-discovery.json",
     )
     manifest = project / "manifest.json"
-    confirm_manifest_draft_v06(draft, manifest, project_root=project)
+    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
 
     private, public, fingerprint = _keys(tmp_path)
     bundle = tmp_path / "study.pcs.zip"
@@ -324,6 +325,7 @@ def test_full_attestation_binds_environment_and_verifier_replays_it(tmp_path):
         private,
         public,
         expected_fingerprint=fingerprint,
+        overwrite=True,
     )
 
     assert result["valid"] is True
@@ -391,6 +393,7 @@ def test_confirmation_replaces_browser_like_environment_preview_with_authoritati
         draft,
         confirmed_path,
         project_root=project,
+        overwrite=True,
     )
     confirmed = json.loads(confirmed_path.read_text(encoding="utf-8"))
 
@@ -506,6 +509,7 @@ def test_confirmation_rejects_new_environment_source_added_after_discovery(tmp_p
             draft,
             project / "manifest.json",
             project_root=project,
+            overwrite=True,
         )
 
 

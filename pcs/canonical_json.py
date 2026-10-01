@@ -141,13 +141,39 @@ def _reject_constant(value: str) -> Any:
     raise CanonicalJSONError(f"non-finite JSON numeric constant is not allowed: {value}")
 
 
+MAX_SAFE_INTEGER = 2**53
+
+
+def _parse_int_jcs(text: str) -> int | float:
+    """Parse a JSON integer token under the ECMAScript binary64 number model.
+
+    Integers with magnitude <= 2**53 are exactly representable as binary64, so
+    their ECMAScript value is the integer itself; they are returned as Python
+    ``int`` so that type-strict scientific checks (for example reaction
+    coefficients, which must be positive integers) see the integer the signer
+    wrote.  ``canonicalize_jcs`` serializes such an ``int`` exactly as it
+    serializes the equal ``float``, so canonical bytes and every hash are
+    unchanged.  Larger integers keep the previous binary64 (``float``)
+    interpretation, so non-exact spellings remain rejected by the canonical
+    byte comparison.
+
+    Regression: previously ``parse_int=float`` turned the golden certificate's
+    ``"coefficient": 2`` into ``2.0``; the chemistry check then rejected it and
+    the end-to-end verifier rejected its own golden package at replay.
+    """
+    value = int(text)
+    if -MAX_SAFE_INTEGER <= value <= MAX_SAFE_INTEGER:
+        return value
+    return float(text)
+
+
 def parse_jcs_json(text: str) -> Any:
     """Parse JSON specifically for canonicalization using the ECMAScript number model."""
     try:
         value = json.loads(
             text,
             object_pairs_hook=_reject_duplicate_keys,
-            parse_int=float,
+            parse_int=_parse_int_jcs,
             parse_float=float,
             parse_constant=_reject_constant,
         )

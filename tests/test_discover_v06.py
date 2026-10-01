@@ -99,6 +99,7 @@ def test_discover_confirm_attest_is_complete_product_onboarding_path(tmp_path):
         draft,
         manifest,
         project_root=project,
+        overwrite=True,
     )
 
     assert confirmed["valid"] is True
@@ -164,6 +165,7 @@ def test_artifact_change_after_confirmation_is_rejected_at_attestation(tmp_path)
         draft,
         manifest,
         project_root=project,
+        overwrite=True,
     )
 
     (project / "predictions.csv").write_text(
@@ -270,6 +272,7 @@ def test_confirm_refuses_no_supported_claims_without_explicit_override(tmp_path)
             draft,
             project / "manifest.json",
             project_root=project,
+            overwrite=True,
         )
 
 
@@ -293,6 +296,7 @@ def test_confirm_refuses_artifact_changed_between_discovery_and_confirmation(tmp
             draft,
             project / "manifest.json",
             project_root=project,
+            overwrite=True,
         )
 
 

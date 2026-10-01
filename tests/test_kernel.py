@@ -16,8 +16,9 @@ class KernelTests(unittest.TestCase):
     def test_tamper_detected(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as d:
-            build_certificate(root/'examples/biopharma_demo/manifest.json', d)
-            p = Path(d)/'artifacts/train/train.csv'
+            cert = build_certificate(root/'examples/biopharma_demo/manifest.json', d)
+            train = next(a for a in cert['artifacts'] if a['id'] == 'train')
+            p = Path(d)/train['path']
             p.write_text(p.read_text() + 'EVIL,0\n')
             result = verify_certificate(Path(d)/'certificate.json')
             self.assertFalse(result['valid'])
@@ -41,9 +42,10 @@ class EvidenceReplayAttackTests(unittest.TestCase):
         from pcs.hashing import sha256_file, sha256_json
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as d:
-            build_certificate(root/'examples/biopharma_demo/manifest.json', d)
+            built = build_certificate(root/'examples/biopharma_demo/manifest.json', d)
             cert_path = Path(d)/'certificate.json'; cert = json.loads(cert_path.read_text())
-            test_path = Path(d)/'artifacts/test/test.csv'
+            test_artifact = next(a for a in built['artifacts'] if a['id'] == 'test')
+            test_path = Path(d)/test_artifact['path']
             test_path.write_text('subject_id,concentration_mg_L\nS001,9.8\nS102,6.1\n')
             for a in cert['artifacts']:
                 if a['id'] == 'test': a['sha256'] = sha256_file(test_path)
