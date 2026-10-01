@@ -39,7 +39,7 @@ def main() -> int:
         "--distpath", str(dist),
         "--workpath", str(work),
         "--specpath", str(work),
-        str(ROOT / "pcs" / "verifier_entrypoint.py"),
+        str(ROOT / "scripts" / "verifier_launcher.py"),
     ]
     proc = subprocess.run(cmd, cwd=ROOT, check=False)
     if proc.returncode:
@@ -53,7 +53,7 @@ def main() -> int:
         "sha256": sha256(built),
         "platform": sys.platform,
         "python": sys.version.split()[0],
-        "entrypoint": "pcs.verifier_entrypoint:main",
+        "entrypoint": "scripts/verifier_launcher.py -> pcs.verifier_entrypoint:main",
     }
     manifest_path = built.with_name(built.name + ".manifest.json")
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
