@@ -602,9 +602,9 @@ This creates and verifies a signed synthetic PK/PD evidence bundle using an exte
 
 ## Aristotle / Lean handoff
 
-The formal project is currently pinned to `leanprover/lean4:v4.28.0`, matching the most recent directly observed Aristotle backend default found during the 2026-09-28 compatibility audit. Aristotle-specific unfinished obligations are isolated under `formal/Aristotle/`; they are not imported into the no-placeholder core until solved and compiled.
+The formal project is pinned to `leanprover/lean4:v4.28.0`. The exact v0.6/v2 refinement layer is integrated under `formal/PCS/V2/` and imported by the production formal root. Its archive/package/decision assurance theorems and the verified `reaction_balance` replay layer build in the hosted Lean gate with no production `sorry`/project axioms. Remaining trust contracts and open statements are documented in `formal/PCS_FULL_FORMALIZATION_REPORT.md`.
 
-See `formal/ARISTOTLE_PROJECT_PROMPT.md` for the ready-to-run project prompt.
+Older Aristotle task files remain non-production proof-search material unless imported by the production root.
 
 ## Initial assurance checks
 
@@ -664,7 +664,7 @@ Today, the Python checker is part of the TCB. The research program is to shrink 
 
 ## Current limitations
 
-- The current Lean 4.28 v1 wire-theorem layer builds successfully in the hosted formal gate; the exact v0.6/v2 end-to-end port remains open.
+- The exact Lean 4.28 v0.6/v2 assurance layer is integrated and builds successfully; production↔Lean refinement, ZIP-decoder faithfulness, capture soundness, non-chemistry replay faithfulness, cryptographic unforgeability, and independent SHA-256/Ed25519 spec correspondence remain explicit boundaries.
 - No arbitrary Python/R/C++ correctness theorem is claimed.
 - The PK/PD adapter is intentionally restricted and synthetic-first.
 - Chemical parsing is intentionally narrow.
