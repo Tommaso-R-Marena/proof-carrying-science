@@ -445,6 +445,9 @@ def main() -> int:
     a = sub.add_parser("aggregate")
     a.add_argument("--input", required=True)
     a.add_argument("--output", required=True)
+    c = sub.add_parser("check")
+    c.add_argument("--input", required=True)
+    c.add_argument("--assertion", required=True)
     args = parser.parse_args()
 
     if args.command == "produce":
@@ -455,10 +458,25 @@ def main() -> int:
             Path(args.output).resolve(),
             args.machine_id,
         )
-    else:
+    elif args.command == "aggregate":
         value = aggregate(Path(args.input).resolve(), Path(args.output).resolve())
+    else:
+        with tempfile.TemporaryDirectory(prefix="pcs-python-wheel-check-") as td:
+            value = aggregate(
+                Path(args.input).resolve(),
+                Path(td) / "summary.json",
+            )
+        observed = value.get("assertions", {}).get(args.assertion)
+        print(json.dumps(
+            {"assertion": args.assertion, "observed": observed},
+            indent=2,
+            sort_keys=True,
+        ))
+        return 0 if observed is True else 1
 
     print(json.dumps(value, indent=2, sort_keys=True))
+    if args.command == "replay":
+        return 0 if value.get("valid") is True else 1
     return 0 if args.command != "aggregate" or value.get("success") is True else 1
 
 
