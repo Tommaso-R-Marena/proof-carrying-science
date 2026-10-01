@@ -75,6 +75,10 @@ def campaign(workdir: str | Path) -> dict:
     run("zip_duplicate_control_member", lambda: add_member("certificate.json", b"{}"))
     run("zip_casefold_collision", lambda: add_member("Certificate.json", b"{}"))
     run("zip_windows_reserved_name", lambda: add_member("artifacts/CON.txt"))
+    run("zip_backslash_alias", lambda: add_member("artifacts\\alias.txt"))
+    run("zip_non_nfc_name", lambda: add_member("artifacts/e\u0301.txt"))
+    run("zip_trailing_dot_segment", lambda: add_member("artifacts/result."))
+    run("normalized_index_byte_tamper", lambda: package_tamper("normalized/index.json", b"{}"))
     def unsigned_extra_member():
         out = root / "unsigned-extra-member.zip"
         shutil.copyfile(cases["pkpd-supported"], out)
