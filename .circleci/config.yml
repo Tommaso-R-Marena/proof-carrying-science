@@ -241,7 +241,9 @@ workflows:
       - formal-wire-lean:
           filters:
             branches:
-              only: formal/integrate-wire-v1-main
+              only:
+                - main
+                - formal/integrate-wire-v1-main
       - restoration-regression:
           filters: &pcs_branch
             branches:
