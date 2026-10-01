@@ -135,7 +135,7 @@ def produce(output: Path) -> dict[str, Any]:
 
         wheelhouse = project / "wheelhouse"
         wheelhouse.mkdir()
-        download_wheel(wheelhouse, "manylinux2014_x86_64", PACKAGE_SPEC)
+        download_wheel(wheelhouse, "manylinux_2_28_x86_64", PACKAGE_SPEC)
         x86_wheels = sorted(wheelhouse.glob("numpy-*-x86_64*.whl"))
         if len(x86_wheels) != 1:
             raise RuntimeError(f"expected one x86_64 wheel, got {x86_wheels}")
@@ -143,7 +143,7 @@ def produce(output: Path) -> dict[str, Any]:
 
         download_wheel(
             wheelhouse,
-            "manylinux2014_aarch64",
+            "manylinux_2_28_aarch64",
             f"numpy=={version}",
         )
         wheels = sorted(wheelhouse.glob("numpy-*.whl"))
