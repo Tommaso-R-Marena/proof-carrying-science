@@ -22,8 +22,25 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def _find_lake() -> str | None:
+    found = shutil.which("lake")
+    if found:
+        return found
+    name = "lake.exe" if sys.platform == "win32" else "lake"
+    candidates = [
+        Path.home() / ".elan" / "bin" / name,
+        Path(os.environ.get("USERPROFILE", "")) / ".elan" / "bin" / name
+        if os.environ.get("USERPROFILE")
+        else None,
+    ]
+    for candidate in candidates:
+        if candidate is not None and candidate.is_file():
+            return str(candidate)
+    return None
+
+
 def _build_lean_authority() -> Path:
-    lake = shutil.which("lake")
+    lake = _find_lake()
     if lake is None:
         raise SystemExit(
             "Lean authority is mandatory for the standalone verifier; install Lean/Lake first"
