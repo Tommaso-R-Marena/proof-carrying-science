@@ -45,8 +45,12 @@ The build produces a single executable and an adjacent
 `pcs-verifier-v06[.exe].manifest.json` containing its SHA-256, platform, Python
 version, and entry point.
 
-`.github/workflows/build-verifier-artifacts.yml` builds Linux, Windows, and macOS
-artifacts on demand and uploads each executable together with its manifest.
+The main CircleCI product-hardening gate builds the Linux single-file artifact,
+executes its `--help` smoke test, and stores the executable plus SHA-256 manifest as
+CI artifacts. `.github/workflows/build-verifier-artifacts.yml` also defines Linux,
+Windows, and macOS builds; those cross-platform jobs remain a configured packaging
+path and should not be described as observed runtime evidence until their runs are
+available.
 
 ## Boundary
 
