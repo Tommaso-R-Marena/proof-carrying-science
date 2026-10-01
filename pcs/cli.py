@@ -92,6 +92,7 @@ from .local_verify_v06 import (
     V06LocalVerifyError,
     verify_local_bundle_v06,
 )
+from .lean_authority_v06 import V06LeanAuthorityError
 
 
 def cmd_certify(args):
@@ -186,6 +187,7 @@ def cmd_verify_v06(args):
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
+            lean_authority_path=args.lean_authority,
             **scheduler_kwargs,
         )
         telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
@@ -210,6 +212,7 @@ def cmd_verify_v06(args):
         V06ReviewerPolicyError,
         V06ReceiptSignatureError,
         V06SchedulerError,
+        V06LeanAuthorityError,
     ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -235,6 +238,7 @@ def cmd_verify_v06_bundle(args):
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
+            lean_authority_path=args.lean_authority,
             **scheduler_kwargs,
         )
         telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
@@ -260,6 +264,7 @@ def cmd_verify_v06_bundle(args):
         V06ReviewerPolicyError,
         V06ReceiptSignatureError,
         V06SchedulerError,
+        V06LeanAuthorityError,
     ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -284,8 +289,9 @@ def cmd_verify_local_v06(args):
             args.trust,
             receipt=args.receipt,
             overwrite_receipt=args.force_receipt,
+            lean_authority_path=args.lean_authority,
         )
-    except (OSError, StrictJSONError, V06LocalVerifyError, V06BundleVerificationError, V06ReviewerPolicyError) as e:
+    except (OSError, StrictJSONError, V06LocalVerifyError, V06BundleVerificationError, V06ReviewerPolicyError, V06LeanAuthorityError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
@@ -949,6 +955,10 @@ def build_parser():
         help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
     )
     v6.add_argument(
+        "--lean-authority",
+        help="receiver-owned pcs-lean-authority executable; defaults to embedded/repository authority",
+    )
+    v6.add_argument(
         "--policy",
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
     )
@@ -1018,6 +1028,10 @@ def build_parser():
         help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
     )
     v6b.add_argument(
+        "--lean-authority",
+        help="receiver-owned pcs-lean-authority executable; defaults to embedded/repository authority",
+    )
+    v6b.add_argument(
         "--policy",
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
     )
@@ -1082,6 +1096,10 @@ def build_parser():
     )
     vl6.add_argument("bundle", help="delivered PCS v0.6 ZIP archive")
     vl6.add_argument("--trust", required=True, help="pcs-verifier-trust-v1 JSON; paths are relative to the profile")
+    vl6.add_argument(
+        "--lean-authority",
+        help="receiver-owned pcs-lean-authority executable; overrides trust-profile path",
+    )
     vl6.add_argument("--receipt", help="write deterministic verification receipt JSON")
     vl6.add_argument("--force-receipt", action="store_true")
     vl6.set_defaults(func=cmd_verify_local_v06)
