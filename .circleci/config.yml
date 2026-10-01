@@ -14,7 +14,7 @@ commands:
             python -m pip install -e .
 
 jobs:
-  restoration-regression:
+  test-environment-contracts:
     machine:
       image: ubuntu-2404:2026.05.1
     resource_class: medium
@@ -30,10 +30,31 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install -e ".[dev]"
       - run:
-          name: Run restoration and executor regressions
+          name: Test environment capture and restoration binding
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_environment_v06.py tests/test_environment_execute_v06.py
+            python -m pytest -q tests/test_environment_v06.py
+
+  test-environment-executor:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install test environment
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python3 python3-venv python3-pip
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Test realized environment executor
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_environment_execute_v06.py
 
   produce-python-wheel:
     machine:
@@ -227,13 +248,16 @@ jobs:
 workflows:
   restoration-and-abi-evidence:
     jobs:
-      - restoration-regression:
+      - test-environment-contracts:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
+      - test-environment-executor:
+          filters: *pcs_branch
       - produce-python-wheel:
           requires:
-            - restoration-regression
+            - test-environment-contracts
+            - test-environment-executor
           filters: *pcs_branch
       - replay-python-amd64:
           requires:
@@ -250,7 +274,8 @@ workflows:
           filters: *pcs_branch
       - produce-r-renv:
           requires:
-            - restoration-regression
+            - test-environment-contracts
+            - test-environment-executor
           filters: *pcs_branch
       - replay-r-renv-amd64:
           requires:
