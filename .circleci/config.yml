@@ -14,6 +14,45 @@ commands:
             python -m pip install -e .
 
 jobs:
+  pypi-api:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Query NumPy PyPI release metadata
+          command: |
+            . .venv/bin/activate
+            python scripts/probe_python_wheel_restore.py api
+
+  pypi-x86:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Download and verify x86_64 NumPy wheel
+          command: |
+            . .venv/bin/activate
+            python scripts/probe_python_wheel_restore.py x86
+
+  pypi-arm:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-pcs
+      - run:
+          name: Download and verify ARM64 NumPy wheel
+          command: |
+            . .venv/bin/activate
+            python scripts/probe_python_wheel_restore.py arm
+
   wheel-resolve:
     machine:
       image: ubuntu-2404:2026.05.1
@@ -22,7 +61,7 @@ jobs:
       - checkout
       - setup-pcs
       - run:
-          name: Resolve amd64 and ARM64 wheels
+          name: Resolve both signed wheel candidates
           command: |
             . .venv/bin/activate
             python scripts/probe_python_wheel_restore.py resolve
@@ -57,10 +96,20 @@ jobs:
 workflows:
   python-wheel-diagnostic:
     jobs:
-      - wheel-resolve:
+      - pypi-api:
           filters: &pcs_branch
             branches:
               only: v06/replay-normalized-wire-v2
+      - pypi-x86:
+          filters: *pcs_branch
+      - pypi-arm:
+          filters: *pcs_branch
+      - wheel-resolve:
+          requires:
+            - pypi-api
+            - pypi-x86
+            - pypi-arm
+          filters: *pcs_branch
       - wheel-offline-build:
           requires:
             - wheel-resolve
