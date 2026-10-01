@@ -46,6 +46,29 @@ _SAFE_ENV_FILES = {
 }
 
 
+_PYTHON_VENDOR_PREFIXES = ("wheelhouse/", "vendor/python/")
+_R_VENDOR_PREFIXES = ("r-packages/", "vendor/r/")
+_PYTHON_DISTRIBUTION_SUFFIXES = (".whl", ".tar.gz", ".zip")
+_R_DISTRIBUTION_SUFFIXES = (".tar.gz", ".tgz", ".zip")
+_R_REPOSITORY_METADATA_NAMES = {"packages", "packages.gz", "packages.rds"}
+
+
+def _restoration_artifact_kind(path: str) -> str | None:
+    rel = path.replace("\\", "/").lstrip("./")
+    lower = rel.lower()
+    name = Path(rel).name.lower()
+    if any(lower.startswith(prefix) for prefix in _PYTHON_VENDOR_PREFIXES):
+        if lower.endswith(_PYTHON_DISTRIBUTION_SUFFIXES):
+            return "python_distribution_artifact"
+    if any(lower.startswith(prefix) for prefix in _R_VENDOR_PREFIXES):
+        if (
+            lower.endswith(_R_DISTRIBUTION_SUFFIXES)
+            or name in _R_REPOSITORY_METADATA_NAMES
+        ):
+            return "r_distribution_artifact"
+    return None
+
+
 class V06EnvironmentCaptureError(ValueError):
     pass
 
@@ -760,6 +783,17 @@ def _hermeticity(
     if containers and all(c["all_base_images_digest_pinned"] for c in containers):
         if kinds & {"uv_lock", "poetry_lock", "pipfile_lock", "conda_lock", "renv_lock", "nix_flake_lock"}:
             return "strongly_pinned"
+        reqs = [
+            d
+            for d in dependencies
+            if d["source_kind"] in {"requirements", "requirements_lock"}
+        ]
+        if (
+            reqs
+            and all(d["exact_pin"] and d["hash_pinned"] for d in reqs)
+            and "python_distribution_artifact" in kinds
+        ):
+            return "strongly_pinned"
         return "container_base_pinned"
     if kinds & {"conda_lock", "nix_flake_lock"}:
         return "strongly_pinned"
@@ -1042,6 +1076,15 @@ def capture_environment_v06(
         if kind and rel in inventory_by_path:
             add_source(rel, kind)
 
+    # Explicit local restoration directories are part of the environment
+    # contract. Their bytes are never executed during discovery; they are simply
+    # content-addressed and promoted into the signed artifact set so an offline
+    # container build cannot consume an unbound wheel/package archive.
+    for rel in sorted(inventory_by_path):
+        kind = _restoration_artifact_kind(rel)
+        if kind is not None:
+            add_source(rel, kind)
+
     observed_dependency_records = len(dependencies)
     if observed_dependency_records > MAX_DEPENDENCY_RECORDS_V06:
         unresolved.append(
@@ -1101,6 +1144,12 @@ def capture_environment_v06(
             "dependencies": [d for d in dependencies if d["ecosystem"] == "conda"],
         },
         "containers": containers,
+        "restoration_artifacts": [
+            source
+            for source in sources
+            if source["kind"]
+            in {"python_distribution_artifact", "r_distribution_artifact"}
+        ],
         "hermeticity": hermeticity,
         "replay_plan": plan,
         "unresolved": unresolved,
@@ -1115,6 +1164,12 @@ def capture_environment_v06(
             "r_dependency_records": sum(1 for d in dependencies if d["ecosystem"] == "r"),
             "conda_dependency_records": sum(1 for d in dependencies if d["ecosystem"] == "conda"),
             "container_specs": len(containers),
+            "restoration_artifacts": sum(
+                1
+                for source in sources
+                if source["kind"]
+                in {"python_distribution_artifact", "r_distribution_artifact"}
+            ),
             "unresolved_items": len(unresolved),
         },
     }
