@@ -340,6 +340,7 @@ def cmd_bundle_v06(args):
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             overwrite=args.force,
+            lean_authority_path=args.lean_authority,
         )
     except (OSError, V06BundleBuildError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
@@ -358,6 +359,7 @@ def cmd_attest_v06(args):
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             overwrite=args.force,
+            lean_authority_path=args.lean_authority,
         )
     except (OSError, V06AttestationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
@@ -1147,6 +1149,10 @@ def build_parser():
         help="pin the accepted Ed25519 raw-public-key SHA-256 fingerprint",
     )
     b6.add_argument(
+        "--lean-authority",
+        help="receiver/producer-owned pcs-lean-authority executable; defaults to embedded/repository authority",
+    )
+    b6.add_argument(
         "--force",
         action="store_true",
         help="explicitly replace an existing output ZIP",
@@ -1164,6 +1170,10 @@ def build_parser():
     a6.add_argument(
         "--expected-signer-fingerprint",
         help="optionally pin the expected raw-public-key SHA-256 fingerprint",
+    )
+    a6.add_argument(
+        "--lean-authority",
+        help="receiver/producer-owned pcs-lean-authority executable; defaults to embedded/repository authority",
     )
     a6.add_argument(
         "--force",
