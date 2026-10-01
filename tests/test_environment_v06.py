@@ -507,3 +507,115 @@ def test_confirmation_rejects_new_environment_source_added_after_discovery(tmp_p
             project / "manifest.json",
             project_root=project,
         )
+
+
+def test_vendored_python_wheels_are_signed_environment_sources(tmp_path):
+    project = tmp_path / "vendored-python"
+    wheelhouse = project / "wheelhouse"
+    wheelhouse.mkdir(parents=True)
+    wheel = wheelhouse / "demo_native-1.0.0-cp312-cp312-manylinux_2_17_x86_64.whl"
+    wheel.write_bytes(b"fake-wheel-bytes")
+    (project / "requirements.lock").write_text(
+        "demo-native==1.0.0 --hash=sha256:"
+        + hashlib.sha256(wheel.read_bytes()).hexdigest()
+        + "\n",
+        encoding="utf-8",
+    )
+    (project / "Dockerfile").write_text(
+        "FROM python:3.12-slim@sha256:" + "a" * 64 + "\n",
+        encoding="utf-8",
+    )
+    paths = [
+        "wheelhouse/demo_native-1.0.0-cp312-cp312-manylinux_2_17_x86_64.whl",
+        "requirements.lock",
+        "Dockerfile",
+    ]
+    capture = capture_environment_v06(project, _inventory(project, paths))
+
+    vendor = [
+        source
+        for source in capture["sources"]
+        if source["kind"] == "python_distribution_artifact"
+    ]
+    assert len(vendor) == 1
+    assert vendor[0]["path"] == paths[0]
+    assert vendor[0]["sha256"] == hashlib.sha256(wheel.read_bytes()).hexdigest()
+    assert capture["restoration_artifacts"] == vendor
+    assert capture["summary"]["restoration_artifacts"] == 1
+    assert capture["hermeticity"] == "strongly_pinned"
+    assert vendor[0]["artifact_id"] in capture["source_artifact_ids"]
+
+
+def test_vendored_r_repository_payloads_are_signed_environment_sources(tmp_path):
+    project = tmp_path / "vendored-r"
+    repo = project / "r-packages" / "src" / "contrib"
+    repo.mkdir(parents=True)
+    archive = repo / "digest_0.6.37.tar.gz"
+    archive.write_bytes(b"fake-r-source-archive")
+    packages = repo / "PACKAGES"
+    packages.write_text(
+        "Package: digest\nVersion: 0.6.37\n\n",
+        encoding="utf-8",
+    )
+    (project / "renv.lock").write_text(
+        json.dumps(
+            {
+                "R": {"Version": "4.4.1"},
+                "Packages": {
+                    "digest": {
+                        "Package": "digest",
+                        "Version": "0.6.37",
+                        "Source": "Repository",
+                        "Repository": "CRAN",
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (project / "Dockerfile").write_text(
+        "FROM r-base:latest@sha256:" + "b" * 64 + "\n",
+        encoding="utf-8",
+    )
+    paths = [
+        "r-packages/src/contrib/digest_0.6.37.tar.gz",
+        "r-packages/src/contrib/PACKAGES",
+        "renv.lock",
+        "Dockerfile",
+    ]
+    capture = capture_environment_v06(project, _inventory(project, paths))
+
+    vendor = [
+        source
+        for source in capture["sources"]
+        if source["kind"] == "r_distribution_artifact"
+    ]
+    assert {row["path"] for row in vendor} == {
+        "r-packages/src/contrib/digest_0.6.37.tar.gz",
+        "r-packages/src/contrib/PACKAGES",
+    }
+    assert capture["summary"]["restoration_artifacts"] == 2
+    assert capture["hermeticity"] == "strongly_pinned"
+    assert {row["artifact_id"] for row in vendor}.issubset(
+        set(capture["source_artifact_ids"])
+    )
+
+
+def test_discovery_promotes_vendored_restoration_artifacts_into_manifest(tmp_path):
+    project = tmp_path / "vendored-discovery"
+    init_project(project, template="pkpd", subject="vendored-restoration")
+    wheelhouse = project / "wheelhouse"
+    wheelhouse.mkdir()
+    wheel = wheelhouse / "demo-1.0.0-py3-none-any.whl"
+    wheel.write_bytes(b"wheel")
+    digest = hashlib.sha256(wheel.read_bytes()).hexdigest()
+    (project / "requirements.lock").write_text(
+        f"demo==1.0.0 --hash=sha256:{digest}\n",
+        encoding="utf-8",
+    )
+
+    report = discover_project_v06(project)
+    paths = {row["path"] for row in report["manifest_draft"]["artifacts"]}
+    assert "requirements.lock" in paths
+    assert "wheelhouse/demo-1.0.0-py3-none-any.whl" in paths
+    assert report["environment_capture"]["summary"]["restoration_artifacts"] == 1
