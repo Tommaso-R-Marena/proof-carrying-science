@@ -332,7 +332,6 @@ workflows:
               only:
                 - formal/v06-e2e-refinement
                 - formal/lean-authoritative-production
-                - fix/restoration-shared-lean
 
   product-demo-hardening:
     jobs:
@@ -343,7 +342,6 @@ workflows:
                 - main
                 - product/p0-p1-demo-hardening
                 - formal/lean-authoritative-production
-                - fix/restoration-shared-lean
 
   restoration-and-abi-evidence:
     jobs:
@@ -355,15 +353,12 @@ workflows:
                 - main
                 - formal/integrate-wire-v1-main
                 - formal/lean-authoritative-production
-                - fix/restoration-shared-lean
       - restoration-regression:
           filters: &pcs_branch
             branches:
               only:
                 - main
                 - release/main-wiring
-                - fix/restoration-lean-authority
-                - fix/restoration-shared-lean
       - produce-python-wheel:
           requires: [restoration-regression]
           filters: *pcs_branch
