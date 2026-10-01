@@ -8,7 +8,9 @@ on:
       - product/verifier-artifact-validation
     paths:
       - 'pcs/**'
+      - 'formal/**'
       - 'scripts/build_verifier_artifact.py'
+      - 'scripts/smoke_standalone_verifier_v06.py'
       - 'scripts/verifier_launcher.py'
       - 'pyproject.toml'
       - '.github/workflows/build-verifier-artifacts.yml'
@@ -35,6 +37,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e '.[standalone]'
+      - name: Install Lean toolchain
+        shell: bash
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build Lean authority
+        shell: bash
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd formal
+          lake build pcs-lean-authority
       - name: Build single-file reviewer verifier
         run: python scripts/build_verifier_artifact.py -o dist/pcs-verifier-v06
       - name: Smoke-test verifier help
@@ -44,6 +57,14 @@ jobs:
             dist/pcs-verifier-v06.exe --help
           else
             dist/pcs-verifier-v06 --help
+          fi
+      - name: Verify golden bundle through embedded Lean authority
+        shell: bash
+        run: |
+          if [ -f dist/pcs-verifier-v06.exe ]; then
+            python scripts/smoke_standalone_verifier_v06.py dist/pcs-verifier-v06.exe
+          else
+            python scripts/smoke_standalone_verifier_v06.py dist/pcs-verifier-v06
           fi
       - name: Upload verifier and SHA-256 manifest
         uses: actions/upload-artifact@v4
