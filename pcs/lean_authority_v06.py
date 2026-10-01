@@ -304,6 +304,8 @@ def enforce_lean_authority_v06(
     stages["lean_authority"] = False
     result["stages"] = stages
     if result.get("valid") is not True:
+        result["authority_required"] = True
+        result["authoritative"] = False
         result["lean_authority"] = {
             "format": LEAN_AUTHORITY_RESULT_FORMAT_V06,
             "required": True,
@@ -326,6 +328,8 @@ def enforce_lean_authority_v06(
         authority_path=authority_path,
     )
     result["lean_authority"] = authority
+    result["authority_required"] = True
+    result["authoritative"] = bool(authority["accepted"])
     if not authority["accepted"]:
         result["valid"] = False
         result["failed_stage"] = "lean_authority"
