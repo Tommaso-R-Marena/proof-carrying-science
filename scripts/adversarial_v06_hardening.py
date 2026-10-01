@@ -14,7 +14,12 @@ from pcs.verifier_zip_v06 import (
     load_package_zip_v06,
     verify_package_zip_end_to_end_v06,
 )
-from scripts.run_golden_examples_v06 import build_golden_examples
+try:
+    from scripts.run_golden_examples_v06 import build_golden_examples
+except ModuleNotFoundError:
+    # Direct execution ("python scripts/adversarial_v06_hardening.py")
+    # puts scripts/ rather than the repository root on sys.path.
+    from run_golden_examples_v06 import build_golden_examples
 
 
 def _rewrite_zip(source: Path, dest: Path, transform) -> None:
