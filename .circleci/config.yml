@@ -12,6 +12,14 @@ commands:
             . .venv/bin/activate
             python -m pip install --upgrade pip
             python -m pip install -e .
+      - run:
+          name: Build mandatory Lean authority
+          command: |
+            curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+            echo 'export PATH="$HOME/.elan/bin:$PATH"' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            cd formal
+            lake build pcs-lean-authority
 
 jobs:
   product-demo-hardening:
@@ -350,6 +358,7 @@ workflows:
                 - main
                 - release/main-wiring
                 - fix/restoration-lean-authority
+                - fix/restoration-shared-lean
       - produce-python-wheel:
           requires: [restoration-regression]
           filters: *pcs_branch
