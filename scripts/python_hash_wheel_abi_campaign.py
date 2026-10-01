@@ -132,6 +132,28 @@ def produce(output: Path) -> dict[str, Any]:
         ]
     ).stdout.strip()
 
+    base_has_numpy = run(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "--network=none",
+            image_ref,
+            "python",
+            "-c",
+            (
+                "import importlib.util,sys;"
+                "sys.exit(17 if importlib.util.find_spec('numpy') else 0)"
+            ),
+        ],
+        check=False,
+    )
+    if base_has_numpy.returncode != 0:
+        raise RuntimeError(
+            "selected Python base unexpectedly already contains NumPy; "
+            "campaign would not prove wheel restoration"
+        )
+
     project = Path(tempfile.mkdtemp(prefix="pcs-python-wheel-producer-"))
     private = project.parent / "python-wheel-private.pem"
     try:
@@ -266,6 +288,7 @@ def produce(output: Path) -> dict[str, Any]:
             "bundle_sha256": sha256_file(bundle),
             "expected_output_sha256": sha256_file(project / "native_output.json"),
             "restoration_artifacts_signed": len(wheel_sources),
+            "base_image_numpy_absent": True,
         }
         write_json(output / "campaign.json", value)
         return value
@@ -327,6 +350,8 @@ def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
         "determinism_confirmed": result.get("determinism_confirmed"),
         "determinism_runs_completed": result.get("determinism_runs_completed"),
         "expected_package_version": meta["package_version"],
+        "base_image_numpy_absent": meta.get("base_image_numpy_absent"),
+        "restoration_artifacts_signed": meta.get("restoration_artifacts_signed"),
         "realized_package_version": package.get("version") if package else None,
         "native_extensions": native,
         "native_extension_hashes": sorted(
@@ -373,6 +398,12 @@ def aggregate(input_root: Path, output: Path) -> dict[str, Any]:
             row.get("determinism_confirmed") is True
             and row.get("determinism_runs_completed") == 3
             for row in rows
+        ),
+        "base_image_did_not_supply_numpy": len(rows) >= 2 and all(
+            row.get("base_image_numpy_absent") is True for row in rows
+        ),
+        "two_architecture_wheels_were_signed": len(rows) >= 2 and all(
+            row.get("restoration_artifacts_signed") == 2 for row in rows
         ),
         "restored_package_version_matches_lock": len(rows) >= 2 and all(
             row.get("realized_package_version") == row.get("expected_package_version")
