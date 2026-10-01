@@ -75,14 +75,15 @@ def campaign(workdir: str | Path) -> dict:
     def environment_source_tamper():
         src = cases["environment-bound"]
         out = root / "environment-source-tamper.zip"
-        target = "artifacts/requirements.txt"
         with zipfile.ZipFile(src, "r") as zf:
-            names = set(zf.namelist())
-        if target not in names:
-            candidates = [n for n in names if n.endswith("requirements.txt")]
-            if not candidates:
-                return False, "environment bundle did not contain requirements.txt"
-            target = candidates[0]
+            certificate = json.loads(zf.read("certificate.json").decode("utf-8"))
+            env_artifacts = [
+                row for row in certificate.get("artifacts", [])
+                if row.get("source_path") == "requirements.txt"
+            ]
+        if not env_artifacts:
+            return False, "environment bundle did not bind requirements.txt"
+        target = env_artifacts[0]["path"]
         _rewrite_zip(src, out, lambda n, r: (n, b"cryptography==0.0.1\n" if n == target else r))
         checked = verify_package_zip_end_to_end_v06(out, env_public)
         return (not checked["valid"], checked.get("failed_stage") or checked.get("errors"))
