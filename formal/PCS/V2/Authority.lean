@@ -24,7 +24,7 @@ namespace PCS.V2.Authority
 
 open PCS PCS.Decision PCS.V2.Json PCS.V2.Hex PCS.V2.Canonical PCS.V2.Common
 open PCS.V2.Package PCS.V2.Replay PCS.V2.CertificateModel PCS.V2.EndToEnd
-open PCS.V2.Archive PCS.V2.TCB
+open PCS.V2.Index PCS.V2.Archive PCS.V2.TCB
 
 def authorityTranscriptFormat : String := "pcs-lean-authority-observations-v1"
 def maxAuthorityTranscriptBytes : Nat := 16 * 1024 * 1024
