@@ -77,12 +77,11 @@ def transcriptExecutor (t : AuthorityTranscript) : Executor := fun req =>
     | none => ⟨.provenance, .unverified⟩
     | some obs => ⟨obs.kind, obs.outcome⟩
 
-/-- Namespace portability is already fail-closed in the Python archive precheck.
-    The Lean authority therefore uses identity Unicode operations and independently
-    checks all byte/hash/signature/member-set invariants. Unicode table equivalence
-    remains an explicit portability boundary, not a scientific-soundness claim. -/
+/-- ASCII-compatible portability operations used by the production Lean authority.
+    This matches the existing v0.6 golden/differential corpus. Full Unicode NFC and
+    case-fold table correspondence remains an explicit portability boundary. -/
 def authorityUnicode : UnicodeOps :=
-  { nfc := id, casefold := id }
+  { nfc := id, casefold := fun s => String.map Char.toLower s }
 
 def transcriptOracles (t : AuthorityTranscript) : Oracles :=
   { unicode := authorityUnicode,
