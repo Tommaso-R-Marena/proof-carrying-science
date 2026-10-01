@@ -53,6 +53,7 @@ from .environment_replay_v06 import (
     V06EnvironmentReplayError,
     environment_binding_v06,
 )
+from .lean_authority_v06 import V06LeanAuthorityError
 
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
@@ -296,6 +297,7 @@ def build_attestation_directory_v06(
     *,
     expected_fingerprint: str | None = None,
     generated_at: str | None = None,
+    lean_authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build one complete signed v0.6 evidence directory from a PCS manifest."""
     manifest_path = Path(manifest_path).resolve()
@@ -580,8 +582,9 @@ def build_attestation_directory_v06(
             out,
             public_key_path,
             expected_fingerprint=public_fingerprint,
+            lean_authority_path=lean_authority_path,
         )
-    except V06VerifierIOError as exc:
+    except (V06VerifierIOError, V06LeanAuthorityError) as exc:
         raise V06AttestationError(str(exc)) from exc
     if not final["valid"]:
         raise V06AttestationError(
@@ -610,6 +613,7 @@ def attest_v06(
     *,
     expected_fingerprint: str | None = None,
     overwrite: bool = False,
+    lean_authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Produce one self-verified v0.6 delivery ZIP from a project manifest."""
     output = Path(output_bundle).resolve()
@@ -636,6 +640,7 @@ def attest_v06(
             private_key_path,
             public_key_path,
             expected_fingerprint=expected_fingerprint,
+            lean_authority_path=lean_authority_path,
         )
 
         try:
@@ -645,6 +650,7 @@ def attest_v06(
                 public_key_path,
                 expected_fingerprint=built["public_key_fingerprint"],
                 overwrite=overwrite,
+                lean_authority_path=lean_authority_path,
             )
         except V06BundleBuildError as exc:
             raise V06AttestationError(str(exc)) from exc
