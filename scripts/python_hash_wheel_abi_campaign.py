@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +25,7 @@ from pcs.signing import generate_keypair
 
 FORMAT = "pcs-python-hash-wheel-abi-v1"
 BASE_TAG = "docker.io/library/python:3.12-slim-bookworm"
-PACKAGE_SPEC = "numpy>=2.1,<3"
+NUMPY_VERSION = "2.5.3"
 
 ANALYSIS = r'''import json
 from pathlib import Path
@@ -72,30 +73,38 @@ def image_index_digest(tag: str) -> str:
     return m.group(1)
 
 
-def download_wheel(wheelhouse: Path, platform_tag: str, spec: str) -> None:
-    run(
-        [
-            "python",
-            "-m",
-            "pip",
-            "download",
-            "--disable-pip-version-check",
-            "--only-binary=:all:",
-            "--no-deps",
-            "--dest",
-            str(wheelhouse),
-            "--platform",
-            platform_tag,
-            "--implementation",
-            "cp",
-            "--python-version",
-            "312",
-            "--abi",
-            "cp312",
-            spec,
-        ]
-    )
-
+def download_arch_wheel(wheelhouse: Path, arch: str) -> Path:
+    api = f"https://pypi.org/pypi/numpy/{NUMPY_VERSION}/json"
+    with urllib.request.urlopen(api, timeout=60) as response:
+        release = json.load(response)
+    candidates = []
+    needle = f"manylinux_2_28_{arch}"
+    for item in release.get("urls", []):
+        filename = item.get("filename")
+        if (
+            item.get("packagetype") == "bdist_wheel"
+            and isinstance(filename, str)
+            and filename.startswith(f"numpy-{NUMPY_VERSION}-")
+            and "cp312-cp312" in filename
+            and needle in filename
+        ):
+            candidates.append(item)
+    if len(candidates) != 1:
+        raise RuntimeError(
+            f"expected one numpy {NUMPY_VERSION} cp312 wheel for {arch}, "
+            f"got {[x.get('filename') for x in candidates]}"
+        )
+    item = candidates[0]
+    target = wheelhouse / item["filename"]
+    with urllib.request.urlopen(item["url"], timeout=120) as response:
+        target.write_bytes(response.read())
+    expected = item.get("digests", {}).get("sha256")
+    observed = sha256_file(target)
+    if not isinstance(expected, str) or observed != expected:
+        raise RuntimeError(
+            f"PyPI digest mismatch for {target.name}: expected={expected} observed={observed}"
+        )
+    return target
 
 def wheel_version(path: Path) -> str:
     m = re.match(r"(?i)^numpy-([0-9][^-]*)-", path.name)
@@ -135,22 +144,12 @@ def produce(output: Path) -> dict[str, Any]:
 
         wheelhouse = project / "wheelhouse"
         wheelhouse.mkdir()
-        download_wheel(wheelhouse, "manylinux_2_28_x86_64", PACKAGE_SPEC)
-        x86_wheels = sorted(wheelhouse.glob("numpy-*-x86_64*.whl"))
-        if len(x86_wheels) != 1:
-            raise RuntimeError(f"expected one x86_64 wheel, got {x86_wheels}")
-        version = wheel_version(x86_wheels[0])
-
-        download_wheel(
-            wheelhouse,
-            "manylinux_2_28_aarch64",
-            f"numpy=={version}",
-        )
-        wheels = sorted(wheelhouse.glob("numpy-*.whl"))
-        if len(wheels) != 2:
-            raise RuntimeError(f"expected two architecture wheels, got {[x.name for x in wheels]}")
+        x86_wheel = download_arch_wheel(wheelhouse, "x86_64")
+        arm_wheel = download_arch_wheel(wheelhouse, "aarch64")
+        wheels = sorted([x86_wheel, arm_wheel])
+        version = NUMPY_VERSION
         if {wheel_version(x) for x in wheels} != {version}:
-            raise RuntimeError("architecture wheels resolved different versions")
+            raise RuntimeError("downloaded wheel filenames disagree with pinned NumPy version")
 
         hashes = [sha256_file(w) for w in wheels]
         lock_lines = [f"numpy=={version} \\"]
