@@ -9,13 +9,15 @@ from pathlib import Path
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from pcs.attest_v06 import attest_v06
+from pcs.attest_v06 import build_attestation_directory_v06
+from pcs.bundle_v06 import create_verified_bundle_v06
 from pcs.discover_v06 import discover_project_v06, write_discovery_outputs_v06, confirm_manifest_draft_v06
 from pcs.scaffold import init_project
 from pcs.verifier_zip_v06 import verify_package_zip_end_to_end_v06
 
 
 DEMO_KEY_SEED = hashlib.sha256(b"PCS deterministic golden examples v1 - NOT A SECRET").digest()
+GOLDEN_GENERATED_AT = "2026-10-01T00:00:00+00:00"
 
 
 def _write_demo_keypair(root: Path) -> tuple[Path, Path, str]:
@@ -68,13 +70,22 @@ def _run_case(root: Path, name: str, mutate=None, *, discover=False) -> dict:
 
     private, public, fingerprint = _write_demo_keypair(root)
     bundle = root / f"{name}.pcs.zip"
-    produced = attest_v06(
+    package_dir = root / f".{name}.package"
+    built = build_attestation_directory_v06(
         manifest,
-        bundle,
+        package_dir,
         private,
         public,
         expected_fingerprint=fingerprint,
+        generated_at=GOLDEN_GENERATED_AT,
     )
+    create_verified_bundle_v06(
+        package_dir,
+        bundle,
+        public,
+        expected_fingerprint=built["public_key_fingerprint"],
+    )
+    shutil.rmtree(package_dir)
     checked = verify_package_zip_end_to_end_v06(
         bundle,
         public,
@@ -127,6 +138,7 @@ def build_golden_examples(output: str | Path, *, force: bool = False) -> dict:
     report = {
         "format": "pcs-golden-examples-v06-v1",
         "deterministic_demo_key": True,
+        "fixed_fixture_generated_at": GOLDEN_GENERATED_AT,
         "demo_key_warning": "The deterministic key is test/demo-only and must never be trusted for real scientific publication.",
         "cases": [positive, negative, environment],
         "expected": {
