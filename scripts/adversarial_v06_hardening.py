@@ -33,8 +33,8 @@ def campaign(workdir: str | Path) -> dict:
     root = Path(workdir).resolve()
     golden = build_golden_examples(root / "golden")
     cases = {c["name"]: root / "golden" / c["bundle"] for c in golden["cases"]}
-    public = root / "golden" / "pkpd-supported" / "demo-public.pem"
-    env_public = root / "golden" / "environment-bound" / "demo-public.pem"
+    public = root / "golden" / "demo-public.pem"
+    env_public = root / "golden" / "demo-public.pem"
 
     results = []
 
