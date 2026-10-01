@@ -5,8 +5,8 @@ end-to-end verifier (`pcs/verifier_v06.py::verify_end_to_end_v06`,
 `pcs/verifier_zip_v06.py`) into the existing v1 semantic theorem stack
 (`PCS.Wire`, `PCS.WireCheck`, `PCS.DecisionExtraction`, `PCS.SerializedBridge`).
 
-All v0.6 material lives in `formal/PCS/V2/` (30 files, about 6 500 lines). Nothing in
-the v1 layer was re-proved or replaced. The v2 wire is mapped into it by `toV1`, and
+All v0.6 material lives in `formal/PCS/V2/` (31 files at the current main baseline;
+see the metrics section below). Nothing in the v1 layer was re-proved or replaced. The v2 wire is mapped into it by `toV1`, and
 `wireCheck_sound` and the `wire_*_sound` theorems are reused as they are.
 
 Gate: `./scripts/verify_lean.sh`, which runs `lake build`, the placeholder audit and
