@@ -285,7 +285,7 @@ def cmd_verify_local_v06(args):
             receipt=args.receipt,
             overwrite_receipt=args.force_receipt,
         )
-    except (OSError, V06LocalVerifyError, V06BundleVerificationError, V06ReviewerPolicyError) as e:
+    except (OSError, StrictJSONError, V06LocalVerifyError, V06BundleVerificationError, V06ReviewerPolicyError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
