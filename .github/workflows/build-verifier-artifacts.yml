@@ -2,6 +2,16 @@ name: Build PCS Reviewer Verifiers
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      - product/verifier-artifact-validation
+    paths:
+      - 'pcs/**'
+      - 'scripts/build_verifier_artifact.py'
+      - 'scripts/verifier_launcher.py'
+      - 'pyproject.toml'
+      - '.github/workflows/build-verifier-artifacts.yml'
 
 jobs:
   build:
