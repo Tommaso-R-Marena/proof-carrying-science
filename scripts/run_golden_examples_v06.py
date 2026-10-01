@@ -87,7 +87,7 @@ def _run_case(root: Path, name: str, mutate=None, *, discover=False) -> dict:
         "bundle_sha256": checked["bundle_sha256"],
         "valid": checked["valid"],
         "claims": _claim_map(checked),
-        "environment_replay": checked.get("stages", {}).get("environment_replay"),
+        "environment_replay": checked.get("environment_replay"),
         "description": {
             "pkpd-supported": "Positive control: restricted PK/PD contract and numerical replay both pass.",
             "pkpd-falsified": "Negative scientific control: package is valid while the numerical scientific claim fails.",
