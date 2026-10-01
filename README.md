@@ -664,7 +664,7 @@ Today, the Python checker is part of the TCB. The research program is to shrink 
 
 ## Current limitations
 
-- Lean source exists but a successful Lean 4.28 build is still open.
+- The current Lean 4.28 v1 wire-theorem layer builds successfully in the hosted formal gate; the exact v0.6/v2 end-to-end port remains open.
 - No arbitrary Python/R/C++ correctness theorem is claimed.
 - The PK/PD adapter is intentionally restricted and synthetic-first.
 - Chemical parsing is intentionally narrow.
