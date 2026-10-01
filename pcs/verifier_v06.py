@@ -52,6 +52,7 @@ def verify_end_to_end_v06(
     bandit_alpha: float = 1.0,
     shadow_bandit: bool = False,
     telemetry_sink: dict[str, Any] | None = None,
+    authority_context_sink: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Verify one complete PCS v0.6 package through the executable trust chain.
 
@@ -197,6 +198,17 @@ def verify_end_to_end_v06(
                 "predicate": claim["predicate"],
                 "normalized_path": entry["path"],
                 "wire_semantic_hash": entry["wire_semantic_hash"],
+            }
+        )
+
+    if authority_context_sink is not None:
+        authority_context_sink.clear()
+        authority_context_sink.update(
+            {
+                "certificate": certificate,
+                "environment_replay": environment_replay,
+                "workflow_replay": workflow_replay,
+                "replay": replay,
             }
         )
 
