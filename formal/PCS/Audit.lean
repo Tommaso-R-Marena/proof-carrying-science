@@ -5,6 +5,11 @@ import PCS.Normalized
 import PCS.Normalization
 import PCS.DecisionExtraction
 import PCS.SerializedBridge
+import PCS.Wire
+import PCS.WireVectors
+import PCS.WireCodec
+import PCS.WireCodecVectors
+import PCS.WireCheck
 import PCS.PKPD
 import PCS.DecisionVectors
 import PCS.AcceptanceTests
@@ -63,3 +68,33 @@ decision-extraction, normalization, and normalized-state soundness theorems.
 
 #print axioms PCS.PKPD.canonical_pk_units_valid
 #print axioms PCS.PKPD.canonical_pd_units_valid
+
+
+#print axioms PCS.Wire.source_claim_identity
+#print axioms PCS.Wire.exact_context_scope_preserved
+#print axioms PCS.Wire.decoded_decision_matches_recorded
+#print axioms PCS.Wire.predicate_commitment_eq_preserved
+#print axioms PCS.Wire.wire_computational_sound
+#print axioms PCS.Wire.wire_formal_sound
+#print axioms PCS.Wire.wire_empirical_sound
+#print axioms PCS.Wire.wire_mixed_sound
+
+
+#print axioms PCS.WireCodec.decodeClaimKind_computational
+#print axioms PCS.WireCodec.decodeEvidenceKind_computationalTest
+#print axioms PCS.WireCodec.decodeOutcome_pass
+#print axioms PCS.WireCodec.decodeDecisionStatus_computational
+#print axioms PCS.WireCodec.unknown_claim_kind_rejected
+#print axioms PCS.WireCodec.unknown_evidence_kind_rejected
+#print axioms PCS.WireCodec.unknown_outcome_rejected
+#print axioms PCS.WireCodec.unknown_decision_rejected
+
+
+#print axioms PCS.WireCheck.decodedEvidence_unique_of_wire_ids_nodup
+#print axioms PCS.WireCheck.contextCovers_of_exact_context_scope
+#print axioms PCS.WireCheck.requiredEvidenceBound_of_commitments
+#print axioms PCS.WireCheck.wireCheck_sound
+#print axioms PCS.WireCheck.wireCheck_computational_sound
+#print axioms PCS.WireCheck.wireCheck_formal_sound
+#print axioms PCS.WireCheck.wireCheck_empirical_sound
+#print axioms PCS.WireCheck.wireCheck_mixed_sound
