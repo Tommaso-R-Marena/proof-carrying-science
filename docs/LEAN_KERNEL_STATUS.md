@@ -61,33 +61,39 @@ See:
 
 The precise current statement is:
 
-> **The PCS assurance decision and normalized-state soundness layer is machine-checked in Lean 4.28.0.**
+> **The exact PCS v0.6/v2 package/archive assurance layer is machine-checked in Lean 4.28.0 under explicit external contracts; `reaction_balance` replay faithfulness is proved internally.**
 
-Do not state that the complete PCS product is formally verified end-to-end.
+Do not state that every production/runtime/cryptographic component is unconditionally formally verified end-to-end.
 
 ## Remaining formal boundary
 
-Still open:
+The representation bridge is now integrated. The remaining named boundaries are:
 
-- raw PCS JSON/ZIP bytes -> parsed/schema-valid Lean-level representation;
-- executable Python parser/replay/refinement -> `Normalized.DecisionInput`;
-- Python implementation refinement to the Lean decision function beyond frozen cross-language decision vectors;
-- formal real-analysis/numerical semantics for PK exponential/Emax evaluation;
+- production-Python acceptance -> Lean acceptance (`ProductionRefinesLean`), currently supported by differential tests rather than a Python-semantics refinement proof;
+- raw ZIP bytes -> semantic archive members (`ZipDecoderFaithful`);
+- environment-capture rules -> `Describes` (`CaptureSound`);
+- replay faithfulness for `unit_compatible`, `csv_disjoint`, PK/PD checks, and external validators;
+- independent SHA-256 and Ed25519 specification-equivalence proofs;
+- Ed25519 unforgeability for the trusted key;
+- formal numerical semantics for the floating-point PK/PD path;
 - empirical adequacy, clinical validity, or regulatory acceptance of scientific models.
 
-The next major theorem program is the serialized-package/executable-refinement bridge:
+The current high-assurance chain is:
 
 ```text
-raw package
+raw archive bytes
+   ↓ ZIP decoder                        explicit contract
+decoded archive members
+   ↓ archive partition / signed set    machine-checked
+canonical certificate/package/index
+   ↓ hashes + signatures + replay      machine-checked wiring;
+                                       explicit crypto/replay contracts where noted
+normalized v0.6/v2 decisions
    ↓
-strict parse + schema + artifact/replay checks
-   ↓
-Normalized.DecisionInput
-   ↓
-machine-checked decision soundness
-   ↓
-Γ ; E ⊢ C @ L
+ScientificAssurance / scoped Assures   machine-checked
 ```
+
+For the exact theorem statements and TCB inventory, see `formal/PCS_FULL_FORMALIZATION_REPORT.md`.
 
 ## Reproduction gate
 
