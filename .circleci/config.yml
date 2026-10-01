@@ -1,6 +1,8 @@
 version: 2.1
 
 commands:
+  # Every restoration producer and consumer crosses an authority-gated v0.6
+  # attestation/verification boundary, so Lean is part of the shared setup.
   setup-pcs:
     steps:
       - run:
