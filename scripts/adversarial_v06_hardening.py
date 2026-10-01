@@ -70,7 +70,15 @@ def campaign(workdir: str | Path) -> dict:
     run("zip_duplicate_control_member", lambda: add_member("certificate.json", b"{}"))
     run("zip_casefold_collision", lambda: add_member("Certificate.json", b"{}"))
     run("zip_windows_reserved_name", lambda: add_member("artifacts/CON.txt"))
-    run("unsigned_extra_member", lambda: add_member("notes.txt", b"not signed"))
+    def unsigned_extra_member():
+        out = root / "unsigned-extra-member.zip"
+        shutil.copyfile(cases["pkpd-supported"], out)
+        with zipfile.ZipFile(out, "a", compression=zipfile.ZIP_STORED) as zf:
+            zf.writestr("notes.txt", b"not signed")
+        checked = verify_package_zip_end_to_end_v06(out, public)
+        return (not checked["valid"], checked.get("failed_stage") or checked.get("errors"))
+
+    run("unsigned_extra_member", unsigned_extra_member)
 
     def environment_source_tamper():
         src = cases["environment-bound"]
