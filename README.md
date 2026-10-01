@@ -43,7 +43,7 @@ The executable reference kernel can:
 - generate a complete evidence package, HTML report, optional signature, and deterministic ZIP with one command;
 - validate and replay a restricted one-compartment IV-bolus PK + direct-Emax PD workflow.
 
-The repository also contains a Lean 4.28 assurance-kernel source tree. It has **not yet completed a real Lean build**, so it is not described as machine-checked. The Python replay checker remains the current executable trusted computing base. v0.5 adds package-level integrity/authentication so human-facing reports cannot be altered without detection. See `docs/LEAN_KERNEL_STATUS.md`.
+The repository also contains the integrated Lean 4.28 v0.6/v2 assurance layer. The production v0.6 path is **Lean-authoritative**: Python performs archive I/O plus the explicitly external replay/capture/workflow stages, but authoritative `valid: true` requires the compiled Lean authority to accept the exact decoded package bytes and certificate-bound observation transcript. v0.5 remains the legacy browser-parity fixture. See `docs/LEAN_KERNEL_STATUS.md`.
 
 
 ## Guided v0.6 project onboarding
