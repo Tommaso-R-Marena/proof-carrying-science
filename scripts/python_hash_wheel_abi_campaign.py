@@ -367,6 +367,7 @@ def replay(source: Path, output: Path, machine_id: str) -> dict[str, Any]:
             and sha256_file(out) == meta["expected_output_sha256"]
         ),
         "environment_comparison": receipt.get("environment_comparison"),
+        "determinism": receipt.get("determinism"),
     }
     write_json(output / "summary.json", summary)
     return summary
