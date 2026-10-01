@@ -113,6 +113,21 @@ jobs:
           path: /tmp/pcs-restoration/python-bundle/campaign.json
           destination: python-wheel/producer-campaign.json
 
+  diagnose-python-arm64-python-precheck:
+    machine:
+      image: ubuntu-2404:2026.05.1
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/pcs-restoration
+      - setup-pcs
+      - run:
+          name: Run Python-only v0.6 verifier on ARM64
+          command: |
+            . .venv/bin/activate
+            python -c 'import json; from pathlib import Path; from pcs.verifier_zip_v06 import load_package_zip_v06; from pcs.verifier_io_v06 import load_public_key_v06; from pcs.verifier_v06 import verify_end_to_end_v06; source=Path("/tmp/pcs-restoration/python-bundle"); meta=json.loads((source/"campaign.json").read_text(encoding="utf-8")); loaded=load_package_zip_v06(source/"study.pcs.zip"); key=load_public_key_v06(source/"producer-public.pem"); ctx={}; result=verify_end_to_end_v06(certificate_bytes=loaded["certificate_bytes"], certificate_signature_bytes=loaded["certificate_signature_bytes"], package_manifest_bytes=loaded["package_manifest_bytes"], package_signature_bytes=loaded["package_signature_bytes"], package_files=loaded["package_files"], public_key=key, expected_fingerprint=meta["producer_public_key_fingerprint"], authority_context_sink=ctx); assert result.get("valid") is True, result; print("ARM64 Python precheck passed")'
+
   diagnose-python-arm64-prepare:
     machine:
       image: ubuntu-2404:2026.05.1
@@ -380,6 +395,9 @@ workflows:
           requires: [restoration-regression]
           filters: *pcs_branch
       - replay-python-amd64:
+          requires: [produce-python-wheel]
+          filters: *pcs_branch
+      - diagnose-python-arm64-python-precheck:
           requires: [produce-python-wheel]
           filters: *pcs_branch
       - diagnose-python-arm64-prepare:
