@@ -25,7 +25,7 @@ jobs:
             python -m venv .venv
             . .venv/bin/activate
             python -m pip install --upgrade pip
-            python -m pip install -e ".[dev]"
+            python -m pip install -e ".[dev,standalone]"
       - run:
           name: Run P0/P1 product hardening gates
           command: |
@@ -33,6 +33,14 @@ jobs:
             python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py
             python scripts/run_golden_examples_v06.py -o /tmp/pcs-golden-demo
             python scripts/adversarial_v06_hardening.py
+            python scripts/build_verifier_artifact.py -o /tmp/pcs-verifier-v06
+            /tmp/pcs-verifier-v06 --help
+      - store_artifacts:
+          path: /tmp/pcs-verifier-v06
+          destination: reviewer-verifier/pcs-verifier-v06
+      - store_artifacts:
+          path: /tmp/pcs-verifier-v06.manifest.json
+          destination: reviewer-verifier/pcs-verifier-v06.manifest.json
 
   restoration-regression:
     machine:
