@@ -50,14 +50,19 @@ def _csv_proposal(
     return {
         "id": proposal_id,
         "confidence": confidence,
-        "finding": f"The cohorts appear disjoint on {key}.",
+        "finding": (
+            "The two cohorts appear intended to represent non-overlapping "
+            "populations on their identifier."
+        ),
         "artifact_ids": [
             ids["cohort_a.csv"],
             ids["cohort_b.csv"],
         ],
         "claim": {
             "id": claim_id,
-            "statement": f"The cohorts are disjoint on {key}.",
+            "statement": (
+                "The two cohorts are disjoint on their intended identifier."
+            ),
             "kind": "computational",
         },
         "check": {
@@ -186,6 +191,10 @@ def test_search_starts_from_committed_repairable_graph(tmp_path: Path):
     assert session["trajectory"]["steps"] == []
     assert session["authority"]["coordinator_trusted_to_set_authoritative"] is False
     assert session["authority"]["diagnostic_reward_sets_authority"] is False
+    assert (
+        session["authority"]["scientific_intent_reproposal_requires_human"]
+        is True
+    )
 
 
 def test_successful_search_step_recompiles_and_stops_before_authority(tmp_path: Path):
@@ -257,6 +266,34 @@ def test_search_detects_semantic_cycle_even_when_proposer_metadata_changes(
         advanced["seen_state_sha256"][0]
         == advanced["seen_state_sha256"][1]
     )
+
+
+def test_search_rejects_repair_that_changes_scientific_intent(
+    tmp_path: Path,
+):
+    _, session, ids = _start_blocked_search(tmp_path)
+    replacement = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD",
+        check_id="E_MODEL_BAD",
+        key="id",
+    )
+    replacement["finding"] = "The cohorts have the same number of rows."
+    replacement["claim"]["statement"] = (
+        "The cohorts contain the same number of records."
+    )
+    response = _repair_response(session, replacement)
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="changes the immutable scientific finding",
+    ):
+        advance_proof_search_v06(
+            tmp_path,
+            session,
+            response,
+        )
 
 
 def test_search_cycle_detection_ignores_claim_and_check_id_churn(
