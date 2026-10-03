@@ -14,6 +14,7 @@ from .checks.chemistry import reaction_balanced
 from .checks.splits import csv_key_disjoint
 from .checks.units import units_compatible
 from .decision import assess_claim
+from .formal_coverage_v06 import CERTIFIED_BUILTIN_CHECK_TYPES_V06
 from .package_v06 import MAX_PACKAGE_SINGLE_FILE_V06, MAX_PACKAGE_TOTAL_BYTES_V06
 from .scheduler_v06 import (
     TELEMETRY_FORMAT_V06,
@@ -155,13 +156,7 @@ def _replay_one(
             "id": evidence["id"],
             "kind": (
                 "computational_test"
-                if check_type in {
-                    "reaction_balance",
-                    "unit_compatible",
-                    "csv_disjoint",
-                    "pkpd_contract",
-                    "pkpd_reference_match",
-                }
+                if check_type in CERTIFIED_BUILTIN_CHECK_TYPES_V06
                 else evidence["kind"]
             ),
             "outcome": "FAIL",
@@ -328,13 +323,10 @@ def verify_certificate_replay_v06(
                     f"evidence replay outcome mismatch: {evidence['id']} "
                     f"recorded={evidence['outcome']} replayed={result['outcome']}"
                 )
-            if evidence["check_spec"]["type"] in {
-                "reaction_balance",
-                "unit_compatible",
-                "csv_disjoint",
-                "pkpd_contract",
-                "pkpd_reference_match",
-            } and evidence["checker"] != certificate["checker_version"]:
+            if (
+                evidence["check_spec"]["type"] in CERTIFIED_BUILTIN_CHECK_TYPES_V06
+                and evidence["checker"] != certificate["checker_version"]
+            ):
                 errors.append(
                     f"evidence {evidence['id']} checker differs from certificate checker_version"
                 )
