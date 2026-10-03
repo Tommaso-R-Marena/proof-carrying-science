@@ -198,6 +198,108 @@ def _validate_active_documents(
     return out
 
 
+def _proposal_intent_anchor(
+    proposal: Mapping[str, Any],
+) -> dict[str, Any]:
+    proposal_id = proposal.get("id")
+    if not isinstance(proposal_id, str) or not proposal_id:
+        raise V06ProofSearchError(
+            "proof search proposal requires a non-empty id for intent binding"
+        )
+    finding = proposal.get("finding")
+    if not isinstance(finding, str) or not finding.strip():
+        reason = proposal.get("reason")
+        finding = reason if isinstance(reason, str) and reason.strip() else None
+
+    claim = proposal.get("claim")
+    statement = None
+    kind = None
+    if isinstance(claim, Mapping):
+        raw_statement = claim.get("statement")
+        if isinstance(raw_statement, str) and raw_statement.strip():
+            statement = raw_statement
+        raw_kind = claim.get("kind", "computational")
+        if isinstance(raw_kind, str):
+            kind = raw_kind
+
+    if finding is None and statement is None:
+        raise V06ProofSearchError(
+            f"proposal {proposal_id!r} lacks a natural-language intent anchor; "
+            "proof search requires finding/reason or claim.statement"
+        )
+    return {
+        "proposal_id": proposal_id,
+        "finding": finding,
+        "claim_statement": statement,
+        "claim_kind": kind,
+    }
+
+
+def _intent_anchors_from_documents(
+    documents: Sequence[Mapping[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    anchors: dict[str, dict[str, Any]] = {}
+    for document in documents:
+        for proposal in document.get("proposals", []):
+            if not isinstance(proposal, Mapping):
+                continue
+            anchor = _proposal_intent_anchor(proposal)
+            proposal_id = anchor["proposal_id"]
+            if proposal_id in anchors:
+                raise V06ProofSearchError(
+                    f"duplicate intent anchor proposal id: {proposal_id}"
+                )
+            anchors[proposal_id] = anchor
+    return {
+        key: anchors[key]
+        for key in sorted(anchors)
+    }
+
+
+def _assert_proposal_preserves_intent(
+    proposal: Mapping[str, Any],
+    anchor: Mapping[str, Any],
+) -> None:
+    proposal_id = proposal.get("id")
+    if proposal_id != anchor.get("proposal_id"):
+        raise V06ProofSearchError(
+            "repair proposal does not match its immutable intent anchor"
+        )
+
+    anchored_finding = anchor.get("finding")
+    if anchored_finding is not None:
+        current_finding = proposal.get("finding")
+        if not isinstance(current_finding, str) or not current_finding.strip():
+            reason = proposal.get("reason")
+            current_finding = (
+                reason
+                if isinstance(reason, str) and reason.strip()
+                else None
+            )
+        if current_finding != anchored_finding:
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} changes the immutable "
+                "scientific finding; create a new human-reviewed proposal instead"
+            )
+
+    anchored_statement = anchor.get("claim_statement")
+    anchored_kind = anchor.get("claim_kind")
+    claim = proposal.get("claim")
+    if anchored_statement is not None:
+        if not isinstance(claim, Mapping) or claim.get("statement") != anchored_statement:
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} changes the immutable "
+                "claim statement; create a new human-reviewed proposal instead"
+            )
+    if anchored_kind is not None:
+        if not isinstance(claim, Mapping) or claim.get("kind", "computational") != anchored_kind:
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} changes the immutable "
+                "claim kind; create a new human-reviewed proposal instead"
+            )
+
+
+
 def _semantic_state_projection(
     translation: Mapping[str, Any],
 ) -> dict[str, Any]:
@@ -501,10 +603,43 @@ def _verify_session(
             "proof search active proposal documents are not normalized"
         )
 
+    intent_anchors = session.get("intent_anchors")
+    if not isinstance(intent_anchors, Mapping):
+        raise V06ProofSearchError(
+            "proof search session lacks intent anchors"
+        )
+    claimed_intent_hash = session.get("intent_anchors_sha256")
+    if (
+        not isinstance(claimed_intent_hash, str)
+        or len(claimed_intent_hash) != 64
+        or _commitment(intent_anchors) != claimed_intent_hash
+    ):
+        raise V06ProofSearchError(
+            "proof search intent-anchor commitment is invalid"
+        )
+    active_ids: set[str] = set()
+    for document in active_documents:
+        for proposal in document.get("proposals", []):
+            if not isinstance(proposal, Mapping):
+                continue
+            proposal_id = str(proposal.get("id"))
+            active_ids.add(proposal_id)
+            anchor = intent_anchors.get(proposal_id)
+            if not isinstance(anchor, Mapping):
+                raise V06ProofSearchError(
+                    f"active proposal {proposal_id!r} lacks an intent anchor"
+                )
+            _assert_proposal_preserves_intent(proposal, anchor)
+    if active_ids != set(intent_anchors):
+        raise V06ProofSearchError(
+            "proof search intent anchors do not exactly cover active proposals"
+        )
+
     expected_authority = {
         "coordinator_trusted_to_set_authoritative": False,
         "repair_model_trusted": False,
         "diagnostic_reward_sets_authority": False,
+        "scientific_intent_reproposal_requires_human": True,
         "human_confirmation_required": True,
         "replay_and_lean_authority_required": True,
     }
@@ -517,6 +652,7 @@ def _verify_session(
         {
             "initial_plan_sha256": session.get("initial_plan_sha256"),
             "inventory_commitment_sha256": inventory,
+            "intent_anchors_sha256": intent_anchors_sha256,
             "max_iterations": max_iterations,
         }
     )[:20]
@@ -678,6 +814,7 @@ def _merge_repaired_proposals(
     compiled_repairs: Mapping[str, Any],
     *,
     inventory_commitment_sha256: str,
+    intent_anchors: Mapping[str, Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
     proposals = compiled_repairs.get("proposals")
     proposer = compiled_repairs.get("proposer")
@@ -695,6 +832,19 @@ def _merge_repaired_proposals(
         raise V06ProofSearchError(
             "compiled repairs contain invalid or duplicate proposal ids"
         )
+
+    for proposal in proposals:
+        if not isinstance(proposal, Mapping):
+            raise V06ProofSearchError(
+                "compiled repair proposal must be an object"
+            )
+        proposal_id = proposal.get("id")
+        anchor = intent_anchors.get(str(proposal_id))
+        if not isinstance(anchor, Mapping):
+            raise V06ProofSearchError(
+                f"compiled repair proposal {proposal_id!r} lacks an intent anchor"
+            )
+        _assert_proposal_preserves_intent(proposal, anchor)
 
     known_ids = {
         proposal.get("id")
@@ -786,6 +936,8 @@ def start_proof_search_v06(
         proposal_files,
         inventory_commitment_sha256=inventory,
     )
+    intent_anchors = _intent_anchors_from_documents(documents)
+    intent_anchors_sha256 = _commitment(intent_anchors)
     state_sha256 = _semantic_state_sha256(translation)
     metrics = _translation_metrics(translation, request)
     status = _search_status(
@@ -798,6 +950,7 @@ def start_proof_search_v06(
         {
             "initial_plan_sha256": translation.get("plan_sha256"),
             "inventory_commitment_sha256": inventory,
+            "intent_anchors_sha256": claimed_intent_hash,
             "max_iterations": max_iterations,
         }
     )[:20]
@@ -822,9 +975,12 @@ def start_proof_search_v06(
             "coordinator_trusted_to_set_authoritative": False,
             "repair_model_trusted": False,
             "diagnostic_reward_sets_authority": False,
+            "scientific_intent_reproposal_requires_human": True,
             "human_confirmation_required": True,
             "replay_and_lean_authority_required": True,
         },
+        "intent_anchors": intent_anchors,
+        "intent_anchors_sha256": intent_anchors_sha256,
         "active_proposal_documents": documents,
         "current_translation": translation,
         "current_repair_request": request,
@@ -884,10 +1040,16 @@ def advance_proof_search_v06(
         session["active_proposal_documents"],
         inventory_commitment_sha256=inventory,
     )
+    intent_anchors = session.get("intent_anchors")
+    if not isinstance(intent_anchors, Mapping):
+        raise V06ProofSearchError(
+            "proof search session lacks intent anchors"
+        )
     merged_documents = _merge_repaired_proposals(
         active_documents,
         compiled,
         inventory_commitment_sha256=inventory,
+        intent_anchors=intent_anchors,
     )
     staged = _write_staged_proposal_documents(
         merged_documents,
