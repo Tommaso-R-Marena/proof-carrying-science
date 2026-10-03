@@ -206,6 +206,33 @@ def _semantic_state_projection(
         raise V06ProofSearchError(
             "proof translation candidates must be an array"
         )
+
+    def semantic_mapping(
+        value: Any,
+        *,
+        ignored_keys: set[str],
+    ) -> Any:
+        if not isinstance(value, Mapping):
+            return _json_clone(value)
+        return {
+            str(key): _json_clone(item)
+            for key, item in value.items()
+            if key not in ignored_keys
+        }
+
+    def semantic_assumptions(value: Any) -> list[Any]:
+        if not isinstance(value, list):
+            return []
+        normalized = [
+            semantic_mapping(
+                item,
+                ignored_keys={"id", "scope"},
+            )
+            for item in value
+            if isinstance(item, Mapping)
+        ]
+        return sorted(normalized, key=_commitment)
+
     projected: list[dict[str, Any]] = []
     for candidate in candidates:
         if not isinstance(candidate, Mapping):
@@ -217,17 +244,27 @@ def _semantic_state_projection(
             raise V06ProofSearchError(
                 "proof translation candidate obligations must be an array"
             )
-        projected_obligations = []
+
+        projected_obligations: list[dict[str, Any]] = []
         for obligation in obligations:
             if not isinstance(obligation, Mapping):
                 continue
             repair = obligation.get("repair")
+            details = obligation.get("details")
+            normalized_details = (
+                {
+                    str(key): _json_clone(item)
+                    for key, item in details.items()
+                    if key not in {"assumption_id"}
+                }
+                if isinstance(details, Mapping)
+                else _json_clone(details)
+            )
             projected_obligations.append(
                 {
                     "kind": obligation.get("kind"),
                     "blocking": obligation.get("blocking") is True,
-                    "message": obligation.get("message"),
-                    "details": _json_clone(obligation.get("details")),
+                    "details": normalized_details,
                     "repair_action": (
                         repair.get("action")
                         if isinstance(repair, Mapping)
@@ -235,25 +272,38 @@ def _semantic_state_projection(
                     ),
                 }
             )
+
         projected.append(
             {
+                # Proposal IDs remain stable under the repair contract and
+                # distinguish independent search roots.
                 "id": candidate.get("id"),
                 "status": candidate.get("status"),
                 "selected": candidate.get("selected") is True,
                 "formalizable": candidate.get("formalizable") is True,
-                "typed_claim": _json_clone(candidate.get("typed_claim")),
-                "check": _json_clone(candidate.get("check")),
-                "artifact_ids": _json_clone(candidate.get("artifact_ids")),
-                "assumptions": _json_clone(candidate.get("assumptions")),
+                # Ignore internal claim/check link IDs so renaming them cannot
+                # masquerade as semantic search progress.
+                "typed_claim": semantic_mapping(
+                    candidate.get("typed_claim"),
+                    ignored_keys={"id", "required_evidence", "assumptions"},
+                ),
+                "check": semantic_mapping(
+                    candidate.get("check"),
+                    ignored_keys={"id", "claim_ids"},
+                ),
+                "artifact_ids": sorted(
+                    str(item)
+                    for item in candidate.get("artifact_ids", [])
+                    if isinstance(item, str)
+                ),
+                "assumptions": semantic_assumptions(
+                    candidate.get("assumptions")
+                ),
                 "grounding": _json_clone(candidate.get("grounding")),
                 "formal_target": _json_clone(candidate.get("formal_target")),
                 "obligations": sorted(
                     projected_obligations,
-                    key=lambda item: (
-                        str(item.get("kind")),
-                        bool(item.get("blocking")),
-                        str(item.get("message")),
-                    ),
+                    key=_commitment,
                 ),
             }
         )
