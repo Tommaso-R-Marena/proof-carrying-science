@@ -644,6 +644,7 @@ def start_proof_search_v06(
         "coordinator": PROOF_SEARCH_COORDINATOR_V06,
         "search_id": search_id,
         "project_root_name": root.name,
+        "subject": translation.get("subject"),
         "inventory_commitment_sha256": inventory,
         "initial_plan_sha256": translation.get("plan_sha256"),
         "max_iterations": max_iterations,
@@ -741,6 +742,11 @@ def advance_proof_search_v06(
     try:
         after_translation = translate_project_v06(
             root,
+            subject=(
+                str(session["subject"])
+                if session.get("subject") is not None
+                else None
+            ),
             proposal_files=staged,
             minimum_confidence=float(thresholds["minimum_confidence"]),
             minimum_model_confidence=float(
