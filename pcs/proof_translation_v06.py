@@ -866,6 +866,7 @@ def translate_project_v06(
     *,
     subject: str | None = None,
     proposal_files: Sequence[str | Path] | None = None,
+    control_paths: Sequence[str | Path] | None = None,
     minimum_confidence: float = 0.95,
     minimum_model_confidence: float = 0.98,
     minimum_workflow_confidence: float = 0.95,
@@ -883,7 +884,10 @@ def translate_project_v06(
             subject=subject,
             minimum_confidence=minimum_confidence,
             minimum_workflow_confidence=minimum_workflow_confidence,
-            exclude_paths=list(proposal_files or []),
+            exclude_paths=[
+                *list(proposal_files or []),
+                *list(control_paths or []),
+            ],
         )
     except V06DiscoveryError as exc:
         raise V06ProofTranslationError(str(exc)) from exc
