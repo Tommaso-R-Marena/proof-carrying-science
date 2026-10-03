@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 import json
 import math
 import re
@@ -23,7 +24,7 @@ from .discover_v06 import (
     V06DiscoveryError,
     discover_project_v06,
 )
-from .jsonio import StrictJSONError, strict_json_load
+from .jsonio import StrictJSONError, strict_json_load, strict_json_loads
 from .numeric_contract_v06 import V06NumericContractError
 from .schema_validation import SchemaValidationError, validate_manifest_shape
 
@@ -79,21 +80,20 @@ def _snapshot_bytes(root: Path, item: Mapping[str, Any]) -> bytes:
 
 
 def _strict_json_snapshot(root: Path, item: Mapping[str, Any]) -> dict[str, Any] | None:
-    _snapshot_bytes(root, item)
+    raw = _snapshot_bytes(root, item)
     try:
-        value = strict_json_load(root / str(item["path"]))
-    except (OSError, StrictJSONError):
+        value = strict_json_loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, StrictJSONError):
         return None
     return value if isinstance(value, dict) else None
 
 
 def _csv_header_snapshot(root: Path, item: Mapping[str, Any]) -> list[str] | None:
-    _snapshot_bytes(root, item)
-    path = root / str(item["path"])
+    raw = _snapshot_bytes(root, item)
     try:
-        with path.open("r", encoding="utf-8", newline="") as fh:
-            row = next(csv.reader(fh), None)
-    except (OSError, UnicodeDecodeError, csv.Error):
+        text = raw.decode("utf-8")
+        row = next(csv.reader(io.StringIO(text, newline="")), None)
+    except (UnicodeDecodeError, csv.Error):
         return None
     if not row:
         return None
