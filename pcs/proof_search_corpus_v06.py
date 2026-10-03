@@ -142,18 +142,35 @@ def _example_from_repair_record(
             "blocking_obligation_delta": _metric_delta(
                 before, after, "blocking_open_obligations"
             ),
+            "blocking_obligations_closed": (
+                int(before.get("blocking_open_obligations", 0))
+                - int(after.get("blocking_open_obligations", 0))
+            ),
             "compiled_selected_delta": _metric_delta(
                 before, after, "compiled_selected"
+            ),
+            "compiled_selected_added": (
+                int(after.get("compiled_selected", 0))
+                - int(before.get("compiled_selected", 0))
             ),
             "formalizable_candidate_delta": _metric_delta(
                 before, after, "formalizable_candidates"
             ),
+            "formalizable_candidates_added": (
+                int(after.get("formalizable_candidates", 0))
+                - int(before.get("formalizable_candidates", 0))
+            ),
             "repairable_task_delta": _metric_delta(
                 before, after, "repairable_tasks"
             ),
+            "repairable_tasks_closed": (
+                int(before.get("repairable_tasks", 0))
+                - int(after.get("repairable_tasks", 0))
+            ),
             "diagnostic_reward": int(step.get("diagnostic_reward", 0)),
-            "scientific_truth_label": False,
-            "proof_authority_label": False,
+            "label_scope": "SEARCH_BEHAVIOR_ONLY",
+            "has_scientific_truth_label": False,
+            "has_proof_authority_label": False,
             "credit_assignment": "STEP_LEVEL_SHARED",
         },
         "authority": {
