@@ -72,6 +72,14 @@ from .proof_translation_v06 import (
     translate_project_v06,
     write_proof_translation_outputs_v06,
 )
+from .proof_repair_v06 import (
+    V06ProofRepairError,
+    build_proof_repair_request_v06,
+    compile_proof_repair_response_v06,
+    load_proof_repair_inputs_v06,
+    write_compiled_repair_proposals_v06,
+    write_proof_repair_request_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -443,6 +451,77 @@ def cmd_translate_project_v06(args):
             ),
         }
     except (OSError, V06ProofTranslationError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_prepare_proof_repairs_v06(args):
+    try:
+        translation, _, _ = load_proof_repair_inputs_v06(args.translation)
+        request = build_proof_repair_request_v06(translation)
+        output = write_proof_repair_request_v06(
+            request,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": request["format"],
+            "translation_plan_sha256": request["translation_plan_sha256"],
+            "obligation_graph_sha256": request["obligation_graph_sha256"],
+            "repair_request_sha256": request["repair_request_sha256"],
+            "summary": request["summary"],
+            "proof_repair_request": output,
+            "next": (
+                "Give the repair request to an external proposer that returns "
+                "pcs-proof-repair-proposals-v1, then compile that response with "
+                "pcs compile-repairs-v06."
+            ),
+        }
+    except (OSError, V06ProofRepairError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_compile_proof_repairs_v06(args):
+    try:
+        translation, request, repair_response = load_proof_repair_inputs_v06(
+            args.translation,
+            args.request,
+            args.response,
+        )
+        if request is None or repair_response is None:
+            raise V06ProofRepairError(
+                "compile-repairs-v06 requires translation, request, and response inputs"
+            )
+        compiled = compile_proof_repair_response_v06(
+            translation,
+            request,
+            repair_response,
+        )
+        output = write_compiled_repair_proposals_v06(
+            compiled,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": compiled["format"],
+            "compiled_repair_sha256": compiled["compiled_repair_sha256"],
+            "proposal_count": len(compiled["proposals"]),
+            "compiled_proposals": output,
+            "next": (
+                "Rerun pcs translate-project-v06 on the unchanged project with "
+                f"--proposals {output}. The repaired proposal must pass grounding, "
+                "predicate compilation, confidence gating, human confirmation, replay, "
+                "and Lean authority exactly like any other untrusted proposal."
+            ),
+        }
+    except (OSError, V06ProofRepairError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -961,6 +1040,47 @@ def build_parser():
         help="explicitly replace existing translation outputs",
     )
     tp6.set_defaults(func=cmd_translate_project_v06)
+
+    pr6 = sub.add_parser(
+        "prepare-repairs-v06",
+        help="derive machine-repairable proof obligations from a committed translation graph",
+    )
+    pr6.add_argument(
+        "translation",
+        help="pcs-proof-translation-v1 JSON produced by translate-project-v06",
+    )
+    pr6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="pcs-proof-repair-request-v1 JSON for an external proposer",
+    )
+    pr6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing repair request",
+    )
+    pr6.set_defaults(func=cmd_prepare_proof_repairs_v06)
+
+    cr6 = sub.add_parser(
+        "compile-repairs-v06",
+        help="validate graph-bound model repairs and emit ordinary untrusted PCS proposals",
+    )
+    cr6.add_argument("translation", help="original pcs-proof-translation-v1 JSON")
+    cr6.add_argument("request", help="committed pcs-proof-repair-request-v1 JSON")
+    cr6.add_argument("response", help="external pcs-proof-repair-proposals-v1 JSON")
+    cr6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="compiled pcs-proof-proposals-v1 JSON to feed back into translation",
+    )
+    cr6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace existing compiled repair proposals",
+    )
+    cr6.set_defaults(func=cmd_compile_proof_repairs_v06)
 
     d6 = sub.add_parser(
         "discover-v06",
