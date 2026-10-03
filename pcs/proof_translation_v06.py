@@ -328,7 +328,7 @@ def _discovery_proposals(discovery: Mapping[str, Any]) -> list[dict[str, Any]]:
         }
         proposal["finding"] = str(rec.get("reason", ""))
         if "assumption" in proposal and "assumptions" not in proposal:
-            proposal["assumptions"] = [proposal["assumption"]]
+            proposal["assumptions"] = [proposal.pop("assumption")]
         proposals.append(proposal)
     return proposals
 
