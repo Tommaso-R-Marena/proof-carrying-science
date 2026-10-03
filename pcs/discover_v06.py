@@ -193,6 +193,28 @@ def _json_object(path: Path) -> dict[str, Any] | None:
     return value if isinstance(value, dict) else None
 
 
+_PCS_CONTROL_DOCUMENT_FORMATS = {
+    DISCOVERY_FORMAT_V06,
+    "pcs-proof-translation-v1",
+    "pcs-proof-proposals-v1",
+}
+
+
+def _is_pcs_control_document(path: Path) -> bool:
+    if path.suffix.lower() != ".json":
+        return False
+    value = _json_object(path)
+    if not isinstance(value, dict):
+        return False
+    if value.get("format") in _PCS_CONTROL_DOCUMENT_FORMATS:
+        return True
+    intake = value.get("pcs_intake")
+    return (
+        isinstance(intake, dict)
+        and intake.get("format") == MANIFEST_DRAFT_FORMAT_V06
+    )
+
+
 def _split_kind(name: str) -> str | None:
     tokens = set(re.split(r"[^a-z0-9]+", name.lower()))
     for kind, variants in _SPLIT_TOKENS.items():
@@ -669,6 +691,9 @@ def discover_project_v06(
             continue
         if path.is_symlink():
             skipped.append({"path": relative_literal, "reason": "symlink"})
+            continue
+        if _is_pcs_control_document(path):
+            skipped.append({"path": relative_literal, "reason": "pcs-control-document"})
             continue
         if not path.is_file():
             skipped.append({"path": relative_literal, "reason": "not-regular-file"})
