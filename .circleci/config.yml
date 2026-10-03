@@ -48,7 +48,7 @@ jobs:
           name: Run P0/P1 product hardening gates
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py
+            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py
             python scripts/run_golden_examples_v06.py -o /tmp/pcs-golden-demo
             python scripts/adversarial_v06_hardening.py
             source "$BASH_ENV"
@@ -342,6 +342,9 @@ workflows:
                 - main
                 - product/p0-p1-demo-hardening
                 - formal/lean-authoritative-production
+                - core/proof-obligation-graph-v1
+                - core/proof-repair-contract-v1
+                - core/proof-search-coordinator-v1
 
   restoration-and-abi-evidence:
     jobs:
