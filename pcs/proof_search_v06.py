@@ -652,7 +652,7 @@ def _verify_session(
         {
             "initial_plan_sha256": session.get("initial_plan_sha256"),
             "inventory_commitment_sha256": inventory,
-            "intent_anchors_sha256": intent_anchors_sha256,
+            "intent_anchors_sha256": claimed_intent_hash,
             "max_iterations": max_iterations,
         }
     )[:20]
@@ -950,7 +950,7 @@ def start_proof_search_v06(
         {
             "initial_plan_sha256": translation.get("plan_sha256"),
             "inventory_commitment_sha256": inventory,
-            "intent_anchors_sha256": claimed_intent_hash,
+            "intent_anchors_sha256": intent_anchors_sha256,
             "max_iterations": max_iterations,
         }
     )[:20]
