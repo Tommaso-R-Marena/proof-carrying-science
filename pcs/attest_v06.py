@@ -13,6 +13,10 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from .bundle_v06 import V06BundleBuildError, create_verified_bundle_v06
+from .check_registry_v06 import (
+    CERTIFIED_BUILTIN_CHECK_TYPES_V06,
+    predicate_from_manifest_check_v06,
+)
 from .canonical_json import JCS_PROFILE, canonicalize_jcs, canonicalize_jcs_bytes
 from .certificate_semantics_v06 import (
     V06CertificateSemanticsError,
@@ -62,13 +66,7 @@ from .numeric_contract_v06 import (
 
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
-_SUPPORTED_CHECK_TYPES = {
-    "csv_disjoint",
-    "reaction_balance",
-    "unit_compatible",
-    "pkpd_contract",
-    "pkpd_reference_match",
-}
+_SUPPORTED_CHECK_TYPES = set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
 
 
 class V06AttestationError(ValueError):
@@ -127,45 +125,12 @@ def _check_spec_from_manifest(check: dict[str, Any]) -> dict[str, Any]:
             f"attest-v06 does not yet produce external evidence type {check_type!r}; "
             f"supported built-in checks are {sorted(_SUPPORTED_CHECK_TYPES)}"
         )
-
-    if check_type == "csv_disjoint":
-        return {
-            "type": check_type,
-            "left_artifact": check["left_artifact"],
-            "right_artifact": check["right_artifact"],
-            "key": check["key"],
-        }
-    if check_type == "reaction_balance":
-        return {
-            "type": check_type,
-            "reactants": deepcopy(check["reactants"]),
-            "products": deepcopy(check["products"]),
-        }
-    if check_type == "unit_compatible":
-        return {
-            "type": check_type,
-            "left_unit": check["left_unit"],
-            "right_unit": check["right_unit"],
-        }
-    if check_type == "pkpd_contract":
-        return {
-            "type": check_type,
-            "model_artifact": check["model_artifact"],
-        }
-    return {
-        "type": check_type,
-        "model_artifact": check["model_artifact"],
-        "output_artifact": check["output_artifact"],
-        "time_column": check.get("time_column", "time"),
-        "concentration_column": check.get("concentration_column", "concentration"),
-        "effect_column": check.get("effect_column", "effect"),
-        "rel_tol": canonical_nonnegative_number_text_v06(
-            check.get("rel_tol", 1e-9), label=f"check {check.get('id')} rel_tol"
-        ),
-        "abs_tol": canonical_nonnegative_number_text_v06(
-            check.get("abs_tol", 1e-12), label=f"check {check.get('id')} abs_tol"
-        ),
-    }
+    try:
+        return predicate_from_manifest_check_v06(check)
+    except (KeyError, ValueError, V06NumericContractError) as exc:
+        raise V06AttestationError(
+            f"invalid {check_type!r} check {check.get('id')!r}: {exc}"
+        ) from exc
 
 
 def _normalize_predicate_v06(value: Any, *, label: str) -> Any:
