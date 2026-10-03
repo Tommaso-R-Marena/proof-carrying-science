@@ -406,6 +406,7 @@ def cmd_translate_project_v06(args):
             root,
             subject=args.subject,
             proposal_files=args.proposals,
+            control_paths=[plan_output, manifest_output],
             minimum_confidence=args.minimum_confidence,
             minimum_model_confidence=args.minimum_model_confidence,
             minimum_workflow_confidence=args.minimum_workflow_confidence,
