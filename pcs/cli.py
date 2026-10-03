@@ -426,6 +426,8 @@ def cmd_translate_project_v06(args):
             "format": result["format"],
             "project": str(root),
             "plan_sha256": result["plan_sha256"],
+            "obligation_graph_sha256": result["obligation_graph"]["graph_sha256"],
+            "obligation_graph_summary": result["obligation_graph"]["summary"],
             "summary": result["summary"],
             "blocking_obligations": [
                 obligation

@@ -31,7 +31,8 @@ from .schema_validation import SchemaValidationError, validate_manifest_shape
 
 PROOF_TRANSLATION_FORMAT_V06 = "pcs-proof-translation-v1"
 PROOF_PROPOSALS_FORMAT_V06 = "pcs-proof-proposals-v1"
-PROOF_TRANSLATION_COMPILER_V06 = "pcs-proof-translation-compiler/0.1"
+PROOF_OBLIGATION_GRAPH_FORMAT_V06 = "pcs-proof-obligation-graph-v1"
+PROOF_TRANSLATION_COMPILER_V06 = "pcs-proof-translation-compiler/0.2"
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 
 
@@ -285,6 +286,121 @@ def _normalized_predicate(value: Any) -> Any:
     return out
 
 
+
+_REPAIR_POLICY_BY_KIND: dict[str, dict[str, Any]] = {
+    "PROVIDE_TYPED_PREDICATE": {
+        "action": "propose_typed_predicate",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "CHECK_TYPE_REQUIRED": {
+        "action": "revise_check_type",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "PROVIDE_EXTERNAL_VALIDATOR": {
+        "action": "attach_external_validator",
+        "actor": "scientist_or_engineer",
+        "machine_assisted": True,
+    },
+    "IMPLEMENT_CERTIFIED_CHECKER": {
+        "action": "implement_certified_checker",
+        "actor": "pcs_engineer",
+        "machine_assisted": True,
+    },
+    "INVALID_CHECK_SPEC": {
+        "action": "repair_check_spec",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "INVALID_ARTIFACT_GROUNDING": {
+        "action": "repair_artifact_grounding",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "GROUND_ARTIFACTS": {
+        "action": "select_grounded_artifacts",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "GROUND_PREDICATE_IN_PROJECT_BYTES": {
+        "action": "revise_predicate_from_project_bytes",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "CLAIM_REQUIRED": {
+        "action": "supply_claim",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "INVALID_CLAIM": {
+        "action": "repair_claim",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "CLAIM_STATEMENT_REQUIRED": {
+        "action": "supply_claim_statement",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "CLAIM_EVIDENCE_LINK_MISMATCH": {
+        "action": "repair_claim_evidence_links",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "ASSUMPTION_LINK_MISMATCH": {
+        "action": "repair_assumption_links",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "INVALID_CLAIM_KIND": {
+        "action": "choose_supported_claim_kind",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "PREDICATE_NUMERIC_CONTRACT": {
+        "action": "repair_numeric_contract",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "PREDICATE_CHECK_MISMATCH": {
+        "action": "accept_compiler_predicate_or_revise_check",
+        "actor": "proposer",
+        "machine_assisted": True,
+    },
+    "CONFIDENCE_BELOW_SELECTION_THRESHOLD": {
+        "action": "human_review_or_reproposal",
+        "actor": "human_or_proposer",
+        "machine_assisted": True,
+    },
+    "HUMAN_CONFIRMATION_REQUIRED": {
+        "action": "human_confirm_translation",
+        "actor": "human",
+        "machine_assisted": False,
+    },
+    "ASSUMPTION_REVIEW_REQUIRED": {
+        "action": "human_review_assumption",
+        "actor": "human",
+        "machine_assisted": False,
+    },
+}
+
+
+def _repair_for_obligation(
+    kind: str,
+    *,
+    details: Mapping[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    policy = _REPAIR_POLICY_BY_KIND.get(kind)
+    if policy is None:
+        return None
+    repair = _json_clone(policy)
+    repair["can_set_authoritative"] = False
+    if details:
+        repair["context"] = _json_clone(details)
+    return repair
+
+
 def _obligation(
     proposal_id: str,
     kind: str,
@@ -293,6 +409,7 @@ def _obligation(
     blocking: bool,
     details: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
+    repair = _repair_for_obligation(kind, details=details)
     seed = canonicalize_jcs_bytes(
         {
             "proposal_id": proposal_id,
@@ -312,6 +429,8 @@ def _obligation(
     }
     if details:
         out["details"] = dict(details)
+    if repair is not None:
+        out["repair"] = repair
     return out
 
 
@@ -769,12 +888,319 @@ def _compile_proposal(
     return result
 
 
+
+def _candidate_closure_state(candidate: Mapping[str, Any]) -> str:
+    if any(
+        isinstance(obligation, Mapping) and obligation.get("blocking") is True
+        for obligation in candidate.get("obligations", [])
+    ):
+        return "BLOCKED"
+    if candidate.get("selected") is True:
+        return "COMPILED_PENDING_HUMAN_CONFIRMATION"
+    if candidate.get("formalizable") is True:
+        return "FORMALIZABLE_NOT_SELECTED"
+    return "OPEN"
+
+
+def _proof_obligation_graph(
+    candidates: Sequence[Mapping[str, Any]],
+    *,
+    inventory: Mapping[str, Mapping[str, Any]],
+) -> dict[str, Any]:
+    nodes: dict[str, dict[str, Any]] = {}
+    edges: list[dict[str, Any]] = []
+    roots: list[str] = []
+    repair_queue: list[dict[str, Any]] = []
+
+    def add_node(node: dict[str, Any]) -> None:
+        node_id = str(node["id"])
+        existing = nodes.get(node_id)
+        if existing is not None and existing != node:
+            raise V06ProofTranslationError(
+                f"proof-obligation graph node collision: {node_id}"
+            )
+        nodes[node_id] = node
+
+    def add_edge(
+        source: str,
+        target: str,
+        relation: str,
+        *,
+        blocking: bool = False,
+    ) -> None:
+        edges.append(
+            {
+                "from": source,
+                "to": target,
+                "relation": relation,
+                "blocking": blocking,
+            }
+        )
+
+    closure_state_counts: dict[str, int] = {}
+    for candidate in sorted(candidates, key=lambda item: str(item.get("id", ""))):
+        proposal_id = str(candidate["id"])
+        proposal_node = f"proposal:{proposal_id}"
+        closure_state = _candidate_closure_state(candidate)
+        closure_state_counts[closure_state] = (
+            closure_state_counts.get(closure_state, 0) + 1
+        )
+        roots.append(proposal_node)
+        add_node(
+            {
+                "id": proposal_node,
+                "type": "proposal",
+                "status": closure_state,
+                "proposal_id": proposal_id,
+                "candidate_status": candidate.get("status"),
+                "selected": candidate.get("selected") is True,
+                "formalizable": candidate.get("formalizable") is True,
+                "confidence": candidate.get("confidence"),
+                "source": _json_clone(candidate.get("source")),
+                "finding": candidate.get("finding"),
+            }
+        )
+
+        artifact_nodes: list[str] = []
+        for artifact_id in sorted(set(candidate.get("artifact_ids", []))):
+            item = inventory.get(str(artifact_id))
+            if item is None:
+                continue
+            node_id = f"artifact:{artifact_id}"
+            artifact_nodes.append(node_id)
+            add_node(
+                {
+                    "id": node_id,
+                    "type": "artifact",
+                    "status": "BOUND_TO_INVENTORY",
+                    "artifact_id": artifact_id,
+                    "path": item.get("path"),
+                    "sha256": item.get("sha256"),
+                    "size": item.get("size"),
+                    "media_type": item.get("media_type"),
+                }
+            )
+            add_edge(proposal_node, node_id, "references_artifact")
+
+        grounding = candidate.get("grounding")
+        grounding_nodes: list[str] = []
+        if isinstance(grounding, Mapping):
+            facts = grounding.get("facts", [])
+            if isinstance(facts, list):
+                for index, fact in enumerate(facts):
+                    if not isinstance(fact, str):
+                        continue
+                    node_id = f"grounding:{proposal_id}:{index}"
+                    grounding_nodes.append(node_id)
+                    add_node(
+                        {
+                            "id": node_id,
+                            "type": "grounding_fact",
+                            "status": (
+                                "CLOSED"
+                                if grounding.get("status") == "GROUNDED"
+                                else "FAILED"
+                            ),
+                            "fact": fact,
+                        }
+                    )
+                    add_edge(proposal_node, node_id, "has_grounding_fact")
+                    for artifact_node in artifact_nodes:
+                        add_edge(artifact_node, node_id, "supports_grounding")
+
+        check = candidate.get("check")
+        check_node: str | None = None
+        if isinstance(check, Mapping):
+            check_id = str(check.get("id") or proposal_id)
+            check_node = f"check:{check_id}"
+            add_node(
+                {
+                    "id": check_node,
+                    "type": "typed_check",
+                    "status": (
+                        "GROUNDED"
+                        if isinstance(grounding, Mapping)
+                        and grounding.get("status") == "GROUNDED"
+                        else "PROPOSED"
+                    ),
+                    "check_id": check.get("id"),
+                    "check_type": check.get("type"),
+                    "predicate": (
+                        _json_clone(candidate["typed_claim"].get("predicate"))
+                        if isinstance(candidate.get("typed_claim"), Mapping)
+                        else None
+                    ),
+                }
+            )
+            add_edge(proposal_node, check_node, "proposes_check")
+            for grounding_node in grounding_nodes:
+                add_edge(grounding_node, check_node, "grounds_check")
+
+        claim = candidate.get("typed_claim")
+        claim_node: str | None = None
+        if isinstance(claim, Mapping):
+            claim_id = str(claim.get("id") or proposal_id)
+            claim_node = f"claim:{claim_id}"
+            add_node(
+                {
+                    "id": claim_node,
+                    "type": "typed_claim",
+                    "status": (
+                        "COMPILED"
+                        if candidate.get("formalizable") is True
+                        else "PROPOSED"
+                    ),
+                    "claim_id": claim.get("id"),
+                    "kind": claim.get("kind"),
+                    "statement": claim.get("statement"),
+                    "predicate": _json_clone(claim.get("predicate")),
+                }
+            )
+            add_edge(proposal_node, claim_node, "interprets_as_claim")
+            if check_node is not None:
+                add_edge(check_node, claim_node, "defines_predicate_for")
+
+        for assumption in candidate.get("assumptions", []):
+            if not isinstance(assumption, Mapping):
+                continue
+            assumption_id = str(assumption.get("id"))
+            node_id = f"assumption:{assumption_id}"
+            add_node(
+                {
+                    "id": node_id,
+                    "type": "assumption",
+                    "status": "REQUIRES_REVIEW",
+                    "assumption_id": assumption.get("id"),
+                    "statement": assumption.get("statement"),
+                }
+            )
+            if claim_node is not None:
+                add_edge(node_id, claim_node, "assumption_for")
+            else:
+                add_edge(proposal_node, node_id, "declares_assumption")
+
+        formal_target = candidate.get("formal_target")
+        if isinstance(formal_target, Mapping):
+            node_id = f"formal_target:{proposal_id}"
+            add_node(
+                {
+                    "id": node_id,
+                    "type": "formal_target",
+                    "status": "TARGET_RESOLVED",
+                    "target": _json_clone(formal_target),
+                }
+            )
+            if claim_node is not None:
+                add_edge(claim_node, node_id, "compiled_toward")
+            elif check_node is not None:
+                add_edge(check_node, node_id, "compiled_toward")
+            else:
+                add_edge(proposal_node, node_id, "compiled_toward")
+
+        for obligation in candidate.get("obligations", []):
+            if not isinstance(obligation, Mapping):
+                continue
+            obligation_id = str(obligation["id"])
+            node_id = f"obligation:{obligation_id}"
+            blocking = obligation.get("blocking") is True
+            add_node(
+                {
+                    "id": node_id,
+                    "type": "obligation",
+                    "status": "OPEN_BLOCKING" if blocking else "OPEN_REVIEW",
+                    "obligation_id": obligation_id,
+                    "proposal_id": proposal_id,
+                    "kind": obligation.get("kind"),
+                    "blocking": blocking,
+                    "message": obligation.get("message"),
+                    "details": _json_clone(obligation.get("details")),
+                    "repair": _json_clone(obligation.get("repair")),
+                }
+            )
+            add_edge(
+                proposal_node,
+                node_id,
+                "has_blocking_obligation" if blocking else "has_review_obligation",
+                blocking=blocking,
+            )
+            repair = obligation.get("repair")
+            if isinstance(repair, Mapping):
+                repair_queue.append(
+                    {
+                        "obligation_id": obligation_id,
+                        "proposal_id": proposal_id,
+                        "kind": obligation.get("kind"),
+                        "blocking": blocking,
+                        "repair": _json_clone(repair),
+                    }
+                )
+
+    node_ids = set(nodes)
+    for edge in edges:
+        if edge["from"] not in node_ids or edge["to"] not in node_ids:
+            raise V06ProofTranslationError(
+                "proof-obligation graph contains a dangling edge"
+            )
+
+    ordered_nodes = [nodes[key] for key in sorted(nodes)]
+    ordered_edges = sorted(
+        edges,
+        key=lambda edge: (
+            str(edge["from"]),
+            str(edge["to"]),
+            str(edge["relation"]),
+            bool(edge["blocking"]),
+        ),
+    )
+    repair_queue = sorted(
+        repair_queue,
+        key=lambda item: (
+            not bool(item["blocking"]),
+            str(item["proposal_id"]),
+            str(item["obligation_id"]),
+        ),
+    )
+    type_counts: dict[str, int] = {}
+    for node in ordered_nodes:
+        node_type = str(node["type"])
+        type_counts[node_type] = type_counts.get(node_type, 0) + 1
+
+    graph_core = {
+        "format": PROOF_OBLIGATION_GRAPH_FORMAT_V06,
+        "roots": sorted(set(roots)),
+        "nodes": ordered_nodes,
+        "edges": ordered_edges,
+        "repair_queue": repair_queue,
+        "summary": {
+            "nodes": len(ordered_nodes),
+            "edges": len(ordered_edges),
+            "blocking_obligations": sum(
+                1
+                for node in ordered_nodes
+                if node.get("type") == "obligation"
+                and node.get("blocking") is True
+            ),
+            "repair_actions": len(repair_queue),
+            "node_type_counts": type_counts,
+            "closure_state_counts": closure_state_counts,
+        },
+    }
+    graph_sha256 = hashlib.sha256(
+        canonicalize_jcs_bytes(graph_core)
+    ).hexdigest()
+    return {
+        **graph_core,
+        "graph_sha256": graph_sha256,
+    }
+
+
 def _merge_selected_proposals_into_manifest(
     base_manifest: Mapping[str, Any],
     *,
     candidates: Sequence[Mapping[str, Any]],
     inventory: Mapping[str, Mapping[str, Any]],
     plan_commitment: str,
+    obligation_graph_commitment: str,
 ) -> dict[str, Any]:
     manifest = _json_clone(base_manifest)
 
@@ -845,6 +1271,8 @@ def _merge_selected_proposals_into_manifest(
     intake["proof_translation_format"] = PROOF_TRANSLATION_FORMAT_V06
     intake["proof_translation_compiler"] = PROOF_TRANSLATION_COMPILER_V06
     intake["proof_translation_plan_sha256"] = plan_commitment
+    intake["proof_obligation_graph_format"] = PROOF_OBLIGATION_GRAPH_FORMAT_V06
+    intake["proof_obligation_graph_sha256"] = obligation_graph_commitment
     intake["proof_translation_selected"] = sorted(translation_selected)
     intake["proof_translation_model_selected"] = sorted(model_selected)
     intake["proof_translation_requires_confirmation"] = True
@@ -955,6 +1383,10 @@ def translate_project_v06(
         for candidate in candidates
         for obligation in candidate.get("obligations", [])
     ]
+    obligation_graph = _proof_obligation_graph(
+        candidates,
+        inventory=inventory,
+    )
     plan_core = {
         "format": PROOF_TRANSLATION_FORMAT_V06,
         "compiler": PROOF_TRANSLATION_COMPILER_V06,
@@ -962,6 +1394,7 @@ def translate_project_v06(
         "proposal_sources": proposal_sources,
         "candidates": candidates,
         "obligations": obligations,
+        "obligation_graph": obligation_graph,
     }
     plan_commitment = hashlib.sha256(canonicalize_jcs_bytes(plan_core)).hexdigest()
 
@@ -970,6 +1403,7 @@ def translate_project_v06(
         candidates=candidates,
         inventory=inventory,
         plan_commitment=plan_commitment,
+        obligation_graph_commitment=obligation_graph["graph_sha256"],
     )
 
     status_counts: dict[str, int] = {}
@@ -1005,6 +1439,9 @@ def translate_project_v06(
                 1 for candidate in candidates if candidate.get("formalizable") is True
             ),
             "blocking_open_obligations": len(open_blocking),
+            "obligation_graph_nodes": obligation_graph["summary"]["nodes"],
+            "obligation_graph_edges": obligation_graph["summary"]["edges"],
+            "repair_actions": obligation_graph["summary"]["repair_actions"],
             "status_counts": status_counts,
             "manifest_claims": len(manifest.get("claims", [])),
             "manifest_checks": len(manifest.get("checks", [])),
