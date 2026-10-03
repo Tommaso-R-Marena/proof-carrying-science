@@ -65,11 +65,51 @@ def _review(
 ) -> dict[str, str]:
     receipt = root / f"{name}.receipt.json"
     signature = root / f"{name}.receipt.sig.json"
+    if not valid:
+        accepted = False
     receipt_obj = {
         "format": "pcs-end-to-end-verifier-v06-v1",
+        "authority_required": True,
+        "authoritative": valid,
         "valid": valid,
         "accepted": accepted,
+        "failed_stage": None if valid else "lean_authority",
+        "errors": [] if valid else ["synthetic rejected review fixture"],
+        "stages": {"lean_authority": valid},
         **subject,
+        "archive_format": "zip",
+        "archive_assurance": "python-materialized-legacy-zip",
+        "public_key_fingerprint": "9" * 64,
+        "lean_authority": {
+            "format": "pcs-lean-authority-result-v1",
+            "required": True,
+            "accepted": valid,
+            "verdict": "ACCEPT" if valid else "REJECT",
+            "mode": "test",
+            "authority_sha256": "1" * 64,
+            "observation_transcript_sha256": "2" * 64,
+            "certificate_semantic_hash": subject["certificate_semantic_hash"],
+            "archive_mode": "python-materialized-members",
+        },
+        "formal_coverage": {
+            "format": "pcs-formal-coverage-v1",
+            "checker_classification_scope": "CHECK_TYPE_ONLY",
+            "execution_authority_scope": "EXACT_PACKAGE_VERIFICATION",
+            "certified_checker_types": [
+                "csv_disjoint",
+                "pkpd_contract",
+                "pkpd_reference_match",
+                "reaction_balance",
+                "unit_compatible",
+            ],
+            "evidence_total": 0,
+            "certified_type_evidence": 0,
+            "outside_certified_type_evidence": 0,
+            "package_authority": (
+                "LEAN_AUTHORITATIVE_ACCEPT" if valid else "LEAN_AUTHORITY_REJECT"
+            ),
+            "evidence": [],
+        },
         "reviewer_policy": {
             "applied": True,
             "pass": accepted,

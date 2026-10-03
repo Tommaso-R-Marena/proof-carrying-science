@@ -46,6 +46,7 @@ from .receipt_signature_v06 import (
     sign_verification_receipt_v06,
     verify_verification_receipt_signature_v06,
 )
+from .receipt_contract_v06 import audit_verification_receipt_file_v06
 from .quorum_v06 import (
     V06ReviewQuorumError,
     verify_review_quorum_v06,
@@ -298,12 +299,26 @@ def cmd_verify_local_v06(args):
     return 0 if result.get("accepted", result["valid"]) else 1
 
 
+def cmd_audit_receipt_v06(args):
+    result = audit_verification_receipt_file_v06(
+        args.receipt,
+        bundle_path=args.bundle,
+        producer_public_key_path=args.producer_public_key,
+        authority_path=args.lean_authority,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0 if result["valid"] else 1
+
+
 def cmd_verify_receipt_v06(args):
     result = verify_verification_receipt_signature_v06(
         args.receipt,
         args.signature,
         args.reviewer_public_key,
         expected_reviewer_fingerprint=args.expected_reviewer_fingerprint,
+        bundle_path=args.bundle,
+        producer_public_key_path=args.producer_public_key,
+        authority_path=args.lean_authority,
     )
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
     return 0 if result["valid"] else 1
@@ -1106,9 +1121,28 @@ def build_parser():
     vl6.add_argument("--force-receipt", action="store_true")
     vl6.set_defaults(func=cmd_verify_local_v06)
 
+    ar6 = sub.add_parser(
+        "audit-receipt-v06",
+        help="audit internal v0.6 receipt invariants and optional external bindings",
+    )
+    ar6.add_argument("receipt", help="verification receipt JSON")
+    ar6.add_argument(
+        "--bundle",
+        help="optional delivered bundle whose exact SHA-256 must match the receipt",
+    )
+    ar6.add_argument(
+        "--producer-public-key",
+        help="optional trusted producer Ed25519 public key whose fingerprint must match",
+    )
+    ar6.add_argument(
+        "--lean-authority",
+        help="optional pcs-lean-authority executable whose SHA-256 must match the receipt",
+    )
+    ar6.set_defaults(func=cmd_audit_receipt_v06)
+
     vr6 = sub.add_parser(
         "verify-receipt-v06",
-        help="verify an independent reviewer Ed25519 signature over exact v0.6 receipt bytes",
+        help="verify reviewer signature plus the semantic v0.6 receipt contract",
     )
     vr6.add_argument("receipt", help="verification receipt JSON")
     vr6.add_argument("--signature", required=True, help="reviewer receipt signature JSON")
@@ -1120,6 +1154,18 @@ def build_parser():
     vr6.add_argument(
         "--expected-reviewer-fingerprint",
         help="pin the accepted reviewer public-key SHA-256 fingerprint",
+    )
+    vr6.add_argument(
+        "--bundle",
+        help="optional delivered bundle whose exact SHA-256 must match the receipt",
+    )
+    vr6.add_argument(
+        "--producer-public-key",
+        help="optional trusted producer Ed25519 public key whose fingerprint must match",
+    )
+    vr6.add_argument(
+        "--lean-authority",
+        help="optional pcs-lean-authority executable whose SHA-256 must match the receipt",
     )
     vr6.set_defaults(func=cmd_verify_receipt_v06)
 

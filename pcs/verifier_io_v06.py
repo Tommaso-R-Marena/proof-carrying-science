@@ -7,6 +7,10 @@ from typing import Any
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
+from .receipt_contract_v06 import (
+    V06ReceiptContractError,
+    assert_verification_receipt_contract_v06,
+)
 from .package_v06 import (
     MAX_PACKAGE_FILES_V06,
     MAX_PACKAGE_SINGLE_FILE_V06,
@@ -200,6 +204,10 @@ def write_verification_receipt_v06(
         raise V06VerifierIOError(
             f"refusing to overwrite existing verification receipt: {path}"
         )
+    try:
+        assert_verification_receipt_contract_v06(receipt)
+    except V06ReceiptContractError as exc:
+        raise V06VerifierIOError(str(exc)) from exc
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
