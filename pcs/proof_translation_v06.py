@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import math
@@ -54,6 +55,174 @@ def _confidence(value: Any, *, label: str) -> float:
     if not math.isfinite(result) or not 0.0 <= result <= 1.0:
         raise V06ProofTranslationError(f"{label} confidence must be finite in [0,1]")
     return result
+
+
+def _snapshot_bytes(root: Path, item: Mapping[str, Any]) -> bytes:
+    path = (root / str(item["path"])).resolve()
+    try:
+        path.relative_to(root)
+    except ValueError as exc:
+        raise V06ProofTranslationError(
+            f"artifact path escapes project root: {item.get('path')!r}"
+        ) from exc
+    if path.is_symlink() or not path.is_file():
+        raise V06ProofTranslationError(
+            f"grounding artifact is missing or unsafe: {item.get('path')!r}"
+        )
+    raw = path.read_bytes()
+    actual_hash = hashlib.sha256(raw).hexdigest()
+    if actual_hash != item.get("sha256") or len(raw) != item.get("size"):
+        raise V06ProofTranslationError(
+            f"artifact changed during proof translation: {item.get('path')!r}"
+        )
+    return raw
+
+
+def _strict_json_snapshot(root: Path, item: Mapping[str, Any]) -> dict[str, Any] | None:
+    _snapshot_bytes(root, item)
+    try:
+        value = strict_json_load(root / str(item["path"]))
+    except (OSError, StrictJSONError):
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def _csv_header_snapshot(root: Path, item: Mapping[str, Any]) -> list[str] | None:
+    _snapshot_bytes(root, item)
+    path = root / str(item["path"])
+    try:
+        with path.open("r", encoding="utf-8", newline="") as fh:
+            row = next(csv.reader(fh), None)
+    except (OSError, UnicodeDecodeError, csv.Error):
+        return None
+    if not row:
+        return None
+    return [str(x).strip() for x in row]
+
+
+def _restricted_pkpd_model_object(value: Any) -> bool:
+    return (
+        isinstance(value, Mapping)
+        and value.get("model_type") == "one_compartment_iv_bolus"
+        and isinstance(value.get("pd"), Mapping)
+        and value["pd"].get("model_type") == "direct_emax"
+        and all(key in value for key in ("dose", "volume", "clearance"))
+    )
+
+
+def _ground_check_against_project(
+    check: Mapping[str, Any],
+    *,
+    declared_artifact_ids: Sequence[str],
+    inventory: Mapping[str, Mapping[str, Any]],
+    project_root: Path,
+) -> dict[str, Any]:
+    check_type = check.get("type")
+    checked_artifacts: list[str] = []
+    facts: list[str] = []
+
+    def item(artifact_id: str) -> Mapping[str, Any]:
+        value = inventory.get(artifact_id)
+        if value is None:
+            raise V06ProofTranslationError(
+                f"grounding references unknown artifact {artifact_id!r}"
+            )
+        return value
+
+    if check_type == "reaction_balance":
+        matches = []
+        for artifact_id in declared_artifact_ids:
+            obj = _strict_json_snapshot(project_root, item(artifact_id))
+            if (
+                isinstance(obj, Mapping)
+                and obj.get("reactants") == check.get("reactants")
+                and obj.get("products") == check.get("products")
+            ):
+                matches.append(artifact_id)
+        if not matches:
+            raise V06ProofTranslationError(
+                "reaction_balance proposal is not grounded in a referenced JSON artifact with exact reactants/products"
+            )
+        checked_artifacts.extend(matches)
+        facts.append("exact reaction arrays re-derived from project JSON")
+
+    elif check_type == "unit_compatible":
+        matches = []
+        for artifact_id in declared_artifact_ids:
+            obj = _strict_json_snapshot(project_root, item(artifact_id))
+            if (
+                isinstance(obj, Mapping)
+                and obj.get("left_unit") == check.get("left_unit")
+                and obj.get("right_unit") == check.get("right_unit")
+            ):
+                matches.append(artifact_id)
+        if not matches:
+            raise V06ProofTranslationError(
+                "unit_compatible proposal is not grounded in a referenced JSON artifact with exact left_unit/right_unit"
+            )
+        checked_artifacts.extend(matches)
+        facts.append("exact unit strings re-derived from project JSON")
+
+    elif check_type == "csv_disjoint":
+        left_id = str(check["left_artifact"])
+        right_id = str(check["right_artifact"])
+        key = check.get("key")
+        left_header = _csv_header_snapshot(project_root, item(left_id))
+        right_header = _csv_header_snapshot(project_root, item(right_id))
+        if (
+            not isinstance(key, str)
+            or left_header is None
+            or right_header is None
+            or key not in left_header
+            or key not in right_header
+        ):
+            raise V06ProofTranslationError(
+                "csv_disjoint proposal key is not present in both referenced CSV headers"
+            )
+        checked_artifacts.extend([left_id, right_id])
+        facts.append(f"CSV key {key!r} re-derived from both project headers")
+
+    elif check_type == "pkpd_contract":
+        model_id = str(check["model_artifact"])
+        model = _strict_json_snapshot(project_root, item(model_id))
+        if not _restricted_pkpd_model_object(model):
+            raise V06ProofTranslationError(
+                "pkpd_contract proposal does not reference a supported restricted PK/PD model artifact"
+            )
+        checked_artifacts.append(model_id)
+        facts.append("restricted PK/PD model shape re-derived from project JSON")
+
+    elif check_type == "pkpd_reference_match":
+        model_id = str(check["model_artifact"])
+        output_id = str(check["output_artifact"])
+        model = _strict_json_snapshot(project_root, item(model_id))
+        header = _csv_header_snapshot(project_root, item(output_id))
+        required = {
+            str(check.get("time_column", "time")),
+            str(check.get("concentration_column", "concentration")),
+            str(check.get("effect_column", "effect")),
+        }
+        if not _restricted_pkpd_model_object(model):
+            raise V06ProofTranslationError(
+                "pkpd_reference_match proposal does not reference a supported restricted PK/PD model artifact"
+            )
+        if header is None or not required.issubset(set(header)):
+            raise V06ProofTranslationError(
+                "pkpd_reference_match proposal columns are not present in the referenced output CSV"
+            )
+        checked_artifacts.extend([model_id, output_id])
+        facts.append("restricted PK/PD model and output columns re-derived from project artifacts")
+
+    else:
+        raise V06ProofTranslationError(
+            f"no deterministic grounding adapter for check type {check_type!r}"
+        )
+
+    return {
+        "status": "GROUNDED",
+        "artifact_ids": sorted(set(checked_artifacts)),
+        "facts": facts,
+    }
 
 
 def _artifact_entry(item: Mapping[str, Any]) -> dict[str, Any]:
@@ -220,6 +389,7 @@ def _compile_proposal(
     proposal: Mapping[str, Any],
     *,
     inventory: Mapping[str, Mapping[str, Any]],
+    project_root: Path,
     confidence_threshold: float,
 ) -> dict[str, Any]:
     ident = _safe_id(proposal.get("id"), label="proposal id")
@@ -245,6 +415,7 @@ def _compile_proposal(
         "check": None,
         "artifact_ids": [],
         "assumptions": [],
+        "grounding": None,
         "obligations": [],
     }
 
@@ -354,6 +525,32 @@ def _compile_proposal(
             )
         )
         return result
+
+    try:
+        grounding = _ground_check_against_project(
+            check,
+            declared_artifact_ids=artifact_ids,
+            inventory=inventory,
+            project_root=project_root,
+        )
+    except V06ProofTranslationError as exc:
+        result["status"] = "REJECTED_UNGROUNDED"
+        result["check"] = check
+        result["artifact_ids"] = artifact_ids
+        result["grounding"] = {
+            "status": "FAILED",
+            "error": str(exc),
+        }
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "GROUND_PREDICATE_IN_PROJECT_BYTES",
+                str(exc),
+                blocking=True,
+            )
+        )
+        return result
+    result["grounding"] = grounding
 
     if not isinstance(claim_raw, Mapping):
         result["status"] = "REJECTED_INVALID_PROPOSAL"
@@ -563,6 +760,7 @@ def _compile_proposal(
         "check": check,
         "artifact_ids": artifact_ids,
         "assumptions": assumptions,
+        "grounding": result["grounding"],
         "formal_target": result["formal_target"],
     }
     result["translation_sha256"] = hashlib.sha256(
@@ -729,6 +927,7 @@ def translate_project_v06(
             _compile_proposal(
                 proposal,
                 inventory=inventory,
+                project_root=Path(project_root).resolve(),
                 confidence_threshold=threshold,
             )
         )
