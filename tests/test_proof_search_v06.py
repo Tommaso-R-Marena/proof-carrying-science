@@ -311,6 +311,46 @@ def test_search_detects_semantic_cycle_even_when_proposer_metadata_changes(
     )
 
 
+def test_search_can_repair_invalid_claim_kind_without_changing_claim_intent(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+    proposal = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD_KIND",
+        claim_id="C_MODEL_BAD_KIND",
+        check_id="E_MODEL_BAD_KIND",
+        key="id",
+    )
+    proposal["claim"]["kind"] = "not-a-supported-kind"
+    proposal_path = _proposal_file(
+        tmp_path,
+        discovery,
+        [proposal],
+    )
+    session = start_proof_search_v06(
+        tmp_path,
+        proposal_files=[proposal_path],
+    )
+    assert session["status"] == "AWAITING_REPAIR"
+    task = session["current_repair_request"]["tasks"][0]
+    assert task["kind"] == "INVALID_CLAIM_KIND"
+
+    replacement = json.loads(json.dumps(proposal))
+    replacement["claim"]["kind"] = "computational"
+    response = _repair_response(session, replacement)
+    advanced = advance_proof_search_v06(
+        tmp_path,
+        session,
+        response,
+    )
+
+    assert advanced["status"] == "READY_FOR_HUMAN_CONFIRMATION"
+    assert advanced["summary"]["blocking_open_obligations"] == 0
+
+
 def test_search_rejects_confidence_inflation_during_other_repair(
     tmp_path: Path,
 ):
