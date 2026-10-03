@@ -8,7 +8,8 @@ Usage (from `formal/`, after `lake build`):
   lake env lean --run tools/LeanVerifyDir.lean <package-dir> <public-key-raw-base64> [<fingerprint-hex>]
 
 Oracles: Lean Ed25519 (real signature verification), ASCII-only Unicode folding,
-the verified Lean `reaction_balance` executor (`PCS.V2.Chemistry.chemExecWith`) with a
+the verified Lean built-in dispatcher (`PCS.V2.Checkers.builtinExecWith`: `reaction_balance`,
+`unit_compatible`, `csv_disjoint` replayed in Lean) with a
 *recorded-outcome* fallback for every other check type, and permissive workflow/capture
 oracles.
 The driver therefore cross-checks every structural, canonical-byte, hash, signature,
@@ -28,7 +29,7 @@ def recordedExecutor : Executor := fun req =>
 def oracles : Oracles :=
   { unicode := PCS.V2.Vectors.asciiUnicode, ed25519 := PCS.V2.Ed25519.verify,
     capture := fun _ => .null, workflow := fun _ _ => true,
-    exec := PCS.V2.Chemistry.chemExecWith recordedExecutor }
+    exec := PCS.V2.Checkers.builtinExecWith recordedExecutor }
 
 partial def collect (root : System.FilePath) (rel : String) : IO (List (String × ByteArray)) := do
   let dir := if rel.isEmpty then root else root / rel

@@ -16,6 +16,24 @@ partial def collectAuthorityFiles (root : System.FilePath) (rel : String) :
 
 def main (args : List String) : IO UInt32 := do
   match args with
+  | "--zip" :: archivePath :: keyB64 :: transcriptPath :: rest =>
+    -- High-assurance mode: the Lean authority decodes the raw canonical archive bytes
+    -- itself (`PCS.V2.Zip.decodeZip`, proved sound against `CanonicalZip`); no external
+    -- ZIP library or filesystem materialisation is on the authoritative path.
+    let transcriptBytes ← IO.FS.readBinFile transcriptPath
+    let some transcript := decodeAuthorityTranscriptBytes transcriptBytes
+      | IO.eprintln "invalid authority observation transcript"; return 2
+    let raw ← IO.FS.readBinFile archivePath
+    let pk := (PCS.V2.Base64.decodeCanonical keyB64).getD []
+    let expected := match rest with
+      | fp :: _ => PCS.V2.Hex.hexDecode fp
+      | [] => none
+    let stage := PCS.V2.CanonicalArchive.diagnoseArchiveWithTranscript transcript { pk, expected } raw
+    if stage = "ACCEPT" then
+      IO.println "ACCEPT"
+    else
+      IO.println ("REJECT:" ++ stage)
+    return 0
   | dir :: keyB64 :: transcriptPath :: rest =>
     let transcriptBytes ← IO.FS.readBinFile transcriptPath
     let some transcript := decodeAuthorityTranscriptBytes transcriptBytes
@@ -35,5 +53,6 @@ def main (args : List String) : IO UInt32 := do
         IO.println ("REJECT:" ++ stage)
       return 0
   | _ =>
-    IO.eprintln "usage: pcs-lean-authority <package-dir> <pk-b64> <observations.json> [fingerprint]"
+    IO.eprintln ("usage: pcs-lean-authority <package-dir> <pk-b64> <observations.json> [fingerprint]\n" ++
+      "       pcs-lean-authority --zip <canonical-archive.zip> <pk-b64> <observations.json> [fingerprint]")
     return 2

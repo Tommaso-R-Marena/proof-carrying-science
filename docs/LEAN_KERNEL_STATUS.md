@@ -61,11 +61,21 @@ See:
 
 The precise current statement is:
 
-> **The exact PCS v0.6/v2 package/archive assurance layer is machine-checked in Lean 4.28.0 under explicit external contracts; `reaction_balance` replay faithfulness is proved internally.**
+> **The exact PCS v0.6/v2 package/archive assurance layer is machine-checked in Lean 4.28.0. For the Lean-authoritative path on canonical archives, the only remaining hypothesis is Ed25519 unforgeability for the trust anchor (`PCS.V2.Frontier.pcs_frontier_archive_acceptance_sound`). SHA-256 is proved equal to an independent FIPS 180-4 specification; `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract` and `pkpd_reference_match` are replayed by proved Lean checkers inside the authority, and a PK/PD PASS has a proved real-valued meaning (`PCSReal.PKPD.pcs_pkpd_reference_match_real`).**
+
+Still not claimed: an RFC 8032 proof of the Lean Ed25519 verifier, Ed25519 unforgeability,
+SHA-512 specification equivalence, a verified workflow front end or environment capture
+beyond `EnvFacts`, verification of external validators, or any empirical/clinical adequacy.
+See `formal/PCS_FRONTIER_FORMALIZATION_REPORT.md`.
 
 Do not state that every production/runtime/cryptographic component is unconditionally formally verified end-to-end.
 
 ## Remaining formal boundary
+
+> Superseded in part by the frontier passes — see `formal/PCS_FRONTIER_FORMALIZATION_REPORT.md`
+> §3–§4 for the current list. The items below are the baseline boundary; SHA-256, the
+> `unit_compatible`/`csv_disjoint`/PK/PD replays and the canonical-ZIP decoder are now
+> proved, and capture/workflow are narrowed.
 
 The representation bridge is now integrated. The remaining named boundaries are:
 
@@ -106,6 +116,7 @@ From repository root:
 
 ```bash
 ./scripts/verify_lean.sh
+./scripts/verify_lean_real.sh   # Mathlib real-analysis bridge (PK/PD real-valued theorem)
 ```
 
 The script now uses token-safe grep patterns and rejects placeholders plus project-level `axiom`, `unsafe`, `implemented_by`, `extern`, and `native_decide` declarations.

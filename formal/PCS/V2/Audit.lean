@@ -5,6 +5,9 @@ import PCS.V2.Authority
 import PCS.V2.SHA256Padding
 import PCS.V2.Chemistry
 import PCS.V2.ChemistryVectors
+import PCS.V2.SHA256Spec
+import PCS.V2.Frontier
+import PCS.V2.PKPDCheck
 
 /-!
 Audit surface for the v0.6/v2 refinement layer: a successful build prints the axiom
@@ -88,3 +91,56 @@ dependencies of the flagship theorem and of the main intermediate theorems.
 #print axioms PCS.V2.Chemistry.chemExecWith_faithful
 #print axioms PCS.V2.Chemistry.chemExec_faithful
 #print axioms PCS.V2.Chemistry.pcs_reaction_evidence_balanced
+-- SHA-256 = independent FIPS 180-4 specification
+#print axioms PCS.V2.SHA256Spec.sha256_eq_spec
+#print axioms PCS.V2.SHA256Spec.sha256_eq_fips1804
+#print axioms PCS.V2.FIPS1804Spec.K_roots
+#print axioms PCS.V2.FIPS1804Spec.H0_roots
+#print axioms PCS.V2.FIPS1804Spec.padK_spec
+-- verified `unit_compatible`
+#print axioms PCS.V2.Units.parseUnit_iff
+#print axioms PCS.V2.Units.exprDenotes_unique
+#print axioms PCS.V2.Units.unitCompatibleB_iff
+#print axioms PCS.V2.Units.unitRun_sound
+-- verified `csv_disjoint` (strict CSV subset)
+#print axioms PCS.V2.Csv.parseCsv_iff
+#print axioms PCS.V2.Csv.csvTable_unique
+#print axioms PCS.V2.Csv.csvDisjointB_iff
+#print axioms PCS.V2.Csv.csvRun_sound
+-- verified PK/PD (exact-rational certified intervals)
+#print axioms PCS.V2.PKPDCheck.decodeModel_sound
+#print axioms PCS.V2.PKPDCheck.rowB_sound
+#print axioms PCS.V2.PKPDCheck.pkpdContractRun_sound
+#print axioms PCS.V2.PKPDCheck.pkpdMatchRun_sound
+-- proof-carrying checker kernel
+#print axioms PCS.V2.Checkers.dispatch_faithful
+#print axioms PCS.V2.Checkers.builtinExecWith_faithful
+#print axioms PCS.V2.Checkers.builtinHolds_semantics
+#print axioms PCS.V2.Checkers.builtinExecWith_pass_semantics
+-- workflow semantics and environment facts
+#print axioms PCS.V2.Workflow.workflowCheckB_sound
+#print axioms PCS.V2.Workflow.workflowDescribes_semantics
+#print axioms PCS.V2.EnvFacts.envFactsB_sound
+-- canonical ZIP
+#print axioms PCS.V2.Zip.decodeZip_sound
+#print axioms PCS.V2.Zip.leanZip_faithful
+#print axioms PCS.V2.Zip.canonicalZip_names_nodup
+-- high-assurance flagship layer
+#print axioms PCS.V2.HighAssurance.pcs_verified_builtin_acceptance_sound
+#print axioms PCS.V2.HighAssurance.pcs_high_assurance_acceptance_sound
+#print axioms PCS.V2.HighAssurance.pcs_authority_binary_sound
+#print axioms PCS.V2.HighAssurance.pcs_authority_binary_builtin_sound
+#print axioms PCS.V2.HighAssurance.pcs_workflow_acceptance_sound
+#print axioms PCS.V2.HighAssurance.pcs_no_environment_authentic
+#print axioms PCS.V2.HighAssurance.authority_capture_sound
+#print axioms PCS.V2.CanonicalArchive.pcs_canonical_archive_builtin_sound
+#print axioms PCS.V2.CanonicalArchive.pcs_canonical_archive_acceptance_sound
+#print axioms PCS.V2.CanonicalArchive.acceptArchiveWithTranscript_refines
+#print axioms PCS.V2.CanonicalArchive.pcs_authority_archive_binary_sound
+#print axioms PCS.V2.CanonicalArchive.pcs_authority_archive_binary_builtin_sound
+-- frontier flagship (sole hypothesis: Ed25519 unforgeability)
+#print axioms PCS.V2.Frontier.pcs_frontier_acceptance_sound
+#print axioms PCS.V2.Frontier.pcs_frontier_archive_acceptance_sound
+#print axioms PCS.V2.Frontier.pcs_frontier_authority_binary_sound
+#print axioms PCS.V2.Frontier.pcs_frontier_environment
+#print axioms PCS.V2.Frontier.pcs_unsigned_acceptance_yields_forgery

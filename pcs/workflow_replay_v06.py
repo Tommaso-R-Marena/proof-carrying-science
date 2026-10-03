@@ -121,12 +121,55 @@ def _artifact_bytes(
     return inventory, bytes_by_id
 
 
-def _reference_key(ref: dict[str, Any]) -> tuple[str, str, str]:
-    return (
-        str(ref.get("kind")),
-        str(ref.get("path")),
-        str(ref.get("artifact_id")),
-    )
+def _reference_key(ref: dict[str, Any]) -> tuple[str, str, str] | None:
+    # Exact string triple. The former `str(...)` coercion made a signed
+    # `artifact_id: null` match a rediscovered artifact literally named "None", and a
+    # numeric field match its decimal spelling (counterexample 13 in
+    # formal/PCS_FRONTIER_FORMALIZATION_REPORT.md). Non-string fields are malformed.
+    kind, path, artifact_id = ref.get("kind"), ref.get("path"), ref.get("artifact_id")
+    if not all(isinstance(v, str) for v in (kind, path, artifact_id)):
+        return None
+    return (kind, path, artifact_id)
+
+
+def _is_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def authority_fresh_sources_v06(fresh: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalized fresh static analysis handed to the Lean authority.
+
+    The Lean authority (formal/PCS/V2/Workflow.lean, `workflowCheckB`) re-checks every
+    signed static-workflow claim against these records itself; the records are the
+    output of the static-analysis front end on the exact committed source bytes.
+    """
+    nodes = {
+        node.get("contract", {}).get("inference_id"): node
+        for node in fresh.get("nodes", [])
+        if isinstance(node.get("contract"), dict)
+    }
+    out: list[dict[str, Any]] = []
+    for source in fresh.get("sources", []):
+        node = nodes.get(source["id"])
+        if node is None:
+            continue
+        refs = []
+        for ref in source.get("resolved_references", []):
+            key = _reference_key(ref) if isinstance(ref, dict) else None
+            if key is not None:
+                refs.append({"kind": key[0], "path": key[1], "artifact_id": key[2]})
+        out.append(
+            {
+                "inference_id": source["id"],
+                "source_artifact_id": source["source_artifact_id"],
+                "source_path": source["source_path"],
+                "source_kind": source["source_kind"],
+                "inputs": list(node.get("inputs", [])),
+                "outputs": list(node.get("outputs", [])),
+                "references": refs,
+            }
+        )
+    return out
 
 
 def _validate_claim_contract(
@@ -193,7 +236,10 @@ def _validate_claim_contract(
             errors.append(
                 f"workflow node {node_id} analysis mode differs from fresh static analysis"
             )
-        if float(signed.get("confidence", -1.0)) != float(
+        # Numbers only: `float("0.98")` used to accept a *string* confidence
+        # (counterexample 14).
+        signed_conf = signed.get("confidence")
+        if not _is_number(signed_conf) or float(signed_conf) != float(
             fresh_source.get("confidence", -2.0)
         ):
             errors.append(
@@ -214,8 +260,15 @@ def _validate_claim_contract(
         for ref in fresh_source.get("resolved_references", [])
         if isinstance(ref, dict)
     }
-    for ref in signed.get("resolved_references", []):
-        if not isinstance(ref, dict):
+    fresh_refs.discard(None)
+    signed_refs = signed.get("resolved_references")
+    if not isinstance(signed_refs, list):
+        errors.append(
+            f"workflow node {node_id} has no resolved_references list"
+        )
+        signed_refs = []
+    for ref in signed_refs:
+        if not isinstance(ref, dict) or _reference_key(ref) is None:
             errors.append(
                 f"workflow node {node_id} has malformed resolved reference"
             )
@@ -260,6 +313,7 @@ def verify_static_workflow_replay_v06(
                 "nodes_checked": 0,
                 "mode": "no-static-workflow-claims",
                 "details": [],
+                "_authority_fresh_sources": [],
             }
 
         inventory, bytes_by_id = _artifact_bytes(certificate, package_files)
@@ -328,6 +382,7 @@ def verify_static_workflow_replay_v06(
             "nodes_checked": len(static_nodes),
             "mode": "static-source-replay",
             "details": details,
+            "_authority_fresh_sources": authority_fresh_sources_v06(fresh),
         }
     except (
         OSError,

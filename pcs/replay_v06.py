@@ -8,7 +8,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Mapping
 
-from .adapters.pkpd import check_contract_file, check_output_file
+from .adapters.pkpd import check_contract_file, check_output_file, strict_decimal_text
 from .certificate_v06 import verify_certificate_hashes_v06
 from .checks.chemistry import reaction_balanced
 from .checks.splits import csv_key_disjoint
@@ -57,6 +57,22 @@ def _artifact_bytes(
     return out
 
 
+def _strict_tolerance(value: Any) -> float:
+    """A PK/PD tolerance: an integer or a strict decimal string (as in the Lean authority's
+    `PCS.V2.PKPDCheck.tolOf`). Strings such as ' 1e-9', '1_0', 'inf' or 'nan', which
+    `float()` would accept, fail closed."""
+    if isinstance(value, bool):
+        raise ValueError("tolerance must not be a boolean")
+    if isinstance(value, int):
+        return float(value)
+    if isinstance(value, float):
+        # direct-API callers; certificates always carry the canonical decimal text
+        return value
+    if isinstance(value, str):
+        return float(strict_decimal_text(value))
+    raise ValueError("tolerance must be a number or a decimal string")
+
+
 def _replay_one(
     evidence: dict[str, Any],
     artifact_paths: Mapping[str, Path],
@@ -88,8 +104,8 @@ def _replay_one(
                 time_column=spec["time_column"],
                 concentration_column=spec["concentration_column"],
                 effect_column=spec["effect_column"],
-                rel_tol=float(spec["rel_tol"]),
-                abs_tol=float(spec["abs_tol"]),
+                rel_tol=_strict_tolerance(spec["rel_tol"]),
+                abs_tol=_strict_tolerance(spec["abs_tol"]),
             )
             kind = "computational_test"
         elif check_type == "external_formal_proof":
