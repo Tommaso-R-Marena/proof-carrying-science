@@ -98,14 +98,24 @@ def _dummy_context() -> dict:
             "semantic_hash": "ab" * 32,
             "checker_version": "pcs-python-kernel/0.6.0-dev",
             "environment": None,
-            "evidence": [],
+            "evidence": [
+                {
+                    "id": "E1",
+                    "check_spec": {"type": "reaction_balance"},
+                }
+            ],
         },
         "environment_replay": {
             "valid": True,
             "_authority_fresh_capture": None,
         },
         "workflow_replay": {"valid": True},
-        "replay": {"valid": True, "evidence": []},
+        "replay": {
+            "valid": True,
+            "evidence": [
+                {"id": "E1", "kind": "computational_test", "outcome": "PASS"}
+            ],
+        },
     }
 
 
@@ -147,6 +157,10 @@ def test_lean_rejection_overrides_successful_python_precheck(monkeypatch):
     assert result["authoritative"] is False
     assert result["failed_stage"] == "lean_authority"
     assert result["stages"]["lean_authority"] is False
+    coverage = result["formal_coverage"]
+    assert coverage["package_authority"] == "LEAN_AUTHORITY_REJECT"
+    assert coverage["evidence"][0]["checker_semantics"] == "PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE"
+    assert coverage["evidence"][0]["execution_authority"] == "CHECKER_TYPE_PROVED_PACKAGE_NOT_LEAN_ACCEPTED"
 
 
 def test_lean_acceptance_is_the_only_authoritative_success(monkeypatch):
@@ -186,6 +200,10 @@ def test_lean_acceptance_is_the_only_authoritative_success(monkeypatch):
     assert result["valid"] is True
     assert result["authoritative"] is True
     assert result["stages"]["lean_authority"] is True
+    coverage = result["formal_coverage"]
+    assert coverage["package_authority"] == "LEAN_AUTHORITATIVE_ACCEPT"
+    assert coverage["certified_type_evidence"] == 1
+    assert coverage["evidence"][0]["execution_authority"] == "AUTHORITATIVELY_REPLAYED_BY_LEAN"
 
 
 @pytest.mark.skipif(
