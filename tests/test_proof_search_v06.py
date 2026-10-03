@@ -311,6 +311,62 @@ def test_search_detects_semantic_cycle_even_when_proposer_metadata_changes(
     )
 
 
+def test_search_rejects_confidence_inflation_during_other_repair(
+    tmp_path: Path,
+):
+    _, session, ids = _start_blocked_search(tmp_path)
+    replacement = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD",
+        check_id="E_MODEL_BAD",
+        key="id",
+        confidence=1.0,
+    )
+    response = _repair_response(session, replacement)
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="changes model confidence",
+    ):
+        advance_proof_search_v06(
+            tmp_path,
+            session,
+            response,
+        )
+
+
+def test_search_rejects_checker_family_switch_during_repair(
+    tmp_path: Path,
+):
+    _, session, ids = _start_blocked_search(tmp_path)
+    replacement = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD",
+        check_id="E_MODEL_BAD",
+        key="id",
+    )
+    replacement["check"] = {
+        "id": "E_MODEL_BAD",
+        "type": "unit_compatible",
+        "claim_ids": ["C_MODEL_BAD"],
+        "left_unit": "mg",
+        "right_unit": "mg",
+    }
+    response = _repair_response(session, replacement)
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="changes the checker family",
+    ):
+        advance_proof_search_v06(
+            tmp_path,
+            session,
+            response,
+        )
+
+
 def test_search_rejects_repair_that_changes_scientific_intent(
     tmp_path: Path,
 ):
