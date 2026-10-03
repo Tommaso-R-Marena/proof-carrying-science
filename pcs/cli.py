@@ -80,6 +80,16 @@ from .proof_repair_v06 import (
     write_compiled_repair_proposals_v06,
     write_proof_repair_request_v06,
 )
+from .proof_search_v06 import (
+    V06ProofSearchError,
+    advance_proof_search_v06,
+    load_proof_search_repair_response_v06,
+    load_proof_search_session_v06,
+    start_proof_search_v06,
+    write_current_repair_request_v06,
+    write_proof_search_session_v06,
+    write_proof_search_trajectory_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -522,6 +532,127 @@ def cmd_compile_proof_repairs_v06(args):
             ),
         }
     except (OSError, V06ProofRepairError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_start_proof_search_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        session_output = Path(args.output).resolve()
+        request_output = (
+            Path(args.repair_request).resolve()
+            if args.repair_request
+            else session_output.with_name(session_output.stem + ".request.json")
+        )
+        if request_output == session_output:
+            raise V06ProofSearchError(
+                "proof search session and repair request must use different paths"
+            )
+        session = start_proof_search_v06(
+            root,
+            proposal_files=args.proposals,
+            subject=args.subject,
+            max_iterations=args.max_iterations,
+            minimum_confidence=args.minimum_confidence,
+            minimum_model_confidence=args.minimum_model_confidence,
+            minimum_workflow_confidence=args.minimum_workflow_confidence,
+        )
+        session_path = write_proof_search_session_v06(
+            session,
+            session_output,
+            overwrite=args.force,
+        )
+        request_path = write_current_repair_request_v06(
+            session,
+            request_output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": session["format"],
+            "search_id": session["search_id"],
+            "status": session["status"],
+            "iteration": session["iteration"],
+            "max_iterations": session["max_iterations"],
+            "summary": session["summary"],
+            "session_sha256": session["session_sha256"],
+            "proof_search_session": session_path,
+            "proof_repair_request": request_path,
+            "next": (
+                "Give the repair request to an external proposer and then run "
+                "pcs advance-proof-search-v06 with the returned repair response."
+                if session["status"] == "AWAITING_REPAIR"
+                else "The search has no machine-repair step to run in its current state."
+            ),
+        }
+    except (OSError, V06ProofSearchError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_advance_proof_search_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        session = load_proof_search_session_v06(args.session)
+        repair_response = load_proof_search_repair_response_v06(args.response)
+        updated = advance_proof_search_v06(
+            root,
+            session,
+            repair_response,
+            state_dir=args.state_dir,
+        )
+        session_path = write_proof_search_session_v06(
+            updated,
+            args.output,
+            overwrite=args.force,
+        )
+
+        request_path = None
+        if args.repair_request:
+            request_path = write_current_repair_request_v06(
+                updated,
+                args.repair_request,
+                overwrite=args.force,
+            )
+
+        trajectory_path = None
+        if args.trajectory:
+            trajectory_path = write_proof_search_trajectory_v06(
+                updated,
+                args.trajectory,
+                overwrite=args.force,
+            )
+
+        response = {
+            "format": updated["format"],
+            "search_id": updated["search_id"],
+            "status": updated["status"],
+            "iteration": updated["iteration"],
+            "max_iterations": updated["max_iterations"],
+            "summary": updated["summary"],
+            "session_sha256": updated["session_sha256"],
+            "trajectory_sha256": updated["trajectory"]["trajectory_sha256"],
+            "proof_search_session": session_path,
+            "proof_repair_request": request_path,
+            "proof_search_trajectory": trajectory_path,
+            "next": (
+                "Submit another graph-bound repair response."
+                if updated["status"] == "AWAITING_REPAIR"
+                else (
+                    "Search reached a theorem-backed translation; human confirmation, "
+                    "replay, and Lean authority are still required."
+                    if updated["status"] == "READY_FOR_HUMAN_CONFIRMATION"
+                    else f"Search stopped with status {updated['status']}."
+                )
+            ),
+        }
+    except (OSError, V06ProofSearchError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -1081,6 +1212,68 @@ def build_parser():
         help="explicitly replace existing compiled repair proposals",
     )
     cr6.set_defaults(func=cmd_compile_proof_repairs_v06)
+
+    sps6 = sub.add_parser(
+        "start-proof-search-v06",
+        help="start a bounded graph-driven proof-repair search session",
+    )
+    sps6.add_argument("project", help="scientific project directory")
+    sps6.add_argument(
+        "--proposals",
+        action="append",
+        required=True,
+        help="initial pcs-proof-proposals-v1 JSON; repeatable",
+    )
+    sps6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write committed pcs-proof-repair-search-v1 session JSON",
+    )
+    sps6.add_argument(
+        "--repair-request",
+        help="write current repair request; defaults beside the session output",
+    )
+    sps6.add_argument("--subject", help="override discovered project subject")
+    sps6.add_argument(
+        "--max-iterations",
+        type=int,
+        default=4,
+        help="hard repair-search budget; maximum 32",
+    )
+    sps6.add_argument("--minimum-confidence", type=float, default=0.95)
+    sps6.add_argument("--minimum-model-confidence", type=float, default=0.98)
+    sps6.add_argument("--minimum-workflow-confidence", type=float, default=0.95)
+    sps6.add_argument("--force", action="store_true")
+    sps6.set_defaults(func=cmd_start_proof_search_v06)
+
+    aps6 = sub.add_parser(
+        "advance-proof-search-v06",
+        help="apply one graph-bound repair and deterministically recompile the search state",
+    )
+    aps6.add_argument("project", help="unchanged scientific project directory")
+    aps6.add_argument("session", help="committed pcs-proof-repair-search-v1 JSON")
+    aps6.add_argument("response", help="external pcs-proof-repair-proposals-v1 JSON")
+    aps6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write the next committed proof-search session",
+    )
+    aps6.add_argument(
+        "--repair-request",
+        help="optionally write the next repair request",
+    )
+    aps6.add_argument(
+        "--trajectory",
+        help="optionally write the committed repair trajectory separately",
+    )
+    aps6.add_argument(
+        "--state-dir",
+        help="proposal staging directory; defaults under PROJECT/.pcs/proof-search",
+    )
+    aps6.add_argument("--force", action="store_true")
+    aps6.set_defaults(func=cmd_advance_proof_search_v06)
 
     d6 = sub.add_parser(
         "discover-v06",
