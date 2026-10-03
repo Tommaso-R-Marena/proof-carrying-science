@@ -308,10 +308,29 @@ def test_verify_bundle_can_emit_reviewer_signed_receipt_in_one_command(tmp_path)
         receipt_signature,
         reviewer_public,
         expected_reviewer_fingerprint=reviewer_fingerprint,
+        bundle_path=bundle,
+        producer_public_key_path=producer_public,
     )
     assert checked["valid"], checked["errors"]
+    assert checked["contract_valid"] is True
+    assert checked["contract_checks"]["external_bundle_binding"] is True
+    assert checked["contract_checks"]["external_producer_key_binding"] is True
     assert checked["bundle_sha256"] == hashlib.sha256(bundle.read_bytes()).hexdigest()
     assert checked["policy_sha256"] == hashlib.sha256(policy_raw).hexdigest()
+
+    audit_proc = _run(
+        "audit-receipt-v06",
+        str(receipt),
+        "--bundle",
+        str(bundle),
+        "--producer-public-key",
+        str(producer_public),
+    )
+    assert audit_proc.returncode == 0, audit_proc.stdout + audit_proc.stderr
+    audit = json.loads(audit_proc.stdout)
+    assert audit["valid"] is True
+    assert audit["checks"]["external_bundle_binding"] is True
+    assert audit["checks"]["external_producer_key_binding"] is True
 
 
 def test_verify_receipt_v06_cli_is_independent_audit_step(tmp_path):
