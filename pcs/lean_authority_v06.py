@@ -14,6 +14,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 from .canonical_json import canonicalize_jcs_bytes
+from .formal_coverage_v06 import classify_formal_coverage_v06
 
 
 LEAN_AUTHORITY_TRANSCRIPT_FORMAT_V06 = "pcs-lean-authority-observations-v1"
@@ -356,6 +357,13 @@ def enforce_lean_authority_v06(
             "accepted": False,
             "verdict": "NOT_RUN_PYTHON_PRECHECK_FAILED",
         }
+        certificate = authority_context.get("certificate")
+        if isinstance(certificate, Mapping):
+            result["formal_coverage"] = classify_formal_coverage_v06(
+                certificate,
+                package_authoritative=False,
+                lean_authority=result["lean_authority"],
+            )
         return result
 
     authority = run_lean_authority_v06(
@@ -375,6 +383,11 @@ def enforce_lean_authority_v06(
     result["lean_authority"] = authority
     result["authority_required"] = True
     result["authoritative"] = bool(authority["accepted"])
+    result["formal_coverage"] = classify_formal_coverage_v06(
+        authority_context["certificate"],
+        package_authoritative=result["authoritative"],
+        lean_authority=authority,
+    )
     if not authority["accepted"]:
         result["valid"] = False
         result["failed_stage"] = "lean_authority"
