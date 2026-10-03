@@ -369,9 +369,9 @@ _REPAIR_POLICY_BY_KIND: dict[str, dict[str, Any]] = {
         "machine_assisted": True,
     },
     "CONFIDENCE_BELOW_SELECTION_THRESHOLD": {
-        "action": "human_review_or_reproposal",
-        "actor": "human_or_proposer",
-        "machine_assisted": True,
+        "action": "human_review_low_confidence",
+        "actor": "human",
+        "machine_assisted": False,
     },
     "HUMAN_CONFIRMATION_REQUIRED": {
         "action": "human_confirm_translation",
