@@ -18,6 +18,7 @@ from pcs.check_registry_v06 import (
 )
 from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06
 from pcs.proof_translation_v06 import (
+    PROOF_OBLIGATION_GRAPH_FORMAT_V06,
     PROOF_PROPOSALS_FORMAT_V06,
     PROOF_TRANSLATION_FORMAT_V06,
     V06ProofTranslationError,
@@ -344,6 +345,94 @@ def test_translation_outputs_are_deterministic_and_cli_visible(tmp_path: Path):
     assert output["format"] == PROOF_TRANSLATION_FORMAT_V06
     assert output["summary"]["external_model_selected"] == 1
     assert cli_plan.is_file() and cli_manifest.is_file()
+
+
+
+def test_proof_obligation_graph_decomposes_compiled_model_claim(tmp_path: Path):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _model_proposal_file(tmp_path, discovery=discovery)
+
+    result = translate_project_v06(tmp_path, proposal_files=[proposal])
+    graph = result["obligation_graph"]
+
+    assert graph["format"] == PROOF_OBLIGATION_GRAPH_FORMAT_V06
+    assert len(graph["graph_sha256"]) == 64
+    assert (
+        result["manifest_draft"]["pcs_intake"]["proof_obligation_graph_sha256"]
+        == graph["graph_sha256"]
+    )
+
+    nodes = {node["id"]: node for node in graph["nodes"]}
+    assert nodes["proposal:MODEL_DISJOINT"]["status"] == (
+        "COMPILED_PENDING_HUMAN_CONFIRMATION"
+    )
+    assert nodes["claim:C_MODEL_DISJOINT"]["type"] == "typed_claim"
+    assert nodes["check:E_MODEL_DISJOINT"]["type"] == "typed_check"
+    formal = nodes["formal_target:MODEL_DISJOINT"]
+    assert formal["target"]["soundness_theorem"] == "PCS.V2.Csv.csvRun_sound"
+
+    node_ids = set(nodes)
+    assert graph["edges"]
+    assert all(
+        edge["from"] in node_ids and edge["to"] in node_ids
+        for edge in graph["edges"]
+    )
+    assert any(
+        edge["relation"] == "supports_grounding"
+        for edge in graph["edges"]
+    )
+    assert any(
+        item["repair"]["action"] == "human_confirm_translation"
+        for item in graph["repair_queue"]
+        if item["proposal_id"] == "MODEL_DISJOINT"
+    )
+
+
+def test_failed_grounding_emits_machine_readable_repair_action(tmp_path: Path):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _model_proposal_file(
+        tmp_path,
+        discovery=discovery,
+        key="patient_id",
+    )
+
+    result = translate_project_v06(tmp_path, proposal_files=[proposal])
+    graph = result["obligation_graph"]
+    proposal_node = next(
+        node
+        for node in graph["nodes"]
+        if node["id"] == "proposal:MODEL_DISJOINT"
+    )
+    assert proposal_node["status"] == "BLOCKED"
+
+    repair = next(
+        item
+        for item in graph["repair_queue"]
+        if item["proposal_id"] == "MODEL_DISJOINT"
+        and item["kind"] == "GROUND_PREDICATE_IN_PROJECT_BYTES"
+    )
+    assert repair["blocking"] is True
+    assert repair["repair"]["action"] == "revise_predicate_from_project_bytes"
+    assert repair["repair"]["actor"] == "proposer"
+    assert repair["repair"]["can_set_authoritative"] is False
+
+
+def test_obligation_graph_is_deterministic_for_same_project_snapshot(tmp_path: Path):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _model_proposal_file(tmp_path, discovery=discovery)
+
+    first = translate_project_v06(tmp_path, proposal_files=[proposal])
+    second = translate_project_v06(tmp_path, proposal_files=[proposal])
+
+    assert (
+        first["obligation_graph"]["graph_sha256"]
+        == second["obligation_graph"]["graph_sha256"]
+    )
+    assert first["obligation_graph"] == second["obligation_graph"]
+
 
 
 @pytest.mark.skipif(shutil.which("lake") is None, reason="Lean/Lake unavailable")
