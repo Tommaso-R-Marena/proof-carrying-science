@@ -20,6 +20,14 @@ MAX_UNRESOLVED_V06 = 256
 _REQUIREMENT_NAME = re.compile(r"^\s*([A-Za-z0-9][A-Za-z0-9_.-]*)")
 _EXACT_PIN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*\s*==\s*[^;\s]+")
 _PYTHON_VERSION_TOKEN = re.compile(r"(?i)(?:python[- ]?)?([0-9]+(?:\.[0-9]+){1,2})")
+# Strict exact version (no wildcard `==1.*`, no `,<2` range tail, no `===`); see
+# counterexample 15 in formal/PCS_FRONTIER_FORMALIZATION_REPORT.md. Mirrored by the Lean
+# authority (formal/PCS/V2/EnvFacts.lean, `StrictVersion`).
+_STRICT_VERSION = re.compile(r"[A-Za-z0-9._+!-]+")
+# A SHA-256 hash pin carries a full 64-hex digest (counterexample 17).
+_HASH_PIN = re.compile(r"--hash=sha256:[0-9a-f]{64}")
+# A digest-pinned container reference ends in a full 64-hex digest (counterexample 16).
+_DIGEST_REF = re.compile(r"@sha256:[0-9a-f]{64}$")
 _FROM = re.compile(r"(?i)^FROM\s+(?:--platform=\S+\s+)?(\S+)(?:\s+AS\s+\S+)?\s*$")
 _SAFE_ENV_FILES = {
     "pyproject.toml",
@@ -190,10 +198,13 @@ def _requirements(
         match = _REQUIREMENT_NAME.match(requirement_part)
         name = match.group(1) if match else None
         exact = bool(_EXACT_PIN.match(requirement_part))
-        hashes = "--hash=sha256:" in stripped
+        hashes = _HASH_PIN.search(stripped) is not None
         version = None
         if exact:
             version = requirement_part.split("==", 1)[1].split(";", 1)[0].strip()
+            if not _STRICT_VERSION.fullmatch(version):
+                exact = False
+                version = None
         records.append(
             _dependency_record(
                 ecosystem="python",
@@ -690,7 +701,7 @@ def _dockerfile(text: str, *, source_path: str) -> tuple[dict[str, Any], list[di
                 platform_match.group(1) if platform_match is not None else None
             )
             dynamic = "$" in ref
-            digest_pinned = "@sha256:" in ref and not dynamic
+            digest_pinned = _DIGEST_REF.search(ref) is not None and not dynamic
             tag = None
             if not digest_pinned and ":" in ref.rsplit("/", 1)[-1]:
                 tag = ref.rsplit(":", 1)[-1]

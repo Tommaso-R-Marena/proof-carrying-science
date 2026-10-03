@@ -1,0 +1,18 @@
+name = "RequestProject"
+defaultTargets = ["PCSReal"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.28.0"
+
+# The PCS kernel (`formal/`, no Mathlib dependency; builds the `pcs-lean-authority`
+# executable).  The Mathlib-based real-analysis bridge below imports it.
+[[require]]
+name = "PCS"
+path = "formal"
+
+# Real-analysis bridge for the PCS kernel (proof-only; not linked into the authority).
+[[lean_lib]]
+name = "PCSReal"
+srcDir = "formal/real"

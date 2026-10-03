@@ -12,6 +12,19 @@ see the metrics section below). Nothing in the v1 layer was re-proved or replace
 Gate: `./scripts/verify_lean.sh`, which runs `lake build`, the placeholder audit and
 the forbidden-declaration audit. **It passes.**
 
+
+> **TCB status update (frontier passes).** Several boundaries listed in §E/§G below have
+> since been closed or narrowed; the authoritative, current inventory is
+> `formal/PCS_FRONTIER_FORMALIZATION_REPORT.md`. In short: SHA-256 is proved equal to an
+> independent FIPS 180-4 specification (`SHA256Spec.sha256_eq_fips1804`); `unit_compatible`,
+> `csv_disjoint`, `pkpd_contract` and `pkpd_reference_match` are replayed by proved Lean
+> checkers inside the authority (`Checkers.builtinExecWith_faithful`), the PK/PD match with a
+> real-valued meaning (`PCSReal.PKPD.pcs_pkpd_reference_match_real`); the workflow oracle has
+> the semantics `Workflow.WorkflowDescribes`; environment capture has the verified meaning
+> `EnvFacts`; canonical STORED archives are decoded by Lean from raw bytes
+> (`Zip.leanZip_faithful`); and the strongest theorem,
+> `Frontier.pcs_frontier_archive_acceptance_sound`, has `NoForgery` as its only hypothesis.
+
 ---
 
 ## A. Exactly proved
@@ -392,23 +405,23 @@ does not imply byte reproducibility, so PCS must never conflate the two.
    decoded-member fidelity remains the `ZipDecoderFaithful` boundary, and the
    transcript's scientific meaning remains governed by `CaptureSound`,
    `ReplayFaithful`, and the workflow-oracle boundary.
-2. **SHA-256 spec faithfulness.** `∀ m, PCS.V2.SHA256.sha256 m = FIPS180_4.SHA256 m`
+2. **SHA-256 spec faithfulness.** — **CLOSED** (`PCS.V2.SHA256Spec.sha256_eq_fips1804`, frontier report §1.1). Original gap: `∀ m, PCS.V2.SHA256.sha256 m = FIPS180_4.SHA256 m`
    against an independent, mathematically stated FIPS 180-4 specification (for
    example one stated over bit-vectors or `ZMod (2^32)`). What is proved so far is
    structural: padding, blocks, schedule size and digest length.
 3. **Python hashlib.** `Sha256ProductionAgrees hashlib`. This is needed only for
    completeness on honest inputs.
-4. **Ed25519 spec faithfulness.** `Ed25519.verify = RFC8032.verify` against a group-law
+4. **Ed25519 spec faithfulness.** — still OPEN (frontier report §4.1); the authority's `Ed25519ImplCorrect` hypothesis is removed by running the Lean verifier. Original gap: `Ed25519.verify = RFC8032.verify` against a group-law
    specification. That requires curve-arithmetic correctness (field inverse, point
    addition formulas, point decoding).
 5. **Ed25519 unforgeability.** `NoForgery Ed25519.verify pk Signed` is a cryptographic
    assumption, for example EUF-CMA. It cannot be proved inside Lean.
-6. **ZIP.** `ZipDecoderFaithful zip ZipSemantics`. Discharging it needs a Lean ZIP
+6. **ZIP.** — **CLOSED for canonical STORED archives** (`PCS.V2.Zip.leanZip_faithful`, `CanonicalArchive`, compiled authority `--zip`); legacy archives keep the contract. Original gap: `ZipDecoderFaithful zip ZipSemantics`. Discharging it needs a Lean ZIP
    decoder (local headers, central directory, DEFLATE) proved against a format
    semantics, or production use of such a decoder.
-7. **Capture.** `CaptureSound O.capture Describes`. This needs a Lean model of each
+7. **Capture.** — **NARROWED** to facts outside `PCS.V2.EnvFacts.EnvFacts` (`authority_capture_sound`). Original gap: `CaptureSound O.capture Describes`. This needs a Lean model of each
    capture rule (lockfile and pin extraction) and a proof against `Describes`.
-8. **Replay.** `ReplayFaithful fb Holds` for the check types other than
+8. **Replay.** — **CLOSED for `unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`** (`PCS.V2.Checkers`, `PCS.V2.PKPDCheck`, real bridge `PCSReal.PKPD`); open only for external validators. Original gap: `ReplayFaithful fb Holds` for the check types other than
    `reaction_balance`: `unit_compatible`, `csv_disjoint`, `pkpd_contract`,
    `pkpd_reference_match`, and the external validators. `reaction_balance` is
    discharged by `chemExecWith_faithful`. `unit_compatible` and `csv_disjoint` are
@@ -416,7 +429,7 @@ does not imply byte reproducibility, so PCS must never conflate the two.
    floating point and need a floating-point semantics. Production also has to *run*
    the Lean executor (or be proved equal to it) for this to cover production
    replays. The differential driver already runs it.
-9. **Workflow oracle.** `O.workflow` (static workflow-dependency replay) is a Boolean
+9. **Workflow oracle.** — **NARROWED**: semantics `PCS.V2.Workflow.WorkflowDescribes` proved; the remaining input is the normalized static analysis (front end). Original gap: `O.workflow` (static workflow-dependency replay) is a Boolean
    oracle. Its acceptance is recorded in `StructuralAssurance.workflow`, but no
    semantic meaning is attached to it yet.
 10. **Unicode tables.** These affect only portability (alias rejection), never

@@ -156,6 +156,7 @@ def build_authority_transcript_v06(
         "certificate_semantic_hash": certificate["semantic_hash"],
         "checker_version": certificate["checker_version"],
         "workflow_ok": True,
+        "workflow_analysis": list(workflow_replay.get("_authority_fresh_sources", [])),
         "environment_capture": fresh_capture,
         "replay": observations,
     }
@@ -200,7 +201,14 @@ def run_lean_authority_v06(
     expected_fingerprint: str | None,
     authority_path: str | Path | None = None,
     timeout_seconds: int = LEAN_AUTHORITY_TIMEOUT_SECONDS_V06,
+    archive_bytes: bytes | None = None,
 ) -> dict[str, Any]:
+    """Run the receiver-owned Lean authority.
+
+    With ``archive_bytes`` (a canonical PCS ZIP, see ``pcs.canonical_zip_v06``) the
+    authority decodes the raw archive itself (``--zip``); otherwise Python materialises
+    the members into a directory (legacy, less-assured byte boundary).
+    """
     transcript = build_authority_transcript_v06(
         certificate=certificate,
         environment_replay=environment_replay,
@@ -223,11 +231,21 @@ def run_lean_authority_v06(
         )
         transcript_path = temp / "observations.json"
         transcript_path.write_bytes(transcript_bytes)
-        args = [
-            str(package_root),
-            _public_key_raw_base64(public_key),
-            str(transcript_path),
-        ]
+        if archive_bytes is not None:
+            archive_path = temp / "archive.zip"
+            archive_path.write_bytes(archive_bytes)
+            args = [
+                "--zip",
+                str(archive_path),
+                _public_key_raw_base64(public_key),
+                str(transcript_path),
+            ]
+        else:
+            args = [
+                str(package_root),
+                _public_key_raw_base64(public_key),
+                str(transcript_path),
+            ]
         if expected_fingerprint:
             args.append(expected_fingerprint)
 
@@ -304,6 +322,11 @@ def run_lean_authority_v06(
         "authority_sha256": authority_sha256,
         "observation_transcript_sha256": hashlib.sha256(transcript_bytes).hexdigest(),
         "certificate_semantic_hash": certificate["semantic_hash"],
+        "archive_mode": (
+            "lean-decoded-canonical-zip"
+            if archive_bytes is not None
+            else "python-materialized-members"
+        ),
     }
 
 
@@ -318,6 +341,7 @@ def enforce_lean_authority_v06(
     public_key: Ed25519PublicKey,
     expected_fingerprint: str | None,
     authority_path: str | Path | None = None,
+    archive_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     result = dict(verification)
     stages = dict(result.get("stages", {}))
@@ -346,6 +370,7 @@ def enforce_lean_authority_v06(
         public_key=public_key,
         expected_fingerprint=expected_fingerprint,
         authority_path=authority_path,
+        archive_bytes=archive_bytes,
     )
     result["lean_authority"] = authority
     result["authority_required"] = True

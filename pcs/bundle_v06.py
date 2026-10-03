@@ -28,6 +28,7 @@ from .verifier_zip_v06 import (
     verify_package_zip_end_to_end_v06,
 )
 from .lean_authority_v06 import V06LeanAuthorityError
+from .canonical_zip_v06 import canonical_zip_bytes_v06
 
 
 BUNDLE_FORMAT_V06 = "pcs-v06-zip-stored-v1"
@@ -170,23 +171,9 @@ def create_verified_bundle_v06(
         ) as tmp:
             temp_path = Path(tmp.name)
 
-        with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_STORED) as zf:
-            for name in sorted(members):
-                info = zipfile.ZipInfo(name, FIXED_ZIP_TIME_V06)
-                info.compress_type = zipfile.ZIP_STORED
-                info.create_system = 3
-                info.create_version = 20
-                info.extract_version = 20
-                info.flag_bits = 0
-                info.external_attr = 0o100644 << 16
-                info.internal_attr = 0
-                info.extra = b""
-                info.comment = b""
-                zf.writestr(
-                    info,
-                    members[name],
-                    compress_type=zipfile.ZIP_STORED,
-                )
+        # The single canonical PCS STORED encoding, decoded by the verified Lean
+        # authority directly from the raw bytes (formal/PCS/V2/Zip.lean).
+        temp_path.write_bytes(canonical_zip_bytes_v06(members))
 
         post_build = verify_package_zip_end_to_end_v06(
             temp_path,

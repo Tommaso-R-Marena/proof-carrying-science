@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import csv
 import json
 import math
+import re
 from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
 from typing import Any
 
+from ..checks.splits import parse_strict_csv
 from ..checks.units import parse_unit
 from ..jsonio import strict_json_load, StrictJSONError
 
@@ -128,6 +129,24 @@ def _decimal(value: Any) -> Decimal:
     return Decimal(str(value))
 
 
+# High-assurance numeric surface, mirrored by the Lean authority
+# (formal/PCS/V2/PKPDCheck.lean, `decimalQ`): a plain decimal spelling with an optional
+# exponent of at most 4 digits and magnitude <= 400. `Decimal()` alone would also accept
+# surrounding whitespace, '+', '.5', '5.', '1_0', 'Infinity' and 'NaN'; those fail closed.
+_STRICT_DECIMAL = re.compile(r"-?[0-9]+(?:\.[0-9]+)?(?:[eE]([+-]?)([0-9]{1,4}))?")
+MAX_DECIMAL_EXPONENT = 400
+
+
+def strict_decimal_text(text: str) -> Decimal:
+    """Parse a prediction-table or tolerance number under the strict decimal grammar."""
+    m = _STRICT_DECIMAL.fullmatch(text)
+    if m is None:
+        raise ValueError(f"number {text!r} is outside the strict decimal subset")
+    if m.group(2) is not None and int(m.group(2)) > MAX_DECIMAL_EXPONENT:
+        raise ValueError(f"number {text!r} exceeds the strict exponent bound")
+    return Decimal(text)
+
+
 def _decimal_isclose(a: Decimal, b: Decimal, *, rel_tol: Decimal, abs_tol: Decimal) -> bool:
     return abs(a - b) <= max(abs_tol, rel_tol * max(abs(a), abs(b)))
 
@@ -177,62 +196,65 @@ def verify_one_compartment_iv_output(
             max_effect_abs = Decimal(0)
             max_effect_rel = Decimal(0)
 
-            with Path(csv_path).open("r", encoding="utf-8", newline="") as fh:
-                reader = csv.DictReader(fh)
-                required = {time_column, concentration_column}
+            # Strict CSV subset (pcs-strict-csv-v1), identical to the Lean authority's
+            # `PCS.V2.Csv.parseCsv`; csv.DictReader's lenient dialect is not used.
+            header_b, rows_b = parse_strict_csv(Path(csv_path).read_bytes())
+            header = [h.decode("utf-8") for h in header_b]
+            required = {time_column, concentration_column}
+            if pd is not None:
+                required.add(effect_column)
+            if not required.issubset(set(header)):
+                raise ValueError(f"CSV must contain columns {sorted(required)!r}")
+            col = {name: idx for idx, name in enumerate(header)}
+            for i, row_b in enumerate(rows_b, start=2):
+                row = {name: row_b[idx].decode("utf-8") for name, idx in col.items()}
+                t = strict_decimal_text(row[time_column])
+                observed = strict_decimal_text(row[concentration_column])
+                if not (t.is_finite() and observed.is_finite()):
+                    raise ValueError(f"row {i} contains non-finite PK numeric values")
+                if t < 0:
+                    raise ValueError(f"row {i} has negative time")
+
+                t_si = t * time_scale
+                expected_si = c0_si * (-kel_si * t_si).exp()
+                expected = expected_si / conc_scale
+                abs_err = abs(observed - expected)
+                rel_err = abs_err / max(abs(expected), rel_floor)
+                max_abs = max(max_abs, abs_err)
+                max_rel = max(max_rel, rel_err)
+                row_count += 1
+
+                if not _decimal_isclose(observed, expected, rel_tol=rel_tol_d, abs_tol=abs_tol_d):
+                    if len(mismatches) < 10:
+                        mismatches.append({
+                            "row": i,
+                            "field": concentration_column,
+                            "observed": float(observed),
+                            "expected": float(expected),
+                            "abs_error": float(abs_err),
+                            "rel_error": float(rel_err),
+                        })
+
                 if pd is not None:
-                    required.add(effect_column)
-                if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
-                    raise ValueError(f"CSV must contain columns {sorted(required)!r}")
-
-                for i, row in enumerate(reader, start=2):
-                    t = Decimal(row[time_column])
-                    observed = Decimal(row[concentration_column])
-                    if not (t.is_finite() and observed.is_finite()):
-                        raise ValueError(f"row {i} contains non-finite PK numeric values")
-                    if t < 0:
-                        raise ValueError(f"row {i} has negative time")
-
-                    t_si = t * time_scale
-                    expected_si = c0_si * (-kel_si * t_si).exp()
-                    expected = expected_si / conc_scale
-                    abs_err = abs(observed - expected)
-                    rel_err = abs_err / max(abs(expected), rel_floor)
-                    max_abs = max(max_abs, abs_err)
-                    max_rel = max(max_rel, rel_err)
-                    row_count += 1
-
-                    if not _decimal_isclose(observed, expected, rel_tol=rel_tol_d, abs_tol=abs_tol_d):
+                    observed_effect = strict_decimal_text(row[effect_column])
+                    if not observed_effect.is_finite():
+                        raise ValueError(f"row {i} contains non-finite PD effect")
+                    expected_effect_si = e0_si + emax_si * expected_si / (ec50_si + expected_si)
+                    expected_effect = expected_effect_si / effect_scale
+                    eff_abs = abs(observed_effect - expected_effect)
+                    eff_rel = eff_abs / max(abs(expected_effect), rel_floor)
+                    max_effect_abs = max(max_effect_abs, eff_abs)
+                    max_effect_rel = max(max_effect_rel, eff_rel)
+                    if not _decimal_isclose(observed_effect, expected_effect, rel_tol=rel_tol_d, abs_tol=abs_tol_d):
                         if len(mismatches) < 10:
                             mismatches.append({
                                 "row": i,
-                                "field": concentration_column,
-                                "observed": float(observed),
-                                "expected": float(expected),
-                                "abs_error": float(abs_err),
-                                "rel_error": float(rel_err),
+                                "field": effect_column,
+                                "observed": float(observed_effect),
+                                "expected": float(expected_effect),
+                                "abs_error": float(eff_abs),
+                                "rel_error": float(eff_rel),
                             })
-
-                    if pd is not None:
-                        observed_effect = Decimal(row[effect_column])
-                        if not observed_effect.is_finite():
-                            raise ValueError(f"row {i} contains non-finite PD effect")
-                        expected_effect_si = e0_si + emax_si * expected_si / (ec50_si + expected_si)
-                        expected_effect = expected_effect_si / effect_scale
-                        eff_abs = abs(observed_effect - expected_effect)
-                        eff_rel = eff_abs / max(abs(expected_effect), rel_floor)
-                        max_effect_abs = max(max_effect_abs, eff_abs)
-                        max_effect_rel = max(max_effect_rel, eff_rel)
-                        if not _decimal_isclose(observed_effect, expected_effect, rel_tol=rel_tol_d, abs_tol=abs_tol_d):
-                            if len(mismatches) < 10:
-                                mismatches.append({
-                                    "row": i,
-                                    "field": effect_column,
-                                    "observed": float(observed_effect),
-                                    "expected": float(expected_effect),
-                                    "abs_error": float(eff_abs),
-                                    "rel_error": float(eff_rel),
-                                })
 
             if row_count == 0:
                 raise ValueError("prediction CSV has no data rows")

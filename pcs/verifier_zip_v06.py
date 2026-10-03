@@ -24,6 +24,7 @@ from .verifier_io_v06 import (
 from .verifier_v06 import verify_end_to_end_v06
 from .policy_v06 import apply_reviewer_policy_v06
 from .lean_authority_v06 import enforce_lean_authority_v06
+from .canonical_zip_v06 import is_canonical_zip_v06
 
 
 MAX_ARCHIVE_ENTRIES_V06 = MAX_PACKAGE_FILES_V06 + 128
@@ -328,9 +329,47 @@ def verify_package_zip_end_to_end_v06(
     shadow_bandit: bool = False,
     telemetry_sink: dict[str, Any] | None = None,
     lean_authority_path: str | Path | None = None,
+    require_canonical_archive: bool = False,
 ) -> dict[str, Any]:
+    """Verify a v0.6 delivery ZIP.
+
+    ``require_canonical_archive=True`` fails closed unless the archive is the canonical
+    PCS STORED encoding, i.e. unless the Lean authority itself decodes the raw archive
+    bytes (``archive_assurance == "lean-decoded-canonical-zip"``; Lean theorem
+    ``PCS.V2.CanonicalArchive.pcs_authority_archive_binary_sound``).
+    """
     loaded = load_package_zip_v06(bundle)
     public_key = load_public_key_v06(public_key_path)
+    # High-assurance archive mode: if the archive is byte-for-byte the canonical PCS
+    # STORED encoding of its members, the Lean authority decodes the raw bytes itself.
+    raw_archive = Path(bundle).resolve().read_bytes()
+    if hashlib.sha256(raw_archive).hexdigest() != loaded["bundle_sha256"]:
+        raise V06BundleVerificationError("v0.6 ZIP changed while it was being verified")
+    members = dict(loaded["package_files"])
+    members["certificate_signature.json"] = loaded["certificate_signature_bytes"]
+    members["package_manifest.json"] = loaded["package_manifest_bytes"]
+    members["package_signature.json"] = loaded["package_signature_bytes"]
+    canonical_archive = is_canonical_zip_v06(raw_archive, members)
+    if require_canonical_archive and not canonical_archive:
+        return apply_reviewer_policy_v06(
+            {
+                "format": "pcs-end-to-end-verifier-v06-v1",
+                "valid": False,
+                "authoritative": False,
+                "authority_required": True,
+                "failed_stage": "canonical_archive",
+                "errors": [
+                    "archive is not the canonical PCS STORED ZIP encoding required "
+                    "for Lean raw-archive verification"
+                ],
+                "stages": {"canonical_archive": False},
+                "bundle_sha256": loaded["bundle_sha256"],
+                "archive_bytes": loaded["archive_bytes"],
+                "archive_format": "zip",
+                "archive_assurance": "python-materialized-legacy-zip",
+            },
+            policy_path,
+        )
     authority_context: dict[str, Any] = {}
     result = verify_end_to_end_v06(
         certificate_bytes=loaded["certificate_bytes"],
@@ -357,8 +396,14 @@ def verify_package_zip_end_to_end_v06(
         public_key=public_key,
         expected_fingerprint=expected_fingerprint,
         authority_path=lean_authority_path,
+        archive_bytes=raw_archive if canonical_archive else None,
     )
     receipt = dict(result)
+    receipt["archive_assurance"] = (
+        "lean-decoded-canonical-zip"
+        if canonical_archive
+        else "python-materialized-legacy-zip"
+    )
     receipt["bundle_sha256"] = loaded["bundle_sha256"]
     receipt["archive_bytes"] = loaded["archive_bytes"]
     receipt["archive_format"] = "zip"
