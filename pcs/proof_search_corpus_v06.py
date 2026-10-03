@@ -16,7 +16,7 @@ from .proof_search_v06 import (
 
 PROOF_SEARCH_CORPUS_FORMAT_V06 = "pcs-proof-search-corpus-v1"
 PROOF_SEARCH_CORPUS_COMPILER_V06 = "pcs-proof-search-corpus-compiler/0.1"
-PROOF_SEARCH_CORPUS_SPLIT_CONTRACT_V06 = "search-id-sha256-80-10-10-v1"
+PROOF_SEARCH_CORPUS_SPLIT_CONTRACT_V06 = "problem-group-sha256-80-10-10-v1"
 
 
 class V06ProofSearchCorpusError(ValueError):
@@ -31,13 +31,28 @@ def _commitment(value: Any) -> str:
     return hashlib.sha256(canonicalize_jcs_bytes(value)).hexdigest()
 
 
-def _split_for_search_id(search_id: str) -> str:
+def _problem_group_sha256(
+    session: Mapping[str, Any],
+) -> str:
+    return _commitment(
+        {
+            "initial_plan_sha256": session.get("initial_plan_sha256"),
+            "inventory_commitment_sha256": session.get(
+                "inventory_commitment_sha256"
+            ),
+            "intent_anchors_sha256": session.get("intent_anchors_sha256"),
+            "subject": session.get("subject"),
+        }
+    )
+
+
+def _split_for_problem_group(problem_group_sha256: str) -> str:
     bucket = int(
         hashlib.sha256(
             canonicalize_jcs_bytes(
                 {
                     "contract": PROOF_SEARCH_CORPUS_SPLIT_CONTRACT_V06,
-                    "search_id": search_id,
+                    "problem_group_sha256": problem_group_sha256,
                 }
             )
         ).hexdigest()[:8],
@@ -51,9 +66,11 @@ def _split_for_search_id(search_id: str) -> str:
 
 
 def _source_record(session: Mapping[str, Any]) -> dict[str, Any]:
+    problem_group_sha256 = _problem_group_sha256(session)
     return {
         "session_sha256": session["session_sha256"],
         "search_id": session["search_id"],
+        "problem_group_sha256": problem_group_sha256,
         "trajectory_sha256": session["trajectory"]["trajectory_sha256"],
         "inventory_commitment_sha256": session[
             "inventory_commitment_sha256"
@@ -61,7 +78,7 @@ def _source_record(session: Mapping[str, Any]) -> dict[str, Any]:
         "initial_plan_sha256": session["initial_plan_sha256"],
         "iteration": session["iteration"],
         "status": session["status"],
-        "split": _split_for_search_id(str(session["search_id"])),
+        "split": _split_for_problem_group(problem_group_sha256),
         "summary": _json_clone(session["summary"]),
     }
 
@@ -81,6 +98,7 @@ def _example_from_repair_record(
     record: Mapping[str, Any],
 ) -> tuple[str, dict[str, Any]]:
     search_id = str(session["search_id"])
+    problem_group_sha256 = _problem_group_sha256(session)
     task = record.get("task")
     replacement = record.get("replacement_proposal")
     if not isinstance(task, Mapping) or not isinstance(replacement, Mapping):
@@ -106,7 +124,8 @@ def _example_from_repair_record(
 
     core = {
         "search_id": search_id,
-        "split": _split_for_search_id(search_id),
+        "problem_group_sha256": problem_group_sha256,
+        "split": _split_for_problem_group(problem_group_sha256),
         "iteration": int(step["iteration"]),
         "proposal_id": record.get("proposal_id"),
         "obligation_id": record.get("obligation_id"),
@@ -274,15 +293,18 @@ def build_proof_search_corpus_v06(
     outcome_counts: dict[str, int] = {}
     status_counts: dict[str, int] = {}
     search_ids: set[str] = set()
+    problem_groups: set[str] = set()
     for example in ordered_examples:
         split_counts[str(example["split"])] += 1
         outcome = str(example["labels"]["outcome"])
         outcome_counts[outcome] = outcome_counts.get(outcome, 0) + 1
         search_ids.add(str(example["search_id"]))
+        problem_groups.add(str(example["problem_group_sha256"]))
     for source in ordered_sources:
         status = str(source["status"])
         status_counts[status] = status_counts.get(status, 0) + 1
         search_ids.add(str(source["search_id"]))
+        problem_groups.add(str(source["problem_group_sha256"]))
 
     core = {
         "format": PROOF_SEARCH_CORPUS_FORMAT_V06,
@@ -292,10 +314,11 @@ def build_proof_search_corpus_v06(
             "train_percent": 80,
             "validation_percent": 10,
             "test_percent": 10,
-            "grouping_key": "search_id",
+            "grouping_key": "problem_group_sha256",
             "purpose": (
-                "Keep all trajectories derived from the same initial search "
-                "state in one split to reduce state leakage."
+                "Keep all trajectories derived from the same underlying proof "
+                "problem in one split even when run configuration such as the "
+                "iteration budget changes."
             ),
         },
         "trust_model": {
@@ -310,6 +333,7 @@ def build_proof_search_corpus_v06(
         "summary": {
             "source_sessions": len(ordered_sources),
             "search_ids": len(search_ids),
+            "problem_groups": len(problem_groups),
             "examples": len(ordered_examples),
             "split_counts": split_counts,
             "outcome_counts": {
