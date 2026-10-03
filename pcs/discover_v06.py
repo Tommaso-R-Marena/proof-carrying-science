@@ -692,11 +692,11 @@ def discover_project_v06(
         if path.is_symlink():
             skipped.append({"path": relative_literal, "reason": "symlink"})
             continue
-        if _is_pcs_control_document(path):
-            skipped.append({"path": relative_literal, "reason": "pcs-control-document"})
-            continue
         if not path.is_file():
             skipped.append({"path": relative_literal, "reason": "not-regular-file"})
+            continue
+        if _is_pcs_control_document(path):
+            skipped.append({"path": relative_literal, "reason": "pcs-control-document"})
             continue
         if len(inventory) >= MAX_DISCOVERY_FILES_V06:
             raise V06DiscoveryError(
