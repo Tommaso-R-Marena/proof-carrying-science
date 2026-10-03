@@ -90,6 +90,11 @@ from .proof_search_v06 import (
     write_proof_search_session_v06,
     write_proof_search_trajectory_v06,
 )
+from .proof_search_corpus_v06 import (
+    V06ProofSearchCorpusError,
+    build_proof_search_corpus_from_files_v06,
+    write_proof_search_corpus_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -653,6 +658,36 @@ def cmd_advance_proof_search_v06(args):
             ),
         }
     except (OSError, V06ProofSearchError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_export_proof_search_corpus_v06(args):
+    try:
+        corpus = build_proof_search_corpus_from_files_v06(
+            args.sessions
+        )
+        output = write_proof_search_corpus_v06(
+            corpus,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": corpus["format"],
+            "corpus_sha256": corpus["corpus_sha256"],
+            "summary": corpus["summary"],
+            "proof_search_corpus": output,
+            "authority": corpus["trust_model"],
+            "next": (
+                "Use this corpus for offline ranking/search evaluation or "
+                "future supervised/RL experiments. Its labels are diagnostic "
+                "search outcomes, not proof or scientific-truth labels."
+            ),
+        }
+    except (OSError, V06ProofSearchCorpusError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -1274,6 +1309,28 @@ def build_parser():
     )
     aps6.add_argument("--force", action="store_true")
     aps6.set_defaults(func=cmd_advance_proof_search_v06)
+
+    epsc6 = sub.add_parser(
+        "export-proof-search-corpus-v06",
+        help="export validated proof-search trajectories as a deterministic learning corpus",
+    )
+    epsc6.add_argument(
+        "sessions",
+        nargs="+",
+        help="one or more committed pcs-proof-repair-search-v1 session JSON files",
+    )
+    epsc6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write pcs-proof-search-corpus-v1 JSON",
+    )
+    epsc6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing corpus output",
+    )
+    epsc6.set_defaults(func=cmd_export_proof_search_corpus_v06)
 
     d6 = sub.add_parser(
         "discover-v06",
