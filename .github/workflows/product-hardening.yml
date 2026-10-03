@@ -37,7 +37,7 @@ jobs:
           cd formal
           lake build pcs-lean-authority
       - name: Focused P0/P1 tests
-        run: python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_formal_coverage_v06.py tests/test_zip_verify_v06.py tests/test_receipt_contract_v06.py tests/test_receipt_signature_v06.py tests/test_quorum_v06.py
+        run: python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_formal_coverage_v06.py tests/test_zip_verify_v06.py tests/test_receipt_contract_v06.py tests/test_receipt_signature_v06.py tests/test_quorum_v06.py tests/test_proof_translation_v06.py
       - name: Golden examples
         run: python scripts/run_golden_examples_v06.py -o golden-demo-gha
       - name: Adversarial hardening campaign

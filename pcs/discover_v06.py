@@ -52,6 +52,7 @@ _SKIP_DIRS = {
 _SKIP_FILENAMES = {
     "pcs-manifest.draft.json",
     "pcs-discovery.json",
+    "pcs-proof-translation.json",
     "manifest.draft.json",
     "discovery.json",
 }
@@ -190,6 +191,28 @@ def _json_object(path: Path) -> dict[str, Any] | None:
     except (OSError, UnicodeDecodeError, StrictJSONError):
         return None
     return value if isinstance(value, dict) else None
+
+
+_PCS_CONTROL_DOCUMENT_FORMATS = {
+    DISCOVERY_FORMAT_V06,
+    "pcs-proof-translation-v1",
+    "pcs-proof-proposals-v1",
+}
+
+
+def _is_pcs_control_document(path: Path) -> bool:
+    if path.suffix.lower() != ".json":
+        return False
+    value = _json_object(path)
+    if not isinstance(value, dict):
+        return False
+    if value.get("format") in _PCS_CONTROL_DOCUMENT_FORMATS:
+        return True
+    intake = value.get("pcs_intake")
+    return (
+        isinstance(intake, dict)
+        and intake.get("format") == MANIFEST_DRAFT_FORMAT_V06
+    )
 
 
 def _split_kind(name: str) -> str | None:
@@ -629,8 +652,17 @@ def discover_project_v06(
     subject: str | None = None,
     minimum_confidence: float = 0.95,
     minimum_workflow_confidence: float = 0.95,
+    exclude_paths: list[str | Path] | tuple[str | Path, ...] | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
+    excluded_relative: set[str] = set()
+    for excluded in exclude_paths or []:
+        resolved = Path(excluded).resolve()
+        try:
+            excluded_relative.add(resolved.relative_to(root).as_posix())
+        except ValueError:
+            # Out-of-tree proposer/control inputs are already outside discovery.
+            pass
     if not root.is_dir():
         raise V06DiscoveryError(f"project root is not a directory: {root}")
     if not 0.0 <= minimum_confidence <= 1.0:
@@ -653,6 +685,8 @@ def discover_project_v06(
         if path.is_dir():
             continue
         relative_literal = path.relative_to(root).as_posix()
+        if relative_literal in excluded_relative:
+            continue
         if Path(relative_literal).name in _SKIP_FILENAMES:
             continue
         if path.is_symlink():
@@ -660,6 +694,9 @@ def discover_project_v06(
             continue
         if not path.is_file():
             skipped.append({"path": relative_literal, "reason": "not-regular-file"})
+            continue
+        if _is_pcs_control_document(path):
+            skipped.append({"path": relative_literal, "reason": "pcs-control-document"})
             continue
         if len(inventory) >= MAX_DISCOVERY_FILES_V06:
             raise V06DiscoveryError(

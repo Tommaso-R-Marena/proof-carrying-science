@@ -67,6 +67,11 @@ from .discover_v06 import (
     discover_project_v06,
     write_discovery_outputs_v06,
 )
+from .proof_translation_v06 import (
+    V06ProofTranslationError,
+    translate_project_v06,
+    write_proof_translation_outputs_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -381,6 +386,65 @@ def cmd_attest_v06(args):
         return 2
 
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_translate_project_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        plan_output = (
+            Path(args.output).resolve()
+            if args.output
+            else root / "pcs-proof-translation.json"
+        )
+        manifest_output = (
+            Path(args.manifest_draft).resolve()
+            if args.manifest_draft
+            else root / "pcs-manifest.draft.json"
+        )
+        result = translate_project_v06(
+            root,
+            subject=args.subject,
+            proposal_files=args.proposals,
+            control_paths=[plan_output, manifest_output],
+            minimum_confidence=args.minimum_confidence,
+            minimum_model_confidence=args.minimum_model_confidence,
+            minimum_workflow_confidence=args.minimum_workflow_confidence,
+        )
+        written = write_proof_translation_outputs_v06(
+            result,
+            plan_output=plan_output,
+            manifest_output=manifest_output,
+            overwrite=args.force,
+        )
+        project_root_flag = (
+            f" --project-root {root}"
+            if manifest_output.parent != root
+            else ""
+        )
+        response = {
+            "format": result["format"],
+            "project": str(root),
+            "plan_sha256": result["plan_sha256"],
+            "summary": result["summary"],
+            "blocking_obligations": [
+                obligation
+                for obligation in result["obligations"]
+                if obligation.get("blocking") is True
+            ],
+            **written,
+            "next": (
+                f"Review {written['proof_translation_plan']} and "
+                f"{written['manifest_draft']}, then run "
+                f"pcs confirm-v06 {written['manifest_draft']}"
+                f"{project_root_flag} -o {root / 'manifest.json'}"
+            ),
+        }
+    except (OSError, V06ProofTranslationError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
     return 0
 
 
@@ -846,6 +910,55 @@ def build_parser():
     v = sub.add_parser("verify", help="independently verify an evidence certificate/package")
     v.add_argument("certificate")
     v.set_defaults(func=cmd_verify)
+
+    tp6 = sub.add_parser(
+        "translate-project-v06",
+        help="analyze a project and compile supported findings into theorem-backed PCS claims",
+    )
+    tp6.add_argument("project", help="scientific project directory to analyze locally")
+    tp6.add_argument(
+        "-o",
+        "--output",
+        help="proof-translation plan JSON; defaults inside the project",
+    )
+    tp6.add_argument(
+        "--manifest-draft",
+        help="translated PCS manifest draft; defaults inside the project",
+    )
+    tp6.add_argument(
+        "--proposals",
+        action="append",
+        default=[],
+        help=(
+            "optional pcs-proof-proposals-v1 JSON from an external model/proposer; "
+            "repeatable and bound to the current project inventory commitment"
+        ),
+    )
+    tp6.add_argument("--subject", help="override the discovered project subject")
+    tp6.add_argument(
+        "--minimum-confidence",
+        type=float,
+        default=0.95,
+        help="minimum deterministic-discovery confidence selected into the draft",
+    )
+    tp6.add_argument(
+        "--minimum-model-confidence",
+        type=float,
+        default=0.98,
+        help="minimum external-model confidence selected into the draft",
+    )
+    tp6.add_argument(
+        "--minimum-workflow-confidence",
+        type=float,
+        default=0.95,
+        help="minimum confidence for static Python/notebook workflow nodes",
+    )
+    tp6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace existing translation outputs",
+    )
+    tp6.set_defaults(func=cmd_translate_project_v06)
 
     d6 = sub.add_parser(
         "discover-v06",

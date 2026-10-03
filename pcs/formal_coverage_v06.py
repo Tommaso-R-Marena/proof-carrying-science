@@ -3,20 +3,10 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from .check_registry_v06 import CERTIFIED_BUILTIN_CHECK_TYPES_V06
+
 
 FORMAL_COVERAGE_FORMAT_V06 = "pcs-formal-coverage-v1"
-
-# Single Python source of truth for evidence kinds whose executable semantics
-# are proved and run by the Lean authority.
-CERTIFIED_BUILTIN_CHECK_TYPES_V06 = frozenset(
-    {
-        "reaction_balance",
-        "unit_compatible",
-        "csv_disjoint",
-        "pkpd_contract",
-        "pkpd_reference_match",
-    }
-)
 
 
 def _authority_status(
