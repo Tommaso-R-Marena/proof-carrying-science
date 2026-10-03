@@ -883,6 +883,7 @@ def translate_project_v06(
             subject=subject,
             minimum_confidence=minimum_confidence,
             minimum_workflow_confidence=minimum_workflow_confidence,
+            exclude_paths=list(proposal_files or []),
         )
     except V06DiscoveryError as exc:
         raise V06ProofTranslationError(str(exc)) from exc
