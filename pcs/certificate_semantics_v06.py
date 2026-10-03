@@ -4,6 +4,10 @@ from pathlib import PurePosixPath
 from typing import Any
 
 from .decision import assess_claim
+from .check_registry_v06 import (
+    CERTIFIED_BUILTIN_CHECK_TYPES_V06,
+    EXTERNAL_CHECK_KIND_BY_TYPE_V06,
+)
 from .schema_validation import SchemaValidationError, validate_v06_certificate_shape
 from .numeric_contract_v06 import (
     V06NumericContractError,
@@ -15,20 +19,8 @@ class V06CertificateSemanticsError(ValueError):
     pass
 
 
-_BUILTIN_CHECK_TYPES = {
-    "csv_disjoint",
-    "reaction_balance",
-    "unit_compatible",
-    "pkpd_contract",
-    "pkpd_reference_match",
-}
-
-_EXTERNAL_KIND_BY_TYPE = {
-    "external_formal_proof": "formal_proof",
-    "external_empirical_validation": "empirical_validation",
-    "external_statistical_validation": "statistical_validation",
-    "provenance_record": "provenance",
-}
+_BUILTIN_CHECK_TYPES = set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
+_EXTERNAL_KIND_BY_TYPE = dict(EXTERNAL_CHECK_KIND_BY_TYPE_V06)
 
 
 def _unique_id_map(items: list[dict[str, Any]], label: str) -> dict[str, dict[str, Any]]:
