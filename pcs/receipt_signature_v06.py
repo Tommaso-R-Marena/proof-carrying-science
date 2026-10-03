@@ -12,6 +12,11 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import (
 )
 
 from .canonical_json import canonicalize_jcs_bytes
+from .receipt_contract_v06 import (
+    V06ReceiptContractError,
+    assert_verification_receipt_contract_v06,
+    audit_verification_receipt_file_v06,
+)
 from .jsonio import StrictJSONError, strict_json_load
 from .signing import public_key_fingerprint
 from .verifier_io_v06 import V06VerifierIOError, load_public_key_v06
@@ -107,6 +112,10 @@ def sign_verification_receipt_v06(
 
     raw = _receipt_bytes(receipt_path)
     receipt = _receipt_object(receipt_path)
+    try:
+        assert_verification_receipt_contract_v06(receipt)
+    except V06ReceiptContractError as exc:
+        raise V06ReceiptSignatureError(str(exc)) from exc
     receipt_sha256 = hashlib.sha256(raw).hexdigest()
     payload = receipt_signature_payload_v06(receipt, receipt_sha256)
 
@@ -133,11 +142,20 @@ def verify_verification_receipt_signature_v06(
     reviewer_public_key_path: str | Path,
     *,
     expected_reviewer_fingerprint: str | None = None,
+    bundle_path: str | Path | None = None,
+    producer_public_key_path: str | Path | None = None,
+    authority_path: str | Path | None = None,
 ) -> dict[str, Any]:
     errors: list[str] = []
     try:
         raw = _receipt_bytes(receipt_path)
         receipt = _receipt_object(receipt_path)
+        contract = audit_verification_receipt_file_v06(
+            receipt_path,
+            bundle_path=bundle_path,
+            producer_public_key_path=producer_public_key_path,
+            authority_path=authority_path,
+        )
         receipt_sha256 = hashlib.sha256(raw).hexdigest()
         expected_payload = receipt_signature_payload_v06(
             receipt,
@@ -194,9 +212,16 @@ def verify_verification_receipt_signature_v06(
                 f"{type(exc).__name__}: {exc}"
             )
 
+        if not contract["valid"]:
+            errors.extend(
+                f"receipt contract: {error}" for error in contract["errors"]
+            )
         return {
             "valid": not errors,
             "errors": errors,
+            "contract_valid": contract["valid"],
+            "contract_errors": contract["errors"],
+            "contract_checks": contract.get("checks", {}),
             "signature_format": record.get("signature_format"),
             "reviewer_public_key_fingerprint": recorded_fingerprint,
             "receipt_sha256": receipt_sha256,
@@ -214,6 +239,9 @@ def verify_verification_receipt_signature_v06(
         return {
             "valid": False,
             "errors": [str(exc)],
+            "contract_valid": False,
+            "contract_errors": [str(exc)],
+            "contract_checks": {},
             "signature_format": None,
             "reviewer_public_key_fingerprint": None,
             "receipt_sha256": None,
