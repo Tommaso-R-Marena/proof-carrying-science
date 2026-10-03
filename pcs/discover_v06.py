@@ -52,6 +52,7 @@ _SKIP_DIRS = {
 _SKIP_FILENAMES = {
     "pcs-manifest.draft.json",
     "pcs-discovery.json",
+    "pcs-proof-translation.json",
     "manifest.draft.json",
     "discovery.json",
 }
@@ -629,8 +630,17 @@ def discover_project_v06(
     subject: str | None = None,
     minimum_confidence: float = 0.95,
     minimum_workflow_confidence: float = 0.95,
+    exclude_paths: list[str | Path] | tuple[str | Path, ...] | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
+    excluded_relative: set[str] = set()
+    for excluded in exclude_paths or []:
+        resolved = Path(excluded).resolve()
+        try:
+            excluded_relative.add(resolved.relative_to(root).as_posix())
+        except ValueError:
+            # Out-of-tree proposer/control inputs are already outside discovery.
+            pass
     if not root.is_dir():
         raise V06DiscoveryError(f"project root is not a directory: {root}")
     if not 0.0 <= minimum_confidence <= 1.0:
@@ -653,6 +663,8 @@ def discover_project_v06(
         if path.is_dir():
             continue
         relative_literal = path.relative_to(root).as_posix()
+        if relative_literal in excluded_relative:
+            continue
         if Path(relative_literal).name in _SKIP_FILENAMES:
             continue
         if path.is_symlink():
