@@ -261,6 +261,62 @@ def test_model_cannot_substitute_predicate_that_differs_from_compiled_check(tmp_
     )
 
 
+def test_model_cannot_smuggle_extra_claim_links_into_compiled_check(tmp_path: Path):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _model_proposal_file(tmp_path, discovery=discovery)
+    value = json.loads(proposal.read_text(encoding="utf-8"))
+    value["proposals"][0]["check"]["claim_ids"] = [
+        "C_MODEL_DISJOINT",
+        "C_UNRELATED",
+    ]
+    proposal.write_text(
+        json.dumps(value, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    result = translate_project_v06(tmp_path, proposal_files=[proposal])
+    model = next(
+        candidate
+        for candidate in result["candidates"]
+        if candidate["source"]["kind"] == "external_model"
+    )
+    assert model["selected"] is False
+    assert model["status"] == "REJECTED_INVALID_PROPOSAL"
+    assert any(
+        obligation["kind"] == "CLAIM_EVIDENCE_LINK_MISMATCH"
+        for obligation in model["obligations"]
+    )
+
+
+def test_model_cannot_smuggle_extra_required_evidence_into_claim(tmp_path: Path):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _model_proposal_file(tmp_path, discovery=discovery)
+    value = json.loads(proposal.read_text(encoding="utf-8"))
+    value["proposals"][0]["claim"]["required_evidence"] = [
+        "E_MODEL_DISJOINT",
+        "E_UNRELATED",
+    ]
+    proposal.write_text(
+        json.dumps(value, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    result = translate_project_v06(tmp_path, proposal_files=[proposal])
+    model = next(
+        candidate
+        for candidate in result["candidates"]
+        if candidate["source"]["kind"] == "external_model"
+    )
+    assert model["selected"] is False
+    assert model["status"] == "REJECTED_INVALID_PROPOSAL"
+    assert any(
+        obligation["kind"] == "CLAIM_EVIDENCE_LINK_MISMATCH"
+        for obligation in model["obligations"]
+    )
+
+
 def test_low_confidence_model_proposal_compiles_but_stays_review_only(tmp_path: Path):
     _write_csv_pair(tmp_path)
     discovery = discover_project_v06(tmp_path)
