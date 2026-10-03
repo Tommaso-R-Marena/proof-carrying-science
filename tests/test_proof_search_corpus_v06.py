@@ -145,6 +145,7 @@ def _session_after_one_repair(
     *,
     replacement_key: str,
     version: str,
+    max_iterations: int = 4,
 ) -> dict:
     _write_csv_pair(root)
     discovery = discover_project_v06(root)
@@ -154,6 +155,7 @@ def _session_after_one_repair(
     session = start_proof_search_v06(
         root,
         proposal_files=[proposal_path],
+        max_iterations=max_iterations,
     )
     response = _repair_response(
         session,
@@ -213,6 +215,43 @@ def test_corpus_deduplicates_sources_and_examples_deterministically(
         assert len(
             example["target_action"]["replacement_proposal_sha256"]
         ) == 64
+
+
+def test_corpus_split_group_is_stable_across_iteration_budgets(
+    tmp_path: Path,
+):
+    short = _session_after_one_repair(
+        tmp_path / "short",
+        replacement_key="id",
+        version="short",
+        max_iterations=1,
+    )
+    long = _session_after_one_repair(
+        tmp_path / "long",
+        replacement_key="id",
+        version="long",
+        max_iterations=8,
+    )
+
+    assert short["search_id"] != long["search_id"]
+
+    corpus = build_proof_search_corpus_v06([short, long])
+    assert corpus["summary"]["source_sessions"] == 2
+    assert corpus["summary"]["search_ids"] == 2
+    assert corpus["summary"]["problem_groups"] == 1
+    groups = {
+        source["problem_group_sha256"]
+        for source in corpus["sources"]
+    }
+    splits = {
+        source["split"]
+        for source in corpus["sources"]
+    }
+    assert len(groups) == 1
+    assert len(splits) == 1
+    assert corpus["split_contract"]["grouping_key"] == (
+        "problem_group_sha256"
+    )
 
 
 def test_corpus_progress_example_contains_actual_repair_action(
