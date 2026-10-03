@@ -104,25 +104,74 @@ def _run(*args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
+def _coherent_receipt(*, accepted: bool = True) -> dict:
+    return {
+        "format": "pcs-end-to-end-verifier-v06-v1",
+        "authority_required": True,
+        "authoritative": True,
+        "valid": True,
+        "accepted": accepted,
+        "failed_stage": None,
+        "errors": [],
+        "stages": {"lean_authority": True},
+        "bundle_sha256": "a" * 64,
+        "archive_format": "zip",
+        "archive_assurance": "python-materialized-legacy-zip",
+        "certificate_semantic_hash": "b" * 64,
+        "certificate_integrity_hash": "c" * 64,
+        "normalized_index_semantic_hash": "d" * 64,
+        "public_key_fingerprint": "f" * 64,
+        "lean_authority": {
+            "format": "pcs-lean-authority-result-v1",
+            "required": True,
+            "accepted": True,
+            "verdict": "ACCEPT",
+            "mode": "test",
+            "authority_sha256": "1" * 64,
+            "observation_transcript_sha256": "2" * 64,
+            "certificate_semantic_hash": "b" * 64,
+            "archive_mode": "python-materialized-members",
+        },
+        "formal_coverage": {
+            "format": "pcs-formal-coverage-v1",
+            "checker_classification_scope": "CHECK_TYPE_ONLY",
+            "execution_authority_scope": "EXACT_PACKAGE_VERIFICATION",
+            "certified_checker_types": [
+                "csv_disjoint",
+                "pkpd_contract",
+                "pkpd_reference_match",
+                "reaction_balance",
+                "unit_compatible",
+            ],
+            "evidence_total": 0,
+            "certified_type_evidence": 0,
+            "outside_certified_type_evidence": 0,
+            "package_authority": "LEAN_AUTHORITATIVE_ACCEPT",
+            "evidence": [],
+        },
+        "reviewer_policy": (
+            {
+                "applied": False,
+                "pass": None,
+                "policy_sha256": None,
+                "failures": [],
+            }
+            if accepted
+            else {
+                "applied": True,
+                "pass": False,
+                "policy_sha256": "e" * 64,
+                "failures": [{"type": "claim_status"}],
+            }
+        ),
+    }
+
+
 def test_reviewer_signature_binds_exact_receipt_bytes_and_summary(tmp_path):
     receipt = tmp_path / "receipt.json"
     signature = tmp_path / "receipt.sig.json"
     private_key, public_key, fingerprint = _reviewer_keys(tmp_path)
-    receipt_obj = {
-        "format": "pcs-end-to-end-verifier-v06-v1",
-        "valid": True,
-        "accepted": False,
-        "bundle_sha256": "a" * 64,
-        "certificate_semantic_hash": "b" * 64,
-        "certificate_integrity_hash": "c" * 64,
-        "normalized_index_semantic_hash": "d" * 64,
-        "reviewer_policy": {
-            "applied": True,
-            "pass": False,
-            "policy_sha256": "e" * 64,
-            "failures": [{"type": "claim_status"}],
-        },
-    }
+    receipt_obj = _coherent_receipt(accepted=False)
     raw = json.dumps(
         receipt_obj,
         indent=2,
@@ -158,14 +207,18 @@ def test_one_byte_receipt_change_breaks_reviewer_signature(tmp_path):
     signature = tmp_path / "receipt.sig.json"
     private_key, public_key, _ = _reviewer_keys(tmp_path)
     receipt.write_text(
-        json.dumps({"format": "x", "valid": True, "accepted": True}) + "\n",
+        json.dumps(_coherent_receipt(), sort_keys=True) + "\n",
         encoding="utf-8",
     )
     sign_verification_receipt_v06(receipt, private_key, signature)
 
     raw = receipt.read_bytes()
-    assert b'"format": "x"' in raw
-    tampered = raw.replace(b'"format": "x"', b'"format": "y"', 1)
+    assert b'"bundle_sha256": "aaaaaaaa' in raw
+    tampered = raw.replace(
+        b'"bundle_sha256": "aaaaaaaa',
+        b'"bundle_sha256": "baaaaaaa',
+        1,
+    )
     assert len(tampered) == len(raw)
     receipt.write_bytes(tampered)
 
@@ -188,7 +241,7 @@ def test_wrong_reviewer_key_and_fingerprint_are_rejected(tmp_path):
     private_key, _, fingerprint = _reviewer_keys(tmp_path, 31)
     _, wrong_public, wrong_fingerprint = _reviewer_keys(tmp_path, 63)
     receipt.write_text(
-        json.dumps({"format": "x", "valid": True, "accepted": True}) + "\n",
+        json.dumps(_coherent_receipt(), sort_keys=True) + "\n",
         encoding="utf-8",
     )
     sign_verification_receipt_v06(receipt, private_key, signature)
@@ -266,23 +319,7 @@ def test_verify_receipt_v06_cli_is_independent_audit_step(tmp_path):
     signature = tmp_path / "receipt.sig.json"
     private_key, public_key, fingerprint = _reviewer_keys(tmp_path)
     receipt.write_text(
-        json.dumps(
-            {
-                "format": "pcs-end-to-end-verifier-v06-v1",
-                "valid": True,
-                "accepted": True,
-                "bundle_sha256": "a" * 64,
-                "reviewer_policy": {
-                    "applied": False,
-                    "pass": None,
-                    "policy_sha256": None,
-                    "failures": [],
-                },
-            },
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
+        json.dumps(_coherent_receipt(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
     sign_verification_receipt_v06(receipt, private_key, signature)
