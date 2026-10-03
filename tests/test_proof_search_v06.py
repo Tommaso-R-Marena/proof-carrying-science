@@ -259,6 +259,33 @@ def test_search_detects_semantic_cycle_even_when_proposer_metadata_changes(
     )
 
 
+def test_search_cycle_detection_ignores_claim_and_check_id_churn(
+    tmp_path: Path,
+):
+    _, session, ids = _start_blocked_search(tmp_path)
+    same_bad_new_internal_ids = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD_RENAMED",
+        check_id="E_MODEL_BAD_RENAMED",
+        key="patient_id",
+    )
+    response = _repair_response(
+        session,
+        same_bad_new_internal_ids,
+        proposer_version="renamed-ids",
+    )
+
+    advanced = advance_proof_search_v06(
+        tmp_path,
+        session,
+        response,
+    )
+
+    assert advanced["status"] == "CYCLE_DETECTED"
+    assert advanced["trajectory"]["steps"][0]["outcome"] == "CYCLE_DETECTED"
+
+
 def test_search_hard_stops_at_iteration_budget_without_faking_progress(
     tmp_path: Path,
 ):
