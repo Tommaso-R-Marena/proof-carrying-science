@@ -204,8 +204,8 @@ def test_corpus_deduplicates_sources_and_examples_deterministically(
     } == {first["examples"][0]["split"]}
     for example in first["examples"]:
         assert example["authority"]["training_record_is_authoritative"] is False
-        assert example["labels"]["scientific_truth_label"] is False
-        assert example["labels"]["proof_authority_label"] is False
+        assert example["labels"]["has_scientific_truth_label"] is False
+        assert example["labels"]["has_proof_authority_label"] is False
         assert example["state"]["task"]["candidate_snapshot"]
         assert example["target_action"]["replacement_proposal"]["id"] == (
             "MODEL_DISJOINT"
@@ -229,6 +229,8 @@ def test_corpus_progress_example_contains_actual_repair_action(
     example = corpus["examples"][0]
     assert example["labels"]["outcome"] == "OBJECTIVE_PROGRESS"
     assert example["labels"]["diagnostic_reward"] > 0
+    assert example["labels"]["label_scope"] == "SEARCH_BEHAVIOR_ONLY"
+    assert example["labels"]["blocking_obligations_closed"] == 1
     assert example["allowed_action"] == (
         "revise_predicate_from_project_bytes"
     )
@@ -254,7 +256,7 @@ def test_corpus_cycle_example_is_negative_search_signal_not_truth_label(
     assert example["labels"]["outcome"] == "CYCLE_DETECTED"
     assert example["labels"]["cycle_detected"] is True
     assert example["labels"]["diagnostic_reward"] < 0
-    assert example["labels"]["scientific_truth_label"] is False
+    assert example["labels"]["has_scientific_truth_label"] is False
     assert corpus["trust_model"]["diagnostic_reward_is_scientific_truth"] is False
 
 
