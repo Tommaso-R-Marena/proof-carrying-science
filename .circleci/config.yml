@@ -24,6 +24,44 @@ commands:
             lake build pcs-lean-authority
 
 jobs:
+  proof-search-syntax:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Compile proof translation/search Python sources
+          command: |
+            python -m py_compile \
+              pcs/proof_translation_v06.py \
+              pcs/proof_repair_v06.py \
+              pcs/proof_search_v06.py \
+              pcs/cli.py \
+              tests/test_proof_translation_v06.py \
+              tests/test_proof_repair_v06.py \
+              tests/test_proof_search_v06.py
+
+  proof-search-python-tests:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install focused PCS test environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run proof translation, repair, and search tests
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q \
+              tests/test_proof_translation_v06.py \
+              tests/test_proof_repair_v06.py \
+              tests/test_proof_search_v06.py
+
   product-demo-hardening:
     docker:
       - image: cimg/python:3.12
@@ -332,6 +370,19 @@ workflows:
               only:
                 - formal/v06-e2e-refinement
                 - formal/lean-authoritative-production
+
+  proof-search-hardening:
+    jobs:
+      - proof-search-syntax:
+          filters: &proof_search_branches
+            branches:
+              only:
+                - core/proof-obligation-graph-v1
+                - core/proof-repair-contract-v1
+                - core/proof-search-coordinator-v1
+      - proof-search-python-tests:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
 
   product-demo-hardening:
     jobs:
