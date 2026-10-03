@@ -227,11 +227,20 @@ def _proposal_intent_anchor(
             f"proposal {proposal_id!r} lacks a natural-language intent anchor; "
             "proof search requires finding/reason or claim.statement"
         )
+    confidence = proposal.get("confidence")
+    check = proposal.get("check")
+    check_type = (
+        check.get("type")
+        if isinstance(check, Mapping) and isinstance(check.get("type"), str)
+        else None
+    )
     return {
         "proposal_id": proposal_id,
         "finding": finding,
         "claim_statement": statement,
         "claim_kind": kind,
+        "proposal_confidence": confidence,
+        "check_type": check_type,
     }
 
 
@@ -298,6 +307,23 @@ def _assert_proposal_preserves_intent(
                 "claim kind; create a new human-reviewed proposal instead"
             )
 
+    if proposal.get("confidence") != anchor.get("proposal_confidence"):
+        raise V06ProofSearchError(
+            f"repair for proposal {proposal_id!r} changes model confidence; "
+            "confidence promotion requires a new human-reviewed proposal"
+        )
+
+    anchored_check_type = anchor.get("check_type")
+    if anchored_check_type is not None:
+        check = proposal.get("check")
+        if (
+            not isinstance(check, Mapping)
+            or check.get("type") != anchored_check_type
+        ):
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} changes the checker family; "
+                "checker-family reproposal requires human review"
+            )
 
 
 def _semantic_state_projection(
