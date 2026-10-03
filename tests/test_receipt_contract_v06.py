@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
+
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
@@ -17,9 +19,12 @@ from pcs.receipt_contract_v06 import (
 from pcs.receipt_signature_v06 import (
     REVIEW_RECEIPT_SIGNATURE_DOMAIN_V06,
     REVIEW_RECEIPT_SIGNATURE_FORMAT_V06,
+    V06ReceiptSignatureError,
     receipt_signature_payload_v06,
+    sign_verification_receipt_v06,
     verify_verification_receipt_signature_v06,
 )
+from pcs.verifier_io_v06 import V06VerifierIOError, write_verification_receipt_v06
 from pcs.signing import public_key_fingerprint
 
 
@@ -193,6 +198,39 @@ def test_contract_binds_optional_external_bundle_key_and_authority(tmp_path: Pat
     )
     assert mismatch["valid"] is False
     assert mismatch["checks"]["external_bundle_binding"] is False
+
+
+def test_writer_and_normal_signer_refuse_contradictory_receipt(tmp_path: Path):
+    contradictory = _receipt()
+    contradictory["authoritative"] = False
+    contradictory["stages"]["lean_authority"] = False
+
+    with pytest.raises(V06VerifierIOError, match="receipt contract failed"):
+        write_verification_receipt_v06(
+            contradictory,
+            tmp_path / "writer-refused.json",
+        )
+
+    receipt_path = tmp_path / "contradictory.json"
+    receipt_path.write_text(
+        json.dumps(contradictory, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    private = Ed25519PrivateKey.from_private_bytes(bytes(range(31, 63)))
+    private_path = tmp_path / "reviewer-private.pem"
+    private_path.write_bytes(
+        private.private_bytes(
+            serialization.Encoding.PEM,
+            serialization.PrivateFormat.PKCS8,
+            serialization.NoEncryption(),
+        )
+    )
+    with pytest.raises(V06ReceiptSignatureError, match="receipt contract failed"):
+        sign_verification_receipt_v06(
+            receipt_path,
+            private_path,
+            tmp_path / "should-not-exist.sig.json",
+        )
 
 
 def test_valid_signature_over_contradictory_receipt_is_still_rejected(tmp_path: Path):
