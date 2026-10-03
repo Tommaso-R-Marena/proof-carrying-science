@@ -53,6 +53,9 @@ _SKIP_FILENAMES = {
     "pcs-manifest.draft.json",
     "pcs-discovery.json",
     "pcs-proof-translation.json",
+    "pcs-proof-repair-request.json",
+    "pcs-proof-repair-response.json",
+    "pcs-proof-repaired-proposals.json",
     "manifest.draft.json",
     "discovery.json",
 }
@@ -197,6 +200,8 @@ _PCS_CONTROL_DOCUMENT_FORMATS = {
     DISCOVERY_FORMAT_V06,
     "pcs-proof-translation-v1",
     "pcs-proof-proposals-v1",
+    "pcs-proof-repair-request-v1",
+    "pcs-proof-repair-proposals-v1",
 }
 
 
