@@ -721,15 +721,15 @@ def _compile_proposal(
         check["claim_ids"] = [claim_id]
     elif (
         not isinstance(check_claim_ids, list)
-        or claim_id not in check_claim_ids
         or not all(isinstance(x, str) for x in check_claim_ids)
+        or sorted(check_claim_ids) != [claim_id]
     ):
         result["status"] = "REJECTED_INVALID_PROPOSAL"
         result["obligations"].append(
             _obligation(
                 ident,
                 "CLAIM_EVIDENCE_LINK_MISMATCH",
-                "The check claim_ids do not include the proposed claim.",
+                "The check claim_ids must contain exactly the proposed claim.",
                 blocking=True,
             )
         )
@@ -757,13 +757,17 @@ def _compile_proposal(
     required = claim.get("required_evidence")
     if required is None:
         claim["required_evidence"] = [check_id]
-    elif not isinstance(required, list) or check_id not in required:
+    elif (
+        not isinstance(required, list)
+        or not all(isinstance(x, str) for x in required)
+        or sorted(required) != [check_id]
+    ):
         result["status"] = "REJECTED_INVALID_PROPOSAL"
         result["obligations"].append(
             _obligation(
                 ident,
                 "CLAIM_EVIDENCE_LINK_MISMATCH",
-                "Claim required_evidence does not include the proposed check.",
+                "Claim required_evidence must contain exactly the proposed check.",
                 blocking=True,
             )
         )
