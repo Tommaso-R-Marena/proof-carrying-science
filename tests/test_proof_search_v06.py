@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 import pytest
 
+from pcs.canonical_json import canonicalize_jcs_bytes
 from pcs.discover_v06 import discover_project_v06
 from pcs.proof_repair_v06 import PROOF_REPAIR_RESPONSE_FORMAT_V06
 from pcs.proof_search_v06 import (
@@ -339,6 +341,39 @@ def test_tampered_search_session_is_fail_closed(tmp_path: Path):
     tampered["max_iterations"] = 31
 
     with pytest.raises(V06ProofSearchError, match="session commitment"):
+        advance_proof_search_v06(
+            tmp_path,
+            tampered,
+            response,
+        )
+
+
+def test_rehashed_session_still_rejects_tampered_repair_request(tmp_path: Path):
+    _, session, ids = _start_blocked_search(tmp_path)
+    replacement = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD",
+        check_id="E_MODEL_BAD",
+        key="id",
+    )
+    response = _repair_response(session, replacement)
+
+    tampered = json.loads(json.dumps(session))
+    tampered["current_repair_request"]["tasks"][0]["allowed_action"] = "declare_pass"
+    core = {
+        key: value
+        for key, value in tampered.items()
+        if key != "session_sha256"
+    }
+    tampered["session_sha256"] = hashlib.sha256(
+        canonicalize_jcs_bytes(core)
+    ).hexdigest()
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="does not exactly match",
+    ):
         advance_proof_search_v06(
             tmp_path,
             tampered,
