@@ -219,7 +219,7 @@ def _proposal_intent_anchor(
         if isinstance(raw_statement, str) and raw_statement.strip():
             statement = raw_statement
         raw_kind = claim.get("kind", "computational")
-        if isinstance(raw_kind, str):
+        if raw_kind in {"computational", "formal", "empirical", "mixed"}:
             kind = raw_kind
 
     if finding is None and statement is None:
