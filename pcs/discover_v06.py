@@ -56,6 +56,9 @@ _SKIP_FILENAMES = {
     "pcs-proof-repair-request.json",
     "pcs-proof-repair-response.json",
     "pcs-proof-repaired-proposals.json",
+    "pcs-proof-search.json",
+    "pcs-proof-search.request.json",
+    "pcs-proof-search.trajectory.json",
     "manifest.draft.json",
     "discovery.json",
 }
@@ -202,6 +205,8 @@ _PCS_CONTROL_DOCUMENT_FORMATS = {
     "pcs-proof-proposals-v1",
     "pcs-proof-repair-request-v1",
     "pcs-proof-repair-proposals-v1",
+    "pcs-proof-repair-search-v1",
+    "pcs-proof-repair-trajectory-v1",
 }
 
 
