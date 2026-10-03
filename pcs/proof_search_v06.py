@@ -768,6 +768,49 @@ def _verify_session(
                 "proof search trajectory step violates authority-boundary metadata"
             )
 
+        repair_records = step.get("repair_records", [])
+        if not isinstance(repair_records, list):
+            raise V06ProofSearchError(
+                "proof search trajectory repair_records must be an array"
+            )
+        for record in repair_records:
+            if not isinstance(record, Mapping):
+                raise V06ProofSearchError(
+                    "proof search trajectory repair record must be an object"
+                )
+            task = record.get("task")
+            replacement = record.get("replacement_proposal")
+            if not isinstance(task, Mapping) or not isinstance(
+                replacement, Mapping
+            ):
+                raise V06ProofSearchError(
+                    "proof search trajectory repair record is incomplete"
+                )
+            if (
+                task.get("obligation_id") != record.get("obligation_id")
+                or task.get("proposal_id") != record.get("proposal_id")
+                or task.get("allowed_action") != record.get("action")
+            ):
+                raise V06ProofSearchError(
+                    "proof search trajectory repair record binding is invalid"
+                )
+            snapshot = task.get("candidate_snapshot")
+            if (
+                not isinstance(snapshot, Mapping)
+                or _commitment(snapshot)
+                != task.get("candidate_snapshot_sha256")
+            ):
+                raise V06ProofSearchError(
+                    "proof search trajectory candidate snapshot hash is invalid"
+                )
+            if (
+                _commitment(replacement)
+                != record.get("replacement_proposal_sha256")
+            ):
+                raise V06ProofSearchError(
+                    "proof search trajectory replacement proposal hash is invalid"
+                )
+
     cycle_detected = (
         iteration > 0 and current_state in seen_states[:-1]
     )
@@ -918,6 +961,95 @@ def _merge_repaired_proposals(
     )
 
 
+
+def _repair_training_records(
+    repair_request: Mapping[str, Any],
+    compiled_repairs: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    raw_tasks = repair_request.get("tasks")
+    raw_proposals = compiled_repairs.get("proposals")
+    provenance = compiled_repairs.get("repair_provenance")
+    if (
+        not isinstance(raw_tasks, list)
+        or not isinstance(raw_proposals, list)
+        or not isinstance(provenance, Mapping)
+        or not isinstance(provenance.get("repairs"), list)
+    ):
+        raise V06ProofSearchError(
+            "compiled repair lacks self-contained training provenance"
+        )
+
+    tasks = {
+        str(task.get("obligation_id")): task
+        for task in raw_tasks
+        if isinstance(task, Mapping)
+        and isinstance(task.get("obligation_id"), str)
+    }
+    proposals = {
+        str(proposal.get("id")): proposal
+        for proposal in raw_proposals
+        if isinstance(proposal, Mapping)
+        and isinstance(proposal.get("id"), str)
+    }
+
+    records: list[dict[str, Any]] = []
+    for repair in provenance["repairs"]:
+        if not isinstance(repair, Mapping):
+            raise V06ProofSearchError(
+                "compiled repair provenance entry must be an object"
+            )
+        obligation_id = str(repair.get("obligation_id"))
+        proposal_id = str(repair.get("proposal_id"))
+        task = tasks.get(obligation_id)
+        proposal = proposals.get(proposal_id)
+        if task is None or proposal is None:
+            raise V06ProofSearchError(
+                "compiled repair provenance cannot be joined to task/proposal"
+            )
+        if task.get("proposal_id") != proposal_id:
+            raise V06ProofSearchError(
+                "compiled repair task/proposal binding mismatch"
+            )
+        if task.get("allowed_action") != repair.get("action"):
+            raise V06ProofSearchError(
+                "compiled repair action differs from requested action"
+            )
+
+        proposal_sha256 = _commitment(proposal)
+        if proposal_sha256 != repair.get("replacement_proposal_sha256"):
+            raise V06ProofSearchError(
+                "compiled repair replacement proposal hash mismatch"
+            )
+        candidate_snapshot = task.get("candidate_snapshot")
+        if (
+            not isinstance(candidate_snapshot, Mapping)
+            or _commitment(candidate_snapshot)
+            != task.get("candidate_snapshot_sha256")
+        ):
+            raise V06ProofSearchError(
+                "repair task candidate snapshot commitment is invalid"
+            )
+
+        records.append(
+            {
+                "obligation_id": obligation_id,
+                "proposal_id": proposal_id,
+                "action": repair.get("action"),
+                "task": _json_clone(task),
+                "replacement_proposal": _json_clone(proposal),
+                "replacement_proposal_sha256": proposal_sha256,
+            }
+        )
+
+    return sorted(
+        records,
+        key=lambda item: (
+            str(item["proposal_id"]),
+            str(item["obligation_id"]),
+        ),
+    )
+
+
 def start_proof_search_v06(
     project_root: str | Path,
     *,
@@ -1061,6 +1193,11 @@ def advance_proof_search_v06(
     except V06ProofRepairError as exc:
         raise V06ProofSearchError(str(exc)) from exc
 
+    repair_records = _repair_training_records(
+        before_request,
+        compiled,
+    )
+
     inventory = session["inventory_commitment_sha256"]
     active_documents = _validate_active_documents(
         session["active_proposal_documents"],
@@ -1172,6 +1309,7 @@ def advance_proof_search_v06(
             for item in compiled.get("proposals", [])
             if isinstance(item, Mapping)
         ),
+        "repair_records": repair_records,
         "after_plan_sha256": after_translation.get("plan_sha256"),
         "after_graph_sha256": after_translation.get(
             "obligation_graph", {}
@@ -1245,6 +1383,13 @@ def advance_proof_search_v06(
         }
     )
     return _session_with_hash(core)
+
+
+def validate_proof_search_session_v06(
+    session: Mapping[str, Any],
+) -> None:
+    """Validate all deterministic proof-search session invariants."""
+    _verify_session(session)
 
 
 def load_proof_search_session_v06(
