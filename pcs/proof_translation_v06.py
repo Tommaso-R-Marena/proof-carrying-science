@@ -417,7 +417,6 @@ def _obligation(
             "message": message,
             "blocking": blocking,
             "details": dict(details or {}),
-            "repair": repair,
         }
     )
     suffix = hashlib.sha256(seed).hexdigest()[:12]
@@ -1177,8 +1176,9 @@ def _proof_obligation_graph(
             "edges": len(ordered_edges),
             "blocking_obligations": sum(
                 1
-                for item in repair_queue
-                if item.get("blocking") is True
+                for node in ordered_nodes
+                if node.get("type") == "obligation"
+                and node.get("blocking") is True
             ),
             "repair_actions": len(repair_queue),
             "node_type_counts": type_counts,
