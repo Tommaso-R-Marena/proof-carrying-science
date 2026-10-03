@@ -377,6 +377,11 @@ def _verify_session(
         raise V06ProofSearchError(
             f"unsupported proof search session format: {session.get('format')!r}"
         )
+    if session.get("coordinator") != PROOF_SEARCH_COORDINATOR_V06:
+        raise V06ProofSearchError(
+            "proof search session coordinator version is unsupported"
+        )
+
     claimed = session.get("session_sha256")
     if not isinstance(claimed, str) or len(claimed) != 64:
         raise V06ProofSearchError(
@@ -404,10 +409,6 @@ def _verify_session(
         minimum=0,
         maximum=max_iterations,
     )
-    if iteration > max_iterations:
-        raise V06ProofSearchError(
-            "proof search iteration exceeds max_iterations"
-        )
 
     translation = session.get("current_translation")
     request = session.get("current_repair_request")
@@ -415,21 +416,16 @@ def _verify_session(
         raise V06ProofSearchError(
             "proof search session lacks current translation/repair request"
         )
-    if request.get("format") != PROOF_REPAIR_REQUEST_FORMAT_V06:
+    try:
+        expected_request = build_proof_repair_request_v06(translation)
+    except V06ProofRepairError as exc:
         raise V06ProofSearchError(
-            "proof search session current repair request has wrong format"
-        )
-    if request.get("translation_plan_sha256") != translation.get(
-        "plan_sha256"
-    ):
+            f"proof search current translation is invalid: {exc}"
+        ) from exc
+    if request != expected_request:
         raise V06ProofSearchError(
-            "proof search current repair request is stale for its translation"
-        )
-    if request.get("obligation_graph_sha256") != translation.get(
-        "obligation_graph", {}
-    ).get("graph_sha256"):
-        raise V06ProofSearchError(
-            "proof search current repair request is stale for its graph"
+            "proof search current repair request does not exactly match "
+            "the deterministic request for its translation"
         )
 
     inventory = translation.get("inventory_commitment_sha256")
@@ -437,10 +433,47 @@ def _verify_session(
         raise V06ProofSearchError(
             "proof search translation lacks inventory commitment"
         )
-    _validate_active_documents(
+    if session.get("inventory_commitment_sha256") != inventory:
+        raise V06ProofSearchError(
+            "proof search session inventory binding does not match translation"
+        )
+    if session.get("subject") != translation.get("subject"):
+        raise V06ProofSearchError(
+            "proof search subject does not match current translation"
+        )
+
+    active_documents = _validate_active_documents(
         session.get("active_proposal_documents"),
         inventory_commitment_sha256=inventory,
     )
+    if active_documents != session.get("active_proposal_documents"):
+        raise V06ProofSearchError(
+            "proof search active proposal documents are not normalized"
+        )
+
+    expected_authority = {
+        "coordinator_trusted_to_set_authoritative": False,
+        "repair_model_trusted": False,
+        "diagnostic_reward_sets_authority": False,
+        "human_confirmation_required": True,
+        "replay_and_lean_authority_required": True,
+    }
+    if session.get("authority") != expected_authority:
+        raise V06ProofSearchError(
+            "proof search authority boundary metadata is invalid"
+        )
+
+    expected_search_id = _commitment(
+        {
+            "initial_plan_sha256": session.get("initial_plan_sha256"),
+            "inventory_commitment_sha256": inventory,
+            "max_iterations": max_iterations,
+        }
+    )[:20]
+    if session.get("search_id") != expected_search_id:
+        raise V06ProofSearchError(
+            "proof search id does not match its initial bindings"
+        )
 
     seen_states = session.get("seen_state_sha256")
     if not isinstance(seen_states, list) or not all(
@@ -450,8 +483,12 @@ def _verify_session(
         raise V06ProofSearchError(
             "proof search seen_state_sha256 must be an array of SHA-256 strings"
         )
+    if len(seen_states) != iteration + 1:
+        raise V06ProofSearchError(
+            "proof search semantic-state history length does not match iteration"
+        )
     current_state = _semantic_state_sha256(translation)
-    if not seen_states or seen_states[-1] != current_state:
+    if seen_states[-1] != current_state:
         raise V06ProofSearchError(
             "proof search current semantic state is not the last seen state"
         )
@@ -461,6 +498,26 @@ def _verify_session(
         raise V06ProofSearchError(
             "proof search session lacks trajectory"
         )
+    if trajectory.get("format") != PROOF_SEARCH_TRAJECTORY_FORMAT_V06:
+        raise V06ProofSearchError(
+            "proof search trajectory format is invalid"
+        )
+    if trajectory.get("reward_contract") != _REWARD_CONTRACT_V06:
+        raise V06ProofSearchError(
+            "proof search trajectory reward contract is invalid"
+        )
+    steps = trajectory.get("steps")
+    if not isinstance(steps, list) or not all(
+        isinstance(step, Mapping) for step in steps
+    ):
+        raise V06ProofSearchError(
+            "proof search trajectory steps must be an array of objects"
+        )
+    if len(steps) != iteration:
+        raise V06ProofSearchError(
+            "proof search trajectory length does not match iteration"
+        )
+
     trajectory_claimed = trajectory.get("trajectory_sha256")
     trajectory_core = {
         key: _json_clone(value)
@@ -474,6 +531,62 @@ def _verify_session(
     ):
         raise V06ProofSearchError(
             "proof search trajectory commitment is invalid"
+        )
+
+    for index, step in enumerate(steps, start=1):
+        if int(step.get("iteration", -1)) != index:
+            raise V06ProofSearchError(
+                "proof search trajectory iteration sequence is invalid"
+            )
+        if step.get("before_state_sha256") != seen_states[index - 1]:
+            raise V06ProofSearchError(
+                "proof search trajectory before-state chain is invalid"
+            )
+        if step.get("after_state_sha256") != seen_states[index]:
+            raise V06ProofSearchError(
+                "proof search trajectory after-state chain is invalid"
+            )
+        authority = step.get("authority")
+        if not isinstance(authority, Mapping) or (
+            authority.get("sets_authoritative") is not False
+            or authority.get("human_confirmation_still_required") is not True
+            or authority.get("replay_and_lean_authority_still_required") is not True
+        ):
+            raise V06ProofSearchError(
+                "proof search trajectory step violates authority-boundary metadata"
+            )
+
+    cycle_detected = (
+        iteration > 0 and current_state in seen_states[:-1]
+    )
+    expected_status = _search_status(
+        translation=translation,
+        repair_request=request,
+        iteration=iteration,
+        max_iterations=max_iterations,
+        cycle_detected=cycle_detected,
+    )
+    if session.get("status") != expected_status:
+        raise V06ProofSearchError(
+            "proof search status does not match deterministic search state"
+        )
+
+    metrics = _translation_metrics(translation, request)
+    reward_total = sum(
+        int(step.get("diagnostic_reward", 0))
+        for step in steps
+    )
+    expected_summary = {
+        **metrics,
+        "semantic_state_sha256": current_state,
+        "trajectory_steps": len(steps),
+        "diagnostic_reward_total": reward_total,
+    }
+    if steps:
+        expected_summary["last_outcome"] = steps[-1].get("outcome")
+    if session.get("summary") != expected_summary:
+        raise V06ProofSearchError(
+            "proof search summary does not match deterministic session state"
         )
 
 
