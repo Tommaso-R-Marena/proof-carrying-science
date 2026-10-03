@@ -111,6 +111,16 @@ def test_v06_zip_cli_accepts_and_receipt_binds_archive_bytes(tmp_path):
     assert output["bundle_sha256"] == expected
     assert saved["bundle_sha256"] == expected
     assert saved["archive_format"] == "zip"
+    coverage = saved["formal_coverage"]
+    assert coverage["format"] == "pcs-formal-coverage-v1"
+    assert coverage["checker_classification_scope"] == "CHECK_TYPE_ONLY"
+    assert coverage["execution_authority_scope"] == "EXACT_PACKAGE_VERIFICATION"
+    assert coverage["package_authority"] == "LEAN_AUTHORITATIVE_ACCEPT"
+    assert coverage["certified_type_evidence"] == 1
+    assert coverage["outside_certified_type_evidence"] == 0
+    assert coverage["evidence"][0]["check_type"] == "reaction_balance"
+    assert coverage["evidence"][0]["checker_semantics"] == "PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE"
+    assert coverage["evidence"][0]["execution_authority"] == "AUTHORITATIVELY_REPLAYED_BY_LEAN"
 
 
 def test_v06_zip_tampered_signed_member_is_verification_rejection(tmp_path):
