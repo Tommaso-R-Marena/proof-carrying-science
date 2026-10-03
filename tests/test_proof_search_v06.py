@@ -197,6 +197,49 @@ def test_search_starts_from_committed_repairable_graph(tmp_path: Path):
     )
 
 
+def test_search_cannot_self_promote_low_confidence_model_proposal(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+    proposal = _csv_proposal(
+        ids,
+        proposal_id="MODEL_LOW_CONF",
+        claim_id="C_MODEL_LOW_CONF",
+        check_id="E_MODEL_LOW_CONF",
+        key="id",
+        confidence=0.97,
+    )
+    proposal_path = _proposal_file(
+        tmp_path,
+        discovery,
+        [proposal],
+    )
+
+    session = start_proof_search_v06(
+        tmp_path,
+        proposal_files=[proposal_path],
+        minimum_model_confidence=0.98,
+    )
+
+    assert session["status"] == "BLOCKED_NO_MACHINE_REPAIR"
+    assert session["summary"]["blocking_open_obligations"] == 1
+    assert session["summary"]["repairable_tasks"] == 0
+    candidate = next(
+        candidate
+        for candidate in session["current_translation"]["candidates"]
+        if candidate["id"] == "MODEL_LOW_CONF"
+    )
+    confidence_obligation = next(
+        obligation
+        for obligation in candidate["obligations"]
+        if obligation["kind"] == "CONFIDENCE_BELOW_SELECTION_THRESHOLD"
+    )
+    assert confidence_obligation["repair"]["actor"] == "human"
+    assert confidence_obligation["repair"]["machine_assisted"] is False
+
+
 def test_successful_search_step_recompiles_and_stops_before_authority(tmp_path: Path):
     _, session, ids = _start_blocked_search(tmp_path)
     replacement = _csv_proposal(
