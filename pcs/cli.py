@@ -444,6 +444,8 @@ def cmd_translate_project_v06(args):
             "format": result["format"],
             "project": str(root),
             "plan_sha256": result["plan_sha256"],
+            "claim_ir_sha256": result["claim_ir"]["claim_ir_sha256"],
+            "claim_ir_summary": result["claim_ir"]["summary"],
             "obligation_graph_sha256": result["obligation_graph"]["graph_sha256"],
             "obligation_graph_summary": result["obligation_graph"]["summary"],
             "summary": result["summary"],
@@ -480,6 +482,7 @@ def cmd_prepare_proof_repairs_v06(args):
         response = {
             "format": request["format"],
             "translation_plan_sha256": request["translation_plan_sha256"],
+            "claim_ir_sha256": request["claim_ir_sha256"],
             "obligation_graph_sha256": request["obligation_graph_sha256"],
             "repair_request_sha256": request["repair_request_sha256"],
             "summary": request["summary"],
