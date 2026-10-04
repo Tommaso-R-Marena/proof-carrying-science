@@ -17,9 +17,10 @@ Do not imply that a source-formalized Lean component was machine checked unless 
 
 ## Local release gate
 
-Run from a clean committed checkout:
+Run from a clean committed checkout. The release gate now includes repository-metadata and governance validation before scientific/product checks:
 
 ```bash
+python scripts/check_repository_integrity.py
 python scripts/run_release_gate.py
 ```
 
@@ -35,19 +36,21 @@ Do not promote inventory counts to executed claims without the retained run dire
 
 ## Release procedure
 
-1. Freeze the pilot claim inventory and assumptions.
-2. Start from an empty evidence output directory.
-3. Verify source artifact hashes and scope.
-4. Run the supported checks / proof adapters.
-5. Produce the attestation.
-6. Review all OPEN and failed claims; do not suppress them.
-7. Confirm `LIMITATIONS.md` accurately reflects certificate scope.
-8. Independently verify the evidence ZIP from a fresh temporary directory.
-9. For signed pilots, verify against the pinned expected signer fingerprint.
-10. Apply the reviewer-supplied acceptance policy.
-11. Record bundle SHA-256 and release metadata.
-12. Deliver only through the approved channel.
-13. Complete retention/deletion obligations after reviewer acceptance/closeout.
+1. Confirm the candidate is based on current `main`; inspect `git diff --summary origin/main...HEAD` for unexpected mode, rename, or path changes.
+2. Run `python scripts/check_repository_integrity.py` and require PASS.
+3. Freeze the pilot claim inventory and assumptions.
+4. Start from an empty evidence output directory.
+5. Verify source artifact hashes and scope.
+6. Run the supported checks / proof adapters.
+7. Produce the attestation.
+8. Review all OPEN and failed claims; do not suppress them.
+9. Confirm `LIMITATIONS.md` accurately reflects certificate scope.
+10. Independently verify the evidence ZIP from a fresh temporary directory.
+11. For signed pilots, verify against the pinned expected signer fingerprint.
+12. Apply the reviewer-supplied acceptance policy.
+13. Record bundle SHA-256 and release metadata.
+14. Deliver only through the approved channel.
+15. Complete retention/deletion obligations after reviewer acceptance/closeout.
 
 ## No silent overwrite
 
@@ -65,6 +68,11 @@ Examples: a check was unsound, a hidden dependency invalidates a claim, a workfl
 
 Action: reopen dependent claims, identify downstream packages, issue a corrected certificate/package, and record the reason. Do not preserve an incorrect supported status for reputational reasons.
 
+### Repository-integrity / integration incident
+Examples: executable-bit loss, line-ending drift, branch-only post-merge work, CI gate accidentally bypassed, stale branch merged wholesale, documentation claiming a green formal build for an untested commit.
+
+Action: stop release promotion, identify the first affected commit, separate source-semantic changes from Git/CI metadata changes, reproduce the failure with the smallest independent check, repair the narrowest invariant, validate the exact production entrypoint, update the branch reconciliation record when relevant, and add a machine regression check whenever possible.
+
 ### Data-handling incident
 Examples: unauthorized sensitive data entered a workspace, retention exceeded agreement, access scope was wrong.
 
@@ -81,4 +89,4 @@ The severity label is operational triage, not a legal determination.
 
 ## Post-incident rule
 
-A discovered false accept is a research result as well as a product defect. Add a regression test/adversarial case whenever technically possible and update the trust-boundary documentation.
+A discovered false accept is a research result as well as a product defect. Add a regression test/adversarial case whenever technically possible and update the trust-boundary documentation. Repository-integrity incidents follow the same rule: convert the failure mode into an automated invariant when technically possible.
