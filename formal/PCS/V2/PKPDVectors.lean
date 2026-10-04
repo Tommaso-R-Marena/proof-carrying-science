@@ -2,8 +2,9 @@ import PCS.V2.PKPDCheck
 
 /-!
 Executable vectors for the verified PK/PD checker (`PCS.V2.PKPDCheck`).  These are tests,
-not proofs; the correctness theorems are `pkpdContractRun_sound`, `pkpdMatchRun_sound` and
-(real-valued) `PCSReal.PKPD.expEncl_sound` / `pcs_pkpd_reference_match_real`.
+not proofs; the correctness theorems are `pkpdContractRun_sound`, `pkpdMatchRun_sound`,
+`pkpdPeakRun_sound`, and (real-valued) `PCSReal.PKPD.expEncl_sound` /
+`pcs_pkpd_reference_match_real`.
 -/
 
 namespace PCS.V2.PKPDVectors
@@ -41,5 +42,12 @@ open PCS.V2.PKPDCheck
 #guard (decodeModel "{\"model_type\":\"one_compartment_iv_bolus\",\"dose\":{\"value\":100.0,\"unit\":\"mg\"},\"volume\":{\"value\":10,\"unit\":\"L\"},\"clearance\":{\"value\":1,\"unit\":\"L/h\"},\"time_unit\":\"h\",\"concentration_unit\":\"mg/L\"}".toUTF8.data.toList).isSome
 #guard (decodeModel "{\"model_type\":\"one_compartment_iv_bolus\",\"dose\":{\"value\":0,\"unit\":\"mg\"},\"volume\":{\"value\":10,\"unit\":\"L\"},\"clearance\":{\"value\":1,\"unit\":\"L/h\"},\"time_unit\":\"h\",\"concentration_unit\":\"mg/L\"}".toUTF8.data.toList).isNone
 #guard (decodeModel "{\"model_type\":\"one_compartment_iv_bolus\",\"dose\":{\"value\":100,\"unit\":\"L\"},\"volume\":{\"value\":10,\"unit\":\"L\"},\"clearance\":{\"value\":1,\"unit\":\"L/h\"},\"time_unit\":\"h\",\"concentration_unit\":\"mg/L\"}".toUTF8.data.toList).isNone
+
+-- committed-table concentration threshold
+#guard modelConcentrationUnit "{\"model_type\":\"one_compartment_iv_bolus\",\"dose\":{\"value\":100,\"unit\":\"mg\"},\"volume\":{\"value\":10,\"unit\":\"L\"},\"clearance\":{\"value\":1,\"unit\":\"L/h\"},\"time_unit\":\"h\",\"concentration_unit\":\"mg/L\"}".toUTF8.data.toList == some "mg/L"
+#guard peakRowB 12 0 [["10".toUTF8.data.toList]] == true
+#guard peakRowB 12 0 [["12".toUTF8.data.toList]] == true
+#guard peakRowB 12 0 [["12.0001".toUTF8.data.toList]] == false
+#guard peakRowB 12 0 [["-1".toUTF8.data.toList]] == false
 
 end PCS.V2.PKPDVectors
