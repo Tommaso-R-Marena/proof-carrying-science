@@ -9,9 +9,11 @@ from typing import Any, Mapping, Sequence
 from .canonical_json import canonicalize_jcs_bytes
 from .jsonio import StrictJSONError, strict_json_load
 from .proof_translation_v06 import (
+    CLAIM_IR_FORMAT_V06,
     PROOF_OBLIGATION_GRAPH_FORMAT_V06,
     PROOF_PROPOSALS_FORMAT_V06,
     PROOF_TRANSLATION_FORMAT_V06,
+    normalize_claim_decomposition_v06,
 )
 
 
@@ -29,6 +31,7 @@ _ALLOWED_PROPOSAL_KEYS = {
     "check",
     "assumption",
     "assumptions",
+    "decomposition",
 }
 _ALLOWED_CLAIM_KEYS = {
     "id",
@@ -135,6 +138,7 @@ def _verify_translation_commitment(
         "proposal_sources": _json_clone(translation.get("proposal_sources")),
         "candidates": _json_clone(translation.get("candidates")),
         "obligations": _json_clone(translation.get("obligations")),
+        "claim_ir": _json_clone(translation.get("claim_ir")),
         "obligation_graph": _json_clone(graph),
     }
     actual_plan = _commitment(plan_core)
@@ -206,6 +210,8 @@ def _repairable_task(
         "assumptions": _json_clone(candidate.get("assumptions")),
         "grounding": _json_clone(candidate.get("grounding")),
         "formal_target": _json_clone(candidate.get("formal_target")),
+        "claim_ir_claim": _json_clone(candidate.get("claim_ir_claim")),
+        "decomposition": _json_clone(candidate.get("decomposition")),
     }
     return {
         "obligation_id": obligation_id,
@@ -411,6 +417,27 @@ def _sanitize_replacement_proposal(
         raise V06ProofRepairError(
             "replacement proposal artifact_ids must be an array of strings"
         )
+
+    decomposition = proposal.get("decomposition")
+    if decomposition is not None:
+        if not isinstance(claim, Mapping):
+            raise V06ProofRepairError(
+                "replacement decomposition requires a claim object"
+            )
+        claim_id = claim.get("id")
+        if not isinstance(claim_id, str):
+            raise V06ProofRepairError(
+                "replacement decomposition claim requires an id"
+            )
+        try:
+            proposal["decomposition"] = normalize_claim_decomposition_v06(
+                decomposition,
+                claim_id=claim_id,
+            )
+        except Exception as exc:
+            raise V06ProofRepairError(
+                f"replacement decomposition is invalid: {exc}"
+            ) from exc
     return proposal
 
 
