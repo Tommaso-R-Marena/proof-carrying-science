@@ -47,6 +47,12 @@ Every release gate also runs this check.
 
 For repository settings/branch protection, treat the CircleCI status `ci/circleci: repository-integrity` as a required merge check. If automatic GitHub Actions triggers are re-enabled, the GitHub `repository-integrity` job should also remain a prerequisite for the other PCS CI jobs.
 
+### Branch-protection enforcement status
+
+As of 2026-10-04, GitHub reports that `main` is **not protected**, so the repository-integrity status exists but is not yet settings-enforced as a merge blocker. Issue #54 tracks enabling protection/rules for `main` and requiring `ci/circleci: repository-integrity`.
+
+Until that issue is closed and verified, maintainers must treat a missing or failing repository-integrity status as a manual no-merge condition.
+
 ## Shell-script rules
 
 Every tracked `.sh` file must:
