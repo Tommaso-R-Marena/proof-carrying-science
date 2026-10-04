@@ -49,6 +49,24 @@ class V06DecompositionProposerError(ValueError):
     pass
 
 
+_ALLOWED_RESPONSE_KEYS_V06 = {
+    "format",
+    "decomposition_request_sha256",
+    "search_id",
+    "inventory_commitment_sha256",
+    "proposer",
+    "decision",
+    "children",
+    "reason",
+}
+_ALLOWED_PROPOSER_KEYS_V06 = {
+    "kind",
+    "name",
+    "version",
+    "model_family",
+}
+
+
 _CHECKER_FIELDS_V06: dict[str, dict[str, Any]] = {
     "reaction_balance": {
         "required_check_fields": ["id", "type", "claim_ids", "reactants", "products"],
@@ -396,6 +414,9 @@ def build_decomposition_proposer_request_v06(
         "target": {
             "proposal_id": target_proposal_id,
             "obligation_id": task.get("obligation_id"),
+            "candidate_snapshot_sha256": task.get(
+                "candidate_snapshot_sha256"
+            ),
             "claim": _json_clone(claim),
             "candidate_status": candidate.get("status"),
             "confidence": candidate.get("confidence"),
@@ -470,7 +491,12 @@ def verify_decomposition_proposer_request_v06(
     session: Mapping[str, Any],
     request: Mapping[str, Any],
 ) -> None:
-    proposal_id = request.get("target", {}).get("proposal_id")
+    target = request.get("target")
+    if not isinstance(target, Mapping):
+        raise V06DecompositionProposerError(
+            "decomposition request lacks target object"
+        )
+    proposal_id = target.get("proposal_id")
     if not isinstance(proposal_id, str):
         raise V06DecompositionProposerError(
             "decomposition request lacks target proposal id"
@@ -497,6 +523,14 @@ def compile_decomposition_proposer_response_v06(
         session,
         request,
     )
+    unexpected_response = sorted(
+        set(response) - _ALLOWED_RESPONSE_KEYS_V06
+    )
+    if unexpected_response:
+        raise V06DecompositionProposerError(
+            "decomposition response contains unsupported fields: "
+            f"{unexpected_response}"
+        )
     if response.get("format") != DECOMPOSITION_PROPOSER_RESPONSE_FORMAT_V06:
         raise V06DecompositionProposerError(
             f"unsupported decomposition proposer response format: {response.get('format')!r}"
@@ -522,6 +556,18 @@ def compile_decomposition_proposer_response_v06(
     if not isinstance(proposer, Mapping):
         raise V06DecompositionProposerError(
             "decomposition response requires proposer metadata"
+        )
+    unexpected_proposer = sorted(
+        set(proposer) - _ALLOWED_PROPOSER_KEYS_V06
+    )
+    if unexpected_proposer:
+        raise V06DecompositionProposerError(
+            "decomposition proposer metadata contains unsupported fields: "
+            f"{unexpected_proposer}"
+        )
+    if proposer.get("kind") != "external_model":
+        raise V06DecompositionProposerError(
+            "decomposition proposer kind must be 'external_model'"
         )
     proposer_name = _nonempty(
         proposer.get("name"),
