@@ -66,7 +66,7 @@ _ALLOWED_CHECK_KEYS = {
     "bound_artifact_ids",
 }
 _ALLOWED_ASSUMPTION_KEYS = {"id", "statement", "scope"}
-_REPAIRABLE_ACTORS = {"proposer", "human_or_proposer"}
+_REPAIRABLE_ACTORS = {"proposer", "human_or_proposer", "scientist_or_engineer"}
 
 
 class V06ProofRepairError(ValueError):
