@@ -317,6 +317,9 @@
           "$ref": "#/$defs/pkpdReferencePredicate"
         },
         {
+          "$ref": "#/$defs/pkpdPeakConcentrationThresholdPredicate"
+        },
+        {
           "$ref": "#/$defs/externalPredicate"
         }
       ]
@@ -497,6 +500,9 @@
         },
         {
           "$ref": "#/$defs/pkpdReferencePredicate"
+        },
+        {
+          "$ref": "#/$defs/pkpdPeakConcentrationThresholdPredicate"
         }
       ]
     },
@@ -753,6 +759,42 @@
         },
         "contract": {
           "$ref": "#/$defs/environmentContract"
+        }
+      }
+    },
+    "pkpdPeakConcentrationThresholdPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "model_artifact",
+        "output_artifact",
+        "concentration_column",
+        "upper_bound",
+        "unit"
+      ],
+      "properties": {
+        "type": {
+          "const": "pkpd_peak_concentration_threshold"
+        },
+        "model_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "output_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "concentration_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "upper_bound": {
+          "$ref": "#/$defs/canonicalNonnegativeNumberText"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
         }
       }
     }
