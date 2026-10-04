@@ -36,13 +36,16 @@ def normalizedIndexDomain : String := "pcs-normalized-index-sha256-v2"
 
 def certificateSignatureDomain : String := "pcs-certificate-signature-v2"
 def packageSignatureDomain : String := "pcs-package-signature-v2"
+def externalValidatorSignatureDomain : String :=
+  "pcs-external-validator-receipt-signature-v1"
 
 def hashDomains : List String :=
   [certificateSemanticDomain, certificateIntegrityDomain, runtimeSemanticDomain,
    intakeSemanticDomain, predicateCommitmentDomain, normalizedDecisionDomain,
    normalizedIndexDomain]
 
-def signatureDomains : List String := [certificateSignatureDomain, packageSignatureDomain]
+def signatureDomains : List String :=
+  [certificateSignatureDomain, packageSignatureDomain, externalValidatorSignatureDomain]
 
 theorem hashDomains_nodup : hashDomains.Nodup := by decide
 theorem signatureDomains_nodup : signatureDomains.Nodup := by decide
