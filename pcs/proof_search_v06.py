@@ -1273,6 +1273,28 @@ def start_proof_search_v06(
         proposal_files,
         inventory_commitment_sha256=inventory,
     )
+    initial_proposal_count = sum(
+        len(document.get("proposals", []))
+        for document in documents
+    )
+    if initial_proposal_count > MAX_PROOF_SEARCH_PROPOSALS_V06:
+        raise V06ProofSearchError(
+            "initial proof search proposal budget is exceeded"
+        )
+    initial_claim_ir = translation.get("claim_ir")
+    initial_claim_ir_summary = (
+        initial_claim_ir.get("summary")
+        if isinstance(initial_claim_ir, Mapping)
+        else None
+    )
+    if (
+        not isinstance(initial_claim_ir_summary, Mapping)
+        or int(initial_claim_ir_summary.get("max_decomposition_depth", 0))
+        > MAX_PROOF_SEARCH_DECOMPOSITION_DEPTH_V06
+    ):
+        raise V06ProofSearchError(
+            "initial proof search decomposition depth budget is exceeded"
+        )
     intent_anchors = _intent_anchors_from_documents(documents)
     intent_anchors_sha256 = _commitment(intent_anchors)
     initial_intent_anchors = _json_clone(intent_anchors)
