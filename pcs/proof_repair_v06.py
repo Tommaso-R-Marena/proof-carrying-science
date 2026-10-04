@@ -114,6 +114,27 @@ def _verify_graph_commitment(graph: Mapping[str, Any]) -> str:
     return actual
 
 
+def _verify_claim_ir_commitment(claim_ir: Mapping[str, Any]) -> str:
+    if claim_ir.get("format") != CLAIM_IR_FORMAT_V06:
+        raise V06ProofRepairError(
+            f"unsupported Claim IR format: {claim_ir.get('format')!r}"
+        )
+    claimed = claim_ir.get("claim_ir_sha256")
+    if not isinstance(claimed, str) or len(claimed) != 64:
+        raise V06ProofRepairError("Claim IR lacks a valid claim_ir_sha256")
+    core = {
+        key: _json_clone(value)
+        for key, value in claim_ir.items()
+        if key != "claim_ir_sha256"
+    }
+    actual = _commitment(core)
+    if actual != claimed:
+        raise V06ProofRepairError(
+            "Claim IR commitment does not match Claim IR contents"
+        )
+    return actual
+
+
 def _verify_translation_commitment(
     translation: Mapping[str, Any],
 ) -> tuple[str, Mapping[str, Any]]:
@@ -121,6 +142,11 @@ def _verify_translation_commitment(
         raise V06ProofRepairError(
             f"unsupported proof translation format: {translation.get('format')!r}"
         )
+    claim_ir = translation.get("claim_ir")
+    if not isinstance(claim_ir, Mapping):
+        raise V06ProofRepairError("proof translation lacks a claim_ir")
+    _verify_claim_ir_commitment(claim_ir)
+
     graph = translation.get("obligation_graph")
     if not isinstance(graph, Mapping):
         raise V06ProofRepairError("proof translation lacks an obligation_graph")
