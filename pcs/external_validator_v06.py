@@ -125,6 +125,25 @@ def external_validator_adapter_missing_fields_v06(
 def normalize_external_validator_check_spec_v06(
     check: Mapping[str, Any],
 ) -> dict[str, Any]:
+    allowed_keys = {
+        "id",
+        "type",
+        "claim_ids",
+        "validator",
+        "predicate",
+        "receipt_format",
+        "trust_model",
+        "receipt_artifact",
+        "validator_public_key_artifact",
+        "validator_public_key_fingerprint",
+        "bound_artifact_ids",
+    }
+    unexpected = sorted(set(check) - allowed_keys)
+    if unexpected:
+        raise V06ExternalValidatorError(
+            f"external validator check contains forbidden fields: {unexpected}"
+        )
+
     check_type = check.get("type")
     if check_type not in EXTERNAL_VALIDATOR_CHECK_TYPES_V06:
         raise V06ExternalValidatorError(
