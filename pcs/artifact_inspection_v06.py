@@ -45,6 +45,51 @@ class V06ArtifactInspectionError(ValueError):
     pass
 
 
+def artifact_inspection_contract_v06() -> dict[str, Any]:
+    return {
+        "query_format": ARTIFACT_INSPECTION_QUERY_FORMAT_V06,
+        "result_format": ARTIFACT_INSPECTION_RESULT_FORMAT_V06,
+        "protocol": ARTIFACT_INSPECTION_PROTOCOL_V06,
+        "allowed_views": {
+            "csv_header": {
+                "required_fields": ["id", "artifact_id", "view"],
+                "scope": "bounded strict-CSV header only; full checker reparses full artifact",
+            },
+            "json_fields": {
+                "required_fields": ["id", "artifact_id", "view", "fields"],
+                "max_fields": MAX_JSON_FIELDS_V06,
+                "field_syntax": "RFC6901-style JSON pointer",
+                "max_artifact_bytes": MAX_JSON_ARTIFACT_BYTES_V06,
+            },
+            "text_lines": {
+                "required_fields": [
+                    "id",
+                    "artifact_id",
+                    "view",
+                    "start_line",
+                    "max_lines",
+                ],
+                "max_lines": MAX_TEXT_LINES_V06,
+                "max_line_chars": MAX_TEXT_LINE_CHARS_V06,
+                "max_artifact_bytes": MAX_TEXT_ARTIFACT_BYTES_V06,
+            },
+        },
+        "bounds": {
+            "max_operations": MAX_INSPECTION_OPERATIONS_V06,
+            "max_result_bytes": MAX_INSPECTION_RESULT_BYTES_V06,
+            "max_csv_header_bytes": MAX_CSV_HEADER_BYTES_V06,
+            "max_json_value_bytes": MAX_JSON_VALUE_BYTES_V06,
+        },
+        "authority": {
+            "sets_authoritative": False,
+            "changes_search_state": False,
+            "filesystem_paths_supplied_by_model": False,
+            "only_target_bound_artifact_ids_allowed": True,
+            "full_artifact_sha256_rechecked_before_observation": True,
+        },
+    }
+
+
 def _clone(value: Any) -> Any:
     return json.loads(json.dumps(value))
 
