@@ -33,6 +33,7 @@ const cryptoVectors = [
   ["pcs-jcs-sha256-v1", "pcs-normalized-index-sha256-v2", "c5a3d915f9ab4f85427c8b050cb4b25db3de19fd6b820fd01df6cfdddb319c91"],
   ["pcs-jcs-ed25519-payload-v1", "pcs-certificate-signature-v2", "66b2b707526c28e7bb311ac05203712b133ed883fdc1158fd823b33205d04cd5"],
   ["pcs-jcs-ed25519-payload-v1", "pcs-package-signature-v2", "cc81ab71e8ab901985fe8601bbd34b016be02d31c2c23fb8b8b5b0968c1a41cd"],
+  ["pcs-jcs-ed25519-payload-v1", "pcs-external-validator-receipt-signature-v1", "2d1d5ef25c49078024246c77137809261589ead1ee278a98aaee6fb135847103"],
 ];
 
 for (const [format, domain, expectedDigest] of cryptoVectors) {
