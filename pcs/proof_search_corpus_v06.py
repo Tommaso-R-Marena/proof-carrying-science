@@ -571,9 +571,8 @@ def _step_examples(
         )
         for action in normalized_actions:
             metadata_action = _metadata_action_projection(action)
-            core = {
+            identity_core = {
                 "problem_group_sha256": problem_group,
-                "split": split,
                 "iteration": int(step.get("iteration", 0)),
                 "action": metadata_action,
                 "state": {
@@ -615,10 +614,6 @@ def _step_examples(
                 "content_available": (
                     action.get("action") != "LEGACY_HASH_ONLY"
                 ),
-                "content_included": bool(
-                    include_content
-                    and action.get("action") != "LEGACY_HASH_ONLY"
-                ),
                 "authority": {
                     "record_is_authoritative": False,
                     "diagnostic_reward_sets_authority": False,
@@ -626,23 +621,23 @@ def _step_examples(
                     "replay_and_lean_authority_required": True,
                 },
             }
-            if (
-                include_content
-                and action.get("action") != "LEGACY_HASH_ONLY"
-            ):
-                core["content"] = {
+            example = {
+                "example_id": _commitment(identity_core),
+                **identity_core,
+                "split": split,
+                "content_included": bool(
+                    include_content
+                    and action.get("action") != "LEGACY_HASH_ONLY"
+                ),
+            }
+            if example["content_included"]:
+                example["content"] = {
                     "task": _clone(action.get("task")),
                     "emitted_proposals": _clone(
                         action.get("emitted_proposals", [])
                     ),
                 }
-            example_id = _commitment(core)
-            examples.append(
-                {
-                    "example_id": example_id,
-                    **core,
-                }
-            )
+            examples.append(example)
     return sorted(examples, key=lambda item: item["example_id"])
 
 
@@ -854,65 +849,104 @@ def build_proof_search_corpus_v06(
                     "proof-search example lacks example_id"
                 )
             existing_example = examples.get(example_id)
+            policy = record["data_use"]
             projected = {
                 **_clone(example),
                 "source_record_sha256s": [record_sha],
-                "data_use": _clone(record["data_use"]),
+                "data_use": {
+                    "content_export_allowed": (
+                        policy.get("content_export_allowed") is True
+                    ),
+                    "evaluation_allowed": (
+                        policy.get("evaluation_allowed") is True
+                    ),
+                    "training_allowed": (
+                        policy.get("training_allowed") is True
+                    ),
+                    "source_policy_sha256s": [
+                        str(policy.get("policy_sha256"))
+                    ],
+                    "aggregation_rule": "MOST_RESTRICTIVE",
+                },
             }
             if existing_example is None:
                 examples[example_id] = projected
             else:
+                identity_keys_excluded = {
+                    "source_record_sha256s",
+                    "data_use",
+                    "split",
+                    "content_included",
+                    "content",
+                }
                 comparable = {
                     key: value
                     for key, value in existing_example.items()
-                    if key not in {
-                        "source_record_sha256s",
-                        "data_use",
-                    }
+                    if key not in identity_keys_excluded
                 }
                 incoming = {
                     key: value
                     for key, value in projected.items()
-                    if key not in {
-                        "source_record_sha256s",
-                        "data_use",
-                    }
+                    if key not in identity_keys_excluded
                 }
                 if comparable != incoming:
                     raise V06ProofSearchCorpusError(
-                        "proof-search example hash collision with different contents"
+                        "proof-search example hash collision with different identity content"
                     )
+
+                existing_content = existing_example.get("content")
+                incoming_content = projected.get("content")
+                if (
+                    existing_content is not None
+                    and incoming_content is not None
+                    and existing_content != incoming_content
+                ):
+                    raise V06ProofSearchCorpusError(
+                        "proof-search example identity maps to conflicting authorized content"
+                    )
+
                 existing_example["source_record_sha256s"] = sorted(
                     set(existing_example["source_record_sha256s"])
                     | {record_sha}
                 )
-                existing_example["data_use"] = {
+                existing_policy = existing_example["data_use"]
+                aggregated = {
                     "content_export_allowed": (
-                        existing_example["data_use"].get(
-                            "content_export_allowed"
-                        ) is True
-                        and record["data_use"].get(
-                            "content_export_allowed"
-                        ) is True
+                        existing_policy.get("content_export_allowed") is True
+                        and policy.get("content_export_allowed") is True
                     ),
                     "evaluation_allowed": (
-                        existing_example["data_use"].get(
-                            "evaluation_allowed"
-                        ) is True
-                        and record["data_use"].get(
-                            "evaluation_allowed"
-                        ) is True
+                        existing_policy.get("evaluation_allowed") is True
+                        and policy.get("evaluation_allowed") is True
                     ),
                     "training_allowed": (
-                        existing_example["data_use"].get(
-                            "training_allowed"
-                        ) is True
-                        and record["data_use"].get(
-                            "training_allowed"
-                        ) is True
+                        existing_policy.get("training_allowed") is True
+                        and policy.get("training_allowed") is True
+                    ),
+                    "source_policy_sha256s": sorted(
+                        set(existing_policy.get("source_policy_sha256s", []))
+                        | {str(policy.get("policy_sha256"))}
                     ),
                     "aggregation_rule": "MOST_RESTRICTIVE",
                 }
+                existing_example["data_use"] = aggregated
+                existing_example["split"] = _split_for_problem_group(
+                    str(existing_example["problem_group_sha256"]),
+                    aggregated,
+                )
+
+                all_sources_include_content = (
+                    existing_example.get("content_included") is True
+                    and projected.get("content_included") is True
+                    and aggregated["content_export_allowed"] is True
+                )
+                if all_sources_include_content:
+                    existing_example["content_included"] = True
+                    if existing_content is None and incoming_content is not None:
+                        existing_example["content"] = _clone(incoming_content)
+                else:
+                    existing_example["content_included"] = False
+                    existing_example.pop("content", None)
 
     ordered_records = [
         unique[key]
