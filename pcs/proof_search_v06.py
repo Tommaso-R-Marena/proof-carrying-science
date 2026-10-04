@@ -1620,6 +1620,13 @@ def advance_proof_search_v06(
     return _session_with_hash(core)
 
 
+def verify_proof_search_session_v06(
+    session: Mapping[str, Any],
+) -> None:
+    """Verify all commitments, lineage, budgets, and authority metadata."""
+    _verify_session(session)
+
+
 def load_proof_search_session_v06(
     path: str | Path,
 ) -> dict[str, Any]:
