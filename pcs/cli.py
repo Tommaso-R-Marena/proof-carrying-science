@@ -885,6 +885,7 @@ def cmd_export_proof_search_record_v06(args):
             args.project,
             args.session,
             interaction_paths=args.interaction or [],
+            historical_session_paths=args.historical_session or [],
             data_use_policy_path=args.data_use_policy,
             include_content=args.include_content,
         )
@@ -1625,6 +1626,14 @@ def build_parser():
         action="append",
         help=(
             "optional verified decomposition/inspection request, result, or response; "
+            "repeatable"
+        ),
+    )
+    epsr6.add_argument(
+        "--historical-session",
+        action="append",
+        help=(
+            "committed prior pcs-proof-repair-search-v1 snapshot used by an interaction; "
             "repeatable"
         ),
     )
