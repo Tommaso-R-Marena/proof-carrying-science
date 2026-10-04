@@ -1378,6 +1378,8 @@ def _compile_proposal(
         "formal_target": None,
         "validation_target": None,
         "typed_claim": None,
+        "claim_ir_claim": None,
+        "decomposition": None,
         "check": None,
         "artifact_ids": [],
         "assumptions": [],
@@ -1386,8 +1388,97 @@ def _compile_proposal(
     }
 
     claim_raw = proposal.get("claim")
+    decomposition_raw = proposal.get("decomposition")
+    if decomposition_raw is not None:
+        try:
+            claim_ir_claim = _normalize_claim_ir_claim_v06(
+                claim_raw,
+                label=f"proposal {ident} decomposition claim",
+            )
+            decomposition = normalize_claim_decomposition_v06(
+                decomposition_raw,
+                claim_id=claim_ir_claim["id"],
+            )
+        except V06ProofTranslationError as exc:
+            result["status"] = "REJECTED_INVALID_PROPOSAL"
+            result["obligations"].append(
+                _obligation(
+                    ident,
+                    "INVALID_CLAIM",
+                    f"Invalid recursive claim decomposition: {exc}",
+                    blocking=True,
+                )
+            )
+            return result
+        result["claim_ir_claim"] = claim_ir_claim
+        result["decomposition"] = decomposition
+
     check_raw = proposal.get("check")
     if not isinstance(check_raw, Mapping):
+        if result["decomposition"] is not None:
+            declared_artifacts = proposal.get("artifact_ids", [])
+            if not isinstance(declared_artifacts, list) or not all(
+                isinstance(item, str) for item in declared_artifacts
+            ):
+                result["status"] = "REJECTED_INVALID_PROPOSAL"
+                result["obligations"].append(
+                    _obligation(
+                        ident,
+                        "INVALID_ARTIFACT_GROUNDING",
+                        "decomposition artifact_ids must be an array of artifact IDs",
+                        blocking=True,
+                    )
+                )
+                return result
+            missing = sorted(
+                artifact_id
+                for artifact_id in declared_artifacts
+                if artifact_id not in inventory
+            )
+            if missing:
+                result["status"] = "REJECTED_UNGROUNDED"
+                result["artifact_ids"] = sorted(set(declared_artifacts))
+                result["obligations"].append(
+                    _obligation(
+                        ident,
+                        "GROUND_ARTIFACTS",
+                        "The decomposed claim references artifacts outside the current discovery snapshot.",
+                        blocking=True,
+                        details={"missing_artifact_ids": missing},
+                    )
+                )
+                return result
+            try:
+                assumptions = _proposal_assumptions(proposal)
+            except V06ProofTranslationError as exc:
+                result["status"] = "REJECTED_INVALID_PROPOSAL"
+                result["obligations"].append(
+                    _obligation(
+                        ident,
+                        "INVALID_CLAIM",
+                        str(exc),
+                        blocking=True,
+                    )
+                )
+                return result
+            result["typed_claim"] = _json_clone(result["claim_ir_claim"])
+            result["artifact_ids"] = sorted(set(declared_artifacts))
+            result["assumptions"] = assumptions
+            result["status"] = "DECOMPOSITION_NODE_PENDING_CHILDREN"
+            if source.get("kind") == "external_model":
+                result["obligations"].append(
+                    _obligation(
+                        ident,
+                        "MODEL_PROPOSAL_UNTRUSTED",
+                        (
+                            "The external model proposed decomposition structure "
+                            "only; it cannot establish the parent scientific claim."
+                        ),
+                        blocking=False,
+                    )
+                )
+            return result
+
         result["obligations"].append(
             _obligation(
                 ident,
