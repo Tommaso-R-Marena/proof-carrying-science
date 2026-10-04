@@ -263,13 +263,56 @@ def _load_interaction_documents(
     return documents
 
 
+def _validated_session_index(
+    final_session: Mapping[str, Any],
+    historical_sessions: Sequence[Mapping[str, Any]],
+) -> dict[str, Mapping[str, Any]]:
+    sessions: dict[str, Mapping[str, Any]] = {}
+    final_search_id = final_session.get("search_id")
+    final_inventory = final_session.get("inventory_commitment_sha256")
+    for index, candidate in enumerate(
+        [final_session, *historical_sessions]
+    ):
+        if not isinstance(candidate, Mapping):
+            raise V06ProofSearchCorpusError(
+                f"proof-search historical session {index} must be an object"
+            )
+        try:
+            verify_proof_search_session_v06(candidate)
+        except V06ProofSearchError as exc:
+            raise V06ProofSearchCorpusError(
+                f"invalid proof-search historical session {index}: {exc}"
+            ) from exc
+        if candidate.get("search_id") != final_search_id:
+            raise V06ProofSearchCorpusError(
+                "historical session belongs to a different proof search"
+            )
+        if candidate.get("inventory_commitment_sha256") != final_inventory:
+            raise V06ProofSearchCorpusError(
+                "historical session is bound to a different project inventory"
+            )
+        session_sha = candidate.get("session_sha256")
+        if not isinstance(session_sha, str):
+            raise V06ProofSearchCorpusError(
+                "historical session lacks session_sha256"
+            )
+        existing = sessions.get(session_sha)
+        if existing is not None and existing != candidate:
+            raise V06ProofSearchCorpusError(
+                "conflicting historical sessions share one session_sha256"
+            )
+        sessions[session_sha] = candidate
+    return sessions
+
+
 def _interaction_indexes(
     project_root: str | Path,
-    session: Mapping[str, Any],
+    final_session: Mapping[str, Any],
+    session_index: Mapping[str, Mapping[str, Any]],
     documents: Sequence[Mapping[str, Any]],
 ) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]], dict[str, list[str]]]:
     root = Path(project_root).resolve()
-    requests: dict[str, Mapping[str, Any]] = {}
+    requests: dict[str, tuple[Mapping[str, Any], Mapping[str, Any]]] = {}
     inspection_results: dict[str, Mapping[str, Any]] = {}
     inspections_by_request: dict[str, list[str]] = {}
     summaries: dict[str, dict[str, Any]] = {}
@@ -281,10 +324,17 @@ def _interaction_indexes(
         doc_sha = _commitment(document)
         payloads[doc_sha] = _clone(document)
         if fmt == DECOMPOSITION_PROPOSER_REQUEST_FORMAT_V06:
+            bound_session_sha = document.get("session_sha256")
+            bound_session = session_index.get(str(bound_session_sha))
+            if bound_session is None:
+                raise V06ProofSearchCorpusError(
+                    "decomposition request requires its exact historical "
+                    "proof-search session; supply that snapshot"
+                )
             try:
                 verify_decomposition_proposer_request_v06(
                     root,
-                    session,
+                    bound_session,
                     document,
                 )
             except V06DecompositionProposerError as exc:
@@ -297,16 +347,17 @@ def _interaction_indexes(
                     "decomposition request lacks request commitment"
                 )
             existing = requests.get(request_sha)
-            if existing is not None and existing != document:
+            if existing is not None and existing[0] != document:
                 raise V06ProofSearchCorpusError(
                     "conflicting decomposition requests share one commitment"
                 )
-            requests[request_sha] = document
+            requests[request_sha] = (document, bound_session)
             target = document.get("target")
             summaries[doc_sha] = {
                 "document_sha256": doc_sha,
                 "format": fmt,
                 "decomposition_request_sha256": request_sha,
+                "source_session_sha256": bound_session_sha,
                 "target_proposal_id_sha256": _id_hash(
                     target.get("proposal_id")
                     if isinstance(target, Mapping)
@@ -326,15 +377,16 @@ def _interaction_indexes(
         doc_sha = _commitment(document)
         if fmt == ARTIFACT_INSPECTION_QUERY_FORMAT_V06:
             request_sha = document.get("decomposition_request_sha256")
-            request = requests.get(str(request_sha))
-            if request is None:
+            request_binding = requests.get(str(request_sha))
+            if request_binding is None:
                 raise V06ProofSearchCorpusError(
                     "inspection query lacks matching verified decomposition request"
                 )
+            request, bound_session = request_binding
             try:
                 expected_result = inspect_artifacts_v06(
                     root,
-                    session,
+                    bound_session,
                     request,
                     document,
                 )
@@ -362,15 +414,16 @@ def _interaction_indexes(
             }
         elif fmt == ARTIFACT_INSPECTION_RESULT_FORMAT_V06:
             request_sha = document.get("decomposition_request_sha256")
-            request = requests.get(str(request_sha))
-            if request is None:
+            request_binding = requests.get(str(request_sha))
+            if request_binding is None:
                 raise V06ProofSearchCorpusError(
                     "inspection result lacks matching verified decomposition request"
                 )
+            request, bound_session = request_binding
             try:
                 verify_artifact_inspection_result_v06(
                     root,
-                    session,
+                    bound_session,
                     request,
                     document,
                 )
@@ -418,11 +471,12 @@ def _interaction_indexes(
             continue
         doc_sha = _commitment(document)
         request_sha = document.get("decomposition_request_sha256")
-        request = requests.get(str(request_sha))
-        if request is None:
+        request_binding = requests.get(str(request_sha))
+        if request_binding is None:
             raise V06ProofSearchCorpusError(
                 "decomposition response lacks matching verified request"
             )
+        request, bound_session = request_binding
         inspection_sha = document.get("inspection_result_sha256")
         inspection = (
             inspection_results.get(str(inspection_sha))
@@ -432,7 +486,7 @@ def _interaction_indexes(
         try:
             compilation = compile_decomposition_proposer_response_v06(
                 root,
-                session,
+                bound_session,
                 request,
                 document,
                 inspection_result=inspection,
@@ -647,6 +701,7 @@ def build_proof_search_record_v06(
     session: Mapping[str, Any],
     *,
     interaction_documents: Sequence[Mapping[str, Any]] = (),
+    historical_sessions: Sequence[Mapping[str, Any]] = (),
     data_use_policy: Mapping[str, Any] | None = None,
     include_content: bool = False,
 ) -> dict[str, Any]:
@@ -672,9 +727,14 @@ def build_proof_search_record_v06(
             "data-use policy with content_export_allowed=true"
         )
 
+    session_index = _validated_session_index(
+        session,
+        historical_sessions,
+    )
     interactions, payloads, repair_to_interactions = _interaction_indexes(
         project_root,
         session,
+        session_index,
         interaction_documents,
     )
     examples = _step_examples(
@@ -755,6 +815,7 @@ def build_proof_search_record_from_files_v06(
     session_path: str | Path,
     *,
     interaction_paths: Sequence[str | Path] = (),
+    historical_session_paths: Sequence[str | Path] = (),
     data_use_policy_path: str | Path | None = None,
     include_content: bool = False,
 ) -> dict[str, Any]:
@@ -774,10 +835,25 @@ def build_proof_search_record_from_files_v06(
         else None
     )
     interactions = _load_interaction_documents(interaction_paths)
+    historical_sessions: list[Mapping[str, Any]] = []
+    for raw_path in historical_session_paths:
+        resolved = Path(raw_path).resolve()
+        try:
+            value = strict_json_load(resolved)
+        except (OSError, StrictJSONError) as exc:
+            raise V06ProofSearchCorpusError(
+                f"cannot load historical proof-search session {resolved}: {exc}"
+            ) from exc
+        if not isinstance(value, Mapping):
+            raise V06ProofSearchCorpusError(
+                f"historical proof-search session root must be an object: {resolved}"
+            )
+        historical_sessions.append(value)
     return build_proof_search_record_v06(
         project_root,
         session,
         interaction_documents=interactions,
+        historical_sessions=historical_sessions,
         data_use_policy=policy,
         include_content=include_content,
     )
