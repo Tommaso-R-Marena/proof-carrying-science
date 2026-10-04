@@ -42,7 +42,7 @@ def test_realistic_pkpd_translation_benchmark_closes_only_supported_frontier(
     assert final["summary"]["trajectory_steps"] == 1
 
     frontier = report["proof_frontier"]
-    assert len(frontier["theorem_backed"]) == 2
+    assert len(frontier["theorem_backed"]) == 3
     external = frontier["externally_validated_under_trust_contract"][0]
     assert external["status"] == "COMPILED_EXTERNAL_VALIDATOR_BOUND"
     assert external["reported_outcome"] == "PASS"
