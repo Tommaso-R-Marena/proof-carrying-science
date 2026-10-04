@@ -107,6 +107,13 @@ from .artifact_inspection_v06 import (
     load_artifact_inspection_result_v06,
     write_artifact_inspection_result_v06,
 )
+from .proof_search_corpus_v06 import (
+    V06ProofSearchCorpusError,
+    build_proof_search_corpus_from_files_v06,
+    build_proof_search_record_from_files_v06,
+    write_proof_search_corpus_v06,
+    write_proof_search_record_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -872,6 +879,70 @@ def cmd_compile_decomposition_v06(args):
     return 0
 
 
+def cmd_export_proof_search_record_v06(args):
+    try:
+        record = build_proof_search_record_from_files_v06(
+            args.project,
+            args.session,
+            interaction_paths=args.interaction or [],
+            data_use_policy_path=args.data_use_policy,
+            include_content=args.include_content,
+        )
+        output = write_proof_search_record_v06(
+            record,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": record["format"],
+            "record_sha256": record["record_sha256"],
+            "summary": record["summary"],
+            "data_use": record["data_use"],
+            "proof_search_record": output,
+            "authority": record["trust_model"],
+            "next": (
+                "This record is training-eligible only if data_use.training_allowed "
+                "is true. Build aggregate corpora with pcs build-proof-search-corpus-v06."
+            ),
+        }
+    except (OSError, V06ProofSearchCorpusError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_build_proof_search_corpus_v06(args):
+    try:
+        corpus = build_proof_search_corpus_from_files_v06(
+            args.records
+        )
+        output = write_proof_search_corpus_v06(
+            corpus,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": corpus["format"],
+            "corpus_sha256": corpus["corpus_sha256"],
+            "summary": corpus["summary"],
+            "proof_search_corpus": output,
+            "authority": corpus["trust_model"],
+            "next": (
+                "Use only examples whose per-example data_use permits the intended "
+                "evaluation/training purpose. Diagnostic rewards remain search labels, "
+                "never scientific-truth or proof-authority labels."
+            ),
+        }
+    except (OSError, V06ProofSearchCorpusError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
 def cmd_discover_v06(args):
     try:
         root = Path(args.project).resolve()
@@ -1542,6 +1613,59 @@ def build_parser():
     )
     cd6.add_argument("--force", action="store_true")
     cd6.set_defaults(func=cmd_compile_decomposition_v06)
+
+    epsr6 = sub.add_parser(
+        "export-proof-search-record-v06",
+        help="export one consent-aware, commitment-bound proof-search record",
+    )
+    epsr6.add_argument("project", help="unchanged scientific project directory")
+    epsr6.add_argument("session", help="committed pcs-proof-repair-search-v1 JSON")
+    epsr6.add_argument(
+        "--interaction",
+        action="append",
+        help=(
+            "optional verified decomposition/inspection request, result, or response; "
+            "repeatable"
+        ),
+    )
+    epsr6.add_argument(
+        "--data-use-policy",
+        help="optional pcs-proof-search-data-use-policy-v1 JSON",
+    )
+    epsr6.add_argument(
+        "--include-content",
+        action="store_true",
+        help=(
+            "include task/proposal/interaction payloads; requires an explicit "
+            "policy with content_export_allowed=true"
+        ),
+    )
+    epsr6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write pcs-proof-search-record-v1 JSON",
+    )
+    epsr6.add_argument("--force", action="store_true")
+    epsr6.set_defaults(func=cmd_export_proof_search_record_v06)
+
+    bpsc6 = sub.add_parser(
+        "build-proof-search-corpus-v06",
+        help="deduplicate committed proof-search records into a policy-aware corpus",
+    )
+    bpsc6.add_argument(
+        "records",
+        nargs="+",
+        help="pcs-proof-search-record-v1 JSON files",
+    )
+    bpsc6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write pcs-proof-search-corpus-v2 JSON",
+    )
+    bpsc6.add_argument("--force", action="store_true")
+    bpsc6.set_defaults(func=cmd_build_proof_search_corpus_v06)
 
     d6 = sub.add_parser(
         "discover-v06",
