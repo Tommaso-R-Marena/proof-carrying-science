@@ -1505,9 +1505,13 @@ def _proof_obligation_graph(
                     "id": claim_node,
                     "type": "typed_claim",
                     "status": (
-                        "COMPILED"
+                        "COMPILED_FORMAL"
                         if candidate.get("formalizable") is True
-                        else "PROPOSED"
+                        else (
+                            "COMPILED_EXTERNAL"
+                            if candidate.get("selected") is True
+                            else "PROPOSED"
+                        )
                     ),
                     "claim_id": claim.get("id"),
                     "kind": claim.get("kind"),
@@ -1555,6 +1559,36 @@ def _proof_obligation_graph(
                 add_edge(check_node, node_id, "compiled_toward")
             else:
                 add_edge(proposal_node, node_id, "compiled_toward")
+
+        validation_target = candidate.get("validation_target")
+        if isinstance(validation_target, Mapping):
+            node_id = f"external_validator_target:{proposal_id}"
+            add_node(
+                {
+                    "id": node_id,
+                    "type": "external_validator_target",
+                    "status": "SIGNED_RECEIPT_BOUND",
+                    "target": _json_clone(validation_target),
+                }
+            )
+            if claim_node is not None:
+                add_edge(
+                    claim_node,
+                    node_id,
+                    "validated_under_external_trust_contract",
+                )
+            elif check_node is not None:
+                add_edge(
+                    check_node,
+                    node_id,
+                    "validated_under_external_trust_contract",
+                )
+            else:
+                add_edge(
+                    proposal_node,
+                    node_id,
+                    "validated_under_external_trust_contract",
+                )
 
         for obligation in candidate.get("obligations", []):
             if not isinstance(obligation, Mapping):
