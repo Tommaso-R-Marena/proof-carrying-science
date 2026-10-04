@@ -46,6 +46,7 @@ Planned domain identifiers:
 - `pcs-intake-semantic-sha256-v2`
 - `pcs-certificate-signature-v2`
 - `pcs-package-signature-v2`
+- `pcs-external-validator-receipt-signature-v1`
 
 Each domain binds an explicit format/version field inside the JCS payload. The research implementation is `pcs/crypto_domains_v06.py`: SHA-256 uses a `pcs-jcs-sha256-v1` envelope and Ed25519 payload bytes use a `pcs-jcs-ed25519-payload-v1` envelope. v0.5 verification remains unchanged.
 
