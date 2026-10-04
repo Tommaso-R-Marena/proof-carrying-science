@@ -83,7 +83,7 @@ jobs:
               tests/test_pkpd_translation_benchmark_v06.py \
               tests/test_pkpd_peak_threshold_v06.py
 
-  proof-search-corpus-tests:
+  proof-search-corpus-policy-tests:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -96,10 +96,47 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install -e ".[dev]"
       - run:
-          name: Run consent-aware proof-search corpus tests
+          name: Run corpus policy and metadata tests
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_proof_search_corpus_v06.py
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "default_record or content_export or partner_training or training_policy or synthetic_training"
+
+  proof-search-corpus-interaction-tests:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install proof-search corpus test environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run corpus interaction provenance tests
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "decomposition_inspection or wrong_or_tampered_interaction or historical_session"
+
+  proof-search-corpus-aggregate-tests:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install proof-search corpus test environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run corpus aggregation, inventory, tamper, and CLI tests
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "tampered_session or record_and_policy or corpus_is_deterministic or problem_group or record_and_corpus_cli or corpus_writer or corpus_keeps_content"
+
 
   product-demo-hardening:
     docker:
@@ -434,7 +471,13 @@ workflows:
       - proof-search-python-tests:
           requires: [proof-search-syntax]
           filters: *proof_search_branches
-      - proof-search-corpus-tests:
+      - proof-search-corpus-policy-tests:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
+      - proof-search-corpus-interaction-tests:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
+      - proof-search-corpus-aggregate-tests:
           requires: [proof-search-syntax]
           filters: *proof_search_branches
 
