@@ -8,6 +8,11 @@ from .check_registry_v06 import (
     CERTIFIED_BUILTIN_CHECK_TYPES_V06,
     EXTERNAL_CHECK_KIND_BY_TYPE_V06,
 )
+from .external_validator_v06 import (
+    external_validator_artifact_ids_v06,
+    is_signed_external_validator_spec_v06,
+    normalize_external_validator_check_spec_v06,
+)
 from .schema_validation import SchemaValidationError, validate_v06_certificate_shape
 from .numeric_contract_v06 import (
     V06NumericContractError,
@@ -217,10 +222,32 @@ def validate_certificate_semantics_v06(certificate: dict[str, Any]) -> None:
             )
 
         expected_artifact_ids = artifact_ids_from_predicate(derived_predicate)
-        if evidence_item["check_spec"]["type"] in _BUILTIN_CHECK_TYPES:
+        check_spec = evidence_item["check_spec"]
+        check_type = check_spec["type"]
+        if check_type in _BUILTIN_CHECK_TYPES:
             if evidence_item["artifact_ids"] != expected_artifact_ids:
                 raise V06CertificateSemanticsError(
                     f"evidence {evidence_item['id']} artifact_ids differ from its built-in predicate"
+                )
+        elif is_signed_external_validator_spec_v06(check_spec):
+            try:
+                normalized_external = normalize_external_validator_check_spec_v06(
+                    check_spec
+                )
+                external_artifacts = external_validator_artifact_ids_v06(
+                    normalized_external
+                )
+            except ValueError as exc:
+                raise V06CertificateSemanticsError(
+                    f"evidence {evidence_item['id']} has invalid signed-validator contract: {exc}"
+                ) from exc
+            if evidence_item["artifact_ids"] != external_artifacts:
+                raise V06CertificateSemanticsError(
+                    f"evidence {evidence_item['id']} artifact_ids differ from its signed-validator contract"
+                )
+            if evidence_item["checker"] != normalized_external["validator"]:
+                raise V06CertificateSemanticsError(
+                    f"evidence {evidence_item['id']} checker differs from its external validator identity"
                 )
 
         for artifact_id in evidence_item["artifact_ids"]:
