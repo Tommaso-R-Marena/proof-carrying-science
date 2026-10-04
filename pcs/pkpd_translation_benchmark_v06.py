@@ -540,9 +540,9 @@ def run_pkpd_translation_benchmark_v06(
                 for obligation in initial_replay.get("obligations", [])
             )
         ),
-        "search_exposed_exactly_one_machine_repair": (
+        "search_exposed_replay_and_validator_repairs": (
             initial.get("status") == "AWAITING_REPAIR"
-            and initial.get("summary", {}).get("repairable_tasks") == 1
+            and initial.get("summary", {}).get("repairable_tasks") == 2
         ),
         "repaired_replay_compiled_to_lean_target": (
             final_replay.get("selected") is True
@@ -558,12 +558,19 @@ def run_pkpd_translation_benchmark_v06(
             and deterministic_contract.get("selected") is True
             and deterministic_contract.get("formalizable") is True
         ),
-        "empirical_adequacy_remained_external_boundary": (
-            empirical.get("selected") is False
-            and empirical.get("status") == "EXTERNAL_VALIDATOR_REQUIRED"
+        "empirical_policy_result_bound_to_signed_external_validator": (
+            empirical.get("selected") is True
+            and empirical.get("formalizable") is False
+            and empirical.get("status") == "COMPILED_EXTERNAL_VALIDATOR_BOUND"
+            and isinstance(empirical.get("validation_target"), Mapping)
+            and empirical["validation_target"].get("reported_outcome") == "PASS"
+            and empirical["validation_target"].get("semantic_authority")
+            == "EXTERNAL_VALIDATOR_TRUST_REQUIRED"
             and any(
                 isinstance(obligation, Mapping)
-                and obligation.get("kind") == "PROVIDE_EXTERNAL_VALIDATOR"
+                and obligation.get("kind")
+                == "EXTERNAL_VALIDATOR_TRUST_REVIEW_REQUIRED"
+                and obligation.get("blocking") is False
                 for obligation in empirical.get("obligations", [])
             )
         ),
@@ -580,7 +587,8 @@ def run_pkpd_translation_benchmark_v06(
         "search_stopped_at_non_machine_boundary": (
             final.get("status") == "BLOCKED_NO_MACHINE_REPAIR"
             and final.get("summary", {}).get("repairable_tasks") == 0
-            and final.get("summary", {}).get("blocking_open_obligations") == 2
+            and final.get("summary", {}).get("blocking_open_obligations") == 1
+            and final.get("summary", {}).get("compiled_selected") == 3
         ),
         "search_never_granted_authority": (
             final.get("authority", {}).get(
@@ -616,11 +624,21 @@ def run_pkpd_translation_benchmark_v06(
                 "Test whether PCS can resolve an ambiguous PK/PD output role "
                 "through an untrusted grounded proposer, repair a failed "
                 "formalization, formally close the supported computational "
-                "claims, and stop at empirical/unsupported-domain boundaries."
+                "claims, bind one empirical policy result to a signed external "
+                "validator receipt, and stop at the remaining unsupported-domain "
+                "boundary."
             ),
             "synthetic_only": True,
             "clinical_claims_permitted": False,
             "ambiguous_tables": ["predictions.csv", "observations.csv"],
+            "external_validator": {
+                "validator": PKPD_RMSE_VALIDATOR_ID_V06,
+                "public_key_fingerprint": validator_fingerprint,
+                "receipt_format": EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
+                "trust_model": EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
+                "reference_validation_result": validation_result,
+                "semantic_authority": "EXTERNAL_VALIDATOR_TRUST_REQUIRED",
+            },
         },
         "criteria": criteria,
         "discovery": {
@@ -684,14 +702,26 @@ def run_pkpd_translation_benchmark_v06(
                     ).get("real_bridge_theorem"),
                 },
             ],
-            "external_validator_required": [
+            "externally_validated_under_trust_contract": [
                 {
                     "candidate_id": "MODEL_EMPIRICAL_ADEQUACY",
                     "claim": (
-                        "restricted model adequately describes synthetic "
-                        "observations"
+                        "restricted model satisfies the prespecified synthetic "
+                        "RMSE policy on the bound observations"
                     ),
                     "status": empirical.get("status"),
+                    "reported_outcome": empirical.get(
+                        "validation_target", {}
+                    ).get("reported_outcome"),
+                    "semantic_authority": empirical.get(
+                        "validation_target", {}
+                    ).get("semantic_authority"),
+                    "validator": empirical.get(
+                        "validation_target", {}
+                    ).get("validator"),
+                    "validator_public_key_fingerprint": empirical.get(
+                        "validation_target", {}
+                    ).get("validator_public_key_fingerprint"),
                 }
             ],
             "certified_checker_missing": [
@@ -704,6 +734,7 @@ def run_pkpd_translation_benchmark_v06(
                 }
             ],
             "not_established": [
+                "validator methodology correctness beyond the signed receipt",
                 "biological adequacy",
                 "clinical validity",
                 "treatment efficacy",
