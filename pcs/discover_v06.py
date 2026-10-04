@@ -207,6 +207,9 @@ _PCS_CONTROL_DOCUMENT_FORMATS = {
     "pcs-proof-repair-proposals-v1",
     "pcs-proof-repair-search-v1",
     "pcs-proof-repair-trajectory-v1",
+    "pcs-decomposition-proposer-request-v1",
+    "pcs-decomposition-proposer-response-v1",
+    "pcs-decomposition-proposer-compilation-v1",
 }
 
 
