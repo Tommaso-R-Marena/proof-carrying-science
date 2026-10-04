@@ -331,13 +331,13 @@ def _proposal_document(
                 "id": "MODEL_PEAK_THRESHOLD",
                 "confidence": 0.995,
                 "finding": (
-                    "The peak predicted concentration does not exceed 12 mg/L."
+                    "The maximum reported predicted concentration in the committed table does not exceed 12 mg/L."
                 ),
                 "artifact_ids": [ids["model.json"], ids["predictions.csv"]],
                 "claim": {
                     "id": "C_MODEL_PEAK_THRESHOLD",
                     "statement": (
-                        "The peak predicted concentration is at most 12 mg/L."
+                        "The maximum reported predicted concentration in the committed table is at most 12 mg/L."
                     ),
                     "kind": "computational",
                 },
