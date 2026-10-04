@@ -210,6 +210,8 @@ _PCS_CONTROL_DOCUMENT_FORMATS = {
     "pcs-decomposition-proposer-request-v1",
     "pcs-decomposition-proposer-response-v1",
     "pcs-decomposition-proposer-compilation-v1",
+    "pcs-artifact-inspection-query-v1",
+    "pcs-artifact-inspection-result-v1",
 }
 
 
