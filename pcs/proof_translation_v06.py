@@ -1858,6 +1858,10 @@ def _candidate_closure_state(candidate: Mapping[str, Any]) -> str:
         return "COMPILED_PENDING_HUMAN_CONFIRMATION"
     if candidate.get("formalizable") is True:
         return "FORMALIZABLE_NOT_SELECTED"
+    if candidate.get("status") == (
+        "DECOMPOSED_CHILDREN_CLOSED_PARENT_REVIEW_REQUIRED"
+    ):
+        return "DECOMPOSED_PENDING_HUMAN_COMPOSITION_REVIEW"
     return "OPEN"
 
 
@@ -1865,6 +1869,7 @@ def _proof_obligation_graph(
     candidates: Sequence[Mapping[str, Any]],
     *,
     inventory: Mapping[str, Mapping[str, Any]],
+    claim_ir: Mapping[str, Any],
 ) -> dict[str, Any]:
     nodes: dict[str, dict[str, Any]] = {}
     edges: list[dict[str, Any]] = []
@@ -1886,15 +1891,17 @@ def _proof_obligation_graph(
         relation: str,
         *,
         blocking: bool = False,
+        semantic_relation: str | None = None,
     ) -> None:
-        edges.append(
-            {
-                "from": source,
-                "to": target,
-                "relation": relation,
-                "blocking": blocking,
-            }
-        )
+        edge = {
+            "from": source,
+            "to": target,
+            "relation": relation,
+            "blocking": blocking,
+        }
+        if semantic_relation is not None:
+            edge["semantic_relation"] = semantic_relation
+        edges.append(edge)
 
     closure_state_counts: dict[str, int] = {}
     for candidate in sorted(candidates, key=lambda item: str(item.get("id", ""))):
@@ -1995,7 +2002,7 @@ def _proof_obligation_graph(
             for grounding_node in grounding_nodes:
                 add_edge(grounding_node, check_node, "grounds_check")
 
-        claim = candidate.get("typed_claim")
+        claim = _candidate_ir_claim(candidate)
         claim_node: str | None = None
         if isinstance(claim, Mapping):
             claim_id = str(claim.get("id") or proposal_id)
@@ -2017,6 +2024,7 @@ def _proof_obligation_graph(
                     "kind": claim.get("kind"),
                     "statement": claim.get("statement"),
                     "predicate": _json_clone(claim.get("predicate")),
+                    "decomposition": _json_clone(candidate.get("decomposition")),
                 }
             )
             add_edge(proposal_node, claim_node, "interprets_as_claim")
@@ -2128,6 +2136,32 @@ def _proof_obligation_graph(
                     }
                 )
 
+    for relation in claim_ir.get("relations", []):
+        if not isinstance(relation, Mapping):
+            continue
+        source_claim = relation.get("from_claim_id")
+        target_claim = relation.get("to_claim_id")
+        if not isinstance(source_claim, str) or not isinstance(target_claim, str):
+            continue
+        source_node = f"claim:{source_claim}"
+        target_node = f"claim:{target_claim}"
+        if relation.get("kind") == "decomposition":
+            add_edge(
+                source_node,
+                target_node,
+                "decomposes_into",
+                blocking=False,
+                semantic_relation=str(relation.get("relation")),
+            )
+        elif relation.get("kind") == "dependency":
+            add_edge(
+                source_node,
+                target_node,
+                "claim_dependency",
+                blocking=False,
+                semantic_relation="depends_on",
+            )
+
     node_ids = set(nodes)
     for edge in edges:
         if edge["from"] not in node_ids or edge["to"] not in node_ids:
@@ -2194,6 +2228,7 @@ def _merge_selected_proposals_into_manifest(
     inventory: Mapping[str, Mapping[str, Any]],
     plan_commitment: str,
     obligation_graph_commitment: str,
+    claim_ir_commitment: str,
 ) -> dict[str, Any]:
     manifest = _json_clone(base_manifest)
 
@@ -2266,6 +2301,8 @@ def _merge_selected_proposals_into_manifest(
     intake["proof_translation_plan_sha256"] = plan_commitment
     intake["proof_obligation_graph_format"] = PROOF_OBLIGATION_GRAPH_FORMAT_V06
     intake["proof_obligation_graph_sha256"] = obligation_graph_commitment
+    intake["claim_ir_format"] = CLAIM_IR_FORMAT_V06
+    intake["claim_ir_sha256"] = claim_ir_commitment
     intake["proof_translation_selected"] = sorted(translation_selected)
     intake["proof_translation_model_selected"] = sorted(model_selected)
     intake["proof_translation_requires_confirmation"] = True
