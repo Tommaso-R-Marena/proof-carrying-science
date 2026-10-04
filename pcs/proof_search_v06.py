@@ -920,6 +920,127 @@ def _verify_session(
                 "proof search trajectory step violates authority-boundary metadata"
             )
 
+        action_records = step.get("action_records")
+        if action_records is not None:
+            if not isinstance(action_records, list):
+                raise V06ProofSearchError(
+                    "proof search trajectory action_records must be an array"
+                )
+            seen_action_obligations: set[str] = set()
+            recorded_replacements: set[str] = set()
+            recorded_introductions: set[str] = set()
+            for record in action_records:
+                if not isinstance(record, Mapping):
+                    raise V06ProofSearchError(
+                        "proof search trajectory action record must be an object"
+                    )
+                record_core = {
+                    key: _json_clone(value)
+                    for key, value in record.items()
+                    if key != "action_record_sha256"
+                }
+                if (
+                    not isinstance(record.get("action_record_sha256"), str)
+                    or _commitment(record_core)
+                    != record.get("action_record_sha256")
+                ):
+                    raise V06ProofSearchError(
+                        "proof search trajectory action-record commitment is invalid"
+                    )
+                obligation_id = record.get("obligation_id")
+                proposal_id = record.get("proposal_id")
+                action = record.get("action")
+                mode = record.get("mode")
+                task = record.get("task")
+                emitted_proposals = record.get("emitted_proposals")
+                emitted_hashes = record.get("emitted_proposal_sha256")
+                if (
+                    not isinstance(obligation_id, str)
+                    or not isinstance(proposal_id, str)
+                    or not isinstance(action, str)
+                    or mode not in {"replace", "decompose"}
+                    or not isinstance(task, Mapping)
+                    or not isinstance(emitted_proposals, list)
+                    or not isinstance(emitted_hashes, Mapping)
+                ):
+                    raise V06ProofSearchError(
+                        "proof search trajectory action record is malformed"
+                    )
+                if obligation_id in seen_action_obligations:
+                    raise V06ProofSearchError(
+                        "proof search trajectory repeats an action obligation"
+                    )
+                seen_action_obligations.add(obligation_id)
+                if (
+                    task.get("obligation_id") != obligation_id
+                    or task.get("proposal_id") != proposal_id
+                    or task.get("allowed_action") != action
+                ):
+                    raise V06ProofSearchError(
+                        "proof search trajectory action/task binding is invalid"
+                    )
+                snapshot = task.get("candidate_snapshot")
+                if (
+                    not isinstance(snapshot, Mapping)
+                    or _commitment(snapshot)
+                    != task.get("candidate_snapshot_sha256")
+                ):
+                    raise V06ProofSearchError(
+                        "proof search trajectory candidate snapshot commitment is invalid"
+                    )
+                proposal_ids: set[str] = set()
+                for emitted in emitted_proposals:
+                    if (
+                        not isinstance(emitted, Mapping)
+                        or not isinstance(emitted.get("id"), str)
+                    ):
+                        raise V06ProofSearchError(
+                            "proof search trajectory emitted proposal is invalid"
+                        )
+                    emitted_id = str(emitted["id"])
+                    if emitted_id in proposal_ids:
+                        raise V06ProofSearchError(
+                            "proof search trajectory repeats an emitted proposal"
+                        )
+                    proposal_ids.add(emitted_id)
+                    if _commitment(emitted) != emitted_hashes.get(emitted_id):
+                        raise V06ProofSearchError(
+                            "proof search trajectory emitted proposal commitment is invalid"
+                        )
+                if set(emitted_hashes) != proposal_ids:
+                    raise V06ProofSearchError(
+                        "proof search trajectory emitted proposal hash map is incomplete"
+                    )
+                if mode == "replace":
+                    if proposal_ids != {proposal_id}:
+                        raise V06ProofSearchError(
+                            "replacement action record must emit exactly its target proposal"
+                        )
+                    recorded_replacements.add(proposal_id)
+                else:
+                    if proposal_id in proposal_ids:
+                        raise V06ProofSearchError(
+                            "decomposition action record may not rewrite its parent"
+                        )
+                    recorded_introductions.update(proposal_ids)
+
+            if recorded_replacements != set(
+                item
+                for item in step.get("repaired_proposal_ids", [])
+                if isinstance(item, str)
+            ):
+                raise V06ProofSearchError(
+                    "trajectory action records do not match repaired proposal ids"
+                )
+            if recorded_introductions != set(
+                item
+                for item in step.get("introduced_proposal_ids", [])
+                if isinstance(item, str)
+            ):
+                raise V06ProofSearchError(
+                    "trajectory action records do not match introduced proposal ids"
+                )
+
     introduced_from_trajectory: set[str] = set()
     for index, step in enumerate(steps, start=1):
         introduced = step.get("introduced_proposal_ids")
@@ -1229,6 +1350,150 @@ def _merge_repaired_proposals(
         for key in sorted(next_anchors)
     }
 
+def _trajectory_action_records(
+    repair_request: Mapping[str, Any],
+    compiled_repairs: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    raw_tasks = repair_request.get("tasks")
+    raw_proposals = compiled_repairs.get("proposals")
+    provenance = compiled_repairs.get("repair_provenance")
+    if (
+        not isinstance(raw_tasks, list)
+        or not isinstance(raw_proposals, list)
+        or not isinstance(provenance, Mapping)
+        or not isinstance(provenance.get("repairs"), list)
+    ):
+        raise V06ProofSearchError(
+            "compiled repair lacks self-contained action provenance"
+        )
+
+    tasks = {
+        str(task.get("obligation_id")): task
+        for task in raw_tasks
+        if isinstance(task, Mapping)
+        and isinstance(task.get("obligation_id"), str)
+    }
+    emitted = {
+        str(proposal.get("id")): proposal
+        for proposal in raw_proposals
+        if isinstance(proposal, Mapping)
+        and isinstance(proposal.get("id"), str)
+    }
+
+    records: list[dict[str, Any]] = []
+    for effect in provenance["repairs"]:
+        if not isinstance(effect, Mapping):
+            raise V06ProofSearchError(
+                "compiled repair provenance entry must be an object"
+            )
+        obligation_id = effect.get("obligation_id")
+        proposal_id = effect.get("proposal_id")
+        action = effect.get("action")
+        mode = effect.get("mode")
+        if not all(
+            isinstance(value, str) and value
+            for value in (obligation_id, proposal_id, action, mode)
+        ):
+            raise V06ProofSearchError(
+                "compiled repair provenance entry lacks stable identifiers"
+            )
+        task = tasks.get(str(obligation_id))
+        if task is None:
+            raise V06ProofSearchError(
+                "compiled repair provenance cannot be joined to repair task"
+            )
+        if (
+            task.get("proposal_id") != proposal_id
+            or task.get("allowed_action") != action
+        ):
+            raise V06ProofSearchError(
+                "compiled repair task/provenance binding mismatch"
+            )
+        snapshot = task.get("candidate_snapshot")
+        if (
+            not isinstance(snapshot, Mapping)
+            or _commitment(snapshot)
+            != task.get("candidate_snapshot_sha256")
+            or task.get("candidate_snapshot_sha256")
+            != effect.get("candidate_snapshot_sha256")
+        ):
+            raise V06ProofSearchError(
+                "compiled repair candidate snapshot commitment is invalid"
+            )
+
+        if mode == "replace":
+            proposal = emitted.get(str(proposal_id))
+            if proposal is None:
+                raise V06ProofSearchError(
+                    "replacement action lacks emitted proposal"
+                )
+            proposal_sha256 = _commitment(proposal)
+            if proposal_sha256 != effect.get(
+                "replacement_proposal_sha256"
+            ):
+                raise V06ProofSearchError(
+                    "replacement action proposal commitment mismatch"
+                )
+            emitted_proposals = [_json_clone(proposal)]
+            emitted_sha256 = {
+                str(proposal_id): proposal_sha256,
+            }
+        elif mode == "decompose":
+            introduced = effect.get("introduced_proposal_ids")
+            hashes = effect.get("introduced_proposal_sha256")
+            if (
+                not isinstance(introduced, list)
+                or not all(isinstance(item, str) for item in introduced)
+                or not isinstance(hashes, Mapping)
+            ):
+                raise V06ProofSearchError(
+                    "decomposition action provenance is malformed"
+                )
+            emitted_proposals = []
+            emitted_sha256 = {}
+            for child_id in sorted(introduced):
+                child = emitted.get(child_id)
+                if child is None:
+                    raise V06ProofSearchError(
+                        f"decomposition action lacks child proposal {child_id!r}"
+                    )
+                child_sha256 = _commitment(child)
+                if child_sha256 != hashes.get(child_id):
+                    raise V06ProofSearchError(
+                        f"decomposition child commitment mismatch: {child_id!r}"
+                    )
+                emitted_proposals.append(_json_clone(child))
+                emitted_sha256[child_id] = child_sha256
+        else:
+            raise V06ProofSearchError(
+                f"unsupported repair provenance mode {mode!r}"
+            )
+
+        record_core = {
+            "obligation_id": obligation_id,
+            "proposal_id": proposal_id,
+            "action": action,
+            "mode": mode,
+            "task": _json_clone(task),
+            "emitted_proposals": emitted_proposals,
+            "emitted_proposal_sha256": emitted_sha256,
+        }
+        records.append(
+            {
+                **record_core,
+                "action_record_sha256": _commitment(record_core),
+            }
+        )
+
+    return sorted(
+        records,
+        key=lambda item: (
+            str(item["proposal_id"]),
+            str(item["obligation_id"]),
+        ),
+    )
+
+
 def start_proof_search_v06(
     project_root: str | Path,
     *,
@@ -1400,6 +1665,11 @@ def advance_proof_search_v06(
     except V06ProofRepairError as exc:
         raise V06ProofSearchError(str(exc)) from exc
 
+    action_records = _trajectory_action_records(
+        before_request,
+        compiled,
+    )
+
     inventory = session["inventory_commitment_sha256"]
     active_documents = _validate_active_documents(
         session["active_proposal_documents"],
@@ -1523,6 +1793,7 @@ def advance_proof_search_v06(
         "compiled_repair_sha256": compiled.get(
             "compiled_repair_sha256"
         ),
+        "action_records": action_records,
         "repaired_proposal_ids": sorted(
             str(effect.get("proposal_id"))
             for effect in compiled.get("repair_provenance", {}).get("repairs", [])
