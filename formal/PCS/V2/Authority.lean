@@ -15,8 +15,8 @@ is bound to the verified certificate semantic hash and checker version.
 
 Lean still reconstructs and verifies the package, certificate, artifact table,
 signatures, hashes, normalized decisions, and normalized set itself. The verified
-built-in checks `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract` and
-`pkpd_reference_match` ignore the
+built-in checks `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract`,
+`pkpd_reference_match`, and `pkpd_peak_concentration_threshold` ignore the
 transcript result and are independently replayed by the proved Lean checkers
 (`PCS.V2.Checkers.builtinExecWith`); the transcript is consulted only for evidence
 kinds that no certified checker handles.
