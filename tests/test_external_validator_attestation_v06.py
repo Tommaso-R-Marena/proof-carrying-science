@@ -13,6 +13,7 @@ from pcs.canonical_json import canonicalize_jcs_bytes
 from pcs.external_validator_v06 import (
     EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
     EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
+    EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
     build_external_validator_receipt_payload_v06,
     sign_external_validator_receipt_v06,
 )
@@ -68,6 +69,38 @@ def test_signed_external_empirical_receipt_reaches_authoritative_package_without
     )
 
     validator_fingerprint = public_key_fingerprint(validator_public)
+    trust_policy = {
+        "format": EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
+        "validator": "fixture-empirical-validator/1",
+        "validator_public_key_fingerprint": validator_fingerprint,
+        "allowed_check_types": ["external_empirical_validation"],
+        "allowed_predicate_namespaces": [predicate["namespace"]],
+    }
+    trust_policy_bytes = canonicalize_jcs_bytes(trust_policy)
+    (project / "validator_trust_policy.json").write_bytes(trust_policy_bytes)
+
+    # Re-sign with the project trust policy itself included in the validator-bound
+    # bytes. The private validator key is never packaged.
+    bound_with_trust = {
+        **bound,
+        "A_TRUST": trust_policy_bytes,
+    }
+    payload = build_external_validator_receipt_payload_v06(
+        check_type="external_empirical_validation",
+        validator="fixture-empirical-validator/1",
+        predicate=predicate,
+        bound_artifact_ids=list(bound_with_trust),
+        artifact_bytes=bound_with_trust,
+        outcome="PASS",
+    )
+    receipt = sign_external_validator_receipt_v06(
+        payload,
+        validator_private,
+    )
+    (project / "validator_receipt.json").write_bytes(
+        canonicalize_jcs_bytes(receipt)
+    )
+
     manifest = {
         "subject": "signed-external-validator-integration",
         "assumptions": [],
@@ -108,6 +141,12 @@ def test_signed_external_empirical_receipt_reaches_authoritative_package_without
                 "role": "external-validator-public-key",
                 "media_type": "application/octet-stream",
             },
+            {
+                "id": "A_TRUST",
+                "path": "validator_trust_policy.json",
+                "role": "external-validator-trust-policy",
+                "media_type": "application/json",
+            },
         ],
         "checks": [
             {
@@ -121,7 +160,8 @@ def test_signed_external_empirical_receipt_reaches_authoritative_package_without
                 "receipt_artifact": "A_RECEIPT",
                 "validator_public_key_artifact": "A_KEY",
                 "validator_public_key_fingerprint": validator_fingerprint,
-                "bound_artifact_ids": ["A_DATA", "A_POLICY"],
+                "validator_trust_policy_artifact": "A_TRUST",
+                "bound_artifact_ids": ["A_DATA", "A_POLICY", "A_TRUST"],
             }
         ],
         "workflow": {"nodes": []},
