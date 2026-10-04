@@ -235,14 +235,27 @@ def _inventory_metadata(discovery: Mapping[str, Any]) -> list[dict[str, Any]]:
 
 
 def _checker_vocabulary() -> list[dict[str, Any]]:
+    certified = set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
+    described = set(_CHECKER_FIELDS_V06)
+    if certified != described:
+        raise V06DecompositionProposerError(
+            "decomposition checker vocabulary drifted from certified registry: "
+            f"missing={sorted(certified - described)}, "
+            f"extra={sorted(described - certified)}"
+        )
+
     out = []
-    for check_type in sorted(CERTIFIED_BUILTIN_CHECK_TYPES_V06):
-        spec = _json_clone(_CHECKER_FIELDS_V06.get(check_type, {}))
+    for check_type in sorted(certified):
+        target = formal_target_for_check_v06(check_type)
+        if not isinstance(target, Mapping):
+            raise V06DecompositionProposerError(
+                f"certified checker {check_type!r} lacks a formal target"
+            )
         out.append(
             {
                 "type": check_type,
-                **spec,
-                "formal_target": formal_target_for_check_v06(check_type),
+                **_json_clone(_CHECKER_FIELDS_V06[check_type]),
+                "formal_target": target,
                 "authority": "LEAN_BACKED_AFTER_DETERMINISTIC_GROUNDING_AND_REPLAY",
             }
         )
@@ -618,6 +631,30 @@ def compile_decomposition_proposer_response_v06(
         raise V06DecompositionProposerError(
             f"decompose response child count must be in [1,{max_children}]"
         )
+
+    allowed_check_types = (
+        set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
+        | set(EXTERNAL_VALIDATOR_CHECK_TYPES_V06)
+    )
+    for index, child in enumerate(children):
+        if not isinstance(child, Mapping):
+            raise V06DecompositionProposerError(
+                f"decomposition child {index} must be an object"
+            )
+        check = child.get("check")
+        if check is None:
+            continue
+        if not isinstance(check, Mapping):
+            raise V06DecompositionProposerError(
+                f"decomposition child {index} check must be an object"
+            )
+        check_type = check.get("type")
+        if check_type not in allowed_check_types:
+            raise V06DecompositionProposerError(
+                f"decomposition child {index} check type {check_type!r} is "
+                "outside the advertised certified/external authority vocabulary; "
+                "decompose further or abstain instead"
+            )
 
     target = request["target"]
     repair_request = session["current_repair_request"]
