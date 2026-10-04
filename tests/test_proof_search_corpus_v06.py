@@ -183,7 +183,7 @@ def _root_proposal(ids: dict[str, str]) -> dict:
 
 def _decomposition_run(
     root: Path,
-) -> tuple[dict, list[dict]]:
+) -> tuple[dict, list[dict], dict]:
     _write_csv_pair(root)
     discovery = discover_project_v06(root)
     ids = _inventory_ids(discovery)
@@ -273,7 +273,7 @@ def _decomposition_run(
         session,
         compilation["repair_response"],
     )
-    return final, [request, query, inspection, response]
+    return final, [request, query, inspection, response], session
 
 
 def _policy(
@@ -432,11 +432,12 @@ def test_synthetic_training_record_includes_action_content(
 def test_decomposition_inspection_chain_is_verified_and_aligned(
     tmp_path: Path,
 ):
-    session, interactions = _decomposition_run(tmp_path)
+    session, interactions, historical = _decomposition_run(tmp_path)
     record = build_proof_search_record_v06(
         tmp_path,
         session,
         interaction_documents=interactions,
+        historical_sessions=[historical],
         data_use_policy=_policy(
             content=True,
             evaluation=True,
@@ -467,7 +468,7 @@ def test_decomposition_inspection_chain_is_verified_and_aligned(
 def test_wrong_or_tampered_interaction_is_rejected(
     tmp_path: Path,
 ):
-    session, interactions = _decomposition_run(tmp_path)
+    session, interactions, historical = _decomposition_run(tmp_path)
     tampered = json.loads(json.dumps(interactions))
     inspection = tampered[2]
     inspection["observations"][0]["observation"]["columns"] = ["fake"]
@@ -480,6 +481,7 @@ def test_wrong_or_tampered_interaction_is_rejected(
             tmp_path,
             session,
             interaction_documents=tampered,
+            historical_sessions=[historical],
         )
 
 
@@ -715,4 +717,27 @@ def test_corpus_keeps_content_only_when_all_duplicate_sources_allow_it(
     assert example["data_use"]["training_allowed"] is True
     assert example["content_included"] is True
     assert example["content"]["emitted_proposals"][0]["check"]["key"] == "id"
+
+def test_interaction_export_requires_exact_historical_session_snapshot(
+    tmp_path: Path,
+):
+    session, interactions, historical = _decomposition_run(tmp_path)
+
+    with pytest.raises(
+        V06ProofSearchCorpusError,
+        match="requires its exact historical proof-search session",
+    ):
+        build_proof_search_record_v06(
+            tmp_path,
+            session,
+            interaction_documents=interactions,
+        )
+
+    record = build_proof_search_record_v06(
+        tmp_path,
+        session,
+        interaction_documents=interactions,
+        historical_sessions=[historical],
+    )
+    assert record["summary"]["interactions"] == 4
 
