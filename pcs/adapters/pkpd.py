@@ -303,3 +303,115 @@ def check_output_file(spec_path: str | Path, csv_path: str | Path, **kwargs: Any
         return verify_one_compartment_iv_output(spec, csv_path, **kwargs)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return False, {"error": type(exc).__name__, "message": str(exc)}
+
+def check_peak_concentration_file(
+    spec_path: str | Path,
+    csv_path: str | Path,
+    *,
+    concentration_column: str = "concentration",
+    upper_bound: Any,
+    unit: str,
+) -> tuple[bool, dict[str, Any]]:
+    """Check the maximum concentration reported in a committed prediction table.
+
+    The bound is interpreted in the model-declared concentration unit. This proves
+    a property of the committed table only; it is not a continuous-time maximum
+    theorem and is not a clinical safety threshold.
+    """
+    try:
+        spec = _load_spec(spec_path)
+        contract_ok, contract = validate_one_compartment_iv(spec)
+        if not contract_ok:
+            return False, {"contract_valid": False, "contract": contract}
+
+        model_unit = spec.get("concentration_unit")
+        if not isinstance(unit, str) or not unit:
+            raise ValueError("unit must be a non-empty string")
+        if unit != model_unit:
+            raise ValueError(
+                f"threshold unit {unit!r} must exactly match model concentration_unit {model_unit!r}"
+            )
+
+        if isinstance(upper_bound, bool):
+            raise ValueError("upper_bound must not be a boolean")
+        if isinstance(upper_bound, int):
+            bound = Decimal(upper_bound)
+        elif isinstance(upper_bound, float):
+            if not math.isfinite(upper_bound):
+                raise ValueError("upper_bound must be finite")
+            bound = strict_decimal_text(str(upper_bound))
+        elif isinstance(upper_bound, str):
+            bound = strict_decimal_text(upper_bound)
+        else:
+            raise ValueError(
+                "upper_bound must be an integer, float, or strict decimal string"
+            )
+        if not bound.is_finite() or bound < 0:
+            raise ValueError("upper_bound must be finite and non-negative")
+
+        header_b, rows_b = parse_strict_csv(Path(csv_path).read_bytes())
+        header = [h.decode("utf-8") for h in header_b]
+        if concentration_column not in header:
+            raise ValueError(
+                f"CSV must contain concentration column {concentration_column!r}"
+            )
+        if not rows_b:
+            raise ValueError("prediction CSV has no data rows")
+        idx = header.index(concentration_column)
+
+        maximum: Decimal | None = None
+        for row_number, row_b in enumerate(rows_b, start=2):
+            value = strict_decimal_text(row_b[idx].decode("utf-8"))
+            if not value.is_finite() or value < 0:
+                raise ValueError(
+                    f"row {row_number} concentration must be finite and non-negative"
+                )
+            maximum = value if maximum is None else max(maximum, value)
+            if value > bound:
+                return False, {
+                    "contract_valid": True,
+                    "concentration_column": concentration_column,
+                    "unit": unit,
+                    "upper_bound": str(bound),
+                    "row_count": len(rows_b),
+                    "first_exceeding_row": row_number,
+                    "first_exceeding_value": str(value),
+                    "scope": (
+                        "maximum concentration in committed prediction rows only; "
+                        "not a continuous-time or clinical safety claim"
+                    ),
+                }
+
+        assert maximum is not None
+        return True, {
+            "contract_valid": True,
+            "concentration_column": concentration_column,
+            "unit": unit,
+            "upper_bound": str(bound),
+            "row_count": len(rows_b),
+            "maximum_reported_concentration": str(maximum),
+            "scope": (
+                "maximum concentration in committed prediction rows only; "
+                "not a continuous-time or clinical safety claim"
+            ),
+        }
+    except (
+        OSError,
+        UnicodeDecodeError,
+        ValueError,
+        OverflowError,
+        InvalidOperation,
+        StrictJSONError,
+        json.JSONDecodeError,
+    ) as exc:
+        return False, {
+            "error": type(exc).__name__,
+            "message": str(exc),
+            "concentration_column": concentration_column,
+            "unit": unit,
+            "scope": (
+                "maximum concentration in committed prediction rows only; "
+                "not a continuous-time or clinical safety claim"
+            ),
+        }
+
