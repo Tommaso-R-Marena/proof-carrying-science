@@ -524,6 +524,24 @@
         },
         "predicate": {
           "$ref": "#/$defs/predicate"
+        },
+        "receipt_format": {
+          "const": "pcs-external-validator-receipt-v1"
+        },
+        "trust_model": {
+          "const": "pinned-ed25519-validator-receipt-v1"
+        },
+        "receipt_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "validator_public_key_artifact": {
+          "$ref": "#/$defs/safeId"
+        },
+        "validator_public_key_fingerprint": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bound_artifact_ids": {
+          "$ref": "#/$defs/idArray"
         }
       }
     },
