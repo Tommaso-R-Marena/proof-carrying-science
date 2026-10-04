@@ -45,9 +45,9 @@ open PCS.V2.PKPDCheck
 
 -- committed-table concentration threshold
 #guard modelConcentrationUnit "{\"model_type\":\"one_compartment_iv_bolus\",\"dose\":{\"value\":100,\"unit\":\"mg\"},\"volume\":{\"value\":10,\"unit\":\"L\"},\"clearance\":{\"value\":1,\"unit\":\"L/h\"},\"time_unit\":\"h\",\"concentration_unit\":\"mg/L\"}".toUTF8.data.toList == some "mg/L"
-#guard peakRowB 12 0 [["10".toUTF8.data.toList]] == true
-#guard peakRowB 12 0 [["12".toUTF8.data.toList]] == true
-#guard peakRowB 12 0 [["12.0001".toUTF8.data.toList]] == false
-#guard peakRowB 12 0 [["-1".toUTF8.data.toList]] == false
+#guard peakRowB 12 0 ["10".toUTF8.data.toList] == true
+#guard peakRowB 12 0 ["12".toUTF8.data.toList] == true
+#guard peakRowB 12 0 ["12.0001".toUTF8.data.toList] == false
+#guard peakRowB 12 0 ["-1".toUTF8.data.toList] == false
 
 end PCS.V2.PKPDVectors
