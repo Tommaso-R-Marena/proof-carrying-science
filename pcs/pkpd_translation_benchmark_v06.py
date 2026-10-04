@@ -1,11 +1,21 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
+
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from .discover_v06 import discover_project_v06
+from .external_validator_v06 import (
+    EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
+    EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
+    build_external_validator_receipt_payload_v06,
+    sign_external_validator_receipt_v06,
+)
 from .proof_repair_v06 import PROOF_REPAIR_RESPONSE_FORMAT_V06
 from .proof_search_v06 import (
     advance_proof_search_v06,
@@ -14,6 +24,11 @@ from .proof_search_v06 import (
     write_proof_search_trajectory_v06,
 )
 from .proof_translation_v06 import PROOF_PROPOSALS_FORMAT_V06
+from .reference_validators.pkpd_rmse_v06 import (
+    PKPD_RMSE_VALIDATOR_ID_V06,
+    evaluate_pkpd_rmse_policy_v06,
+)
+from .signing import public_key_fingerprint
 
 
 PKPD_TRANSLATION_BENCHMARK_FORMAT_V06 = "pcs-pkpd-translation-benchmark-v1"
@@ -76,6 +91,7 @@ def _inventory_ids(discovery: Mapping[str, Any]) -> dict[str, str]:
         "study_metadata.json",
         "study_protocol.md",
         "analysis.py",
+        "validation_policy.json",
     }
     missing = sorted(required - set(out))
     if missing:
@@ -138,6 +154,140 @@ def _replay_proposal(
     }
 
 
+def _empirical_predicate() -> dict[str, str]:
+    return {
+        "type": "external",
+        "namespace": "pcs-reference-pkpd-rmse-policy/v1",
+        "proposition": (
+            "The bound model prediction and synthetic observation tables satisfy "
+            "the exact bound pcs-pkpd-rmse-policy-v1 thresholds under exact time "
+            "alignment. This proposition is a scoped validation-policy result, "
+            "not biological or clinical truth."
+        ),
+    }
+
+
+def _empirical_proposal(
+    ids: Mapping[str, str],
+    *,
+    validator_fingerprint: str | None = None,
+) -> dict[str, Any]:
+    artifact_ids = [
+        ids["model.json"],
+        ids["predictions.csv"],
+        ids["observations.csv"],
+        ids["validation_policy.json"],
+    ]
+    check: dict[str, Any] = {
+        "id": "E_MODEL_EMPIRICAL_ADEQUACY",
+        "type": "external_empirical_validation",
+        "claim_ids": ["C_MODEL_EMPIRICAL_ADEQUACY"],
+        "validator": PKPD_RMSE_VALIDATOR_ID_V06,
+        "predicate": _empirical_predicate(),
+    }
+    if validator_fingerprint is not None:
+        artifact_ids.extend(
+            [
+                ids["validator_receipt.json"],
+                ids["validator_public_key.der"],
+            ]
+        )
+        check.update(
+            {
+                "receipt_format": EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
+                "trust_model": EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
+                "receipt_artifact": ids["validator_receipt.json"],
+                "validator_public_key_artifact": ids[
+                    "validator_public_key.der"
+                ],
+                "validator_public_key_fingerprint": validator_fingerprint,
+                "bound_artifact_ids": sorted(
+                    [
+                        ids["model.json"],
+                        ids["predictions.csv"],
+                        ids["observations.csv"],
+                        ids["validation_policy.json"],
+                    ]
+                ),
+            }
+        )
+
+    return {
+        "id": "MODEL_EMPIRICAL_ADEQUACY",
+        "confidence": 0.99,
+        "finding": (
+            "The restricted model satisfies the prespecified synthetic RMSE "
+            "validation policy on the observed concentration and effect data."
+        ),
+        "artifact_ids": sorted(artifact_ids),
+        "claim": {
+            "id": "C_MODEL_EMPIRICAL_ADEQUACY",
+            "statement": (
+                "The restricted PK/PD model satisfies the prespecified synthetic "
+                "RMSE validation policy on the bound observations."
+            ),
+            "kind": "empirical",
+            "predicate": _empirical_predicate(),
+        },
+        "check": check,
+    }
+
+
+def _benchmark_validator_private_key() -> Ed25519PrivateKey:
+    seed = hashlib.sha256(
+        b"PCS synthetic PKPD validator benchmark key v1"
+    ).digest()
+    return Ed25519PrivateKey.from_private_bytes(seed)
+
+
+def _prepare_validator_receipt(
+    destination: Path,
+) -> tuple[dict[str, Any], str]:
+    private_key = _benchmark_validator_private_key()
+    public_key = private_key.public_key()
+    public_der = public_key.public_bytes(
+        serialization.Encoding.DER,
+        serialization.PublicFormat.SubjectPublicKeyInfo,
+    )
+    (destination / "validator_public_key.der").write_bytes(public_der)
+
+    preliminary = discover_project_v06(
+        destination,
+        subject="synthetic-pkpd-grounded-translation-benchmark",
+    )
+    ids = _inventory_ids(preliminary)
+    bound_paths = (
+        "model.json",
+        "predictions.csv",
+        "observations.csv",
+        "validation_policy.json",
+    )
+    artifact_bytes = {
+        ids[path]: (destination / path).read_bytes()
+        for path in bound_paths
+    }
+
+    validation = evaluate_pkpd_rmse_policy_v06(
+        predictions_bytes=(destination / "predictions.csv").read_bytes(),
+        observations_bytes=(destination / "observations.csv").read_bytes(),
+        policy_bytes=(destination / "validation_policy.json").read_bytes(),
+    )
+    payload = build_external_validator_receipt_payload_v06(
+        check_type="external_empirical_validation",
+        validator=PKPD_RMSE_VALIDATOR_ID_V06,
+        predicate=_empirical_predicate(),
+        bound_artifact_ids=[ids[path] for path in bound_paths],
+        artifact_bytes=artifact_bytes,
+        outcome=validation["outcome"],
+    )
+    receipt = sign_external_validator_receipt_v06(
+        payload,
+        private_key,
+    )
+    _json_write(receipt, destination / "validator_receipt.json")
+    return validation, public_key_fingerprint(public_key)
+
+
 def _proposal_document(
     discovery: Mapping[str, Any],
     ids: Mapping[str, str],
@@ -155,32 +305,7 @@ def _proposal_document(
         },
         "proposals": [
             _replay_proposal(ids, effect_column="response"),
-            {
-                "id": "MODEL_EMPIRICAL_ADEQUACY",
-                "confidence": 0.99,
-                "finding": (
-                    "The restricted model adequately describes the synthetic "
-                    "observed concentration and effect data."
-                ),
-                "artifact_ids": [
-                    ids["model.json"],
-                    ids["observations.csv"],
-                    ids["fit_summary.json"],
-                ],
-                "claim": {
-                    "id": "C_MODEL_EMPIRICAL_ADEQUACY",
-                    "statement": (
-                        "The restricted PK/PD model adequately describes the "
-                        "synthetic observations."
-                    ),
-                    "kind": "empirical",
-                },
-                "check": {
-                    "id": "E_MODEL_EMPIRICAL_ADEQUACY",
-                    "type": "external_empirical_validation",
-                    "claim_ids": ["C_MODEL_EMPIRICAL_ADEQUACY"],
-                },
-            },
+            _empirical_proposal(ids),
             {
                 "id": "MODEL_PEAK_THRESHOLD",
                 "confidence": 0.995,
@@ -223,7 +348,7 @@ def _candidate(
 
 def _repair_response(
     session: Mapping[str, Any],
-    corrected_proposal: Mapping[str, Any],
+    corrected_proposals: Sequence[Mapping[str, Any]],
 ) -> dict[str, Any]:
     request = session.get("current_repair_request")
     if not isinstance(request, Mapping):
@@ -235,18 +360,27 @@ def _repair_response(
         raise V06PkpdTranslationBenchmarkError(
             "benchmark repair request lacks tasks"
         )
-    task = next(
-        (
-            item
-            for item in tasks
-            if isinstance(item, Mapping)
-            and item.get("proposal_id") == "MODEL_PKPD_REPLAY_REPAIR"
-        ),
-        None,
-    )
-    if not isinstance(task, Mapping):
-        raise V06PkpdTranslationBenchmarkError(
-            "benchmark did not expose the expected replay-grounding repair task"
+    by_proposal = {
+        str(item.get("proposal_id")): item
+        for item in tasks
+        if isinstance(item, Mapping)
+        and isinstance(item.get("proposal_id"), str)
+    }
+    repairs: list[dict[str, Any]] = []
+    for proposal in corrected_proposals:
+        proposal_id = proposal.get("id")
+        task = by_proposal.get(str(proposal_id))
+        if not isinstance(task, Mapping):
+            raise V06PkpdTranslationBenchmarkError(
+                f"benchmark did not expose a repair task for {proposal_id!r}"
+            )
+        repairs.append(
+            {
+                "obligation_id": task["obligation_id"],
+                "proposal_id": task["proposal_id"],
+                "action": task["allowed_action"],
+                "replacement_proposal": dict(proposal),
+            }
         )
     return {
         "format": PROOF_REPAIR_RESPONSE_FORMAT_V06,
@@ -258,17 +392,10 @@ def _repair_response(
         "proposer": {
             "kind": "external_model",
             "name": "pkpd-benchmark-repair-proposer",
-            "version": "fixture-v1",
+            "version": "fixture-v2",
             "model_family": "deterministic-benchmark-fixture",
         },
-        "repairs": [
-            {
-                "obligation_id": task["obligation_id"],
-                "proposal_id": task["proposal_id"],
-                "action": task["allowed_action"],
-                "replacement_proposal": dict(corrected_proposal),
-            }
-        ],
+        "repairs": repairs,
     }
 
 
@@ -286,11 +413,27 @@ def run_pkpd_translation_benchmark_v06(
     )
     _copy_fixture(source, destination, overwrite=overwrite)
 
+    validation_result, validator_fingerprint = _prepare_validator_receipt(
+        destination
+    )
+    if validation_result.get("outcome") != "PASS":
+        raise V06PkpdTranslationBenchmarkError(
+            "reference PK/PD validation policy unexpectedly failed"
+        )
+
     discovery = discover_project_v06(
         destination,
         subject="synthetic-pkpd-grounded-translation-benchmark",
     )
     ids = _inventory_ids(discovery)
+    for required_dynamic in (
+        "validator_public_key.der",
+        "validator_receipt.json",
+    ):
+        if required_dynamic not in ids:
+            raise V06PkpdTranslationBenchmarkError(
+                f"benchmark discovery missed {required_dynamic}"
+            )
 
     deterministic_replays = [
         rec
@@ -325,8 +468,15 @@ def run_pkpd_translation_benchmark_v06(
         control_dir / "initial-repair-request.json",
     )
 
-    corrected = _replay_proposal(ids, effect_column="effect")
-    response = _repair_response(initial, corrected)
+    corrected_replay = _replay_proposal(ids, effect_column="effect")
+    corrected_empirical = _empirical_proposal(
+        ids,
+        validator_fingerprint=validator_fingerprint,
+    )
+    response = _repair_response(
+        initial,
+        [corrected_replay, corrected_empirical],
+    )
     response_path = control_dir / "repair-response.json"
     _json_write(response, response_path)
 
