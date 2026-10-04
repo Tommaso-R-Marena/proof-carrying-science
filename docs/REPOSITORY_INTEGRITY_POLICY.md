@@ -45,6 +45,8 @@ It checks required governance files, shell-script Git modes, LF line endings, di
 
 Every release gate also runs this check.
 
+For repository settings/branch protection, treat the CircleCI status `ci/circleci: repository-integrity` as a required merge check. If automatic GitHub Actions triggers are re-enabled, the GitHub `repository-integrity` job should also remain a prerequisite for the other PCS CI jobs.
+
 ## Shell-script rules
 
 Every tracked `.sh` file must:
