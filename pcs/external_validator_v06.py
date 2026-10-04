@@ -20,6 +20,9 @@ EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06 = "pcs-external-validator-receipt-v1"
 EXTERNAL_VALIDATOR_TRUST_CONTRACT_FORMAT_V06 = (
     "pcs-external-validator-trust-contract-v1"
 )
+EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06 = (
+    "pcs-external-validator-trust-policy-v1"
+)
 EXTERNAL_VALIDATOR_TRUST_MODEL_V06 = "pinned-ed25519-validator-receipt-v1"
 EXTERNAL_VALIDATOR_SIGNATURE_DOMAIN_V06 = (
     "pcs-external-validator-receipt-signature-v1"
@@ -40,6 +43,7 @@ _REQUIRED_ADAPTER_FIELDS = (
     "receipt_artifact",
     "validator_public_key_artifact",
     "validator_public_key_fingerprint",
+    "validator_trust_policy_artifact",
     "bound_artifact_ids",
 )
 
@@ -48,6 +52,7 @@ EXTERNAL_VALIDATOR_TRUST_CONTRACT_V06: dict[str, Any] = {
     "pcs_verifies": [
         "ed25519_receipt_signature",
         "pinned_validator_key_fingerprint",
+        "project_pinned_validator_trust_policy",
         "exact_external_predicate",
         "exact_artifact_sha256_bindings",
         "reported_outcome",
@@ -136,6 +141,7 @@ def normalize_external_validator_check_spec_v06(
         "receipt_artifact",
         "validator_public_key_artifact",
         "validator_public_key_fingerprint",
+        "validator_trust_policy_artifact",
         "bound_artifact_ids",
     }
     unexpected = sorted(set(check) - allowed_keys)
@@ -184,6 +190,10 @@ def normalize_external_validator_check_spec_v06(
         check.get("validator_public_key_artifact"),
         label="validator_public_key_artifact",
     )
+    trust_policy_artifact = _safe_id(
+        check.get("validator_trust_policy_artifact"),
+        label="validator_trust_policy_artifact",
+    )
     if receipt_artifact == key_artifact:
         raise V06ExternalValidatorError(
             "receipt artifact and validator public-key artifact must differ"
@@ -219,6 +229,10 @@ def normalize_external_validator_check_spec_v06(
         raise V06ExternalValidatorError(
             "receipt/key artifacts must not be self-included in bound_artifact_ids"
         )
+    if trust_policy_artifact not in bound:
+        raise V06ExternalValidatorError(
+            "validator_trust_policy_artifact must be included in bound_artifact_ids"
+        )
 
     return {
         "type": check_type,
@@ -229,6 +243,7 @@ def normalize_external_validator_check_spec_v06(
         "receipt_artifact": receipt_artifact,
         "validator_public_key_artifact": key_artifact,
         "validator_public_key_fingerprint": fingerprint,
+        "validator_trust_policy_artifact": trust_policy_artifact,
         "bound_artifact_ids": sorted(bound),
     }
 
@@ -262,6 +277,75 @@ def external_validator_evidence_kind_v06(check_type: str) -> str:
     raise V06ExternalValidatorError(
         f"unsupported external validator check type: {check_type!r}"
     )
+
+
+def _validator_trust_policy(raw: bytes) -> dict[str, Any]:
+    try:
+        value = strict_json_loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, StrictJSONError) as exc:
+        raise V06ExternalValidatorError(
+            f"external validator trust policy is not strict UTF-8 JSON: {exc}"
+        ) from exc
+    if not isinstance(value, dict):
+        raise V06ExternalValidatorError(
+            "external validator trust policy root must be an object"
+        )
+    expected = {
+        "format",
+        "validator",
+        "validator_public_key_fingerprint",
+        "allowed_check_types",
+        "allowed_predicate_namespaces",
+    }
+    if set(value) != expected:
+        raise V06ExternalValidatorError(
+            "external validator trust policy has unexpected or missing fields"
+        )
+    if value.get("format") != EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06:
+        raise V06ExternalValidatorError(
+            "unsupported external validator trust policy format"
+        )
+    validator = value.get("validator")
+    fingerprint = value.get("validator_public_key_fingerprint")
+    check_types = value.get("allowed_check_types")
+    namespaces = value.get("allowed_predicate_namespaces")
+    if not isinstance(validator, str) or not validator.strip():
+        raise V06ExternalValidatorError(
+            "external validator trust policy validator is invalid"
+        )
+    if not isinstance(fingerprint, str) or not _SHA256.fullmatch(fingerprint):
+        raise V06ExternalValidatorError(
+            "external validator trust policy fingerprint is invalid"
+        )
+    if (
+        not isinstance(check_types, list)
+        or not check_types
+        or not all(
+            isinstance(item, str)
+            and item in EXTERNAL_VALIDATOR_CHECK_TYPES_V06
+            for item in check_types
+        )
+        or len(check_types) != len(set(check_types))
+    ):
+        raise V06ExternalValidatorError(
+            "external validator trust policy allowed_check_types is invalid"
+        )
+    if (
+        not isinstance(namespaces, list)
+        or not namespaces
+        or not all(isinstance(item, str) and item for item in namespaces)
+        or len(namespaces) != len(set(namespaces))
+    ):
+        raise V06ExternalValidatorError(
+            "external validator trust policy allowed_predicate_namespaces is invalid"
+        )
+    return {
+        "format": EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
+        "validator": validator,
+        "validator_public_key_fingerprint": fingerprint,
+        "allowed_check_types": sorted(check_types),
+        "allowed_predicate_namespaces": sorted(namespaces),
+    }
 
 
 def _artifact_bindings(
@@ -474,6 +558,32 @@ def verify_external_validator_receipt_v06(
                 f"external validator evidence is missing artifact bytes: {missing}"
             )
 
+        trust_policy = _validator_trust_policy(
+            artifact_bytes[normalized["validator_trust_policy_artifact"]]
+        )
+        if trust_policy["validator"] != normalized["validator"]:
+            raise V06ExternalValidatorError(
+                "external validator identity is not authorized by the project trust policy"
+            )
+        if (
+            trust_policy["validator_public_key_fingerprint"]
+            != normalized["validator_public_key_fingerprint"]
+        ):
+            raise V06ExternalValidatorError(
+                "external validator fingerprint is not authorized by the project trust policy"
+            )
+        if normalized["type"] not in trust_policy["allowed_check_types"]:
+            raise V06ExternalValidatorError(
+                "external validator check type is not authorized by the project trust policy"
+            )
+        if (
+            normalized["predicate"]["namespace"]
+            not in trust_policy["allowed_predicate_namespaces"]
+        ):
+            raise V06ExternalValidatorError(
+                "external validator predicate namespace is not authorized by the project trust policy"
+            )
+
         public_key = _load_public_key(
             artifact_bytes[normalized["validator_public_key_artifact"]]
         )
@@ -552,6 +662,7 @@ def verify_external_validator_receipt_v06(
             "trust_contract": deepcopy(
                 EXTERNAL_VALIDATOR_TRUST_CONTRACT_V06
             ),
+            "validator_trust_policy": deepcopy(trust_policy),
             "semantic_authority": "EXTERNAL_VALIDATOR_TRUST_REQUIRED",
         }
     except V06ExternalValidatorError as exc:
