@@ -9,9 +9,11 @@ from typing import Any, Mapping, Sequence
 from .canonical_json import canonicalize_jcs_bytes
 from .jsonio import StrictJSONError, strict_json_load
 from .proof_translation_v06 import (
+    CLAIM_IR_FORMAT_V06,
     PROOF_OBLIGATION_GRAPH_FORMAT_V06,
     PROOF_PROPOSALS_FORMAT_V06,
     PROOF_TRANSLATION_FORMAT_V06,
+    normalize_claim_decomposition_v06,
 )
 
 
@@ -29,6 +31,7 @@ _ALLOWED_PROPOSAL_KEYS = {
     "check",
     "assumption",
     "assumptions",
+    "decomposition",
 }
 _ALLOWED_CLAIM_KEYS = {
     "id",
@@ -111,6 +114,27 @@ def _verify_graph_commitment(graph: Mapping[str, Any]) -> str:
     return actual
 
 
+def _verify_claim_ir_commitment(claim_ir: Mapping[str, Any]) -> str:
+    if claim_ir.get("format") != CLAIM_IR_FORMAT_V06:
+        raise V06ProofRepairError(
+            f"unsupported Claim IR format: {claim_ir.get('format')!r}"
+        )
+    claimed = claim_ir.get("claim_ir_sha256")
+    if not isinstance(claimed, str) or len(claimed) != 64:
+        raise V06ProofRepairError("Claim IR lacks a valid claim_ir_sha256")
+    core = {
+        key: _json_clone(value)
+        for key, value in claim_ir.items()
+        if key != "claim_ir_sha256"
+    }
+    actual = _commitment(core)
+    if actual != claimed:
+        raise V06ProofRepairError(
+            "Claim IR commitment does not match Claim IR contents"
+        )
+    return actual
+
+
 def _verify_translation_commitment(
     translation: Mapping[str, Any],
 ) -> tuple[str, Mapping[str, Any]]:
@@ -118,6 +142,11 @@ def _verify_translation_commitment(
         raise V06ProofRepairError(
             f"unsupported proof translation format: {translation.get('format')!r}"
         )
+    claim_ir = translation.get("claim_ir")
+    if not isinstance(claim_ir, Mapping):
+        raise V06ProofRepairError("proof translation lacks a claim_ir")
+    _verify_claim_ir_commitment(claim_ir)
+
     graph = translation.get("obligation_graph")
     if not isinstance(graph, Mapping):
         raise V06ProofRepairError("proof translation lacks an obligation_graph")
@@ -135,6 +164,7 @@ def _verify_translation_commitment(
         "proposal_sources": _json_clone(translation.get("proposal_sources")),
         "candidates": _json_clone(translation.get("candidates")),
         "obligations": _json_clone(translation.get("obligations")),
+        "claim_ir": _json_clone(translation.get("claim_ir")),
         "obligation_graph": _json_clone(graph),
     }
     actual_plan = _commitment(plan_core)
@@ -206,6 +236,8 @@ def _repairable_task(
         "assumptions": _json_clone(candidate.get("assumptions")),
         "grounding": _json_clone(candidate.get("grounding")),
         "formal_target": _json_clone(candidate.get("formal_target")),
+        "claim_ir_claim": _json_clone(candidate.get("claim_ir_claim")),
+        "decomposition": _json_clone(candidate.get("decomposition")),
     }
     return {
         "obligation_id": obligation_id,
@@ -260,6 +292,7 @@ def build_proof_repair_request_v06(
         "format": PROOF_REPAIR_REQUEST_FORMAT_V06,
         "compiler": PROOF_REPAIR_COMPILER_V06,
         "translation_plan_sha256": translation["plan_sha256"],
+        "claim_ir_sha256": translation["claim_ir"]["claim_ir_sha256"],
         "obligation_graph_sha256": graph_sha256,
         "inventory_commitment_sha256": translation.get(
             "inventory_commitment_sha256"
@@ -311,6 +344,12 @@ def _verify_repair_request(
     if request.get("translation_plan_sha256") != translation.get("plan_sha256"):
         raise V06ProofRepairError(
             "repair request is bound to a different proof translation plan"
+        )
+    if request.get("claim_ir_sha256") != translation.get(
+        "claim_ir", {}
+    ).get("claim_ir_sha256"):
+        raise V06ProofRepairError(
+            "repair request is bound to a different Claim IR"
         )
     if request.get("obligation_graph_sha256") != graph_sha256:
         raise V06ProofRepairError(
@@ -411,6 +450,27 @@ def _sanitize_replacement_proposal(
         raise V06ProofRepairError(
             "replacement proposal artifact_ids must be an array of strings"
         )
+
+    decomposition = proposal.get("decomposition")
+    if decomposition is not None:
+        if not isinstance(claim, Mapping):
+            raise V06ProofRepairError(
+                "replacement decomposition requires a claim object"
+            )
+        claim_id = claim.get("id")
+        if not isinstance(claim_id, str):
+            raise V06ProofRepairError(
+                "replacement decomposition claim requires an id"
+            )
+        try:
+            proposal["decomposition"] = normalize_claim_decomposition_v06(
+                decomposition,
+                claim_id=claim_id,
+            )
+        except Exception as exc:
+            raise V06ProofRepairError(
+                f"replacement decomposition is invalid: {exc}"
+            ) from exc
     return proposal
 
 

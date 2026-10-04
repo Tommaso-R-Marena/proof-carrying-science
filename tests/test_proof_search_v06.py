@@ -376,6 +376,79 @@ def test_search_rejects_confidence_inflation_during_other_repair(
         )
 
 
+def test_search_rejects_parent_or_dependency_change_during_repair(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+
+    root = {
+        "id": "MODEL_ROOT",
+        "confidence": 0.995,
+        "finding": "The cohort comparison is methodologically valid.",
+        "artifact_ids": [
+            ids["cohort_a.csv"],
+            ids["cohort_b.csv"],
+        ],
+        "claim": {
+            "id": "C_ROOT",
+            "statement": "The cohort comparison is methodologically valid.",
+            "kind": "mixed",
+        },
+        "decomposition": {
+            "relation": "root",
+            "depends_on_claim_ids": [],
+        },
+    }
+    child = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD",
+        check_id="E_MODEL_BAD",
+        key="patient_id",
+    )
+    child["decomposition"] = {
+        "parent_claim_id": "C_ROOT",
+        "relation": "required_subclaim",
+        "depends_on_claim_ids": [],
+    }
+    proposal_path = _proposal_file(
+        tmp_path,
+        discovery,
+        [root, child],
+    )
+    session = start_proof_search_v06(
+        tmp_path,
+        proposal_files=[proposal_path],
+        max_iterations=4,
+    )
+
+    replacement = _csv_proposal(
+        ids,
+        proposal_id="MODEL_BAD",
+        claim_id="C_MODEL_BAD",
+        check_id="E_MODEL_BAD",
+        key="id",
+    )
+    replacement["decomposition"] = {
+        "parent_claim_id": "C_OTHER_PARENT",
+        "relation": "required_subclaim",
+        "depends_on_claim_ids": [],
+    }
+    response = _repair_response(session, replacement)
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="changes parent/dependency decomposition structure",
+    ):
+        advance_proof_search_v06(
+            tmp_path,
+            session,
+            response,
+        )
+
+
 def test_search_rejects_checker_family_switch_during_repair(
     tmp_path: Path,
 ):

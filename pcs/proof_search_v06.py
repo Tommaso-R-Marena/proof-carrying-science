@@ -16,6 +16,7 @@ from .proof_repair_v06 import (
 from .proof_translation_v06 import (
     PROOF_PROPOSALS_FORMAT_V06,
     V06ProofTranslationError,
+    normalize_claim_decomposition_v06,
     translate_project_v06,
 )
 
@@ -234,6 +235,22 @@ def _proposal_intent_anchor(
         if isinstance(check, Mapping) and isinstance(check.get("type"), str)
         else None
     )
+    decomposition = None
+    raw_decomposition = proposal.get("decomposition")
+    if raw_decomposition is not None:
+        if not isinstance(claim, Mapping) or not isinstance(claim.get("id"), str):
+            raise V06ProofSearchError(
+                f"proposal {proposal_id!r} decomposition lacks a claim id"
+            )
+        try:
+            decomposition = normalize_claim_decomposition_v06(
+                raw_decomposition,
+                claim_id=claim["id"],
+            )
+        except V06ProofTranslationError as exc:
+            raise V06ProofSearchError(
+                f"proposal {proposal_id!r} has invalid decomposition: {exc}"
+            ) from exc
     return {
         "proposal_id": proposal_id,
         "finding": finding,
@@ -241,6 +258,7 @@ def _proposal_intent_anchor(
         "claim_kind": kind,
         "proposal_confidence": confidence,
         "check_type": check_type,
+        "decomposition": decomposition,
     }
 
 
@@ -323,6 +341,34 @@ def _assert_proposal_preserves_intent(
             raise V06ProofSearchError(
                 f"repair for proposal {proposal_id!r} changes the checker family; "
                 "checker-family reproposal requires human review"
+            )
+
+    anchored_decomposition = anchor.get("decomposition")
+    current_decomposition = proposal.get("decomposition")
+    if anchored_decomposition is None:
+        if current_decomposition is not None:
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} introduces decomposition; "
+                "decomposition reproposal requires human review"
+            )
+    else:
+        if not isinstance(claim, Mapping) or not isinstance(claim.get("id"), str):
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} loses the decomposition claim"
+            )
+        try:
+            normalized_current = normalize_claim_decomposition_v06(
+                current_decomposition,
+                claim_id=claim["id"],
+            )
+        except V06ProofTranslationError as exc:
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} has invalid decomposition: {exc}"
+            ) from exc
+        if normalized_current != anchored_decomposition:
+            raise V06ProofSearchError(
+                f"repair for proposal {proposal_id!r} changes parent/dependency "
+                "decomposition structure; create a new human-reviewed proposal instead"
             )
 
 
@@ -429,6 +475,7 @@ def _semantic_state_projection(
                 ),
                 "grounding": _json_clone(candidate.get("grounding")),
                 "formal_target": _json_clone(candidate.get("formal_target")),
+                "decomposition": _json_clone(candidate.get("decomposition")),
                 "obligations": sorted(
                     projected_obligations,
                     key=_commitment,
