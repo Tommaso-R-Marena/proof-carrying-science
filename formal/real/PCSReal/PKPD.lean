@@ -297,7 +297,7 @@ theorem pcs_pkpd_reference_match_real {t : AuthorityTranscript} {T : TrustAnchor
           PkpdMatchReal (requestFor r.pkg.cert r.model r.table e)) := by
   intro p hp ev hev hpass
   obtain ⟨e, he, hid, hsem⟩ := (pcs_verified_builtin_acceptance_sound h).builtinEvidence p hp ev hev hpass
-  exact ⟨e, he, hid, fun hc => pkpdMatchHolds_real (hsem.2.2.2.2 hc)⟩
+  exact ⟨e, he, hid, fun hc => pkpdMatchHolds_real (hsem.2.2.2.2.1 hc)⟩
 
 /-- The same from raw canonical archive bytes decoded by the Lean authority. -/
 theorem pcs_canonical_archive_pkpd_real {t : AuthorityTranscript} {T : TrustAnchor}
