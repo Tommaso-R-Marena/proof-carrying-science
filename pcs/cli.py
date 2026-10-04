@@ -3,6 +3,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Mapping
 
 from .jsonio import strict_json_load, StrictJSONError
 
