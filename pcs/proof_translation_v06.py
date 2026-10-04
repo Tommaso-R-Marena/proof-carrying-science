@@ -222,6 +222,30 @@ def _ground_check_against_project(
         checked_artifacts.extend([model_id, output_id])
         facts.append("restricted PK/PD model and output columns re-derived from project artifacts")
 
+    elif check_type == "pkpd_peak_concentration_threshold":
+        model_id = str(check["model_artifact"])
+        output_id = str(check["output_artifact"])
+        model = _strict_json_snapshot(project_root, item(model_id))
+        header = _csv_header_snapshot(project_root, item(output_id))
+        concentration_column = str(check.get("concentration_column", "concentration"))
+        unit = check.get("unit")
+        if not _restricted_pkpd_model_object(model):
+            raise V06ProofTranslationError(
+                "pkpd_peak_concentration_threshold proposal does not reference a supported restricted PK/PD model artifact"
+            )
+        if not isinstance(unit, str) or model.get("concentration_unit") != unit:
+            raise V06ProofTranslationError(
+                "pkpd_peak_concentration_threshold unit does not match the model-declared concentration unit"
+            )
+        if header is None or concentration_column not in header:
+            raise V06ProofTranslationError(
+                "pkpd_peak_concentration_threshold concentration column is not present in the referenced output CSV"
+            )
+        checked_artifacts.extend([model_id, output_id])
+        facts.append(
+            "restricted PK/PD model, declared concentration unit, and output concentration column re-derived from project artifacts"
+        )
+
     else:
         raise V06ProofTranslationError(
             f"no deterministic grounding adapter for check type {check_type!r}"
