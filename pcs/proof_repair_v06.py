@@ -292,6 +292,7 @@ def build_proof_repair_request_v06(
         "format": PROOF_REPAIR_REQUEST_FORMAT_V06,
         "compiler": PROOF_REPAIR_COMPILER_V06,
         "translation_plan_sha256": translation["plan_sha256"],
+        "claim_ir_sha256": translation["claim_ir"]["claim_ir_sha256"],
         "obligation_graph_sha256": graph_sha256,
         "inventory_commitment_sha256": translation.get(
             "inventory_commitment_sha256"
@@ -343,6 +344,12 @@ def _verify_repair_request(
     if request.get("translation_plan_sha256") != translation.get("plan_sha256"):
         raise V06ProofRepairError(
             "repair request is bound to a different proof translation plan"
+        )
+    if request.get("claim_ir_sha256") != translation.get(
+        "claim_ir", {}
+    ).get("claim_ir_sha256"):
+        raise V06ProofRepairError(
+            "repair request is bound to a different Claim IR"
         )
     if request.get("obligation_graph_sha256") != graph_sha256:
         raise V06ProofRepairError(
