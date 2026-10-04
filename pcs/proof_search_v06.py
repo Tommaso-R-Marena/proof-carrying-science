@@ -545,9 +545,10 @@ def _diagnostic_reward(
     cycle: bool,
 ) -> int:
     reward = int(_REWARD_CONTRACT_V06["iteration_cost"])
-    reward += int(_REWARD_CONTRACT_V06["blocking_obligation_closed"]) * (
+    reward += int(_REWARD_CONTRACT_V06["blocking_obligation_closed"]) * max(
+        0,
         int(before["blocking_open_obligations"])
-        - int(after["blocking_open_obligations"])
+        - int(after["blocking_open_obligations"]),
     )
     reward += int(_REWARD_CONTRACT_V06["compiled_selected_added"]) * (
         int(after["compiled_selected"])
