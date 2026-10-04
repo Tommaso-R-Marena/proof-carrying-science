@@ -100,6 +100,13 @@ from .decomposition_proposer_v06 import (
     write_decomposition_proposer_request_v06,
     write_decomposition_repair_response_v06,
 )
+from .artifact_inspection_v06 import (
+    V06ArtifactInspectionError,
+    inspect_artifacts_v06,
+    load_artifact_inspection_query_v06,
+    load_artifact_inspection_result_v06,
+    write_artifact_inspection_result_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -733,6 +740,59 @@ def cmd_prepare_decomposition_v06(args):
     return 0
 
 
+def cmd_inspect_artifacts_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        session = load_proof_search_session_v06(args.session)
+        request = load_decomposition_proposer_request_v06(args.request)
+        query = load_artifact_inspection_query_v06(args.query)
+        result = inspect_artifacts_v06(
+            root,
+            session,
+            request,
+            query,
+        )
+        output = write_artifact_inspection_result_v06(
+            result,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": result["format"],
+            "protocol": result["protocol"],
+            "search_id": result["search_id"],
+            "decomposition_request_sha256": result[
+                "decomposition_request_sha256"
+            ],
+            "artifact_inspection_query_sha256": result[
+                "artifact_inspection_query_sha256"
+            ],
+            "inspection_result_sha256": result[
+                "inspection_result_sha256"
+            ],
+            "observation_count": len(result["observations"]),
+            "artifact_inspection_result": output,
+            "authority": result["authority"],
+            "next": (
+                "Give this SHA-bound observation result back to the external "
+                "decomposition proposer. If its final decomposition response uses "
+                "these observations, it must include inspection_result_sha256 and "
+                "compile-decomposition-v06 must receive --inspection with this file."
+            ),
+        }
+    except (
+        OSError,
+        V06ProofSearchError,
+        V06DecompositionProposerError,
+        V06ArtifactInspectionError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
 def cmd_compile_decomposition_v06(args):
     try:
         root = Path(args.project).resolve()
@@ -741,11 +801,17 @@ def cmd_compile_decomposition_v06(args):
         proposer_response = load_decomposition_proposer_response_v06(
             args.response
         )
+        inspection_result = (
+            load_artifact_inspection_result_v06(args.inspection)
+            if args.inspection
+            else None
+        )
         compilation = compile_decomposition_proposer_response_v06(
             root,
             session,
             request,
             proposer_response,
+            inspection_result=inspection_result,
         )
 
         repair_output = None
@@ -774,6 +840,9 @@ def cmd_compile_decomposition_v06(args):
             "decomposition_response_sha256": compilation[
                 "decomposition_response_sha256"
             ],
+            "inspection_result_sha256": compilation.get(
+                "inspection_result_sha256"
+            ),
             "repair_response": repair_output,
             "authority": compilation["authority"],
             "next": (
@@ -794,6 +863,7 @@ def cmd_compile_decomposition_v06(args):
         OSError,
         V06ProofSearchError,
         V06DecompositionProposerError,
+        V06ArtifactInspectionError,
     ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
@@ -1436,6 +1506,23 @@ def build_parser():
     pd6.add_argument("--force", action="store_true")
     pd6.set_defaults(func=cmd_prepare_decomposition_v06)
 
+    ia6 = sub.add_parser(
+        "inspect-artifacts-v06",
+        help="execute bounded SHA-bound observations over artifacts bound to one unresolved claim",
+    )
+    ia6.add_argument("project", help="unchanged scientific project directory")
+    ia6.add_argument("session", help="committed pcs-proof-repair-search-v1 JSON")
+    ia6.add_argument("request", help="pcs-decomposition-proposer-request-v1 JSON")
+    ia6.add_argument("query", help="external pcs-artifact-inspection-query-v1 JSON")
+    ia6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write pcs-artifact-inspection-result-v1 JSON",
+    )
+    ia6.add_argument("--force", action="store_true")
+    ia6.set_defaults(func=cmd_inspect_artifacts_v06)
+
     cd6 = sub.add_parser(
         "compile-decomposition-v06",
         help="compile one external decomposition proposal into an ordinary PCS repair response",
@@ -1444,6 +1531,10 @@ def build_parser():
     cd6.add_argument("session", help="committed pcs-proof-repair-search-v1 JSON")
     cd6.add_argument("request", help="pcs-decomposition-proposer-request-v1 JSON")
     cd6.add_argument("response", help="pcs-decomposition-proposer-response-v1 JSON")
+    cd6.add_argument(
+        "--inspection",
+        help="optional pcs-artifact-inspection-result-v1 bound by inspection_result_sha256",
+    )
     cd6.add_argument(
         "-o",
         "--output",

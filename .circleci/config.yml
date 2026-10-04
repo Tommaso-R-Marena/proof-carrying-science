@@ -37,6 +37,7 @@ jobs:
               pcs/proof_repair_v06.py \
               pcs/proof_search_v06.py \
               pcs/decomposition_proposer_v06.py \
+              pcs/artifact_inspection_v06.py \
               pcs/external_validator_v06.py \
               pcs/reference_validators/pkpd_rmse_v06.py \
               pcs/pkpd_translation_benchmark_v06.py \
@@ -49,6 +50,7 @@ jobs:
               tests/test_proof_repair_v06.py \
               tests/test_proof_search_v06.py \
               tests/test_decomposition_proposer_v06.py \
+              tests/test_artifact_inspection_v06.py \
               tests/test_pkpd_translation_benchmark_v06.py \
               tests/test_pkpd_peak_threshold_v06.py
 
@@ -102,7 +104,7 @@ jobs:
           name: Run P0/P1 product hardening gates
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_decomposition_proposer_v06.py tests/test_pkpd_translation_benchmark_v06.py tests/test_pkpd_peak_threshold_v06.py
+            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_decomposition_proposer_v06.py tests/test_artifact_inspection_v06.py tests/test_pkpd_translation_benchmark_v06.py tests/test_pkpd_peak_threshold_v06.py
             python scripts/run_golden_examples_v06.py -o /tmp/pcs-golden-demo
             python scripts/run_pkpd_translation_benchmark_v06.py -o /tmp/pcs-pkpd-translation-benchmark
             python scripts/adversarial_v06_hardening.py
@@ -406,6 +408,7 @@ workflows:
                 - core/recursive-claim-ir-v1
                 - core/decompose-claim-search-action-v1
                 - core/decomposition-proposer-protocol-v1
+                - core/bounded-artifact-inspection-v1
       - proof-search-python-tests:
           requires: [proof-search-syntax]
           filters: *proof_search_branches
@@ -428,6 +431,7 @@ workflows:
                 - core/recursive-claim-ir-v1
                 - core/decompose-claim-search-action-v1
                 - core/decomposition-proposer-protocol-v1
+                - core/bounded-artifact-inspection-v1
 
   restoration-and-abi-evidence:
     jobs:
