@@ -56,6 +56,14 @@ _ALLOWED_CHECK_KEYS = {
     "effect_column",
     "rel_tol",
     "abs_tol",
+    "validator",
+    "predicate",
+    "receipt_format",
+    "trust_model",
+    "receipt_artifact",
+    "validator_public_key_artifact",
+    "validator_public_key_fingerprint",
+    "bound_artifact_ids",
 }
 _ALLOWED_ASSUMPTION_KEYS = {"id", "statement", "scope"}
 _REPAIRABLE_ACTORS = {"proposer", "human_or_proposer"}
