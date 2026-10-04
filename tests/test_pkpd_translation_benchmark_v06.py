@@ -35,14 +35,14 @@ def test_realistic_pkpd_translation_benchmark_closes_only_supported_frontier(
     )
 
     final = report["final_search"]
-    assert final["status"] == "BLOCKED_NO_MACHINE_REPAIR"
+    assert final["status"] == "READY_FOR_HUMAN_CONFIRMATION"
     assert final["summary"]["repairable_tasks"] == 0
-    assert final["summary"]["blocking_open_obligations"] == 1
-    assert final["summary"]["compiled_selected"] == 3
+    assert final["summary"]["blocking_open_obligations"] == 0
+    assert final["summary"]["compiled_selected"] == 4
     assert final["summary"]["trajectory_steps"] == 1
 
     frontier = report["proof_frontier"]
-    assert len(frontier["theorem_backed"]) == 2
+    assert len(frontier["theorem_backed"]) == 3
     external = frontier["externally_validated_under_trust_contract"][0]
     assert external["status"] == "COMPILED_EXTERNAL_VALIDATOR_BOUND"
     assert external["reported_outcome"] == "PASS"
@@ -50,9 +50,14 @@ def test_realistic_pkpd_translation_benchmark_closes_only_supported_frontier(
     assert report["design"]["external_validator"]["reference_validation_result"][
         "outcome"
     ] == "PASS"
-    assert frontier["certified_checker_missing"][0]["status"] == (
-        "OPEN_UNSUPPORTED_DOMAIN"
+    assert frontier["certified_checker_missing"] == []
+    peak = next(
+        item
+        for item in frontier["theorem_backed"]
+        if item["candidate_id"] == "MODEL_PEAK_THRESHOLD"
     )
+    assert peak["proof_level"] == "LEAN_KERNEL"
+    assert peak["soundness_theorem"] == "PCS.V2.PKPDCheck.pkpdPeakRun_sound"
     assert "clinical validity" in frontier["not_established"]
 
 

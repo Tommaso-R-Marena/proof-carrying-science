@@ -18,10 +18,10 @@ shows that only the fallback's faithfulness remains an assumption, and only for 
 requests no certified checker handles.  New checkers are added by appending to the
 list; the dispatcher and its theorem do not change.
 
-`builtinCheckers` registers the five verified built-ins:
+`builtinCheckers` registers the six verified built-ins:
 `reaction_balance` (`PCS.V2.Chemistry`), `unit_compatible` (`PCS.V2.Units`),
-`csv_disjoint` (`PCS.V2.Csv`), `pkpd_contract` and `pkpd_reference_match`
-(`PCS.V2.PKPDCheck`).
+`csv_disjoint` (`PCS.V2.Csv`), `pkpd_contract`, `pkpd_reference_match`, and
+`pkpd_peak_concentration_threshold` (`PCS.V2.PKPDCheck`).
 -/
 
 namespace PCS.V2.Checkers
@@ -99,8 +99,13 @@ def pkpdMatchChecker : CertifiedChecker :=
   { name := "pkpd_reference_match", handles := fun req => isPkpdMatch req.evidence,
     run := pkpdMatchRun, Holds := PkpdMatchHolds, sound := pkpdMatchRun_sound }
 
+def pkpdPeakChecker : CertifiedChecker :=
+  { name := "pkpd_peak_concentration_threshold", handles := fun req => isPkpdPeak req.evidence,
+    run := pkpdPeakRun, Holds := PkpdPeakHolds, sound := pkpdPeakRun_sound }
+
 def builtinCheckers : List CertifiedChecker :=
-  [reactionChecker, unitChecker, csvChecker, pkpdContractChecker, pkpdMatchChecker]
+  [reactionChecker, unitChecker, csvChecker, pkpdContractChecker, pkpdMatchChecker,
+    pkpdPeakChecker]
 
 /-- The Lean replay executor for all verified built-ins, delegating everything else. -/
 def builtinExecWith (fallback : Executor) : Executor := dispatch builtinCheckers fallback
@@ -147,6 +152,16 @@ theorem pm_not_csv {ev : JVal} (h : isPkpdMatch ev = true) : isCsvCheck ev = fal
   checkType_excl (by decide) h
 theorem pm_not_pc {ev : JVal} (h : isPkpdMatch ev = true) : isPkpdContract ev = false :=
   checkType_excl (by decide) h
+theorem pp_not_reaction {ev : JVal} (h : isPkpdPeak ev = true) : isReactionCheck ev = false :=
+  checkType_excl (by decide) h
+theorem pp_not_unit {ev : JVal} (h : isPkpdPeak ev = true) : isUnitCheck ev = false :=
+  checkType_excl (by decide) h
+theorem pp_not_csv {ev : JVal} (h : isPkpdPeak ev = true) : isCsvCheck ev = false :=
+  checkType_excl (by decide) h
+theorem pp_not_pc {ev : JVal} (h : isPkpdPeak ev = true) : isPkpdContract ev = false :=
+  checkType_excl (by decide) h
+theorem pp_not_pm {ev : JVal} (h : isPkpdPeak ev = true) : isPkpdMatch ev = false :=
+  checkType_excl (by decide) h
 
 /-! ### What a dispatched `PASS` means for each built-in -/
 
@@ -186,19 +201,28 @@ theorem builtinHolds_pkpdMatch {fb : ReplayRequest → Prop} {req : ReplayReques
     pkpdMatchChecker, hc, pm_not_reaction hc, pm_not_unit hc, pm_not_csv hc, pm_not_pc hc] at h
   exact h
 
+theorem builtinHolds_pkpdPeak {fb : ReplayRequest → Prop} {req : ReplayRequest}
+    (hc : isPkpdPeak req.evidence = true) (h : BuiltinHolds fb req) : PkpdPeakHolds req := by
+  unfold BuiltinHolds DispatchHolds builtinCheckers at h
+  simp only [List.find?, reactionChecker, unitChecker, csvChecker, pkpdContractChecker,
+    pkpdMatchChecker, pkpdPeakChecker, hc, pp_not_reaction hc, pp_not_unit hc,
+    pp_not_csv hc, pp_not_pc hc, pp_not_pm hc] at h
+  exact h
+
 /-- The semantic content of a passing built-in evidence item. -/
 def BuiltinSemantics (req : ReplayRequest) : Prop :=
   (isReactionCheck req.evidence = true → ReactionHolds req.evidence) ∧
   (isUnitCheck req.evidence = true → UnitHolds req.evidence) ∧
   (isCsvCheck req.evidence = true → CsvHolds req) ∧
   (isPkpdContract req.evidence = true → PkpdContractHolds req) ∧
-  (isPkpdMatch req.evidence = true → PkpdMatchHolds req)
+  (isPkpdMatch req.evidence = true → PkpdMatchHolds req) ∧
+  (isPkpdPeak req.evidence = true → PkpdPeakHolds req)
 
 theorem builtinHolds_semantics {fb : ReplayRequest → Prop} {req : ReplayRequest}
     (h : BuiltinHolds fb req) : BuiltinSemantics req :=
   ⟨fun hc => builtinHolds_reaction hc h, fun hc => builtinHolds_unit hc h,
     fun hc => builtinHolds_csv hc h, fun hc => builtinHolds_pkpdContract hc h,
-    fun hc => builtinHolds_pkpdMatch hc h⟩
+    fun hc => builtinHolds_pkpdMatch hc h, fun hc => builtinHolds_pkpdPeak hc h⟩
 
 /-- **No-assumption replay soundness for the verified built-ins**: whatever the fallback
     executor is, every `PASS` of `builtinExecWith fallback` on a built-in check denotes the

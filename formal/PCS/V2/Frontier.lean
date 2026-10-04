@@ -18,7 +18,7 @@ prove — and conclude:
 * authenticity against the key holder's actual signing record;
 * every member and artifact digest is FIPS 180-4 SHA-256 of the exact bytes;
 * every passing `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract`,
-  `pkpd_reference_match` item denotes its declarative scientific proposition;
+  `pkpd_reference_match` or `pkpd_peak_concentration_threshold` item denotes its declarative scientific proposition;
 * every signed static-workflow claim satisfies `WorkflowDescribes` w.r.t. the transcript's
   normalized static analysis;
 * the signed environment declaration equals the transcript capture, which satisfies the
@@ -60,7 +60,7 @@ theorem pcs_frontier_acceptance_sound {t : AuthorityTranscript} {T : TrustAnchor
 
 /-- **Frontier flagship (raw canonical archive form).**  Sole hypothesis: Ed25519
     unforgeability for the trust anchor.  No `ZipDecoderFaithful`, `ReplayFaithful` (for the
-    five verified built-ins), `Ed25519ImplCorrect`, SHA-256-specification or `CaptureSound`
+    six verified built-ins), `Ed25519ImplCorrect`, SHA-256-specification or `CaptureSound`
     hypothesis. -/
 theorem pcs_frontier_archive_acceptance_sound {t : AuthorityTranscript} {T : TrustAnchor}
     {signed : List UInt8 → Prop} (hB : NoForgery PCS.V2.Ed25519.verify T.pk signed)

@@ -26,6 +26,10 @@ Checks finite/positive PK parameters, dimensional consistency for Dose, V, CL, t
 
 Replays both analytic equations independently from the JSON model artifact and compares every row of a prediction CSV against the reference under explicit relative/absolute tolerances.
 
+### `pkpd_peak_concentration_threshold`
+
+Checks that a non-empty committed prediction CSV contains the declared concentration column, that every value is a strict non-negative PCS decimal, that the threshold unit exactly equals the model artifact's declared concentration unit, and that every committed row is at or below the committed upper bound. This certifies the maximum **reported table value** only; it is not a theorem about the continuous-time analytic maximum or clinical safety.
+
 This establishes: **the artifact is consistent with the declared restricted PK/PD model within tolerance**.
 
 It does not establish one-compartment adequacy, direct-Emax adequacy, population validity, identifiability, goodness of fit, patient predictive validity, regulatory acceptability, or arbitrary ODE-solver correctness. Those remain separate empirical/statistical/formal obligations.

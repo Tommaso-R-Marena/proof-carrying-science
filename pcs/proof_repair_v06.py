@@ -56,6 +56,8 @@ _ALLOWED_CHECK_KEYS = {
     "effect_column",
     "rel_tol",
     "abs_tol",
+    "upper_bound",
+    "unit",
     "validator",
     "predicate",
     "receipt_format",

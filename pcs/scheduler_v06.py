@@ -29,6 +29,7 @@ _PRIOR_DURATION_MS = {
     "pkpd_contract": 1.0,
     "csv_disjoint": 2.0,
     "pkpd_reference_match": 4.0,
+    "pkpd_peak_concentration_threshold": 1.0,
     "external_formal_proof": 0.05,
     "external_empirical_validation": 0.05,
     "external_statistical_validation": 0.05,

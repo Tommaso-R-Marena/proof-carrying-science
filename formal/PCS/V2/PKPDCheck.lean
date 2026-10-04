@@ -812,4 +812,129 @@ theorem pkpdMatchRun_sound (req : ReplayRequest) (hc : isPkpdMatch req.evidence 
     · cases hp
   · cases hp
 
+
+/-! ## Certified maximum reported concentration threshold -/
+
+def isPkpdPeak (ev : JVal) : Bool :=
+  isCheckType "pkpd_peak_concentration_threshold" ev
+
+/-- Parameters of the committed-table concentration upper-bound check. -/
+structure PeakSpec where
+  model : String
+  output : String
+  concCol : String
+  upper : Rat
+  unit : String
+
+def peakSpec (sp : List (String × JVal)) : Option PeakSpec :=
+  match field sp "model_artifact", field sp "output_artifact",
+      field sp "concentration_column", tolOf (field sp "upper_bound"), field sp "unit" with
+  | some (.str m), some (.str o), some (.str cc), some ub, some (.str u) =>
+      some ⟨m, o, cc, ub, u⟩
+  | _, _, _, _, _ => none
+
+/-- Read the model-declared concentration unit directly from the exact committed JSON bytes. -/
+def modelConcentrationUnit (b : List UInt8) : Option String :=
+  match parseJsonDoc b with
+  | some (.obj ms) => pstr (pfield ms "concentration_unit")
+  | _ => none
+
+/-- Declarative meaning of one committed concentration cell satisfying the upper bound. -/
+def PeakRowHolds (upper : Rat) (iC : Nat) (row : List Bytes) : Prop :=
+  ∃ c, fieldQ row iC = some c ∧ 0 ≤ c ∧ c ≤ upper
+
+def peakRowB (upper : Rat) (iC : Nat) (row : List Bytes) : Bool :=
+  match fieldQ row iC with
+  | some c => decide (0 ≤ c ∧ c ≤ upper)
+  | none => false
+
+theorem peakRowB_sound {upper : Rat} {iC : Nat} {row : List Bytes}
+    (h : peakRowB upper iC row = true) : PeakRowHolds upper iC row := by
+  unfold peakRowB at h
+  split at h
+  · rename_i c hc
+    exact ⟨c, hc, (of_decide_eq_true h).1, (of_decide_eq_true h).2⟩
+  · cases h
+
+/-- **Meaning of a passing `pkpd_peak_concentration_threshold` item**:
+    the model artifact satisfies the restricted PK/PD contract; the threshold unit is
+    exactly the concentration unit declared by those committed model bytes; the output
+    is a non-empty strict CSV table containing the named concentration column; and every
+    committed concentration cell is an exact non-negative decimal not exceeding the
+    committed upper bound. This is the maximum of the committed table, not a theorem
+    about the continuous-time analytic trajectory or clinical safety. -/
+def PkpdPeakHolds (req : ReplayRequest) : Prop :=
+  ∃ sp ps bm bo m header rows iC,
+    checkSpec req.evidence = some sp ∧
+    strField sp "type" = some "pkpd_peak_concentration_threshold" ∧
+    peakSpec sp = some ps ∧
+    lookup req.artifacts ps.model = some bm ∧
+    lookup req.artifacts ps.output = some bo ∧
+    ModelContract bm.data.toList m ∧
+    modelConcentrationUnit bm.data.toList = some ps.unit ∧
+    PCS.V2.Csv.CsvTable bo.data.toList header rows ∧
+    rows ≠ [] ∧
+    header[iC]? = some ps.concCol.toUTF8.data.toList ∧
+    ∀ row ∈ rows, PeakRowHolds ps.upper iC row
+
+def peakB (ps : PeakSpec) (bm bo : ByteArray) : Bool :=
+  match decodeModel bm.data.toList, modelConcentrationUnit bm.data.toList,
+      PCS.V2.Csv.parseCsv bo.data.toList with
+  | some _m, some u, some (header, rows) =>
+    match PCS.V2.Csv.indexOf ps.concCol.toUTF8.data.toList header with
+    | some iC =>
+      !rows.isEmpty && decide (u = ps.unit) &&
+        rows.all (peakRowB ps.upper iC)
+    | none => false
+  | _, _, _ => false
+
+def pkpdPeakRun (req : ReplayRequest) : Observation :=
+  match checkSpec req.evidence with
+  | some sp =>
+    match peakSpec sp with
+    | some ps =>
+      match lookup req.artifacts ps.model, lookup req.artifacts ps.output with
+      | some bm, some bo =>
+        ⟨.computationalTest, if peakB ps bm bo then .pass else .fail⟩
+      | _, _ => ⟨.computationalTest, .fail⟩
+    | none => ⟨.computationalTest, .fail⟩
+  | none => ⟨.computationalTest, .fail⟩
+
+theorem pkpdPeakRun_sound (req : ReplayRequest) (hc : isPkpdPeak req.evidence = true)
+    (hp : (pkpdPeakRun req).outcome = .pass) : PkpdPeakHolds req := by
+  unfold isPkpdPeak isCheckType at hc
+  unfold pkpdPeakRun at hp
+  split at hp
+  · rename_i sp hsp
+    rw [hsp] at hc
+    simp only [decide_eq_true_eq] at hc
+    split at hp
+    · rename_i ps hps
+      split at hp
+      · rename_i bm bo hbm hbo
+        have hb : peakB ps bm bo = true := by
+          cases hh : peakB ps bm bo
+          · rw [hh] at hp; cases hp
+          · rfl
+        unfold peakB at hb
+        split at hb
+        · rename_i m u header rows hm hu hcsv
+          split at hb
+          · rename_i iC hiC
+            simp only [Bool.and_eq_true, Bool.not_eq_true',
+              List.isEmpty_eq_false_iff, List.all_eq_true, decide_eq_true_eq] at hb
+            obtain ⟨⟨hne, hunit⟩, hrows⟩ := hb
+            have htable := PCS.V2.Csv.parseCsv_sound hcsv
+            have hcol := PCS.V2.Csv.indexOf_sound hiC
+            rw [hunit] at hu
+            refine ⟨sp, ps, bm, bo, m, header, rows, iC, hsp, hc, hps, hbm, hbo,
+              decodeModel_sound hm, hu, htable, hne, hcol, ?_⟩
+            intro row hr
+            exact peakRowB_sound (hrows row hr)
+          · cases hb
+        · cases hb
+      · cases hp
+    · cases hp
+  · cases hp
+
 end PCS.V2.PKPDCheck

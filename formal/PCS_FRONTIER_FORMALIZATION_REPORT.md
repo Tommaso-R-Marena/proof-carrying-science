@@ -50,7 +50,7 @@ canonical control records, exact signed member set, digests, per-claim scoped `A
 authenticity against the key holder's signing record, FIPS 180-4 SHA-256 digests of every
 member and artifact, the semantic content of every passing built-in evidence item
 (`reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract`,
-`pkpd_reference_match`), `WorkflowDescribes` for every signed static-workflow claim, and
+`pkpd_reference_match`, `pkpd_peak_concentration_threshold`), `WorkflowDescribes` for every signed static-workflow claim, and
 the verified environment facts `EnvFacts`.
 
 | Baseline hypothesis | Status now (authoritative path) |
@@ -58,7 +58,7 @@ the verified environment facts `EnvFacts`.
 | 1 `Ed25519ImplCorrect` | **removed** — the authority runs the Lean verifier (`authority_ed25519ImplCorrect`); what remains is that this Lean verifier is RFC 8032 (open, §4) |
 | 2 `NoForgery` | **kept**, stated for the Lean verifier; plus an exact forgery-extraction theorem `pcs_unsigned_acceptance_yields_forgery` |
 | 3 `CaptureSound` | **removed** for the verified meaning `EnvFacts` (`authority_capture_sound`, `verifiedContracts`); facts outside `EnvFacts` are simply not concluded |
-| 4 `ReplayFaithful` | **removed** for the five verified built-ins (`builtinExecWith_faithful`); for other kinds the conclusion is only "the transcript reported PASS" (no assumption) |
+| 4 `ReplayFaithful` | **removed** for the six verified built-ins (`builtinExecWith_faithful`); for other kinds the conclusion is only "the transcript reported PASS" (no assumption) |
 | 5 `ZipDecoderFaithful` | **removed** for canonical STORED archives decoded by Lean (`leanZip_faithful`); legacy archives are explicitly labelled less-assured |
 | SHA-256 spec | **proved** `sha256_eq_fips1804` against an independent bit-level FIPS 180-4 spec |
 | workflow oracle | **given meaning** `WorkflowDescribes`; the only workflow input not checked by Lean is the normalized static analysis (`FreshSource`) |
@@ -74,7 +74,7 @@ prediction row is within the committed tolerance of the real analytic model
 
 All theorems below compile with no `sorry`/`admit`, no project axiom, no `unsafe`,
 `implemented_by`, `extern` or `native_decide`. `#print axioms` (in `PCS/V2/Audit.lean`,
-111 theorems, and `formal/real/PCSReal/Audit.lean`, 6 theorems) reports only
+112 theorem audit entries, and `formal/real/PCSReal/Audit.lean`, 6 theorem audit entries) reports only
 `propext`, `Classical.choice`, `Quot.sound` (or a subset).
 
 ### 1.1 SHA-256 = independent FIPS 180-4 specification (Phase 1 — closed)
@@ -143,10 +143,10 @@ Real-analysis bridge (`formal/real/PCSReal/PKPD.lean`, Mathlib, proof-only):
 `PCS.V2.Checkers`: `CertifiedChecker` (`handles`, `run`, `Holds`, `sound`), dispatcher
 `dispatch`, `dispatch_faithful` (only the fallback's faithfulness remains, and only for
 requests no certified checker handles). `builtinCheckers` = `reaction_balance`,
-`unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`;
-`builtinExecWith_faithful`, `builtinHolds_semantics`, `builtinExecWith_pass_semantics`.
+`unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`,
+`pkpd_peak_concentration_threshold`; `builtinExecWith_faithful`, `builtinHolds_semantics`, `builtinExecWith_pass_semantics`.
 The authority's executor is `builtinExecWith (transcriptExecutor t)`
-(`Authority.transcriptOracles`): for these five kinds the transcript's PASS bit is never
+(`Authority.transcriptOracles`): for these six kinds the transcript's PASS bit is never
 consulted. Adding a kind = appending a checker; no theorem changes.
 
 ### 1.6 Workflow semantics (Phase 3 — narrowed)
@@ -180,7 +180,7 @@ range), `decodeZip` (parse central directory, re-encode, compare), `decodeZip_so
 ### 1.9 Flagship layers (Phase 9)
 * `HighAssurance.pcs_verified_builtin_acceptance_sound` — **no hypothesis**
   (`VerifiedBuiltinAssurance`: structural, per-claim `Assures`, transcript binding, the
-  five built-in semantics, `WorkflowDescribes`, `EnvFacts`, exact artifact binding).
+  six built-in semantics, `WorkflowDescribes`, `EnvFacts`, exact artifact binding).
 * `HighAssurance.pcs_high_assurance_acceptance_sound` — `AuthorityContracts` only.
 * `Frontier.pcs_frontier_acceptance_sound`, `pcs_frontier_archive_acceptance_sound`,
   `pcs_frontier_authority_binary_sound`, `pcs_frontier_environment` — **only
@@ -235,7 +235,7 @@ Visible in theorem types:
 2. **Workflow front end** — the meaning `A` of the normalized analysis records
    `t.workflowAnalysis` (hypothesis `hA` of `pcs_workflow_acceptance_sound`). Without it,
    the theorems still give `WorkflowDescribes` relative to the records.
-3. For evidence kinds **other than the five verified built-ins** (external validators,
+3. For evidence kinds **other than the six verified built-ins** (external validators,
    provenance records), the conclusion is only that the transcript reported the outcome;
    a stronger meaning needs `ReplayFaithful` for them (generic flagship).
 4. For **legacy (non-canonical) archives**, `ZipDecoderFaithful` for the Python decoder
@@ -255,7 +255,8 @@ Not in theorem types, i.e. outside the formal model (operational TCB):
    by vectors (open, §4). Python `cryptography`/OpenSSL agreement
    (`Sha256ProductionAgrees`-style completeness) is not claimed.
 9. Interpretation boundary: computational replay does not establish empirical, biological,
-   clinical or regulatory adequacy; the PK/PD theorem is about the declared analytic model.
+   clinical or regulatory adequacy; the reference-match theorem is about the declared analytic
+   model, while the peak-threshold theorem is only about values reported in the committed table.
 
 ### 3.1 Before/after TCB inventory
 
@@ -267,6 +268,7 @@ Not in theorem types, i.e. outside the formal model (operational TCB):
 | `csv_disjoint` replay | `ReplayFaithful` (DictReader) | **proved** (strict subset) + run by authority |
 | `pkpd_contract` replay | `ReplayFaithful` (float) | **proved** (exact rationals) + run by authority |
 | `pkpd_reference_match` replay | `ReplayFaithful` (Decimal/float) | **proved**, real-valued meaning via certified `exp` enclosure + run by authority |
+| `pkpd_peak_concentration_threshold` replay | unsupported | **proved** for exact non-negative concentration cells in the committed strict-CSV table, with threshold unit bound to the model-declared concentration unit; this is not continuous-time Cmax or a clinical-safety theorem |
 | external validators | `ReplayFaithful` | signed empirical/statistical receipt identity, signature, predicate and artifact bindings replayed in Python; scientific validator semantics remain external |
 | workflow oracle | Boolean, no meaning | `WorkflowDescribes` proved; front-end analysis remains |
 | environment capture | `CaptureSound` | `EnvFacts` proved for pins/hashes/interpreters/digest bases; rest unconcluded |

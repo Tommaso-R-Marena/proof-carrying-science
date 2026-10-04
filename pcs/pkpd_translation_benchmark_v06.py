@@ -331,13 +331,13 @@ def _proposal_document(
                 "id": "MODEL_PEAK_THRESHOLD",
                 "confidence": 0.995,
                 "finding": (
-                    "The peak predicted concentration does not exceed 12 mg/L."
+                    "The maximum reported predicted concentration in the committed table does not exceed 12 mg/L."
                 ),
-                "artifact_ids": [ids["predictions.csv"]],
+                "artifact_ids": [ids["model.json"], ids["predictions.csv"]],
                 "claim": {
                     "id": "C_MODEL_PEAK_THRESHOLD",
                     "statement": (
-                        "The peak predicted concentration is at most 12 mg/L."
+                        "The maximum reported predicted concentration in the committed table is at most 12 mg/L."
                     ),
                     "kind": "computational",
                 },
@@ -345,6 +345,7 @@ def _proposal_document(
                     "id": "E_MODEL_PEAK_THRESHOLD",
                     "type": "pkpd_peak_concentration_threshold",
                     "claim_ids": ["C_MODEL_PEAK_THRESHOLD"],
+                    "model_artifact": ids["model.json"],
                     "output_artifact": ids["predictions.csv"],
                     "concentration_column": "concentration",
                     "upper_bound": 12.0,
@@ -595,21 +596,21 @@ def run_pkpd_translation_benchmark_v06(
                 for obligation in empirical.get("obligations", [])
             )
         ),
-        "unsupported_peak_threshold_remained_open": (
-            peak.get("selected") is False
-            and peak.get("status") == "OPEN_UNSUPPORTED_DOMAIN"
-            and any(
-                isinstance(obligation, Mapping)
-                and obligation.get("kind")
-                == "IMPLEMENT_CERTIFIED_CHECKER"
-                for obligation in peak.get("obligations", [])
-            )
+        "peak_threshold_promoted_to_certified_lean_checker": (
+            peak.get("selected") is True
+            and peak.get("formalizable") is True
+            and peak.get("status") == "COMPILED_LEAN_BUILTIN"
+            and isinstance(peak.get("formal_target"), Mapping)
+            and peak["formal_target"].get("soundness_theorem")
+            == "PCS.V2.PKPDCheck.pkpdPeakRun_sound"
+            and peak["typed_claim"].get("predicate", {}).get("upper_bound")
+            == "12"
         ),
-        "search_stopped_at_non_machine_boundary": (
-            final.get("status") == "BLOCKED_NO_MACHINE_REPAIR"
+        "search_closed_all_machine_blockers": (
+            final.get("status") == "READY_FOR_HUMAN_CONFIRMATION"
             and final.get("summary", {}).get("repairable_tasks") == 0
-            and final.get("summary", {}).get("blocking_open_obligations") == 1
-            and final.get("summary", {}).get("compiled_selected") == 3
+            and final.get("summary", {}).get("blocking_open_obligations") == 0
+            and final.get("summary", {}).get("compiled_selected") == 4
         ),
         "search_never_granted_authority": (
             final.get("authority", {}).get(
@@ -646,8 +647,8 @@ def run_pkpd_translation_benchmark_v06(
                 "through an untrusted grounded proposer, repair a failed "
                 "formalization, formally close the supported computational "
                 "claims, bind one empirical policy result to a signed external "
-                "validator receipt, and stop at the remaining unsupported-domain "
-                "boundary."
+                "validator receipt, and demonstrate promotion of the previously "
+                "unsupported peak-table threshold into the certified Lean checker set."
             ),
             "synthetic_only": True,
             "clinical_claims_permitted": False,
@@ -722,6 +723,19 @@ def run_pkpd_translation_benchmark_v06(
                         "formal_target", {}
                     ).get("real_bridge_theorem"),
                 },
+                {
+                    "candidate_id": "MODEL_PEAK_THRESHOLD",
+                    "claim": (
+                        "maximum reported concentration in the committed prediction "
+                        "table is at most 12 mg/L"
+                    ),
+                    "proof_level": peak.get(
+                        "formal_target", {}
+                    ).get("proof_level"),
+                    "soundness_theorem": peak.get(
+                        "formal_target", {}
+                    ).get("soundness_theorem"),
+                },
             ],
             "externally_validated_under_trust_contract": [
                 {
@@ -745,15 +759,7 @@ def run_pkpd_translation_benchmark_v06(
                     ).get("validator_public_key_fingerprint"),
                 }
             ],
-            "certified_checker_missing": [
-                {
-                    "candidate_id": "MODEL_PEAK_THRESHOLD",
-                    "claim": (
-                        "peak predicted concentration is at most 12 mg/L"
-                    ),
-                    "status": peak.get("status"),
-                }
-            ],
+            "certified_checker_missing": [],
             "not_established": [
                 "validator methodology correctness beyond the signed receipt",
                 "biological adequacy",

@@ -112,6 +112,7 @@ dependencies of the flagship theorem and of the main intermediate theorems.
 #print axioms PCS.V2.PKPDCheck.rowB_sound
 #print axioms PCS.V2.PKPDCheck.pkpdContractRun_sound
 #print axioms PCS.V2.PKPDCheck.pkpdMatchRun_sound
+#print axioms PCS.V2.PKPDCheck.pkpdPeakRun_sound
 -- proof-carrying checker kernel
 #print axioms PCS.V2.Checkers.dispatch_faithful
 #print axioms PCS.V2.Checkers.builtinExecWith_faithful

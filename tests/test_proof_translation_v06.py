@@ -130,10 +130,16 @@ def test_shared_registry_names_exact_certified_frontier():
         "csv_disjoint",
         "pkpd_contract",
         "pkpd_reference_match",
+        "pkpd_peak_concentration_threshold",
     }
     target = formal_target_for_check_v06("pkpd_reference_match")
     assert target["soundness_theorem"] == "PCS.V2.PKPDCheck.pkpdMatchRun_sound"
     assert target["real_bridge_theorem"] == "PCSReal.PKPD.pcs_pkpd_reference_match_real"
+    peak_target = formal_target_for_check_v06(
+        "pkpd_peak_concentration_threshold"
+    )
+    assert peak_target["soundness_theorem"] == "PCS.V2.PKPDCheck.pkpdPeakRun_sound"
+    assert peak_target["proof_level"] == "LEAN_KERNEL"
 
 
 def test_deterministic_discovery_compiles_to_explicit_formal_target(tmp_path: Path):

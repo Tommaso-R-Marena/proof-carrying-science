@@ -8,7 +8,12 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Mapping
 
-from .adapters.pkpd import check_contract_file, check_output_file, strict_decimal_text
+from .adapters.pkpd import (
+    check_contract_file,
+    check_output_file,
+    check_peak_concentration_file,
+    strict_decimal_text,
+)
 from .certificate_v06 import verify_certificate_hashes_v06
 from .checks.chemistry import reaction_balanced
 from .checks.splits import csv_key_disjoint
@@ -113,6 +118,15 @@ def _replay_one(
                 effect_column=spec["effect_column"],
                 rel_tol=_strict_tolerance(spec["rel_tol"]),
                 abs_tol=_strict_tolerance(spec["abs_tol"]),
+            )
+            kind = "computational_test"
+        elif check_type == "pkpd_peak_concentration_threshold":
+            ok, details = check_peak_concentration_file(
+                artifact_paths[spec["model_artifact"]],
+                artifact_paths[spec["output_artifact"]],
+                concentration_column=spec["concentration_column"],
+                upper_bound=spec["upper_bound"],
+                unit=spec["unit"],
             )
             kind = "computational_test"
         elif check_type == "external_formal_proof":

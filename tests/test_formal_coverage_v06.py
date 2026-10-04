@@ -54,4 +54,5 @@ def test_certified_builtin_type_set_is_exactly_the_formal_frontier_set():
         "csv_disjoint",
         "pkpd_contract",
         "pkpd_reference_match",
+        "pkpd_peak_concentration_threshold",
     }
