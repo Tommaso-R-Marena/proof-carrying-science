@@ -3,6 +3,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Mapping
 
 from .jsonio import strict_json_load, StrictJSONError
 
@@ -522,16 +523,32 @@ def cmd_compile_proof_repairs_v06(args):
             args.output,
             overwrite=args.force,
         )
+        has_decomposition = any(
+            isinstance(item, Mapping) and item.get("mode") == "decompose"
+            for item in compiled.get("repair_provenance", {}).get(
+                "repairs", []
+            )
+        )
         response = {
             "format": compiled["format"],
             "compiled_repair_sha256": compiled["compiled_repair_sha256"],
             "proposal_count": len(compiled["proposals"]),
             "compiled_proposals": output,
+            "contains_decomposition_additions": has_decomposition,
             "next": (
-                "Rerun pcs translate-project-v06 on the unchanged project with "
-                f"--proposals {output}. The repaired proposal must pass grounding, "
-                "predicate compilation, confidence gating, human confirmation, replay, "
-                "and Lean authority exactly like any other untrusted proposal."
+                (
+                    "Apply this response with continue-proof-search-v06, or merge "
+                    "the emitted child proposals with the original parent proposal "
+                    "documents before retranslation. Do not translate the child-only "
+                    "file by itself."
+                )
+                if has_decomposition
+                else (
+                    "Rerun pcs translate-project-v06 on the unchanged project with "
+                    f"--proposals {output}. The repaired proposal must pass grounding, "
+                    "predicate compilation, confidence gating, human confirmation, replay, "
+                    "and Lean authority exactly like any other untrusted proposal."
+                )
             ),
         }
     except (OSError, V06ProofRepairError) as e:

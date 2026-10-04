@@ -401,6 +401,7 @@ workflows:
                 - core/signed-external-validator-receipts-v1
                 - core/pkpd-peak-threshold-checker-v1
                 - core/recursive-claim-ir-v1
+                - core/decompose-claim-search-action-v1
       - proof-search-python-tests:
           requires: [proof-search-syntax]
           filters: *proof_search_branches
@@ -421,6 +422,7 @@ workflows:
                 - core/signed-external-validator-receipts-v1
                 - core/pkpd-peak-threshold-checker-v1
                 - core/recursive-claim-ir-v1
+                - core/decompose-claim-search-action-v1
 
   restoration-and-abi-evidence:
     jobs:

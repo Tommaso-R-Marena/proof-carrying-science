@@ -19,7 +19,8 @@ from .proof_translation_v06 import (
 
 PROOF_REPAIR_REQUEST_FORMAT_V06 = "pcs-proof-repair-request-v1"
 PROOF_REPAIR_RESPONSE_FORMAT_V06 = "pcs-proof-repair-proposals-v1"
-PROOF_REPAIR_COMPILER_V06 = "pcs-proof-repair-compiler/0.1"
+PROOF_REPAIR_COMPILER_V06 = "pcs-proof-repair-compiler/0.2"
+MAX_DECOMPOSITION_CHILDREN_PER_ACTION_V06 = 8
 
 _ALLOWED_PROPOSAL_KEYS = {
     "id",
@@ -529,14 +530,30 @@ def compile_proof_repair_response_v06(
             )
         tasks[obligation_id] = task
 
+    candidates = _candidate_map(translation)
+    existing_proposal_ids = set(candidates)
+    claim_ir = translation.get("claim_ir")
+    if not isinstance(claim_ir, Mapping):
+        raise V06ProofRepairError("proof translation lacks Claim IR")
+    raw_claims = claim_ir.get("claims")
+    if not isinstance(raw_claims, list):
+        raise V06ProofRepairError("Claim IR claims must be an array")
+    existing_claim_ids = {
+        str(item.get("claim_id"))
+        for item in raw_claims
+        if isinstance(item, Mapping) and isinstance(item.get("claim_id"), str)
+    }
+
     raw_repairs = response.get("repairs")
     if not isinstance(raw_repairs, list):
         raise V06ProofRepairError("repair response repairs must be an array")
 
-    proposals: list[dict[str, Any]] = []
+    emitted: list[dict[str, Any]] = []
     provenance: list[dict[str, Any]] = []
     seen_obligations: set[str] = set()
-    seen_proposals: set[str] = set()
+    seen_target_proposals: set[str] = set()
+    seen_emitted_proposals: set[str] = set()
+
     for index, repair in enumerate(raw_repairs):
         if not isinstance(repair, Mapping):
             raise V06ProofRepairError(f"repair {index} must be an object")
@@ -572,22 +589,199 @@ def compile_proof_repair_response_v06(
                 f"repair {obligation_id!r} uses action {action!r}, "
                 f"expected {task.get('allowed_action')!r}"
             )
-        if proposal_id in seen_proposals:
+        if proposal_id in seen_target_proposals:
             raise V06ProofRepairError(
-                "one repair response may emit at most one replacement per proposal"
+                "one repair response may target a proposal at most once"
             )
-        seen_proposals.add(proposal_id)
+        seen_target_proposals.add(proposal_id)
 
+        candidate = candidates.get(proposal_id)
+        if candidate is None:
+            raise V06ProofRepairError(
+                f"repair targets unknown proposal {proposal_id!r}"
+            )
+
+        if action == "decompose_claim":
+            if repair.get("replacement_proposal") is not None:
+                raise V06ProofRepairError(
+                    "decompose_claim may not replace or rewrite the parent proposal"
+                )
+            if candidate.get("status") != "DECOMPOSITION_LEAF_UNRESOLVED":
+                raise V06ProofRepairError(
+                    "decompose_claim is only valid for an unresolved decomposition leaf"
+                )
+            decomposition = candidate.get("decomposition")
+            if (
+                not isinstance(decomposition, Mapping)
+                or decomposition.get("child_claim_ids") not in ([], None)
+            ):
+                raise V06ProofRepairError(
+                    "decompose_claim parent must be a childless decomposition node"
+                )
+
+            parent_claim = candidate.get("typed_claim")
+            if not isinstance(parent_claim, Mapping):
+                parent_claim = candidate.get("claim_ir_claim")
+            if (
+                not isinstance(parent_claim, Mapping)
+                or not isinstance(parent_claim.get("id"), str)
+            ):
+                raise V06ProofRepairError(
+                    "decompose_claim parent lacks a stable Claim IR id"
+                )
+            parent_claim_id = str(parent_claim["id"])
+            parent_confidence = candidate.get("confidence")
+            if (
+                isinstance(parent_confidence, bool)
+                or not isinstance(parent_confidence, (int, float))
+                or not math.isfinite(float(parent_confidence))
+            ):
+                raise V06ProofRepairError(
+                    "decompose_claim parent lacks finite model confidence"
+                )
+
+            raw_children = repair.get("child_proposals")
+            if not isinstance(raw_children, list):
+                raise V06ProofRepairError(
+                    "decompose_claim requires child_proposals as an array"
+                )
+            if not 1 <= len(raw_children) <= MAX_DECOMPOSITION_CHILDREN_PER_ACTION_V06:
+                raise V06ProofRepairError(
+                    "decompose_claim child count must be in "
+                    f"[1,{MAX_DECOMPOSITION_CHILDREN_PER_ACTION_V06}]"
+                )
+
+            children: list[dict[str, Any]] = []
+            child_claim_ids: set[str] = set()
+            child_proposal_ids: set[str] = set()
+            for child_index, raw_child in enumerate(raw_children):
+                if not isinstance(raw_child, Mapping):
+                    raise V06ProofRepairError(
+                        f"decompose_claim child {child_index} must be an object"
+                    )
+                child_id = _nonempty_string(
+                    raw_child.get("id"),
+                    label=f"decompose_claim child {child_index} proposal id",
+                )
+                if (
+                    child_id in existing_proposal_ids
+                    or child_id in seen_emitted_proposals
+                    or child_id in child_proposal_ids
+                ):
+                    raise V06ProofRepairError(
+                        f"decompose_claim introduces duplicate proposal id {child_id!r}"
+                    )
+                child = _sanitize_replacement_proposal(
+                    raw_child,
+                    expected_proposal_id=child_id,
+                )
+                child_confidence = child.get("confidence")
+                if float(child_confidence) > float(parent_confidence):
+                    raise V06ProofRepairError(
+                        "decomposition child confidence may not exceed parent confidence"
+                    )
+                child_claim = child.get("claim")
+                if (
+                    not isinstance(child_claim, Mapping)
+                    or not isinstance(child_claim.get("id"), str)
+                    or not isinstance(child_claim.get("statement"), str)
+                    or not child_claim.get("statement", "").strip()
+                ):
+                    raise V06ProofRepairError(
+                        "decompose_claim children require explicit claim id and statement"
+                    )
+                child_claim_id = str(child_claim["id"])
+                if (
+                    child_claim_id in existing_claim_ids
+                    or child_claim_id in child_claim_ids
+                    or child_claim_id == parent_claim_id
+                ):
+                    raise V06ProofRepairError(
+                        f"decompose_claim introduces duplicate claim id {child_claim_id!r}"
+                    )
+                child_decomposition = child.get("decomposition")
+                if not isinstance(child_decomposition, Mapping):
+                    raise V06ProofRepairError(
+                        "decompose_claim children require decomposition metadata"
+                    )
+                if child_decomposition.get("parent_claim_id") != parent_claim_id:
+                    raise V06ProofRepairError(
+                        "decompose_claim child must name the exact target claim as parent"
+                    )
+                if child_decomposition.get("relation") == "root":
+                    raise V06ProofRepairError(
+                        "decompose_claim child cannot declare root relation"
+                    )
+                child_proposal_ids.add(child_id)
+                child_claim_ids.add(child_claim_id)
+                children.append(child)
+
+            allowed_dependency_ids = existing_claim_ids | child_claim_ids
+            for child in children:
+                child_decomposition = child["decomposition"]
+                unknown_dependencies = sorted(
+                    dependency
+                    for dependency in child_decomposition.get(
+                        "depends_on_claim_ids", []
+                    )
+                    if dependency not in allowed_dependency_ids
+                )
+                if unknown_dependencies:
+                    raise V06ProofRepairError(
+                        "decompose_claim child dependencies reference unknown claims: "
+                        f"{unknown_dependencies}"
+                    )
+
+            for child in children:
+                emitted.append(child)
+                seen_emitted_proposals.add(str(child["id"]))
+            provenance.append(
+                {
+                    "obligation_id": obligation_id,
+                    "proposal_id": proposal_id,
+                    "action": action,
+                    "mode": "decompose",
+                    "candidate_snapshot_sha256": task.get(
+                        "candidate_snapshot_sha256"
+                    ),
+                    "parent_claim_id": parent_claim_id,
+                    "introduced_proposal_ids": sorted(child_proposal_ids),
+                    "introduced_claim_ids": sorted(child_claim_ids),
+                    "introduced_proposal_sha256": {
+                        str(child["id"]): _commitment(child)
+                        for child in sorted(
+                            children, key=lambda item: str(item["id"])
+                        )
+                    },
+                    "authority": {
+                        "children_authoritative": False,
+                        "parent_authority_changed": False,
+                        "human_review_required": True,
+                    },
+                }
+            )
+            continue
+
+        if "child_proposals" in repair:
+            raise V06ProofRepairError(
+                "child_proposals are only permitted for decompose_claim"
+            )
         replacement = _sanitize_replacement_proposal(
             repair.get("replacement_proposal"),
             expected_proposal_id=proposal_id,
         )
-        proposals.append(replacement)
+        if proposal_id in seen_emitted_proposals:
+            raise V06ProofRepairError(
+                f"duplicate emitted proposal id {proposal_id!r}"
+            )
+        emitted.append(replacement)
+        seen_emitted_proposals.add(proposal_id)
         provenance.append(
             {
                 "obligation_id": obligation_id,
                 "proposal_id": proposal_id,
                 "action": action,
+                "mode": "replace",
                 "candidate_snapshot_sha256": task.get(
                     "candidate_snapshot_sha256"
                 ),
@@ -606,11 +800,14 @@ def compile_proof_repair_response_v06(
             "version": proposer.get("version"),
             "model_family": proposer.get("model_family"),
         },
-        "proposals": proposals,
+        "proposals": emitted,
         "repair_provenance": {
             "format": PROOF_REPAIR_RESPONSE_FORMAT_V06,
             "compiler": PROOF_REPAIR_COMPILER_V06,
             "translation_plan_sha256": translation.get("plan_sha256"),
+            "claim_ir_sha256": translation.get("claim_ir", {}).get(
+                "claim_ir_sha256"
+            ),
             "obligation_graph_sha256": request.get("obligation_graph_sha256"),
             "repair_request_sha256": request_sha256,
             "repairs": provenance,
@@ -620,7 +817,6 @@ def compile_proof_repair_response_v06(
         **compiled_core,
         "compiled_repair_sha256": _commitment(compiled_core),
     }
-
 
 def load_proof_repair_inputs_v06(
     translation_path: str | Path,
