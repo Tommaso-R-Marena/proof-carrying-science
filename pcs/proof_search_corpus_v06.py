@@ -199,9 +199,13 @@ def load_data_use_policy_v06(
 
 
 def _problem_group_sha256(session: Mapping[str, Any]) -> str:
+    # Group by scientific bytes + immutable initial scientific intent only.
+    # Do NOT include initial_plan_sha256: the translation plan commits
+    # proposal-source metadata including an absolute local proposal-file path,
+    # which would leak run-directory identity into train/eval splitting.
     return _commitment(
         {
-            "initial_plan_sha256": session.get("initial_plan_sha256"),
+            "contract": "scientific-inventory-plus-initial-intent-v1",
             "inventory_commitment_sha256": session.get(
                 "inventory_commitment_sha256"
             ),
