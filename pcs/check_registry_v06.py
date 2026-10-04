@@ -13,6 +13,7 @@ CERTIFIED_BUILTIN_CHECK_TYPES_V06 = frozenset(
         "csv_disjoint",
         "pkpd_contract",
         "pkpd_reference_match",
+        "pkpd_peak_concentration_threshold",
     }
 )
 
@@ -71,6 +72,15 @@ FORMAL_TARGETS_V06: dict[str, dict[str, Any]] = {
         "real_bridge_theorem": "PCSReal.PKPD.pcs_pkpd_reference_match_real",
         "proof_level": "LEAN_KERNEL_PLUS_MATHLIB_REAL",
     },
+    "pkpd_peak_concentration_threshold": {
+        "formal_module": "PCS.V2.PKPDCheck",
+        "checker": "PCS.V2.Checkers.pkpdPeakChecker",
+        "soundness_theorem": "PCS.V2.PKPDCheck.pkpdPeakRun_sound",
+        "decision_theorem": None,
+        "semantic_proposition": "PCS.V2.PKPDCheck.PkpdPeakHolds",
+        "high_assurance_theorem": "PCS.V2.HighAssurance.pcs_verified_builtin_acceptance_sound",
+        "proof_level": "LEAN_KERNEL",
+    },
 }
 
 
@@ -112,6 +122,18 @@ def predicate_from_manifest_check_v06(check: dict[str, Any]) -> dict[str, Any]:
             "type": check_type,
             "model_artifact": check["model_artifact"],
         }
+    if check_type == "pkpd_peak_concentration_threshold":
+        return {
+            "type": check_type,
+            "model_artifact": check["model_artifact"],
+            "output_artifact": check["output_artifact"],
+            "concentration_column": check.get("concentration_column", "concentration"),
+            "upper_bound": canonical_nonnegative_number_text_v06(
+                check["upper_bound"],
+                label=f"check {check.get('id')} upper_bound",
+            ),
+            "unit": check["unit"],
+        }
     return {
         "type": check_type,
         "model_artifact": check["model_artifact"],
@@ -136,6 +158,6 @@ def check_artifact_references_v06(check: dict[str, Any]) -> list[str]:
         return [check["left_artifact"], check["right_artifact"]]
     if check_type == "pkpd_contract":
         return [check["model_artifact"]]
-    if check_type == "pkpd_reference_match":
+    if check_type in {"pkpd_reference_match", "pkpd_peak_concentration_threshold"}:
         return [check["model_artifact"], check["output_artifact"]]
     return []
