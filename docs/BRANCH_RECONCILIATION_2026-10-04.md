@@ -12,9 +12,11 @@ At that commit, CircleCI reported green status for the production formal gate, p
 
 The durable repository-integrity/reconciliation policy was then merged through PR #53 as commit `87d494417d685042834fbb48735d62f87c74e1e3`. This record is a dated historical snapshot; always compare against the current `main` before making a new merge decision.
 
-## Open settings-level enforcement gap
+## Settings-level enforcement completed
 
-GitHub reports `main` as unprotected as of this audit. The new `ci/circleci: repository-integrity` check is green and runs on every branch, but repository settings do not yet block merge when that check fails. Issue #54 tracks enabling protection/rules for `main` and requiring the integrity status.
+GitHub now reports `main` as protected by the active `Protect PCS main` ruleset. The ruleset requires pull-request integration, linear history, an up-to-date branch, review-thread resolution, and the exact status `ci/circleci: repository-integrity`; it blocks deletion and non-fast-forward updates and has no bypass actors.
+
+The enforcement was tested with temporary PR #56. That PR intentionally violated the repository-integrity policy, CircleCI returned a failing required status, and GitHub rejected the merge with a repository-rule violation. The PR was closed unmerged and the test branch was reset to `main`. Issue #54 records this verification.
 
 ## Executive conclusion
 

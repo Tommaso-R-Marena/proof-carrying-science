@@ -49,9 +49,21 @@ For repository settings/branch protection, treat the CircleCI status `ci/circlec
 
 ### Branch-protection enforcement status
 
-As of 2026-10-04, GitHub reports that `main` is **not protected**, so the repository-integrity status exists but is not yet settings-enforced as a merge blocker. Issue #54 tracks enabling protection/rules for `main` and requiring `ci/circleci: repository-integrity`.
+As of 2026-10-04, GitHub reports `main` as protected by the active repository ruleset `Protect PCS main`.
 
-Until that issue is closed and verified, maintainers must treat a missing or failing repository-integrity status as a manual no-merge condition.
+The ruleset:
+- targets the default branch;
+- blocks deletion and non-fast-forward updates;
+- requires changes through pull requests;
+- requires review-thread resolution;
+- requires `ci/circleci: repository-integrity`;
+- requires the branch to be up to date before merge;
+- requires linear history;
+- has no bypass actors.
+
+Enforcement was tested with temporary PR #56, which deliberately removed the required shell LF rule from `.gitattributes`. The repository-integrity check failed, and GitHub rejected a merge attempt with a ruleset violation naming the failing required status check. PR #56 was then closed without merge and its test branch was reset to `main`.
+
+Issue #54 records the configuration and verification evidence and may be closed as completed.
 
 ## Shell-script rules
 
