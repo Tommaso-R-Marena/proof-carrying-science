@@ -18,6 +18,7 @@ from pcs.check_registry_v06 import (
 )
 from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06
 from pcs.proof_translation_v06 import (
+    CLAIM_IR_FORMAT_V06,
     PROOF_OBLIGATION_GRAPH_FORMAT_V06,
     PROOF_PROPOSALS_FORMAT_V06,
     PROOF_TRANSLATION_FORMAT_V06,
@@ -99,6 +100,131 @@ def _model_proposal_file(
     }
     path = root / "model-proposals.json"
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def _decomposition_proposal_file(
+    root: Path,
+    *,
+    discovery: dict,
+    recursive_open_leaf: bool = False,
+    dependency_cycle: bool = False,
+) -> Path:
+    ids = _inventory_ids(discovery)
+    left = ids["cohort_a.csv"]
+    right = ids["cohort_b.csv"]
+
+    proposals = [
+        {
+            "id": "MODEL_ROOT",
+            "confidence": 0.995,
+            "finding": "The cohort comparison is methodologically valid.",
+            "artifact_ids": [left, right],
+            "claim": {
+                "id": "C_ROOT",
+                "statement": "The cohort comparison is methodologically valid.",
+                "kind": "mixed",
+            },
+            "decomposition": {
+                "relation": "root",
+                "depends_on_claim_ids": [],
+            },
+        }
+    ]
+
+    parent_claim = "C_ROOT"
+    if recursive_open_leaf:
+        proposals.append(
+            {
+                "id": "MODEL_METHOD",
+                "confidence": 0.995,
+                "finding": "The evaluation split is scientifically suitable.",
+                "artifact_ids": [left, right],
+                "claim": {
+                    "id": "C_METHOD",
+                    "statement": "The evaluation split is scientifically suitable.",
+                    "kind": "mixed",
+                },
+                "decomposition": {
+                    "parent_claim_id": "C_ROOT",
+                    "relation": "required_subclaim",
+                    "depends_on_claim_ids": [],
+                },
+            }
+        )
+        parent_claim = "C_METHOD"
+
+    proposals.append(
+        {
+            "id": "MODEL_DISJOINT",
+            "confidence": 0.995,
+            "finding": "The two cohorts have no shared id values.",
+            "artifact_ids": [left, right],
+            "claim": {
+                "id": "C_DISJOINT",
+                "statement": "The two cohorts are disjoint on id.",
+                "kind": "computational",
+            },
+            "check": {
+                "id": "E_DISJOINT",
+                "type": "csv_disjoint",
+                "claim_ids": ["C_DISJOINT"],
+                "left_artifact": left,
+                "right_artifact": right,
+                "key": "id",
+            },
+            "decomposition": {
+                "parent_claim_id": parent_claim,
+                "relation": "required_subclaim",
+                "depends_on_claim_ids": (
+                    ["C_LABELS"] if dependency_cycle else []
+                ),
+            },
+        }
+    )
+
+    if recursive_open_leaf:
+        proposals.append(
+            {
+                "id": "MODEL_LABELS",
+                "confidence": 0.995,
+                "finding": "The cohort labels identify the intended populations.",
+                "artifact_ids": [left, right],
+                "claim": {
+                    "id": "C_LABELS",
+                    "statement": (
+                        "The cohort labels identify the intended scientific populations."
+                    ),
+                    "kind": "empirical",
+                },
+                "decomposition": {
+                    "parent_claim_id": "C_METHOD",
+                    "relation": "required_assumption",
+                    "depends_on_claim_ids": (
+                        ["C_DISJOINT"] if dependency_cycle else []
+                    ),
+                },
+            }
+        )
+
+    value = {
+        "format": PROOF_PROPOSALS_FORMAT_V06,
+        "inventory_commitment_sha256": discovery[
+            "inventory_commitment_sha256"
+        ],
+        "proposer": {
+            "kind": "external_model",
+            "name": "recursive-decomposition-fixture",
+            "version": "1",
+            "model_family": "fixture",
+        },
+        "proposals": proposals,
+    }
+    path = root / "decomposition-proposals.json"
+    path.write_text(
+        json.dumps(value, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     return path
 
 
@@ -479,6 +605,116 @@ def test_failed_grounding_emits_machine_readable_repair_action(tmp_path: Path):
     assert repair["repair"]["action"] == "revise_predicate_from_project_bytes"
     assert repair["repair"]["actor"] == "proposer"
     assert repair["repair"]["can_set_authoritative"] is False
+
+
+def test_recursive_claim_ir_closes_child_but_keeps_parent_composition_review(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _decomposition_proposal_file(
+        tmp_path,
+        discovery=discovery,
+    )
+
+    result = translate_project_v06(tmp_path, proposal_files=[proposal])
+    claim_ir = result["claim_ir"]
+
+    assert claim_ir["format"] == CLAIM_IR_FORMAT_V06
+    assert len(claim_ir["claim_ir_sha256"]) == 64
+    assert claim_ir["roots"] == ["C_ROOT"]
+    assert claim_ir["summary"]["decomposed_claims"] == 2
+    assert claim_ir["summary"]["max_decomposition_depth"] == 1
+
+    root = next(c for c in result["candidates"] if c["id"] == "MODEL_ROOT")
+    child = next(
+        c for c in result["candidates"] if c["id"] == "MODEL_DISJOINT"
+    )
+    assert child["selected"] is True
+    assert child["formalizable"] is True
+    assert root["selected"] is False
+    assert root["status"] == (
+        "DECOMPOSED_CHILDREN_CLOSED_PARENT_REVIEW_REQUIRED"
+    )
+    assert any(
+        obligation["kind"] == "COMPOSITION_SEMANTICS_REVIEW_REQUIRED"
+        and obligation["blocking"] is False
+        for obligation in root["obligations"]
+    )
+    assert result["summary"]["blocking_open_obligations"] == 0
+    assert (
+        result["manifest_draft"]["pcs_intake"]["claim_ir_sha256"]
+        == claim_ir["claim_ir_sha256"]
+    )
+
+    graph = result["obligation_graph"]
+    assert any(
+        edge["from"] == "claim:C_ROOT"
+        and edge["to"] == "claim:C_DISJOINT"
+        and edge["relation"] == "decomposes_into"
+        and edge["semantic_relation"] == "required_subclaim"
+        for edge in graph["edges"]
+    )
+
+
+def test_recursive_claim_ir_propagates_irreducible_leaf_blocker(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _decomposition_proposal_file(
+        tmp_path,
+        discovery=discovery,
+        recursive_open_leaf=True,
+    )
+
+    result = translate_project_v06(tmp_path, proposal_files=[proposal])
+    candidates = {c["id"]: c for c in result["candidates"]}
+
+    assert result["claim_ir"]["summary"]["max_decomposition_depth"] == 2
+    assert candidates["MODEL_LABELS"]["status"] == (
+        "DECOMPOSITION_LEAF_UNRESOLVED"
+    )
+    assert any(
+        obligation["kind"] == "DECOMPOSITION_LEAF_NEEDS_CHECK_OR_CHILDREN"
+        and obligation["blocking"] is True
+        for obligation in candidates["MODEL_LABELS"]["obligations"]
+    )
+    assert candidates["MODEL_METHOD"]["status"] == (
+        "DECOMPOSITION_BLOCKED_BY_CHILDREN"
+    )
+    assert candidates["MODEL_ROOT"]["status"] == (
+        "DECOMPOSITION_BLOCKED_BY_CHILDREN"
+    )
+
+    relations = result["claim_ir"]["relations"]
+    assert {
+        (
+            relation["from_claim_id"],
+            relation["to_claim_id"],
+            relation["relation"],
+        )
+        for relation in relations
+        if relation["kind"] == "decomposition"
+    } == {
+        ("C_ROOT", "C_METHOD", "required_subclaim"),
+        ("C_METHOD", "C_DISJOINT", "required_subclaim"),
+        ("C_METHOD", "C_LABELS", "required_assumption"),
+    }
+
+
+def test_recursive_claim_ir_rejects_dependency_cycles(tmp_path: Path):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    proposal = _decomposition_proposal_file(
+        tmp_path,
+        discovery=discovery,
+        recursive_open_leaf=True,
+        dependency_cycle=True,
+    )
+
+    with pytest.raises(V06ProofTranslationError, match="dependency relation contains a cycle"):
+        translate_project_v06(tmp_path, proposal_files=[proposal])
 
 
 def test_obligation_graph_is_deterministic_for_same_project_snapshot(tmp_path: Path):
