@@ -1,0 +1,15 @@
+{
+  "model_type": "one_compartment_iv_bolus",
+  "dose": {"value": 100.0, "unit": "mg"},
+  "volume": {"value": 10.0, "unit": "L"},
+  "clearance": {"value": 1.0, "unit": "L/h"},
+  "time_unit": "h",
+  "concentration_unit": "mg/L",
+  "pd": {
+    "model_type": "direct_emax",
+    "e0": {"value": 0.0, "unit": "1"},
+    "emax": {"value": 100.0, "unit": "1"},
+    "ec50": {"value": 2.0, "unit": "mg/L"},
+    "effect_unit": "1"
+  }
+}
