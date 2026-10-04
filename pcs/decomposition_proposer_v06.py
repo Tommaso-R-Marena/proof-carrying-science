@@ -41,7 +41,7 @@ DECOMPOSITION_PROPOSER_COMPILATION_FORMAT_V06 = (
     "pcs-decomposition-proposer-compilation-v1"
 )
 DECOMPOSITION_PROPOSER_PROTOCOL_V06 = (
-    "pcs-decomposition-proposer-protocol/0.1"
+    "pcs-decomposition-proposer-protocol/0.2"
 )
 
 
@@ -58,6 +58,7 @@ _ALLOWED_RESPONSE_KEYS_V06 = {
     "decision",
     "children",
     "reason",
+    "inspection_result_sha256",
 }
 _ALLOWED_PROPOSER_KEYS_V06 = {
     "kind",
@@ -466,6 +467,12 @@ def build_decomposition_proposer_request_v06(
             "remaining_depth": remaining_depth,
             "child_confidence_may_not_exceed": candidate.get("confidence"),
         },
+        "inspection_contract": (
+            __import__(
+                "pcs.artifact_inspection_v06",
+                fromlist=["artifact_inspection_contract_v06"],
+            ).artifact_inspection_contract_v06()
+        ),
         "response_contract": {
             "format": DECOMPOSITION_PROPOSER_RESPONSE_FORMAT_V06,
             "decisions": ["decompose", "abstain"],
@@ -530,6 +537,8 @@ def compile_decomposition_proposer_response_v06(
     session: Mapping[str, Any],
     request: Mapping[str, Any],
     response: Mapping[str, Any],
+    *,
+    inspection_result: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     verify_decomposition_proposer_request_v06(
         project_root,
@@ -564,6 +573,45 @@ def compile_decomposition_proposer_response_v06(
         raise V06DecompositionProposerError(
             "decomposition response is bound to a different project inventory"
         )
+
+    claimed_inspection = response.get("inspection_result_sha256")
+    if claimed_inspection is None and inspection_result is not None:
+        raise V06DecompositionProposerError(
+            "inspection result was supplied but the decomposition response does not bind it"
+        )
+    if claimed_inspection is not None:
+        if (
+            not isinstance(claimed_inspection, str)
+            or len(claimed_inspection) != 64
+            or any(ch not in "0123456789abcdef" for ch in claimed_inspection)
+        ):
+            raise V06DecompositionProposerError(
+                "inspection_result_sha256 must be a lowercase SHA-256 hex string"
+            )
+        if inspection_result is None:
+            raise V06DecompositionProposerError(
+                "decomposition response binds an inspection result but none was supplied"
+            )
+        try:
+            from .artifact_inspection_v06 import (
+                V06ArtifactInspectionError,
+                verify_artifact_inspection_result_v06,
+            )
+
+            verify_artifact_inspection_result_v06(
+                project_root,
+                session,
+                request,
+                inspection_result,
+            )
+        except V06ArtifactInspectionError as exc:
+            raise V06DecompositionProposerError(
+                f"bound artifact inspection result is invalid: {exc}"
+            ) from exc
+        if inspection_result.get("inspection_result_sha256") != claimed_inspection:
+            raise V06DecompositionProposerError(
+                "decomposition response binds a different artifact inspection result"
+            )
 
     proposer = response.get("proposer")
     if not isinstance(proposer, Mapping):
@@ -608,6 +656,7 @@ def compile_decomposition_proposer_response_v06(
             ],
             "decomposition_response_sha256": response_sha256,
             "search_id": session.get("search_id"),
+            "inspection_result_sha256": claimed_inspection,
             "reason": reason,
             "repair_response": None,
             "authority": {
@@ -705,6 +754,7 @@ def compile_decomposition_proposer_response_v06(
         ],
         "decomposition_response_sha256": response_sha256,
         "search_id": session.get("search_id"),
+        "inspection_result_sha256": claimed_inspection,
         "repair_response": repair_response,
         "preview_compiled_repair_sha256": preview.get(
             "compiled_repair_sha256"
