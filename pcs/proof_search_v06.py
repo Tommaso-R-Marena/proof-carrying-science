@@ -708,6 +708,27 @@ def _verify_session(
         raise V06ProofSearchError(
             "proof search intent-anchor commitment is invalid"
         )
+
+    initial_intent_anchors = session.get("initial_intent_anchors")
+    claimed_initial_intent_hash = session.get(
+        "initial_intent_anchors_sha256"
+    )
+    if (
+        not isinstance(initial_intent_anchors, Mapping)
+        or not isinstance(claimed_initial_intent_hash, str)
+        or len(claimed_initial_intent_hash) != 64
+        or _commitment(initial_intent_anchors)
+        != claimed_initial_intent_hash
+    ):
+        raise V06ProofSearchError(
+            "proof search initial intent-anchor commitment is invalid"
+        )
+    for proposal_id, anchor in initial_intent_anchors.items():
+        if intent_anchors.get(proposal_id) != anchor:
+            raise V06ProofSearchError(
+                "proof search changed an immutable initial intent anchor"
+            )
+
     active_ids: set[str] = set()
     for document in active_documents:
         for proposal in document.get("proposals", []):
@@ -725,12 +746,77 @@ def _verify_session(
         raise V06ProofSearchError(
             "proof search intent anchors do not exactly cover active proposals"
         )
+    if len(active_ids) > MAX_PROOF_SEARCH_PROPOSALS_V06:
+        raise V06ProofSearchError(
+            "proof search proposal budget is exceeded"
+        )
+
+    initial_ids = set(initial_intent_anchors)
+    derived_ids = active_ids - initial_ids
+    for proposal_id in sorted(derived_ids):
+        anchor = intent_anchors.get(proposal_id)
+        if not isinstance(anchor, Mapping):
+            raise V06ProofSearchError(
+                f"derived proposal {proposal_id!r} lacks an intent anchor"
+            )
+        if (
+            anchor.get("origin") != "decomposition"
+            or anchor.get("requires_human_review") is not True
+            or not isinstance(anchor.get("parent_proposal_id"), str)
+            or anchor.get("parent_proposal_id") not in intent_anchors
+            or not isinstance(anchor.get("parent_claim_id"), str)
+            or not isinstance(
+                anchor.get("decomposition_obligation_id"), str
+            )
+        ):
+            raise V06ProofSearchError(
+                f"derived proposal {proposal_id!r} has invalid decomposition lineage"
+            )
+        introduced_iteration = anchor.get("introduced_iteration")
+        if (
+            isinstance(introduced_iteration, bool)
+            or not isinstance(introduced_iteration, int)
+            or not 1 <= introduced_iteration <= iteration
+        ):
+            raise V06ProofSearchError(
+                f"derived proposal {proposal_id!r} has invalid introduction iteration"
+            )
+        decomposition = anchor.get("decomposition")
+        if (
+            not isinstance(decomposition, Mapping)
+            or decomposition.get("parent_claim_id")
+            != anchor.get("parent_claim_id")
+            or decomposition.get("relation") == "root"
+        ):
+            raise V06ProofSearchError(
+                f"derived proposal {proposal_id!r} does not preserve parent lineage"
+            )
+
+    claim_ir = translation.get("claim_ir")
+    claim_ir_summary = (
+        claim_ir.get("summary")
+        if isinstance(claim_ir, Mapping)
+        else None
+    )
+    if not isinstance(claim_ir_summary, Mapping):
+        raise V06ProofSearchError(
+            "proof search current translation lacks Claim IR summary"
+        )
+    if (
+        int(claim_ir_summary.get("max_decomposition_depth", 0))
+        > MAX_PROOF_SEARCH_DECOMPOSITION_DEPTH_V06
+    ):
+        raise V06ProofSearchError(
+            "proof search decomposition depth budget is exceeded"
+        )
 
     expected_authority = {
         "coordinator_trusted_to_set_authoritative": False,
         "repair_model_trusted": False,
         "diagnostic_reward_sets_authority": False,
         "scientific_intent_reproposal_requires_human": True,
+        "decomposition_model_trusted": False,
+        "decomposition_children_require_human_review": True,
         "human_confirmation_required": True,
         "replay_and_lean_authority_required": True,
     }
@@ -743,7 +829,7 @@ def _verify_session(
         {
             "initial_plan_sha256": session.get("initial_plan_sha256"),
             "inventory_commitment_sha256": inventory,
-            "intent_anchors_sha256": claimed_intent_hash,
+            "initial_intent_anchors_sha256": claimed_initial_intent_hash,
             "max_iterations": max_iterations,
         }
     )[:20]
@@ -832,6 +918,49 @@ def _verify_session(
             raise V06ProofSearchError(
                 "proof search trajectory step violates authority-boundary metadata"
             )
+
+    introduced_from_trajectory: set[str] = set()
+    for index, step in enumerate(steps, start=1):
+        introduced = step.get("introduced_proposal_ids")
+        if (
+            not isinstance(introduced, list)
+            or not all(isinstance(item, str) for item in introduced)
+            or len(introduced) != len(set(introduced))
+        ):
+            raise V06ProofSearchError(
+                "proof search trajectory introduced_proposal_ids are invalid"
+            )
+        overlap = introduced_from_trajectory & set(introduced)
+        if overlap:
+            raise V06ProofSearchError(
+                "proof search trajectory introduces a proposal more than once"
+            )
+        subset: dict[str, Any] = {}
+        for proposal_id in introduced:
+            anchor = intent_anchors.get(proposal_id)
+            if not isinstance(anchor, Mapping):
+                raise V06ProofSearchError(
+                    f"trajectory-introduced proposal {proposal_id!r} lacks an intent anchor"
+                )
+            if anchor.get("introduced_iteration") != index:
+                raise V06ProofSearchError(
+                    f"trajectory-introduced proposal {proposal_id!r} has wrong iteration lineage"
+                )
+            subset[proposal_id] = _json_clone(anchor)
+        if step.get("introduced_intent_anchors_sha256") != _commitment(
+            {
+                key: subset[key]
+                for key in sorted(subset)
+            }
+        ):
+            raise V06ProofSearchError(
+                "proof search trajectory introduced-intent commitment is invalid"
+            )
+        introduced_from_trajectory.update(introduced)
+    if introduced_from_trajectory != derived_ids:
+        raise V06ProofSearchError(
+            "proof search trajectory does not exactly account for derived intents"
+        )
 
     cycle_detected = (
         iteration > 0 and current_state in seen_states[:-1]
