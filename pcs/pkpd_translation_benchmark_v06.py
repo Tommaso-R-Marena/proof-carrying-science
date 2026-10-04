@@ -13,6 +13,7 @@ from .discover_v06 import discover_project_v06
 from .external_validator_v06 import (
     EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
     EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
+    EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
     build_external_validator_receipt_payload_v06,
     sign_external_validator_receipt_v06,
 )
@@ -92,6 +93,7 @@ def _inventory_ids(discovery: Mapping[str, Any]) -> dict[str, str]:
         "study_protocol.md",
         "analysis.py",
         "validation_policy.json",
+        "validator_trust_policy.json",
     }
     missing = sorted(required - set(out))
     if missing:
@@ -177,6 +179,7 @@ def _empirical_proposal(
         ids["predictions.csv"],
         ids["observations.csv"],
         ids["validation_policy.json"],
+        ids["validator_trust_policy.json"],
     ]
     check: dict[str, Any] = {
         "id": "E_MODEL_EMPIRICAL_ADEQUACY",
@@ -201,12 +204,16 @@ def _empirical_proposal(
                     "validator_public_key.der"
                 ],
                 "validator_public_key_fingerprint": validator_fingerprint,
+                "validator_trust_policy_artifact": ids[
+                    "validator_trust_policy.json"
+                ],
                 "bound_artifact_ids": sorted(
                     [
                         ids["model.json"],
                         ids["predictions.csv"],
                         ids["observations.csv"],
                         ids["validation_policy.json"],
+                        ids["validator_trust_policy.json"],
                     ]
                 ),
             }
@@ -250,6 +257,19 @@ def _prepare_validator_receipt(
         serialization.PublicFormat.SubjectPublicKeyInfo,
     )
     (destination / "validator_public_key.der").write_bytes(public_der)
+    validator_fingerprint = public_key_fingerprint(public_key)
+    _json_write(
+        {
+            "format": EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
+            "validator": PKPD_RMSE_VALIDATOR_ID_V06,
+            "validator_public_key_fingerprint": validator_fingerprint,
+            "allowed_check_types": ["external_empirical_validation"],
+            "allowed_predicate_namespaces": [
+                _empirical_predicate()["namespace"]
+            ],
+        },
+        destination / "validator_trust_policy.json",
+    )
 
     preliminary = discover_project_v06(
         destination,
@@ -261,6 +281,7 @@ def _prepare_validator_receipt(
         "predictions.csv",
         "observations.csv",
         "validation_policy.json",
+        "validator_trust_policy.json",
     )
     artifact_bytes = {
         ids[path]: (destination / path).read_bytes()
@@ -285,7 +306,7 @@ def _prepare_validator_receipt(
         private_key,
     )
     _json_write(receipt, destination / "validator_receipt.json")
-    return validation, public_key_fingerprint(public_key)
+    return validation, validator_fingerprint
 
 
 def _proposal_document(
