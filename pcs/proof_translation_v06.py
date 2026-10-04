@@ -41,7 +41,7 @@ PROOF_TRANSLATION_FORMAT_V06 = "pcs-proof-translation-v1"
 PROOF_PROPOSALS_FORMAT_V06 = "pcs-proof-proposals-v1"
 CLAIM_IR_FORMAT_V06 = "pcs-claim-ir-v1"
 PROOF_OBLIGATION_GRAPH_FORMAT_V06 = "pcs-proof-obligation-graph-v1"
-PROOF_TRANSLATION_COMPILER_V06 = "pcs-proof-translation-compiler/0.3"
+PROOF_TRANSLATION_COMPILER_V06 = "pcs-proof-translation-compiler/0.4"
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 _DECOMPOSITION_RELATIONS_V06 = frozenset(
     {"root", "required_subclaim", "required_assumption", "external_obligation"}
@@ -804,6 +804,11 @@ _REPAIR_POLICY_BY_KIND: dict[str, dict[str, Any]] = {
         "action": "human_review_external_validator_trust",
         "actor": "human",
         "machine_assisted": False,
+    },
+    "DECOMPOSITION_LEAF_NEEDS_CHECK_OR_CHILDREN": {
+        "action": "decompose_claim",
+        "actor": "proposer",
+        "machine_assisted": True,
     },
 }
 
