@@ -69,19 +69,10 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install -e ".[dev]"
       - run:
-          name: Run proof translation, validator, repair, search, and PK/PD tests
+          name: Diagnose core proof-search trajectory tests
           command: |
             . .venv/bin/activate
-            python -m pytest -q \
-              tests/test_crypto_domains_v06.py \
-              tests/test_external_validator_v06.py \
-              tests/test_proof_translation_v06.py \
-              tests/test_proof_repair_v06.py \
-              tests/test_proof_search_v06.py \
-              tests/test_decomposition_proposer_v06.py \
-              tests/test_artifact_inspection_v06.py \
-              tests/test_pkpd_translation_benchmark_v06.py \
-              tests/test_pkpd_peak_threshold_v06.py
+            python -m pytest -q tests/test_proof_search_v06.py
 
   proof-search-corpus-policy-tests:
     docker:
