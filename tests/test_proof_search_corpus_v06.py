@@ -451,7 +451,7 @@ def test_decomposition_inspection_chain_is_verified_and_aligned(
     assert example["action"]["mode"] == "decompose"
     assert example["action"]["emitted_proposal_count"] == 1
     assert len(example["interaction_refs"]) == 4
-    assert record["content"]["interaction_payloads"]
+    assert example["content"]["interaction_payloads"]
     kinds = {
         item["kind"]
         for item in record["interaction_summaries"]
@@ -561,9 +561,19 @@ def test_corpus_is_deterministic_and_preserves_restricted_examples(
     assert first["format"] == PROOF_SEARCH_CORPUS_FORMAT_V06
     assert len(first["corpus_sha256"]) == 64
     assert first["summary"]["records"] == 2
-    assert first["summary"]["examples"] == 2
-    assert first["summary"]["split_counts"]["restricted"] == 1
-    assert first["summary"]["training_eligible_examples"] == 1
+    assert first["summary"]["examples"] == 1
+    assert first["summary"]["split_counts"] == {"restricted": 1}
+    assert first["summary"]["training_eligible_examples"] == 0
+    assert first["summary"]["evaluation_eligible_examples"] == 0
+    assert first["summary"]["content_bearing_examples"] == 0
+    example = first["examples"][0]
+    assert example["data_use"]["training_allowed"] is False
+    assert example["data_use"]["evaluation_allowed"] is False
+    assert example["data_use"]["content_export_allowed"] is False
+    assert example["data_use"]["aggregation_rule"] == "MOST_RESTRICTIVE"
+    assert example["content_included"] is False
+    assert "content" not in example
+    assert len(example["source_record_sha256s"]) == 2
     assert first["trust_model"]["corpus_is_proof_authority"] is False
 
 
@@ -673,3 +683,36 @@ def test_corpus_writer_rejects_tampering(
             tampered,
             tmp_path / "bad-corpus.json",
         )
+
+def test_corpus_keeps_content_only_when_all_duplicate_sources_allow_it(
+    tmp_path: Path,
+):
+    session = _replacement_session(tmp_path)
+    policy = _policy(
+        content=True,
+        evaluation=True,
+        training=True,
+    )
+    first_record = build_proof_search_record_v06(
+        tmp_path,
+        session,
+        data_use_policy=policy,
+        include_content=True,
+    )
+    second_record = build_proof_search_record_v06(
+        tmp_path,
+        session,
+        data_use_policy=policy,
+        include_content=True,
+    )
+
+    corpus = build_proof_search_corpus_v06(
+        [first_record, second_record]
+    )
+    assert corpus["summary"]["records"] == 1
+    assert corpus["summary"]["examples"] == 1
+    example = corpus["examples"][0]
+    assert example["data_use"]["training_allowed"] is True
+    assert example["content_included"] is True
+    assert example["content"]["emitted_proposals"][0]["check"]["key"] == "id"
+
