@@ -91,6 +91,15 @@ from .proof_search_v06 import (
     write_proof_search_session_v06,
     write_proof_search_trajectory_v06,
 )
+from .decomposition_proposer_v06 import (
+    V06DecompositionProposerError,
+    build_decomposition_proposer_request_v06,
+    compile_decomposition_proposer_response_v06,
+    load_decomposition_proposer_request_v06,
+    load_decomposition_proposer_response_v06,
+    write_decomposition_proposer_request_v06,
+    write_decomposition_repair_response_v06,
+)
 from .discovery_review_v06 import (
     V06DiscoveryReviewError,
     write_discovery_review_v06,
@@ -673,6 +682,119 @@ def cmd_advance_proof_search_v06(args):
             ),
         }
     except (OSError, V06ProofSearchError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_prepare_decomposition_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        session = load_proof_search_session_v06(args.session)
+        request = build_decomposition_proposer_request_v06(
+            root,
+            session,
+            proposal_id=args.proposal,
+        )
+        output = write_decomposition_proposer_request_v06(
+            request,
+            args.output,
+            overwrite=args.force,
+        )
+        response = {
+            "format": request["format"],
+            "protocol": request["protocol"],
+            "search_id": request["search_id"],
+            "proposal_id": request["target"]["proposal_id"],
+            "claim_id": request["target"]["claim"]["id"],
+            "decomposition_request_sha256": request[
+                "decomposition_request_sha256"
+            ],
+            "bounds": request["bounds"],
+            "decomposition_request": output,
+            "next": (
+                "Give this metadata-only, graph-bound request to an external "
+                "proposer. It must return pcs-decomposition-proposer-response-v1 "
+                "with decision 'decompose' or 'abstain', then run "
+                "pcs compile-decomposition-v06."
+            ),
+        }
+    except (
+        OSError,
+        V06ProofSearchError,
+        V06DecompositionProposerError,
+    ) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+
+    print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
+    return 0
+
+
+def cmd_compile_decomposition_v06(args):
+    try:
+        root = Path(args.project).resolve()
+        session = load_proof_search_session_v06(args.session)
+        request = load_decomposition_proposer_request_v06(args.request)
+        proposer_response = load_decomposition_proposer_response_v06(
+            args.response
+        )
+        compilation = compile_decomposition_proposer_response_v06(
+            root,
+            session,
+            request,
+            proposer_response,
+        )
+
+        repair_output = None
+        if compilation["status"] == "COMPILED_REPAIR_RESPONSE":
+            output = (
+                Path(args.output).resolve()
+                if args.output
+                else Path(args.response).resolve().with_name(
+                    Path(args.response).stem + ".repair.json"
+                )
+            )
+            repair_output = write_decomposition_repair_response_v06(
+                compilation,
+                output,
+                overwrite=args.force,
+            )
+
+        response = {
+            "format": compilation["format"],
+            "protocol": compilation["protocol"],
+            "status": compilation["status"],
+            "search_id": compilation["search_id"],
+            "decomposition_request_sha256": compilation[
+                "decomposition_request_sha256"
+            ],
+            "decomposition_response_sha256": compilation[
+                "decomposition_response_sha256"
+            ],
+            "repair_response": repair_output,
+            "authority": compilation["authority"],
+            "next": (
+                (
+                    f"Run pcs advance-proof-search-v06 {root} "
+                    f"{Path(args.session).resolve()} {repair_output} "
+                    "with a new output session path. PCS will deterministically "
+                    "retranslate every introduced child."
+                )
+                if repair_output is not None
+                else (
+                    "The proposer abstained. No PCS search state changed; route "
+                    "the unresolved claim to a human or another untrusted proposer."
+                )
+            ),
+        }
+    except (
+        OSError,
+        V06ProofSearchError,
+        V06DecompositionProposerError,
+    ) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
         return 2
 
@@ -1294,6 +1416,41 @@ def build_parser():
     )
     aps6.add_argument("--force", action="store_true")
     aps6.set_defaults(func=cmd_advance_proof_search_v06)
+
+    pd6 = sub.add_parser(
+        "prepare-decomposition-v06",
+        help="build one metadata-only, graph-bound request for an unresolved Claim IR leaf",
+    )
+    pd6.add_argument("project", help="unchanged scientific project directory")
+    pd6.add_argument("session", help="committed pcs-proof-repair-search-v1 JSON")
+    pd6.add_argument(
+        "-o",
+        "--output",
+        required=True,
+        help="write pcs-decomposition-proposer-request-v1 JSON",
+    )
+    pd6.add_argument(
+        "--proposal",
+        help="target proposal id when multiple decompose_claim tasks are available",
+    )
+    pd6.add_argument("--force", action="store_true")
+    pd6.set_defaults(func=cmd_prepare_decomposition_v06)
+
+    cd6 = sub.add_parser(
+        "compile-decomposition-v06",
+        help="compile one external decomposition proposal into an ordinary PCS repair response",
+    )
+    cd6.add_argument("project", help="unchanged scientific project directory")
+    cd6.add_argument("session", help="committed pcs-proof-repair-search-v1 JSON")
+    cd6.add_argument("request", help="pcs-decomposition-proposer-request-v1 JSON")
+    cd6.add_argument("response", help="pcs-decomposition-proposer-response-v1 JSON")
+    cd6.add_argument(
+        "-o",
+        "--output",
+        help="write standard pcs-proof-repair-proposals-v1 response; defaults beside response",
+    )
+    cd6.add_argument("--force", action="store_true")
+    cd6.set_defaults(func=cmd_compile_decomposition_v06)
 
     d6 = sub.add_parser(
         "discover-v06",
