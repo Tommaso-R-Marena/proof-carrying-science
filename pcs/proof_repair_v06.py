@@ -63,6 +63,7 @@ _ALLOWED_CHECK_KEYS = {
     "receipt_artifact",
     "validator_public_key_artifact",
     "validator_public_key_fingerprint",
+    "validator_trust_policy_artifact",
     "bound_artifact_ids",
 }
 _ALLOWED_ASSUMPTION_KEYS = {"id", "statement", "scope"}
