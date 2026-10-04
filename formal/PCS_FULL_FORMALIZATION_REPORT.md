@@ -17,7 +17,7 @@ the forbidden-declaration audit. **It passes.**
 > since been closed or narrowed; the authoritative, current inventory is
 > `formal/PCS_FRONTIER_FORMALIZATION_REPORT.md`. In short: SHA-256 is proved equal to an
 > independent FIPS 180-4 specification (`SHA256Spec.sha256_eq_fips1804`); `unit_compatible`,
-> `csv_disjoint`, `pkpd_contract` and `pkpd_reference_match` are replayed by proved Lean
+> `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`, and `pkpd_peak_concentration_threshold` are replayed by proved Lean
 > checkers inside the authority (`Checkers.builtinExecWith_faithful`), the PK/PD match with a
 > real-valued meaning (`PCSReal.PKPD.pcs_pkpd_reference_match_real`); the workflow oracle has
 > the semantics `Workflow.WorkflowDescribes`; environment capture has the verified meaning
@@ -421,9 +421,9 @@ does not imply byte reproducibility, so PCS must never conflate the two.
    semantics, or production use of such a decoder.
 7. **Capture.** — **NARROWED** to facts outside `PCS.V2.EnvFacts.EnvFacts` (`authority_capture_sound`). Original gap: `CaptureSound O.capture Describes`. This needs a Lean model of each
    capture rule (lockfile and pin extraction) and a proof against `Describes`.
-8. **Replay.** — **CLOSED for `unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`** (`PCS.V2.Checkers`, `PCS.V2.PKPDCheck`, real bridge `PCSReal.PKPD`); open only for external validators. Original gap: `ReplayFaithful fb Holds` for the check types other than
+8. **Replay.** — **CLOSED for `unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`, `pkpd_peak_concentration_threshold`** (`PCS.V2.Checkers`, `PCS.V2.PKPDCheck`, real bridge `PCSReal.PKPD`); open only for external validators. Original gap: `ReplayFaithful fb Holds` for the check types other than
    `reaction_balance`: `unit_compatible`, `csv_disjoint`, `pkpd_contract`,
-   `pkpd_reference_match`, and the external validators. `reaction_balance` is
+   `pkpd_reference_match`, `pkpd_peak_concentration_threshold`, and the external validators. `reaction_balance` is
    discharged by `chemExecWith_faithful`. `unit_compatible` and `csv_disjoint` are
    deterministic and could be transcribed the same way. The PK/PD checks involve
    floating point and need a floating-point semantics. Production also has to *run*
