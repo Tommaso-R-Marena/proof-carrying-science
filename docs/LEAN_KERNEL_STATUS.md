@@ -65,7 +65,10 @@ The precise current statement is:
 
 Still not claimed: an RFC 8032 proof of the Lean Ed25519 verifier, Ed25519 unforgeability,
 SHA-512 specification equivalence, a verified workflow front end or environment capture
-beyond `EnvFacts`, verification of external validators, or any empirical/clinical adequacy.
+beyond `EnvFacts`, Lean-verified scientific semantics for external validators, or any
+empirical/clinical adequacy. PCS can cryptographically replay a pinned signed external
+empirical/statistical validator receipt in the Python precheck, but the validator algorithm
+and adequacy of its policy remain explicit external trust assumptions.
 See `formal/PCS_FRONTIER_FORMALIZATION_REPORT.md`.
 
 Do not state that every production/runtime/cryptographic component is unconditionally formally verified end-to-end.
@@ -82,7 +85,9 @@ The representation bridge is now integrated. The remaining named boundaries are:
 - authoritative production validity is now gated on compiled Lean acceptance; the whole-Python-semantics equivalence problem is therefore avoided rather than claimed proved. The remaining operational bridge is the faithful handoff from Python ZIP decoding/materialization/process invocation to the exact member bytes Lean checks;
 - raw ZIP bytes -> semantic archive members (`ZipDecoderFaithful`);
 - environment-capture rules -> `Describes` (`CaptureSound`);
-- replay faithfulness for `unit_compatible`, `csv_disjoint`, PK/PD checks, and external validators;
+- external-validator scientific semantics: signed empirical/statistical receipts can now be
+  authenticated and bound to exact predicate/artifact bytes in the Python precheck, but PCS
+  does not prove the validator algorithm or policy scientifically adequate;
 - independent SHA-256 and Ed25519 specification-equivalence proofs;
 - Ed25519 unforgeability for the trusted key;
 - formal numerical semantics for the floating-point PK/PD path;
