@@ -170,6 +170,10 @@ def _normalize_predicate_v06(value: Any, *, label: str) -> Any:
         out["abs_tol"] = canonical_nonnegative_number_text_v06(
             out.get("abs_tol", 1e-12), label=f"{label} abs_tol"
         )
+    elif out.get("type") == "pkpd_peak_concentration_threshold":
+        out["upper_bound"] = canonical_nonnegative_number_text_v06(
+            out.get("upper_bound"), label=f"{label} upper_bound"
+        )
     return out
 
 
