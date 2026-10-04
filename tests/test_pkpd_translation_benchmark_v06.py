@@ -29,7 +29,7 @@ def test_realistic_pkpd_translation_benchmark_closes_only_supported_frontier(
     assert discovery["deterministic_pkpd_replay_recommendations"] == 0
 
     assert report["initial_search"]["status"] == "AWAITING_REPAIR"
-    assert report["initial_search"]["summary"]["repairable_tasks"] == 1
+    assert report["initial_search"]["summary"]["repairable_tasks"] == 2
     assert report["initial_search"]["replay_candidate_status"] == (
         "REJECTED_UNGROUNDED"
     )
@@ -37,15 +37,19 @@ def test_realistic_pkpd_translation_benchmark_closes_only_supported_frontier(
     final = report["final_search"]
     assert final["status"] == "BLOCKED_NO_MACHINE_REPAIR"
     assert final["summary"]["repairable_tasks"] == 0
-    assert final["summary"]["blocking_open_obligations"] == 2
-    assert final["summary"]["compiled_selected"] == 2
+    assert final["summary"]["blocking_open_obligations"] == 1
+    assert final["summary"]["compiled_selected"] == 3
     assert final["summary"]["trajectory_steps"] == 1
 
     frontier = report["proof_frontier"]
     assert len(frontier["theorem_backed"]) == 2
-    assert frontier["external_validator_required"][0]["status"] == (
-        "EXTERNAL_VALIDATOR_REQUIRED"
-    )
+    external = frontier["externally_validated_under_trust_contract"][0]
+    assert external["status"] == "COMPILED_EXTERNAL_VALIDATOR_BOUND"
+    assert external["reported_outcome"] == "PASS"
+    assert external["semantic_authority"] == "EXTERNAL_VALIDATOR_TRUST_REQUIRED"
+    assert report["design"]["external_validator"]["reference_validation_result"][
+        "outcome"
+    ] == "PASS"
     assert frontier["certified_checker_missing"][0]["status"] == (
         "OPEN_UNSUPPORTED_DOMAIN"
     )

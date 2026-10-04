@@ -316,9 +316,13 @@ pcs verify-v06-bundle study.pcs.zip \
 
 The initial MVP producer supports the built-in check types
 `csv_disjoint`, `reaction_balance`, `unit_compatible`,
-`pkpd_contract`, and `pkpd_reference_match`. External formal,
-empirical, statistical, and provenance evidence remain verifier-boundary work and
-are deliberately not auto-promoted to PASS by the producer.
+`pkpd_contract`, and `pkpd_reference_match`. It also supports a narrow signed-receipt
+adapter for `external_empirical_validation` and `external_statistical_validation`:
+PCS can verify a pinned Ed25519 validator identity, exact external predicate, exact
+artifact SHA-256 bindings, and the validator's reported PASS/FAIL. Those external
+results remain outside the certified Lean checker set; PCS does **not** thereby prove
+the validator algorithm, the scientific adequacy of its policy, or biological/clinical
+truth. External formal-proof and provenance evidence remain verifier-boundary work.
 
 A successful PCS verification means the delivered package is authentic under the
 selected public key, byte-bound, structurally consistent, freshly replayed for the
@@ -673,7 +677,7 @@ The v0.6 production verification path is **Lean-authoritative**: Python performs
 
 ## Current limitations
 
-- The exact Lean 4.28 v0.6/v2 assurance layer is integrated. Production now gates authoritative validity on Lean acceptance, avoiding a whole-Python-semantics equivalence claim. ZIP-decoder/materialization fidelity, process invocation, capture/workflow semantics, non-chemistry replay faithfulness, cryptographic unforgeability, and independent SHA-256/Ed25519 spec correspondence remain explicit boundaries.
+- The exact Lean 4.28 v0.6/v2 assurance layer is integrated. Production now gates authoritative validity on Lean acceptance, avoiding a whole-Python-semantics equivalence claim. ZIP-decoder/materialization fidelity, process invocation, capture/workflow semantics, external-validator scientific semantics, cryptographic unforgeability, and independent Ed25519/SHA-512 spec correspondence remain explicit boundaries.
 - No arbitrary Python/R/C++ correctness theorem is claimed.
 - The PK/PD adapter is intentionally restricted and synthetic-first.
 - Chemical parsing is intentionally narrow.

@@ -53,6 +53,12 @@ class V06SchedulerError(ValueError):
 
 
 def _evidence_artifact_ids(evidence: dict[str, Any]) -> list[str]:
+    recorded = evidence.get("artifact_ids")
+    if (
+        isinstance(recorded, list)
+        and all(isinstance(item, str) for item in recorded)
+    ):
+        return sorted(set(recorded))
     spec = evidence.get("check_spec")
     if not isinstance(spec, dict):
         return []

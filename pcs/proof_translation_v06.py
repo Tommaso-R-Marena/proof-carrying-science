@@ -24,6 +24,14 @@ from .discover_v06 import (
     V06DiscoveryError,
     discover_project_v06,
 )
+from .external_validator_v06 import (
+    EXTERNAL_VALIDATOR_CHECK_TYPES_V06,
+    V06ExternalValidatorError,
+    external_validator_adapter_missing_fields_v06,
+    external_validator_artifact_ids_v06,
+    normalize_external_validator_check_spec_v06,
+    verify_external_validator_receipt_v06,
+)
 from .jsonio import StrictJSONError, strict_json_load, strict_json_loads
 from .numeric_contract_v06 import V06NumericContractError
 from .schema_validation import SchemaValidationError, validate_manifest_shape
@@ -383,6 +391,11 @@ _REPAIR_POLICY_BY_KIND: dict[str, dict[str, Any]] = {
         "actor": "human",
         "machine_assisted": False,
     },
+    "EXTERNAL_VALIDATOR_TRUST_REVIEW_REQUIRED": {
+        "action": "human_review_external_validator_trust",
+        "actor": "human",
+        "machine_assisted": False,
+    },
 }
 
 
@@ -504,6 +517,430 @@ def _load_external_proposal_file(
     }, proposals
 
 
+def _compile_external_validator_proposal(
+    proposal: Mapping[str, Any],
+    *,
+    ident: str,
+    confidence: float,
+    confidence_threshold: float,
+    source: Mapping[str, Any],
+    claim_raw: Any,
+    check: dict[str, Any],
+    inventory: Mapping[str, Mapping[str, Any]],
+    project_root: Path,
+    result: dict[str, Any],
+) -> dict[str, Any]:
+    check_type = str(check.get("type"))
+    missing_adapter = external_validator_adapter_missing_fields_v06(check)
+    if missing_adapter:
+        result["status"] = "EXTERNAL_VALIDATOR_REQUIRED"
+        result["check"] = check
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "PROVIDE_EXTERNAL_VALIDATOR",
+                (
+                    "This external validation claim needs a signed, hash-bound "
+                    "validator receipt before PCS can replay it."
+                ),
+                blocking=True,
+                details={
+                    "check_type": check_type,
+                    "evidence_kind": EXTERNAL_CHECK_KIND_BY_TYPE_V06[check_type],
+                    "missing_adapter_fields": missing_adapter,
+                },
+            )
+        )
+        return result
+
+    try:
+        check_id = _safe_id(
+            check.get("id"),
+            label=f"proposal {ident} check id",
+        )
+        spec = normalize_external_validator_check_spec_v06(check)
+        check_refs = external_validator_artifact_ids_v06(spec)
+    except (V06ExternalValidatorError, V06ProofTranslationError) as exc:
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["check"] = check
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "INVALID_CHECK_SPEC",
+                f"The signed external-validator contract is invalid: {exc}",
+                blocking=True,
+            )
+        )
+        return result
+
+    declared_artifacts = proposal.get("artifact_ids", [])
+    if not isinstance(declared_artifacts, list) or not all(
+        isinstance(x, str) for x in declared_artifacts
+    ):
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["check"] = check
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "INVALID_ARTIFACT_GROUNDING",
+                "proposal artifact_ids must be an array of artifact IDs",
+                blocking=True,
+            )
+        )
+        return result
+
+    artifact_ids = sorted(set(declared_artifacts) | set(check_refs))
+    missing_refs = sorted(
+        artifact_id
+        for artifact_id in artifact_ids
+        if artifact_id not in inventory
+    )
+    if missing_refs:
+        result["status"] = "REJECTED_UNGROUNDED"
+        result["check"] = check
+        result["artifact_ids"] = artifact_ids
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "GROUND_ARTIFACTS",
+                (
+                    "The signed validator contract references artifacts outside "
+                    "the current discovery snapshot."
+                ),
+                blocking=True,
+                details={"missing_artifact_ids": missing_refs},
+            )
+        )
+        return result
+
+    try:
+        bound_bytes = {
+            artifact_id: _snapshot_bytes(project_root, inventory[artifact_id])
+            for artifact_id in check_refs
+        }
+    except V06ProofTranslationError as exc:
+        result["status"] = "REJECTED_UNGROUNDED"
+        result["check"] = check
+        result["artifact_ids"] = artifact_ids
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "PROVIDE_EXTERNAL_VALIDATOR",
+                str(exc),
+                blocking=True,
+                details={"check_type": check_type},
+            )
+        )
+        return result
+
+    receipt = verify_external_validator_receipt_v06(spec, bound_bytes)
+    if receipt.get("valid") is not True:
+        result["status"] = "REJECTED_UNGROUNDED"
+        result["check"] = check
+        result["artifact_ids"] = artifact_ids
+        result["grounding"] = {
+            "status": "FAILED",
+            "adapter": "signed_external_validator_receipt",
+            "errors": list(receipt.get("errors", [])),
+        }
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "PROVIDE_EXTERNAL_VALIDATOR",
+                (
+                    "The supplied signed external-validator receipt did not "
+                    "verify against the pinned key/predicate/artifact bytes."
+                ),
+                blocking=True,
+                details={
+                    "check_type": check_type,
+                    "errors": list(receipt.get("errors", [])),
+                },
+            )
+        )
+        return result
+
+    if not isinstance(claim_raw, Mapping):
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["check"] = check
+        result["artifact_ids"] = artifact_ids
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "CLAIM_REQUIRED",
+                "A signed external validator requires a scoped claim object.",
+                blocking=True,
+            )
+        )
+        return result
+
+    claim = _json_clone(claim_raw)
+    try:
+        claim_id = _safe_id(
+            claim.get("id"),
+            label=f"proposal {ident} claim id",
+        )
+        assumptions = _proposal_assumptions(proposal)
+    except V06ProofTranslationError as exc:
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["check"] = check
+        result["artifact_ids"] = artifact_ids
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "INVALID_CLAIM",
+                str(exc),
+                blocking=True,
+            )
+        )
+        return result
+
+    statement = claim.get("statement")
+    if not isinstance(statement, str) or not statement.strip():
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "CLAIM_STATEMENT_REQUIRED",
+                "The proposed claim requires a non-empty scientific statement.",
+                blocking=True,
+            )
+        )
+        return result
+
+    check_claim_ids = check.get("claim_ids")
+    if check_claim_ids is None:
+        check["claim_ids"] = [claim_id]
+    elif (
+        not isinstance(check_claim_ids, list)
+        or not all(isinstance(x, str) for x in check_claim_ids)
+        or sorted(check_claim_ids) != [claim_id]
+    ):
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "CLAIM_EVIDENCE_LINK_MISMATCH",
+                "The check claim_ids must contain exactly the proposed claim.",
+                blocking=True,
+            )
+        )
+        return result
+
+    assumption_ids = [assumption["id"] for assumption in assumptions]
+    provided_assumption_ids = claim.get("assumptions")
+    if provided_assumption_ids is None:
+        claim["assumptions"] = assumption_ids
+    elif (
+        not isinstance(provided_assumption_ids, list)
+        or sorted(provided_assumption_ids) != sorted(assumption_ids)
+    ):
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "ASSUMPTION_LINK_MISMATCH",
+                (
+                    "Claim assumption IDs do not exactly match the supplied "
+                    "assumption objects."
+                ),
+                blocking=True,
+            )
+        )
+        return result
+
+    required = claim.get("required_evidence")
+    if required is None:
+        claim["required_evidence"] = [check_id]
+    elif (
+        not isinstance(required, list)
+        or not all(isinstance(x, str) for x in required)
+        or sorted(required) != [check_id]
+    ):
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "CLAIM_EVIDENCE_LINK_MISMATCH",
+                "Claim required_evidence must contain exactly the proposed check.",
+                blocking=True,
+            )
+        )
+        return result
+
+    claim_kind = claim.get("kind", "empirical")
+    if claim_kind not in {"empirical", "mixed"}:
+        result["status"] = "REJECTED_INVALID_PROPOSAL"
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "INVALID_CLAIM_KIND",
+                (
+                    "Signed empirical/statistical validator evidence may support "
+                    "only empirical or mixed claims."
+                ),
+                blocking=True,
+            )
+        )
+        return result
+    claim["kind"] = claim_kind
+
+    predicate = _json_clone(spec["predicate"])
+    provided_predicate = claim.get("predicate")
+    if provided_predicate is not None and provided_predicate != predicate:
+        result["status"] = "REJECTED_PREDICATE_MISMATCH"
+        result["check"] = check
+        result["typed_claim"] = claim
+        result["artifact_ids"] = artifact_ids
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "PREDICATE_CHECK_MISMATCH",
+                (
+                    "The model-proposed external predicate differs from the exact "
+                    "predicate signed by the validator receipt."
+                ),
+                blocking=True,
+                details={
+                    "provided_predicate": _json_clone(provided_predicate),
+                    "derived_predicate": predicate,
+                },
+            )
+        )
+        return result
+
+    claim["predicate"] = predicate
+    normalized_check = {
+        "id": check_id,
+        "claim_ids": [claim_id],
+        **spec,
+    }
+    result["typed_claim"] = claim
+    result["check"] = normalized_check
+    result["artifact_ids"] = artifact_ids
+    result["assumptions"] = assumptions
+    result["formalizable"] = False
+    result["formal_target"] = None
+    result["validation_target"] = {
+        "type": "SIGNED_EXTERNAL_VALIDATOR_RECEIPT",
+        "validator": receipt["validator"],
+        "validator_public_key_fingerprint": receipt[
+            "validator_public_key_fingerprint"
+        ],
+        "receipt_payload_sha256": receipt["receipt_payload_sha256"],
+        "reported_outcome": receipt["outcome"],
+        "semantic_authority": receipt["semantic_authority"],
+        "trust_contract": _json_clone(receipt["trust_contract"]),
+    }
+    result["grounding"] = {
+        "status": "GROUNDED",
+        "adapter": "signed_external_validator_receipt",
+        "artifact_ids": check_refs,
+        "facts": [
+            "validator Ed25519 signature verified against pinned fingerprint",
+            "external predicate exactly matches signed receipt",
+            "all validator-bound artifact SHA-256 digests match project bytes",
+            f"validator reported {receipt['outcome']}",
+        ],
+    }
+
+    if confidence < confidence_threshold:
+        result["status"] = "REVIEW_ONLY_LOW_CONFIDENCE"
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "CONFIDENCE_BELOW_SELECTION_THRESHOLD",
+                (
+                    "The external validator contract compiled structurally but "
+                    "the model proposal is below the selection threshold."
+                ),
+                blocking=True,
+                details={
+                    "confidence": confidence,
+                    "threshold": confidence_threshold,
+                },
+            )
+        )
+        return result
+
+    result["selected"] = True
+    if receipt["outcome"] == "FAIL":
+        result["status"] = "COMPILED_EXTERNAL_VALIDATOR_FAIL"
+    else:
+        result["status"] = (
+            "COMPILED_EXTERNAL_VALIDATOR_BOUND_WITH_ASSUMPTIONS"
+            if assumptions
+            else "COMPILED_EXTERNAL_VALIDATOR_BOUND"
+        )
+
+    result["obligations"].append(
+        _obligation(
+            ident,
+            "HUMAN_CONFIRMATION_REQUIRED",
+            (
+                "PCS authenticated and grounded the validator receipt, but a "
+                "human must confirm that this externally validated predicate is "
+                "the intended scientific claim before attestation."
+            ),
+            blocking=False,
+        )
+    )
+    result["obligations"].append(
+        _obligation(
+            ident,
+            "EXTERNAL_VALIDATOR_TRUST_REVIEW_REQUIRED",
+            (
+                "PCS verifies validator identity/signature, predicate binding, "
+                "artifact hashes, and reported outcome. It does not prove the "
+                "validator algorithm or scientific adequacy of its policy."
+            ),
+            blocking=False,
+            details={
+                "validator": receipt["validator"],
+                "validator_public_key_fingerprint": receipt[
+                    "validator_public_key_fingerprint"
+                ],
+                "semantic_authority": receipt["semantic_authority"],
+            },
+        )
+    )
+    if source.get("kind") == "external_model":
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "MODEL_PROPOSAL_UNTRUSTED",
+                (
+                    "The external model remains a proposer only; it cannot set "
+                    "the validator outcome or PCS authority."
+                ),
+                blocking=False,
+            )
+        )
+    for assumption in assumptions:
+        result["obligations"].append(
+            _obligation(
+                ident,
+                "ASSUMPTION_REVIEW_REQUIRED",
+                f"Review assumption {assumption['id']}: {assumption['statement']}",
+                blocking=False,
+                details={"assumption_id": assumption["id"]},
+            )
+        )
+
+    normalized_translation = {
+        "claim": claim,
+        "check": normalized_check,
+        "artifact_ids": artifact_ids,
+        "assumptions": assumptions,
+        "grounding": result["grounding"],
+        "validation_target": result["validation_target"],
+    }
+    result["translation_sha256"] = hashlib.sha256(
+        canonicalize_jcs_bytes(normalized_translation)
+    ).hexdigest()
+    return result
+
+
 def _compile_proposal(
     proposal: Mapping[str, Any],
     *,
@@ -530,6 +967,7 @@ def _compile_proposal(
         "status": "OPEN_UNSTRUCTURED_FINDING",
         "formalizable": False,
         "formal_target": None,
+        "validation_target": None,
         "typed_claim": None,
         "check": None,
         "artifact_ids": [],
@@ -565,6 +1003,20 @@ def _compile_proposal(
         )
         return result
 
+    if check_type in EXTERNAL_VALIDATOR_CHECK_TYPES_V06:
+        return _compile_external_validator_proposal(
+            proposal,
+            ident=ident,
+            confidence=confidence,
+            confidence_threshold=confidence_threshold,
+            source=source,
+            claim_raw=claim_raw,
+            check=check,
+            inventory=inventory,
+            project_root=project_root,
+            result=result,
+        )
+
     if check_type in EXTERNAL_CHECK_KIND_BY_TYPE_V06:
         result["status"] = "EXTERNAL_VALIDATOR_REQUIRED"
         result["check"] = check
@@ -572,7 +1024,10 @@ def _compile_proposal(
             _obligation(
                 ident,
                 "PROVIDE_EXTERNAL_VALIDATOR",
-                "PCS recognizes this evidence family but the v0.6 producer cannot synthesize a verified PASS for it; supply a separately trusted validator/proof adapter.",
+                (
+                    "PCS recognizes this external evidence family, but no signed "
+                    "validator-receipt adapter is implemented for it."
+                ),
                 blocking=True,
                 details={
                     "check_type": check_type,
@@ -1050,9 +1505,13 @@ def _proof_obligation_graph(
                     "id": claim_node,
                     "type": "typed_claim",
                     "status": (
-                        "COMPILED"
+                        "COMPILED_FORMAL"
                         if candidate.get("formalizable") is True
-                        else "PROPOSED"
+                        else (
+                            "COMPILED_EXTERNAL"
+                            if candidate.get("selected") is True
+                            else "PROPOSED"
+                        )
                     ),
                     "claim_id": claim.get("id"),
                     "kind": claim.get("kind"),
@@ -1100,6 +1559,36 @@ def _proof_obligation_graph(
                 add_edge(check_node, node_id, "compiled_toward")
             else:
                 add_edge(proposal_node, node_id, "compiled_toward")
+
+        validation_target = candidate.get("validation_target")
+        if isinstance(validation_target, Mapping):
+            node_id = f"external_validator_target:{proposal_id}"
+            add_node(
+                {
+                    "id": node_id,
+                    "type": "external_validator_target",
+                    "status": "SIGNED_RECEIPT_BOUND",
+                    "target": _json_clone(validation_target),
+                }
+            )
+            if claim_node is not None:
+                add_edge(
+                    claim_node,
+                    node_id,
+                    "validated_under_external_trust_contract",
+                )
+            elif check_node is not None:
+                add_edge(
+                    check_node,
+                    node_id,
+                    "validated_under_external_trust_contract",
+                )
+            else:
+                add_edge(
+                    proposal_node,
+                    node_id,
+                    "validated_under_external_trust_contract",
+                )
 
         for obligation in candidate.get("obligations", []):
             if not isinstance(obligation, Mapping):

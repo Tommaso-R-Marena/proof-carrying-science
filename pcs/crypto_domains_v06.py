@@ -18,6 +18,7 @@ NORMALIZED_INDEX_DOMAIN = "pcs-normalized-index-sha256-v2"
 
 CERTIFICATE_SIGNATURE_DOMAIN = "pcs-certificate-signature-v2"
 PACKAGE_SIGNATURE_DOMAIN = "pcs-package-signature-v2"
+EXTERNAL_VALIDATOR_SIGNATURE_DOMAIN = "pcs-external-validator-receipt-signature-v1"
 
 HASH_DOMAINS = frozenset(
     {
@@ -34,6 +35,7 @@ SIGNATURE_DOMAINS = frozenset(
     {
         CERTIFICATE_SIGNATURE_DOMAIN,
         PACKAGE_SIGNATURE_DOMAIN,
+        EXTERNAL_VALIDATOR_SIGNATURE_DOMAIN,
     }
 )
 

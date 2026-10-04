@@ -10,6 +10,7 @@ from pcs.crypto_domains_v06 import (
     CERTIFICATE_INTEGRITY_DOMAIN,
     CERTIFICATE_SEMANTIC_DOMAIN,
     CERTIFICATE_SIGNATURE_DOMAIN,
+    EXTERNAL_VALIDATOR_SIGNATURE_DOMAIN,
     HASH_ENVELOPE_FORMAT,
     INTAKE_SEMANTIC_DOMAIN,
     PREDICATE_COMMITMENT_DOMAIN,
@@ -42,6 +43,7 @@ EXPECTED_HASHES = {
 EXPECTED_SIGNATURE_PAYLOAD_SHA256 = {
     CERTIFICATE_SIGNATURE_DOMAIN: "66b2b707526c28e7bb311ac05203712b133ed883fdc1158fd823b33205d04cd5",
     PACKAGE_SIGNATURE_DOMAIN: "cc81ab71e8ab901985fe8601bbd34b016be02d31c2c23fb8b8b5b0968c1a41cd",
+    EXTERNAL_VALIDATOR_SIGNATURE_DOMAIN: "2d1d5ef25c49078024246c77137809261589ead1ee278a98aaee6fb135847103",
 }
 
 
@@ -74,9 +76,15 @@ def test_v05_hash_is_not_reused_as_v06_domain_hash():
 
 
 def test_signature_domains_are_distinct_for_same_payload():
-    assert signature_payload_bytes(CERTIFICATE_SIGNATURE_DOMAIN, PAYLOAD) != signature_payload_bytes(
-        PACKAGE_SIGNATURE_DOMAIN, PAYLOAD
-    )
+    payloads = {
+        signature_payload_bytes(domain, PAYLOAD)
+        for domain in (
+            CERTIFICATE_SIGNATURE_DOMAIN,
+            PACKAGE_SIGNATURE_DOMAIN,
+            EXTERNAL_VALIDATOR_SIGNATURE_DOMAIN,
+        )
+    }
+    assert len(payloads) == 3
 
 
 def test_unknown_domains_fail_closed():

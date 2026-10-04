@@ -57,6 +57,14 @@ from .environment_replay_v06 import (
     V06EnvironmentReplayError,
     environment_binding_v06,
 )
+from .external_validator_v06 import (
+    EXTERNAL_VALIDATOR_CHECK_TYPES_V06,
+    V06ExternalValidatorError,
+    external_validator_adapter_missing_fields_v06,
+    external_validator_artifact_ids_v06,
+    external_validator_evidence_kind_v06,
+    normalize_external_validator_check_spec_v06,
+)
 from .lean_authority_v06 import V06LeanAuthorityError
 from .numeric_contract_v06 import (
     V06NumericContractError,
@@ -67,6 +75,7 @@ from .numeric_contract_v06 import (
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 _SUPPORTED_CHECK_TYPES = set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
+_SUPPORTED_EXTERNAL_RECEIPT_TYPES = set(EXTERNAL_VALIDATOR_CHECK_TYPES_V06)
 
 
 class V06AttestationError(ValueError):
@@ -120,17 +129,34 @@ def _safe_source_file(root: Path, relative: str, *, label: str) -> Path:
 
 def _check_spec_from_manifest(check: dict[str, Any]) -> dict[str, Any]:
     check_type = check.get("type")
-    if check_type not in _SUPPORTED_CHECK_TYPES:
-        raise V06AttestationError(
-            f"attest-v06 does not yet produce external evidence type {check_type!r}; "
-            f"supported built-in checks are {sorted(_SUPPORTED_CHECK_TYPES)}"
-        )
-    try:
-        return predicate_from_manifest_check_v06(check)
-    except (KeyError, ValueError, V06NumericContractError) as exc:
-        raise V06AttestationError(
-            f"invalid {check_type!r} check {check.get('id')!r}: {exc}"
-        ) from exc
+    if check_type in _SUPPORTED_CHECK_TYPES:
+        try:
+            return predicate_from_manifest_check_v06(check)
+        except (KeyError, ValueError, V06NumericContractError) as exc:
+            raise V06AttestationError(
+                f"invalid {check_type!r} check {check.get('id')!r}: {exc}"
+            ) from exc
+
+    if check_type in _SUPPORTED_EXTERNAL_RECEIPT_TYPES:
+        missing = external_validator_adapter_missing_fields_v06(check)
+        if missing:
+            raise V06AttestationError(
+                f"external validator check {check.get('id')!r} is missing "
+                f"signed-receipt fields: {missing}"
+            )
+        try:
+            return normalize_external_validator_check_spec_v06(check)
+        except V06ExternalValidatorError as exc:
+            raise V06AttestationError(
+                f"invalid signed external validator check {check.get('id')!r}: {exc}"
+            ) from exc
+
+    raise V06AttestationError(
+        f"attest-v06 does not produce external evidence type {check_type!r}; "
+        f"supported built-in checks are {sorted(_SUPPORTED_CHECK_TYPES)} and "
+        "signed-receipt adapters are supported for "
+        f"{sorted(_SUPPORTED_EXTERNAL_RECEIPT_TYPES)}"
+    )
 
 
 def _normalize_predicate_v06(value: Any, *, label: str) -> Any:
@@ -394,7 +420,22 @@ def build_attestation_directory_v06(
             spec = _check_spec_from_manifest(check)
         except V06NumericContractError as exc:
             raise V06AttestationError(str(exc)) from exc
-        artifact_refs = artifact_ids_from_predicate(spec)
+        if check.get("type") in _SUPPORTED_EXTERNAL_RECEIPT_TYPES:
+            try:
+                artifact_refs = external_validator_artifact_ids_v06(spec)
+                evidence_kind = external_validator_evidence_kind_v06(
+                    str(check.get("type"))
+                )
+            except V06ExternalValidatorError as exc:
+                raise V06AttestationError(str(exc)) from exc
+            checker_identity = spec["validator"]
+            predicate = deepcopy(spec["predicate"])
+        else:
+            artifact_refs = artifact_ids_from_predicate(spec)
+            evidence_kind = "computational_test"
+            checker_identity = CHECKER_VERSION_V06
+            predicate = deepcopy(spec)
+
         for artifact_id in artifact_refs:
             if artifact_id not in artifact_ids:
                 raise V06AttestationError(
@@ -403,11 +444,11 @@ def build_attestation_directory_v06(
 
         item: dict[str, Any] = {
             "id": check_id,
-            "kind": "computational_test",
+            "kind": evidence_kind,
             "claim_ids": claim_ids,
             "outcome": "UNVERIFIED",
-            "checker": CHECKER_VERSION_V06,
-            "predicate": deepcopy(spec),
+            "checker": checker_identity,
+            "predicate": predicate,
             "artifact_ids": artifact_refs,
             "check_spec": deepcopy(spec),
         }
