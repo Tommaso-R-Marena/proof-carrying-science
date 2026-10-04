@@ -194,7 +194,8 @@ def load_data_use_policy_v06(
         raise V06ProofSearchCorpusError(
             "proof-search data-use policy root must be an object"
         )
-    return validate_data_use_policy_v06(value)
+    validate_data_use_policy_v06(value)
+    return dict(value)
 
 
 def _problem_group_sha256(session: Mapping[str, Any]) -> str:
@@ -682,6 +683,20 @@ def build_proof_search_record_v06(
         include_content=include_content,
         repair_to_interactions=repair_to_interactions,
     )
+    if include_content:
+        for example in examples:
+            if example.get("content_included") is not True:
+                continue
+            content = example.get("content")
+            if not isinstance(content, dict):
+                raise V06ProofSearchCorpusError(
+                    "content-bearing example lacks content object"
+                )
+            content["interaction_payloads"] = {
+                ref: _clone(payloads[ref])
+                for ref in example.get("interaction_refs", [])
+                if ref in payloads
+            }
 
     problem_group = _problem_group_sha256(session)
     split = _split_for_problem_group(problem_group, policy)
@@ -729,22 +744,6 @@ def build_proof_search_record_v06(
             "human_confirmation_replay_and_lean_remain_authoritative": True,
         },
     }
-    if include_content:
-        referenced = sorted(
-            {
-                ref
-                for example in examples
-                for ref in example.get("interaction_refs", [])
-            }
-        )
-        core["content"] = {
-            "interaction_payloads": {
-                ref: _clone(payloads[ref])
-                for ref in referenced
-                if ref in payloads
-            }
-        }
-
     return {
         **core,
         "record_sha256": _commitment(core),
@@ -814,6 +813,46 @@ def _verify_record(record: Mapping[str, Any]) -> None:
         raise V06ProofSearchCorpusError(
             "proof-search record includes content without data-use authorization"
         )
+    examples = record.get("examples")
+    if not isinstance(examples, list):
+        raise V06ProofSearchCorpusError(
+            "proof-search record examples must be an array"
+        )
+    for example in examples:
+        if not isinstance(example, Mapping):
+            raise V06ProofSearchCorpusError(
+                "proof-search record example must be an object"
+            )
+        identity_core = {
+            key: _clone(value)
+            for key, value in example.items()
+            if key not in {
+                "example_id",
+                "split",
+                "content_included",
+                "content",
+            }
+        }
+        if (
+            not isinstance(example.get("example_id"), str)
+            or _commitment(identity_core) != example.get("example_id")
+        ):
+            raise V06ProofSearchCorpusError(
+                "proof-search example identity commitment is invalid"
+            )
+        if example.get("content_included") is True:
+            if data_use.get("content_export_allowed") is not True:
+                raise V06ProofSearchCorpusError(
+                    "proof-search example content violates data-use policy"
+                )
+            if not isinstance(example.get("content"), Mapping):
+                raise V06ProofSearchCorpusError(
+                    "content-bearing proof-search example lacks content"
+                )
+        elif "content" in example:
+            raise V06ProofSearchCorpusError(
+                "metadata-only proof-search example unexpectedly contains content"
+            )
 
 
 def build_proof_search_corpus_v06(
@@ -948,10 +987,19 @@ def build_proof_search_corpus_v06(
                     existing_example["content_included"] = False
                     existing_example.pop("content", None)
 
-    ordered_records = [
-        unique[key]
-        for key in sorted(unique)
-    ]
+    ordered_records = []
+    for key in sorted(unique):
+        record = unique[key]
+        ordered_records.append(
+            {
+                "record_sha256": record["record_sha256"],
+                "source_session": _clone(record["source_session"]),
+                "data_use": _clone(record["data_use"]),
+                "split": record.get("split"),
+                "summary": _clone(record.get("summary", {})),
+                "trust_model": _clone(record.get("trust_model", {})),
+            }
+        )
     ordered_examples = [
         examples[key]
         for key in sorted(examples)
