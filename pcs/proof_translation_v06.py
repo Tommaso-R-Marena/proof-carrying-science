@@ -2017,7 +2017,11 @@ def _proof_obligation_graph(
                         else (
                             "COMPILED_EXTERNAL"
                             if candidate.get("selected") is True
-                            else "PROPOSED"
+                            else (
+                                _candidate_closure_state(candidate)
+                                if isinstance(candidate.get("decomposition"), Mapping)
+                                else "PROPOSED"
+                            )
                         )
                     ),
                     "claim_id": claim.get("id"),
@@ -2194,6 +2198,7 @@ def _proof_obligation_graph(
 
     graph_core = {
         "format": PROOF_OBLIGATION_GRAPH_FORMAT_V06,
+        "claim_ir_sha256": claim_ir["claim_ir_sha256"],
         "roots": sorted(set(roots)),
         "nodes": ordered_nodes,
         "edges": ordered_edges,
