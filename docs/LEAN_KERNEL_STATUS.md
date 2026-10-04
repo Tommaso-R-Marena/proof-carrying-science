@@ -115,6 +115,25 @@ crashing, malformed, or rejecting authority cannot yield authoritative PCS valid
 
 For the exact theorem statements and TCB inventory, see `formal/PCS_FULL_FORMALIZATION_REPORT.md`.
 
+## 2026-10-04 CI metadata incident and resolution
+
+A repository audit found a discrepancy between the documented successful Lean build and the hosted `formal-wire-lean` status on later `main` commits.
+
+The Lean source was not broken. The Aristotle frontier integration commit `cec96c3b4a15a028a143b6ed00cb1b77a61dc69e` preserved the exact bytes of `scripts/verify_lean.sh` but changed its Git mode from executable `100755` to non-executable `100644`. CircleCI invokes that gate with `./scripts/verify_lean.sh`, so the job failed before the Lean build could run.
+
+A split diagnostic reproduced the distinction:
+
+- `lake build PCS` — PASS;
+- `lake build pcs-lean-authority` — PASS;
+- default `lake build` — PASS;
+- production source hygiene audit — PASS;
+- direct `./scripts/verify_lean.sh` with mode `100644` — FAIL;
+- direct `./scripts/verify_lean.sh` after restoring `100755` — PASS.
+
+PR #52 restored executable metadata for `scripts/verify_lean.sh` and `scripts/verify_lean_real.sh` without changing either script's bytes or any theorem/source content. The repaired baseline `2f5c9aa49f18ba3af03bbaf5590bae380d038de3` returned `formal-wire-lean` to green.
+
+Repository metadata is now covered by `python scripts/check_repository_integrity.py` and the policy in `docs/REPOSITORY_INTEGRITY_POLICY.md`.
+
 ## Reproduction gate
 
 From repository root:
