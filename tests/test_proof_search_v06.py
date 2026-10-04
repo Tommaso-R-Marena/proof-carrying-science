@@ -1050,3 +1050,165 @@ def test_decompose_claim_cannot_rewrite_parent_proposal(
             response,
         )
 
+def test_search_rejects_over_budget_initial_proposal_set(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+    proposals = [
+        {
+            **_root_decomposition_proposal(
+                ids,
+                proposal_id=f"MODEL_ROOT_{index}",
+                claim_id=f"C_ROOT_{index}",
+            ),
+            "finding": f"Methodological claim {index}.",
+            "claim": {
+                "id": f"C_ROOT_{index}",
+                "statement": f"Methodological claim {index}.",
+                "kind": "mixed",
+            },
+        }
+        for index in range(129)
+    ]
+    proposal_path = _proposal_file(
+        tmp_path,
+        discovery,
+        proposals,
+    )
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="initial proof search proposal budget is exceeded",
+    ):
+        start_proof_search_v06(
+            tmp_path,
+            proposal_files=[proposal_path],
+        )
+
+
+def test_search_rejects_over_budget_initial_decomposition_depth(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+    proposals = []
+    for depth in range(10):
+        proposal = {
+            "id": f"MODEL_DEPTH_{depth}",
+            "confidence": 0.99,
+            "finding": f"Nested scientific claim {depth}.",
+            "artifact_ids": [
+                ids["cohort_a.csv"],
+                ids["cohort_b.csv"],
+            ],
+            "claim": {
+                "id": f"C_DEPTH_{depth}",
+                "statement": f"Nested scientific claim {depth}.",
+                "kind": "mixed",
+            },
+            "decomposition": (
+                {
+                    "relation": "root",
+                    "depends_on_claim_ids": [],
+                }
+                if depth == 0
+                else {
+                    "parent_claim_id": f"C_DEPTH_{depth - 1}",
+                    "relation": "required_subclaim",
+                    "depends_on_claim_ids": [],
+                }
+            ),
+        }
+        proposals.append(proposal)
+    proposal_path = _proposal_file(
+        tmp_path,
+        discovery,
+        proposals,
+    )
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="initial proof search decomposition depth budget is exceeded",
+    ):
+        start_proof_search_v06(
+            tmp_path,
+            proposal_files=[proposal_path],
+        )
+
+
+def test_decompose_claim_rejects_more_than_eight_children(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+    root = _root_decomposition_proposal(ids)
+    proposal_path = _proposal_file(tmp_path, discovery, [root])
+    session = start_proof_search_v06(
+        tmp_path,
+        proposal_files=[proposal_path],
+    )
+    children = [
+        _claim_only_child(
+            ids,
+            proposal_id=f"MODEL_CHILD_{index}",
+            claim_id=f"C_CHILD_{index}",
+            parent_claim_id="C_ROOT",
+            confidence=0.99,
+        )
+        for index in range(9)
+    ]
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match=r"child count must be in \[1,8\]",
+    ):
+        advance_proof_search_v06(
+            tmp_path,
+            session,
+            _decomposition_response(
+                session,
+                parent_proposal_id="MODEL_ROOT",
+                children=children,
+            ),
+        )
+
+
+def test_decompose_claim_rejects_unknown_dependency(
+    tmp_path: Path,
+):
+    _write_csv_pair(tmp_path)
+    discovery = discover_project_v06(tmp_path)
+    ids = _inventory_ids(discovery)
+    root = _root_decomposition_proposal(ids)
+    proposal_path = _proposal_file(tmp_path, discovery, [root])
+    session = start_proof_search_v06(
+        tmp_path,
+        proposal_files=[proposal_path],
+    )
+    child = _claim_only_child(
+        ids,
+        proposal_id="MODEL_CHILD_DEP",
+        claim_id="C_CHILD_DEP",
+        parent_claim_id="C_ROOT",
+        confidence=0.99,
+    )
+    child["decomposition"]["depends_on_claim_ids"] = ["C_UNKNOWN"]
+
+    with pytest.raises(
+        V06ProofSearchError,
+        match="dependencies reference unknown claims",
+    ):
+        advance_proof_search_v06(
+            tmp_path,
+            session,
+            _decomposition_response(
+                session,
+                parent_proposal_id="MODEL_ROOT",
+                children=[child],
+            ),
+        )
+
