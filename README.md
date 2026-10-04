@@ -316,7 +316,7 @@ pcs verify-v06-bundle study.pcs.zip \
 
 The initial MVP producer supports the built-in check types
 `csv_disjoint`, `reaction_balance`, `unit_compatible`,
-`pkpd_contract`, and `pkpd_reference_match`. It also supports a narrow signed-receipt
+`pkpd_contract`, `pkpd_reference_match`, and `pkpd_peak_concentration_threshold`. The peak-threshold checker proves only that every concentration in the committed prediction table is at or below the committed bound in the model-declared concentration unit; it is not a continuous-time Cmax or clinical-safety theorem. It also supports a narrow signed-receipt
 adapter for `external_empirical_validation` and `external_statistical_validation`:
 PCS can verify a pinned Ed25519 validator identity, exact external predicate, exact
 artifact SHA-256 bindings, and the validator's reported PASS/FAIL. Those external
