@@ -84,6 +84,78 @@ jobs:
               tests/test_pkpd_translation_benchmark_v06.py \
               tests/test_pkpd_peak_threshold_v06.py
 
+  corpus-diag-core:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install corpus diagnostic environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run core record diagnostics
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "default_record or content_export_requires or synthetic_training_record or tampered_session or record_and_policy_files"
+
+  corpus-diag-policy:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install corpus diagnostic environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run corpus policy diagnostics
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "partner_training or training_policy or corpus_is_deterministic or problem_group_split or corpus_keeps_content or corpus_writer"
+
+  corpus-diag-interactions:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install corpus diagnostic environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run interaction provenance diagnostics
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "decomposition_inspection_chain or wrong_or_tampered_interaction or interaction_export_requires"
+
+  corpus-diag-cli:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install corpus diagnostic environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Run CLI round-trip diagnostic
+          command: |
+            . .venv/bin/activate
+            python -m pytest -q tests/test_proof_search_corpus_v06.py -k "record_and_corpus_cli_round_trip"
+
   product-demo-hardening:
     docker:
       - image: cimg/python:3.12
@@ -415,6 +487,18 @@ workflows:
                 - core/bounded-artifact-inspection-v1
                 - core/proof-search-corpus-v2
       - proof-search-python-tests:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
+      - corpus-diag-core:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
+      - corpus-diag-policy:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
+      - corpus-diag-interactions:
+          requires: [proof-search-syntax]
+          filters: *proof_search_branches
+      - corpus-diag-cli:
           requires: [proof-search-syntax]
           filters: *proof_search_branches
 
