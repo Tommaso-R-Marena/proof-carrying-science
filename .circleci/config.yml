@@ -83,9 +83,7 @@ jobs:
               tests/test_pkpd_translation_benchmark_v06.py \
               tests/test_pkpd_peak_threshold_v06.py
 
-  product-demo-hardening:
-    docker:
-      - image: c  proof-search-corpus-tests:
+  proof-search-corpus-tests:
     docker:
       - image: cimg/python:3.12
     steps:
@@ -103,7 +101,9 @@ jobs:
             . .venv/bin/activate
             python -m pytest -q tests/test_proof_search_corpus_v06.py
 
-img/python:3.12
+  product-demo-hardening:
+    docker:
+      - image: cimg/python:3.12
     steps:
       - checkout
       - run:
