@@ -47,7 +47,8 @@ jobs:
               tests/test_proof_translation_v06.py \
               tests/test_proof_repair_v06.py \
               tests/test_proof_search_v06.py \
-              tests/test_pkpd_translation_benchmark_v06.py
+              tests/test_pkpd_translation_benchmark_v06.py \
+              tests/test_pkpd_peak_threshold_v06.py
 
   proof-search-python-tests:
     docker:
@@ -71,7 +72,8 @@ jobs:
               tests/test_proof_translation_v06.py \
               tests/test_proof_repair_v06.py \
               tests/test_proof_search_v06.py \
-              tests/test_pkpd_translation_benchmark_v06.py
+              tests/test_pkpd_translation_benchmark_v06.py \
+              tests/test_pkpd_peak_threshold_v06.py
 
   product-demo-hardening:
     docker:
@@ -97,7 +99,7 @@ jobs:
           name: Run P0/P1 product hardening gates
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_pkpd_translation_benchmark_v06.py
+            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_pkpd_translation_benchmark_v06.py tests/test_pkpd_peak_threshold_v06.py
             python scripts/run_golden_examples_v06.py -o /tmp/pcs-golden-demo
             python scripts/run_pkpd_translation_benchmark_v06.py -o /tmp/pcs-pkpd-translation-benchmark
             python scripts/adversarial_v06_hardening.py
@@ -397,6 +399,7 @@ workflows:
                 - core/proof-search-coordinator-v1
                 - product/pkpd-realistic-translation-benchmark-v1
                 - core/signed-external-validator-receipts-v1
+                - core/pkpd-peak-threshold-checker-v1
       - proof-search-python-tests:
           requires: [proof-search-syntax]
           filters: *proof_search_branches
@@ -415,6 +418,7 @@ workflows:
                 - core/proof-search-coordinator-v1
                 - product/pkpd-realistic-translation-benchmark-v1
                 - core/signed-external-validator-receipts-v1
+                - core/pkpd-peak-threshold-checker-v1
 
   restoration-and-abi-evidence:
     jobs:
