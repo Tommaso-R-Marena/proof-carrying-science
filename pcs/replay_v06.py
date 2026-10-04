@@ -14,6 +14,12 @@ from .checks.chemistry import reaction_balanced
 from .checks.splits import csv_key_disjoint
 from .checks.units import units_compatible
 from .decision import assess_claim
+from .external_validator_v06 import (
+    EXTERNAL_VALIDATOR_CHECK_TYPES_V06,
+    external_validator_artifact_ids_v06,
+    is_signed_external_validator_spec_v06,
+    verify_external_validator_receipt_v06,
+)
 from .formal_coverage_v06 import CERTIFIED_BUILTIN_CHECK_TYPES_V06
 from .package_v06 import MAX_PACKAGE_SINGLE_FILE_V06, MAX_PACKAGE_TOTAL_BYTES_V06
 from .scheduler_v06 import (
@@ -119,24 +125,67 @@ def _replay_one(
                     "validator": spec["validator"],
                 },
             }
-        elif check_type == "external_empirical_validation":
-            return {
-                "id": evidence["id"],
-                "kind": "empirical_validation",
-                "outcome": "UNVERIFIED",
-                "details": {
-                    "reason": "external empirical validation is not established by the v0.6 built-in replay kernel",
-                    "validator": spec["validator"],
-                },
+        elif check_type in EXTERNAL_VALIDATOR_CHECK_TYPES_V06:
+            if not is_signed_external_validator_spec_v06(spec):
+                kind = (
+                    "empirical_validation"
+                    if check_type == "external_empirical_validation"
+                    else "statistical_validation"
+                )
+                return {
+                    "id": evidence["id"],
+                    "kind": kind,
+                    "outcome": "UNVERIFIED",
+                    "details": {
+                        "reason": (
+                            "external validation lacks a complete signed-receipt "
+                            "adapter contract"
+                        ),
+                        "validator": spec["validator"],
+                        "semantic_authority": "EXTERNAL_VALIDATOR_TRUST_REQUIRED",
+                    },
+                }
+
+            validator_artifacts = {
+                artifact_id: artifact_paths[artifact_id].read_bytes()
+                for artifact_id in external_validator_artifact_ids_v06(spec)
             }
-        elif check_type == "external_statistical_validation":
+            receipt = verify_external_validator_receipt_v06(
+                spec,
+                validator_artifacts,
+            )
+            if receipt.get("valid") is not True:
+                return {
+                    "id": evidence["id"],
+                    "kind": receipt["kind"],
+                    "outcome": "FAIL",
+                    "details": {
+                        "reason": "signed external validator receipt failed verification",
+                        "validator": spec["validator"],
+                        "errors": list(receipt.get("errors", [])),
+                        "semantic_authority": "EXTERNAL_VALIDATOR_TRUST_REQUIRED",
+                    },
+                }
             return {
                 "id": evidence["id"],
-                "kind": "statistical_validation",
-                "outcome": "UNVERIFIED",
+                "kind": receipt["kind"],
+                "outcome": receipt["outcome"],
                 "details": {
-                    "reason": "external statistical validation is not established by the v0.6 built-in replay kernel",
-                    "validator": spec["validator"],
+                    "reason": (
+                        "PCS verified the pinned validator signature, predicate, "
+                        "and exact artifact bindings; validator methodology remains "
+                        "an explicit external trust assumption"
+                    ),
+                    "validator": receipt["validator"],
+                    "validator_public_key_fingerprint": receipt[
+                        "validator_public_key_fingerprint"
+                    ],
+                    "receipt_payload_sha256": receipt[
+                        "receipt_payload_sha256"
+                    ],
+                    "artifact_bindings": receipt["artifact_bindings"],
+                    "trust_contract": receipt["trust_contract"],
+                    "semantic_authority": receipt["semantic_authority"],
                 },
             }
         elif check_type == "provenance_record":
