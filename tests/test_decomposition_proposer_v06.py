@@ -203,6 +203,7 @@ def test_request_is_exactly_bound_and_exposes_metadata_not_bytes(
     assert request["authority"]["request_contains_artifact_bytes"] is False
     assert request["authority"]["model_may_set_authoritative"] is False
     assert request["authority"]["model_may_rewrite_parent"] is False
+    assert len(request["target"]["candidate_snapshot_sha256"]) == 64
 
     assert {
         item["type"]
@@ -447,3 +448,57 @@ def test_response_binding_to_search_and_inventory_is_fail_closed(
             request,
             response,
         )
+
+def test_response_rejects_unsupported_side_channel_fields(
+    tmp_path: Path,
+):
+    _, session, ids = _start(tmp_path)
+    request = build_decomposition_proposer_request_v06(
+        tmp_path,
+        session,
+    )
+    response = _response(
+        request,
+        decision="decompose",
+        children=[_child_csv_proposal(ids)],
+    )
+    response["authoritative"] = True
+
+    with pytest.raises(
+        V06DecompositionProposerError,
+        match="unsupported fields",
+    ):
+        compile_decomposition_proposer_response_v06(
+            tmp_path,
+            session,
+            request,
+            response,
+        )
+
+
+def test_response_requires_explicit_external_model_proposer_kind(
+    tmp_path: Path,
+):
+    _, session, _ = _start(tmp_path)
+    request = build_decomposition_proposer_request_v06(
+        tmp_path,
+        session,
+    )
+    response = _response(
+        request,
+        decision="abstain",
+        reason="Insufficient evidence.",
+    )
+    response["proposer"]["kind"] = "trusted_oracle"
+
+    with pytest.raises(
+        V06DecompositionProposerError,
+        match="must be 'external_model'",
+    ):
+        compile_decomposition_proposer_response_v06(
+            tmp_path,
+            session,
+            request,
+            response,
+        )
+
