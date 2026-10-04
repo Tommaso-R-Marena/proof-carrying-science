@@ -11,6 +11,8 @@ Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
 
 > **Pre-publication / private founding build.** PCS is maintained in its own standalone repository and deliberately isolated from constituent research projects so those works can be published on their own terms first. See `docs/PUBLICATION_FIREWALL.md`.
 
+> **Repository integrity.** `main` is the authoritative integration branch. Before contributing, read `CONTRIBUTING.md` and `docs/REPOSITORY_INTEGRITY_POLICY.md`. Run `python scripts/check_repository_integrity.py` before every PR or release. The 2026-10-04 branch/CI reconciliation is recorded in `docs/BRANCH_RECONCILIATION_2026-10-04.md`.
+
 **Working category:** scientific assurance / formal verification infrastructure  
 **Initial vertical:** computational biopharma  
 **Long-term scope:** critical computation across biology, chemistry, AI, medicine, engineering, and other high-consequence sectors.

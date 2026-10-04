@@ -24,6 +24,15 @@ commands:
             lake build pcs-lean-authority
 
 jobs:
+  repository-integrity:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Verify repository metadata and governance invariants
+          command: python scripts/check_repository_integrity.py
+
   proof-search-syntax:
     docker:
       - image: cimg/python:3.12
@@ -388,6 +397,10 @@ jobs:
           command: echo "Python hash-locked wheel restoration, native ABI variation, and offline R renv restoration all passed."
 
 workflows:
+  repository-integrity-gate:
+    jobs:
+      - repository-integrity
+
   formal-v06-integration:
     jobs:
       - formal-v06-integration:

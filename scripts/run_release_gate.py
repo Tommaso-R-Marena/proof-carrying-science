@@ -117,6 +117,14 @@ def main() -> int:
     steps: list[dict] = []
     steps.append(
         _run(
+            "repository_integrity",
+            [sys.executable, "scripts/check_repository_integrity.py"],
+            ROOT,
+            run_dir,
+        )
+    )
+    steps.append(
+        _run(
             "doctor",
             [sys.executable, "-m", "pcs.cli", "doctor"],
             ROOT,
@@ -169,7 +177,13 @@ def main() -> int:
     else:
         lean_status = "NOT_AVAILABLE"
 
-    required_step_names = {"doctor", "pytest", "adversarial_campaign", "reference_demo"}
+    required_step_names = {
+        "repository_integrity",
+        "doctor",
+        "pytest",
+        "adversarial_campaign",
+        "reference_demo",
+    }
     python_ready = (
         not dirty
         and placeholder_audit["pass"]
