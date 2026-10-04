@@ -23,14 +23,17 @@ from .proof_translation_v06 import (
 
 PROOF_SEARCH_SESSION_FORMAT_V06 = "pcs-proof-repair-search-v1"
 PROOF_SEARCH_TRAJECTORY_FORMAT_V06 = "pcs-proof-repair-trajectory-v1"
-PROOF_SEARCH_COORDINATOR_V06 = "pcs-proof-repair-search-coordinator/0.1"
+PROOF_SEARCH_COORDINATOR_V06 = "pcs-proof-repair-search-coordinator/0.2"
 MAX_PROOF_SEARCH_ITERATIONS_V06 = 32
+MAX_PROOF_SEARCH_PROPOSALS_V06 = 128
+MAX_PROOF_SEARCH_DECOMPOSITION_DEPTH_V06 = 8
 
 _REWARD_CONTRACT_V06 = {
     "blocking_obligation_closed": 10,
     "compiled_selected_added": 4,
     "formalizable_candidate_added": 2,
     "repairable_task_closed": 1,
+    "decomposed_claim_added": 2,
     "iteration_cost": -1,
     "cycle_penalty": -10,
     "authority_meaning": (
@@ -507,6 +510,14 @@ def _translation_metrics(
         raise V06ProofSearchError(
             "translation/repair request summaries are missing"
         )
+    claim_ir = translation.get("claim_ir")
+    claim_ir_summary = (
+        claim_ir.get("summary")
+        if isinstance(claim_ir, Mapping)
+        else {}
+    )
+    if not isinstance(claim_ir_summary, Mapping):
+        claim_ir_summary = {}
     return {
         "blocking_open_obligations": int(
             summary.get("blocking_open_obligations", 0)
@@ -520,6 +531,9 @@ def _translation_metrics(
         ),
         "blocking_repairable_tasks": int(
             request_summary.get("blocking_repairable_tasks", 0)
+        ),
+        "decomposed_claims": int(
+            claim_ir_summary.get("decomposed_claims", 0)
         ),
     }
 
@@ -546,6 +560,10 @@ def _diagnostic_reward(
     reward += int(_REWARD_CONTRACT_V06["repairable_task_closed"]) * (
         int(before["repairable_tasks"])
         - int(after["repairable_tasks"])
+    )
+    reward += int(_REWARD_CONTRACT_V06["decomposed_claim_added"]) * (
+        int(after["decomposed_claims"])
+        - int(before["decomposed_claims"])
     )
     if cycle:
         reward += int(_REWARD_CONTRACT_V06["cycle_penalty"])
@@ -888,36 +906,99 @@ def _merge_repaired_proposals(
     *,
     inventory_commitment_sha256: str,
     intent_anchors: Mapping[str, Mapping[str, Any]],
-) -> list[dict[str, Any]]:
+    iteration: int,
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
     proposals = compiled_repairs.get("proposals")
     proposer = compiled_repairs.get("proposer")
-    if not isinstance(proposals, list) or not isinstance(proposer, Mapping):
+    provenance = compiled_repairs.get("repair_provenance")
+    if (
+        not isinstance(proposals, list)
+        or not isinstance(proposer, Mapping)
+        or not isinstance(provenance, Mapping)
+    ):
         raise V06ProofSearchError(
-            "compiled repair output lacks proposals/proposer"
+            "compiled repair output lacks proposals/proposer/provenance"
         )
-    replacement_ids = {
-        proposal.get("id")
-        for proposal in proposals
-        if isinstance(proposal, Mapping)
-        and isinstance(proposal.get("id"), str)
-    }
-    if len(replacement_ids) != len(proposals):
+    raw_effects = provenance.get("repairs")
+    if not isinstance(raw_effects, list):
         raise V06ProofSearchError(
-            "compiled repairs contain invalid or duplicate proposal ids"
+            "compiled repair provenance lacks repair effects"
         )
 
+    emitted_by_id: dict[str, Mapping[str, Any]] = {}
     for proposal in proposals:
         if not isinstance(proposal, Mapping):
             raise V06ProofSearchError(
                 "compiled repair proposal must be an object"
             )
         proposal_id = proposal.get("id")
-        anchor = intent_anchors.get(str(proposal_id))
-        if not isinstance(anchor, Mapping):
+        if not isinstance(proposal_id, str) or not proposal_id:
             raise V06ProofSearchError(
-                f"compiled repair proposal {proposal_id!r} lacks an intent anchor"
+                "compiled repair proposal requires an id"
             )
-        _assert_proposal_preserves_intent(proposal, anchor)
+        if proposal_id in emitted_by_id:
+            raise V06ProofSearchError(
+                f"compiled repairs contain duplicate proposal id {proposal_id!r}"
+            )
+        emitted_by_id[proposal_id] = proposal
+
+    replacement_ids: set[str] = set()
+    addition_lineage: dict[str, dict[str, Any]] = {}
+    for effect in raw_effects:
+        if not isinstance(effect, Mapping):
+            raise V06ProofSearchError(
+                "compiled repair provenance entry must be an object"
+            )
+        mode = effect.get("mode")
+        if mode == "replace":
+            proposal_id = effect.get("proposal_id")
+            if not isinstance(proposal_id, str):
+                raise V06ProofSearchError(
+                    "replacement provenance lacks proposal_id"
+                )
+            replacement_ids.add(proposal_id)
+        elif mode == "decompose":
+            parent_proposal_id = effect.get("proposal_id")
+            obligation_id = effect.get("obligation_id")
+            parent_claim_id = effect.get("parent_claim_id")
+            introduced = effect.get("introduced_proposal_ids")
+            if (
+                not isinstance(parent_proposal_id, str)
+                or not isinstance(obligation_id, str)
+                or not isinstance(parent_claim_id, str)
+                or not isinstance(introduced, list)
+                or not all(isinstance(item, str) for item in introduced)
+            ):
+                raise V06ProofSearchError(
+                    "decomposition provenance is malformed"
+                )
+            for proposal_id in introduced:
+                if proposal_id in addition_lineage:
+                    raise V06ProofSearchError(
+                        f"decomposition proposal {proposal_id!r} has duplicate lineage"
+                    )
+                addition_lineage[proposal_id] = {
+                    "origin": "decomposition",
+                    "parent_proposal_id": parent_proposal_id,
+                    "parent_claim_id": parent_claim_id,
+                    "decomposition_obligation_id": obligation_id,
+                    "introduced_iteration": iteration,
+                    "requires_human_review": True,
+                }
+        else:
+            raise V06ProofSearchError(
+                f"compiled repair provenance has unsupported mode {mode!r}"
+            )
+
+    addition_ids = set(addition_lineage)
+    if replacement_ids & addition_ids:
+        raise V06ProofSearchError(
+            "a proposal cannot be both replacement and decomposition addition"
+        )
+    if set(emitted_by_id) != replacement_ids | addition_ids:
+        raise V06ProofSearchError(
+            "compiled proposal ids do not exactly match repair provenance effects"
+        )
 
     known_ids = {
         proposal.get("id")
@@ -925,11 +1006,48 @@ def _merge_repaired_proposals(
         for proposal in document.get("proposals", [])
         if isinstance(proposal, Mapping)
     }
-    unknown = sorted(replacement_ids - known_ids)
-    if unknown:
+    unknown_replacements = sorted(replacement_ids - known_ids)
+    if unknown_replacements:
         raise V06ProofSearchError(
-            f"compiled repairs replace unknown active proposal ids: {unknown}"
+            f"compiled repairs replace unknown active proposal ids: {unknown_replacements}"
         )
+    collisions = sorted(addition_ids & known_ids)
+    if collisions:
+        raise V06ProofSearchError(
+            f"decomposition additions collide with active proposal ids: {collisions}"
+        )
+    if len(known_ids) + len(addition_ids) > MAX_PROOF_SEARCH_PROPOSALS_V06:
+        raise V06ProofSearchError(
+            "proof search proposal budget exceeded by decomposition"
+        )
+
+    next_anchors = {
+        str(key): _json_clone(value)
+        for key, value in intent_anchors.items()
+        if isinstance(key, str) and isinstance(value, Mapping)
+    }
+
+    for proposal_id in replacement_ids:
+        proposal = emitted_by_id[proposal_id]
+        anchor = next_anchors.get(proposal_id)
+        if not isinstance(anchor, Mapping):
+            raise V06ProofSearchError(
+                f"compiled repair proposal {proposal_id!r} lacks an intent anchor"
+            )
+        _assert_proposal_preserves_intent(proposal, anchor)
+
+    for proposal_id in sorted(addition_ids):
+        proposal = emitted_by_id[proposal_id]
+        lineage = addition_lineage[proposal_id]
+        parent_proposal_id = lineage["parent_proposal_id"]
+        if parent_proposal_id not in next_anchors:
+            raise V06ProofSearchError(
+                f"decomposition parent proposal {parent_proposal_id!r} lacks an intent anchor"
+            )
+        anchor = _proposal_intent_anchor(proposal)
+        anchor.update(_json_clone(lineage))
+        next_anchors[proposal_id] = anchor
+        _assert_proposal_preserves_intent(proposal, anchor)
 
     merged: list[dict[str, Any]] = []
     for document in active_documents:
@@ -955,15 +1073,31 @@ def _merge_repaired_proposals(
                 "format": PROOF_PROPOSALS_FORMAT_V06,
                 "inventory_commitment_sha256": inventory_commitment_sha256,
                 "proposer": _json_clone(proposer),
-                "proposals": [_json_clone(item) for item in proposals],
+                "proposals": [
+                    _json_clone(emitted_by_id[item])
+                    for item in sorted(emitted_by_id)
+                ],
             }
         )
 
-    return _validate_active_documents(
+    normalized = _validate_active_documents(
         merged,
         inventory_commitment_sha256=inventory_commitment_sha256,
     )
-
+    active_after = {
+        str(proposal.get("id"))
+        for document in normalized
+        for proposal in document.get("proposals", [])
+        if isinstance(proposal, Mapping)
+    }
+    if active_after != set(next_anchors):
+        raise V06ProofSearchError(
+            "proof search intent anchors do not exactly cover merged proposals"
+        )
+    return normalized, {
+        key: next_anchors[key]
+        for key in sorted(next_anchors)
+    }
 
 def start_proof_search_v06(
     project_root: str | Path,
@@ -1011,6 +1145,8 @@ def start_proof_search_v06(
     )
     intent_anchors = _intent_anchors_from_documents(documents)
     intent_anchors_sha256 = _commitment(intent_anchors)
+    initial_intent_anchors = _json_clone(intent_anchors)
+    initial_intent_anchors_sha256 = intent_anchors_sha256
     state_sha256 = _semantic_state_sha256(translation)
     metrics = _translation_metrics(translation, request)
     status = _search_status(
@@ -1023,7 +1159,7 @@ def start_proof_search_v06(
         {
             "initial_plan_sha256": translation.get("plan_sha256"),
             "inventory_commitment_sha256": inventory,
-            "intent_anchors_sha256": intent_anchors_sha256,
+            "initial_intent_anchors_sha256": initial_intent_anchors_sha256,
             "max_iterations": max_iterations,
         }
     )[:20]
@@ -1049,9 +1185,13 @@ def start_proof_search_v06(
             "repair_model_trusted": False,
             "diagnostic_reward_sets_authority": False,
             "scientific_intent_reproposal_requires_human": True,
+            "decomposition_model_trusted": False,
+            "decomposition_children_require_human_review": True,
             "human_confirmation_required": True,
             "replay_and_lean_authority_required": True,
         },
+        "initial_intent_anchors": initial_intent_anchors,
+        "initial_intent_anchors_sha256": initial_intent_anchors_sha256,
         "intent_anchors": intent_anchors,
         "intent_anchors_sha256": intent_anchors_sha256,
         "active_proposal_documents": documents,
@@ -1118,11 +1258,12 @@ def advance_proof_search_v06(
         raise V06ProofSearchError(
             "proof search session lacks intent anchors"
         )
-    merged_documents = _merge_repaired_proposals(
+    merged_documents, next_intent_anchors = _merge_repaired_proposals(
         active_documents,
         compiled,
         inventory_commitment_sha256=inventory,
         intent_anchors=intent_anchors,
+        iteration=next_iteration,
     )
     staged = _write_staged_proposal_documents(
         merged_documents,
@@ -1169,6 +1310,20 @@ def advance_proof_search_v06(
         raise V06ProofSearchError(
             "project inventory changed during proof search; restart from a new translation"
         )
+    claim_ir = after_translation.get("claim_ir")
+    claim_ir_summary = (
+        claim_ir.get("summary")
+        if isinstance(claim_ir, Mapping)
+        else None
+    )
+    if (
+        not isinstance(claim_ir_summary, Mapping)
+        or int(claim_ir_summary.get("max_decomposition_depth", 0))
+        > MAX_PROOF_SEARCH_DECOMPOSITION_DEPTH_V06
+    ):
+        raise V06ProofSearchError(
+            "proof search decomposition depth budget exceeded"
+        )
 
     after_state = _semantic_state_sha256(after_translation)
     seen_states = list(session["seen_state_sha256"])
@@ -1194,6 +1349,8 @@ def advance_proof_search_v06(
         > before_metrics["formalizable_candidates"]
         or after_metrics["repairable_tasks"]
         < before_metrics["repairable_tasks"]
+        or after_metrics["decomposed_claims"]
+        > before_metrics["decomposed_claims"]
     ):
         outcome = "OBJECTIVE_PROGRESS"
     else:
@@ -1215,9 +1372,22 @@ def advance_proof_search_v06(
             "compiled_repair_sha256"
         ),
         "repaired_proposal_ids": sorted(
-            str(item.get("id"))
-            for item in compiled.get("proposals", [])
-            if isinstance(item, Mapping)
+            str(effect.get("proposal_id"))
+            for effect in compiled.get("repair_provenance", {}).get("repairs", [])
+            if isinstance(effect, Mapping)
+            and effect.get("mode") == "replace"
+            and isinstance(effect.get("proposal_id"), str)
+        ),
+        "introduced_proposal_ids": sorted(
+            set(next_intent_anchors) - set(intent_anchors)
+        ),
+        "introduced_intent_anchors_sha256": _commitment(
+            {
+                proposal_id: next_intent_anchors[proposal_id]
+                for proposal_id in sorted(
+                    set(next_intent_anchors) - set(intent_anchors)
+                )
+            }
         ),
         "after_plan_sha256": after_translation.get("plan_sha256"),
         "after_graph_sha256": after_translation.get(
@@ -1266,6 +1436,8 @@ def advance_proof_search_v06(
             "iteration",
             "status",
             "active_proposal_documents",
+            "intent_anchors",
+            "intent_anchors_sha256",
             "current_translation",
             "current_repair_request",
             "seen_state_sha256",
@@ -1278,6 +1450,8 @@ def advance_proof_search_v06(
             "iteration": next_iteration,
             "status": status,
             "active_proposal_documents": merged_documents,
+            "intent_anchors": next_intent_anchors,
+            "intent_anchors_sha256": _commitment(next_intent_anchors),
             "current_translation": after_translation,
             "current_repair_request": after_request,
             "seen_state_sha256": next_seen,
