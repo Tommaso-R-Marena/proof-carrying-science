@@ -18,11 +18,13 @@ whose verdict the compiled `pcs-lean-authority` prints, see
 
 * `pcs_verified_builtin_acceptance_sound` — **no hypothesis at all**: acceptance implies
   structural assurance, per-claim `Assures`, and that every passing `reaction_balance`,
-  `unit_compatible`, `csv_disjoint`, `pkpd_contract` and `pkpd_reference_match` evidence
+  `unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`, and
+  `pkpd_peak_concentration_threshold` evidence
   item denotes its declarative scientific proposition (balanced reaction / equal physical
   dimension / disjoint strict-CSV key sets / restricted PK/PD positivity-and-dimension
   contract / certified-interval agreement of every reported row with the analytic PK/PD
-  model; the real-valued form is `PCSReal.PKPD.pcs_pkpd_reference_match_real`) on the
+  model; the real-valued form is `PCSReal.PKPD.pcs_pkpd_reference_match_real`), or a
+  committed-table concentration upper bound for the peak-threshold checker, on the
   exact committed request.  The transcript's PASS bit is never trusted for
   these kinds.
 * `pcs_high_assurance_acceptance_sound` — hypotheses: only `NoForgery` (2) for the Lean
