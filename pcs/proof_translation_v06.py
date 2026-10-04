@@ -2408,6 +2408,9 @@ def translate_project_v06(
             "proof compiler selection drifted from deterministic discovery selection"
         )
 
+    _apply_claim_decomposition_v06(candidates)
+    claim_ir = _claim_ir_v06(candidates)
+
     obligations = [
         obligation
         for candidate in candidates
@@ -2416,6 +2419,7 @@ def translate_project_v06(
     obligation_graph = _proof_obligation_graph(
         candidates,
         inventory=inventory,
+        claim_ir=claim_ir,
     )
     plan_core = {
         "format": PROOF_TRANSLATION_FORMAT_V06,
@@ -2424,6 +2428,7 @@ def translate_project_v06(
         "proposal_sources": proposal_sources,
         "candidates": candidates,
         "obligations": obligations,
+        "claim_ir": claim_ir,
         "obligation_graph": obligation_graph,
     }
     plan_commitment = hashlib.sha256(canonicalize_jcs_bytes(plan_core)).hexdigest()
@@ -2434,6 +2439,7 @@ def translate_project_v06(
         inventory=inventory,
         plan_commitment=plan_commitment,
         obligation_graph_commitment=obligation_graph["graph_sha256"],
+        claim_ir_commitment=claim_ir["claim_ir_sha256"],
     )
 
     status_counts: dict[str, int] = {}
@@ -2455,6 +2461,8 @@ def translate_project_v06(
             "human_confirmation_required": True,
             "authoritative_scientific_acceptance_requires_existing_pcs_replay_and_lean_authority": True,
             "model_output_can_never_directly_set_pass_or_authoritative": True,
+            "decomposition_children_do_not_imply_parent_authority": True,
+            "uncertified_parent_composition_requires_human_review": True,
         },
         "summary": {
             "proposals_total": len(candidates),
@@ -2469,6 +2477,10 @@ def translate_project_v06(
                 1 for candidate in candidates if candidate.get("formalizable") is True
             ),
             "blocking_open_obligations": len(open_blocking),
+            "claim_ir_claims": claim_ir["summary"]["claims"],
+            "decomposed_claims": claim_ir["summary"]["decomposed_claims"],
+            "decomposition_roots": claim_ir["summary"]["decomposition_roots"],
+            "max_decomposition_depth": claim_ir["summary"]["max_decomposition_depth"],
             "obligation_graph_nodes": obligation_graph["summary"]["nodes"],
             "obligation_graph_edges": obligation_graph["summary"]["edges"],
             "repair_actions": obligation_graph["summary"]["repair_actions"],
