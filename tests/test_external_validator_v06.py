@@ -12,6 +12,7 @@ from pcs.crypto_domains_v06 import CERTIFICATE_SIGNATURE_DOMAIN
 from pcs.external_validator_v06 import (
     EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
     EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
+    EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
     V06ExternalValidatorError,
     build_external_validator_receipt_payload_v06,
     external_validator_artifact_ids_v06,
@@ -46,10 +47,21 @@ def _fixture() -> tuple[dict, dict[str, bytes], dict]:
         serialization.Encoding.DER,
         serialization.PublicFormat.SubjectPublicKeyInfo,
     )
+    fingerprint = public_key_fingerprint(public)
+    trust_policy = canonicalize_jcs_bytes(
+        {
+            "format": EXTERNAL_VALIDATOR_TRUST_POLICY_FORMAT_V06,
+            "validator": "fixture-validator/1",
+            "validator_public_key_fingerprint": fingerprint,
+            "allowed_check_types": ["external_empirical_validation"],
+            "allowed_predicate_namespaces": [PREDICATE["namespace"]],
+        }
+    )
     bound = {
         "A_MODEL": b'{"model":"fixture"}\n',
         "A_DATA": b"time,value\n0,1\n1,2\n",
         "A_POLICY": b'{"threshold":"fixture"}\n',
+        "A_TRUST": trust_policy,
     }
     payload = build_external_validator_receipt_payload_v06(
         check_type="external_empirical_validation",
@@ -68,7 +80,8 @@ def _fixture() -> tuple[dict, dict[str, bytes], dict]:
         "trust_model": EXTERNAL_VALIDATOR_TRUST_MODEL_V06,
         "receipt_artifact": "A_RECEIPT",
         "validator_public_key_artifact": "A_KEY",
-        "validator_public_key_fingerprint": public_key_fingerprint(public),
+        "validator_public_key_fingerprint": fingerprint,
+        "validator_trust_policy_artifact": "A_TRUST",
         "bound_artifact_ids": sorted(bound),
     }
     all_bytes = {
@@ -96,6 +109,25 @@ def test_signed_external_validator_receipt_binds_identity_predicate_and_bytes():
         "validator_policy_scientific_adequacy",
         "biological_or_clinical_truth",
     ]
+
+
+def test_signed_validator_receipt_rejects_proposer_selected_untrusted_key():
+    spec, artifact_bytes, _ = _fixture()
+    forged_key = Ed25519PrivateKey.generate().public_key()
+    forged_der = forged_key.public_bytes(
+        serialization.Encoding.DER,
+        serialization.PublicFormat.SubjectPublicKeyInfo,
+    )
+    artifact_bytes["A_KEY"] = forged_der
+    spec["validator_public_key_fingerprint"] = public_key_fingerprint(forged_key)
+
+    checked = verify_external_validator_receipt_v06(
+        spec,
+        artifact_bytes,
+    )
+
+    assert checked["valid"] is False
+    assert any("trust policy" in error for error in checked["errors"])
 
 
 def test_signed_validator_receipt_fails_closed_if_bound_data_changes():
