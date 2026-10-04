@@ -1,6 +1,3 @@
 # Byte-contract fixtures must remain byte-for-byte identical on every checkout.
 # In particular, the signed v0.6 golden package commits exact LF bytes.
 tests/v06_golden/** -text
-
-# Directly runnable verification gates must keep Unix line endings.
-*.sh text eol=lf
