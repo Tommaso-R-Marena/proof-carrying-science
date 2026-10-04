@@ -267,7 +267,7 @@ Not in theorem types, i.e. outside the formal model (operational TCB):
 | `csv_disjoint` replay | `ReplayFaithful` (DictReader) | **proved** (strict subset) + run by authority |
 | `pkpd_contract` replay | `ReplayFaithful` (float) | **proved** (exact rationals) + run by authority |
 | `pkpd_reference_match` replay | `ReplayFaithful` (Decimal/float) | **proved**, real-valued meaning via certified `exp` enclosure + run by authority |
-| external validators | `ReplayFaithful` | unchanged (no claim made) |
+| external validators | `ReplayFaithful` | signed empirical/statistical receipt identity, signature, predicate and artifact bindings replayed in Python; scientific validator semantics remain external |
 | workflow oracle | Boolean, no meaning | `WorkflowDescribes` proved; front-end analysis remains |
 | environment capture | `CaptureSound` | `EnvFacts` proved for pins/hashes/interpreters/digest bases; rest unconcluded |
 | raw ZIP | `ZipDecoderFaithful` | **proved** for canonical STORED archives decoded by the compiled authority |
@@ -310,9 +310,16 @@ Not in theorem types, i.e. outside the formal model (operational TCB):
    executable specifications; a declarative grammar with `decimalQ_sound/complete` and a
    JSON-text grammar for `parseJsonDoc` would remove them from the "definition is the
    meaning" boundary.
-5. **External validators.** `ReplayFaithful` for `external_formal_proof`,
-   `external_*_validation`, `provenance_record` (e.g. an independently checkable proof
-   artifact as a new `CertifiedChecker`).
+5. **External-validator scientific semantics.** For
+   `external_empirical_validation` and `external_statistical_validation`, PCS now
+   verifies a domain-separated Ed25519 receipt from a pinned validator key, the exact
+   external predicate, and SHA-256 bindings to the exact referenced artifacts before
+   accepting the validator's reported PASS/FAIL into the transcript. This closes
+   authenticity/binding/reported-outcome replay in the Python precheck only. The validator
+   algorithm and scientific adequacy of its policy remain external trust assumptions and
+   are deliberately `NOT_IN_CERTIFIED_BUILTIN_SET`. `external_formal_proof` and
+   `provenance_record` remain unchanged. A future validator becomes Lean-scientific
+   authority only by being modeled as a new `CertifiedChecker` with a soundness theorem.
 6. **DEFLATE archives.** Only canonical STORED archives are Lean-decoded; a verified
    DEFLATE decoder would extend `leanZip_faithful`.
 7. **Binary64 agreement at extremes.** Not a soundness gap (fail-closed), see §5 item 21.
