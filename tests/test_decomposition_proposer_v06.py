@@ -502,3 +502,46 @@ def test_response_requires_explicit_external_model_proposer_kind(
             response,
         )
 
+def test_decomposition_protocol_rejects_unadvertised_checker_type(
+    tmp_path: Path,
+):
+    _, session, ids = _start(tmp_path)
+    request = build_decomposition_proposer_request_v06(
+        tmp_path,
+        session,
+    )
+    child = _child_csv_proposal(ids)
+    child["check"] = {
+        "id": "E_UNSUPPORTED",
+        "type": "invented_super_checker",
+        "claim_ids": ["C_DISJOINT"],
+    }
+
+    with pytest.raises(
+        V06DecompositionProposerError,
+        match="outside the advertised certified/external authority vocabulary",
+    ):
+        compile_decomposition_proposer_response_v06(
+            tmp_path,
+            session,
+            request,
+            _response(
+                request,
+                decision="decompose",
+                children=[child],
+            ),
+        )
+
+
+def test_every_advertised_certified_checker_has_fields_and_formal_target(
+    tmp_path: Path,
+):
+    _, session, _ = _start(tmp_path)
+    request = build_decomposition_proposer_request_v06(
+        tmp_path,
+        session,
+    )
+    for checker in request["available_authorities"]["certified_checkers"]:
+        assert checker["required_check_fields"]
+        assert checker["formal_target"]["proof_level"].startswith("LEAN")
+
