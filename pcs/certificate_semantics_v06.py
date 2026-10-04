@@ -56,9 +56,14 @@ def _validate_predicate_numeric_contract_v06(
     *,
     label: str,
 ) -> None:
-    if predicate.get("type") != "pkpd_reference_match":
+    predicate_type = predicate.get("type")
+    if predicate_type == "pkpd_peak_concentration_threshold":
+        keys = ("upper_bound",)
+    elif predicate_type == "pkpd_reference_match":
+        keys = ("rel_tol", "abs_tol")
+    else:
         return
-    for key in ("rel_tol", "abs_tol"):
+    for key in keys:
         value = predicate.get(key)
         try:
             canonical = canonical_nonnegative_number_text_v06(
@@ -88,7 +93,7 @@ def artifact_ids_from_predicate(predicate: dict[str, Any]) -> list[str]:
         return [predicate["left_artifact"], predicate["right_artifact"]]
     if predicate_type == "pkpd_contract":
         return [predicate["model_artifact"]]
-    if predicate_type == "pkpd_reference_match":
+    if predicate_type in {"pkpd_reference_match", "pkpd_peak_concentration_threshold"}:
         return [predicate["model_artifact"], predicate["output_artifact"]]
     return []
 
