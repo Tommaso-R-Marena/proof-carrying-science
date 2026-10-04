@@ -39,9 +39,13 @@ from .schema_validation import SchemaValidationError, validate_manifest_shape
 
 PROOF_TRANSLATION_FORMAT_V06 = "pcs-proof-translation-v1"
 PROOF_PROPOSALS_FORMAT_V06 = "pcs-proof-proposals-v1"
+CLAIM_IR_FORMAT_V06 = "pcs-claim-ir-v1"
 PROOF_OBLIGATION_GRAPH_FORMAT_V06 = "pcs-proof-obligation-graph-v1"
-PROOF_TRANSLATION_COMPILER_V06 = "pcs-proof-translation-compiler/0.2"
+PROOF_TRANSLATION_COMPILER_V06 = "pcs-proof-translation-compiler/0.3"
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
+_DECOMPOSITION_RELATIONS_V06 = frozenset(
+    {"root", "required_subclaim", "required_assumption", "external_obligation"}
+)
 
 
 class V06ProofTranslationError(ValueError):
@@ -65,6 +69,387 @@ def _confidence(value: Any, *, label: str) -> float:
     if not math.isfinite(result) or not 0.0 <= result <= 1.0:
         raise V06ProofTranslationError(f"{label} confidence must be finite in [0,1]")
     return result
+
+
+def _normalize_claim_ir_claim_v06(
+    value: Any,
+    *,
+    label: str,
+) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        raise V06ProofTranslationError(f"{label} must be an object")
+    claim_id = _safe_id(value.get("id"), label=f"{label} id")
+    statement = value.get("statement")
+    if not isinstance(statement, str) or not statement.strip():
+        raise V06ProofTranslationError(
+            f"{label} statement must be a non-empty string"
+        )
+    kind = value.get("kind", "computational")
+    if kind not in {"computational", "formal", "empirical", "mixed"}:
+        raise V06ProofTranslationError(
+            f"{label} has unsupported claim kind {kind!r}"
+        )
+    out: dict[str, Any] = {
+        "id": claim_id,
+        "statement": statement,
+        "kind": kind,
+    }
+    if "predicate" in value:
+        out["predicate"] = _json_clone(value.get("predicate"))
+    return out
+
+
+def normalize_claim_decomposition_v06(
+    value: Any,
+    *,
+    claim_id: str,
+) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        raise V06ProofTranslationError(
+            "claim decomposition metadata must be an object"
+        )
+    allowed = {"parent_claim_id", "relation", "depends_on_claim_ids"}
+    unexpected = sorted(set(value) - allowed)
+    if unexpected:
+        raise V06ProofTranslationError(
+            f"claim decomposition contains unsupported fields: {unexpected}"
+        )
+    relation = value.get("relation")
+    if relation not in _DECOMPOSITION_RELATIONS_V06:
+        raise V06ProofTranslationError(
+            f"unsupported claim decomposition relation: {relation!r}"
+        )
+    parent_raw = value.get("parent_claim_id")
+    if relation == "root":
+        if parent_raw is not None:
+            raise V06ProofTranslationError(
+                "root decomposition claim must not declare parent_claim_id"
+            )
+        parent_claim_id = None
+    else:
+        parent_claim_id = _safe_id(
+            parent_raw,
+            label="decomposition parent_claim_id",
+        )
+        if parent_claim_id == claim_id:
+            raise V06ProofTranslationError(
+                "decomposition claim cannot be its own parent"
+            )
+
+    raw_dependencies = value.get("depends_on_claim_ids", [])
+    if (
+        not isinstance(raw_dependencies, list)
+        or not all(isinstance(item, str) for item in raw_dependencies)
+    ):
+        raise V06ProofTranslationError(
+            "decomposition depends_on_claim_ids must be an array of claim IDs"
+        )
+    dependencies = [
+        _safe_id(item, label="decomposition dependency claim id")
+        for item in raw_dependencies
+    ]
+    if len(dependencies) != len(set(dependencies)):
+        raise V06ProofTranslationError(
+            "decomposition dependencies must not contain duplicates"
+        )
+    if claim_id in dependencies:
+        raise V06ProofTranslationError(
+            "decomposition claim cannot depend on itself"
+        )
+    return {
+        "parent_claim_id": parent_claim_id,
+        "relation": relation,
+        "depends_on_claim_ids": sorted(dependencies),
+    }
+
+
+def _candidate_ir_claim(candidate: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    typed = candidate.get("typed_claim")
+    if isinstance(typed, Mapping):
+        return typed
+    fallback = candidate.get("claim_ir_claim")
+    return fallback if isinstance(fallback, Mapping) else None
+
+
+def _candidate_has_blocking_obligation(candidate: Mapping[str, Any]) -> bool:
+    return any(
+        isinstance(item, Mapping) and item.get("blocking") is True
+        for item in candidate.get("obligations", [])
+    )
+
+
+def _apply_claim_decomposition_v06(
+    candidates: list[dict[str, Any]],
+) -> None:
+    claim_to_candidate: dict[str, dict[str, Any]] = {}
+    decomposed: dict[str, dict[str, Any]] = {}
+
+    for candidate in candidates:
+        claim = _candidate_ir_claim(candidate)
+        if not isinstance(claim, Mapping):
+            continue
+        claim_id = str(claim["id"])
+        existing = claim_to_candidate.get(claim_id)
+        if existing is not None and existing is not candidate:
+            raise V06ProofTranslationError(
+                f"duplicate claim id across proof proposals: {claim_id}"
+            )
+        claim_to_candidate[claim_id] = candidate
+        if isinstance(candidate.get("decomposition"), Mapping):
+            decomposed[claim_id] = candidate
+
+    if not decomposed:
+        return
+
+    children: dict[str, list[str]] = {claim_id: [] for claim_id in decomposed}
+    parent_of: dict[str, str | None] = {}
+    dependencies: dict[str, list[str]] = {}
+
+    for claim_id, candidate in decomposed.items():
+        metadata = candidate["decomposition"]
+        parent_id = metadata.get("parent_claim_id")
+        relation = metadata.get("relation")
+        parent_of[claim_id] = parent_id
+        dependencies[claim_id] = list(metadata.get("depends_on_claim_ids", []))
+        if relation == "root":
+            if parent_id is not None:
+                raise V06ProofTranslationError(
+                    f"decomposition root {claim_id!r} unexpectedly has a parent"
+                )
+        else:
+            if not isinstance(parent_id, str) or parent_id not in decomposed:
+                raise V06ProofTranslationError(
+                    f"decomposition claim {claim_id!r} references unknown "
+                    f"decomposition parent {parent_id!r}"
+                )
+            children[parent_id].append(claim_id)
+
+        for dependency in dependencies[claim_id]:
+            if dependency not in claim_to_candidate:
+                raise V06ProofTranslationError(
+                    f"decomposition claim {claim_id!r} depends on unknown "
+                    f"claim {dependency!r}"
+                )
+
+    depth_cache: dict[str, int] = {}
+    visiting: set[str] = set()
+
+    def depth(claim_id: str) -> int:
+        if claim_id in depth_cache:
+            return depth_cache[claim_id]
+        if claim_id in visiting:
+            raise V06ProofTranslationError(
+                "claim decomposition parent relation contains a cycle"
+            )
+        visiting.add(claim_id)
+        parent_id = parent_of[claim_id]
+        value = 0 if parent_id is None else depth(parent_id) + 1
+        visiting.remove(claim_id)
+        depth_cache[claim_id] = value
+        return value
+
+    for claim_id in decomposed:
+        depth(claim_id)
+
+    dependency_visiting: set[str] = set()
+    dependency_done: set[str] = set()
+
+    def visit_dependency(claim_id: str) -> None:
+        if claim_id in dependency_done:
+            return
+        if claim_id in dependency_visiting:
+            raise V06ProofTranslationError(
+                "claim decomposition dependency relation contains a cycle"
+            )
+        dependency_visiting.add(claim_id)
+        for dependency in dependencies.get(claim_id, []):
+            if dependency in dependencies:
+                visit_dependency(dependency)
+        dependency_visiting.remove(claim_id)
+        dependency_done.add(claim_id)
+
+    for claim_id in decomposed:
+        visit_dependency(claim_id)
+
+    for claim_id, candidate in decomposed.items():
+        candidate["decomposition"] = {
+            **_json_clone(candidate["decomposition"]),
+            "depth": depth_cache[claim_id],
+            "child_claim_ids": sorted(children[claim_id]),
+        }
+
+    # Evaluate structural closure from leaves upward.  Children may establish
+    # themselves, but their success never grants the parent scientific authority.
+    for claim_id in sorted(
+        decomposed,
+        key=lambda ident: (-depth_cache[ident], ident),
+    ):
+        candidate = decomposed[claim_id]
+        if isinstance(candidate.get("check"), Mapping):
+            continue
+        child_ids = sorted(children[claim_id])
+        if not child_ids:
+            candidate["status"] = "DECOMPOSITION_LEAF_UNRESOLVED"
+            candidate["obligations"].append(
+                _obligation(
+                    candidate["id"],
+                    "DECOMPOSITION_LEAF_NEEDS_CHECK_OR_CHILDREN",
+                    (
+                        "This decomposed leaf has no deterministic/external check "
+                        "and no child claims that could further refine it."
+                    ),
+                    blocking=True,
+                    details={"claim_id": claim_id},
+                )
+            )
+            continue
+
+        blocked_children = [
+            child_id
+            for child_id in child_ids
+            if _candidate_has_blocking_obligation(claim_to_candidate[child_id])
+        ]
+        if blocked_children:
+            candidate["status"] = "DECOMPOSITION_BLOCKED_BY_CHILDREN"
+            candidate["obligations"].append(
+                _obligation(
+                    candidate["id"],
+                    "DECOMPOSITION_CHILD_BLOCKED",
+                    (
+                        "At least one required decomposed child still has an "
+                        "open blocking obligation."
+                    ),
+                    blocking=True,
+                    details={
+                        "claim_id": claim_id,
+                        "blocked_child_claim_ids": blocked_children,
+                    },
+                )
+            )
+        else:
+            candidate["status"] = (
+                "DECOMPOSED_CHILDREN_CLOSED_PARENT_REVIEW_REQUIRED"
+            )
+            candidate["obligations"].append(
+                _obligation(
+                    candidate["id"],
+                    "COMPOSITION_SEMANTICS_REVIEW_REQUIRED",
+                    (
+                        "All direct child claims are machine-closed, but PCS has "
+                        "no certified rule asserting that those children entail "
+                        "the broader parent scientific statement."
+                    ),
+                    blocking=False,
+                    details={
+                        "claim_id": claim_id,
+                        "child_claim_ids": child_ids,
+                    },
+                )
+            )
+
+
+def _claim_ir_v06(
+    candidates: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    claims: list[dict[str, Any]] = []
+    relations: list[dict[str, Any]] = []
+    roots: list[str] = []
+
+    for candidate in sorted(candidates, key=lambda item: str(item.get("id", ""))):
+        claim = _candidate_ir_claim(candidate)
+        if not isinstance(claim, Mapping):
+            continue
+        claim_id = str(claim["id"])
+        decomposition = candidate.get("decomposition")
+        closure_state = _candidate_closure_state(candidate)
+        entry = {
+            "claim_id": claim_id,
+            "proposal_id": candidate.get("id"),
+            "statement": claim.get("statement"),
+            "kind": claim.get("kind"),
+            "predicate": _json_clone(claim.get("predicate")),
+            "closure_state": closure_state,
+            "candidate_status": candidate.get("status"),
+            "selected": candidate.get("selected") is True,
+            "formalizable": candidate.get("formalizable") is True,
+            "decomposition": (
+                _json_clone(decomposition)
+                if isinstance(decomposition, Mapping)
+                else None
+            ),
+            "authority": {
+                "children_can_set_parent_authority": False,
+                "composition_semantics_certified": False,
+                "human_review_required_for_uncertified_composition": True,
+            },
+        }
+        claims.append(entry)
+
+        if isinstance(decomposition, Mapping):
+            parent_id = decomposition.get("parent_claim_id")
+            relation = decomposition.get("relation")
+            if relation == "root":
+                roots.append(claim_id)
+            elif isinstance(parent_id, str):
+                relations.append(
+                    {
+                        "kind": "decomposition",
+                        "from_claim_id": parent_id,
+                        "to_claim_id": claim_id,
+                        "relation": relation,
+                    }
+                )
+            for dependency in decomposition.get("depends_on_claim_ids", []):
+                relations.append(
+                    {
+                        "kind": "dependency",
+                        "from_claim_id": dependency,
+                        "to_claim_id": claim_id,
+                        "relation": "depends_on",
+                    }
+                )
+
+    relations.sort(
+        key=lambda item: (
+            str(item["kind"]),
+            str(item["from_claim_id"]),
+            str(item["to_claim_id"]),
+            str(item["relation"]),
+        )
+    )
+    core = {
+        "format": CLAIM_IR_FORMAT_V06,
+        "claims": claims,
+        "relations": relations,
+        "roots": sorted(set(roots)),
+        "summary": {
+            "claims": len(claims),
+            "decomposed_claims": sum(
+                1 for item in claims if item["decomposition"] is not None
+            ),
+            "decomposition_roots": len(set(roots)),
+            "decomposition_relations": sum(
+                1 for item in relations if item["kind"] == "decomposition"
+            ),
+            "dependency_relations": sum(
+                1 for item in relations if item["kind"] == "dependency"
+            ),
+            "max_decomposition_depth": max(
+                (
+                    int(item["decomposition"].get("depth", 0))
+                    for item in claims
+                    if isinstance(item.get("decomposition"), Mapping)
+                ),
+                default=0,
+            ),
+        },
+    }
+    return {
+        **core,
+        "claim_ir_sha256": hashlib.sha256(
+            canonicalize_jcs_bytes(core)
+        ).hexdigest(),
+    }
 
 
 def _snapshot_bytes(root: Path, item: Mapping[str, Any]) -> bytes:
