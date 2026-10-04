@@ -212,6 +212,9 @@ _PCS_CONTROL_DOCUMENT_FORMATS = {
     "pcs-decomposition-proposer-compilation-v1",
     "pcs-artifact-inspection-query-v1",
     "pcs-artifact-inspection-result-v1",
+    "pcs-proof-search-data-use-policy-v1",
+    "pcs-proof-search-record-v1",
+    "pcs-proof-search-corpus-v2",
 }
 
 
