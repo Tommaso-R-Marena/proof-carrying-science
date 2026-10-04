@@ -61,7 +61,7 @@ See:
 
 The precise current statement is:
 
-> **The exact PCS v0.6/v2 package/archive assurance layer is machine-checked in Lean 4.28.0. For the Lean-authoritative path on canonical archives, the only remaining hypothesis is Ed25519 unforgeability for the trust anchor (`PCS.V2.Frontier.pcs_frontier_archive_acceptance_sound`). SHA-256 is proved equal to an independent FIPS 180-4 specification; `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract` and `pkpd_reference_match` are replayed by proved Lean checkers inside the authority, and a PK/PD PASS has a proved real-valued meaning (`PCSReal.PKPD.pcs_pkpd_reference_match_real`).**
+> **The exact PCS v0.6/v2 package/archive assurance layer is machine-checked in Lean 4.28.0. For the Lean-authoritative path on canonical archives, the only remaining hypothesis is Ed25519 unforgeability for the trust anchor (`PCS.V2.Frontier.pcs_frontier_archive_acceptance_sound`). SHA-256 is proved equal to an independent FIPS 180-4 specification; `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract`, `pkpd_reference_match`, and `pkpd_peak_concentration_threshold` are replayed by proved Lean checkers inside the authority. `pkpd_reference_match` additionally has a proved real-valued meaning (`PCSReal.PKPD.pcs_pkpd_reference_match_real`); the peak-threshold theorem is deliberately scoped to exact concentrations in the committed prediction table, not the continuous-time model or clinical safety.**
 
 Still not claimed: an RFC 8032 proof of the Lean Ed25519 verifier, Ed25519 unforgeability,
 SHA-512 specification equivalence, a verified workflow front end or environment capture
