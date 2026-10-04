@@ -12,6 +12,10 @@ At that commit, CircleCI reported green status for the production formal gate, p
 
 The durable repository-integrity/reconciliation policy was then merged through PR #53 as commit `87d494417d685042834fbb48735d62f87c74e1e3`. This record is a dated historical snapshot; always compare against the current `main` before making a new merge decision.
 
+## Open settings-level enforcement gap
+
+GitHub reports `main` as unprotected as of this audit. The new `ci/circleci: repository-integrity` check is green and runs on every branch, but repository settings do not yet block merge when that check fails. Issue #54 tracks enabling protection/rules for `main` and requiring the integrity status.
+
 ## Executive conclusion
 
 No existing non-`main` branch is approved for wholesale merge into current `main`.
