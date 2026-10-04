@@ -171,6 +171,7 @@ The producer currently supports these executable checks:
 - `unit_compatible`
 - `pkpd_contract`
 - `pkpd_reference_match`
+- `pkpd_peak_concentration_threshold` — maximum reported concentration in the committed prediction table only; not continuous-time Cmax or a safety claim
 
 This is intentionally narrower than the certificate schema. External proof,
 empirical, statistical, and provenance evidence remain explicit boundaries and are
