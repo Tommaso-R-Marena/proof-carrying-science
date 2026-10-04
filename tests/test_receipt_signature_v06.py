@@ -139,6 +139,7 @@ def _coherent_receipt(*, accepted: bool = True) -> dict:
             "certified_checker_types": [
                 "csv_disjoint",
                 "pkpd_contract",
+                "pkpd_peak_concentration_threshold",
                 "pkpd_reference_match",
                 "reaction_balance",
                 "unit_compatible",
