@@ -46,11 +46,11 @@ Do not promote inventory counts to executed claims without the retained run dire
 8. Review all OPEN and failed claims; do not suppress them.
 9. Confirm `LIMITATIONS.md` accurately reflects certificate scope.
 10. Independently verify the evidence ZIP from a fresh temporary directory.
-11. For signed pilots, verify against the pinned expected signer fingerprint.
+11. For signed pilots, verify against the pinned expected signer fingerprint and check that fingerprint at the certificate/signature time against the pilot signer-lifecycle registry.
 12. Apply the reviewer-supplied acceptance policy.
-13. Record bundle SHA-256 and release metadata.
+13. Record bundle SHA-256, signer-registry semantic hash, and release metadata.
 14. Deliver only through the approved channel.
-15. Complete retention/deletion obligations after reviewer acceptance/closeout.
+15. Complete retention/deletion obligations after reviewer acceptance/closeout using the exact closeout plan/receipt procedure in `docs/PILOT_CLOSEOUT.md`.
 
 ## No silent overwrite
 
@@ -61,7 +61,7 @@ PCS attestation refuses non-empty output directories. A new run creates a new ev
 ### Integrity/authenticity incident
 Examples: signature mismatch, package-manifest mismatch, leaked signing key, altered report, unbound file.
 
-Action: stop delivery/use of the affected package, preserve bytes/logs, determine affected signer/releases, rotate key if relevant, and reissue only after root cause is understood.
+Action: stop delivery/use of the affected package, preserve bytes/logs, determine affected signer/releases, update the signer lifecycle registry, rotate or revoke the key as appropriate under `docs/SIGNING_KEY_CUSTODY.md`, and reissue only after root cause is understood.
 
 ### Scientific-assurance incident
 Examples: a check was unsound, a hidden dependency invalidates a claim, a workflow artifact was omitted, an accepted claim should have remained OPEN.

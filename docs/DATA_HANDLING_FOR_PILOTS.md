@@ -25,9 +25,22 @@ Each partner engagement should use a separate private workspace. Access should b
 
 Record cryptographic hashes of source artifacts at intake. Transformations made for PCS analysis should be separately identified rather than silently replacing the originals.
 
-## Retention
+## Retention and deletion
 
-The pilot agreement should state a retention period and deletion process. Default operational preference: retain the final signed certificate and permitted evidence package; delete unnecessary raw partner data after the agreed closeout window.
+The pilot agreement should state a retention period, closeout trigger, and deletion process. Default operational preference: retain only the final signed assurance records and other expressly permitted evidence; delete unnecessary raw partner data and temporary working copies after the agreed closeout window.
+
+PCS now has a fail-closed local closeout mechanism in `scripts/pilot_closeout.py`:
+
+- the plan must classify every regular workspace file as RETAIN or DELETE;
+- it binds exact size/SHA-256 for each file;
+- apply requires the exact plan hash;
+- any added, removed, modified, or symlinked file aborts the operation;
+- only planned DELETE files are unlinked;
+- a hash-bound receipt records what was deleted and what remained.
+
+Use `docs/PILOT_CLOSEOUT.md` for the operational procedure.
+
+The receipt is evidence of the local closeout execution only. It is **not** proof of secure media erasure or deletion from cloud snapshots, backups, transfer services, or third-party systems.
 
 ## Research separation
 

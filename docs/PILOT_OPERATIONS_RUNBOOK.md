@@ -21,6 +21,8 @@ Accept a pilot only when all of the following are true:
 3. Freeze the initial claim inventory and assumptions.
 4. Record which files are expected and which are explicitly out of scope.
 5. Create a dedicated private workspace with least-privilege access.
+6. Initialize/confirm the pilot producer-signing registry under `docs/SIGNING_KEY_CUSTODY.md`; record the ACTIVE signer fingerprint in intake.
+7. Confirm the agreed retention trigger, deletion date, and which final evidence records may survive closeout.
 
 ## Assurance execution
 
@@ -31,9 +33,11 @@ Accept a pilot only when all of the following are true:
 5. Run the relevant adversarial tests.
 6. Review all OPEN / FAILED claims manually; never suppress them to make the report look cleaner.
 7. Generate `report.html`.
-8. Sign the final certificate with the pilot signing key.
-9. Create the deterministic evidence ZIP.
-10. Verify the ZIP from a clean temporary directory with `pcs verify-bundle --require-signature --receipt verification-receipt.json`.\n11. Archive the reviewer receipt alongside the delivery record; it must bind the exact bundle SHA-256 and any external acceptance-policy SHA-256.
+8. Sign the final certificate with the ACTIVE pilot signing key.
+9. Check the signer fingerprint/timestamp against the machine-readable key lifecycle registry before release.
+10. Create the deterministic evidence ZIP.
+11. Verify the ZIP from a clean temporary directory with `pcs verify-bundle --require-signature --receipt verification-receipt.json`.
+12. Archive the reviewer receipt alongside the delivery record; it must bind the exact bundle SHA-256 and any external acceptance-policy SHA-256.
 
 ## Required delivery package
 
@@ -62,6 +66,10 @@ A reviewer who did not produce the original workflow should be able to answer:
 - obtain partner feedback;
 - record manual work that should become an adapter;
 - record false-positive/false-negative concerns;
-- archive the signed bundle and public-key fingerprint;
-- delete or retain partner data only according to the governing agreement;
+- archive the signed bundle, public-key fingerprint, and applicable signer-lifecycle registry hash;
+- create an exact hash-bound retention/deletion plan with `scripts/pilot_closeout.py plan`;
+- after reviewer acceptance and the contractual closeout trigger, apply that exact plan with its confirmation hash and retain the resulting closeout receipt outside the partner workspace;
+- treat local unlinking as logical workspace deletion, not proof of secure erasure from backups/snapshots/provider systems;
 - do not reuse partner artifacts for research, demos, or model training without explicit permission.
+
+See `docs/SIGNING_KEY_CUSTODY.md` and `docs/PILOT_CLOSEOUT.md`.
