@@ -1,17 +1,9 @@
 name: PCS Product Hardening
-
+# TEMPORARY: automatic GitHub-hosted execution is disabled because jobs are
+# failing before runner allocation. CircleCI remains optional while credits are
+# unavailable; the protected zero-credit gate is PCS Required Self-Hosted.
 on:
-  push:
-    branches:
-      - product/p0-p1-demo-hardening
-  pull_request:
-    paths:
-      - 'pcs/**'
-      - 'formal/**'
-      - 'scripts/**'
-      - 'tests/**'
-      - 'pyproject.toml'
-      - '.github/workflows/product-hardening.yml'
+  workflow_dispatch:
 
 jobs:
   p0-p1:
