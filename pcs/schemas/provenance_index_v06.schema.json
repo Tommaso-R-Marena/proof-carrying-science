@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS v0.6 provenance index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "canonical_json_profile",
+    "semantic_hash_format",
+    "entries",
+    "semantic_hash"
+  ],
+  "properties": {
+    "format": {
+      "const": "pcs-provenance-index-v1"
+    },
+    "canonical_json_profile": {
+      "const": "pcs-jcs-rfc8785-v1"
+    },
+    "semantic_hash_format": {
+      "const": "pcs-provenance-index-sha256-v1"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "path",
+              "format",
+              "sha256",
+              "size"
+            ],
+            "properties": {
+              "kind": {
+                "const": "sbom"
+              },
+              "path": {
+                "const": "provenance/sbom.json"
+              },
+              "format": {
+                "enum": [
+                  "cyclonedx-json-1.4",
+                  "cyclonedx-json-1.5",
+                  "cyclonedx-json-1.6",
+                  "cyclonedx-json-1.7",
+                  "spdx-json-2.2",
+                  "spdx-json-2.3"
+                ]
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10485760
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "path",
+              "format",
+              "sha256",
+              "size",
+              "public_key_path",
+              "public_key_fingerprint",
+              "expected_subject_sha256",
+              "attested_subject_sha256",
+              "payload_type",
+              "predicate_type"
+            ],
+            "properties": {
+              "kind": {
+                "const": "build_provenance"
+              },
+              "path": {
+                "const": "provenance/build-provenance.dsse.json"
+              },
+              "format": {
+                "const": "dsse-in-toto-statement-v1-ed25519"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10485760
+              },
+              "public_key_path": {
+                "const": "provenance/build-provenance-public-key.pem"
+              },
+              "public_key_fingerprint": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "expected_subject_sha256": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "attested_subject_sha256": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "payload_type": {
+                "const": "application/vnd.in-toto+json"
+              },
+              "predicate_type": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            }
+          }
+        ]
+      }
+    },
+    "semantic_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

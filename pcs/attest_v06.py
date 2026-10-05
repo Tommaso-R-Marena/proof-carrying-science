@@ -57,6 +57,10 @@ from .environment_replay_v06 import (
     V06EnvironmentReplayError,
     environment_binding_v06,
 )
+from .provenance_v06 import (
+    V06ProvenanceError,
+    stage_provenance_inputs_v06,
+)
 from .external_validator_v06 import (
     EXTERNAL_VALIDATOR_CHECK_TYPES_V06,
     V06ExternalValidatorError,
@@ -329,6 +333,11 @@ def build_attestation_directory_v06(
     expected_fingerprint: str | None = None,
     generated_at: str | None = None,
     lean_authority_path: str | Path | None = None,
+    sbom_path: str | Path | None = None,
+    build_provenance_path: str | Path | None = None,
+    build_provenance_public_key_path: str | Path | None = None,
+    expected_build_provenance_fingerprint: str | None = None,
+    expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Build one complete signed v0.6 evidence directory from a PCS manifest."""
     manifest_path = Path(manifest_path).resolve()
@@ -610,6 +619,23 @@ def build_attestation_directory_v06(
         package_files[rel] = raw
 
     try:
+        provenance = stage_provenance_inputs_v06(
+            sbom_path=sbom_path,
+            build_provenance_path=build_provenance_path,
+            build_provenance_public_key_path=build_provenance_public_key_path,
+            expected_build_provenance_fingerprint=expected_build_provenance_fingerprint,
+            expected_build_subject_sha256=expected_build_subject_sha256,
+        )
+    except V06ProvenanceError as exc:
+        raise V06AttestationError(str(exc)) from exc
+
+    for rel, raw in provenance["files"].items():
+        target = out / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+        package_files[rel] = raw
+
+    try:
         certificate_signature = sign_certificate_v06(certificate, private_key)
         (out / "certificate_signature.json").write_bytes(
             canonicalize_jcs_bytes(certificate_signature)
@@ -643,6 +669,10 @@ def build_attestation_directory_v06(
             public_key_path,
             expected_fingerprint=public_fingerprint,
             lean_authority_path=lean_authority_path,
+            expected_build_provenance_fingerprint=(
+                expected_build_provenance_fingerprint
+            ),
+            expected_build_subject_sha256=expected_build_subject_sha256,
         )
     except (V06VerifierIOError, V06LeanAuthorityError) as exc:
         raise V06AttestationError(str(exc)) from exc
@@ -661,6 +691,7 @@ def build_attestation_directory_v06(
         ],
         "public_key_fingerprint": public_fingerprint,
         "claims": final["claims"],
+        "provenance": final.get("provenance", {"mode": "none", "entries": []}),
         "package_root": str(out),
     }
 
@@ -674,6 +705,11 @@ def attest_v06(
     expected_fingerprint: str | None = None,
     overwrite: bool = False,
     lean_authority_path: str | Path | None = None,
+    sbom_path: str | Path | None = None,
+    build_provenance_path: str | Path | None = None,
+    build_provenance_public_key_path: str | Path | None = None,
+    expected_build_provenance_fingerprint: str | None = None,
+    expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Produce one self-verified v0.6 delivery ZIP from a project manifest."""
     output = Path(output_bundle).resolve()
@@ -701,6 +737,11 @@ def attest_v06(
             public_key_path,
             expected_fingerprint=expected_fingerprint,
             lean_authority_path=lean_authority_path,
+            sbom_path=sbom_path,
+            build_provenance_path=build_provenance_path,
+            build_provenance_public_key_path=build_provenance_public_key_path,
+            expected_build_provenance_fingerprint=expected_build_provenance_fingerprint,
+            expected_build_subject_sha256=expected_build_subject_sha256,
         )
 
         try:
@@ -711,6 +752,10 @@ def attest_v06(
                 expected_fingerprint=built["public_key_fingerprint"],
                 overwrite=overwrite,
                 lean_authority_path=lean_authority_path,
+                expected_build_provenance_fingerprint=(
+                    expected_build_provenance_fingerprint
+                ),
+                expected_build_subject_sha256=expected_build_subject_sha256,
             )
         except V06BundleBuildError as exc:
             raise V06AttestationError(str(exc)) from exc
@@ -728,4 +773,5 @@ def attest_v06(
         ],
         "public_key_fingerprint": built["public_key_fingerprint"],
         "claims": built["claims"],
+        "provenance": built.get("provenance", {"mode": "none", "entries": []}),
     }

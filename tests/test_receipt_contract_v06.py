@@ -110,6 +110,85 @@ def _receipt(
     }
 
 
+def test_contract_accepts_consistent_bound_provenance_summary():
+    receipt = _receipt()
+    receipt["provenance"] = {
+        "mode": "bound",
+        "semantic_hash": "9" * 64,
+        "entries": [
+            {
+                "kind": "build_provenance",
+                "format": "dsse-in-toto-statement-v1-ed25519",
+                "sha256": "8" * 64,
+            },
+            {
+                "kind": "sbom",
+                "format": "cyclonedx-json-1.5",
+                "sha256": "7" * 64,
+            },
+        ],
+        "reviewer_expectations": {
+            "applied": True,
+            "build_provenance_fingerprint": "6" * 64,
+            "subject_sha256": ["5" * 64],
+        },
+    }
+
+    audit = audit_verification_receipt_v06(receipt)
+
+    assert audit["valid"], audit["errors"]
+    assert audit["checks"]["provenance_bound_hash"] is True
+    assert audit["checks"]["provenance_entry_contract"] is True
+    assert audit["checks"][
+        "provenance_reviewer_expectations_contract"
+    ] is True
+
+
+def test_contract_rejects_inconsistent_reviewer_provenance_expectations():
+    receipt = _receipt()
+    receipt["provenance"] = {
+        "mode": "bound",
+        "semantic_hash": "9" * 64,
+        "entries": [
+            {
+                "kind": "sbom",
+                "format": "cyclonedx-json-1.5",
+                "sha256": "7" * 64,
+            }
+        ],
+        "reviewer_expectations": {
+            "applied": False,
+            "build_provenance_fingerprint": "6" * 64,
+            "subject_sha256": [],
+        },
+    }
+
+    audit = audit_verification_receipt_v06(receipt)
+
+    assert audit["valid"] is False
+    assert audit["checks"][
+        "provenance_reviewer_expectations_contract"
+    ] is False
+
+
+def test_contract_rejects_inconsistent_provenance_summary():
+    receipt = _receipt()
+    receipt["provenance"] = {
+        "mode": "none",
+        "semantic_hash": "9" * 64,
+        "entries": [],
+    }
+
+    audit = audit_verification_receipt_v06(receipt)
+
+    assert audit["valid"] is False
+    assert audit["checks"]["provenance_none_contract"] is False
+    assert any(
+        "mode=none" in error
+        for error in audit["errors"]
+    )
+
+
 def test_contract_rejects_valid_without_authoritative_lean_acceptance():
     receipt = _receipt()
     receipt["authoritative"] = False

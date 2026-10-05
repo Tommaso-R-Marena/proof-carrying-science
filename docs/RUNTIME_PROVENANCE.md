@@ -48,11 +48,22 @@ The diff reports:
 
 PCS does not automatically convert any of those differences into scientific claim failure. A reviewer or domain policy may decide that a particular workflow requires a matching runtime, while another workflow may be robust across environments.
 
+For signed v0.6 supply-chain provenance, `pcs provenance-diff-v06` compares two `provenance/index.json` files and reports SBOM/build-provenance digest, format, signer, and expected-subject changes.
+
 ## Trust boundary
 
-The current snapshot is descriptive. It trusts Python/platform metadata exposed by the runtime and package metadata exposed by installed distributions. Future work may add independently attested container digests, SBOMs, signed build provenance, or hardware/runtime identity.
+The runtime snapshot is descriptive. It trusts Python/platform metadata exposed by the runtime and package metadata exposed by installed distributions.
 
-Those stronger mechanisms should remain separate from the scientific claim calculus: reproducibility context and scientific correctness are related but not interchangeable.
+PCS v0.6 now adds two optional, explicitly separate supply-chain layers:
+
+- standards-based SBOM binding (CycloneDX JSON 1.4–1.6 or SPDX JSON 2.2–2.3);
+- externally signed DSSE/in-toto Statement v1 build provenance with a pinned Ed25519 signer fingerprint and explicit expected subject SHA-256 digest(s).
+
+See `docs/SBOM_BUILD_PROVENANCE_V06.md`.
+
+Those mechanisms do not turn provenance into scientific evidence. An SBOM records an inventory claim; a valid external build attestation establishes that the pinned key signed the exact statement for the expected digest. Neither proves builder integrity, package safety, scientific correctness, or biological/clinical adequacy.
+
+Hardware identity remains deliberately outside the baseline contract. TPM/TEE/hardware-rooted attestation is threat-model-specific and should be introduced only as a separately named trust contract rather than inferred from self-reported platform metadata.
 
 
 ## Mid-attestation drift guard

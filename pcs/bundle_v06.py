@@ -72,6 +72,8 @@ def create_verified_bundle_v06(
     expected_fingerprint: str | None = None,
     overwrite: bool = False,
     lean_authority_path: str | Path | None = None,
+    expected_build_provenance_fingerprint: str | None = None,
+    expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Create a deterministic ZIP from an already-valid v0.6 package directory.
 
@@ -99,6 +101,10 @@ def create_verified_bundle_v06(
             public_key_path,
             expected_fingerprint=expected_fingerprint,
             lean_authority_path=lean_authority_path,
+            expected_build_provenance_fingerprint=(
+                expected_build_provenance_fingerprint
+            ),
+            expected_build_subject_sha256=expected_build_subject_sha256,
         )
     except (V06VerifierIOError, V06LeanAuthorityError) as exc:
         raise V06BundleBuildError(str(exc)) from exc
@@ -180,6 +186,10 @@ def create_verified_bundle_v06(
             public_key_path,
             expected_fingerprint=expected_fingerprint,
             lean_authority_path=lean_authority_path,
+            expected_build_provenance_fingerprint=(
+                expected_build_provenance_fingerprint
+            ),
+            expected_build_subject_sha256=expected_build_subject_sha256,
         )
         if not post_build["valid"]:
             raise V06BundleBuildError(

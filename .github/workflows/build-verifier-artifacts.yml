@@ -1,29 +1,11 @@
 name: Build PCS Reviewer Verifiers
-
+# TEMPORARY: GitHub-hosted jobs in this repository repeatedly complete before
+# runner allocation (steps=[] and no logs), which creates misleading red PR
+# checks without executing PCS code. CircleCI is the automatic protected CI.
+# Keep this cross-platform artifact workflow manual-only until a real hosted
+# runner execution is observed and recorded before re-enabling push/PR triggers.
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - product/verifier-artifact-validation
-      - formal/lean-authoritative-production
-    paths:
-      - 'pcs/**'
-      - 'formal/**'
-      - 'scripts/build_verifier_artifact.py'
-      - 'scripts/smoke_standalone_verifier_v06.py'
-      - 'scripts/verifier_launcher.py'
-      - 'pyproject.toml'
-      - '.github/workflows/build-verifier-artifacts.yml'
-  pull_request:
-    paths:
-      - 'pcs/**'
-      - 'formal/**'
-      - 'scripts/build_verifier_artifact.py'
-      - 'scripts/smoke_standalone_verifier_v06.py'
-      - 'scripts/verifier_launcher.py'
-      - 'pyproject.toml'
-      - '.github/workflows/build-verifier-artifacts.yml'
 
 jobs:
   build:

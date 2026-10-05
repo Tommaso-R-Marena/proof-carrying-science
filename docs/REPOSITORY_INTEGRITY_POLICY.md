@@ -45,7 +45,23 @@ It checks required governance files, shell-script Git modes, LF line endings, di
 
 Every release gate also runs this check.
 
-For repository settings/branch protection, treat the CircleCI status `ci/circleci: repository-integrity` as a required merge check. If automatic GitHub Actions triggers are re-enabled, the GitHub `repository-integrity` job should also remain a prerequisite for the other PCS CI jobs.
+For repository settings/branch protection, treat the CircleCI status `ci/circleci: repository-integrity` as a required merge check.
+
+### Automatic CI ownership and hosted-runner failure policy
+
+CircleCI is the authoritative **automatic** PR/branch CI while the repository's GitHub-hosted runners remain unable to start jobs reliably.
+
+As of 2026-10-04, repeated GitHub Actions jobs have completed with `steps=[]` and no downloadable logs. That is a runner-allocation/infrastructure failure: no PCS source, tests, Lean build, or verifier artifact executed. Do not report such a check as a code/test regression, and do not let it create permanent red PR noise that duplicates executing CircleCI gates.
+
+Therefore:
+
+- `.github/workflows/pcs-ci.yml` remains manual-only as already documented;
+- `.github/workflows/product-hardening.yml` is manual-only; the automatic product-hardening equivalent is CircleCI;
+- `.github/workflows/build-verifier-artifacts.yml` is manual-only until a real GitHub-hosted run executes steps; it remains available for deliberate cross-platform artifact experiments;
+- `scripts/check_repository_integrity.py` enforces the two duplicate workflows above as manual-only so automatic triggers cannot be accidentally reintroduced;
+- re-enabling GitHub automatic triggers requires a deliberate CI-policy change that records evidence of an actually allocated runner, removes/updates the temporary integrity invariant, and avoids duplicating required merge checks without a clear reason.
+
+A CI provider failure and a PCS test failure must always be distinguished in incident reports. Evidence that no job step ran is not evidence that PCS failed a test.
 
 ### Branch-protection enforcement status
 

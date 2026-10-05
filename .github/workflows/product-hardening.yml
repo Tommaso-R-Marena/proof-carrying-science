@@ -1,17 +1,10 @@
 name: PCS Product Hardening
-
+# TEMPORARY: automatic GitHub-hosted execution is disabled because jobs are
+# failing before runner allocation (steps=[] and no logs). The equivalent
+# automatic product-hardening gate is executed by CircleCI. Re-enable GitHub
+# push/PR triggers only after a manual run proves hosted runners actually start.
 on:
-  push:
-    branches:
-      - product/p0-p1-demo-hardening
-  pull_request:
-    paths:
-      - 'pcs/**'
-      - 'formal/**'
-      - 'scripts/**'
-      - 'tests/**'
-      - 'pyproject.toml'
-      - '.github/workflows/product-hardening.yml'
+  workflow_dispatch:
 
 jobs:
   p0-p1:
