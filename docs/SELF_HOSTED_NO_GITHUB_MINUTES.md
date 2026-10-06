@@ -12,7 +12,7 @@ would weaken the project's integrity policy.
   `self-hosted`, `linux`, `x64` runner with the extra label `pcs-lean-ci`.
 - It is gated by `PCS_SELF_HOSTED_CI_ENABLED=true`; absent the variable,
   GitHub skips the job without scheduling any billable GitHub-hosted compute.
-- Runs on pushes to `main` and manual dispatch, NOT external PR heads
+- Runs only by manual dispatch, NOT on pushes or external PR heads
   (which are unsafe to run on an owner-controlled workstation).
 - `bash scripts/ci_selfhosted_zero_hosted_minutes.sh` also runs locally
   without GitHub Actions: repository-integrity check, Python pytest,
