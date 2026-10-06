@@ -102,7 +102,7 @@ def evaluate_proposal(proposal: Any, root: Path) -> dict:
     _identity(source["project"], "project")
     if not isinstance(source["commit"], str) or _COMMIT.fullmatch(source["commit"]) is None:
         raise AdapterProposalError("source revision must be 40 lowercase hex characters")
-    if source["disclosure"] not in {"synthetic", "private", "public"}:
+    if not isinstance(source["disclosure"], str) or source["disclosure"] not in {"synthetic", "private", "public"}:
         raise AdapterProposalError("source disclosure must be explicit")
 
     claim = _obj(proposal["claim"], {"id", "kind", "statement"}, "claim")
@@ -128,7 +128,10 @@ def evaluate_proposal(proposal: Any, root: Path) -> dict:
         if not isinstance(entry, dict):
             raise AdapterProposalError("artifact record must be an object")
         key = _identity(entry.get("id"), "artifact ID")
-        if key in files or entry.get("path") in names:
+        artifact_path = entry.get("path")
+        if not isinstance(artifact_path, str):
+            raise AdapterProposalError("artifact path must be a string")
+        if key in files or artifact_path in names:
             raise AdapterProposalError("duplicate artifact ID or file path")
         files[key] = _read_pinned(root, entry)
         names.add(entry["path"])
@@ -137,7 +140,7 @@ def evaluate_proposal(proposal: Any, root: Path) -> dict:
     if not isinstance(check, dict):
         raise AdapterProposalError("check must be an object")
     check_type = check.get("type")
-    if check_type not in REGISTRY:
+    if not isinstance(check_type, str) or check_type not in REGISTRY:
         raise AdapterProposalError("UNREGISTERED_CHECK_TYPE: no transcript/status fallback is permitted")
     if check_type == "pcs.reference.identical_bytes.v1":
         _obj(check, {"type", "left_artifact", "right_artifact"}, "identical_bytes check")
