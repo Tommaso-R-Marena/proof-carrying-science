@@ -63,7 +63,7 @@ def main() -> int:
                 ("certificate verification", [py, "-m", "pcs.cli", "verify", str(work / "certificate/certificate.json")], ROOT),
                 ("claim policy gate", [py, "-m", "pcs.cli", "gate", str(work / "certificate/certificate.json"), "--claim", "C1", "--claim", "C2", "--claim", "C3"], ROOT),
                 ("Lean default targets and proof hygiene", ["bash", "scripts/verify_lean.sh"], ROOT),
-                ("frozen v0.6 cross-language byte contract", [py, "scripts/run_v06_contract_gate.py"], ROOT),
+                ("frozen v0.6 cross-language byte contract", [py, "scripts/run_v06_contract_gate.py", "--results-root", str(work / "byte-contract")], ROOT),
             ]
             golden_checker = ROOT / "formal" / "tools" / "CheckGoldenFileLiterals.lean"
             if golden_checker.exists():
