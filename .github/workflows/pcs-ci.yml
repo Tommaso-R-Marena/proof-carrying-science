@@ -1,15 +1,29 @@
 name: PCS CI
-# TEMPORARY: automatic triggers are disabled while GitHub is completing jobs
-# before runner allocation (steps=[] for both Python and Lean jobs). Re-enable
-# push/pull_request only after issue #1 records a real executed workflow.
+# Read-only PR tests. NEVER migrate the branch protection away from CircleCI
+# until these checks have executed successfully on the exact head being merged.
+# GitHub-hosted runners on a private repo may be unavailable when quota is exhausted.
 on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcs-trusted-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   repository-integrity:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -17,10 +31,13 @@ jobs:
         run: python scripts/check_repository_integrity.py
 
   python-assurance:
+    timeout-minutes: 40
     needs: repository-integrity
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -46,10 +63,13 @@ jobs:
           ! grep -R --line-number --fixed-strings 'sorry' formal/PCS.lean formal/PCS
 
   lean-kernel:
+    timeout-minutes: 35
     needs: repository-integrity
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Build Lean assurance kernel
         uses: leanprover/lean-action@v1
         with:
@@ -62,10 +82,13 @@ jobs:
 
 
   v06-byte-contract:
+    timeout-minutes: 25
     needs: repository-integrity
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -85,3 +108,31 @@ jobs:
           name: pcs-v06-byte-contract-gate
           path: results/v06-contract-runs/
           if-no-files-found: warn
+
+  # This is the ONE required check to select in a future GitHub ruleset.
+  # Never mark this successful unless every independent verifier succeeded.
+  verified-integration:
+    name: verified-integration
+    needs:
+      - repository-integrity
+      - python-assurance
+      - lean-kernel
+      - v06-byte-contract
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require completed success in every trust-boundary gate
+        env:
+          INTEGRITY: ${{ needs.repository-integrity.result }}
+          PYTHON: ${{ needs.python-assurance.result }}
+          LEAN: ${{ needs.lean-kernel.result }}
+          BYTES: ${{ needs.v06-byte-contract.result }}
+        run: |
+          for result in "$INTEGRITY" "$PYTHON" "$LEAN" "$BYTES"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Required verification was skipped, cancelled, missing, or failed ($result)"
+              exit 1
+            fi
+          done
+          echo "Every named PCS assurance gate executed successfully."
