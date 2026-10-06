@@ -9,7 +9,9 @@ permissions:
 jobs:
   verify:
     name: PCS Submission Verification
-    runs-on: ubuntu-latest
+    # No hosted minutes, and never run fork PR code on a personal machine.
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
