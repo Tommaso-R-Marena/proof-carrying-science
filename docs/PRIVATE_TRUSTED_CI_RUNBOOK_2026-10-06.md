@@ -2,15 +2,15 @@
 
 **Current status: implementation prepared; runner not provisioned; branch protection unchanged.**
 
-The core GitHub Actions workflow supports an optional repository Actions variable `PCS_TRUSTED_RUNNER`. When absent, jobs use GitHub-hosted `ubuntu-latest` as before. When set, it must name a **dedicated, sandboxed runner label** provisioned by the repository owner.
+The core GitHub Actions workflow uses **only** self-hosted Linux x64 runners labeled `pcs-lean-ci`. The repository Actions variable `PCS_SELF_HOSTED_CI_ENABLED=true` enables jobs only after a dedicated runner is provisioned. When absent, jobs are skipped rather than consuming GitHub-hosted minutes.
 
 ## Before providing any runner
 
 1. Do not use your primary laptop, personal Windows installation, JHU/HPC infrastructure without authorization, or a normal Docker socket to execute arbitrary PR code. A self-hosted runner executes repository source and can leak its host, filesystem and network credentials if compromised.
 2. Provision a disposable dedicated Linux VM or similarly strong isolated environment with an unprivileged user, no production secrets, no private SSH keys, no administrative cloud tokens, no privileged Docker socket or host file mounts, and restricted network egress. Patch host software and enable per-job reset/teardown.
 3. Use the GitHub repository **Settings → Actions → Runners → New self-hosted runner** wizard; obtain a fresh short-lived registration token there. Never put tokens into code, CI logs or a support chat.
-4. Register an **ephemeral** runner with a private label such as `pcs-private-ephemeral`. Enable automatic re-provisioning for each job (the workflow contains four independent checks plus the aggregate gate). Runner teardown and source cleanup are mandatory; one persistent runner that sequentially executes untrusted PRs is not equivalent isolation.
-5. Set the repository Actions variable `PCS_TRUSTED_RUNNER` to `pcs-private-ephemeral` **only after** that isolation and provisioning are working. Never configure this label with a public/fork runner service or reuse it for private secrets.
+4. Register an **ephemeral** runner with the required label `pcs-lean-ci`. Enable automatic re-provisioning for each job (the workflow contains four independent checks plus the aggregate gate). Runner teardown and source cleanup are mandatory; one persistent runner that sequentially executes untrusted PRs is not equivalent isolation.
+5. Set the repository Actions variable `PCS_SELF_HOSTED_CI_ENABLED` to `true` **only after** that isolation and provisioning are working. Never configure this label with a public/fork runner service or reuse it for private secrets.
 6. This workflow fails closed for PRs whose `head.repo.full_name` differs from the protected repository. External forks need a separate explicitly approved strategy with untrusted code in disposable hosted environments. Do not use `pull_request_target` to build PR source.
 7. The GitHub Actions token remains `contents: read` and `actions/checkout` uses `persist-credentials: false`. Never attach Cloudflare credentials or GitHub write tokens to the PR test environment.
 
