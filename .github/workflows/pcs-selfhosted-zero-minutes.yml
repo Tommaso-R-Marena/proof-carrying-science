@@ -1,0 +1,32 @@
+name: PCS zero-hosted-minute assurance gate
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcs-local-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  kernel-and-python:
+    # Only run on an explicitly registered, isolated owner-controlled runner.
+    # Never route potentially untrusted PR code to an unprotected owner computer.
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run repository-integrity, Python, adversarial and Lean kernel gates
+        shell: bash
+        run: bash scripts/ci_selfhosted_zero_hosted_minutes.sh
+      - name: Explain evidence scope
+        run: |
+          echo "This used only self-hosted CPU time, never GitHub-hosted runner minutes."
+          echo "Passing local tests does not eliminate external-world trust assumptions."
