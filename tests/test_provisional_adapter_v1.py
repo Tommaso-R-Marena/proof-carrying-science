@@ -161,3 +161,43 @@ def test_no_false_claim_upgrade_on_python_reference_pass(tmp_path):
     assert result["pcs_acceptance"] == "NOT_EVALUATED"
     assert result["authoritative"] is False
     assert result["claim_status"] == "OPEN"
+
+def test_machine_readable_contract_accepts_pinned_fixture_and_rejects_unknown_keys(tmp_path):
+    import jsonschema
+    schema_path = Path(__file__).resolve().parents[1] / "pcs" / "schemas" / "adapter_proposal_v1.schema.json"
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    jsonschema.Draft202012Validator.check_schema(schema)
+    document = identity(tmp_path)
+    jsonschema.validate(document, schema)
+    document["check"]["transcript_outcome"] = "PASS"
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(document, schema)
+
+
+def test_unhashable_malicious_fields_rejected_without_raising_type_errors(tmp_path):
+    for field, bad_value in [
+        ("type", {"reported": "PASS"}),
+        ("type", ["unknown"]),
+    ]:
+        p = identity(tmp_path)
+        p["check"][field] = bad_value
+        with pytest.raises(AdapterProposalError, match="UNREGISTERED_CHECK_TYPE"):
+            evaluate_proposal(p, tmp_path)
+    p = identity(tmp_path)
+    p["source"]["disclosure"] = ["public"]
+    with pytest.raises(AdapterProposalError, match="disclosure"):
+        evaluate_proposal(p, tmp_path)
+    p = identity(tmp_path)
+    p["artifacts"][0]["path"] = ["before.bin"]
+    with pytest.raises(AdapterProposalError, match="path"):
+        evaluate_proposal(p, tmp_path)
+
+
+def test_disclosure_and_unverified_claim_status_do_not_confuse_cryptographic_authenticity(tmp_path):
+    p = identity(tmp_path)
+    p["source"]["disclosure"] = "public"
+    report = evaluate_proposal(p, tmp_path)
+    assert report["authoritative"] is False
+    assert report["pcs_acceptance"] == "NOT_EVALUATED"
+    assert report["claim_status"] == "OPEN"
+    assert "signature" in " ".join(report["limitations"]).lower() or "unsigned" in " ".join(report["limitations"]).lower()
