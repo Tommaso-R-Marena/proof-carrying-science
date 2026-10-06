@@ -42,10 +42,15 @@ def run()->int:
     base=os.environ.get("GITHUB_BASE_SHA","")
     if repo not in REPOS or not re.fullmatch(r"[0-9a-f]{40}",base,re.I):
         raise ValueError("Expected a known PCS GitHub repository and pinned PR base SHA")
-    manifests=sorted(PROMOTIONS.glob("*/manifest.json")) if PROMOTIONS.exists() else []
-    if len(manifests)!=1:
-        raise ValueError("A production promotion PR must contain exactly one promotion manifest")
-    manifest_path=manifests[0]
+    diff=subprocess.run(
+        ["git","diff","--name-only",base,"HEAD"],
+        cwd=ROOT,capture_output=True,text=True,check=True)
+    actual=set(diff.stdout.splitlines())
+    manifest_names=[n for n in actual if re.fullmatch(
+        r"contributions/pcs-promotions/[0-9a-f-]{36}/manifest\.json",n,re.I)]
+    if len(manifest_names)!=1:
+        raise ValueError("A promotion PR must introduce exactly one new source-bound promotion manifest")
+    manifest_path=ROOT/manifest_names[0]
     obj=json.loads(manifest_path.read_text(encoding="utf-8"))
     promo=manifest_path.parent.name
     source=obj.get("source_submission_id")
@@ -88,10 +93,6 @@ def run()->int:
             raise ValueError("Destination bytes do not match the accepted archived artifact")
         if dest.endswith(".lean") and FORBIDDEN.search(produced_bytes.decode("utf-8")):
             raise ValueError("Production Lean file contains forbidden proof shortcuts")
-    diff=subprocess.run(
-        ["git","diff","--name-only","--diff-filter=ACMRTD",base,"HEAD"],
-        cwd=ROOT,capture_output=True,text=True,check=True)
-    actual=set(diff.stdout.splitlines())
     if actual!=expected:
         raise ValueError(f"Promotion altered unexpected paths: missing={sorted(expected-actual)}, extra={sorted(actual-expected)}")
     statuses=subprocess.run(
