@@ -55,6 +55,7 @@ def main() -> int:
             work = Path(tmp)
             stages = [
                 ("git metadata and governance", [py, "scripts/check_repository_integrity.py"], ROOT),
+                ("Lean default targets and proof hygiene", ["bash", "scripts/verify_lean.sh"], ROOT),
                 ("Python test suite", [py, "-m", "pytest", "-q"], ROOT),
                 ("adversarial v0.5 baseline", [py, "scripts/adversarial_campaign.py"], ROOT),
                 ("golden v0.6 package examples", [py, "scripts/run_golden_examples_v06.py", "-o", str(work / "golden")], ROOT),
@@ -62,7 +63,6 @@ def main() -> int:
                 ("certificate construction", [py, "-m", "pcs.cli", "certify", "examples/biopharma_demo/manifest.json", "-o", str(work / "certificate")], ROOT),
                 ("certificate verification", [py, "-m", "pcs.cli", "verify", str(work / "certificate/certificate.json")], ROOT),
                 ("claim policy gate", [py, "-m", "pcs.cli", "gate", str(work / "certificate/certificate.json"), "--claim", "C1", "--claim", "C2", "--claim", "C3"], ROOT),
-                ("Lean default targets and proof hygiene", ["bash", "scripts/verify_lean.sh"], ROOT),
                 ("frozen v0.6 cross-language byte contract", [py, "scripts/run_v06_contract_gate.py", "--results-root", str(work / "byte-contract")], ROOT),
             ]
             golden_checker = ROOT / "formal" / "tools" / "CheckGoldenFileLiterals.lean"
