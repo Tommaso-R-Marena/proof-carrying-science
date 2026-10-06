@@ -27,14 +27,14 @@ jobs:
           find contributions/pcs-submissions -type f -name '*.py' -print0 | xargs -0 -r -n1 python -m py_compile
       - name: Install isolated PCS test dependencies
         run: python -m pip install -e '.[dev]'
-      - name: Run PCS tests on unchanged production package plus proposed artifacts
-        run: python -m pytest -q
       - name: Build formal PCS kernel
         uses: leanprover/lean-action@v1
         with:
           lake-package-directory: formal
           build: true
           test: false
+      - name: Run PCS tests on unchanged production package plus proposed artifacts
+        run: python -m pytest -q
       - name: Check contributed Lean files against PCS imports
         run: |
           cd formal
