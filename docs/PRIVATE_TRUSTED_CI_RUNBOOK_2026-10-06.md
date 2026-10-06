@@ -40,3 +40,11 @@ The script executes Git integrity, the full Python suite, legacy and v0.6 advers
 - Private hosted-runner usage remains unavailable while the allowance is exhausted. This code alone cannot provide execution capacity.
 - GitHub rulesets and the repo Actions variable require an authorized owner to configure; they are deliberately **not** changed by this PR.
 - No fresh Lean/Python assurance run on this PR has yet been observed. Until then, **do not merge formal or production-security claims into core main** under an assertion that CI passed.
+
+## Zero-GitHub-hosted-minute workflow inventory (October 6, 2026)
+
+Every active GitHub Actions workflow in this branch is now restricted to the owner's registered **self-hosted** runners. The full PR integration gate and the core Linux gates require `PCS_SELF_HOSTED_CI_ENABLED=true` and a private Linux x64 runner with the `pcs-lean-ci` label. The cross-platform verifier-artifact workflow requires `PCS_CROSS_PLATFORM_RUNNERS_ENABLED=true` and isolated `pcs-verifier-ci` runners on each OS (Linux, Windows, and macOS). The cross-machine OCI evidence workflow requires `PCS_CROSS_MACHINE_RUNNERS_ENABLED=true` and **four genuinely distinct** machines labeled `pcs-ubuntu24-x64`, `pcs-ubuntu22-x64`, `pcs-ubuntu24-arm64`, and `pcs-ubuntu22-arm64` respectively.
+
+**Important:** Setting these variables without provisioning the corresponding machines only queues jobs; it does not establish a PASS. Never substitute an x64 job that pretends to be ARM64, or a same-machine run for independent cross-host evidence. Until corresponding real runs complete, leave such gates disabled and explicitly unverified. `PCS_SELF_HOSTED_CI_ENABLED` does not override the existing required CircleCI context. That rule must only change after an equivalently robust *executing* replacement exists.
+
+Cloudflare CI-only Python builds may aid preflight on private branches, but do not give Lean authority or satisfy GitHub's current CircleCI required status.
