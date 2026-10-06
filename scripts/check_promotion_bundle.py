@@ -60,6 +60,7 @@ def run()->int:
         or not re.fullmatch(r"[A-Z][A-Z0-9._-]{2,31}",str(task))
         or obj.get("repository")!=os.environ["GITHUB_REPOSITORY"]
         or obj.get("base_sha")!=base
+        or not isinstance(obj.get("attempt"),int) or not 1<=obj["attempt"]<=50
         or not isinstance(obj.get("source_pr_number"),int) or obj["source_pr_number"]<1):
         raise ValueError("Promotion envelope/base/repository is invalid")
     changes=obj.get("changes")
