@@ -8,6 +8,14 @@ Status: **PREPARED, NOT CUT OVER**. GitHub Actions and CircleCI hosted minutes o
 - Required prereqs: repository-integrity (including Git modes), Python assurance/regression/adversarial/golden examples, Lean build + placeholder check, and frozen v0.6 cross-language byte contracts.
 - These are **source and executable verification checks**, not formal assurance of external empirical truth.
 
+## Private, free-runner option
+
+The CI workflow supports the optional owner-set repository variable `PCS_TRUSTED_RUNNER`. This targets a disposable, isolated self-hosted runner instead of `ubuntu-latest`, **without** making the repository public. Fork PR source is rejected at each CI job and cannot get a green aggregate.
+
+`python scripts/run_trusted_ci.py` provides the same essential verifiers as a local exact-SHA diagnostic, including the Aristotle golden-file checker when installed. Its JSON report is deliberately unsigned and cannot satisfy GitHub branch protection. See `docs/PRIVATE_TRUSTED_CI_RUNBOOK_2026-10-06.md` for explicit owner action, isolation requirements, registration, automated job teardown, and check migration.
+
+Do not set `PCS_TRUSTED_RUNNER` to a personal workstation or a host with production secrets.
+
 ## Cutover (only after real successful PR execution)
 1. Confirm that the repository may be public **only after** completing `docs/PUBLIC_RELEASE_GATE.md`. If keeping private, supply a safely isolated runner or wait for credit reset. Do not use `pull_request_target` to execute untrusted PR code.
 2. Create a disposable PR from current `main` and inspect **all** run steps, logs, build artifacts and their exact SHA. Ensure `PCS CI / verified-integration` is actually green. A no-run or runner-less check is **not** evidence.
