@@ -18,7 +18,7 @@ jobs:
     name: required-gate
     # No hosted minutes, no untrusted fork code, no queue without a registered runner.
     if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
-    runs-on: [self-hosted, linux, x64, pcs-ci]
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     timeout-minutes: 30
     steps:
       - name: Check out exact revision
@@ -45,6 +45,14 @@ jobs:
         shell: bash
         run: python -m compileall -q pcs scripts
 
+      - name: Build pinned Lean 4 authority before any verifier-dependent Python tests
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Audit Lean source and compiled authority
+        run: bash scripts/verify_lean.sh
       - name: Run stable key-custody baseline
         shell: bash
         run: python -m pytest -q tests/test_key_custody.py
