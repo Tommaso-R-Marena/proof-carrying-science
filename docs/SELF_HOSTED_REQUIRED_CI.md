@@ -12,6 +12,7 @@ The self-hosted gate is intentionally smaller than the full evidence campaign. I
 
 - repository-integrity policy;
 - Python compilation;
+- pinned Lean authority compilation and formal source hygiene before verifier-dependent tests;
 - existing signing-key custody tests;
 - v0.6 provenance integration tests when present;
 - pilot key-lifecycle/closeout tests when present.
@@ -36,14 +37,14 @@ In GitHub:
 4. In the dedicated Linux/WSL environment, execute the download and configuration commands GitHub displays.
 5. During configuration, add the custom label:
 
-   `pcs-ci`
+   `pcs-lean-ci`
 
-   If using the command directly, GitHub's generated `config.sh` command can be extended with `--labels pcs-ci`.
+   If using the command directly, GitHub's generated `config.sh` command can be extended with `--labels pcs-lean-ci`.
 6. Start the runner with the command GitHub provides (normally `./run.sh`). For durable use, install it as a service only after the one-off validation succeeds.
 
 The workflow requires all four labels:
 
-`self-hosted`, `linux`, `x64`, `pcs-ci`.
+`self-hosted`, `linux`, `x64`, `pcs-lean-ci`.
 
 ## Required status migration
 
@@ -60,7 +61,7 @@ When CircleCI credits return, its broader jobs may run as supplemental evidence.
 
 ## Current recovery order
 
-1. Bring one `pcs-ci` runner online.
+1. Bring one `pcs-lean-ci` runner online.
 2. Let PR #58 and PR #60 execute the self-hosted gate.
 3. Require `PCS Required Self-Hosted / required-gate` in the main ruleset.
 4. Merge #58 first if green.
