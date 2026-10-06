@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from pcs.kernel import build_certificate
-from scripts.adversarial_campaign import MANIFEST, PKPD_MANIFEST, packaged_artifact_path
+from scripts.adversarial_campaign import MANIFEST, PKPD_MANIFEST, packaged_artifact_path, campaign
 
 
 @pytest.mark.parametrize(
@@ -38,3 +38,16 @@ def test_campaign_rejects_artifact_path_escape(tmp_path: Path) -> None:
     cert = {"artifacts": [{"id": "train", "path": "../outside"}]}
     with pytest.raises(ValueError, match="missing or escaped"):
         packaged_artifact_path(package, cert, "train")
+
+
+def test_actual_tampering_campaign_exercises_all_four_repaired_artifacts() -> None:
+    outcomes = {row["attack"]: row for row in campaign()["results"]}
+    for name in (
+        "artifact_tamper_without_rehash",
+        "forged_PASS_after_data_change_with_rehash",
+        "pkpd_prediction_tamper_with_rehash",
+        "pkpd_effect_tamper_with_rehash",
+    ):
+        verdict = outcomes[name]
+        assert verdict["rejected"] is True, f"{name}: {verdict['detail']}"
+        assert "campaign error" not in str(verdict["detail"]), name
