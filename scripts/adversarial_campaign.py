@@ -25,6 +25,26 @@ def rehash(cert: dict) -> None:
     cert["integrity_hash"] = sha256_json(cert)
 
 
+def packaged_artifact_path(package_dir: Path, cert: dict, artifact_id: str) -> Path:
+    """Resolve a tampering target from the actual digest-addressed certificate.
+
+    The producer no longer packages artifacts using their source filenames.
+    A missing, escaped or ambiguous packaged path is a campaign error, never
+    evidence that the verifier safely rejected a forged artifact.
+    """
+    matches = [artifact for artifact in cert["artifacts"] if artifact.get("id") == artifact_id]
+    if len(matches) != 1:
+        raise ValueError(f"expected exactly one packaged artifact {artifact_id!r}")
+    root = package_dir.resolve()
+    relative = matches[0].get("path")
+    if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+        raise ValueError(f"invalid packaged path for {artifact_id!r}")
+    target = (root / relative).resolve()
+    if not target.is_relative_to(root) or not target.is_file():
+        raise ValueError(f"missing or escaped packaged artifact {artifact_id!r}")
+    return target
+
+
 def campaign() -> dict:
     results=[]
 
@@ -37,8 +57,9 @@ def campaign() -> dict:
 
     def artifact_tamper():
         with tempfile.TemporaryDirectory() as d:
-            build_certificate(MANIFEST,d)
-            p=Path(d)/"artifacts/train/train.csv"; p.write_text(p.read_text()+"X,0\n")
+            cert=build_certificate(MANIFEST,d)
+            p=packaged_artifact_path(Path(d),cert,"train")
+            p.write_text(p.read_text()+"X,0\n")
             r=verify_certificate(Path(d)/"certificate.json")
             return (not r["valid"], r["errors"])
     run("artifact_tamper_without_rehash", artifact_tamper)
@@ -54,7 +75,8 @@ def campaign() -> dict:
         with tempfile.TemporaryDirectory() as d:
             build_certificate(MANIFEST,d)
             cp=Path(d)/"certificate.json"; c=json.loads(cp.read_text())
-            tp=Path(d)/"artifacts/test/test.csv"; tp.write_text("subject_id,concentration_mg_L\nS001,9.8\n")
+            tp=packaged_artifact_path(Path(d),c,"test")
+            tp.write_text("subject_id,concentration_mg_L\nS001,9.8\n")
             for a in c["artifacts"]:
                 if a["id"]=="test": a["sha256"]=sha256_file(tp)
             rehash(c); cp.write_text(json.dumps(c,indent=2,sort_keys=True))
@@ -121,7 +143,7 @@ def campaign() -> dict:
         with tempfile.TemporaryDirectory() as d:
             build_certificate(PKPD_MANIFEST, d)
             cp=Path(d)/"certificate.json"; c=json.loads(cp.read_text())
-            pp=Path(d)/"artifacts/pk_predictions/predictions.csv"
+            pp=packaged_artifact_path(Path(d),c,"pk_predictions")
             lines=pp.read_text().splitlines(); cells=lines[row].split(",")
             idx = 1 if field=="concentration" else 2
             cells[idx]=str(float(cells[idx])+delta); lines[row]=",".join(cells)
