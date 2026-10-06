@@ -46,6 +46,14 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install -e ".[dev]"
       - run:
+          name: Build pinned Lean authority before provenance-attestation tests
+          command: |
+            curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+            echo 'export PATH="$HOME/.elan/bin:$PATH"' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            cd formal
+            lake build pcs-lean-authority
+      - run:
           name: Compile and test SBOM/build provenance contract
           command: |
             . .venv/bin/activate
