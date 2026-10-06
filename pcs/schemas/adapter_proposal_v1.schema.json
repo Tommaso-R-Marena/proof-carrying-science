@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proof-carrying-science.org/schemas/adapter-proposal-v1",
+  "title": "PCS provisional cross-project adapter proposal v1",
+  "description": "Strict untrusted proposal; passing validation is not PCS acceptance or Lean assurance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "source",
+    "claim",
+    "artifacts",
+    "check",
+    "assumptions"
+  ],
+  "properties": {
+    "format": {
+      "const": "pcs-adapter-proposal-v1"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project",
+        "commit",
+        "disclosure"
+      ],
+      "properties": {
+        "project": {
+          "$ref": "#/$defs/id"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "disclosure": {
+          "enum": [
+            "synthetic",
+            "private",
+            "public"
+          ]
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "statement"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "computational"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}(\\/[A-Za-z0-9][A-Za-z0-9._-]{0,99})*$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "check": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "left_artifact",
+            "right_artifact"
+          ],
+          "properties": {
+            "type": {
+              "const": "pcs.reference.identical_bytes.v1"
+            },
+            "left_artifact": {
+              "$ref": "#/$defs/id"
+            },
+            "right_artifact": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "trace_artifact",
+            "forbidden_action",
+            "max_cumulative_risk"
+          ],
+          "properties": {
+            "type": {
+              "const": "pcs.reference.bounded_trace.v1"
+            },
+            "trace_artifact": {
+              "$ref": "#/$defs/id"
+            },
+            "forbidden_action": {
+              "$ref": "#/$defs/nonneg"
+            },
+            "max_cumulative_risk": {
+              "$ref": "#/$defs/nonneg"
+            }
+          }
+        }
+      ]
+    },
+    "assumptions": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 400
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "nonneg": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+    }
+  }
+}
