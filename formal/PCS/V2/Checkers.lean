@@ -110,6 +110,22 @@ def builtinCheckers : List CertifiedChecker :=
 /-- The Lean replay executor for all verified built-ins, delegating everything else. -/
 def builtinExecWith (fallback : Executor) : Executor := dispatch builtinCheckers fallback
 
+/-! Production must never treat an unregistered check as trusted evidence.
+Only certified checker handlers may emit authoritative PASS. In particular a
+perfectly signed producer transcript cannot turn an unknown check_spec.type
+into a positive semantic result. -/
+def registeredBuiltin (req : ReplayRequest) : Bool :=
+  (builtinCheckers.find? (·.handles req)).isSome
+
+def certifiedOnlyExec : Executor := builtinExecWith unverifiedExec
+
+theorem certifiedOnlyExec_unknown (req : ReplayRequest)
+    (h : registeredBuiltin req = false) :
+    (certifiedOnlyExec req).outcome = .unverified := by
+  cases hf : builtinCheckers.find? (·.handles req) with
+  | none => simp [certifiedOnlyExec, builtinExecWith, dispatch, hf, unverifiedExec]
+  | some c => simp [registeredBuiltin, hf] at h
+
 def BuiltinHolds (fallbackHolds : ReplayRequest → Prop) : ReplayRequest → Prop :=
   DispatchHolds builtinCheckers fallbackHolds
 
