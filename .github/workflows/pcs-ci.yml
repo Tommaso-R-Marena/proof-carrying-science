@@ -9,8 +9,8 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Optional repository variable PCS_TRUSTED_RUNNER chooses an ephemeral, isolated
-# self-hosted runner when the private GitHub-hosted allowance is exhausted.
+# Optional self-hosted CI is enabled only when PCS_SELF_HOSTED_CI_ENABLED=true.
+# Never default to private-repository GitHub-hosted compute.
 # Only set this after the security runbook is satisfied; outside-fork PRs fail closed.
 permissions:
   contents: read
@@ -22,9 +22,9 @@ concurrency:
 jobs:
   repository-integrity:
     # Never run fork PR source on the private trusted runner.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     timeout-minutes: 10
-    runs-on: ${{ vars.PCS_TRUSTED_RUNNER || 'ubuntu-latest' }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,10 +37,10 @@ jobs:
 
   python-assurance:
     # Never run fork PR source on the private trusted runner.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     timeout-minutes: 40
     needs: repository-integrity
-    runs-on: ${{ vars.PCS_TRUSTED_RUNNER || 'ubuntu-latest' }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -71,10 +71,10 @@ jobs:
 
   lean-kernel:
     # Never run fork PR source on the private trusted runner.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     timeout-minutes: 35
     needs: repository-integrity
-    runs-on: ${{ vars.PCS_TRUSTED_RUNNER || 'ubuntu-latest' }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -92,10 +92,10 @@ jobs:
 
   v06-byte-contract:
     # Never run fork PR source on the private trusted runner.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     timeout-minutes: 25
     needs: repository-integrity
-    runs-on: ${{ vars.PCS_TRUSTED_RUNNER || 'ubuntu-latest' }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -129,8 +129,8 @@ jobs:
       - python-assurance
       - lean-kernel
       - v06-byte-contract
-    if: ${{ always() }}
-    runs-on: ${{ vars.PCS_TRUSTED_RUNNER || 'ubuntu-latest' }}
+    if: ${{ always() && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     timeout-minutes: 5
     steps:
       - name: Require completed success in every trust-boundary gate
