@@ -57,9 +57,9 @@ def validate_benchmark(root: Path, index: dict, published: dict) -> dict:
             published.get("origin_commit") != SOURCE_REVISION):
         raise ValueError("Unexpected prooflab benchmark schema or source revision")
     cases, views = index.get("cases"), published.get("cases")
-    if not isinstance(cases, list) or not isinstance(views, list) or len(cases) != 40 or len(views) != 40:
+    if not isinstance(cases, list) or not isinstance(views, list) or len(cases) != 40 or len(views) != 22:
         raise ValueError("Exactly 40 public-indexed real Lean targets required")
-    if len({c["id"] for c in cases}) != 40 or len({v["id"] for v in views}) != 40:
+    if len({c["id"] for c in cases}) != 40 or len({v["id"] for v in views}) != 22:
         raise ValueError("Duplicate prooflab case ID")
     view_by_id = {c["id"]: c for c in views}
     names_by_source: dict[str, list[str]] = {}
@@ -96,6 +96,10 @@ def validate_benchmark(root: Path, index: dict, published: dict) -> dict:
         if c.get("cited_theorems") != expected:
             raise ValueError(f"Incorrect source-cited lemma references: {name}")
         edges += len(expected)
+        if c["split"] != "training":
+            if c["id"] in view_by_id:
+                raise ValueError("Held-out theorem leaked to the public game")
+            continue
         view = view_by_id[name_id(c)]
         if view.get("source", {}).get("revision") != SOURCE_REVISION:
             raise ValueError("Public source revision mismatch")
@@ -138,6 +142,18 @@ def validate_benchmark(root: Path, index: dict, published: dict) -> dict:
                 raise ValueError("Claimed source mention without matching public lemma node")
     if counts != EXPECTED_COUNTS:
         raise ValueError("Incorrect module split counts")
+    if (index.get("case_count") != 40 or published.get("case_count") != 40
+            or published.get("public_case_count") != 22):
+        raise ValueError("Incorrect declared benchmark size")
+    if published.get("withheld_by_module") != {
+        "Checkers": {"split": "validation", "count": 8},
+        "PackageProofs": {"split": "evaluation", "count": 7},
+        "Frontier": {"split": "evaluation", "count": 3},
+    }:
+        raise ValueError("Withheld task counts changed")
+    # Previously published 40-case views are not allowed here.
+    if any(v.get("split") != "training" for v in views):
+        raise ValueError("Nontraining mission published")
     if index.get("case_count") != 40 or published.get("case_count") != 40:
         raise ValueError("Incorrect declared benchmark size")
     return {"case_count": 40, "source_modules": len(SPLITS), "source_cited_edges": edges,
