@@ -1,0 +1,153 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "Binding",
+  "split": "train",
+  "records": [
+    {
+      "id": "Binding/verifyWireBytes_scope",
+      "name": "verifyWireBytes_scope",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 37,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem verifyWireBytes_scope {raw : ByteArray} {w : WireV2} (h : verifyWireBytes raw = some w) : Scope w",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/encodeSource_injective",
+      "name": "encodeSource_injective",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 66,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem encodeSource_injective {a b : SourceV2} (h : encodeSource a = encodeSource b) : a = b",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/encodeClaim_injective",
+      "name": "encodeClaim_injective",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 83,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem encodeClaim_injective {a b : ClaimV2} (h : encodeClaim a = encodeClaim b) : a = b",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/projection_injective",
+      "name": "projection_injective",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 103,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem projection_injective {w₁ w₂ : WireV2} (h : projection w₁ = projection w₂) (hh : w₁.wireSemanticHash = w₂.wireSemanticHash) : w₁ = w₂",
+      "syntactic_reference_mentions": [
+        "encodeSource_injective",
+        "encodeClaim_injective"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/wire_hash_binding",
+      "name": "wire_hash_binding",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 131,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem wire_hash_binding {r₁ r₂ : ByteArray} {w₁ w₂ : WireV2} (h₁ : verifyWireBytes r₁ = some w₁) (h₂ : verifyWireBytes r₂ = some w₂) (hh : w₁.wireSemanticHash = w₂.wireSemanticHash) : w₁ = w₂ ∨ Sha256Collision",
+      "syntactic_reference_mentions": [
+        "projection_injective"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/wire_hash_binds_bytes",
+      "name": "wire_hash_binds_bytes",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 142,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem wire_hash_binds_bytes {r₁ r₂ : ByteArray} {w₁ w₂ : WireV2} (h₁ : verifyWireBytes r₁ = some w₁) (h₂ : verifyWireBytes r₂ = some w₂) (hh : w₁.wireSemanticHash = w₂.wireSemanticHash) : r₁ = r₂ ∨ Sha256Collision",
+      "syntactic_reference_mentions": [
+        "wire_hash_binding"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/predicate_commitment_binding",
+      "name": "predicate_commitment_binding",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 207,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem predicate_commitment_binding {d : List UInt8} {p₁ p₂ : JVal} (h₁ : PredicateCommits d p₁) (h₂ : PredicateCommits d p₂) : p₁ = p₂ ∨ Sha256Collision",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Binding/evidence_predicate_unique",
+      "name": "evidence_predicate_unique",
+      "module": "Binding",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 224,
+        "blob_sha": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "statement": "theorem evidence_predicate_unique {raw : ByteArray} {w : WireV2} {p q : JVal} (h : verifyWireBytes raw = some w) (hp : PredicateCommits w.claim.predicateCommitment p) {e : EvidenceV2} (he : e ∈ w.evidence) (hq : PredicateCommits e.predicateCommitment q) : q = p ∨ Sha256Collision",
+      "syntactic_reference_mentions": [
+        "predicate_commitment_binding"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
