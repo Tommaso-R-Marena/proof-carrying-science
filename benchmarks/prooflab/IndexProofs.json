@@ -1,0 +1,116 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "IndexProofs",
+  "split": "challenge",
+  "records": [
+    {
+      "id": "IndexProofs/decodeEntry_sound",
+      "name": "decodeEntry_sound",
+      "module": "IndexProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/IndexProofs.lean",
+        "line": 31,
+        "blob_sha": "1f558e69a8234f020a9b529b7e439eedac36e5c0"
+      },
+      "statement": "theorem decodeEntry_sound {v : JVal} {e : EntryV2} (h : decodeEntry v = some e) : encodeEntry e = v",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "IndexProofs/decodeIndex_sound",
+      "name": "decodeIndex_sound",
+      "module": "IndexProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/IndexProofs.lean",
+        "line": 64,
+        "blob_sha": "1f558e69a8234f020a9b529b7e439eedac36e5c0"
+      },
+      "statement": "theorem decodeIndex_sound {v : JVal} {i : IndexV2} (h : decodeIndex v = some i) : encodeIndex i = v ∧ schemaOK i = true",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "IndexProofs/verifyIndexBytes_accepted",
+      "name": "verifyIndexBytes_accepted",
+      "module": "IndexProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/IndexProofs.lean",
+        "line": 85,
+        "blob_sha": "1f558e69a8234f020a9b529b7e439eedac36e5c0"
+      },
+      "statement": "theorem verifyIndexBytes_accepted {raw : ByteArray} {i : IndexV2} (h : verifyIndexBytes raw = some i) : IndexAccepted raw i",
+      "syntactic_reference_mentions": [
+        "decodeIndex_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "IndexProofs/index_hash_binding",
+      "name": "index_hash_binding",
+      "module": "IndexProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/IndexProofs.lean",
+        "line": 139,
+        "blob_sha": "1f558e69a8234f020a9b529b7e439eedac36e5c0"
+      },
+      "statement": "theorem index_hash_binding {r₁ r₂ : ByteArray} {i₁ i₂ : IndexV2} (h₁ : verifyIndexBytes r₁ = some i₁) (h₂ : verifyIndexBytes r₂ = some i₂) (hh : i₁.indexSemanticHash = i₂.indexSemanticHash) : i₁ = i₂ ∨ Sha256Collision",
+      "syntactic_reference_mentions": [
+        "verifyIndexBytes_accepted"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "IndexProofs/lookup_unique",
+      "name": "lookup_unique",
+      "module": "IndexProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/IndexProofs.lean",
+        "line": 175,
+        "blob_sha": "1f558e69a8234f020a9b529b7e439eedac36e5c0"
+      },
+      "statement": "theorem lookup_unique {files : FileMap} (hnd : (files.map (·.1)).Nodup) {p : String} {raw raw' : ByteArray} (h : lookup files p = some raw) (h' : (p, raw') ∈ files) : raw' = raw",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "IndexProofs/verifyNormalizedSet_sound",
+      "name": "verifyNormalizedSet_sound",
+      "module": "IndexProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/IndexProofs.lean",
+        "line": 249,
+        "blob_sha": "1f558e69a8234f020a9b529b7e439eedac36e5c0"
+      },
+      "statement": "theorem verifyNormalizedSet_sound {files : FileMap} {i : IndexV2} {ps : List (EntryV2 × WireV2)} (h : verifyNormalizedSet files = some (i, ps)) : SetAccepted files i ps",
+      "syntactic_reference_mentions": [
+        "verifyIndexBytes_accepted"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
