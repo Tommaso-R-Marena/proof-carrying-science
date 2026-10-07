@@ -118,9 +118,9 @@ def allEvidenceRegistered (r : AcceptedResult) : Bool :=
     PCS.V2.Checkers.registeredBuiltin (requestFor r.pkg.cert r.model r.table e))
 
 def transcriptCovers (t : AuthorityTranscript) (r : AcceptedResult) : Bool :=
-  t.certificateSemanticHash == r.pkg.cert.semanticHash &&
-  t.checkerVersion == r.model.checkerVersion &&
-  decide (t.replay.map (·.evidenceId) = r.model.evidence.map (·.id)) &&
+  (t.certificateSemanticHash == r.pkg.cert.semanticHash &&
+   t.checkerVersion == r.model.checkerVersion &&
+   decide (t.replay.map (·.evidenceId) = r.model.evidence.map (·.id))) &&
   allEvidenceRegistered r
 
 def acceptPCSWithTranscript (t : AuthorityTranscript) (T : TrustAnchor)
