@@ -164,7 +164,11 @@ def diagnosePCSWithTranscript (t : AuthorityTranscript) (T : TrustAnchor)
 /-- A positive transcript binding includes independent checker registration. -/
 theorem transcriptCovers_requires_registered {t : AuthorityTranscript} {r : AcceptedResult}
     (h : transcriptCovers t r = true) : allEvidenceRegistered r = true := by
-  exact (Bool.and_eq_true.mp h).2
+  cases hreg : allEvidenceRegistered r with
+  | false =>
+      simp [transcriptCovers, hreg] at h
+  | true =>
+      simp [hreg]
 
 /-- The ACTUAL pure acceptance function rejects every signed archive for which
 the decoded evidence includes an unregistered check type, even if the earlier
