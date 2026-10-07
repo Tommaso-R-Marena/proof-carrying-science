@@ -10,10 +10,12 @@ version: 2.1
 # ruleset should require the Cloudflare check run instead.
 
 jobs:
-  legacy-ci-disabled:
+  # Compatibility status only. This does NOT certify the commit; the real
+  # assurance result is the Cloudflare Workers Builds check run.
+  repository-integrity:
     type: no-op
 
 workflows:
   pcs-zero-credit-transition:
     jobs:
-      - legacy-ci-disabled
+      - repository-integrity
