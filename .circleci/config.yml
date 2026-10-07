@@ -33,6 +33,51 @@ jobs:
           name: Verify repository metadata and governance invariants
           command: python scripts/check_repository_integrity.py
 
+  provenance-v06-tests:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install provenance test environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Build pinned Lean authority before provenance-attestation tests
+          command: |
+            curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+            echo 'export PATH="$HOME/.elan/bin:$PATH"' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            cd formal
+            lake build pcs-lean-authority
+      - run:
+          name: Compile and test SBOM/build provenance contract
+          command: |
+            . .venv/bin/activate
+            python -m py_compile \
+              pcs/provenance_v06.py \
+              pcs/attest_v06.py \
+              pcs/bundle_v06.py \
+              pcs/verifier_v06.py \
+              pcs/verifier_io_v06.py \
+              pcs/verifier_zip_v06.py \
+              pcs/local_verify_v06.py \
+              pcs/receipt_contract_v06.py \
+              pcs/cli.py \
+              tests/test_provenance_v06.py \
+              tests/test_attest_v06.py \
+              tests/test_local_verify_v06.py \
+              tests/test_receipt_contract_v06.py
+            python -m pytest -q \
+              tests/test_provenance_v06.py \
+              tests/test_attest_v06.py \
+              tests/test_local_verify_v06.py \
+              tests/test_receipt_contract_v06.py \
+              tests/test_schema_boundary.py
+
   proof-search-syntax:
     docker:
       - image: cimg/python:3.12
@@ -117,7 +162,7 @@ jobs:
           name: Run P0/P1 product hardening gates
           command: |
             . .venv/bin/activate
-            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_decomposition_proposer_v06.py tests/test_artifact_inspection_v06.py tests/test_proof_search_corpus_v06.py tests/test_pkpd_translation_benchmark_v06.py tests/test_pkpd_peak_threshold_v06.py
+            python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_provenance_v06.py tests/test_attest_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_decomposition_proposer_v06.py tests/test_artifact_inspection_v06.py tests/test_proof_search_corpus_v06.py tests/test_pkpd_translation_benchmark_v06.py tests/test_pkpd_peak_threshold_v06.py
             python scripts/run_golden_examples_v06.py -o /tmp/pcs-golden-demo
             python scripts/run_pkpd_translation_benchmark_v06.py -o /tmp/pcs-pkpd-translation-benchmark
             python scripts/adversarial_v06_hardening.py
@@ -134,6 +179,34 @@ jobs:
       - store_artifacts:
           path: /tmp/pcs-verifier-v06.manifest.json
           destination: reviewer-verifier/pcs-verifier-v06.manifest.json
+
+  pilot-ops-tests:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Install focused pilot operations test environment
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install -e ".[dev]"
+      - run:
+          name: Compile and test signer lifecycle and pilot closeout controls
+          command: |
+            . .venv/bin/activate
+            python -m py_compile \
+              pcs/key_lifecycle.py \
+              pcs/pilot_closeout.py \
+              scripts/pilot_key_lifecycle.py \
+              scripts/pilot_closeout.py \
+              tests/test_key_lifecycle.py \
+              tests/test_pilot_closeout.py
+            python -m pytest -q \
+              tests/test_key_lifecycle.py \
+              tests/test_pilot_closeout.py \
+              tests/test_key_custody.py
 
   restoration-regression:
     machine:
@@ -397,6 +470,10 @@ jobs:
           command: echo "Python hash-locked wheel restoration, native ABI variation, and offline R renv restoration all passed."
 
 workflows:
+  provenance-hardening:
+    jobs:
+      - provenance-v06-tests
+
   repository-integrity-gate:
     jobs:
       - repository-integrity
@@ -451,6 +528,16 @@ workflows:
                 - core/decomposition-proposer-protocol-v1
                 - core/bounded-artifact-inspection-v1
                 - core/proof-search-corpus-v2
+                - core/sbom-build-provenance-v1
+
+  pilot-ops-hardening:
+    jobs:
+      - pilot-ops-tests:
+          filters:
+            branches:
+              only:
+                - main
+                - ops/pilot-key-closeout-v1
 
   restoration-and-abi-evidence:
     jobs:

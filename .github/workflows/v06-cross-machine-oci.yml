@@ -11,8 +11,9 @@ permissions:
 
 jobs:
   producer:
+    if: ${{ vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
     name: producer-ubuntu24-x64
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64, pcs-ubuntu24-x64]
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
@@ -36,19 +37,20 @@ jobs:
           retention-days: 14
 
   consumer:
+    if: ${{ vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
     name: replay-${{ matrix.machine_id }}
     needs: producer
     strategy:
       fail-fast: false
       matrix:
         include:
-          - runner: ubuntu-24.04
+          - runner: [self-hosted, linux, x64, pcs-ubuntu24-x64]
             machine_id: ubuntu24-x64
-          - runner: ubuntu-22.04
+          - runner: [self-hosted, linux, x64, pcs-ubuntu22-x64]
             machine_id: ubuntu22-x64
-          - runner: ubuntu-24.04-arm
+          - runner: [self-hosted, linux, ARM64, pcs-ubuntu24-arm64]
             machine_id: ubuntu24-arm64
-          - runner: ubuntu-22.04-arm
+          - runner: [self-hosted, linux, ARM64, pcs-ubuntu22-arm64]
             machine_id: ubuntu22-arm64
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
@@ -73,7 +75,7 @@ jobs:
             --output "cross-machine-results/${{ matrix.machine_id }}" \
             --machine-id "${{ matrix.machine_id }}"
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ always() && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
         with:
           name: pcs-cross-machine-results-${{ matrix.machine_id }}
           path: cross-machine-results
@@ -84,7 +86,7 @@ jobs:
     name: aggregate-cross-machine-evidence
     needs: consumer
     if: always()
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64, pcs-ubuntu24-x64]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5

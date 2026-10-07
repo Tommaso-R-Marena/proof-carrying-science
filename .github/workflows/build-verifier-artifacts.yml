@@ -27,17 +27,18 @@ on:
 
 jobs:
   build:
+    if: ${{ vars.PCS_CROSS_PLATFORM_RUNNERS_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - runner: [self-hosted, linux, x64, pcs-verifier-ci]
             artifact: pcs-verifier-v06-linux
-          - os: windows-latest
+          - runner: [self-hosted, windows, x64, pcs-verifier-ci]
             artifact: pcs-verifier-v06-windows
-          - os: macos-latest
+          - runner: [self-hosted, macos, x64, pcs-verifier-ci]
             artifact: pcs-verifier-v06-macos
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -40,9 +40,9 @@ Required:
 
 - business entity/payment route;
 - counsel-reviewed pilot/SOW/confidentiality/data-handling terms;
-- signing-key custody procedure;
+- signing-key custody procedure (engineering procedure/tooling implemented; real custody deployment still must be exercised);
 - versioned release procedure;
-- data deletion/retention process;
+- data deletion/retention process (hash-bound local plan/receipt tooling implemented; partner-specific contractual retention still must be agreed and exercised);
 - incident/failure response;
 - external workflow completed at least once;
 - scope language that avoids regulatory/clinical overclaim.

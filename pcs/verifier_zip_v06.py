@@ -330,6 +330,8 @@ def verify_package_zip_end_to_end_v06(
     telemetry_sink: dict[str, Any] | None = None,
     lean_authority_path: str | Path | None = None,
     require_canonical_archive: bool = False,
+    expected_build_provenance_fingerprint: str | None = None,
+    expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Verify a v0.6 delivery ZIP.
 
@@ -385,6 +387,10 @@ def verify_package_zip_end_to_end_v06(
         shadow_bandit=shadow_bandit,
         telemetry_sink=telemetry_sink,
         authority_context_sink=authority_context,
+        expected_build_provenance_fingerprint=(
+            expected_build_provenance_fingerprint
+        ),
+        expected_build_subject_sha256=expected_build_subject_sha256,
     )
     result = enforce_lean_authority_v06(
         result,

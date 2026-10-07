@@ -17,6 +17,7 @@ from .replay_v06 import verify_certificate_replay_v06
 from .signing_v06 import verify_certificate_signature_v06
 from .workflow_replay_v06 import verify_static_workflow_replay_v06
 from .environment_replay_v06 import verify_environment_replay_v06
+from .provenance_v06 import verify_provenance_package_v06
 
 
 VERIFIER_FORMAT_V06 = "pcs-end-to-end-verifier-v06-v1"
@@ -55,6 +56,8 @@ def verify_end_to_end_v06(
     shadow_bandit: bool = False,
     telemetry_sink: dict[str, Any] | None = None,
     authority_context_sink: dict[str, Any] | None = None,
+    expected_build_provenance_fingerprint: str | None = None,
+    expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Run the Python v0.6 precheck over one complete package.
 
@@ -70,10 +73,12 @@ def verify_end_to_end_v06(
     2. certificate hash/schema validity and its Ed25519 signature;
     3. exact signed package member set, byte sizes/hashes, certificate binding and
        package-manifest Ed25519 signature;
-    4. fresh regeneration of any human-confirmed reproducibility-environment contract;
-    5. fresh static replay of any human-confirmed workflow dependency claims;
-    6. fresh replay of every certificate evidence item;
-    7. exact equality of the delivered normalized set with the set derived from
+    4. optional SBOM/build-provenance index integrity and any pinned external
+       DSSE Ed25519 build-provenance signature;
+    5. fresh regeneration of any human-confirmed reproducibility-environment contract;
+    6. fresh static replay of any human-confirmed workflow dependency claims;
+    7. fresh replay of every certificate evidence item;
+    8. exact equality of the delivered normalized set with the set derived from
        that *same* replay result.
 
     This is the production executable composition point. It does not turn an
@@ -85,6 +90,7 @@ def verify_end_to_end_v06(
         "canonical_inputs": False,
         "certificate_signature": False,
         "package_binding": False,
+        "provenance": False,
         "environment_replay": False,
         "workflow_replay": False,
         "replay": False,
@@ -140,6 +146,21 @@ def verify_end_to_end_v06(
             stages=stages,
         )
     stages["package_binding"] = True
+
+    provenance = verify_provenance_package_v06(
+        package_files,
+        expected_build_provenance_fingerprint=(
+            expected_build_provenance_fingerprint
+        ),
+        expected_build_subject_sha256=expected_build_subject_sha256,
+    )
+    if not provenance["valid"]:
+        return _failed(
+            "provenance",
+            list(provenance["errors"]),
+            stages=stages,
+        )
+    stages["provenance"] = True
 
     environment_replay = verify_environment_replay_v06(
         certificate,
@@ -233,6 +254,19 @@ def verify_end_to_end_v06(
         "public_key_fingerprint": package_check["public_key_fingerprint"],
         "normalized_index_semantic_hash": normalized["index_semantic_hash"],
         "verified_members": package_check["verified_members"],
+        "provenance": {
+            "mode": provenance["mode"],
+            "semantic_hash": provenance["semantic_hash"],
+            "entries": provenance["entries"],
+            "reviewer_expectations": provenance.get(
+                "reviewer_expectations",
+                {
+                    "applied": False,
+                    "build_provenance_fingerprint": None,
+                    "subject_sha256": [],
+                },
+            ),
+        },
         "environment_replay": {
             "mode": environment_replay["mode"],
             "hermeticity": environment_replay["hermeticity"],

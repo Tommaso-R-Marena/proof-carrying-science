@@ -124,3 +124,11 @@ def validate_v06_normalized_decision_index_shape(value: Any) -> None:
         "normalized_decision_index_v06.schema.json",
         label="v0.6 normalized decision index",
     )
+
+
+def validate_v06_provenance_index_shape(value: Any) -> None:
+    validate_shape(
+        value,
+        "provenance_index_v06.schema.json",
+        label="v0.6 provenance index",
+    )

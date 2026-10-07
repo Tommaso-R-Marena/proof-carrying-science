@@ -25,6 +25,15 @@ REQUIRED_GITATTRIBUTES = {
     "*.sh text eol=lf",
 }
 
+# GitHub-hosted jobs in this repository currently fail before runner allocation
+# (no steps, no logs). CircleCI is the protected automatic CI. Keep the
+# duplicate GitHub workflows manual-only until this invariant is deliberately
+# retired after a real hosted-runner execution is observed.
+MANUAL_ONLY_GITHUB_WORKFLOWS = {
+    ".github/workflows/build-verifier-artifacts.yml",
+    ".github/workflows/product-hardening.yml",
+}
+
 
 def _git(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
@@ -124,6 +133,36 @@ def audit_repository() -> dict:
             )
         else:
             normalized[key] = path
+
+    for path in sorted(MANUAL_ONLY_GITHUB_WORKFLOWS):
+        if path not in tracked:
+            errors.append(f"manual-only GitHub workflow is not tracked: {path}")
+            continue
+        text = (ROOT / path).read_text(encoding="utf-8")
+        lines = text.splitlines()
+        try:
+            on_index = next(i for i, line in enumerate(lines) if line == "on:")
+        except StopIteration:
+            errors.append(f"GitHub workflow has no top-level on: block: {path}")
+            continue
+
+        trigger_lines: list[str] = []
+        for line in lines[on_index + 1 :]:
+            if line and not line.startswith((" ", "\t", "#")):
+                break
+            trigger_lines.append(line)
+
+        trigger_text = "\n".join(trigger_lines)
+        if "  workflow_dispatch:" not in trigger_text:
+            errors.append(
+                f"manual-only GitHub workflow lacks workflow_dispatch: {path}"
+            )
+        for forbidden in ("  pull_request:", "  push:"):
+            if forbidden in trigger_text:
+                errors.append(
+                    "GitHub hosted-runner allocation is unresolved; "
+                    f"automatic trigger {forbidden.strip()} must stay disabled: {path}"
+                )
 
     root_toolchain = ROOT / "lean-toolchain"
     formal_toolchain = ROOT / "formal" / "lean-toolchain"

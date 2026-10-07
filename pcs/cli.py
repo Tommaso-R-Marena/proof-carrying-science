@@ -21,6 +21,11 @@ from .attest import attest, AttestationError
 from .policy import load_policy, evaluate_policy_file, PolicyError
 from .package import build_package_manifest, PackageError
 from .environment import write_environment, diff_environment_files
+from .provenance_v06 import (
+    V06ProvenanceError,
+    diff_provenance_files_v06,
+    write_cyclonedx_sbom_v06,
+)
 from .intake import freeze_intake_file, PilotIntakeError
 from .verifier_io_v06 import (
     V06VerifierIOError,
@@ -236,6 +241,12 @@ def cmd_verify_v06(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
             lean_authority_path=args.lean_authority,
+            expected_build_provenance_fingerprint=(
+                args.expected_build_provenance_fingerprint
+            ),
+            expected_build_subject_sha256=(
+                args.expected_build_provenance_subject_sha256
+            ),
             **scheduler_kwargs,
         )
         telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
@@ -287,6 +298,12 @@ def cmd_verify_v06_bundle(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
             lean_authority_path=args.lean_authority,
+            expected_build_provenance_fingerprint=(
+                args.expected_build_provenance_fingerprint
+            ),
+            expected_build_subject_sha256=(
+                args.expected_build_provenance_subject_sha256
+            ),
             **scheduler_kwargs,
         )
         telemetry_path, telemetry_history_path = _persist_scheduler_telemetry_from_args(
@@ -422,6 +439,15 @@ def cmd_attest_v06(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             overwrite=args.force,
             lean_authority_path=args.lean_authority,
+            sbom_path=args.sbom,
+            build_provenance_path=args.build_provenance,
+            build_provenance_public_key_path=args.build_provenance_public_key,
+            expected_build_provenance_fingerprint=(
+                args.expected_build_provenance_fingerprint
+            ),
+            expected_build_subject_sha256=(
+                args.build_provenance_subject_sha256
+            ),
         )
     except (OSError, V06AttestationError) as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
@@ -1394,6 +1420,42 @@ def cmd_env_diff(args):
     return 0
 
 
+def cmd_export_sbom_v06(args):
+    try:
+        written = write_cyclonedx_sbom_v06(
+            args.output,
+            overwrite=args.force,
+        )
+    except (OSError, V06ProvenanceError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {
+                "format": "cyclonedx-json-1.5",
+                "wrote": str(written),
+                "scope": (
+                    "observed Python runtime/dependency inventory; "
+                    "not scientific correctness"
+                ),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def cmd_provenance_diff_v06(args):
+    try:
+        result = diff_provenance_files_v06(args.left, args.right)
+    except (OSError, V06ProvenanceError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser():
     p = argparse.ArgumentParser(prog="pcs", description="Proof-Carrying Science reference CLI")
     sub = p.add_subparsers(required=True)
@@ -1808,6 +1870,16 @@ def build_parser():
         "--policy",
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
     )
+    v6.add_argument(
+        "--expected-build-provenance-fingerprint",
+        help="require external build provenance signed by this Ed25519 key fingerprint",
+    )
+    v6.add_argument(
+        "--expected-build-provenance-subject-sha256",
+        action="append",
+        default=[],
+        help="require external build provenance to attest this subject SHA-256; repeatable",
+    )
     v6.add_argument("--receipt", help="write deterministic JSON verification receipt")
     v6.add_argument(
         "--force-receipt",
@@ -1880,6 +1952,16 @@ def build_parser():
     v6b.add_argument(
         "--policy",
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
+    )
+    v6b.add_argument(
+        "--expected-build-provenance-fingerprint",
+        help="require external build provenance signed by this Ed25519 key fingerprint",
+    )
+    v6b.add_argument(
+        "--expected-build-provenance-subject-sha256",
+        action="append",
+        default=[],
+        help="require external build provenance to attest this subject SHA-256; repeatable",
     )
     v6b.add_argument("--receipt", help="write deterministic JSON verification receipt")
     v6b.add_argument(
@@ -2051,6 +2133,37 @@ def build_parser():
         help="receiver/producer-owned pcs-lean-authority executable; defaults to embedded/repository authority",
     )
     a6.add_argument(
+        "--sbom",
+        help=(
+            "optional CycloneDX JSON 1.4/1.5/1.6/1.7 or SPDX JSON 2.2/2.3 SBOM; "
+            "exact bytes are bound into the signed package"
+        ),
+    )
+    a6.add_argument(
+        "--build-provenance",
+        help=(
+            "optional DSSE envelope containing an in-toto Statement v1; "
+            "requires pinned external Ed25519 provenance signer inputs"
+        ),
+    )
+    a6.add_argument(
+        "--build-provenance-public-key",
+        help="trusted external build-provenance signer Ed25519 public key PEM",
+    )
+    a6.add_argument(
+        "--expected-build-provenance-fingerprint",
+        help="pin the external build-provenance Ed25519 public-key SHA-256 fingerprint",
+    )
+    a6.add_argument(
+        "--build-provenance-subject-sha256",
+        action="append",
+        default=[],
+        help=(
+            "SHA-256 subject that the in-toto statement must attest; repeatable "
+            "for image/artifact/build subjects"
+        ),
+    )
+    a6.add_argument(
         "--force",
         action="store_true",
         help="explicitly replace an existing output ZIP after the replacement self-verifies",
@@ -2178,6 +2291,26 @@ def build_parser():
     ed.add_argument("left")
     ed.add_argument("right")
     ed.set_defaults(func=cmd_env_diff)
+
+    sb6 = sub.add_parser(
+        "export-sbom-v06",
+        help="export a deterministic CycloneDX SBOM from the observed Python runtime",
+    )
+    sb6.add_argument("-o", "--output", required=True)
+    sb6.add_argument(
+        "--force",
+        action="store_true",
+        help="explicitly replace an existing SBOM",
+    )
+    sb6.set_defaults(func=cmd_export_sbom_v06)
+
+    pd6 = sub.add_parser(
+        "provenance-diff-v06",
+        help="compare two PCS v0.6 provenance indexes",
+    )
+    pd6.add_argument("left")
+    pd6.add_argument("right")
+    pd6.set_defaults(func=cmd_provenance_diff_v06)
 
     return p
 
