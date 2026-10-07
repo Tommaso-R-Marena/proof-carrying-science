@@ -21,7 +21,7 @@ For an audited migration, the owner must:
 4. Verify the new check blocks known-bad PRs and permits known-good PRs; then remove the exhausted `ci/circleci: repository-integrity` requirement from that same ruleset, preserving mandatory PRs, signed/reviewed merge policy and strict update requirements.
 5. Re-run on the new head SHA of every PR after bringing it up to date with main. For code changing semantics, obtain independent reviewer confirmation appropriate to its threat model.
 
-This is one manual ruleset change the API integration does not expose; no research PR should be merged before it happens.
+This ruleset migration is still the desired end state, but the current repository uses the legacy CircleCI context only as a documented zero-credit compatibility bridge. Until the GitHub ruleset can be edited, merge decisions must require an independently inspected **green full Cloudflare build on the exact candidate head**; the compatibility status alone is never sufficient assurance.
 
 ## Security constraints
 
