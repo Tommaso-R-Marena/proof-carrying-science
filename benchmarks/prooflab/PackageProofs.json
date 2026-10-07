@@ -1,0 +1,154 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "PackageProofs",
+  "split": "challenge",
+  "records": [
+    {
+      "id": "PackageProofs/digestField_sound",
+      "name": "digestField_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 26,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem digestField_sound {ms : List (String × JVal)} {k : String} {d : List UInt8} (h : digestField ms k = some d) : field ms k = some (.str (hexEncode d)) ∧ d.length = 32",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/verifyCertBytes_sound",
+      "name": "verifyCertBytes_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 47,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem verifyCertBytes_sound {raw : ByteArray} {c : CertV2} (h : verifyCertBytes raw = some c) : CertAccepted raw c",
+      "syntactic_reference_mentions": [
+        "digestField_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/decodeMeta_sound",
+      "name": "decodeMeta_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 103,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem decodeMeta_sound {v : JVal} {m : FileMeta} (h : decodeMeta v = some m) : encodeMeta m = v ∧ m.sha256.length = 32",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/decodeManifest_sound",
+      "name": "decodeManifest_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 148,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem decodeManifest_sound {v : JVal} {m : ManifestV2} (h : decodeManifest v = some m) : encodeManifest m = v ∧ m.certSemanticHash.length = 32 ∧ m.certIntegrityHash.length = 32 ∧ ∀ nf ∈ m.files, nf.2.sha256.length = 32",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/verifyManifestBytes_sound",
+      "name": "verifyManifestBytes_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 178,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem verifyManifestBytes_sound {U : UnicodeOps} {raw : ByteArray} {m : ManifestV2} (h : verifyManifestBytes U raw = some m) : ManifestAccepted U raw m",
+      "syntactic_reference_mentions": [
+        "decodeManifest_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/fileMapOK_sound",
+      "name": "fileMapOK_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 226,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem fileMapOK_sound {U : UnicodeOps} {m : ManifestV2} {c : CertV2} {certBytes : ByteArray} {files : FileMap} (h : fileMapOK U m c certBytes files = true) : FileMapAccepted U m c certBytes files",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/verifyPackage_sound",
+      "name": "verifyPackage_sound",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 304,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem verifyPackage_sound {U : UnicodeOps} {V : Ed25519Verify} {pk : List UInt8} {expected : Option (List UInt8)} {inp : PackageInput} {r : PackageResult} (h : verifyPackage U V pk expected inp = some r) : PackageAccepted U V pk expected inp r",
+      "syntactic_reference_mentions": [
+        "verifyCertBytes_sound",
+        "verifyManifestBytes_sound",
+        "fileMapOK_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PackageProofs/package_authentic",
+      "name": "package_authentic",
+      "module": "PackageProofs",
+      "split": "challenge",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PackageProofs.lean",
+        "line": 333,
+        "blob_sha": "28f48455e79ba68a80c65fd51cd8264c59823f5d"
+      },
+      "statement": "theorem package_authentic {U : UnicodeOps} {V Spec : Ed25519Verify} {pk : List UInt8} {expected : Option (List UInt8)} {inp : PackageInput} {r : PackageResult} {Signed : List UInt8 → Prop} (h : verifyPackage U V pk expected inp = some r) (hA : Ed25519ImplCorrect V Spec) (hB : NoForgery Spec pk Signed) : Signed (signedMessage packageSignatureDomain (encodeManifest r.manifest)) ∧ ∃ csp, certSigPayload r.cert = some csp ∧ Signed (signedMessage certificateSignatureDomain csp)",
+      "syntactic_reference_mentions": [
+        "verifyPackage_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
