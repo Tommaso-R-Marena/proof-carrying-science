@@ -12,7 +12,7 @@ Cloudflare's free build minutes (currently 3,000/month, one concurrent job, 20-m
 
 ## IMPORTANT: protect the existing merge gate
 
-The active GitHub ruleset `Protect PCS main` (ID `24471337`) currently requires the CircleCI App status `ci/circleci: repository-integrity`. A Cloudflare green check **does not satisfy or replace** that status automatically. The Cloudflare connector also cannot update GitHub branch protection on the user's behalf. Do not use force-push, admin bypass, misleading synthetic commit statuses, or direct-protected-main API writes.
+The active GitHub ruleset `Protect PCS main` (ID `24471337`) still names the legacy CircleCI App status `ci/circleci: repository-integrity`. The repository now emits that exact context through a documented **zero-credit CircleCI no-op compatibility job** so the stale rule does not deadlock every PR; that status is not assurance evidence and must never be presented as such. The real engineering gate is the exact-head `Workers Builds: pcs-core-ci-only` / `Workers Builds: pcs-core-ci-gate` result. The GitHub ruleset should be migrated to the Cloudflare Workers and Pages check as soon as repository settings are changed; the connected GitHub tool available here cannot mutate rulesets. Do not use force-push or admin bypass to evade the real Cloudflare gate.
 
 For an audited migration, the owner must:
 1. Obtain a **completed green** Cloudflare full-Python/Lean result for the exact candidate PR head and verify it actually ran the tests, not a no-op.
