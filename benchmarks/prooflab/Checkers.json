@@ -1,0 +1,98 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "Checkers",
+  "split": "train",
+  "records": [
+    {
+      "id": "Checkers/dispatch_faithful",
+      "name": "dispatch_faithful",
+      "module": "Checkers",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Checkers.lean",
+        "line": 55,
+        "blob_sha": "5cb5fe89a0466a8f63d04021adcc1bbed938ed3c"
+      },
+      "statement": "theorem dispatch_faithful (cs : List CertifiedChecker) {fallback : Executor} {fallbackHolds : ReplayRequest → Prop} (hfb : ReplayFaithful fallback fallbackHolds) : ReplayFaithful (dispatch cs fallback) (DispatchHolds cs fallbackHolds)",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Checkers/chem_sound",
+      "name": "chem_sound",
+      "module": "Checkers",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Checkers.lean",
+        "line": 77,
+        "blob_sha": "5cb5fe89a0466a8f63d04021adcc1bbed938ed3c"
+      },
+      "statement": "theorem chem_sound (req : ReplayRequest) (hc : isReactionCheck req.evidence = true) (hp : (chemExecWith unverifiedExec req).outcome = .pass) : ReactionHolds req.evidence",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Checkers/builtinExecWith_faithful",
+      "name": "builtinExecWith_faithful",
+      "module": "Checkers",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Checkers.lean",
+        "line": 116,
+        "blob_sha": "5cb5fe89a0466a8f63d04021adcc1bbed938ed3c"
+      },
+      "statement": "theorem builtinExecWith_faithful {fallback : Executor} {fallbackHolds : ReplayRequest → Prop} (hfb : ReplayFaithful fallback fallbackHolds) : ReplayFaithful (builtinExecWith fallback) (BuiltinHolds fallbackHolds)",
+      "syntactic_reference_mentions": [
+        "dispatch_faithful"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Checkers/builtinHolds_semantics",
+      "name": "builtinHolds_semantics",
+      "module": "Checkers",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Checkers.lean",
+        "line": 221,
+        "blob_sha": "5cb5fe89a0466a8f63d04021adcc1bbed938ed3c"
+      },
+      "statement": "theorem builtinHolds_semantics {fb : ReplayRequest → Prop} {req : ReplayRequest} (h : BuiltinHolds fb req) : BuiltinSemantics req",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Checkers/builtinExecWith_pass_semantics",
+      "name": "builtinExecWith_pass_semantics",
+      "module": "Checkers",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Checkers.lean",
+        "line": 230,
+        "blob_sha": "5cb5fe89a0466a8f63d04021adcc1bbed938ed3c"
+      },
+      "statement": "theorem builtinExecWith_pass_semantics (fallback : Executor) (req : ReplayRequest) (hp : (builtinExecWith fallback req).outcome = .pass) : BuiltinSemantics req",
+      "syntactic_reference_mentions": [
+        "builtinExecWith_faithful",
+        "builtinHolds_semantics"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
