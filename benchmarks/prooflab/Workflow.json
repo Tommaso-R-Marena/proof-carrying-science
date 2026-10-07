@@ -1,0 +1,134 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "Workflow",
+  "split": "evaluation",
+  "records": [
+    {
+      "id": "Workflow/subsetB_sound",
+      "name": "subsetB_sound",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 342,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem subsetB_sound {xs ys : List String} (h : subsetB xs ys = true) : SubsetL xs ys",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Workflow/refsOK_sound",
+      "name": "refsOK_sound",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 364,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem refsOK_sound {f : FreshSource} {refs : List PVal} (h : refsOK f refs = true) : ∀ r ∈ refs, ∃ k, refKey r = some k ∧ k ∈ f.refs",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Workflow/claimB_sound",
+      "name": "claimB_sound",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 374,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem claimB_sound {f : FreshSource} {nm : List (String × JVal)} {sg : List (String × PVal)} (h : claimB f nm sg = true) : ClaimMatches f nm sg",
+      "syntactic_reference_mentions": [
+        "refsOK_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Workflow/boundB_sound",
+      "name": "boundB_sound",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 387,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem boundB_sound {cert : List (String × JVal)} {f : FreshSource} (h : boundB cert f = true) : SourceBound cert f",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Workflow/nodeOK_sound",
+      "name": "nodeOK_sound",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 400,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem nodeOK_sound {fa : List FreshSource} {cert : List (String × JVal)} {nm : List (String × JVal)} (h : nodeOK fa cert (.obj nm) = true) {sg : List (String × PVal)} (hs : StaticContract nm sg) : ∃ f ∈ fa, SourceBound cert f ∧ ClaimMatches f nm sg",
+      "syntactic_reference_mentions": [
+        "claimB_sound",
+        "boundB_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Workflow/workflowCheckB_sound",
+      "name": "workflowCheckB_sound",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 411,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem workflowCheckB_sound {fa : List FreshSource} {cert : List (String × JVal)} (h : workflowCheckB fa cert = true) : WorkflowDescribes fa cert",
+      "syntactic_reference_mentions": [
+        "nodeOK_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Workflow/workflowDescribes_semantics",
+      "name": "workflowDescribes_semantics",
+      "module": "Workflow",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 430,
+        "blob_sha": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "statement": "theorem workflowDescribes_semantics {fa : List FreshSource} {cert : List (String × JVal)} {A : FreshSource → Prop} (h : WorkflowDescribes fa cert) (hA : ∀ f ∈ fa, A f) : WorkflowSemantics A cert",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
