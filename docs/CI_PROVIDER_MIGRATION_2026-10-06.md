@@ -1,6 +1,6 @@
 # PCS CI provider migration — 2026-10-06
 
-Status: **PREPARED, NOT CUT OVER**. GitHub Actions and CircleCI hosted minutes on private repos have reportedly been exhausted. A status stuck pending because a runner did not execute is **not** a pass.
+Status: **CUT OVER TO CLOUDFLARE WORKERS BUILDS (2026-10-07)**. GitHub Actions and CircleCI hosted compute are not the PCS core assurance path. A status that did not execute the full repository-integrity + Lean + Python + adversarial gate is **not** a pass.
 
 ## Current safety baseline
 - `main` is protected by the **Protect PCS main** ruleset. It requires a PR, linear history, resolved review threads, and `ci/circleci: repository-integrity`, with no bypass actors.
