@@ -25,13 +25,13 @@ REQUIRED_GITATTRIBUTES = {
     "*.sh text eol=lf",
 }
 
-# GitHub-hosted jobs in this repository currently fail before runner allocation
-# (no steps, no logs). CircleCI is the protected automatic CI. Keep the
-# duplicate GitHub workflows manual-only until this invariant is deliberately
-# retired after a real hosted-runner execution is observed.
-MANUAL_ONLY_GITHUB_WORKFLOWS = {
-    ".github/workflows/build-verifier-artifacts.yml",
-    ".github/workflows/product-hardening.yml",
+# Automatic GitHub workflows are permitted only when they are hard-gated to
+# explicitly enabled self-hosted runners. This keeps zero-hosted-minute CI
+# fail-closed: no repository variable => no runner allocation, and pull requests
+# from forks never execute on an owner-controlled runner.
+SELF_HOSTED_GITHUB_WORKFLOWS = {
+    ".github/workflows/build-verifier-artifacts.yml": "PCS_CROSS_PLATFORM_RUNNERS_ENABLED",
+    ".github/workflows/product-hardening.yml": "PCS_SELF_HOSTED_CI_ENABLED",
 }
 
 
@@ -134,9 +134,9 @@ def audit_repository() -> dict:
         else:
             normalized[key] = path
 
-    for path in sorted(MANUAL_ONLY_GITHUB_WORKFLOWS):
+    for path, gate_var in sorted(SELF_HOSTED_GITHUB_WORKFLOWS.items()):
         if path not in tracked:
-            errors.append(f"manual-only GitHub workflow is not tracked: {path}")
+            errors.append(f"self-hosted GitHub workflow is not tracked: {path}")
             continue
         text = (ROOT / path).read_text(encoding="utf-8")
         lines = text.splitlines()
@@ -153,16 +153,31 @@ def audit_repository() -> dict:
             trigger_lines.append(line)
 
         trigger_text = "\n".join(trigger_lines)
-        if "  workflow_dispatch:" not in trigger_text:
-            errors.append(
-                f"manual-only GitHub workflow lacks workflow_dispatch: {path}"
-            )
-        for forbidden in ("  pull_request:", "  push:"):
-            if forbidden in trigger_text:
+        automatic = any(
+            trigger in trigger_text for trigger in ("  pull_request:", "  push:")
+        )
+        if automatic:
+            if f"vars.{gate_var}" not in text:
                 errors.append(
-                    "GitHub hosted-runner allocation is unresolved; "
-                    f"automatic trigger {forbidden.strip()} must stay disabled: {path}"
+                    f"automatic self-hosted workflow lacks {gate_var} enable gate: {path}"
                 )
+            if "self-hosted" not in text:
+                errors.append(
+                    f"automatic workflow is not pinned to self-hosted runners: {path}"
+                )
+            if "github.event.pull_request.head.repo.full_name == github.repository" not in text:
+                errors.append(
+                    f"automatic self-hosted workflow does not reject fork PR execution: {path}"
+                )
+            hosted_labels = ("ubuntu-latest", "windows-latest", "macos-latest")
+            if any(label in text for label in hosted_labels):
+                errors.append(
+                    f"automatic workflow still references a GitHub-hosted runner: {path}"
+                )
+        elif "  workflow_dispatch:" not in trigger_text:
+            errors.append(
+                f"non-automatic GitHub workflow lacks workflow_dispatch: {path}"
+            )
 
     root_toolchain = ROOT / "lean-toolchain"
     formal_toolchain = ROOT / "formal" / "lean-toolchain"
