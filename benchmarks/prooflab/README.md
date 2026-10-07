@@ -8,7 +8,7 @@ This first benchmark indexes **40 existing Lean theorem declarations** from the 
 
 These are **entire source modules**, not row-random splits. All 40 come from **one project (PCS Lean v2)**. A real project-held-out evaluation must wait for independently permission-cleared outside projects; do not claim cross-project generalization yet.
 
-`pcs_lean_v2_40.json` includes genuine theorem statements and source cited prior target lemma mentions; it is private repo material. `prooflab_public_view.json` is a source-pinned public pedagogical index with summaries, task boards, and citation references but **no private Lean proof body or statement**. Public educational graph edges describe a prudent review workflow and are not a Lean theorem's exact minimal prerequisites. Actual cited lemma edges are labeled separately and checked lexically against source.
+`pcs_lean_v2_40.json` includes genuine theorem statements and source cited prior target lemma mentions; it is private repo material. `prooflab_public_view.json` publishes **only the 22 training mission summaries**, never the 18 validation/evaluation cases; it contains task boards and citation references but **no private Lean proof bodies or statements**. The private benchmark is the only file carrying held-out target identifiers and theorem statements. Public educational graph edges describe a prudent review workflow and are not a Lean theorem's exact minimal prerequisites. Actual cited lemma edges are labeled separately and checked lexically against source.
 
 The validator checks Git blob SHA-1, line, exact normalized statement, prior cited theorem names, 40 IDs, graph acyclicity and source-module split integrity. It does not prove those lexical references logically necessary. It does not run Lean.
 
