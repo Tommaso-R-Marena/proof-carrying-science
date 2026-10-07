@@ -14,7 +14,7 @@ from pathlib import Path
 
 BENCHMARK_FORMAT = "pcs-prooflab-lean-obligation-benchmark-v1"
 PUBLIC_FORMAT = "pcs-prooflab-public-source-index-v1"
-SOURCE_REVISION = "cff0b67595abd4862ab0c156b157f262b169eca5"
+SOURCE_REVISION = "717c00ea6f362fe059267184273e1a733d59f0ce"
 SPLITS = {
     "Binding": "training", "Workflow": "training", "PKPDCheck": "training",
     "Checkers": "validation", "PackageProofs": "evaluation", "Frontier": "evaluation",

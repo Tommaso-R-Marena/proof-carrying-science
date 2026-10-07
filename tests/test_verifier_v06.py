@@ -142,6 +142,7 @@ def test_end_to_end_fails_at_package_binding_before_replay_on_artifact_tamper():
         "canonical_inputs": True,
         "certificate_signature": True,
         "package_binding": False,
+        "provenance": False,
         "environment_replay": False,
         "workflow_replay": False,
         "replay": False,

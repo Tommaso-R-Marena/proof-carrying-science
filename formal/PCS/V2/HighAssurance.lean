@@ -79,7 +79,7 @@ theorem transcriptCovers_spec {t : AuthorityTranscript} {r : AcceptedResult}
     t.replay.map (·.evidenceId) = r.model.evidence.map (·.id) := by
   unfold transcriptCovers at h
   simp only [Bool.and_eq_true, beq_iff_eq, decide_eq_true_eq] at h
-  exact ⟨h.1.1, h.1.2, h.2⟩
+  exact ⟨h.1.1.1, h.1.1.2, h.1.2⟩
 
 theorem acceptPCSWithTranscript_covers {t : AuthorityTranscript} {T : TrustAnchor}
     {inp : PackageInput} {r : AcceptedResult} (h : acceptPCSWithTranscript t T inp = some r) :
@@ -133,9 +133,12 @@ theorem pcs_verified_builtin_acceptance_sound {t : AuthorityTranscript} {T : Tru
     (authority_workflow_describes (acceptPCS_sound ha).workflow).1,
     fun _ _ he => authority_env_facts ha he, pcs_artifacts_bound ha⟩
   intro p hp ev hev hpass
-  obtain ⟨e, he, hid, hholds⟩ :=
-    pcs_evidence_holds ha (builtinExecWith_faithful (replayFaithful_reported _)) p hp ev hev hpass
-  exact ⟨e, he, hid, builtinHolds_semantics hholds⟩
+  obtain ⟨e, he, hid, hrun⟩ :=
+    pcs_evidence_holds ha (replayFaithful_reported (transcriptOracles t).exec) p hp ev hev hpass
+  refine ⟨e, he, hid, ?_⟩
+  exact builtinExecWith_pass_semantics PCS.V2.Chemistry.unverifiedExec
+    (requestFor r.pkg.cert r.model r.table e) (by
+      simpa [transcriptOracles, certifiedOnlyExec] using hrun)
 
 /-! ## High-assurance layer: only unforgeability and capture soundness remain -/
 
@@ -163,8 +166,12 @@ structure AuthorityContracts (t : AuthorityTranscript) (T : TrustAnchor) where
 def AuthorityContracts.toExternal {t : AuthorityTranscript} {T : TrustAnchor}
     (K : AuthorityContracts t T) : ExternalContracts (transcriptOracles t) T :=
   contractsWithLeanEd25519 rfl K.signed K.noForgery K.describes K.captureSound
-    (BuiltinHolds (fun req => (transcriptExecutor t req).outcome = .pass))
-    (builtinExecWith_faithful (replayFaithful_reported _))
+    (BuiltinHolds (fun req => (PCS.V2.Chemistry.unverifiedExec req).outcome = .pass))
+    (by
+      change ReplayFaithful certifiedOnlyExec
+        (BuiltinHolds (fun req => (PCS.V2.Chemistry.unverifiedExec req).outcome = .pass))
+      exact builtinExecWith_faithful
+        (replayFaithful_reported PCS.V2.Chemistry.unverifiedExec))
 
 /-- The high-assurance conclusion. -/
 structure HighAssurance (t : AuthorityTranscript) (T : TrustAnchor) (K : AuthorityContracts t T)

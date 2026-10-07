@@ -1,43 +1,51 @@
-# PCS CI provider migration — 2026-10-06
+# PCS CI provider migration — 2026-10-07
 
-Status: **CUT OVER TO CLOUDFLARE WORKERS BUILDS (2026-10-07)**. GitHub Actions and CircleCI hosted compute are not the PCS core assurance path. A status that did not execute the full repository-integrity + Lean + Python + adversarial gate is **not** a pass.
+Status: **CUT OVER TO CLOUDFLARE WORKERS BUILDS** for the private PCS core repository.
 
-## Current safety baseline
-- `main` is protected by the **Protect PCS main** ruleset. It requires a PR, linear history, resolved review threads, and `ci/circleci: repository-integrity`, with no bypass actors.
-- The GitHub Actions workflow `.github/workflows/pcs-ci.yml` now schedules read-only checks on PRs and main. It has one aggregate job named `verified-integration`, which fails if **any** prerequisite check is failed, cancelled, skipped, or unavailable.
-- Required prereqs: repository-integrity (including Git modes), Python assurance/regression/adversarial/golden examples, Lean build + placeholder check, and frozen v0.6 cross-language byte contracts.
-- These are **source and executable verification checks**, not formal assurance of external empirical truth.
+GitHub-hosted Actions minutes and CircleCI compute credits are not the core assurance path. A status that did not execute the repository-integrity + pinned Lean + full Python + adversarial gate is **not** evidence that a revision passed PCS engineering CI.
 
-## Private, free-runner option
+## Current assurance path
 
-The CI workflow supports the optional owner-set repository variable `PCS_TRUSTED_RUNNER`. This targets a disposable, isolated self-hosted runner instead of `ubuntu-latest`, **without** making the repository public. Fork PR source is rejected at each CI job and cannot get a green aggregate.
+The GitHub-connected Cloudflare Worker build service `pcs-core-ci-gate` runs, fail-closed, on non-main owner branches. The main-side build service runs the same command after merge. Both pin `PYTHON_VERSION=3.12` and `NODE_VERSION=22`.
 
-`python scripts/run_trusted_ci.py` provides the same essential verifiers as a local exact-SHA diagnostic, including the Aristotle golden-file checker when installed. Its JSON report is deliberately unsigned and cannot satisfy GitHub branch protection. See `docs/PRIVATE_TRUSTED_CI_RUNBOOK_2026-10-06.md` for explicit owner action, isolation requirements, registration, automated job teardown, and check migration.
+The full gate performs, in order:
 
-Do not set `PCS_TRUSTED_RUNNER` to a personal workstation or a host with production secrets.
+1. install PCS `[dev]` dependencies;
+2. run `scripts/check_repository_integrity.py`;
+3. install the pinned Lean toolchain and run `scripts/verify_lean.sh`;
+4. run the complete `pytest` suite;
+5. run `scripts/adversarial_campaign.py`;
+6. run `scripts/adversarial_v06_hardening.py`.
 
-## Cutover (only after real successful PR execution)
-1. Confirm that the repository may be public **only after** completing `docs/PUBLIC_RELEASE_GATE.md`. If keeping private, supply a safely isolated runner or wait for credit reset. Do not use `pull_request_target` to execute untrusted PR code.
-2. Create a disposable PR from current `main` and inspect **all** run steps, logs, build artifacts and their exact SHA. Ensure `PCS CI / verified-integration` is actually green. A no-run or runner-less check is **not** evidence.
-3. Inspect `PCS CI / repository-integrity`, `PCS CI / python-assurance`, `PCS CI / lean-kernel`, and `PCS CI / v06-byte-contract` individually. Validate equivalence to the existing CircleCI gate and run optional restoration, signing/provenance, and specialized suites for relevant PRs.
-4. Under GitHub **Settings → Rules → Rulesets → Protect PCS main**, add the GitHub required check (select `PCS CI / verified-integration` with **GitHub Actions** as the expected app). Keep the old CircleCI requirement initially.
-5. Verify that an intentionally failing test branch is rejected by the new check; also confirm that a green test PR satisfies the new status. Only then remove the obsolete required `ci/circleci: repository-integrity` status. Preserve the PR/linear-history/conversation-resolution rules. Do not add bypass actors.
-6. Keep exact-head revalidation in the PCS production promotion gateway. Domain-specific submission and promotion workflows require their **own** completed successful jobs; an aggregate core CI green does not replace them.
-7. Restore scheduled maintenance and document the settings, exact job names, tests, head SHAs and approval in an audited issue.
+The core CI Workers do **not** deploy PCS. Their deploy command is a CI-only no-op message. Only a completed successful build for the exact candidate SHA is admissible engineering evidence.
 
-**Important:** Changing a repo private→public has side effects. GitHub reports that push rulesets are disabled during such a change; re-check and re-enable effective protections before letting outside contributors submit.
+## GitHub protection transition
 
-## Open PR reconciliation (against 2026-10-06 main)
-| PR | Scope / changed files | Decision until verified |
-|---|---|---|
-| #62 | 2 files: digest-bound submission verifier and read-only workflow | **Priority 1**. Required for core Commons submissions. Review and run PR-specific job before merge. |
-| #63 | 2 files: exact archive-to-source production promotion verifier/workflow | **Priority 1** after #62. Requires fresh Lean/PCS and PR-diff checks; no bypass. |
-| #61 | 5 files: Claim Invalidation v1 fixtures and reference checker | **Priority 2** after review of corpus and reference semantics. |
-| #58 | 27 files, ~2,897 changed lines: SBOM and signed provenance, shared .circleci and workflow edits | **Priority 3**; large, independently review and rebase/consolidate. |
-| #60 | 17 files, ~2,088 changed lines: pilot key custody/closeout, overlapping CI files with #58 | **Priority 3**; deduplicate shared CI edits and independently test key lifecycle. |
+The active `Protect PCS main` ruleset still requires the legacy CircleCI App status `ci/circleci: repository-integrity`. CircleCI now emits that context with a zero-credit `type: no-op` compatibility job solely to prevent the stale required context from deadlocking every PR. It is **not** an assurance result.
 
-**No PR above is deemed test-passing merely because GitHub says `mergeable`.**
-Main still carries historical formal, Lean and proof-translation features already integrated through squash merges; do not wholesale merge 50+ historical branches. Follow `docs/BRANCH_RECONCILIATION_2026-10-04.md` and perform targeted salvage only for demonstrated absent functionality.
+The real gate is the Cloudflare Workers and Pages check `Workers Builds: pcs-core-ci-gate`. The remaining account-level migration is:
 
-### Current blocker
-PRs #58, #60, #61, #62, and #63 have the current required `ci/circleci: repository-integrity` pending. Do **not** remove the requirement merely to get them merged. A change of CI provider is permissible only after independently executed equivalent verification.
+1. in GitHub **Settings → Rules → Rulesets → Protect PCS main**, add `Workers Builds: pcs-core-ci-gate` from the **Cloudflare Workers and Pages** app as a required status;
+2. confirm a known-bad disposable PR is blocked and a known-good exact-head PR is permitted;
+3. remove the legacy `ci/circleci: repository-integrity` requirement;
+4. retain PR-required, linear-history, conversation-resolution, and no-bypass protections.
+
+The connected GitHub integration used for this migration can read but cannot mutate repository rulesets, so that settings change must be performed by a repository administrator.
+
+## GitHub Actions and self-hosted runners
+
+GitHub workflows remain in the repository for optional owner-controlled self-hosted execution. Automatic jobs are guarded by explicit repository variables and reject fork PR execution. If the variables/runners are absent, skipped jobs are expected and are **not** substitutes for the Cloudflare gate.
+
+Do not re-enable GitHub-hosted compute merely to obtain a green badge while hosted minutes are exhausted.
+
+## Integrated work
+
+Core PR #72 consolidated the previously open provenance/SBOM, pilot key lifecycle and closeout, Commons contribution/promotion gates, CI migration, cross-project adapter, fail-closed checker authority, zero-minute runner, and ProofLab benchmark work into `main`.
+
+PR #73 is the post-merge repair/validation pass for the fail-closed authority integration. It must not merge until the exact-head Cloudflare full gate is green. After merge, the new `main` SHA must also receive a green main-side Cloudflare full gate.
+
+## Security boundary
+
+Cloudflare source builds execute repository code. The current build integration uses an existing build token and therefore must be restricted to trusted owner-originated branches while the core repository is private. Before accepting untrusted contributors or forks into automatic builds, replace it with a dedicated least-privilege CI token or isolated runner architecture.
+
+A green CI build is an engineering verification result, not a Lean theorem and not proof of external empirical truth.
