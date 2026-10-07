@@ -1,0 +1,158 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "PKPDCheck",
+  "split": "evaluation",
+  "records": [
+    {
+      "id": "PKPDCheck/unitInfo_sound",
+      "name": "unitInfo_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 283,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem unitInfo_sound {u : String} {d : Dim} {k : Rat} (h : unitInfo u = some (d, k)) : u ≠ \"\" ∧ ExprDenotes u.toList d ∧ unitScale u.toList = some k ∧ 0 < k",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/quantity_sound",
+      "name": "quantity_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 439,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem quantity_sound {v : Option PVal} {e : Dim} {st : Bool} {q : Qty} (h : quantity v e st = some q) : QtyDenotes v e st q",
+      "syntactic_reference_mentions": [
+        "unitInfo_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/unitDenotes_of",
+      "name": "unitDenotes_of",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 460,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem unitDenotes_of {v : Option PVal} {u : String} {d : Dim} {k : Rat} (hu : pstr v = some u) (hk : unitInfo u = some (d, k)) : UnitDenotes v d k",
+      "syntactic_reference_mentions": [
+        "unitInfo_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/decodeModel_sound",
+      "name": "decodeModel_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 484,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem decodeModel_sound {b : List UInt8} {m : PKModel} (h : decodeModel b = some m) : ModelContract b m",
+      "syntactic_reference_mentions": [
+        "quantity_sound",
+        "unitDenotes_of"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/rowB_sound",
+      "name": "rowB_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 638,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem rowB_sound {m : PKModel} {atol rtol : Rat} {iT iC : Nat} {iE : Option Nat} {row : List Bytes} (h : rowB m atol rtol iT iC iE row = true) : RowHolds m atol rtol iT iC iE row",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/pkpdContractRun_sound",
+      "name": "pkpdContractRun_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 698,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem pkpdContractRun_sound (req : ReplayRequest) (hc : isPkpdContract req.evidence = true) (hp : (pkpdContractRun req).outcome = .pass) : PkpdContractHolds req",
+      "syntactic_reference_mentions": [
+        "decodeModel_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/pkpdMatchRun_sound",
+      "name": "pkpdMatchRun_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 776,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem pkpdMatchRun_sound (req : ReplayRequest) (hc : isPkpdMatch req.evidence = true) (hp : (pkpdMatchRun req).outcome = .pass) : PkpdMatchHolds req",
+      "syntactic_reference_mentions": [
+        "decodeModel_sound",
+        "rowB_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "PKPDCheck/pkpdPeakRun_sound",
+      "name": "pkpdPeakRun_sound",
+      "module": "PKPDCheck",
+      "split": "evaluation",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 903,
+        "blob_sha": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "statement": "theorem pkpdPeakRun_sound (req : ReplayRequest) (hc : isPkpdPeak req.evidence = true) (hp : (pkpdPeakRun req).outcome = .pass) : PkpdPeakHolds req",
+      "syntactic_reference_mentions": [
+        "decodeModel_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
