@@ -1,0 +1,117 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "EnvFacts",
+  "split": "train",
+  "records": [
+    {
+      "id": "EnvFacts/textLines_sound",
+      "name": "textLines_sound",
+      "module": "EnvFacts",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/EnvFacts.lean",
+        "line": 308,
+        "blob_sha": "e6f9a8c7503a3e4e6a56591106e0151032651b9a"
+      },
+      "statement": "theorem textLines_sound {b : ByteArray} {ls : List (List Char)} (h : textLines b = some ls) : TextLines b ls",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "EnvFacts/fileLines_sound",
+      "name": "fileLines_sound",
+      "module": "EnvFacts",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/EnvFacts.lean",
+        "line": 324,
+        "blob_sha": "e6f9a8c7503a3e4e6a56591106e0151032651b9a"
+      },
+      "statement": "theorem fileLines_sound {inv : List InventoryItem} {sp : String} {ls : List (List Char)} (h : fileLines inv sp = some ls) : FileLines inv sp ls",
+      "syntactic_reference_mentions": [
+        "textLines_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "EnvFacts/pinLineB_sound",
+      "name": "pinLineB_sound",
+      "module": "EnvFacts",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/EnvFacts.lean",
+        "line": 362,
+        "blob_sha": "e6f9a8c7503a3e4e6a56591106e0151032651b9a"
+      },
+      "statement": "theorem pinLineB_sound {nm v l : List Char} (h : pinLineB nm v l = true) : PinLine nm v l",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "EnvFacts/sourceB_sound",
+      "name": "sourceB_sound",
+      "module": "EnvFacts",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/EnvFacts.lean",
+        "line": 500,
+        "blob_sha": "e6f9a8c7503a3e4e6a56591106e0151032651b9a"
+      },
+      "statement": "theorem sourceB_sound {inv : List InventoryItem} {s : JVal} (h : sourceB inv s = true) : SourceBacked inv s",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "EnvFacts/depB_sound",
+      "name": "depB_sound",
+      "module": "EnvFacts",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/EnvFacts.lean",
+        "line": 513,
+        "blob_sha": "e6f9a8c7503a3e4e6a56591106e0151032651b9a"
+      },
+      "statement": "theorem depB_sound {inv : List InventoryItem} {d : JVal} (h : depB inv d = true) : ∃ dm, d = .obj dm ∧ DepBacked inv dm",
+      "syntactic_reference_mentions": [
+        "fileLines_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "EnvFacts/envFactsB_sound",
+      "name": "envFactsB_sound",
+      "module": "EnvFacts",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/EnvFacts.lean",
+        "line": 580,
+        "blob_sha": "e6f9a8c7503a3e4e6a56591106e0151032651b9a"
+      },
+      "statement": "theorem envFactsB_sound {inv : List InventoryItem} {v : JVal} (h : envFactsB inv v = true) : EnvFacts inv v",
+      "syntactic_reference_mentions": [
+        "sourceB_sound",
+        "depB_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
