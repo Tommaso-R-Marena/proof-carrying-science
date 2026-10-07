@@ -168,7 +168,7 @@ theorem transcriptCovers_requires_registered {t : AuthorityTranscript} {r : Acce
   | false =>
       simp [transcriptCovers, hreg] at h
   | true =>
-      exact hreg
+      rfl
 
 /-- The ACTUAL pure acceptance function rejects every signed archive for which
 the decoded evidence includes an unregistered check type, even if the earlier
