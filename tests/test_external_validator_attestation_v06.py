@@ -8,7 +8,7 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from pcs.attest_v06 import build_attestation_directory_v06
+from pcs.attest_v06 import V06AttestationError, build_attestation_directory_v06
 from pcs.canonical_json import canonicalize_jcs_bytes
 from pcs.external_validator_v06 import (
     EXTERNAL_VALIDATOR_RECEIPT_FORMAT_V06,
@@ -177,20 +177,18 @@ def test_signed_external_empirical_receipt_reaches_authoritative_package_without
     generate_keypair(pcs_private, pcs_public)
 
     package = tmp_path / "package"
-    built = build_attestation_directory_v06(
-        manifest_path,
-        package,
-        pcs_private,
-        pcs_public,
-        generated_at="2026-10-04T00:00:00+00:00",
-    )
+    with pytest.raises(V06AttestationError, match="lean_authority"):
+        build_attestation_directory_v06(
+            manifest_path,
+            package,
+            pcs_private,
+            pcs_public,
+            generated_at="2026-10-04T00:00:00+00:00",
+        )
 
-    claims = {
-        item["claim_id"]: item["decision"]
-        for item in built["claims"]
-    }
-    assert claims["C_EMPIRICAL"] == "EMPIRICALLY_VALIDATED_WITHIN_SCOPE"
-
+    # External validator receipts remain parseable evidence for non-kernel review,
+    # but a PASS from a checker outside the certified Lean registry must not produce
+    # a Lean-authoritative package acceptance.
     certificate = strict_json_load(package / "certificate.json")
     evidence = certificate["evidence"][0]
     assert evidence["outcome"] == "PASS"
@@ -199,11 +197,11 @@ def test_signed_external_empirical_receipt_reaches_authoritative_package_without
 
     coverage = classify_formal_coverage_v06(
         certificate,
-        package_authoritative=True,
-        lean_authority={"accepted": True, "verdict": "ACCEPT"},
+        package_authoritative=False,
+        lean_authority={"accepted": False, "verdict": "REJECT"},
     )
     row = coverage["evidence"][0]
-    assert coverage["package_authority"] == "LEAN_AUTHORITATIVE_ACCEPT"
+    assert coverage["package_authority"] != "LEAN_AUTHORITATIVE_ACCEPT"
     assert row["checker_semantics"] == "NOT_IN_CERTIFIED_BUILTIN_SET"
     assert row["execution_authority"] == "OUTSIDE_CERTIFIED_BUILTIN_SET"
     assert row["external_validator_contract"]["semantic_authority"] == (
