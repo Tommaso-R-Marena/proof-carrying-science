@@ -1,0 +1,245 @@
+{
+  "format": "pcs-prooflab-source-module-v1",
+  "source_revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "module": "Units",
+  "split": "train",
+  "records": [
+    {
+      "id": "Units/baseDim_sound",
+      "name": "baseDim_sound",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 75,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem baseDim_sound {n : String} {d : Dim} (h : baseDim n = some d) : (n, d) ∈ baseTable",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/baseDim_complete",
+      "name": "baseDim_complete",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 90,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem baseDim_complete {n : String} {d : Dim} (h : (n, d) ∈ baseTable) : baseDim n = some d",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/baseDim_iff",
+      "name": "baseDim_iff",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 97,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem baseDim_iff (n : String) (d : Dim) : baseDim n = some d ↔ (n, d) ∈ baseTable",
+      "syntactic_reference_mentions": [
+        "baseDim_sound",
+        "baseDim_complete"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseExp_sound",
+      "name": "parseExp_sound",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 179,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseExp_sound {es : List Char} {e : Int} (h : parseExp es = some e) : ExpDenotes es e",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseExp_complete",
+      "name": "parseExp_complete",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 209,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseExp_complete {es : List Char} {e : Int} (h : ExpDenotes es e) : parseExp es = some e",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseTerm_sound",
+      "name": "parseTerm_sound",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 232,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseTerm_sound {t : List Char} {d : Dim} (h : parseTerm t = some d) : TermDenotes t d",
+      "syntactic_reference_mentions": [
+        "baseDim_sound",
+        "parseExp_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseTerm_complete",
+      "name": "parseTerm_complete",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 260,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseTerm_complete {t : List Char} {d : Dim} (h : TermDenotes t d) : parseTerm t = some d",
+      "syntactic_reference_mentions": [
+        "baseDim_complete",
+        "parseExp_complete"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseProduct_sound",
+      "name": "parseProduct_sound",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 282,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseProduct_sound {s : List Char} {d : Dim} (h : parseProduct s = some d) : ProductDenotes s d",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseProduct_complete",
+      "name": "parseProduct_complete",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 296,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseProduct_complete {s : List Char} {d : Dim} (h : ProductDenotes s d) : parseProduct s = some d",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseUnit_sound",
+      "name": "parseUnit_sound",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 314,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseUnit_sound {s : List Char} {d : Dim} (h : parseUnit s = some d) : ExprDenotes s d",
+      "syntactic_reference_mentions": [
+        "parseProduct_sound"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseUnit_complete",
+      "name": "parseUnit_complete",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 328,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseUnit_complete {s : List Char} {d : Dim} (h : ExprDenotes s d) : parseUnit s = some d",
+      "syntactic_reference_mentions": [
+        "parseProduct_complete"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/parseUnit_iff",
+      "name": "parseUnit_iff",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 335,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem parseUnit_iff (s : List Char) (d : Dim) : parseUnit s = some d ↔ ExprDenotes s d",
+      "syntactic_reference_mentions": [
+        "parseUnit_sound",
+        "parseUnit_complete"
+      ],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    },
+    {
+      "id": "Units/unitRun_sound",
+      "name": "unitRun_sound",
+      "module": "Units",
+      "split": "train",
+      "source": {
+        "repository": "Tommaso-R-Marena/proof-carrying-science",
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Units.lean",
+        "line": 387,
+        "blob_sha": "2dcb63d49939061b226a43ee31c4b54b20fcc3cc"
+      },
+      "statement": "theorem unitRun_sound (req : ReplayRequest) (hc : isUnitCheck req.evidence = true) (hp : (unitRun req).outcome = .pass) : UnitHolds req.evidence",
+      "syntactic_reference_mentions": [],
+      "status": "source_declared_kernel_not_attested",
+      "type": "real_lean_header_with_educational_scaffold"
+    }
+  ]
+}
