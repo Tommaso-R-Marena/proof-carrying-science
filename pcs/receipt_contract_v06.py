@@ -78,6 +78,96 @@ def _sequence(value: Any) -> Sequence[Any] | None:
     return None
 
 
+def _audit_provenance_summary(
+    provenance: Mapping[str, Any],
+    *,
+    errors: list[str],
+    checks: dict[str, bool],
+) -> None:
+    mode = provenance.get("mode")
+    entries = _sequence(provenance.get("entries"))
+    semantic_hash = provenance.get("semantic_hash")
+
+    checks["provenance_mode"] = mode in {"none", "bound"}
+    if not checks["provenance_mode"]:
+        errors.append("provenance has unsupported mode")
+        return
+
+    checks["provenance_entries_shape"] = entries is not None and all(
+        isinstance(entry, Mapping) for entry in (entries or [])
+    )
+    if not checks["provenance_entries_shape"]:
+        errors.append("provenance entries must be an array of objects")
+        return
+
+    if mode == "none":
+        checks["provenance_none_contract"] = (
+            semantic_hash is None and len(entries or []) == 0
+        )
+        if not checks["provenance_none_contract"]:
+            errors.append(
+                "provenance mode=none requires null semantic_hash and no entries"
+            )
+        return
+
+    checks["provenance_bound_hash"] = _is_hex64(semantic_hash)
+    if not checks["provenance_bound_hash"]:
+        errors.append("bound provenance lacks a 64-hex semantic_hash")
+
+    kinds: list[str] = []
+    row_ok = True
+    for entry in entries or []:
+        kind = entry.get("kind")
+        digest = entry.get("sha256")
+        fmt = entry.get("format")
+        if (
+            kind not in {"sbom", "build_provenance"}
+            or not isinstance(fmt, str)
+            or not fmt
+            or not _is_hex64(digest)
+        ):
+            row_ok = False
+        elif isinstance(kind, str):
+            kinds.append(kind)
+
+    checks["provenance_entry_contract"] = (
+        row_ok and kinds == sorted(kinds) and len(kinds) == len(set(kinds))
+    )
+    if not checks["provenance_entry_contract"]:
+        errors.append(
+            "bound provenance entries are malformed, duplicated, or unsorted"
+        )
+
+
+    expectations = provenance.get("reviewer_expectations")
+    if expectations is not None:
+        if not isinstance(expectations, Mapping):
+            checks["provenance_reviewer_expectations_shape"] = False
+            errors.append("provenance reviewer_expectations must be an object")
+        else:
+            checks["provenance_reviewer_expectations_shape"] = True
+            applied = expectations.get("applied")
+            fingerprint = expectations.get("build_provenance_fingerprint")
+            subjects = _sequence(expectations.get("subject_sha256"))
+            fp_ok = fingerprint is None or _is_hex64(fingerprint)
+            subjects_ok = (
+                subjects is not None
+                and all(_is_hex64(item) for item in subjects)
+                and list(subjects) == sorted(subjects)
+                and len(subjects) == len(set(subjects))
+            )
+            state_ok = isinstance(applied, bool) and fp_ok and subjects_ok
+            if state_ok and applied is False:
+                state_ok = fingerprint is None and len(subjects or []) == 0
+            if state_ok and applied is True:
+                state_ok = fingerprint is not None or len(subjects or []) > 0
+            checks["provenance_reviewer_expectations_contract"] = state_ok
+            if not state_ok:
+                errors.append(
+                    "provenance reviewer expectations are internally inconsistent"
+                )
+
+
 def _audit_formal_coverage(
     coverage: Mapping[str, Any],
     *,
@@ -296,6 +386,19 @@ def audit_verification_receipt_v06(
                 errors.append(
                     "Lean authority certificate semantic hash does not match receipt"
                 )
+
+    provenance = receipt.get("provenance")
+    if provenance is not None:
+        if not isinstance(provenance, Mapping):
+            checks["provenance_shape"] = False
+            errors.append("provenance must be an object")
+        else:
+            checks["provenance_shape"] = True
+            _audit_provenance_summary(
+                provenance,
+                errors=errors,
+                checks=checks,
+            )
 
     stages = receipt.get("stages")
     if isinstance(stages, Mapping) and "lean_authority" in stages:

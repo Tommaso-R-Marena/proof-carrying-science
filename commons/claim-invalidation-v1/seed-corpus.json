@@ -1,0 +1,296 @@
+{
+  "format": "pcs-claim-invalidation-corpus-v1",
+  "semantics": "expected_impact records only consequences reachable through the declared graph. Cases with dependency_complete=false are negative controls: they demonstrate why graph non-reachability cannot imply real-world non-impact when a dependency is hidden.",
+  "cases": [
+    {
+      "id": "seed_transitive_chain",
+      "dependency_complete": true,
+      "certificate": {
+        "workflow": {
+          "nodes": [
+            {
+              "id": "prepare",
+              "inputs": [
+                "raw"
+              ],
+              "outputs": [
+                "processed"
+              ]
+            },
+            {
+              "id": "analyze",
+              "inputs": [
+                "processed"
+              ],
+              "outputs": [
+                "result"
+              ]
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "id": "e_result",
+            "artifact_ids": [
+              "result"
+            ],
+            "claim_ids": [
+              "c_result"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c_result",
+            "required_evidence": [
+              "e_result"
+            ]
+          }
+        ]
+      },
+      "changed_artifacts": [
+        "raw"
+      ],
+      "expected_impact": {
+        "changed_artifacts": [
+          "raw"
+        ],
+        "affected_artifacts": [
+          "processed",
+          "raw",
+          "result"
+        ],
+        "affected_workflow_nodes": [
+          "analyze",
+          "prepare"
+        ],
+        "affected_evidence": [
+          "e_result"
+        ],
+        "affected_claims": [
+          "c_result"
+        ]
+      },
+      "explanation": "Changing raw data propagates through prepare and analyze, invalidating the result-bound evidence and its required claim."
+    },
+    {
+      "id": "seed_unrelated_branch",
+      "dependency_complete": true,
+      "certificate": {
+        "workflow": {
+          "nodes": [
+            {
+              "id": "left",
+              "inputs": [
+                "a"
+              ],
+              "outputs": [
+                "a_out"
+              ]
+            },
+            {
+              "id": "right",
+              "inputs": [
+                "b"
+              ],
+              "outputs": [
+                "b_out"
+              ]
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "id": "e_a",
+            "artifact_ids": [
+              "a_out"
+            ],
+            "claim_ids": [
+              "c_a"
+            ]
+          },
+          {
+            "id": "e_b",
+            "artifact_ids": [
+              "b_out"
+            ],
+            "claim_ids": [
+              "c_b"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c_a",
+            "required_evidence": [
+              "e_a"
+            ]
+          },
+          {
+            "id": "c_b",
+            "required_evidence": [
+              "e_b"
+            ]
+          }
+        ]
+      },
+      "changed_artifacts": [
+        "a"
+      ],
+      "expected_impact": {
+        "changed_artifacts": [
+          "a"
+        ],
+        "affected_artifacts": [
+          "a",
+          "a_out"
+        ],
+        "affected_workflow_nodes": [
+          "left"
+        ],
+        "affected_evidence": [
+          "e_a"
+        ],
+        "affected_claims": [
+          "c_a"
+        ]
+      },
+      "explanation": "The declared right branch is unreachable from a, so only the left branch is reopened when the graph is assumed complete."
+    },
+    {
+      "id": "seed_direct_evidence_dependency",
+      "dependency_complete": true,
+      "certificate": {
+        "workflow": {
+          "nodes": []
+        },
+        "evidence": [
+          {
+            "id": "e_raw",
+            "artifact_ids": [
+              "raw"
+            ],
+            "claim_ids": [
+              "c_raw"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c_raw",
+            "required_evidence": [
+              "e_raw"
+            ]
+          }
+        ]
+      },
+      "changed_artifacts": [
+        "raw"
+      ],
+      "expected_impact": {
+        "changed_artifacts": [
+          "raw"
+        ],
+        "affected_artifacts": [
+          "raw"
+        ],
+        "affected_workflow_nodes": [],
+        "affected_evidence": [
+          "e_raw"
+        ],
+        "affected_claims": [
+          "c_raw"
+        ]
+      },
+      "explanation": "Evidence may depend directly on a changed artifact even when no workflow node is present."
+    },
+    {
+      "id": "seed_hidden_dependency_negative_control",
+      "dependency_complete": false,
+      "certificate": {
+        "workflow": {
+          "nodes": [
+            {
+              "id": "declared_analysis",
+              "inputs": [
+                "raw"
+              ],
+              "outputs": [
+                "declared_result"
+              ]
+            },
+            {
+              "id": "apparently_independent",
+              "inputs": [
+                "other"
+              ],
+              "outputs": [
+                "other_result"
+              ]
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "id": "e_declared",
+            "artifact_ids": [
+              "declared_result"
+            ],
+            "claim_ids": [
+              "c_declared"
+            ]
+          },
+          {
+            "id": "e_other",
+            "artifact_ids": [
+              "other_result"
+            ],
+            "claim_ids": [
+              "c_other"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c_declared",
+            "required_evidence": [
+              "e_declared"
+            ]
+          },
+          {
+            "id": "c_other",
+            "required_evidence": [
+              "e_other"
+            ]
+          }
+        ]
+      },
+      "changed_artifacts": [
+        "raw"
+      ],
+      "expected_impact": {
+        "changed_artifacts": [
+          "raw"
+        ],
+        "affected_artifacts": [
+          "declared_result",
+          "raw"
+        ],
+        "affected_workflow_nodes": [
+          "declared_analysis"
+        ],
+        "affected_evidence": [
+          "e_declared"
+        ],
+        "affected_claims": [
+          "c_declared"
+        ]
+      },
+      "hidden_dependency": {
+        "omitted_edge": "raw -> c_other (through an undeclared analyst/manual dependency)",
+        "real_world_consequence": "If this omitted dependency is genuine, c_other must also be reconsidered even though it is unreachable in the declared graph."
+      },
+      "explanation": "This is deliberately not dependency-complete. It is a counterexample to the stronger inference that every unreachable claim remains valid."
+    }
+  ]
+}

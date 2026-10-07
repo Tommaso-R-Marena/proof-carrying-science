@@ -37,6 +37,8 @@ def load_trust_profile_v06(path: str | Path) -> dict[str, Any]:
         "expected_signer_fingerprint": fingerprint.lower(),
         "policy": None,
         "lean_authority": None,
+        "expected_build_provenance_fingerprint": None,
+        "expected_build_subject_sha256": [],
         "profile": str(source),
     }
     policy = value.get("policy")
@@ -49,6 +51,48 @@ def load_trust_profile_v06(path: str | Path) -> dict[str, Any]:
         if not isinstance(lean_authority, str) or not lean_authority:
             raise V06LocalVerifyError("trust profile lean_authority must be a relative path string")
         resolved["lean_authority"] = str((base / lean_authority).resolve())
+
+    build_fingerprint = value.get("expected_build_provenance_fingerprint")
+    if build_fingerprint is not None:
+        if not isinstance(build_fingerprint, str) or len(build_fingerprint) != 64:
+            raise V06LocalVerifyError(
+                "trust profile expected_build_provenance_fingerprint must be a 64-hex SHA-256"
+            )
+        try:
+            int(build_fingerprint, 16)
+        except ValueError as exc:
+            raise V06LocalVerifyError(
+                "trust profile build-provenance fingerprint must be hex"
+            ) from exc
+        resolved["expected_build_provenance_fingerprint"] = build_fingerprint.lower()
+
+    build_subjects = value.get("expected_build_subject_sha256", [])
+    if (
+        not isinstance(build_subjects, list)
+        or not all(isinstance(item, str) and len(item) == 64 for item in build_subjects)
+        or len(build_subjects) != len(set(build_subjects))
+    ):
+        raise V06LocalVerifyError(
+            "trust profile expected_build_subject_sha256 must be a unique array of 64-hex SHA-256 strings"
+        )
+    normalized_subjects: list[str] = []
+    for digest in build_subjects:
+        try:
+            int(digest, 16)
+        except ValueError as exc:
+            raise V06LocalVerifyError(
+                "trust profile build-provenance subject SHA-256 must be hex"
+            ) from exc
+        normalized_subjects.append(digest.lower())
+    resolved["expected_build_subject_sha256"] = sorted(normalized_subjects)
+
+    if (build_fingerprint is None) != (len(normalized_subjects) == 0):
+        raise V06LocalVerifyError(
+            "trust profile build provenance requires both "
+            "expected_build_provenance_fingerprint and at least one "
+            "expected_build_subject_sha256"
+        )
+
     for key in ("public_key", "policy", "lean_authority"):
         candidate = resolved.get(key)
         if candidate and not Path(candidate).is_file():
@@ -71,6 +115,12 @@ def verify_local_bundle_v06(
         expected_fingerprint=trust["expected_signer_fingerprint"],
         policy_path=trust["policy"],
         lean_authority_path=(lean_authority_path or trust["lean_authority"]),
+        expected_build_provenance_fingerprint=trust[
+            "expected_build_provenance_fingerprint"
+        ],
+        expected_build_subject_sha256=trust[
+            "expected_build_subject_sha256"
+        ],
     )
     out = dict(result)
     out["trust_profile"] = trust["profile"]

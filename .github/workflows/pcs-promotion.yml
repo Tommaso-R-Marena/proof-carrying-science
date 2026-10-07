@@ -1,0 +1,49 @@
+name: PCS production promotion verification
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'contributions/pcs-promotions/**'
+permissions:
+  contents: read
+jobs:
+  promotion:
+    name: PCS Promotion Verification
+    # No hosted minutes, and never run fork PR code on a personal machine.
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check exact archive-to-source mapping and PR diff
+        env:
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python scripts/check_promotion_bundle.py
+      - name: Verify repository integrity, file modes and governance
+        run: python scripts/check_repository_integrity.py
+      - name: Install test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Build Lean 4 authority with project-source hygiene
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Run full PCS regression tests
+        run: python -m pytest -q
+      - name: Run adversarial campaign
+        run: python scripts/adversarial_campaign.py
+      - name: Elaborate every promoted Lean source
+        run: |
+          find formal/PCS -name '*.lean' -print0 | while IFS= read -r -d '' file; do
+            case "$file" in *.lean) true;; *) exit 1;; esac
+          done
+          bash scripts/verify_lean.sh
+      - name: Interpret result scope
+        run: echo 'CI proves only that selected executable checks completed for this exact PR; scientific claims still require independent review.'

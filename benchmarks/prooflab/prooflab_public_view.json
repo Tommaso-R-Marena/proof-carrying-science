@@ -1,0 +1,2069 @@
+{
+  "format": "pcs-prooflab-public-source-index-v1",
+  "benchmark_version": 1,
+  "origin_repo": "PCS core, private pinned commit",
+  "origin_commit": "cff0b67595abd4862ab0c156b157f262b169eca5",
+  "case_count": 40,
+  "split_contract": "whole-source-module holdout; all cases from ONE PCS project, NOT a cross-project split",
+  "disclaimer": "22 educational training missions are publicly playable. The remaining 18 real theorem targets stay private for module-held-out validation and evaluation. Browser DAG completion is NOT Lean kernel verification. Source statements and proof bodies remain private.",
+  "cases": [
+    {
+      "id": "pcs-binding-01",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "VerifyWireBytes Scope",
+      "theorem": "verifyWireBytes_scope",
+      "public_summary": "Verify that a decoded wire record preserves the correct claim-and-evidence scope.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 37,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-02",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "VerifyWireBytes Evidence Commitments",
+      "theorem": "verifyWireBytes_evidence_commitments",
+      "public_summary": "Show that each accepted evidence item binds to its claim's predicate commitment.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 51,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-03",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "EncodedBytes Injective",
+      "theorem": "encodedBytes_injective",
+      "public_summary": "Establish that matching canonical encoded bytes do not hide distinct wire records.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 123,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-04",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "Wire Hash Binding",
+      "theorem": "wire_hash_binding",
+      "public_summary": "Determine when equal semantic digests force identical wire meaning or a collision.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 131,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-05",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "Wire Hash Binds Bytes",
+      "theorem": "wire_hash_binds_bytes",
+      "public_summary": "Understand the connection between semantic digests and exact original bytes.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 142,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "wire_hash_binding"
+      ],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-wire_hash_binding",
+          "label": "Inspect cited theorem: wire_hash_binding",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "wire_hash_binding"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-wire_hash_binding"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-06",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "Claim Substitution Needs Collision",
+      "theorem": "claim_substitution_needs_collision",
+      "public_summary": "Analyze why replacing an accepted claim demands a digest collision.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 151,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "wire_hash_binding"
+      ],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-wire_hash_binding",
+          "label": "Inspect cited theorem: wire_hash_binding",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "wire_hash_binding"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-wire_hash_binding"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-07",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "Predicate Commitment Binding",
+      "theorem": "predicate_commitment_binding",
+      "public_summary": "Explain how a predicate digest binds the interpreted predicate.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 207,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-binding-08",
+      "split": "training",
+      "campaign": "Binding",
+      "campaign_title": "Evidence Lockdown",
+      "campaign_tagline": "Can the claimed evidence be swapped without detection?",
+      "topic": "Claim–evidence binding",
+      "title": "Evidence Predicate Unique",
+      "theorem": "evidence_predicate_unique",
+      "public_summary": "Check whether one evidence item can be relabeled for another predicate.",
+      "prompt": "Trace what makes a source, predicate, evidence object, and decision refer to the same committed bytes.",
+      "theme": "Evidence Lockdown",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Binding.lean",
+        "line": 224,
+        "blob_sha1": "b26364d57f9b2ba81e2245e1f557d9cfa6c60aef"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "predicate_commitment_binding"
+      ],
+      "threats": [
+        "claim substitution",
+        "predicate substitution",
+        "digest collision",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-predicate_commitment_binding",
+          "label": "Inspect cited theorem: predicate_commitment_binding",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "predicate_commitment_binding"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-predicate_commitment_binding"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-01",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "SubsetB Sound",
+      "theorem": "subsetB_sound",
+      "public_summary": "Justify a workflow's recorded dependency-subset condition.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 342,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-02",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "ModeOK Sound",
+      "theorem": "modeOK_sound",
+      "public_summary": "Show the workflow mode enforces its declared dependency contract.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 347,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "subsetB_sound"
+      ],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-subsetB_sound",
+          "label": "Inspect cited theorem: subsetB_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "subsetB_sound"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-subsetB_sound"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-03",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "RefsOK Sound",
+      "theorem": "refsOK_sound",
+      "public_summary": "Verify that every declared dependency resolves to a grounded reference.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 364,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-04",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "ClaimB Sound",
+      "theorem": "claimB_sound",
+      "public_summary": "Connect a claimed workflow property to the recorded source analysis.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 374,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "modeOK_sound",
+        "refsOK_sound"
+      ],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-modeOK_sound",
+          "label": "Inspect cited theorem: modeOK_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "modeOK_sound"
+        },
+        {
+          "id": "lemma-refsOK_sound",
+          "label": "Inspect cited theorem: refsOK_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "refsOK_sound"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-modeOK_sound",
+            "lemma-refsOK_sound"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-05",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "BoundB Sound",
+      "theorem": "boundB_sound",
+      "public_summary": "Establish that the workflow fact is actually bound to its source artifacts.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 387,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-06",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "WorkflowCheckB Sound",
+      "theorem": "workflowCheckB_sound",
+      "public_summary": "Connect a successful workflow Boolean check to its declarative meaning.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 411,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-workflow-07",
+      "split": "training",
+      "campaign": "Workflow",
+      "campaign_title": "Workflow Detective",
+      "campaign_tagline": "Does the reported workflow describe the actual source?",
+      "topic": "Reproducible workflows",
+      "title": "WorkflowDescribes Semantics",
+      "theorem": "workflowDescribes_semantics",
+      "public_summary": "Translate verified workflow descriptions into restricted workflow semantics.",
+      "prompt": "Identify the source, allowed dependencies and workflow semantics behind a bounded check.",
+      "theme": "Workflow Detective",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/Workflow.lean",
+        "line": 430,
+        "blob_sha1": "766918e28e8c44c4d92326387dabfb53a7ec233f"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "undeclared dependency",
+        "unbound source",
+        "hidden workflow step",
+        "scope confusion"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-01",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "UnitInfo Sound",
+      "theorem": "unitInfo_sound",
+      "public_summary": "Explain how parsed units retain dimensional meaning and positive conversion scale.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 283,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-02",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "DecodeModel Sound",
+      "theorem": "decodeModel_sound",
+      "public_summary": "Show that decoding the pharmacokinetic model establishes its model contract.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 484,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-03",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "RowB Sound",
+      "theorem": "rowB_sound",
+      "public_summary": "Connect a numerical row check to the actual scientific row predicate.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 638,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-04",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "PkpdContractRun Sound",
+      "theorem": "pkpdContractRun_sound",
+      "public_summary": "Identify what a PASS from a PK/PD model-contract checker certifies.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 698,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "decodeModel_sound"
+      ],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-decodeModel_sound",
+          "label": "Inspect cited theorem: decodeModel_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "decodeModel_sound"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-decodeModel_sound"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-05",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "PkpdMatchRun Sound",
+      "theorem": "pkpdMatchRun_sound",
+      "public_summary": "Trace the numerical agreement checker back to bounded model predictions.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 776,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "decodeModel_sound",
+        "rowB_sound"
+      ],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-decodeModel_sound",
+          "label": "Inspect cited theorem: decodeModel_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "decodeModel_sound"
+        },
+        {
+          "id": "lemma-rowB_sound",
+          "label": "Inspect cited theorem: rowB_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "rowB_sound"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-decodeModel_sound",
+            "lemma-rowB_sound"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-06",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "PeakRowB Sound",
+      "theorem": "peakRowB_sound",
+      "public_summary": "Justify a single-row peak-threshold check for concentration data.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 851,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    },
+    {
+      "id": "pcs-pkpdcheck-07",
+      "split": "training",
+      "campaign": "PKPDCheck",
+      "campaign_title": "Pharmacology Lab",
+      "campaign_tagline": "When is a numerical prediction actually checked?",
+      "topic": "PK/PD numerical assurance",
+      "title": "PkpdPeakRun Sound",
+      "theorem": "pkpdPeakRun_sound",
+      "public_summary": "Understand the restricted peak-threshold guarantee of the PK/PD checker.",
+      "prompt": "Track the model decoder, dimensional assumptions, bounded numerical checks and formal claim.",
+      "theme": "Pharmacology Lab",
+      "source": {
+        "revision": "cff0b67595abd4862ab0c156b157f262b169eca5",
+        "path": "formal/PCS/V2/PKPDCheck.lean",
+        "line": 903,
+        "blob_sha1": "2e140f19f3646394cb58874cc1a9177a6bd172c1"
+      },
+      "evidence_status": "Checked-in real Lean theorem; no kernel execution in this game",
+      "dependency_basis": "Source cited theorem names plus explicitly labeled educational workflow",
+      "cited_theorems": [
+        "decodeModel_sound",
+        "peakRowB_sound"
+      ],
+      "threats": [
+        "unit mismatch",
+        "model assumption",
+        "numeric tolerance",
+        "unsupported extrapolation"
+      ],
+      "nodes": [
+        {
+          "id": "scope",
+          "label": "Define the claim's scope",
+          "needs": [],
+          "kind": "interpretation"
+        },
+        {
+          "id": "premises",
+          "label": "Identify the statement's assumptions",
+          "needs": [
+            "scope"
+          ],
+          "kind": "premise"
+        },
+        {
+          "id": "artifact",
+          "label": "Locate the source-bound theorem",
+          "needs": [
+            "scope"
+          ],
+          "kind": "provenance"
+        },
+        {
+          "id": "lemma-decodeModel_sound",
+          "label": "Inspect cited theorem: decodeModel_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "decodeModel_sound"
+        },
+        {
+          "id": "lemma-peakRowB_sound",
+          "label": "Inspect cited theorem: peakRowB_sound",
+          "needs": [
+            "artifact"
+          ],
+          "kind": "cited-lemma",
+          "source_theorem": "peakRowB_sound"
+        },
+        {
+          "id": "strategy",
+          "label": "Inspect the actual proof strategy",
+          "needs": [
+            "premises",
+            "artifact",
+            "lemma-decodeModel_sound",
+            "lemma-peakRowB_sound"
+          ],
+          "kind": "proof-review"
+        },
+        {
+          "id": "challenge",
+          "label": "Propose an adversarial challenge",
+          "needs": [
+            "premises"
+          ],
+          "kind": "falsification"
+        },
+        {
+          "id": "boundary",
+          "label": "Record the theorem's limits",
+          "needs": [
+            "premises"
+          ],
+          "kind": "uncertainty"
+        },
+        {
+          "id": "review",
+          "label": "Request an independent Lean replay",
+          "needs": [
+            "strategy",
+            "challenge",
+            "boundary"
+          ],
+          "kind": "external-check"
+        }
+      ]
+    }
+  ],
+  "public_case_count": 22,
+  "withheld_by_module": {
+    "Checkers": {
+      "split": "validation",
+      "count": 8
+    },
+    "PackageProofs": {
+      "split": "evaluation",
+      "count": 7
+    },
+    "Frontier": {
+      "split": "evaluation",
+      "count": 3
+    }
+  }
+}

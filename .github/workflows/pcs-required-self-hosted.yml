@@ -1,0 +1,84 @@
+name: PCS Required Self-Hosted
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcs-required-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  required-gate:
+    name: required-gate
+    # No hosted minutes, no untrusted fork code, no queue without a registered runner.
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    timeout-minutes: 30
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PCS focused test environment
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Repository integrity
+        shell: bash
+        run: python scripts/check_repository_integrity.py
+
+      - name: Compile Python sources
+        shell: bash
+        run: python -m compileall -q pcs scripts
+
+      - name: Build pinned Lean 4 authority before any verifier-dependent Python tests
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Audit Lean source and compiled authority
+        run: bash scripts/verify_lean.sh
+      - name: Run stable key-custody baseline
+        shell: bash
+        run: python -m pytest -q tests/test_key_custody.py
+
+      - name: Run provenance integration tests when present
+        shell: bash
+        run: |
+          if [[ -f tests/test_provenance_v06.py ]]; then
+            python -m pytest -q \
+              tests/test_provenance_v06.py \
+              tests/test_attest_v06.py \
+              tests/test_local_verify_v06.py \
+              tests/test_receipt_contract_v06.py \
+              tests/test_schema_boundary.py
+          else
+            echo "No provenance-v06 test layer in this revision."
+          fi
+
+      - name: Run pilot operations tests when present
+        shell: bash
+        run: |
+          if [[ -f tests/test_key_lifecycle.py ]]; then
+            python -m pytest -q \
+              tests/test_key_lifecycle.py \
+              tests/test_pilot_closeout.py \
+              tests/test_key_custody.py
+          else
+            echo "No pilot-operations test layer in this revision."
+          fi

@@ -294,6 +294,8 @@ recompute claim assessments
         ↓
 derive normalized decision set
         ↓
+optionally validate + bind SBOM / external build provenance
+        ↓
 sign certificate
         ↓
 build + sign exact package manifest
@@ -324,7 +326,7 @@ PCS can verify a pinned Ed25519 validator identity, exact external predicate, ex
 artifact SHA-256 bindings, and the validator's reported PASS/FAIL. Those external
 results remain outside the certified Lean checker set; PCS does **not** thereby prove
 the validator algorithm, the scientific adequacy of its policy, or biological/clinical
-truth. External formal-proof and provenance evidence remain verifier-boundary work.
+truth. External formal-proof evidence remains verifier-boundary work. Supply-chain provenance is handled separately: PCS can bind CycloneDX/SPDX SBOM bytes and can verify a pinned Ed25519 DSSE/in-toto build-provenance statement for explicitly expected subject SHA-256 digests, without treating that provenance as scientific truth.
 
 A successful PCS verification means the delivered package is authentic under the
 selected public key, byte-bound, structurally consistent, freshly replayed for the
@@ -334,6 +336,34 @@ carry `FALSIFIED_OR_CHECK_FAILED`.
 
 Passing PCS checks does not establish biological adequacy, clinical validity,
 safety, efficacy, GxP validation, or regulatory acceptance.
+
+### SBOM and external build provenance
+
+Export a deterministic CycloneDX inventory of the observed Python runtime:
+
+```bash
+pcs export-sbom-v06 -o runtime.cdx.json
+```
+
+Bind those exact SBOM bytes into the signed delivery:
+
+```bash
+pcs attest-v06 project/manifest.json \
+  -o study.pcs.zip \
+  --private-key organization-private.pem \
+  --public-key organization-public.pem \
+  --sbom runtime.cdx.json
+```
+
+PCS also accepts CycloneDX JSON 1.4–1.7 or SPDX JSON 2.2–2.3 supplied by an
+external build process. For stronger build provenance, `attest-v06` can verify and
+bind a DSSE-signed in-toto Statement v1 under an explicitly pinned Ed25519 key and
+one or more expected subject SHA-256 digests. See
+`docs/SBOM_BUILD_PROVENANCE_V06.md`.
+
+A valid build-provenance signature means only that the pinned key signed the exact
+statement for the expected digest(s). It does not prove the builder was uncompromised,
+the SBOM is complete, the artifact is safe, or any scientific claim is correct.
 
 ### Reviewer-controlled acceptance policy
 

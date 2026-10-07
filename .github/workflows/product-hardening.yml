@@ -15,7 +15,8 @@ on:
 
 jobs:
   p0-p1:
-    runs-on: ubuntu-latest
+    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
