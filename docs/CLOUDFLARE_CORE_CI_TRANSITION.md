@@ -8,6 +8,8 @@ The separate, non-serving Cloudflare Worker `pcs-core-ci-gate` is GitHub-connect
 
 The Build command is an exact-commit, fail-closed chain: install PCS Python `[dev]` dependencies, audit Git repository integrity and executable modes, install elan and build the **pinned** `formal/` Lean authority via `scripts/verify_lean.sh`, run full pytest, and run frozen/adversarial campaigns. **Lean must be built before pytest** because v0.6 tests invoke its executable authority. The independent Cloudflare result appears as a GitHub check named **`Workers Builds: pcs-core-ci-gate`** when the build is associated with a commit.
 
+Both the main and non-main core build triggers pin `PYTHON_VERSION=3.12` and `NODE_VERSION=22`, so the protected-branch candidate gate and post-merge main verification use the same runtime versions rather than silently testing different Python interpreters.
+
 Cloudflare's free build minutes (currently 3,000/month, one concurrent job, 20-minute job timeout) are separate from GitHub-hosted Actions minutes. All queued/running/cancelled build states are **not** passed checks. Only a completed successful exact-SHA run is admissible engineering evidence. The free quota is finite, not free unlimited compute.
 
 ## IMPORTANT: protect the existing merge gate
