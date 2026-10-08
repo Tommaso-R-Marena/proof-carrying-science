@@ -1,9 +1,11 @@
 name = "PCS"
 version = "0.5.0"
-defaultTargets = ["PCS:elabArts", "pcs-lean-authority"]
+defaultTargets = ["PCS", "pcs-lean-authority"]
 
 [[lean_lib]]
 name = "PCS"
+# Elaborate and kernel-check the entire proof-only umbrella without emitting native objects.
+defaultFacets = ["elabArts"]
 
 [[lean_exe]]
 name = "pcs-lean-authority"
