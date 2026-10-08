@@ -135,9 +135,37 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+  python-portability:
+    name: portability-${{ matrix.os }}-py${{ matrix.python }}
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-24.04, python: "3.11"}
+          - {os: ubuntu-24.04, python: "3.13"}
+          - {os: windows-2022, python: "3.12"}
+          - {os: macos-15, python: "3.12"}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install public Python verification dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Compile all PCS Python sources
+        run: python -m compileall -q pcs scripts tests
+      - name: Run cross-platform parser, canonicalization, and disclosure checks
+        run: python -m pytest -q tests/test_strict_json.py tests/test_canonical_json_v06.py tests/test_public_release_history_audit.py
+
   verified-public-integration:
     name: verified-public-integration
-    needs: [source-policy, core-full-gate]
+    needs: [source-policy, core-full-gate, python-portability]
     if: ${{ always() && github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -147,8 +175,10 @@ jobs:
         env:
           SOURCE_POLICY: ${{ needs.source-policy.result }}
           FULL_CORE: ${{ needs.core-full-gate.result }}
+          PORTABILITY: ${{ needs.python-portability.result }}
         run: |
           set -euo pipefail
           test "$SOURCE_POLICY" = success || { echo "::error::Source policy did not succeed ($SOURCE_POLICY)"; exit 1; }
           test "$FULL_CORE" = success || { echo "::error::Full Lean/Python/adversarial gate did not succeed ($FULL_CORE)"; exit 1; }
+          test "$PORTABILITY" = success || { echo "::error::Python portability suite did not succeed ($PORTABILITY)"; exit 1; }
           echo "PCS_PUBLIC_VERIFIED_INTEGRATION_PASS"
