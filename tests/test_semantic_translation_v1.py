@@ -145,6 +145,7 @@ def test_adversarial_fails_closed(label, modify, expected):
     assert expected in codes(out), (label,codes(out))
     assert not out["authoritative"]
 
+
 def test_symbol_registry_pinned_independently():
     reg, human, cand = fixture()
     reg["symbols"][0]["definition_id"] = "PCS.Malicious.fake"
