@@ -481,7 +481,7 @@ def cmd_semantic_translation_v1(args):
             confirmed_interpretation_sha256=args.confirmed_interpretation_sha256,
             claim_ir=claim_ir,
         )
-        output = json.dumps(decision, indent=2, sort_keys=True) + "\\n"
+        output = json.dumps(decision, indent=2, sort_keys=True) + "\n"
         if args.output:
             Path(args.output).write_text(output, encoding="utf-8")
         else:
@@ -491,7 +491,7 @@ def cmd_semantic_translation_v1(args):
                 raise ValueError("--overlay requires --claim-ir")
             overlay = attach_to_claim_ir(claim_ir, decision)
             Path(args.overlay).write_text(
-                json.dumps(overlay, indent=2, sort_keys=True) + "\\n",
+                json.dumps(overlay, indent=2, sort_keys=True) + "\n",
                 encoding="utf-8",
             )
     except (OSError, ValueError, TypeError) as exc:
