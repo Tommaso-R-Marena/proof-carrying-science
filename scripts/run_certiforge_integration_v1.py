@@ -36,6 +36,8 @@ def main():
     parser.add_argument("--checkout", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    if run(["git", "-C", ROOT, "status", "--porcelain"]).strip():
+        raise RuntimeError("commit the PCS source before binding demo evidence")
     checkout = args.checkout.resolve(strict=True)
     source_sha = run(["git", "-C", checkout, "rev-parse", "HEAD"]).strip()
     if run(["git", "-C", checkout, "status", "--porcelain"]).strip():
