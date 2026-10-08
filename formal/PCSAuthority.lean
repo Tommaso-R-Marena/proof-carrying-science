@@ -1,5 +1,4 @@
-import PCS
-
+import PCS.V2.AuthorityCLI
 open PCS.V2.Json PCS.V2.Package PCS.V2.EndToEnd PCS.V2.Authority
 
 partial def collectAuthorityFiles (root : System.FilePath) (rel : String) :
