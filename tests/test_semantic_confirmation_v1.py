@@ -131,3 +131,20 @@ def test_signed_confirmation_standalone_cli(tmp_path):
     paths["confirmation-receipt"].write_text(json.dumps(receipt))
     assert main(args) == 1
     assert json.loads(output.read_text())["confirmation_authenticated"] is False
+
+
+def test_confirmation_json_schema_requires_complete_digests_and_signature():
+    import json
+    from pathlib import Path
+    from jsonschema import Draft202012Validator
+    schema = json.loads((Path(__file__).resolve().parents[1]/"pcs/schemas/interpretation_confirmation_v1.schema.json").read_text())
+    Draft202012Validator.check_schema(schema)
+    registry, human, candidate, signer, keyhex, receipt = payload()
+    validate = Draft202012Validator(schema)
+    assert validate.is_valid(receipt)
+    for field in ("claim_id", "registry_sha256", "signature_hex", "nonce"):
+        broken = dict(receipt)
+        broken.pop(field)
+        assert not validate.is_valid(broken)
+    broken = dict(receipt, signature_hex="Z"*128)
+    assert not validate.is_valid(broken)
