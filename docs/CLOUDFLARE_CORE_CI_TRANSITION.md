@@ -1,3 +1,5 @@
+> **Live status correction (2026-10-08):** GitHub ruleset `Protect PCS main` (ID 24471337) was inspected through the GitHub API. It **already requires** `Workers Builds: pcs-core-ci-only` (Cloudflare Workers and Pages integration ID 85455), not the legacy CircleCI no-op. The CircleCI compatibility context remains present but is not currently the required check. A separate `Workers Builds: pcs-core-ci-gate` check was observed running against PR #74 commit `037c47a2`; the required `pcs-core-ci-only` build was queued. Do not confuse the two check names or treat a green result from one as satisfying the other. Historical migration steps below record earlier states and should not override this checked live state. See issue #75 and `docs/PUBLIC_RELEASE_EXECUTION_2026-10-08.md`.
+
 # Private PCS core CI: Cloudflare Workers Builds and fail-closed merge policy
 
 **Scope:** This is CI verification infrastructure, not a scientific assurance theorem. As of 2026-10-06, GitHub Actions hosted minutes and CircleCI credits are unavailable for the private core repository. Do **not** remove protected-branch requirements just because an alternative job was configured.

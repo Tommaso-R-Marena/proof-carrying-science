@@ -457,6 +457,64 @@ def cmd_attest_v06(args):
     return 0
 
 
+def cmd_semantic_translation_v1(args):
+    """Never emit PCS authority: this is an independently pinned structural precheck."""
+    from .semantic_translation_v1 import check_translation, attach_to_claim_ir
+    from .semantic_confirmation_v1 import check_translation_with_confirmation
+
+    try:
+        def bounded_read(path):
+            source = Path(path)
+            if source.stat().st_size > 1_000_000:
+                raise ValueError("semantic JSON exceeds 1 MB")
+            value = strict_json_load(source)
+            if not isinstance(value, dict):
+                raise ValueError("semantic JSON root must be an object")
+            return value
+
+        registry = bounded_read(args.registry)
+        interpretation = bounded_read(args.interpretation)
+        candidate = bounded_read(args.candidate)
+        claim_ir = bounded_read(args.claim_ir) if args.claim_ir else None
+        if args.confirmation_receipt and args.confirmed_interpretation_sha256:
+            raise ValueError("cannot combine unsigned digest-only and signed confirmation")
+        if bool(args.confirmation_receipt) != bool(args.approved_confirmation_public_key_hex):
+            raise ValueError("signed confirmation needs independently approved signer public key")
+        if args.confirmation_receipt:
+            decision = check_translation_with_confirmation(
+                registry, interpretation, candidate,
+                approved_registry_sha256=args.approved_registry_sha256,
+                confirmation_receipt=bounded_read(args.confirmation_receipt),
+                approved_signer_public_key_hex=args.approved_confirmation_public_key_hex,
+                claim_ir=claim_ir,
+            )
+        else:
+            decision = check_translation(
+                registry, interpretation, candidate,
+                approved_registry_sha256=args.approved_registry_sha256,
+                confirmed_interpretation_sha256=args.confirmed_interpretation_sha256,
+                claim_ir=claim_ir,
+            )
+        output = json.dumps(decision, indent=2, sort_keys=True) + "\n"
+        if args.output:
+            Path(args.output).write_text(output, encoding="utf-8")
+        else:
+            print(output, end="")
+        if args.overlay:
+            if claim_ir is None:
+                raise ValueError("--overlay requires --claim-ir")
+            overlay = attach_to_claim_ir(claim_ir, decision)
+            Path(args.overlay).write_text(
+                json.dumps(overlay, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+    except (OSError, ValueError, TypeError) as exc:
+        # Avoid echoing untrusted candidate payloads or secret-like fields.
+        print("ERROR: semantic translation precheck " + type(exc).__name__, file=sys.stderr)
+        return 2
+    return 0 if decision["decision"] == "STRUCTURALLY_CONFORMANT_NONAUTHORITATIVE" else 1
+
+
 def cmd_translate_project_v06(args):
     try:
         root = Path(args.project).resolve()
@@ -1468,6 +1526,26 @@ def build_parser():
     v = sub.add_parser("verify", help="independently verify an evidence certificate/package")
     v.add_argument("certificate")
     v.set_defaults(func=cmd_verify)
+
+    st1 = sub.add_parser(
+        "semantic-translation-v1",
+        help="bounded, NON-AUTHORITATIVE semantic interpretation/candidate comparison",
+    )
+    st1.add_argument("--registry", required=True, help="approved symbol registry JSON")
+    st1.add_argument("--approved-registry-sha256", required=True,
+                     help="trusted out-of-band registry commitment SHA256")
+    st1.add_argument("--interpretation", required=True, help="selected human interpretation JSON")
+    st1.add_argument("--candidate", required=True, help="untrusted model translation proposal JSON")
+    st1.add_argument("--confirmed-interpretation-sha256",
+                     help="digest-only match (does not authenticate human approval)")
+    st1.add_argument("--confirmation-receipt",
+                     help="signed, context-bound human interpretation receipt JSON")
+    st1.add_argument("--approved-confirmation-public-key-hex",
+                     help="trusted, externally pinned Ed25519 public key; never accept from model")
+    st1.add_argument("--claim-ir", help="optional pcs-claim-ir-v1 artifact from translate-project-v06")
+    st1.add_argument("-o", "--output", help="structured decision JSON output")
+    st1.add_argument("--overlay", help="optional non-authoritative Claim IR semantic overlay JSON")
+    st1.set_defaults(func=cmd_semantic_translation_v1)
 
     tp6 = sub.add_parser(
         "translate-project-v06",
