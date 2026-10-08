@@ -379,7 +379,12 @@ def explanation_roundtrip_check(value: Any, compiled: Mapping[str, Any],
     It also does not certify the independent Python implementation in Lean.
     """
     expected = explanation_ir(compiled, registry, human_digest=human_digest)
-    ok = type(value) is dict and value == expected
+    # Do not use Python object equality here: True == 1 can silently turn a
+    # bound-variable index into a Boolean while reporting a successful check.
+    try:
+        ok = type(value) is dict and canonical_bytes(value) == canonical_bytes(expected)
+    except (TypeError, ValueError, OverflowError, RecursionError):
+        ok = False
     return {"format": "pcs-explanation-roundtrip-result-v1", "equivalent": ok,
             "authoritative": False, "diagnostics": [] if ok else [
                 {"code": "ROUNDTRIP_MISMATCH", "path": "explanation_ir",
