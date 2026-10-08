@@ -28,6 +28,8 @@ jobs:
       - name: Check out exact untrusted candidate revision
         uses: actions/checkout@v4
         with:
+          # Fork PRs must fetch from their actual source repository.
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
