@@ -167,3 +167,122 @@ class Compiler:
         if not isinstance(value, dict) or not isinstance(value.get("op"), str):
             _error("MALFORMED_CANDIDATE", path, "formula needs an operator")
         op = value["op"]
+        if op in ("true", "false"):
+            _object(value, path, {"op"}, {"op"})
+            return (op,)
+        if op == "atom":
+            _object(value, path, {"op", "symbol", "args"}, {"op", "symbol", "args"})
+            name = _identifier(value["symbol"], path + ".symbol")
+            sym = self.registry.symbols.get(name)
+            if sym is None:
+                _error("UNRESOLVED_SYMBOL", path, f"predicate {name} is not registered")
+            if sym["kind"] != "predicate":
+                _error("BINDING_MISMATCH", path, "registered constant used as predicate")
+            args = _array(value["args"], path + ".args", 12)
+            if len(args) != len(sym["args"]):
+                _error("BINDING_MISMATCH", path, "predicate arity mismatch")
+            terms = []
+            for i, (arg, expected) in enumerate(zip(args, sym["args"])):
+                term, got = self.term(arg, env, f"{path}.args[{i}]")
+                if got != expected:
+                    _error("BINDING_MISMATCH", f"{path}.args[{i}]", f"expected {expected}, received {got}")
+                terms.append(term)
+            self.used.add(name)
+            return ("atom", name, sym["definition_sha256"], tuple(terms))
+        if op in ("eq", "neq"):
+            _object(value, path, {"op", "left", "right"}, {"op", "left", "right"})
+            l, ls = self.term(value["left"], env, path + ".left")
+            r, rs = self.term(value["right"], env, path + ".right")
+            if ls != rs:
+                _error("BINDING_MISMATCH", path, "equality terms have different sorts")
+            return (op, l, r)
+        if op == "not":
+            _object(value, path, {"op", "body"}, {"op", "body"})
+            return ("not", self.formula(value["body"], env, path + ".body", depth + 1))
+        if op in ("and", "or", "implies"):
+            _object(value, path, {"op", "left", "right"}, {"op", "left", "right"})
+            return (op, self.formula(value["left"], env, path + ".left", depth + 1),
+                    self.formula(value["right"], env, path + ".right", depth + 1))
+        if op in ("forall", "exists"):
+            _object(value, path, {"op", "var", "sort", "body"}, {"op", "var", "sort", "body"})
+            ident = _identifier(value["var"], path + ".var")
+            sort = _identifier(value["sort"], path + ".sort")
+            if sort not in self.registry.sorts:
+                _error("UNKNOWN_DEFINITION", path, "quantifier domain sort unregistered")
+            if any(name == ident for name, _ in env) or any(name == ident for name, _ in self.free):
+                _error("BINDING_MISMATCH", path, "shadowed bound variable")
+            return (op, sort, self.formula(value["body"], env + [(ident, sort)], path + ".body", depth + 1))
+        _error("UNSUPPORTED_CONSTRUCT", path, f"unsupported logical operator {op}")
+
+
+def _free_vars(value: Any, registry: Registry, path: str) -> list[tuple[str, str]]:
+    free = []
+    for i, val in enumerate(_array(value, path, MAX_SYMBOLS)):
+        v = _object(val, f"{path}[{i}]", {"name", "sort"}, {"name", "sort"})
+        name, sort = _identifier(v["name"], f"{path}[{i}].name"), _identifier(v["sort"], f"{path}[{i}].sort")
+        if sort not in registry.sorts:
+            _error("UNKNOWN_DEFINITION", f"{path}[{i}]", "free-variable sort is unknown")
+        if name in [item[0] for item in free]:
+            _error("BINDING_MISMATCH", path, "duplicate free-variable declaration")
+        free.append((name, sort))
+    return free
+
+
+def _scope(value: Any, path: str) -> tuple[str, str]:
+    v = _object(value, path, {"context_id", "description"}, {"context_id", "description"})
+    return _identifier(v["context_id"], path + ".context_id"), _limited_statement(v["description"], path + ".description")
+
+
+def compile_claim(value: Mapping[str, Any], registry: Registry, *, human: bool, path: str) -> dict[str, Any]:
+    required = {"format", "claim_id", "statement", "formula", "assumptions", "free_variables", "scope"} if human else \
+               {"format", "claim_id", "formula", "assumptions", "free_variables", "scope", "grounding"}
+    allowed = required | ({"ambiguities", "provenance"} if human else {"model_confidence", "proposer", "proof_receipt", "elaboration_receipt"})
+    obj = _object(value, path, required, allowed)
+    expected = INTERPRETATION_FORMAT if human else CANDIDATE_FORMAT
+    if obj["format"] != expected:
+        _error("UNSUPPORTED_CONSTRUCT", path + ".format", "wrong semantic wire format")
+    claim_id = _identifier(obj["claim_id"], path + ".claim_id")
+    if human:
+        _limited_statement(obj["statement"], path + ".statement")
+        if "provenance" in obj and not isinstance(obj["provenance"], dict):
+            _error("MALFORMED_CANDIDATE", path + ".provenance", "expected structured provenance")
+        ambiguity = _array(obj.get("ambiguities", []), path + ".ambiguities", 64)
+        if ambiguity:
+            _error("AMBIGUOUS_SCOPE", path + ".ambiguities", "interpretation has unresolved ambiguity")
+    free = _free_vars(obj["free_variables"], registry, path + ".free_variables")
+    scope = _scope(obj["scope"], path + ".scope")
+    compiler = Compiler(registry, free)
+    assumptions = _array(obj["assumptions"], path + ".assumptions", MAX_ASSUMPTIONS)
+    atoms = [compiler.formula(a, [], f"{path}.assumptions[{i}]") for i, a in enumerate(assumptions)]
+    if len(set(atoms)) != len(atoms):
+        _error("ASSUMPTION_DUPLICATED", path + ".assumptions", "duplicate semantic assumption")
+    result = compiler.formula(obj["formula"], [], path + ".formula")
+    grounding_errors: list[dict[str, str]] = []
+    if not human:
+        declared: dict[str, str] = {}
+        for i, g in enumerate(_array(obj["grounding"], path + ".grounding", MAX_SYMBOLS)):
+            entry = _object(g, f"{path}.grounding[{i}]", {"symbol", "definition_sha256"}, {"symbol", "definition_sha256"})
+            name = _identifier(entry["symbol"], f"{path}.grounding[{i}].symbol")
+            dig = _digest(entry["definition_sha256"], f"{path}.grounding[{i}].definition_sha256")
+            if name in declared:
+                _error("SHADOWED_OR_DUPLICATE_GROUNDING", path + ".grounding", "duplicate grounding for symbol")
+            declared[name] = dig
+        if set(declared) != compiler.used:
+            grounding_errors.append({"code": "GROUNDING_MISMATCH", "path": path + ".grounding",
+                                     "message": "grounding declarations differ from actually referenced symbols"})
+        for name, digest in declared.items():
+            if name not in registry.symbols or registry.symbols[name]["definition_sha256"] != digest:
+                grounding_errors.append({"code": "UNKNOWN_DEFINITION", "path": path + ".grounding",
+                                         "message": f"unregistered or incorrect definition digest for {name}"})
+    return {"claim_id": claim_id, "scope": scope, "free": tuple(free),
+            "assumptions": tuple(atoms), "formula": result, "symbols": tuple(sorted(compiler.used)),
+            "grounding_errors": grounding_errors}
+
+
+def _diagnose_mismatch(expected: Any, got: Any, path: str) -> dict[str, str] | None:
+    if expected == got:
+        return None
+    if isinstance(expected, tuple) and isinstance(got, tuple) and expected and got:
+        a, b = expected[0], got[0]
+        if a != b:
+            if a == "not" or b == "not":
