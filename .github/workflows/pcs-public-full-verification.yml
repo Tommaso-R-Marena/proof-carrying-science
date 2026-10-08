@@ -97,11 +97,23 @@ jobs:
           echo "PCS_PUBLIC_TESTED_MERGE_SHA=$(git rev-parse HEAD)"
           echo "PCS_PUBLIC_SOURCE_HEAD_SHA=$PR_HEAD_SHA"
           test -f scripts/core_ci_cloudflare.sh
+      - name: Require complete Aristotle semantic source overlay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/check_aristotle_semantic_source_v1.py
       - name: Full Lean kernel, real compiled authority, Python, and adversarial gate
         shell: bash
         run: |
           set -euo pipefail
           bash scripts/core_ci_cloudflare.sh
+      - name: Genuine compiled semantic authority fixtures and Python client
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd formal
+          bash tools/run_semantic_fixture_tests.sh
+          python3 -m unittest discover -s python/tests
       - name: Independent Python/JavaScript serialization stress gate
         shell: bash
         run: |
