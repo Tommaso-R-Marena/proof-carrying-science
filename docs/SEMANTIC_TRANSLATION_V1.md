@@ -91,7 +91,7 @@ For production-quality approval provenance, use `pcs/semantic_confirmation_v1.py
 
 1. A host-configured **approved public key** supplied outside the model/proposal channel (the receipt never chooses its own trust anchor).
 2. The exact claim ID, interpretation SHA-256, approved registry SHA-256 and optional Claim IR SHA-256, all inside the signed bytes.
-3. Domain separation `PCS_INTERPRETATION_CONFIRMATION_V1\\x00`, signer signature, nonce, issued/expiry timestamps and a maximum 30-day receipt lifetime.
+3. Domain separation `PCS_INTERPRETATION_CONFIRMATION_V1\x00`, signer signature, nonce, issued/expiry timestamps and a maximum 30-day receipt lifetime.
 4. The typed candidate's semantic invariants **after** verifying the receipt. A valid signature cannot override a quantifier or other semantic rejection.
 
 The time source and reviewer key custody are external trust assumptions. The signer must actually have authority to approve the selected interpretation and keep the private key secret. The public key should be rotated/revoked if compromised; an approval receipt does not prove real human intent or scientific truth. Reuse is possible within its validity interval; preventing replay across distinct sessions, if required by a workflow, needs external nonce-state management.
@@ -99,13 +99,13 @@ The time source and reviewer key custody are external trust assumptions. The sig
 Example of the standalone CLI **after an external reviewer has legitimately signed the receipt**:
 
 ```bash
-pcs semantic-translation-v1 \\
-  --registry examples/semantic_translation_v1/registry.json \\
-  --approved-registry-sha256 <trusted_registry_digest> \\
-  --interpretation examples/semantic_translation_v1/interpretation.json \\
-  --candidate examples/semantic_translation_v1/candidate.json \\
-  --confirmation-receipt approved-interpretation-receipt.json \\
-  --approved-confirmation-public-key-hex <independently_pinned_signer_public_key_hex> \\
+pcs semantic-translation-v1 \
+  --registry examples/semantic_translation_v1/registry.json \
+  --approved-registry-sha256 <trusted_registry_digest> \
+  --interpretation examples/semantic_translation_v1/interpretation.json \
+  --candidate examples/semantic_translation_v1/candidate.json \
+  --confirmation-receipt approved-interpretation-receipt.json \
+  --approved-confirmation-public-key-hex <independently_pinned_signer_public_key_hex> \
   -o decision.json
 ```
 
@@ -113,3 +113,7 @@ This path sets `confirmation_authenticated: true` and records the receipt commit
 
 `python -m pytest -q tests/test_semantic_translation_v1.py tests/test_semantic_confirmation_v1.py` tests malformed and forged receipts, signature/key mismatch, statement/registry/claim misbinding, clock window, schema validation, quantifier attacks after valid human approval, and signed CLI behavior. These are executable tests, **not Lean refinements**.
 
+
+### Exact-byte structural equality hardening
+
+The Explanation IR round-trip checker now compares canonical serialized JSON bytes, not Python equality. Python considers `True == 1`, but those have different meanings in a typed AST (a Boolean must never be accepted in place of a de Bruijn binder index). The corresponding negative regression test explicitly verifies this rejection. The isolated suite now includes **73 passing tests**.
