@@ -286,3 +286,166 @@ def _diagnose_mismatch(expected: Any, got: Any, path: str) -> dict[str, str] | N
         a, b = expected[0], got[0]
         if a != b:
             if a == "not" or b == "not":
+                code = "NEGATION_MISMATCH"
+            elif a in ("forall", "exists") or b in ("forall", "exists"):
+                code = "QUANTIFIER_MISMATCH"
+            elif {a, b} == {"and", "or"}:
+                code = "POLARITY_MISMATCH"
+            elif a in ("and", "or", "implies") or b in ("and", "or", "implies"):
+                code = "CONNECTIVE_MISMATCH"
+            elif a in ("eq", "neq") or b in ("eq", "neq"):
+                code = "POLARITY_MISMATCH"
+            else:
+                code = "SYMBOL_MISMATCH"
+            return {"code": code, "path": path, "message": f"operator mismatch: {a} versus {b}"}
+        if a == "atom" and expected[1:3] != got[1:3]:
+            return {"code": "SYMBOL_MISMATCH", "path": path, "message": "canonical symbol or definition mismatch"}
+        if a in ("forall", "exists") and expected[1] != got[1]:
+            return {"code": "BINDING_MISMATCH", "path": path, "message": "quantified sort mismatch"}
+        if a == "bound" and expected != got:
+            return {"code": "BINDING_MISMATCH", "path": path, "message": "variable bound by different quantifier"}
+        if a in ("free", "constant") and expected != got:
+            return {"code": "SYMBOL_MISMATCH", "path": path, "message": "term reference changed"}
+        if len(expected) != len(got):
+            return {"code": "ROUNDTRIP_MISMATCH", "path": path, "message": "structural arity mismatch"}
+        for i, (x, y) in enumerate(zip(expected[1:], got[1:]), 1):
+            issue = _diagnose_mismatch(x, y, f"{path}[{i}]")
+            if issue:
+                return issue
+    return {"code": "ROUNDTRIP_MISMATCH", "path": path, "message": "different normalized structured meaning"}
+
+
+def _match_assumptions(expected: tuple, given: tuple) -> list[dict[str, str]]:
+    msgs: list[dict[str, str]] = []
+    missing = [a for a in expected if a not in given]
+    added = [a for a in given if a not in expected]
+    if missing:
+        msgs.append({"code": "ASSUMPTION_DROPPED", "path": "candidate.assumptions", "message": f"{len(missing)} interpretation assumptions missing"})
+    if added:
+        msgs.append({"code": "ASSUMPTION_ADDED", "path": "candidate.assumptions", "message": f"{len(added)} unapproved assumptions added"})
+    return msgs
+
+
+def interpretation_digest(interpretation: Mapping[str, Any]) -> str:
+    """Commit the entire selected interpretation including original human words."""
+    return sha256(interpretation)
+
+
+def explanation_ir(compiled: Mapping[str, Any], registry: Registry, *, human_digest: str) -> dict[str, Any]:
+    """Preserve the normalized AST, not an unconstrained prose generator output."""
+    return {"format": EXPLANATION_FORMAT, "claim_id": compiled["claim_id"],
+            "interpretation_sha256": human_digest, "registry_sha256": registry.digest,
+            "scope": list(compiled["scope"]), "free_variables": list(map(list, compiled["free"])),
+            "assumptions": [listify(a) for a in compiled["assumptions"]],
+            "conclusion": listify(compiled["formula"]),
+            "grounding": [{"symbol": s, "definition_id": registry.symbols[s]["definition_id"],
+                           "definition_sha256": registry.symbols[s]["definition_sha256"]} for s in compiled["symbols"]],
+            "limitations": ["Human intent is not formally verified", "No external elaboration/proof receipt verified",
+                            "Python precheck is not yet Lean-refined or PCS-authoritative"]}
+
+
+def listify(value: Any) -> Any:
+    if isinstance(value, tuple):
+        return [listify(x) for x in value]
+    return value
+
+
+def check_translation(
+    registry_value: Any, interpretation: Any, candidate: Any,
+    *, approved_registry_sha256: str, confirmed_interpretation_sha256: str | None = None,
+    claim_ir: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Fail-closed structural precheck; this function *never* grants PCS authority.
+
+    confirmed_interpretation_sha256 must come from an authorized external host,
+    not from model-generated candidate data. Confirmation is not proof of intent.
+    """
+    failures: list[dict[str, str]] = []
+    reg: Registry | None = None
+    human_compiled = None
+    cand_compiled = None
+    try:
+        reg = validate_registry(registry_value, approved_registry_sha256)
+        human_compiled = compile_claim(interpretation, reg, human=True, path="interpretation")
+    except (SemanticError, TypeError, ValueError, OverflowError, RecursionError) as exc:
+        failures.append(exc.record() if isinstance(exc, SemanticError) else
+                        {"code": "MALFORMED_CANDIDATE", "path": "interpretation_or_registry", "message": type(exc).__name__})
+    if reg is not None:
+        try:
+            cand_compiled = compile_claim(candidate, reg, human=False, path="candidate")
+        except (SemanticError, TypeError, ValueError, OverflowError, RecursionError) as exc:
+            failures.append(exc.record() if isinstance(exc, SemanticError) else
+                            {"code": "MALFORMED_CANDIDATE", "path": "candidate", "message": type(exc).__name__})
+    if cand_compiled is not None:
+        failures.extend(cand_compiled["grounding_errors"])
+    if human_compiled is not None and cand_compiled is not None:
+        if human_compiled["claim_id"] != cand_compiled["claim_id"]:
+            failures.append({"code": "CLAIM_BINDING_MISMATCH", "path": "candidate.claim_id", "message": "claim ID changed"})
+        if human_compiled["scope"] != cand_compiled["scope"]:
+            failures.append({"code": "AMBIGUOUS_SCOPE", "path": "candidate.scope", "message": "scope differs from selected interpretation"})
+        if human_compiled["free"] != cand_compiled["free"]:
+            failures.append({"code": "BINDING_MISMATCH", "path": "candidate.free_variables", "message": "declared free variables differ"})
+        failures.extend(_match_assumptions(human_compiled["assumptions"], cand_compiled["assumptions"]))
+        mismatch = _diagnose_mismatch(human_compiled["formula"], cand_compiled["formula"], "candidate.formula")
+        if mismatch:
+            failures.append(mismatch)
+        if human_compiled["symbols"] != cand_compiled["symbols"]:
+            failures.append({"code": "GROUNDING_MISMATCH", "path": "candidate.grounding", "message": "different set of approved symbols used"})
+        if claim_ir is not None:
+            try:
+                _object(claim_ir, "claim_ir", {"format", "claims", "claim_ir_sha256"},
+                        set(claim_ir.keys()) if isinstance(claim_ir, dict) else set())
+                if claim_ir["format"] != "pcs-claim-ir-v1":
+                    _error("CLAIM_BINDING_MISMATCH", "claim_ir.format", "unexpected Claim IR format")
+                claims = _array(claim_ir["claims"], "claim_ir.claims", MAX_NODES)
+                bound = [c for c in claims if isinstance(c, dict) and c.get("claim_id") == human_compiled["claim_id"]]
+                if len(bound) != 1 or bound[0].get("statement") != interpretation["statement"]:
+                    _error("CLAIM_BINDING_MISMATCH", "claim_ir.claims", "interpretation does not match exactly one existing Claim IR claim")
+                if not isinstance(claim_ir["claim_ir_sha256"], str) or not _SHA.fullmatch(claim_ir["claim_ir_sha256"]):
+                    _error("CLAIM_BINDING_MISMATCH", "claim_ir.claim_ir_sha256", "invalid Claim IR commitment")
+                # Cross-check full existing Claim IR payload with its JCS commitment.
+                # Import the actual PCS canonicalizer, never trust a supplied hash alone.
+                from .canonical_json import canonicalize_jcs_bytes
+                ir_core = {k: v for k, v in claim_ir.items() if k != "claim_ir_sha256"}
+                if hashlib.sha256(canonicalize_jcs_bytes(ir_core)).hexdigest() != claim_ir["claim_ir_sha256"]:
+                    _error("CLAIM_BINDING_MISMATCH", "claim_ir.claim_ir_sha256", "Claim IR content does not match its commitment")
+            except (SemanticError, TypeError, ValueError) as exc:
+                failures.append(exc.record() if isinstance(exc, SemanticError) else
+                                {"code": "CLAIM_BINDING_MISMATCH", "path": "claim_ir", "message": "invalid Claim IR"})
+    h = interpretation_digest(interpretation) if isinstance(interpretation, dict) else None
+    if confirmed_interpretation_sha256 is None or h is None or h != confirmed_interpretation_sha256:
+        failures.append({"code": "CONFIRMATION_NOT_VERIFIED", "path": "interpretation", "message": "independent human selection/confirmation digest missing or mismatched"})
+    structural = not [f for f in failures if f["code"] != "CONFIRMATION_NOT_VERIFIED"]
+    confirmed = not any(f["code"] == "CONFIRMATION_NOT_VERIFIED" for f in failures)
+    decision = "REJECTED" if not structural else ("NEEDS_CONFIRMATION" if not confirmed else "STRUCTURALLY_CONFORMANT_NONAUTHORITATIVE")
+    result: dict[str, Any] = {
+        "format": DECISION_FORMAT, "decision": decision,
+        "structural_precheck_pass": structural, "authoritative": False,
+        "interpretation_sha256": h, "registry_sha256": reg.digest if reg else None,
+        "claim_ir_sha256": claim_ir.get("claim_ir_sha256") if isinstance(claim_ir, dict) else None,
+        "diagnostics": failures,
+        "unverified_authority_bridges": ["PYTHON_CHECKER_LEAN_REFINEMENT_NOT_VERIFIED",
+                                         "ELABORATION_NOT_VERIFIED", "PROOF_NOT_VERIFIED",
+                                         "PCS_EXECUTABLE_AUTHORITY_NOT_INVOKED"],
+    }
+    if structural and human_compiled is not None and reg is not None:
+        expl = explanation_ir(human_compiled, reg, human_digest=h)
+        result["explanation_ir"] = expl
+        result["explanation_ir_sha256"] = sha256(expl)
+    return result
+
+
+def attach_to_claim_ir(claim_ir: Mapping[str, Any], result: Mapping[str, Any]) -> dict[str, Any]:
+    """Non-authoritative extension for existing claim IR / POG consumption."""
+    if claim_ir.get("format") != "pcs-claim-ir-v1" or not isinstance(claim_ir.get("claim_ir_sha256"), str):
+        _error("CLAIM_BINDING_MISMATCH", "claim_ir", "expected existing PCS v1 Claim IR")
+    if result.get("format") != DECISION_FORMAT or result.get("claim_ir_sha256") != claim_ir["claim_ir_sha256"]:
+        _error("CLAIM_BINDING_MISMATCH", "result", "semantic result not bound to this Claim IR")
+    claim_id = result.get("explanation_ir", {}).get("claim_id")
+    if not isinstance(claim_id, str):
+        _error("CLAIM_BINDING_MISMATCH", "result", "claim binding unavailable on unsuccessful structural check")
+    return {"format": "pcs-claim-ir-semantic-overlay-v1", "claim_ir_sha256": claim_ir["claim_ir_sha256"],
+            "claim_id": claim_id, "semantic_translation": dict(result),
+            "pcs_authority_granted": False,
+            "blocking_obligations": list(result["unverified_authority_bridges"]) +
+                                    [d["code"] for d in result["diagnostics"]]}
