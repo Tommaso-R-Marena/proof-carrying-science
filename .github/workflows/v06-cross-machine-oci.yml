@@ -85,7 +85,7 @@ jobs:
   aggregate:
     name: aggregate-cross-machine-evidence
     needs: consumer
-    if: always()
+    if: ${{ always() && github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
     runs-on: [self-hosted, linux, x64, pcs-ubuntu24-x64]
     timeout-minutes: 15
     steps:

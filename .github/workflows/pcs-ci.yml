@@ -133,7 +133,7 @@ jobs:
       - python-assurance
       - lean-kernel
       - v06-byte-contract
-    if: ${{ always() && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    if: ${{ always() && github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     timeout-minutes: 5
     steps:
