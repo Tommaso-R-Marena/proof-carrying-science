@@ -61,7 +61,7 @@ pcs semantic-translation-v1 \
 
 The first command prints *candidate commitments only*; a trusted reviewer must verify the selected objects and approve hashes out of band. Omit the confirmation flag to obtain `NEEDS_CONFIRMATION`. Do not paste production secrets or unpublished human research into the synthetic demo.
 
-Equivalent lower-level CLI: `python scripts/run_semantic_translation_v1.py --registry ...`. Optional `--claim-ir` binds an original `pcs-claim-ir-v1` artifact by claim ID, unchanged human statement and verified JCS SHA-256; `--overlay` writes a separately hashed, non-authoritative integration artifact.
+Equivalent lower-level CLI: `python scripts/run_semantic_translation_v1.py --registry ...`. Optional `--claim-ir` binds an original `pcs-claim-ir-v1` artifact by claim ID, unchanged human statement and verified JCS SHA-256; `--overlay` writes a non-authoritative integration artifact.
 
 ## Acceptance evidence and adversarial tests
 
@@ -84,3 +84,32 @@ A learned translator may propose structured interpretations, candidates and repa
 The following are OPEN: independently defined typed denotation, correctness of normalization and binder handling, interpretation-to-typed-AST parsing, Python ↔ Lean serialization and validator refinement, binding of registry IDs/digests to real Lean constants, independent elaboration/kernel proof evidence, signed human-confirmation authority, and final existing PCS authority integration. The exact Lean AST and meaning equivalence theorems must be compared against Aristotle's implementation **without weakening its soundness hypotheses**.
 
 **Defensible present claim:** the *tested Python implementation* rejects the enumerated structural failures, emits Explanation IR and reason codes, and **never grants** PCS authority. It is not a formally verified natural-language translator.
+
+## Signed interpretation confirmation (2026-10-08 extension)
+
+For production-quality approval provenance, use `pcs/semantic_confirmation_v1.py` with `pcs/schemas/interpretation_confirmation_v1.schema.json`. A separately authorized reviewer signs the canonical JSON approval body with Ed25519. PCS verifies:
+
+1. A host-configured **approved public key** supplied outside the model/proposal channel (the receipt never chooses its own trust anchor).
+2. The exact claim ID, interpretation SHA-256, approved registry SHA-256 and optional Claim IR SHA-256, all inside the signed bytes.
+3. Domain separation `PCS_INTERPRETATION_CONFIRMATION_V1\\x00`, signer signature, nonce, issued/expiry timestamps and a maximum 30-day receipt lifetime.
+4. The typed candidate's semantic invariants **after** verifying the receipt. A valid signature cannot override a quantifier or other semantic rejection.
+
+The time source and reviewer key custody are external trust assumptions. The signer must actually have authority to approve the selected interpretation and keep the private key secret. The public key should be rotated/revoked if compromised; an approval receipt does not prove real human intent or scientific truth. Reuse is possible within its validity interval; preventing replay across distinct sessions, if required by a workflow, needs external nonce-state management.
+
+Example of the standalone CLI **after an external reviewer has legitimately signed the receipt**:
+
+```bash
+pcs semantic-translation-v1 \\
+  --registry examples/semantic_translation_v1/registry.json \\
+  --approved-registry-sha256 <trusted_registry_digest> \\
+  --interpretation examples/semantic_translation_v1/interpretation.json \\
+  --candidate examples/semantic_translation_v1/candidate.json \\
+  --confirmation-receipt approved-interpretation-receipt.json \\
+  --approved-confirmation-public-key-hex <independently_pinned_signer_public_key_hex> \\
+  -o decision.json
+```
+
+This path sets `confirmation_authenticated: true` and records the receipt commitment after successful signature verification, but `authoritative: false` remains mandatory. The old `--confirmed-interpretation-sha256` option remains as a **digest-only** provisional path and always sets `confirmation_authenticated: false`. Supplying both confirmation methods rejects.
+
+`python -m pytest -q tests/test_semantic_translation_v1.py tests/test_semantic_confirmation_v1.py` tests malformed and forged receipts, signature/key mismatch, statement/registry/claim misbinding, clock window, schema validation, quantifier attacks after valid human approval, and signed CLI behavior. These are executable tests, **not Lean refinements**.
+
