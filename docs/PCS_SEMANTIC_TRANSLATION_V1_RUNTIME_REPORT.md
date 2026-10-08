@@ -13,7 +13,7 @@
 - Independent Ed25519 receipt verification: `pcs/semantic_confirmation_v1.py` and `pcs/schemas/interpretation_confirmation_v1.schema.json`; signed approvals bind claim, interpretation, registry and optional Claim IR, with expiry and a pinned key. Both PCS CLI and standalone CLI offer signature verification.
 
 ## Evidence and explicit limitations
-- Local isolated Python tests: **72 passed** (`PYTHONPATH=. python -m pytest -q tests/test_semantic_translation_v1.py tests/test_semantic_confirmation_v1.py`), with Python byte-compilation passing. Test environment uses a minimal copy/stub of the existing PCS JCS canonicalizer, not a complete connected core clone.
+- Local isolated Python tests: **73 passed** (`PYTHONPATH=. python -m pytest -q tests/test_semantic_translation_v1.py tests/test_semantic_confirmation_v1.py`), with Python byte-compilation passing. Test environment uses a minimal copy/stub of the existing PCS JCS canonicalizer, not a complete connected core clone.
 - Full PCS `pytest`, Lean `lake build`, binary authority fixtures, Linux/macOS/Windows matrix, integration CI and Aristotle theorem/refinement review: **NOT RUN** from the final complete repository as of this report. Do not infer those passed.
 - All statuses returned by `check_translation` have `authoritative: false`. The `STRUCTURALLY_CONFORMANT_NONAUTHORITATIVE` state reports a matching selection digest. Only the signed-receipt path verifies an approved public-key signature and sets `confirmation_authenticated: true`; it does not itself prove signer authorization, intent, scientific premises, Lean elaboration or proof validity.
 - The approved registry digest and canonical definition metadata are not independent proofs of live Lean constant/type identity.
@@ -27,3 +27,5 @@
 5. Introduce a separately versioned, consent-respecting diagnostic dataset and repair loop once authority/labels are independently grounded.
 
 **What PCS can truthfully say now:** the bounded runtime performs an executable non-authoritative structural precheck and generates machine-readable diagnostics. **What it cannot truthfully claim:** kernel-checked semantic equivalence of English and Lean, proved Python/Lean correspondence, verified human intent, or formally assured real-world safety.
+
+Additional hardening: reject Boolean-instead-of-index substitution in Explanation IR, a Python equality edge case, by comparing canonical serialized bytes; 73 tests passed after this change.
