@@ -1,6 +1,6 @@
 # Public rights/provenance review ledger (working record)
 
-**No entry marked CLEARED as of 2026-10-08.** Source attribution is not the same as the right to redistribute. This is a release checklist, not a license certification.
+**Founder ownership declaration (2026-10-08):** The founder states that all intellectual property constituting the original PCS project is entirely theirs. This is recorded as the founder's assertion and is the basis for the chosen Apache-2.0 public-core policy. It is not an independent audit of third-party materials or contractual rights. **No external-source/third-party rights entry is marked CLEARED yet.** Source attribution is not the same as the right to redistribute. This is a release checklist, not a license certification.
 
 | Material | Observed source / scope | Current evidence | Clearance still required |
 |---|---|---|---|
