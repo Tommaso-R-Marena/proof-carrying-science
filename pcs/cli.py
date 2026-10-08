@@ -460,6 +460,7 @@ def cmd_attest_v06(args):
 def cmd_semantic_translation_v1(args):
     """Never emit PCS authority: this is an independently pinned structural precheck."""
     from .semantic_translation_v1 import check_translation, attach_to_claim_ir
+    from .semantic_confirmation_v1 import check_translation_with_confirmation
 
     try:
         def bounded_read(path):
@@ -475,12 +476,25 @@ def cmd_semantic_translation_v1(args):
         interpretation = bounded_read(args.interpretation)
         candidate = bounded_read(args.candidate)
         claim_ir = bounded_read(args.claim_ir) if args.claim_ir else None
-        decision = check_translation(
-            registry, interpretation, candidate,
-            approved_registry_sha256=args.approved_registry_sha256,
-            confirmed_interpretation_sha256=args.confirmed_interpretation_sha256,
-            claim_ir=claim_ir,
-        )
+        if args.confirmation_receipt and args.confirmed_interpretation_sha256:
+            raise ValueError("cannot combine unsigned digest-only and signed confirmation")
+        if bool(args.confirmation_receipt) != bool(args.approved_confirmation_public_key_hex):
+            raise ValueError("signed confirmation needs independently approved signer public key")
+        if args.confirmation_receipt:
+            decision = check_translation_with_confirmation(
+                registry, interpretation, candidate,
+                approved_registry_sha256=args.approved_registry_sha256,
+                confirmation_receipt=bounded_read(args.confirmation_receipt),
+                approved_signer_public_key_hex=args.approved_confirmation_public_key_hex,
+                claim_ir=claim_ir,
+            )
+        else:
+            decision = check_translation(
+                registry, interpretation, candidate,
+                approved_registry_sha256=args.approved_registry_sha256,
+                confirmed_interpretation_sha256=args.confirmed_interpretation_sha256,
+                claim_ir=claim_ir,
+            )
         output = json.dumps(decision, indent=2, sort_keys=True) + "\n"
         if args.output:
             Path(args.output).write_text(output, encoding="utf-8")
@@ -1523,7 +1537,11 @@ def build_parser():
     st1.add_argument("--interpretation", required=True, help="selected human interpretation JSON")
     st1.add_argument("--candidate", required=True, help="untrusted model translation proposal JSON")
     st1.add_argument("--confirmed-interpretation-sha256",
-                     help="digest confirmed by a trusted separate human workflow")
+                     help="digest-only match (does not authenticate human approval)")
+    st1.add_argument("--confirmation-receipt",
+                     help="signed, context-bound human interpretation receipt JSON")
+    st1.add_argument("--approved-confirmation-public-key-hex",
+                     help="trusted, externally pinned Ed25519 public key; never accept from model")
     st1.add_argument("--claim-ir", help="optional pcs-claim-ir-v1 artifact from translate-project-v06")
     st1.add_argument("-o", "--output", help="structured decision JSON output")
     st1.add_argument("--overlay", help="optional non-authoritative Claim IR semantic overlay JSON")
