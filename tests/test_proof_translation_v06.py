@@ -32,6 +32,24 @@ from pcs.verifier_zip_v06 import verify_package_zip_end_to_end_v06
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_grounding_rejects_symlink_alias_even_when_bytes_and_digest_match(tmp_path):
+    import hashlib
+    from pcs.proof_translation_v06 import _snapshot_bytes
+    actual = tmp_path / 'actual.json'
+    raw = b'{"synthetic":true}'
+    actual.write_bytes(raw)
+    item = {'path': 'actual.json', 'sha256': hashlib.sha256(raw).hexdigest(), 'size': len(raw)}
+    assert _snapshot_bytes(tmp_path, item) == raw
+    (tmp_path / 'alias.json').symlink_to(actual)
+    with pytest.raises(V06ProofTranslationError, match='symlink'):
+        _snapshot_bytes(tmp_path, dict(item, path='alias.json'))
+    (tmp_path / 'dir').mkdir()
+    (tmp_path / 'aliasdir').symlink_to(tmp_path / 'dir', target_is_directory=True)
+    (tmp_path / 'dir' / 'actual.json').write_bytes(raw)
+    with pytest.raises(V06ProofTranslationError, match='symlink'):
+        _snapshot_bytes(tmp_path, dict(item, path='aliasdir/actual.json'))
+
+
 def _write_csv_pair(root: Path) -> None:
     (root / "cohort_a.csv").write_text(
         "id,value\nA,1\nB,2\n",

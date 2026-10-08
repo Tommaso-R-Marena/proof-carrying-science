@@ -14,11 +14,11 @@ jobs:
   kernel-and-python:
     # Only run on an explicitly registered, isolated owner-controlled runner.
     # Never route potentially untrusted PR code to an unprotected owner computer.
-    if: ${{ vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' }}
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' }}
     runs-on: [self-hosted, linux, x64, pcs-lean-ci]
     timeout-minutes: 180
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
       - name: Run repository-integrity, Python, adversarial and Lean kernel gates

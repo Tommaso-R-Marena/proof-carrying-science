@@ -14,3 +14,7 @@
 Until all are complete: **keep the core private** and use a narrow public tutorial/sample repository or a sanitized snapshot (as a separate repository) for community onboarding if necessary. Neither action occurs automatically from this document.
 
 Source: GitHub official docs on [repository visibility](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility) and [Actions usage](https://docs.github.com/en/actions/concepts/billing-and-usage).
+
+## Integrated campaign checkpoint
+
+The 2026-10-08 campaign remains HOLD. See RELEASE_CAMPAIGN_PR_DISPOSITIONS.md, RELEASE_CAMPAIGN_SECURITY_AND_RIGHTS.md, CERTIFORGE_ADAPTER_V1.md and RELEASE_CAMPAIGN_RESEARCH_DRAFT.md. Passing local computational/formal checks is not source/data rights clearance, provider token revocation, complete disclosure-surface audit, protected required CI enforcement or deployment evidence. No missing semantic-source gate may be bypassed.

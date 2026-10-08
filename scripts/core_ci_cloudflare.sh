@@ -9,10 +9,10 @@ case "$HEAD_SHA" in
   (*[!0-9a-f]*|'') echo "invalid Git HEAD SHA" >&2; exit 8;;
 esac
 echo "PCS_CORE_HEAD_SHA=$HEAD_SHA"
-python3 -m pip install --disable-pip-version-check -e '.[dev]'
+python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-build.lock -r requirements-dev.lock
+python3 -m pip install --disable-pip-version-check --no-deps --no-build-isolation -e .
 python3 scripts/check_repository_integrity.py
-curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
-export PATH="$HOME/.elan/bin:$PATH"
+source scripts/activate_lean_428.sh
 bash scripts/verify_lean.sh
 cd "$ROOT/formal"
 bash tools/run_fixture_tests.sh
