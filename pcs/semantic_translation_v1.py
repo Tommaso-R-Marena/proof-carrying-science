@@ -105,6 +105,7 @@ def validate_registry(value: Any, approved_sha256: str) -> Registry:
             _error("SHADOWED_OR_DUPLICATE_GROUNDING", f"registry.sorts[{i}]", "duplicate sort")
         sorts.add(name)
     symbols: dict[str, dict[str, Any]] = {}
+    definition_owners: dict[str, str] = {}
     for i, entry in enumerate(_array(obj["symbols"], "registry.symbols", MAX_SYMBOLS)):
         path = f"registry.symbols[{i}]"
         sym = _object(entry, path, {"id", "kind", "definition_id", "definition_sha256", "provenance"},
@@ -114,7 +115,12 @@ def validate_registry(value: Any, approved_sha256: str) -> Registry:
             _error("SHADOWED_OR_DUPLICATE_GROUNDING", path, "duplicate canonical symbol")
         if sym["kind"] not in ("predicate", "constant"):
             _error("UNSUPPORTED_CONSTRUCT", f"{path}.kind", "only typed predicates/constants supported")
-        _identifier(sym["definition_id"], f"{path}.definition_id")
+        definition_id = _identifier(sym["definition_id"], f"{path}.definition_id")
+        prior = definition_owners.get(definition_id)
+        if prior is not None:
+            _error("SHADOWED_OR_DUPLICATE_GROUNDING", path,
+                   "canonical definition identifier is claimed by multiple symbols")
+        definition_owners[definition_id] = ident
         _digest(sym["definition_sha256"], f"{path}.definition_sha256")
         provenance = sym["provenance"]
         if not isinstance(provenance, str) or not provenance.strip() or len(provenance) > 1024:
@@ -242,6 +248,21 @@ def compile_claim(value: Mapping[str, Any], registry: Registry, *, human: bool, 
     if obj["format"] != expected:
         _error("UNSUPPORTED_CONSTRUCT", path + ".format", "wrong semantic wire format")
     claim_id = _identifier(obj["claim_id"], path + ".claim_id")
+    if not human:
+        # Receipts in a model proposal cannot make their own authority claims.
+        # Reject them until a separate verifier authenticates and binds them.
+        for receipt in ("proof_receipt", "elaboration_receipt"):
+            if receipt in obj:
+                _error("UNVERIFIED_EXTERNAL_RECEIPT", f"{path}.{receipt}",
+                       "untrusted proposer cannot submit an authoritative receipt")
+        if "model_confidence" in obj:
+            conf = obj["model_confidence"]
+            if (isinstance(conf, bool) or not isinstance(conf, (float, int))
+                    or not 0.0 <= conf <= 1.0):
+                _error("MALFORMED_CANDIDATE", f"{path}.model_confidence",
+                       "model confidence must be a finite number in [0,1]")
+        if "proposer" in obj and not isinstance(obj["proposer"], dict):
+            _error("MALFORMED_CANDIDATE", f"{path}.proposer", "proposer must be an object")
     if human:
         _limited_statement(obj["statement"], path + ".statement")
         if "provenance" in obj and not isinstance(obj["provenance"], dict):
@@ -350,6 +371,22 @@ def listify(value: Any) -> Any:
     return value
 
 
+def explanation_roundtrip_check(value: Any, compiled: Mapping[str, Any],
+                                registry: Registry, *, human_digest: str) -> dict[str, Any]:
+    """Check exact structural Explanation IR against independently compiled source.
+
+    This check provides no guarantee about stylistically generated natural language.
+    It also does not certify the independent Python implementation in Lean.
+    """
+    expected = explanation_ir(compiled, registry, human_digest=human_digest)
+    ok = type(value) is dict and value == expected
+    return {"format": "pcs-explanation-roundtrip-result-v1", "equivalent": ok,
+            "authoritative": False, "diagnostics": [] if ok else [
+                {"code": "ROUNDTRIP_MISMATCH", "path": "explanation_ir",
+                 "message": "explanation differs from the checked structured meaning"}],
+            "expected_explanation_sha256": sha256(expected)}
+
+
 def check_translation(
     registry_value: Any, interpretation: Any, candidate: Any,
     *, approved_registry_sha256: str, confirmed_interpretation_sha256: str | None = None,
@@ -441,6 +478,16 @@ def attach_to_claim_ir(claim_ir: Mapping[str, Any], result: Mapping[str, Any]) -
         _error("CLAIM_BINDING_MISMATCH", "claim_ir", "expected existing PCS v1 Claim IR")
     if result.get("format") != DECISION_FORMAT or result.get("claim_ir_sha256") != claim_ir["claim_ir_sha256"]:
         _error("CLAIM_BINDING_MISMATCH", "result", "semantic result not bound to this Claim IR")
+    # Re-verify before exporting: downstream callers may mutate the document
+    # after its initial check. A digest field by itself is not evidence.
+    from .canonical_json import canonicalize_jcs_bytes
+    try:
+        core = {k: v for k, v in claim_ir.items() if k != "claim_ir_sha256"}
+        actual = hashlib.sha256(canonicalize_jcs_bytes(core)).hexdigest()
+    except (TypeError, ValueError, OverflowError, RecursionError):
+        _error("CLAIM_BINDING_MISMATCH", "claim_ir", "malformed Claim IR content")
+    if actual != claim_ir["claim_ir_sha256"]:
+        _error("CLAIM_BINDING_MISMATCH", "claim_ir", "Claim IR changed since its commitment")
     claim_id = result.get("explanation_ir", {}).get("claim_id")
     if not isinstance(claim_id, str):
         _error("CLAIM_BINDING_MISMATCH", "result", "claim binding unavailable on unsuccessful structural check")
