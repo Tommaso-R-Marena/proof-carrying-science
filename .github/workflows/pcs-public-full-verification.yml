@@ -122,8 +122,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/run_semantic_kernel_bridge_vectors_v1.py > semantic-cross-language-evidence.json
-          python -c 'import json; d=json.load(open("semantic-cross-language-evidence.json")); assert d["passed"]==36 and d["pcs_scientific_authority"] is False'
+          python scripts/run_semantic_kernel_bridge_vectors_v1.py > "$RUNNER_TEMP/semantic-cross-language-evidence.json"
+          python - <<'PY'
+          import json, os, pathlib
+          d = json.loads((pathlib.Path(os.environ['RUNNER_TEMP']) / 'semantic-cross-language-evidence.json').read_text())
+          assert d['passed'] == 36 and d['pcs_scientific_authority'] is False
+          PY
       - name: Independent Python/JavaScript serialization stress gate
         shell: bash
         run: |
@@ -133,12 +137,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/run_v06_contract_gate.py
+          git status --short
+          python scripts/run_v06_contract_gate.py --results-root "$RUNNER_TEMP/v06-contract-runs"
       - name: Retain exact-source toolchain evidence
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p results/public-ci-evidence
+          test -z "$(git status --porcelain)"
+          mkdir -p "$RUNNER_TEMP/public-ci-evidence"
           {
             echo "PCS_PUBLIC_COMPLETE_GATE_PASS"
             echo "tested_merge_sha=$(git rev-parse HEAD)"
@@ -147,16 +153,16 @@ jobs:
             node --version
             lean --version || "$HOME/.elan/bin/lean" --version
             lake --version || "$HOME/.elan/bin/lake" --version
-          } | tee results/public-ci-evidence/build-identity.txt
+          } | tee "$RUNNER_TEMP/public-ci-evidence/build-identity.txt"
       - name: Upload cross-language and toolchain evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: pcs-public-full-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
-            results/public-ci-evidence/
-            results/v06-contract-runs/
-            semantic-cross-language-evidence.json
+            ${{ runner.temp }}/public-ci-evidence/
+            ${{ runner.temp }}/v06-contract-runs/
+            ${{ runner.temp }}/semantic-cross-language-evidence.json
           if-no-files-found: warn
           retention-days: 14
 
