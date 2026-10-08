@@ -114,6 +114,12 @@ jobs:
           cd formal
           bash tools/run_semantic_fixture_tests.sh
           python3 -m unittest discover -s python/tests
+      - name: Pin binary and replay 36 semantic requests through PCS Python adapter
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_semantic_kernel_bridge_vectors_v1.py > semantic-cross-language-evidence.json
+          python -c 'import json; d=json.load(open("semantic-cross-language-evidence.json")); assert d["passed"]==36 and d["pcs_scientific_authority"] is False'
       - name: Independent Python/JavaScript serialization stress gate
         shell: bash
         run: |
@@ -146,6 +152,7 @@ jobs:
           path: |
             results/public-ci-evidence/
             results/v06-contract-runs/
+            semantic-cross-language-evidence.json
           if-no-files-found: warn
           retention-days: 14
 
