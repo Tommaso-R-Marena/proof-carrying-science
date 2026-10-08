@@ -86,13 +86,13 @@ def scan(root: Path) -> dict:
             raise RuntimeError("Git blob size mismatch")
         if b"\x00" in body:
             skipped_binary += 1
-            reasons = []
+            reasons = ["binary_blob_uninspected"]
         else:
             try:
                 body.decode("utf-8")
             except UnicodeDecodeError:
                 skipped_binary += 1
-                reasons = []
+                reasons = ["binary_blob_uninspected"]
             else:
                 inspected += 1
                 reasons = matches_in_text(body)
@@ -111,9 +111,9 @@ def scan(root: Path) -> dict:
         "binary_blobs_not_content_scanned": skipped_binary,
         "suspected_findings": findings,
         "candidate_count": len(findings),
-        "preflight_pass": not is_shallow and not dirty and not findings,
+        "preflight_pass": not is_shallow and not dirty and not findings and skipped_binary == 0,
         "release_approved": False,
-        "note": "Heuristic check of reachable local refs only. Fetch all heads/tags/PR refs; independently inspect logs, archives, licenses, binary data and rights. No zero-finding result authorizes public release.",
+        "note": "Heuristic check of reachable local refs only. Every uninspected binary blob is flagged for human adjudication, not silently passed. Fetch all heads/tags/PR refs; independently inspect logs, archives, licenses, binary data and rights. No zero-finding result authorizes public release.",
     }
 
 
