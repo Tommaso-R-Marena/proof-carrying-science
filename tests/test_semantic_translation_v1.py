@@ -336,3 +336,16 @@ def test_overlay_recomputes_existing_claim_ir_commitment_on_export():
     ir["summary"]["claims"] = 7
     with pytest.raises(SemanticError, match="changed since its commitment"):
         attach_to_claim_ir(ir, out)
+
+
+def test_boolean_is_not_equal_to_bound_variable_index_in_explanation_roundtrip():
+    from pcs.semantic_translation_v1 import explanation_roundtrip_check
+    reg, human, candidate = fixture()
+    pinned = validate_registry(reg, sha256(reg))
+    compiled = compile_claim(human, pinned, human=True, path="interpretation")
+    exp = explanation_ir(compiled, pinned, human_digest=interpretation_digest(human))
+    # In Python, True == 1; structured semantic checks must not use that equality.
+    exp["conclusion"][2][2][1][3][0][1] = True
+    got = explanation_roundtrip_check(exp, compiled, pinned, human_digest=interpretation_digest(human))
+    assert not got["equivalent"]
+    assert got["diagnostics"][0]["code"] == "ROUNDTRIP_MISMATCH"
