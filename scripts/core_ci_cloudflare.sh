@@ -3,6 +3,12 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+# Emit immutable source identity so a CI log can be tied back to the exact Git commit.
+HEAD_SHA="$(git rev-parse HEAD)"
+case "$HEAD_SHA" in
+  (*[!0-9a-f]*|'') echo "invalid Git HEAD SHA" >&2; exit 8;;
+esac
+echo "PCS_CORE_HEAD_SHA=$HEAD_SHA"
 python3 -m pip install --disable-pip-version-check -e '.[dev]'
 python3 scripts/check_repository_integrity.py
 curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
