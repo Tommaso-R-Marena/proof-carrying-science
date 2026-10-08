@@ -1,0 +1,64 @@
+name: PCS Public Full Verification
+
+# Standard hosted runners are free in public repositories. This workflow is
+# intentionally inert while PCS core remains private; private CI stays on the
+# existing fail-closed external verification path.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcs-public-full-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-full-gate:
+    name: core-full-gate
+    # GitHub must not consume private hosted-runner minutes; skipped is NOT pass.
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Check out exact untrusted candidate revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify exact source identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          echo "PCS_PUBLIC_CI_HEAD_SHA=$actual"
+          if [[ "$actual" != "$EXPECTED_SHA" ]]; then
+            echo "Source revision mismatch: expected $EXPECTED_SHA" >&2
+            exit 9
+          fi
+
+      - name: Full repository, Lean, executable, Python and adversarial verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/core_ci_cloudflare.sh
+
+      - name: Confirm complete gate marker
+        shell: bash
+        run: |
+          # The full script exits nonzero on failure; this step is reachable
+          # only if it finished. This line labels the required check clearly.
+          echo "PCS_PUBLIC_FULL_GATE_PASS"
