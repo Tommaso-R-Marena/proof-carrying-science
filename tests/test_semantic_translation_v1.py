@@ -145,3 +145,131 @@ def test_adversarial_fails_closed(label, modify, expected):
     assert expected in codes(out), (label,codes(out))
     assert not out["authoritative"]
 
+def test_symbol_registry_pinned_independently():
+    reg, human, cand = fixture()
+    reg["symbols"][0]["definition_id"] = "PCS.Malicious.fake"
+    result = check_translation(reg, human, cand, approved_registry_sha256=sha256(fixture()[0]),
+                               confirmed_interpretation_sha256=interpretation_digest(human))
+    assert "REGISTRY_COMMITMENT_MISMATCH" in codes(result)
+
+
+def test_duplicate_registry_symbol_rejected():
+    def mutate(reg):
+        reg["symbols"].append(deepcopy(reg["symbols"][0]))
+    assert "SHADOWED_OR_DUPLICATE_GROUNDING" in codes(decision(registry_transform=mutate))
+
+
+def test_shadowed_variable_rejected():
+    def mutate(h,c):
+        c["formula"]["body"].update(var="t",sort="Trace")
+    assert "BINDING_MISMATCH" in codes(decision(mutate))
+
+
+def test_connective_and_or_change_rejected():
+    def mutate(h,c):
+        h["formula"]["body"]["body"]["op"] = "and"
+        c["formula"]["body"]["body"]["op"] = "or"
+    assert "POLARITY_MISMATCH" in codes(decision(mutate))
+
+
+def test_quantifier_order_changes_binding_and_rejects():
+    def mutate(h,c):
+        c["formula"] = bind("forall", "i", "Time", bind("forall", "t", "Trace",
+                        op("implies", atom("safety.revoked", "t", "i"),
+                           {"op": "not", "body": atom("safety.unsafe", "t", "i")})))
+    assert "BINDING_MISMATCH" in codes(decision(mutate))
+
+
+def test_known_equality_and_inequality():
+    reg,h,c=fixture()
+    e={"op":"eq","left":var("x"),"right":var("x")}
+    h["formula"]=bind("forall","x","Trace",e)
+    c["formula"]=deepcopy(h["formula"])
+    h["assumptions"]=[];c["assumptions"]=[]
+    h["provenance"]={"source":"user"}
+    c["grounding"]=[]
+    good=check_translation(reg,h,c,approved_registry_sha256=sha256(reg),confirmed_interpretation_sha256=interpretation_digest(h))
+    assert good["structural_precheck_pass"]
+    c["formula"]["body"]["op"]="neq"
+    bad=check_translation(reg,h,c,approved_registry_sha256=sha256(reg),confirmed_interpretation_sha256=interpretation_digest(h))
+    assert "POLARITY_MISMATCH" in codes(bad)
+
+
+def test_explanation_structure_preserves_normalized_semantics():
+    reg,h,c=fixture()
+    approved=validate_registry(reg,sha256(reg))
+    compiled=compile_claim(h,approved,human=True,path="human")
+    exp=explanation_ir(compiled,approved,human_digest=interpretation_digest(h))
+    assert exp["conclusion"]==listify(compiled["formula"])
+    assert exp["assumptions"]==[listify(x) for x in compiled["assumptions"]]
+    assert "Human intent is not formally verified" in exp["limitations"]
+    assert len(exp["grounding"])==3
+
+
+def test_claim_ir_binding_and_non_authoritative_overlay():
+    reg,h,c=fixture()
+    cir={"format":"pcs-claim-ir-v1","claims":[{"claim_id":"C_SAFE","statement":h["statement"]}],
+         "summary":{"claims":1}}
+    cir["claim_ir_sha256"] = sha256(cir)
+    good=check_translation(reg,h,c,approved_registry_sha256=sha256(reg),
+                           confirmed_interpretation_sha256=interpretation_digest(h),claim_ir=cir)
+    overlay=attach_to_claim_ir(cir,good)
+    assert overlay["claim_id"]=="C_SAFE"
+    assert not overlay["pcs_authority_granted"] and overlay["blocking_obligations"]
+    cir["claims"][0]["statement"]="Other sentence"
+    bad=check_translation(reg,h,c,approved_registry_sha256=sha256(reg),
+                          confirmed_interpretation_sha256=interpretation_digest(h),claim_ir=cir)
+    assert "CLAIM_BINDING_MISMATCH" in codes(bad)
+
+
+def test_claim_ir_overlay_rejects_wrong_receipt_binding():
+    reg,h,c=fixture()
+    d=check_translation(reg,h,c,approved_registry_sha256=sha256(reg),
+                        confirmed_interpretation_sha256=interpretation_digest(h))
+    with pytest.raises(SemanticError):
+        attach_to_claim_ir({"format":"pcs-claim-ir-v1","claim_ir_sha256":D},d)
+
+
+def test_wire_schema_accepts_positive_and_rejects_unknown(tmp_path):
+    import json
+    from pathlib import Path
+    from jsonschema import Draft202012Validator
+    schema = json.loads((Path(__file__).resolve().parents[1] / "pcs/schemas/semantic_translation_v1.schema.json").read_text())
+    Draft202012Validator.check_schema(schema)
+    validator = Draft202012Validator(schema)
+    reg, h, c = fixture()
+    for x in (reg, h, c):
+        assert validator.is_valid(x)
+    c["formula"]["body"]["body"]["left"]["unrecognized"] = "bad"
+    assert not validator.is_valid(c)
+
+
+def test_strict_json_loader_rejects_duplicate_and_nan(tmp_path):
+    from scripts.run_semantic_translation_v1 import read_json
+    p = tmp_path / "test.json"
+    p.write_text('{"a": 1, "a": 2}')
+    with pytest.raises(ValueError, match="duplicate"):
+        read_json(p)
+    p.write_text('{"a": NaN}')
+    with pytest.raises(ValueError, match="nonstandard"):
+        read_json(p)
+
+
+def test_cli_end_to_end_positive_and_negative(tmp_path):
+    from scripts.run_semantic_translation_v1 import main
+    import json
+    reg,h,c=fixture()
+    args=[]
+    for name,val in (("registry",reg),( "interpretation",h),("candidate",c)):
+        file=tmp_path/(name+".json")
+        file.write_text(json.dumps(val))
+        args += ["--"+name, str(file)]
+    args += ["--approved-registry-sha256",sha256(reg),
+             "--confirmed-interpretation-sha256",interpretation_digest(h)]
+    out=tmp_path/"decision.json"
+    assert main(args+["--output",str(out)])==0
+    assert json.loads(out.read_text())["decision"]=="STRUCTURALLY_CONFORMANT_NONAUTHORITATIVE"
+    c["formula"]["op"]="exists"
+    (tmp_path/"candidate.json").write_text(json.dumps(c))
+    assert main(args+["--output",str(out)])==1
+    assert "QUANTIFIER_MISMATCH" in {x["code"] for x in json.loads(out.read_text())["diagnostics"]}
