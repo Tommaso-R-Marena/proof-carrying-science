@@ -25,12 +25,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     steps:
-      - name: Check out exact untrusted candidate revision
+      - name: Check out proposed integration revision
         uses: actions/checkout@v4
         with:
-          # Fork PRs must fetch from their actual source repository.
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          # pull_request's github.sha is GitHub's synthetic merge commit.
+          # Test integration with current base, not only the unmerged head.
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -42,11 +42,13 @@ jobs:
       - name: Verify exact source identity
         shell: bash
         env:
-          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_SHA: ${{ github.sha }}
+          SOURCE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           actual="$(git rev-parse HEAD)"
-          echo "PCS_PUBLIC_CI_HEAD_SHA=$actual"
+          echo "PCS_PUBLIC_CI_TESTED_SHA=$actual"
+          echo "PCS_PUBLIC_CI_SOURCE_HEAD_SHA=$SOURCE_PR_HEAD_SHA"
           if [[ "$actual" != "$EXPECTED_SHA" ]]; then
             echo "Source revision mismatch: expected $EXPECTED_SHA" >&2
             exit 9
