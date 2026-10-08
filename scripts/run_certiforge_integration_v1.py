@@ -104,7 +104,7 @@ def main():
               "formal_promotion": False,
               "limitations": ["No AST-bound Lean certificate or Rust/Lean refinement", "External compiler/build correspondence trusted",
                   "No native executable guarantee", "Proposal-only monitor assumes exclusive trusted effect interface and faithful logging",
-                  "No claim of general AI alignment", "Private CertiForge component requires separate disclosure clearance"]}
+                  "No claim of general AI alignment", "Public component subject to its license and attribution obligations"]}
     (output / "proposal.json").write_text(json.dumps(proposal, sort_keys=True, indent=2)+"\n")
     (output / "result.json").write_text(json.dumps(report, sort_keys=True, indent=2)+"\n")
     (output / "claim-graph.json").write_text(json.dumps(graph, sort_keys=True, indent=2)+"\n")

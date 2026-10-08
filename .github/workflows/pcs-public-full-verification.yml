@@ -182,6 +182,68 @@ jobs:
           lake exe cache get
           bash scripts/verify_lean_real.sh
 
+  certiforge-integration:
+    name: certiforge-integration
+    needs: source-policy
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      CARGO_BUILD_JOBS: '4'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Retrieve exact public component source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: Tommaso-R-Marena/certiforge
+          ref: b27729cd47f04fb0d022ce817042bbceaab9c5f4
+          path: .ci-components/certiforge
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.14'
+      - name: Build real pinned Rust component and separate Lean workspace
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '${{ github.sha }}'
+          mv .ci-components/certiforge "$RUNNER_TEMP/pcs-certiforge"
+          rmdir .ci-components
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
+          cd "$RUNNER_TEMP/pcs-certiforge"
+          test "$(git rev-parse HEAD)" = b27729cd47f04fb0d022ce817042bbceaab9c5f4
+          rustup override set 1.99.0
+          cargo fmt --all --check
+          cargo test --workspace --locked
+          cargo clippy --workspace --all-targets --locked -- -D warnings
+          cargo build --workspace --locked
+          source scripts/activate_lean_416.sh
+          (cd formal && lake build && lake env lean CertiForge/AxiomAudit.lean)
+      - name: Execute actual PCS optimizer/checker/binding/negative-control demo
+        run: |
+          set -euo pipefail
+          python scripts/run_certiforge_integration_v1.py --checkout "$RUNNER_TEMP/pcs-certiforge" --output "$RUNNER_TEMP/pcs-integrated-demo"
+          python - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'pcs-integrated-demo'
+          r = json.loads((p / 'result.json').read_text())
+          assert r['optimization']['state'] == 'CHECKED_EXHAUSTIVE'
+          assert r['optimization']['pcs_authority'] is False
+          assert r['malicious_rebound_optimization']['state'] == 'REJECTED'
+          assert r['formal_promotion'] is False
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() }}
+        with:
+          name: pcs-certiforge-integration-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pcs-integrated-demo/
+          if-no-files-found: warn
+          retention-days: 14
+
   python-portability:
     name: portability-${{ matrix.os }}-py${{ matrix.python }}
     if: ${{ github.event.repository.private == false }}
@@ -212,7 +274,7 @@ jobs:
 
   verified-public-integration:
     name: verified-public-integration
-    needs: [source-policy, core-full-gate, real-analysis-bridge, python-portability]
+    needs: [source-policy, core-full-gate, real-analysis-bridge, certiforge-integration, python-portability]
     if: ${{ always() && github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -223,11 +285,13 @@ jobs:
           SOURCE_POLICY: ${{ needs.source-policy.result }}
           FULL_CORE: ${{ needs.core-full-gate.result }}
           REAL_ANALYSIS: ${{ needs.real-analysis-bridge.result }}
+          CERTIFORGE: ${{ needs.certiforge-integration.result }}
           PORTABILITY: ${{ needs.python-portability.result }}
         run: |
           set -euo pipefail
           test "$SOURCE_POLICY" = success || { echo "::error::Source policy did not succeed ($SOURCE_POLICY)"; exit 1; }
           test "$FULL_CORE" = success || { echo "::error::Full Lean/Python/adversarial gate did not succeed ($FULL_CORE)"; exit 1; }
           test "$REAL_ANALYSIS" = success || { echo "::error::Real-analysis kernel and axiom audit did not succeed ($REAL_ANALYSIS)"; exit 1; }
+          test "$CERTIFORGE" = success || { echo "::error::PCS/CertiForge integration did not succeed ($CERTIFORGE)"; exit 1; }
           test "$PORTABILITY" = success || { echo "::error::Python portability suite did not succeed ($PORTABILITY)"; exit 1; }
           echo "PCS_PUBLIC_VERIFIED_INTEGRATION_PASS"

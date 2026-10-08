@@ -51,6 +51,9 @@ the exact PR merge revision; local results are not remote status/merge evidence.
 Hosted Actions uses read-only permissions, pinned Actions, frozen dependencies
 and no deployment credentials. The core aggregate requires source policy, the
 full core gate, Mathlib real-analysis and portability; skipped prerequisites fail.
+The aggregate also requires a separate PCS/CertiForge integration job. It retrieves
+the component by full immutable commit, builds its Rust and Lean workspaces, runs
+the actual PCS adapter/demo and checks malicious-candidate rejection.
 CertiForge keeps Lean 4.16 separate from PCS/website Lean 4.28.
 Existing Cloudflare protection must migrate only after replacement GitHub checks
 actually pass. Switching providers does not revoke historical credentials or
