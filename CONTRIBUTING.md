@@ -96,3 +96,26 @@ Use the repository PR template. In particular, state:
 - whether any Git metadata changed intentionally.
 
 After a PR merges, do not add substantive commits to its old branch. Additional work requires a new PR.
+
+## Public contribution provenance (release preparation)
+
+Before submitting to a public PCS repository, contributors must have the legal right
+to license **all** of their submitted code, proofs, fixtures, and documentation under
+the license applicable to the destination paths. Do not submit institutional,
+employer, collaborator, or third-party intellectual property without permission.
+
+For new public contributions PCS proposes the [Developer Certificate of Origin 1.1](https://developercertificate.org/)
+signed-off commit convention, using `git commit -s`. The sign-off attests a
+contributor's right to submit; it is **not** copyright assignment, a patent grant
+beyond the applicable license, or proof of ownership. This is a proposed public
+policy until founder/legal approval under issue #11. Existing history is **not**
+retroactively cleared by this paragraph.
+
+Use synthetic, public or properly permissioned examples only. Do not upload
+partner data, private signing keys, production credentials, unpublished external
+research, or security vulnerability details to public issues, PRs, CI logs or
+fixtures. Follow `SECURITY.md` for private reporting.
+
+A correct Lean proof is not sufficient for merging a change that expands
+scientific claims or execution trust boundaries. Exact-source kernel builds,
+adversarial cases, and domain reviewer approval remain required.
