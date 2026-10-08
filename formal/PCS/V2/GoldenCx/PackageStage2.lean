@@ -44,4 +44,42 @@ theorem fileMapOK_cx : fileMapOK authorityUnicode manifestV certV certBA filesV 
 theorem pkgMsgV : signedMessage packageSignatureDomain (encodeManifest manifestV) = Lit.pkgMsg := by
   rw [‚Üê manifest_eq, ‚Üê FixtureSpec.pkgMsg, pkgMsg_eq]
 
-td—P–ÄL@¯˜çÖ™Ï
+theorem pkgMsgDigest_lit : sha256 Lit.pkgMsg = Lit.pkgMsgDigest := by
+  rw [‚Üê pkgMsg_eq]; exact pkgMsgDigest_eq
+
+def pkgRecV : SigRecordV2 :=
+  { domain := packageSignatureDomain, payload := encodeManifest manifestV,
+    payloadSha256 := Lit.pkgMsgDigest, fingerprint := Lit.fingerprint, signature := cxPkgSig }
+
+theorem pkgSigBA_jcs : pkgSigBA = jcsBytes (encodeSigRecord pkgRecV) := by
+  rw [‚Üê pkgSigBA_eq, FixtureSpec.pkgSigBytesWith, pkgSigRecord_eq, manifest_eq]; rfl
+
+theorem pkgRec_canonical : canonical (encodeSigRecord pkgRecV) = true := by kernel_rfl
+
+theorem pkgRec_decode : decodeSigRecord (encodeSigRecord pkgRecV) = some pkgRecV := by kernel_rfl
+
+theorem verifyPkgSig_cx :
+    verifySigRecordBytes PCS.V2.Ed25519.verify testPk (some Lit.fingerprint)
+      packageSignatureDomain (encodeManifest manifestV) pkgSigBA = some pkgRecV := by
+  have hs : (jcsBytes (encodeSigRecord pkgRecV)).size ‚â§ maxSigRecordBytes := by
+    rw [‚Üê pkgSigBA_jcs]; decide +kernel
+  rw [pkgSigBA_jcs, verifySigRecordBytes, parseCanonicalBytes_complete pkgRec_canonical hs]
+  dsimp only
+  rw [pkgRec_decode]
+  dsimp only
+  simp only [pkgMsgV, pkgRecV, pkgSig_verifies, pkgMsgDigest_lit, pinOK, fingerprint_eq]
+  kernel_rfl
+
+/-! ## Stage 1 composed: `verifyPackage` on the cx input -/
+
+/-- The package-stage result on the cx input. -/
+def pkgResultV : PackageResult :=
+  { cert := certV, certSignature := certRecV, manifest := manifestV, packageSignature := pkgRecV }
+
+theorem verifyPackage_cx :
+    verifyPackage authorityUnicode PCS.V2.Ed25519.verify testPk (some Lit.fingerprint) inputV =
+      some pkgResultV :=
+  PCS.V2.Golden.verifyPackage_of_stages (inp := inputV) verifyCertBytes_certBA certSigPayload_certV
+    verifyCertSig_cx verifyManifestBytes_cx fileMapOK_cx verifyPkgSig_cx
+
+end PCS.V2.GoldenCx

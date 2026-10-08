@@ -33,4 +33,18 @@ Printed on every build.  Expected: only `propext`, `Classical.choice`, `Quot.sou
 -- golden acceptance (re-proved for the strict authority)
 #print axioms PCS.V2.Golden.supportedEvidence_golden
 #print axioms PCS.V2.Golden.claimsBound_golden
-#print axioms PCS.V2.Golden.certifdÑPÐ€L@÷ón…ªì
+#print axioms PCS.V2.Golden.certifiedAuthority_golden
+#print axioms PCS.V2.Golden.aiSafetyGoldenArchive_accepts
+#print axioms PCS.V2.Golden.aiSafetyGoldenArchive_entries_accepts
+#print axioms PCS.V2.Golden.aiSafetyGoldenArchive_committed_safe
+-- adversarial fixtures
+#print axioms PCS.V2.GoldenCx.cx_signed_but_rejected
+#print axioms PCS.V2.GoldenCx.cx_cli_rejected
+#print axioms PCS.V2.Golden.FailClosedFixtures.m7_rejected_zip
+#print axioms PCS.V2.Golden.FailClosedFixtures.m7_rejected_entries
+#print axioms PCS.V2.Golden.FailClosedFixtures.m7b_rejected_zip
+#print axioms PCS.V2.Golden.FailClosedFixtures.m7b_rejected_entries
+#print axioms PCS.V2.Golden.FailClosedFixtures.m7c_rejected_zip
+#print axioms PCS.V2.Golden.FailClosedFixtures.m7c_rejected_entries
+#print axioms PCS.V2.Golden.FailClosedFixtures.m15_rejected_zip
+#print axioms PCS.V2.Golden.FailClosedFixtures.m15_rejected_entries

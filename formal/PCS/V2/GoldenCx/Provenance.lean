@@ -43,4 +43,79 @@ theorem intHash_eq : cx.intHash = Lit.intHash := by
   rw [FixtureSpec.intHash, semHash_eq, PCS.V2.Golden.domainDigest_eq, sha256_eq_sha256Fast]; kernel_rfl
 
 /-- The certificate JSON value with its two hash members as literals. -/
-theorem certJ_d—P–ÄL@˚„MÖ™Ï
+theorem certJ_eq : cx.certJ = .obj (cx.certMembers (hexEncode Lit.semHash) (hexEncode Lit.intHash)) := by
+  rw [FixtureSpec.certJ, semHash_eq, intHash_eq]
+
+theorem certBytes_eq : cx.certBytes.data.toList = Lit.certBytes := by
+  rw [FixtureSpec.certBytes, PCS.V2.Golden.jcsBytes_data, certJ_eq]; kernel_rfl
+
+theorem certBytes_size : cx.certBytes.size = 1686 := by
+  rw [‚Üê ByteArray.size_data, ‚Üê Array.length_toList, certBytes_eq]; kernel_rfl
+
+theorem certDigest_eq : sha256 cx.certBytes.data.toList = Lit.certDigest := by
+  rw [certBytes_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem commitment_eq : commitmentOf (predJ 4 7) = Lit.commitment := by
+  rw [commitmentOf, PCS.V2.Golden.domainDigest_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem storageKey_eq : storageKey "C1" = Lit.storageKeyC1 := by
+  rw [storageKey, sha256_eq_sha256Fast]; kernel_rfl
+
+/-! ## The normalized wire, index and manifest -/
+
+/-- The normalized decision wire of claim `C1`, with literal digests. -/
+def wireV : WireV2 :=
+  { source := { checkerVersion := checkerVersion, certificateSemanticHash := Lit.semHash,
+                certificateIntegrityHash := Lit.intHash, claimId := "C1" },
+    context := [{ id := "A1", statement := "Risk of action a is a mod 4 (declared toy cost model)." }],
+    claim := { id := "C1", kind := .computational, predicateCommitment := Lit.commitment,
+               requiredEvidence := ["E1"], assumptions := ["A1"] },
+    evidence := [{ id := "E1", kind := .computationalTest, outcome := .pass,
+                   predicateCommitment := Lit.commitment }],
+    decision := .computational, wireSemanticHash := Lit.wireHash }
+
+theorem certV2_eq : cx.certV2 =
+    { members := cx.certMembers (hexEncode Lit.semHash) (hexEncode Lit.intHash),
+      semanticHash := Lit.semHash, integrityHash := Lit.intHash } := by
+  rw [FixtureSpec.certV2, semHash_eq, intHash_eq]
+
+theorem wire_eq : cx.wire = wireV := by
+  rw [FixtureSpec.wire, FixtureSpec.certModel, certV2_eq]
+  simp only [deriveWire, NormalizedWire.expectedHash, commitmentOf, PCS.V2.Golden.domainDigest_eq,
+    sha256_eq_sha256Fast]
+  kernel_rfl
+
+theorem wireBytes_eq : cx.wireBytes.data.toList = Lit.wireBytes := by
+  rw [FixtureSpec.wireBytes, encodedBytes, wire_eq, PCS.V2.Golden.jcsBytes_data]; kernel_rfl
+
+theorem wireBytes_size : cx.wireBytes.size = 1108 := by
+  rw [‚Üê ByteArray.size_data, ‚Üê Array.length_toList, wireBytes_eq]; kernel_rfl
+
+theorem wireDigest_eq : sha256 cx.wireBytes.data.toList = Lit.wireDigest := by
+  rw [wireBytes_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem wirePath_eq : wirePath = keyPath Lit.storageKeyC1 := by
+  rw [wirePath, storageKey_eq]
+
+/-- The normalized index, with literal digests. -/
+def indexV : IndexV2 :=
+  { certificateIntegrityHash := Lit.intHash, certificateSemanticHash := Lit.semHash,
+    entries := [{ claimId := "C1", decision := .computational, storageKey := Lit.storageKeyC1,
+                  wireSemanticHash := Lit.wireHash }],
+    indexSemanticHash := Lit.indexHash }
+
+theorem index_eq : cx.index = indexV := by
+  rw [FixtureSpec.index, semHash_eq, intHash_eq, wire_eq, storageKey_eq]
+  simp only [Index.expectedHash, PCS.V2.Golden.domainDigest_eq, sha256_eq_sha256Fast]
+  kernel_rfl
+
+theorem indexBytes_eq : cx.indexBytes.data.toList = Lit.indexBytes := by
+  rw [FixtureSpec.indexBytes, index_eq, PCS.V2.Golden.jcsBytes_data]; kernel_rfl
+
+theorem indexBytes_size : cx.indexBytes.size = 677 := by
+  rw [‚Üê ByteArray.size_data, ‚Üê Array.length_toList, indexBytes_eq]; kernel_rfl
+
+theorem indexDigest_eq : sha256 cx.indexBytes.data.toList = Lit.indexDigest := by
+  rw [indexBytes_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+end PCS.V2.GoldenCx

@@ -51,4 +51,46 @@ theorem crc32_of_crcChunksOK {cs : List (List UInt8 × UInt32)}
   rw [crc32, foldl_of_crcChunksOK _ _ h]
 
 /-- Look `l` up in a table of proved `(input, crc)` facts. -/
-M��t��Z�
+def crcFind (l : List UInt8) : List (List UInt8 × UInt32) → Option UInt32
+  | [] => none
+  | p :: ps => if p.1 = l then some p.2 else crcFind l ps
+
+/-- CRC-32 with a memo table (falls back to `crc32` on a miss). -/
+def crc32Memo (table : List (List UInt8 × UInt32)) (l : List UInt8) : UInt32 :=
+  match crcFind l table with
+  | some c => c
+  | none => crc32 l
+
+def CrcMemoCorrect (table : List (List UInt8 × UInt32)) : Prop :=
+  ∀ p ∈ table, crc32 p.1 = p.2
+
+theorem crcFind_sound {l : List UInt8} :
+    ∀ {table : List (List UInt8 × UInt32)} {c : UInt32},
+      CrcMemoCorrect table → crcFind l table = some c → crc32 l = c
+  | [], _, _, h => by simp [crcFind] at h
+  | p :: ps, c, hc, h => by
+    unfold crcFind at h
+    split at h
+    · rename_i hp
+      subst hp
+      rw [hc p (List.mem_cons_self ..)]; exact Option.some.inj h
+    · exact crcFind_sound (fun q hq => hc q (List.mem_cons_of_mem _ hq)) h
+
+theorem crc32_eq_crc32Memo {table : List (List UInt8 × UInt32)} (hc : CrcMemoCorrect table) :
+    crc32 = crc32Memo table := by
+  funext l
+  unfold crc32Memo
+  split
+  · rename_i c h; exact crcFind_sound hc h
+  · rfl
+
+theorem crcMemoCorrect_nil : CrcMemoCorrect [] := by simp [CrcMemoCorrect]
+
+theorem crcMemoCorrect_cons {x : List UInt8} {c : UInt32} {ps : List (List UInt8 × UInt32)}
+    (h : crc32 x = c) (hs : CrcMemoCorrect ps) : CrcMemoCorrect ((x, c) :: ps) := by
+  intro p hp
+  rcases List.mem_cons.1 hp with rfl | hp
+  · exact h
+  · exact hs p hp
+
+end PCS.V2.Crc32Memo

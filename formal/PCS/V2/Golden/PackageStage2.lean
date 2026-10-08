@@ -54,4 +54,44 @@ theorem pkgRec_canonical : canonical (encodeSigRecord pkgRecV) = true := by kern
 theorem pkgRec_decode : decodeSigRecord (encodeSigRecord pkgRecV) = some pkgRecV := by kernel_rfl
 
 theorem verifyPkgSig_golden :
-    verifySigRecordBytes PCS.V2.Ed25519.verify tesMƒ≠5Ÿ»ZÆ
+    verifySigRecordBytes PCS.V2.Ed25519.verify testPk (some Lit.fingerprint)
+      packageSignatureDomain (encodeManifest manifestV) pkgSigBA = some pkgRecV := by
+  have hs : (jcsBytes (encodeSigRecord pkgRecV)).size ‚â§ maxSigRecordBytes := by
+    rw [‚Üê pkgSigBA_jcs]; decide +kernel
+  rw [pkgSigBA_jcs, verifySigRecordBytes, parseCanonicalBytes_complete pkgRec_canonical hs]
+  dsimp only
+  rw [pkgRec_decode]
+  dsimp only
+  simp only [pkgMsgV, pkgRecV, pkgSig_verifies, pkgMsgDigest_lit, pinOK, fingerprint_eq]
+  kernel_rfl
+
+/-! ## Stage 1 composed: `verifyPackage` on the golden input -/
+
+/-- The package-stage result on the golden input. -/
+def pkgResultV : PackageResult :=
+  { cert := certV, certSignature := certRecV, manifest := manifestV, packageSignature := pkgRecV }
+
+/-- `verifyPackage` succeeds once each of its stages is known to succeed (stated over
+arbitrary inputs, so no concrete evaluation happens in the elaborator). -/
+theorem verifyPackage_of_stages {U : UnicodeOps} {V : Ed25519Verify} {pk : List UInt8}
+    {expected : Option (List UInt8)} {inp : PackageInput} {c : CertV2} {csp : JVal}
+    {cs ps : SigRecordV2} {m : ManifestV2}
+    (h1 : verifyCertBytes inp.certificateBytes = some c)
+    (h2 : certSigPayload c = some csp)
+    (h3 : verifySigRecordBytes V pk expected certificateSignatureDomain csp
+            inp.certificateSignatureBytes = some cs)
+    (h4 : verifyManifestBytes U inp.manifestBytes = some m)
+    (h5 : fileMapOK U m c inp.certificateBytes inp.files = true)
+    (h6 : verifySigRecordBytes V pk expected packageSignatureDomain (encodeManifest m)
+            inp.packageSignatureBytes = some ps) :
+    verifyPackage U V pk expected inp =
+      some { cert := c, certSignature := cs, manifest := m, packageSignature := ps } := by
+  simp only [verifyPackage, h1, h2, h3, h4, h5, h6, if_true]
+
+theorem verifyPackage_golden :
+    verifyPackage authorityUnicode PCS.V2.Ed25519.verify testPk (some Lit.fingerprint) inputV =
+      some pkgResultV :=
+  verifyPackage_of_stages (inp := inputV) verifyCertBytes_certBA certSigPayload_certV
+    verifyCertSig_golden verifyManifestBytes_golden fileMapOK_golden verifyPkgSig_golden
+
+end PCS.V2.Golden

@@ -38,4 +38,95 @@ open PCS.V2.AuthorityCLI
 
 /-! ## CRC-32 of the seven members (kernel-checked checkpoints) -/
 
-theorem crcOK0 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks0 = true :=$�PЀL@��O���
+theorem crcOK0 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks0 = true := by kernel_rfl
+theorem crcOK1 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks1 = true := by kernel_rfl
+theorem crcOK2 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks2 = true := by kernel_rfl
+theorem crcOK3 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks3 = true := by kernel_rfl
+theorem crcOK4 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks4 = true := by kernel_rfl
+theorem crcOK5 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks5 = true := by kernel_rfl
+theorem crcOK6 : crcChunksOK 0xFFFFFFFF FileLit.crcChunks6 = true := by kernel_rfl
+
+/-- Proved CRC-32 facts for the member bytes. -/
+def memberCrcTable : List (List UInt8 × UInt32) :=
+  [FileLit.crcChunks0, FileLit.crcChunks1, FileLit.crcChunks2, FileLit.crcChunks3,
+   FileLit.crcChunks4, FileLit.crcChunks5, FileLit.crcChunks6].map
+    fun cs => (chunksBytes cs, chunksFinal 0xFFFFFFFF cs ^^^ 0xFFFFFFFF)
+
+theorem memberCrcTable_correct : CrcMemoCorrect memberCrcTable :=
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK0) <|
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK1) <|
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK2) <|
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK3) <|
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK4) <|
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK5) <|
+  crcMemoCorrect_cons (crc32_of_crcChunksOK crcOK6) crcMemoCorrect_nil
+
+/-! ## The archive literal is the canonical encoding -/
+
+/-- The committed `archive.zip` literal. -/
+def archiveBA : ByteArray := ⟨⟨FileLit.archiveBytes⟩⟩
+
+/-- **The committed archive bytes are exactly `goldenRaw`** (the canonical ZIP encoding of
+    the golden entries), every header field and CRC-32 included. -/
+theorem archiveBytes_eq_goldenRaw : archiveBA = goldenRaw := by
+  rw [goldenRaw, goldenEntries_eq]
+  simp only [encodeZip, entryBytes, entriesV, List.map, locals, centrals, localRecord,
+    localHeader, centralRecord]
+  rw [crc32_eq_crc32Memo memberCrcTable_correct]
+  kernel_rfl
+
+/-! ## The transcript and trust-anchor inputs -/
+
+/-- The transcript JSON value with the certificate hash as a literal. -/
+def transcriptJV : JVal :=
+  .obj [("certificate_semantic_hash", .str (hexEncode Lit.semHash)),
+        ("checker_version", .str checkerVersion), ("environment_capture", .null),
+        ("format", .str authorityTranscriptFormat),
+        ("replay", .arr [.obj [("evidence_id", .str "E1"), ("kind", .str "computational_test"),
+                               ("outcome", .str "PASS")]]),
+        ("workflow_ok", .bool true)]
+
+theorem goldenTranscriptJ_eq : goldenTranscriptJ = transcriptJV := by
+  rw [goldenTranscriptJ, semHash, semHash_eq]; rfl
+
+/-- The committed `observations.json` literal. -/
+def observationsBA : ByteArray := ⟨⟨FileLit.observationsBytes⟩⟩
+
+theorem observationsBA_jcs : observationsBA = jcsBytes transcriptJV := by kernel_rfl
+
+theorem observationsBA_eq : observationsBA = goldenTranscriptBytes := by
+  rw [observationsBA_jcs, goldenTranscriptBytes, goldenTranscriptJ_eq]
+
+theorem transcriptJV_canonical : canonical transcriptJV = true := by kernel_rfl
+
+theorem decodeTranscript_golden :
+    decodeAuthorityTranscript transcriptJV = some goldenTranscript := by
+  rw [goldenTranscript_eq]; kernel_rfl
+
+theorem decodeAuthorityTranscriptBytes_golden :
+    decodeAuthorityTranscriptBytes observationsBA = some goldenTranscript := by
+  have hs : (jcsBytes transcriptJV).size ≤ maxAuthorityTranscriptBytes := by
+    rw [← observationsBA_jcs]; decide +kernel
+  rw [observationsBA_jcs, decodeAuthorityTranscriptBytes,
+    parseCanonicalBytes_complete transcriptJV_canonical hs]
+  exact decodeTranscript_golden
+
+theorem cliAnchor_golden :
+    cliAnchor FileLit.pkB64 (some FileLit.fingerprintHex) = goldenAnchor := by
+  rw [goldenAnchor_eq]; kernel_rfl
+
+theorem pcsLeanAuthority_golden_zip_output :
+    zipModeOutput archiveBA observationsBA FileLit.pkB64 (some FileLit.fingerprintHex) =
+      some "ACCEPT" :=
+  (zipModeOutput_accept_iff _ _ _ _).2 ⟨_, decodeAuthorityTranscriptBytes_golden, by
+    rw [cliAnchor_golden, archiveBytes_eq_goldenRaw]; exact aiSafetyGoldenArchive_accepts⟩
+
+theorem pcsLeanAuthority_golden_dir_output :
+    dirModeOutput goldenEntries observationsBA FileLit.pkB64 (some FileLit.fingerprintHex) =
+      some "ACCEPT" := by
+  rw [dirModeOutput, decodeAuthorityTranscriptBytes_golden]
+  dsimp only
+  rw [cliAnchor_golden, aiSafetyGoldenArchive_entries_accepts]
+  rfl
+
+end PCS.V2.Golden

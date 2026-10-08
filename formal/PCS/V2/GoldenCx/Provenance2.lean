@@ -38,4 +38,39 @@ theorem certSigPayloadJ_eq : cx.certSigPayloadJ =
   rw [FixtureSpec.certSigPayloadJ, certV2_eq]
 
 theorem certMsg_eq : cx.certMsg = Lit.certMsg := by
-  rw [FixtureSpec.certMsg, PCS.V2.Golden.signedMessage_eq, certSigPayloadJ_eq]; kernd—P–ÄL@¯˜mÖ™Ï
+  rw [FixtureSpec.certMsg, PCS.V2.Golden.signedMessage_eq, certSigPayloadJ_eq]; kernel_rfl
+
+theorem pkgMsg_eq : cx.pkgMsg = Lit.pkgMsg := by
+  rw [FixtureSpec.pkgMsg, PCS.V2.Golden.signedMessage_eq, manifest_eq]; kernel_rfl
+
+theorem certMsgDigest_eq : sha256 cx.certMsg = Lit.certMsgDigest := by
+  rw [certMsg_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem pkgMsgDigest_eq : sha256 cx.pkgMsg = Lit.pkgMsgDigest := by
+  rw [pkgMsg_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem fingerprint_eq : fingerprintOf testPk = Lit.fingerprint := by
+  rw [fingerprintOf, sha256_eq_sha256Fast]; kernel_rfl
+
+/-- The certificate signature record, with literal fields. -/
+theorem certSigRecord_eq :
+    FixtureSpec.sigRecord certificateSignatureDomain cx.certSigPayloadJ cxCertSig =
+      { domain := certificateSignatureDomain, payload := cx.certSigPayloadJ,
+        payloadSha256 := Lit.certMsgDigest, fingerprint := Lit.fingerprint,
+        signature := cxCertSig } := by
+  rw [FixtureSpec.sigRecord, ‚Üê FixtureSpec.certMsg, certMsgDigest_eq, fingerprint_eq]
+
+theorem pkgSigRecord_eq :
+    FixtureSpec.sigRecord packageSignatureDomain (encodeManifest cx.manifest) cxPkgSig =
+      { domain := packageSignatureDomain, payload := encodeManifest cx.manifest,
+        payloadSha256 := Lit.pkgMsgDigest, fingerprint := Lit.fingerprint,
+        signature := cxPkgSig } := by
+  rw [FixtureSpec.sigRecord, ‚Üê FixtureSpec.pkgMsg, pkgMsgDigest_eq, fingerprint_eq]
+
+theorem certSigBytes_eq : (cx.certSigBytesWith cxCertSig).data.toList = Lit.certSigBytes := by
+  rw [FixtureSpec.certSigBytesWith, certSigRecord_eq, PCS.V2.Golden.jcsBytes_data, certSigPayloadJ_eq]; kernel_rfl
+
+theorem pkgSigBytes_eq : (cx.pkgSigBytesWith cxPkgSig).data.toList = Lit.pkgSigBytes := by
+  rw [FixtureSpec.pkgSigBytesWith, pkgSigRecord_eq, PCS.V2.Golden.jcsBytes_data, manifest_eq]; kernel_rfl
+
+end PCS.V2.GoldenCx

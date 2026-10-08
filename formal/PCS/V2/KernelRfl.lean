@@ -27,4 +27,13 @@ elab "kernel_rfl" : tactic =>
     if expectedType.hasFVar || expectedType.hasMVar then
       throwError "kernel_rfl: goal must be closed (no local hypotheses or metavariables)"
     let pf â† forallTelescope expectedType fun xs body => do
-      let some (_, lhtÑPĞ€L@öç¯…ªì
+      let some (_, lhs, _) := body.cleanupAnnotations.eq?
+        | throwError "kernel_rfl: goal is not an equality{indentExpr body}"
+      mkLambdaFVars xs (â† mkEqRefl lhs)
+    let levelsInType := (collectLevelParams {} expectedType).params
+    let lemmaLevels := (â† Term.getLevelNames).reverse.filter levelsInType.contains
+    let lemmaName â† withOptions (Elab.async.set Â· false) do
+      mkAuxLemma lemmaLevels expectedType pf
+    return mkConst lemmaName (lemmaLevels.map .param)
+
+end PCS.V2.KernelRfl

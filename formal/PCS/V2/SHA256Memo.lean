@@ -47,4 +47,23 @@ theorem memoFind_sound {l : List UInt8} :
       subst hp
       have := hc p (List.mem_cons_self ..)
       rw [this]; exact Option.some.inj h
-    · exact memoFind_sounSECB1�~�r�
+    · exact memoFind_sound (fun q hq => hc q (List.mem_cons_of_mem _ hq)) h
+
+theorem sha256_eq_sha256Memo {table : List (List UInt8 × List UInt8)} (hc : MemoCorrect table) :
+    sha256 = sha256Memo table := by
+  funext l
+  unfold sha256Memo
+  split
+  · rename_i d h; exact memoFind_sound hc h
+  · rfl
+
+theorem memoCorrect_nil : MemoCorrect [] := by simp [MemoCorrect]
+
+theorem memoCorrect_cons {x d : List UInt8} {ps : List (List UInt8 × List UInt8)}
+    (h : sha256 x = d) (hs : MemoCorrect ps) : MemoCorrect ((x, d) :: ps) := by
+  intro p hp
+  rcases List.mem_cons.1 hp with rfl | hp
+  · exact h
+  · exact hs p hp
+
+end PCS.V2.SHA256Memo

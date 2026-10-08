@@ -48,4 +48,27 @@ def goldenWorld : List (String × ByteArray) := [("trace", ⟨#[0, 1, 2, 4, 1, 8
 
 def goldenClaim : TraceClaim := ⟨["trace"], 4, 7⟩
 
-/-- A deployed run whose episode `trace` actuSECB1�^zr�
+/-- A deployed run whose episode `trace` actually took the forbidden action 7. -/
+def unsafeRun : DeployedRun := { episode := fun _ => some [0, 7] }
+
+/-- **The correspondence premise is necessary.**  The committed world satisfies the claim,
+    the unfaithfully logged deployed run violates it, and that run does not correspond to the
+    committed world. -/
+theorem committed_safe_deployed_unsafe :
+    aiDomain.Holds goldenWorld goldenClaim ∧ ¬ DeployedSafe unsafeRun goldenClaim ∧
+      ¬ FaithfulLog goldenWorld unsafeRun := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro a ha
+    simp only [goldenClaim, List.mem_singleton] at ha
+    subst ha
+    exact ⟨[0, 1, 2, 4, 1, 8], by decide, by decide, by decide⟩
+  · intro h
+    obtain ⟨tr, htr, hs⟩ := h "trace" (by simp [goldenClaim])
+    simp only [unsafeRun, Option.some.injEq] at htr
+    subst htr
+    exact hs.1 7 (by decide) rfl
+  · intro h
+    have := h "trace" [0, 1, 2, 4, 1, 8] (by decide)
+    simp [unsafeRun] at this
+
+end PCS.V2.Witnesses.AISafety

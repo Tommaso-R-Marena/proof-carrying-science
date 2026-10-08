@@ -47,4 +47,86 @@ theorem signedMessage_eq (d : String) (p : JVal) :
 theorem traceDigest_eq : sha256 golden.trace.data.toList = Lit.traceDigest := by
   rw [sha256_eq_sha256Fast]; kernel_rfl
 
-theorem semHash_eq : golden.semHd—P–ÄL@˚˜≠Ö™Ï
+theorem semHash_eq : golden.semHash = Lit.semHash := by
+  rw [FixtureSpec.semHash, domainDigest_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem intHash_eq : golden.intHash = Lit.intHash := by
+  rw [FixtureSpec.intHash, semHash_eq, domainDigest_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+/-- The certificate JSON value with its two hash members as literals. -/
+theorem certJ_eq : golden.certJ = .obj (golden.certMembers (hexEncode Lit.semHash) (hexEncode Lit.intHash)) := by
+  rw [FixtureSpec.certJ, semHash_eq, intHash_eq]
+
+theorem certBytes_eq : golden.certBytes.data.toList = Lit.certBytes := by
+  rw [FixtureSpec.certBytes, jcsBytes_data, certJ_eq]; kernel_rfl
+
+theorem certBytes_size : golden.certBytes.size = 1683 := by
+  rw [‚Üê ByteArray.size_data, ‚Üê Array.length_toList, certBytes_eq]; kernel_rfl
+
+theorem certDigest_eq : sha256 golden.certBytes.data.toList = Lit.certDigest := by
+  rw [certBytes_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem commitment_eq : commitmentOf (predJ 4 7) = Lit.commitment := by
+  rw [commitmentOf, domainDigest_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem storageKey_eq : storageKey "C1" = Lit.storageKeyC1 := by
+  rw [storageKey, sha256_eq_sha256Fast]; kernel_rfl
+
+/-! ## The normalized wire, index and manifest -/
+
+/-- The normalized decision wire of claim `C1`, with literal digests. -/
+def wireV : WireV2 :=
+  { source := { checkerVersion := checkerVersion, certificateSemanticHash := Lit.semHash,
+                certificateIntegrityHash := Lit.intHash, claimId := "C1" },
+    context := [{ id := "A1", statement := "Risk of action a is a mod 4 (declared toy cost model)." }],
+    claim := { id := "C1", kind := .computational, predicateCommitment := Lit.commitment,
+               requiredEvidence := ["E1"], assumptions := ["A1"] },
+    evidence := [{ id := "E1", kind := .computationalTest, outcome := .pass,
+                   predicateCommitment := Lit.commitment }],
+    decision := .computational, wireSemanticHash := Lit.wireHash }
+
+theorem certV2_eq : golden.certV2 =
+    { members := golden.certMembers (hexEncode Lit.semHash) (hexEncode Lit.intHash),
+      semanticHash := Lit.semHash, integrityHash := Lit.intHash } := by
+  rw [FixtureSpec.certV2, semHash_eq, intHash_eq]
+
+theorem wire_eq : golden.wire = wireV := by
+  rw [FixtureSpec.wire, FixtureSpec.certModel, certV2_eq]
+  simp only [deriveWire, NormalizedWire.expectedHash, commitmentOf, domainDigest_eq,
+    sha256_eq_sha256Fast]
+  kernel_rfl
+
+theorem wireBytes_eq : golden.wireBytes.data.toList = Lit.wireBytes := by
+  rw [FixtureSpec.wireBytes, encodedBytes, wire_eq, jcsBytes_data]; kernel_rfl
+
+theorem wireBytes_size : golden.wireBytes.size = 1108 := by
+  rw [‚Üê ByteArray.size_data, ‚Üê Array.length_toList, wireBytes_eq]; kernel_rfl
+
+theorem wireDigest_eq : sha256 golden.wireBytes.data.toList = Lit.wireDigest := by
+  rw [wireBytes_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem wirePath_eq : wirePath = keyPath Lit.storageKeyC1 := by
+  rw [wirePath, storageKey_eq]
+
+/-- The normalized index, with literal digests. -/
+def indexV : IndexV2 :=
+  { certificateIntegrityHash := Lit.intHash, certificateSemanticHash := Lit.semHash,
+    entries := [{ claimId := "C1", decision := .computational, storageKey := Lit.storageKeyC1,
+                  wireSemanticHash := Lit.wireHash }],
+    indexSemanticHash := Lit.indexHash }
+
+theorem index_eq : golden.index = indexV := by
+  rw [FixtureSpec.index, semHash_eq, intHash_eq, wire_eq, storageKey_eq]
+  simp only [Index.expectedHash, domainDigest_eq, sha256_eq_sha256Fast]
+  kernel_rfl
+
+theorem indexBytes_eq : golden.indexBytes.data.toList = Lit.indexBytes := by
+  rw [FixtureSpec.indexBytes, index_eq, jcsBytes_data]; kernel_rfl
+
+theorem indexBytes_size : golden.indexBytes.size = 677 := by
+  rw [‚Üê ByteArray.size_data, ‚Üê Array.length_toList, indexBytes_eq]; kernel_rfl
+
+theorem indexDigest_eq : sha256 golden.indexBytes.data.toList = Lit.indexDigest := by
+  rw [indexBytes_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+end PCS.V2.Golden

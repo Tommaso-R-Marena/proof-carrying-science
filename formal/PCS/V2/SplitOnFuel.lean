@@ -32,4 +32,60 @@ def splitOnAuxFuel : Nat → String → String → Pos.Raw → Pos.Raw → Pos.R
     else
       if i.get s == j.get sep then
         if (j.next sep).atEnd sep then
-$�PЀL@�����
+          splitOnAuxFuel n s sep (i.next s) (i.next s) 0
+            (b.extract s ((i.next s).unoffsetBy (j.next sep)) :: r)
+        else
+          splitOnAuxFuel n s sep b (i.next s) (j.next sep) r
+      else
+        splitOnAuxFuel n s sep b ((i.unoffsetBy j).next s) 0 r
+
+theorem splitOnAuxFuel_sound :
+    ∀ (n : Nat) (s sep : String) (b i j : Pos.Raw) (r l : List String),
+      splitOnAuxFuel n s sep b i j r = some l → String.splitOnAux s sep b i j r = l
+  | 0, _, _, _, _, _, _, _, h => by simp [splitOnAuxFuel] at h
+  | n+1, s, sep, b, i, j, r, l, h => by
+    rw [String.splitOnAux]
+    simp only [splitOnAuxFuel] at h
+    split
+    · rename_i hat
+      rw [if_pos hat] at h
+      exact Option.some.inj h
+    · rename_i hat
+      rw [if_neg hat] at h
+      split
+      · rename_i hget
+        rw [if_pos hget] at h
+        dsimp only
+        split
+        · rename_i hj
+          rw [if_pos hj] at h
+          exact splitOnAuxFuel_sound n _ _ _ _ _ _ _ h
+        · rename_i hj
+          rw [if_neg hj] at h
+          exact splitOnAuxFuel_sound n _ _ _ _ _ _ _ h
+      · rename_i hget
+        rw [if_neg hget] at h
+        exact splitOnAuxFuel_sound n _ _ _ _ _ _ _ h
+
+/-- `segments` evaluated with fuel `k`, falling back to `segments` itself. -/
+def segmentsFuel (k : Nat) (name : String) : List String :=
+  match splitOnAuxFuel k name "/" 0 0 0 [] with
+  | some l => l
+  | none => PCS.V2.Package.segments name
+
+theorem segments_eq_segmentsFuel (k : Nat) :
+    PCS.V2.Package.segments = segmentsFuel k := by
+  funext name
+  unfold segmentsFuel
+  split
+  · rename_i l h
+    have := splitOnAuxFuel_sound k name "/" 0 0 0 [] l h
+    simp only [PCS.V2.Package.segments, String.splitOn]
+    rw [if_neg (by decide)]
+    exact this
+  · rfl
+
+/-- The fuel bound used for concrete member names (names are at most 1024 bytes). -/
+def segmentsFuelBound : Nat := 4096
+
+end PCS.V2.SplitOnFuel

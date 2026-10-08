@@ -43,4 +43,30 @@ theorem certMsgDigest_eq : sha256 golden.certMsg = Lit.certMsgDigest := by
   rw [certMsg_eq, sha256_eq_sha256Fast]; kernel_rfl
 
 theorem pkgMsgDigest_eq : sha256 golden.pkgMsg = Lit.pkgMsgDigest := by
-  rw [pkgMsg_d—P–ÄL@¯ÎoÖ™Ï
+  rw [pkgMsg_eq, sha256_eq_sha256Fast]; kernel_rfl
+
+theorem fingerprint_eq : fingerprintOf testPk = Lit.fingerprint := by
+  rw [fingerprintOf, sha256_eq_sha256Fast]; kernel_rfl
+
+/-- The certificate signature record, with literal fields. -/
+theorem certSigRecord_eq :
+    FixtureSpec.sigRecord certificateSignatureDomain golden.certSigPayloadJ goldenCertSig =
+      { domain := certificateSignatureDomain, payload := golden.certSigPayloadJ,
+        payloadSha256 := Lit.certMsgDigest, fingerprint := Lit.fingerprint,
+        signature := goldenCertSig } := by
+  rw [FixtureSpec.sigRecord, ‚Üê FixtureSpec.certMsg, certMsgDigest_eq, fingerprint_eq]
+
+theorem pkgSigRecord_eq :
+    FixtureSpec.sigRecord packageSignatureDomain (encodeManifest golden.manifest) goldenPkgSig =
+      { domain := packageSignatureDomain, payload := encodeManifest golden.manifest,
+        payloadSha256 := Lit.pkgMsgDigest, fingerprint := Lit.fingerprint,
+        signature := goldenPkgSig } := by
+  rw [FixtureSpec.sigRecord, ‚Üê FixtureSpec.pkgMsg, pkgMsgDigest_eq, fingerprint_eq]
+
+theorem certSigBytes_eq : (golden.certSigBytesWith goldenCertSig).data.toList = Lit.certSigBytes := by
+  rw [FixtureSpec.certSigBytesWith, certSigRecord_eq, jcsBytes_data, certSigPayloadJ_eq]; kernel_rfl
+
+theorem pkgSigBytes_eq : (golden.pkgSigBytesWith goldenPkgSig).data.toList = Lit.pkgSigBytes := by
+  rw [FixtureSpec.pkgSigBytesWith, pkgSigRecord_eq, jcsBytes_data, manifest_eq]; kernel_rfl
+
+end PCS.V2.Golden

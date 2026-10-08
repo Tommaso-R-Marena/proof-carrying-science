@@ -38,4 +38,16 @@ namespace PCS.V2.Golden.Lit
   IO.println (bytesDef "indexHash" "normalized index semantic hash" s.index.indexSemanticHash)
   IO.println (bytesDef "fingerprint" "SHA-256 fingerprint of the RFC 8032 TEST 1 public key" (PCS.V2.Signature.fingerprintOf testPk))
   IO.println (bytesDef "certBytes" "`certificate.json` bytes" s.certBytes.data.toList)
-  ISECB1ã®8r«
+  IO.println (bytesDef "wireBytes" "normalized wire member bytes" s.wireBytes.data.toList)
+  IO.println (bytesDef "indexBytes" "`normalized/index.json` bytes" s.indexBytes.data.toList)
+  IO.println (bytesDef "certDigest" "SHA-256 of `certificate.json`" (PCS.V2.SHA256.sha256 s.certBytes.data.toList))
+  IO.println (bytesDef "wireDigest" "SHA-256 of the normalized wire member" (PCS.V2.SHA256.sha256 s.wireBytes.data.toList))
+  IO.println (bytesDef "indexDigest" "SHA-256 of `normalized/index.json`" (PCS.V2.SHA256.sha256 s.indexBytes.data.toList))
+  IO.println (bytesDef "manifestBytes" "`package_manifest.json` bytes" s.manifestBytes.data.toList)
+  IO.println (bytesDef "certMsg" "exact message signed by the certificate signature" s.certMsg)
+  IO.println (bytesDef "pkgMsg" "exact message signed by the package signature" s.pkgMsg)
+  IO.println (bytesDef "certMsgDigest" "SHA-256 of the certificate-signature message" (PCS.V2.SHA256.sha256 s.certMsg))
+  IO.println (bytesDef "pkgMsgDigest" "SHA-256 of the package-signature message" (PCS.V2.SHA256.sha256 s.pkgMsg))
+  IO.println (bytesDef "certSigBytes" "`certificate_signature.json` bytes" (s.certSigBytesWith goldenCertSig).data.toList)
+  IO.println (bytesDef "pkgSigBytes" "`package_signature.json` bytes" (s.pkgSigBytesWith goldenPkgSig).data.toList)
+  IO.println "end PCS.V2.Golden.Lit"

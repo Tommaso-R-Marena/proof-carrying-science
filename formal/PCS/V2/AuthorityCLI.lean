@@ -45,4 +45,20 @@ def dirModeOutput (entries : List (String Ã— ByteArray)) (transcript : ByteArray
 theorem zipModeOutput_accept_iff (archive transcript : ByteArray) (keyB64 : String)
     (fp : Option String) :
     zipModeOutput archive transcript keyB64 fp = some "ACCEPT" â†”
-      âˆƒ t, decodeAuthorityTranscriptBytes transcript = MÄ~üáÈZ®
+      âˆƒ t, decodeAuthorityTranscriptBytes transcript = some t âˆ§
+        executableAuthority t (cliAnchor keyB64 fp) archive = "ACCEPT" := by
+  unfold zipModeOutput
+  cases decodeAuthorityTranscriptBytes transcript with
+  | none => simp
+  | some t =>
+    simp only [Option.some.injEq, exists_eq_left']
+    by_cases h : executableAuthority t (cliAnchor keyB64 fp) archive = "ACCEPT"
+    Â· simp [h]
+    Â· simp only [h, if_false, iff_false]
+      intro h'
+      have := congrArg String.toList h'
+      rw [String.toList_append, show "REJECT:".toList = ['R', 'E', 'J', 'E', 'C', 'T', ':'] by decide,
+        show "ACCEPT".toList = ['A', 'C', 'C', 'E', 'P', 'T'] by decide] at this
+      simp at this
+
+end PCS.V2.AuthorityCLI

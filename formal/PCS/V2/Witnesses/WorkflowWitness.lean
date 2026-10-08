@@ -46,4 +46,11 @@ theorem evaluator_sound (budget : Nat) (tr : List UInt8)
     âˆ€ k â‰¤ tr.length, stateAfter (tr.take k) â‰¤ budget := by
   have hpre : (evaluator budget).spec.pre tr :=
     âŸ¨âŸ¨trivial, fun _ _ => trivialâŸ©, fun _ _ => trivialâŸ©
-  obtaidÑPÐ€L@ö÷^œ…ªì
+  obtain âŸ¨s, âŸ¨rs, hrs, hsâŸ©, hvâŸ© := pipeline_run_sound _ (evaluator_stages budget) hpre h
+  have hle : stateAfter tr â‰¤ budget := by
+    have := hv rfl
+    subst hrs hs
+    exact this
+  exact fun k _ => Nat.le_trans (stateAfter_take_le tr k) hle
+
+end PCS.V2.Witnesses.WorkflowWitness

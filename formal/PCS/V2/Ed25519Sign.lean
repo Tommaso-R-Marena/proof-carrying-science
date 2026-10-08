@@ -33,4 +33,6 @@ def sign (seed msg : List UInt8) : List UInt8 :=
   let r := leNat (PCS.V2.SHA512.sha512 (h.drop 32 ++ msg)) % L
   let rB := encode (scalarMul r B)
   let k := leNat (PCS.V2.SHA512.sha512 (rB ++ pk ++ msg)) % L
-  rB ++ leBytes ((r + k * a) %!4T4 =}çg!j»
+  rB ++ leBytes ((r + k * a) % L) 32
+
+end PCS.V2.Ed25519Sign

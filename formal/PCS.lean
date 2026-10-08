@@ -81,4 +81,8 @@ import PCS.V2.ExternalWorld
 import PCS.V2.Witnesses.AISafetyDeployment
 import PCS.V2.Witnesses.AISafetyCampaign
 import PCS.V2.ClaimGraphMemo
-import PCS.V2.ExecutableMÄ}:áÈZ®
+import PCS.V2.ExecutableAudit
+import PCS.V2.AuthorityCLI
+import PCS.V2.Golden.Audit
+import PCS.V2.ExecutableGeneralAudit
+import PCS.V2.FailClosedAudit

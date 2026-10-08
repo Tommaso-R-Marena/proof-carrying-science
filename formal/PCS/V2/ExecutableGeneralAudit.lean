@@ -25,4 +25,14 @@ Printed on every build.  Expected: only `propext`, `Classical.choice`, `Quot.sou
 #print axioms PCS.V2.Golden.tamperedEntries_rejected
 #print axioms PCS.V2.Golden.golden_vs_tampered
 #print axioms PCS.V2.Golden.Insider.insider_rejected_entries
-#print axioms PCS.V2.Golden.Insider.insider_rejdÑPÐ€L@öëŽ…ªì
+#print axioms PCS.V2.Golden.Insider.insider_rejected_zip
+-- obstructions and the kernel-checked counterexample
+#print axioms PCS.V2.ExecutableLimits.uncertifiedTag_passes_unsafe
+#print axioms PCS.V2.ExecutableLimits.certifiedTag_fails_unsafe
+#print axioms PCS.V2.GoldenCx.legacyAuthority_cx
+#print axioms PCS.V2.GoldenCx.legacy_no_unconditional_claim_bridge
+#print axioms PCS.V2.GoldenCx.cx_package_valid
+#print axioms PCS.V2.GoldenCx.cx_rejected
+#print axioms PCS.V2.GoldenCx.cx_entries_rejected
+#print axioms PCS.V2.GoldenCx.cx_cli_rejected
+#print axioms PCS.V2.GoldenCx.cx_signed_but_rejected
