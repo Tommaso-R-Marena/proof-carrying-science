@@ -1,5 +1,7 @@
 # Security and rights checkpoint — 2026-10-08
 
+**Public follow-up, 2026-10-08:** The owner made all three repositories public and explicitly confirmed complete first-party ownership and publication authority. See PUBLIC_INTEGRATION_2026-10-08.md. Private-status/missing-owner-decision statements below are historical and superseded. Third-party license obligations and actual technical gates remain distinct.
+
 Release state: **HOLD**. This document does not authorize visibility changes or certify ownership.
 
 ## Verified local work

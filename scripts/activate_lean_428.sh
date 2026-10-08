@@ -12,4 +12,7 @@ echo "ceb3a3f844f7aebf63245e2b51c28d5b0ed38942c19f93cf3febd520302160bd  $pcs_lea
 tar --zstd -xf "$pcs_lean_stage/lean.tar.zst" -C "$pcs_lean_stage"
 rm "$pcs_lean_stage/lean.tar.zst"
 export PATH="$pcs_lean_stage/lean-4.28.0-linux/bin:$PATH"
+if [ -n "${GITHUB_PATH:-}" ]; then
+  printf '%s\n' "$pcs_lean_stage/lean-4.28.0-linux/bin" >> "$GITHUB_PATH"
+fi
 lean --version | grep 'version 4.28.0'

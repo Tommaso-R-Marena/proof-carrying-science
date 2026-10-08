@@ -1518,6 +1518,12 @@ def build_parser():
     p = argparse.ArgumentParser(prog="pcs", description="Proof-Carrying Science reference CLI")
     sub = p.add_subparsers(required=True)
 
+    sv3 = sub.add_parser("semantic-authority-v3",
+                        help="host-pinned Lean semantic contract with persistent replay protection")
+    from .semantic_authority_v3 import add_arguments, run_cli
+    add_arguments(sv3)
+    sv3.set_defaults(func=run_cli)
+
     c = sub.add_parser("certify", help="run manifest checks and emit self-contained evidence package")
     c.add_argument("manifest")
     c.add_argument("-o", "--output", required=True)

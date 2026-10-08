@@ -114,6 +114,9 @@ jobs:
           set -euo pipefail
           cd formal
           bash tools/run_semantic_fixture_tests.sh
+          bash tools/run_semantic_v2_fixture_tests.sh
+          bash tools/check_semantic_v3_audit.sh
+          bash tools/run_semantic_v3_fixture_tests.sh
           python3 -m unittest discover -s python/tests
       - name: Pin binary and replay 36 semantic requests through PCS Python adapter
         shell: bash
@@ -209,7 +212,7 @@ jobs:
 
   verified-public-integration:
     name: verified-public-integration
-    needs: [source-policy, core-full-gate, python-portability]
+    needs: [source-policy, core-full-gate, real-analysis-bridge, python-portability]
     if: ${{ always() && github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -219,10 +222,12 @@ jobs:
         env:
           SOURCE_POLICY: ${{ needs.source-policy.result }}
           FULL_CORE: ${{ needs.core-full-gate.result }}
+          REAL_ANALYSIS: ${{ needs.real-analysis-bridge.result }}
           PORTABILITY: ${{ needs.python-portability.result }}
         run: |
           set -euo pipefail
           test "$SOURCE_POLICY" = success || { echo "::error::Source policy did not succeed ($SOURCE_POLICY)"; exit 1; }
           test "$FULL_CORE" = success || { echo "::error::Full Lean/Python/adversarial gate did not succeed ($FULL_CORE)"; exit 1; }
+          test "$REAL_ANALYSIS" = success || { echo "::error::Real-analysis kernel and axiom audit did not succeed ($REAL_ANALYSIS)"; exit 1; }
           test "$PORTABILITY" = success || { echo "::error::Python portability suite did not succeed ($PORTABILITY)"; exit 1; }
           echo "PCS_PUBLIC_VERIFIED_INTEGRATION_PASS"

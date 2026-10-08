@@ -1,6 +1,6 @@
 name = "PCS"
 version = "0.5.0"
-defaultTargets = ["PCS", "pcs-lean-authority"]
+defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check"]
 
 [[lean_lib]]
 name = "PCS"
@@ -10,3 +10,7 @@ defaultFacets = ["leanArts"]
 [[lean_exe]]
 name = "pcs-lean-authority"
 root = "PCSAuthority"
+
+[[lean_exe]]
+name = "pcs-semantic-check"
+root = "PCSSemanticCheck"

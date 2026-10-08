@@ -1,5 +1,7 @@
 # PR reconciliation and private review record
 
+**Public follow-up, 2026-10-08:** The owner made all three repositories public and explicitly confirmed complete first-party ownership and publication authority. See PUBLIC_INTEGRATION_2026-10-08.md. Private-status/missing-owner-decision statements below are historical and superseded. Third-party license obligations and actual technical gates remain distinct.
+
 Fetched all advertised heads, tags and PR-head refs. GitHub REST confirms the listed PRs remain open drafts. Integration uses fresh branches from the observed main heads. No original PR is closed or merged by this record.
 
 | Repository / PR | Exact head | Capability | Disposition |

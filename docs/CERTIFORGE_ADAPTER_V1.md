@@ -1,6 +1,6 @@
 # PCS–CertiForge research adapter v1
 
-The public-facing protocol is independently implemented in `pcs/certiforge_adapter_v1.py`. CertiForge's implementation remains in its separately private repository; no optimizer, interpreter, or formalization is copied into PCS. Publication rights for both repositories remain OPEN. Lean workspaces stay separate: PCS 4.28.0 and CertiForge 4.16.0.
+The public-facing protocol is independently implemented in `pcs/certiforge_adapter_v1.py`. The owner made CertiForge public and confirmed first-party publication rights. The Rust implementation remains a separate pinned component. The imported PCS Lean CertiForge model does not prove a general Rust/Lean refinement theorem. Lean workspaces stay separate: PCS 4.28.0 and CertiForge 4.16.0.
 
 ## Protocol and acceptance boundary
 

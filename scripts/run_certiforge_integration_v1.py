@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Reproduce the real PCS/CertiForge adapter and bounded control demo locally.
 
-Requires a separately retained, rights-controlled CertiForge checkout and its
+Requires a separately retained, public CertiForge checkout and its
 actual Rust binary. Writes only a new output directory, with no credentials.
 """
 from __future__ import annotations
@@ -52,7 +52,7 @@ def main():
     package = output / "package"
     run([binary, "package", "build", original, "--optimized", optimized, "--out", package, "--seed", "42"], env=environment)
     proposal = {"format": FORMAT, "claim_id": "or-optimization", "source": {
-        "repository": "Tommaso-R-Marena/certiforge", "commit": source_sha, "disclosure": "private"},
+        "repository": "Tommaso-R-Marena/certiforge", "commit": source_sha, "disclosure": "public"},
         "artifacts": [{"id": str(i), "path": name, "sha256": digest((package/name).read_bytes())}
                       for i, name in enumerate(sorted(MEMBERS))],
         "cost_objective": {"metric": "CERTIR_AST_NODE_COUNT", "require_improvement": True}}
