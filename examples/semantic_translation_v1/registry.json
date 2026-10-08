@@ -1,0 +1,42 @@
+{
+  "format": "pcs-semantic-symbol-registry-v1",
+  "sorts": [
+    "Trace",
+    "Time"
+  ],
+  "symbols": [
+    {
+      "id": "safety.revoked",
+      "kind": "predicate",
+      "args": [
+        "Trace",
+        "Time"
+      ],
+      "definition_id": "PCS.Safety.revoked",
+      "definition_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "provenance": "approved formal safety predicate"
+    },
+    {
+      "id": "safety.unsafe",
+      "kind": "predicate",
+      "args": [
+        "Trace",
+        "Time"
+      ],
+      "definition_id": "PCS.Safety.unsafe",
+      "definition_sha256": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "provenance": "approved unsafe-action predicate"
+    },
+    {
+      "id": "safety.allowed",
+      "kind": "predicate",
+      "args": [
+        "Trace",
+        "Time"
+      ],
+      "definition_id": "PCS.Safety.allowed",
+      "definition_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "provenance": "approved permission predicate"
+    }
+  ]
+}
