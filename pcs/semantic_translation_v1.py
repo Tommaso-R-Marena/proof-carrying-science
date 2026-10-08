@@ -458,6 +458,7 @@ def check_translation(
     result: dict[str, Any] = {
         "format": DECISION_FORMAT, "decision": decision,
         "structural_precheck_pass": structural, "authoritative": False,
+        "confirmation_authenticated": False, "confirmation_receipt_sha256": None,
         "interpretation_sha256": h, "registry_sha256": reg.digest if reg else None,
         "claim_ir_sha256": claim_ir.get("claim_ir_sha256") if isinstance(claim_ir, dict) else None,
         "diagnostics": failures,
