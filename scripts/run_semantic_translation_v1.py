@@ -48,7 +48,11 @@ def main(argv=None) -> int:
     p.add_argument("--candidate", required=True, type=Path)
     p.add_argument("--claim-ir", type=Path, help="optional pcs-claim-ir-v1 artifact from existing translation engine")
     p.add_argument("--confirmed-interpretation-sha256",
-                   help="digest recorded by an authorized interpretation-confirmation process")
+                   help="digest match only; does not authenticate who approved interpretation")
+    p.add_argument("--confirmation-receipt", type=Path,
+                   help="Ed25519 signed, context-bound independent human approval JSON")
+    p.add_argument("--approved-confirmation-public-key-hex",
+                   help="trusted approved signer public key (independently configured, not from model)")
     p.add_argument("--output", type=Path, help="write machine-readable decision JSON")
     p.add_argument("--overlay", type=Path, help="write non-authoritative PCS Claim IR semantic overlay")
     p.add_argument("--print-interpretation-sha256", action="store_true", help="print digest to request explicit confirmation")
@@ -59,12 +63,26 @@ def main(argv=None) -> int:
         claim_ir = read_json(args.claim_ir) if args.claim_ir else None
         if args.print_interpretation_sha256:
             print("SELECTED_INTERPRETATION_SHA256=" + interpretation_digest(interpretation), file=sys.stderr)
-        decision = check_translation(
-            registry, interpretation, candidate,
-            approved_registry_sha256=args.approved_registry_sha256,
-            confirmed_interpretation_sha256=args.confirmed_interpretation_sha256,
-            claim_ir=claim_ir,
-        )
+        if args.confirmation_receipt and args.confirmed_interpretation_sha256:
+            raise ValueError("use either a digest-only confirmation or a signed receipt")
+        if bool(args.confirmation_receipt) != bool(args.approved_confirmation_public_key_hex):
+            raise ValueError("signed receipt requires an independently pinned signer public key")
+        if args.confirmation_receipt:
+            from pcs.semantic_confirmation_v1 import check_translation_with_confirmation
+            decision = check_translation_with_confirmation(
+                registry, interpretation, candidate,
+                approved_registry_sha256=args.approved_registry_sha256,
+                confirmation_receipt=read_json(args.confirmation_receipt),
+                approved_signer_public_key_hex=args.approved_confirmation_public_key_hex,
+                claim_ir=claim_ir,
+            )
+        else:
+            decision = check_translation(
+                registry, interpretation, candidate,
+                approved_registry_sha256=args.approved_registry_sha256,
+                confirmed_interpretation_sha256=args.confirmed_interpretation_sha256,
+                claim_ir=claim_ir,
+            )
         encoded = json.dumps(decision, indent=2, sort_keys=True, allow_nan=False) + "\n"
         if args.output:
             args.output.write_text(encoded, encoding="utf-8")
