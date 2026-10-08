@@ -17,3 +17,9 @@ scripts/build_semantic_golden_benchmark_v1.py converts source fixtures to an exp
 
 ## OPEN trust boundaries
 Full v1 source import; independent proof checker binary tested on exact integrated revision; Claim IR symbol mapping and human confirmation; external actual-Lean declaration grounding, elaboration and proof issuer; provenance/versioned evaluation and privacy; core repo publication and Cloudflare shared-token isolation. Website Workers cannot run arbitrary Lean locally. A privileged, isolated job runner plus authenticated receipts is needed for live checker-backed user submissions.
+
+## Exact Claim IR binding now implemented
+
+The Python module pcs/semantic_claim_binding_v1.py now supports an explicit, versioned integrity binding of one existing claim-IR claim_id and exact statement to Aristotle's interpretation.source_text, selected structured claim digest, canonical checker request digest and registry authority digest. It rechecks the original PCS v0.6 JCS Claim IR commitment and independently pinned binding digest. A mismatch or unknown/duplicate claim rejects. This establishes exact *content correspondence only*, not that the model's translation faithfully captures the human intention. A model-created binding digest is not an authenticated reviewer decision. Tests/test_semantic_claim_binding_v1.py includes tampering tests and is included in source-policy CI.
+
+scripts/run_semantic_kernel_bridge_vectors_v1.py is the exact 36-case *compiled* Lean-to-Python cross-language gate. It remains blocked by the missing committed Aristotle source/binary. All stages use exact source revision and fail closed; a skipped gate cannot be treated as success.
