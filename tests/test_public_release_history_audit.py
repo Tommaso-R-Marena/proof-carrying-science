@@ -50,3 +50,17 @@ def test_clean_repository_preflight_is_not_release_approval(tmp_path: Path):
     assert report["preflight_pass"]
     assert report["candidate_count"] == 0
     assert report["release_approved"] is False
+
+def test_binary_blob_never_passes_history_preflight(tmp_path: Path):
+    root = tmp_path / "repo"
+    root.mkdir()
+    _git(root, "init")
+    _git(root, "config", "user.email", "tests@example.invalid")
+    _git(root, "config", "user.name", "PCS Tests")
+    (root / "asset.bin").write_bytes(b"\x00\xff\x01binary-data")
+    _git(root, "add", ".")
+    _git(root, "commit", "-m", "binary needs human review")
+    result = scan(root)
+    assert result["preflight_pass"] is False
+    assert result["binary_blobs_not_content_scanned"] >= 1
+    assert any("binary_blob_uninspected" in finding["reason"] for finding in result["suspected_findings"])
