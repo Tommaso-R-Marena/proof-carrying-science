@@ -85,6 +85,8 @@ def _pin(raw: bytes, expected: str, role: str) -> None:
 def evaluate(binary: str | Path, *, binary_sha256: str,
              authority_bytes: bytes, authority_sha256: str,
              request_bytes: bytes, claim_ir: Mapping[str, Any] | None = None,
+             binding: Mapping[str, Any] | None = None,
+             approved_binding_sha256: str | None = None,
              timeout_seconds: int = 120) -> dict[str, Any]:
     """Exact binary/authority commitments and subprocess verdict, never trust JSON alone."""
     request_sha = digest(request_bytes)
@@ -103,16 +105,17 @@ def evaluate(binary: str | Path, *, binary_sha256: str,
             raise ValueError("CHECKER_BINARY_MISSING")
         b = path.read_bytes()
         _pin(b, binary_sha256, "BINARY")
+        claim_binding = None
         if claim_ir is not None:
-            if claim_ir.get("format") != "pcs-claim-ir-v1":
-                raise ValueError("CLAIM_IR_SCHEMA_MISMATCH")
-            from .canonical_json import canonicalize_jcs_bytes
-            core = {k: v for k, v in claim_ir.items() if k != "claim_ir_sha256"}
-            actual = digest(canonicalize_jcs_bytes(core))
-            if claim_ir.get("claim_ir_sha256") != actual:
-                raise ValueError("CLAIM_IR_SHA_MISMATCH")
-            # Never infer the model's semantics from a mere claim statement.
-            raise ValueError("CLAIM_IR_INTERPRETATION_MAPPING_NOT_CERTIFIED")
+            if binding is None or approved_binding_sha256 is None:
+                raise ValueError("CLAIM_BINDING_APPROVAL_REQUIRED")
+            from .semantic_claim_binding_v1 import verify_binding
+            claim_binding = verify_binding(
+                claim_ir, req, authority_sha256=authority_sha256,
+                request_sha256=request_sha, binding=binding,
+                approved_binding_sha256=approved_binding_sha256)
+        elif binding is not None or approved_binding_sha256 is not None:
+            raise ValueError("CLAIM_BINDING_WITHOUT_IR")
         with tempfile.TemporaryDirectory(prefix="pcs-semantic-") as work:
             a, r = Path(work) / "authority.json", Path(work) / "request.json"
             a.write_bytes(authority_bytes)
@@ -144,6 +147,7 @@ def evaluate(binary: str | Path, *, binary_sha256: str,
                 "binary_sha256": binary_sha256,
                 "authority_sha256": authority_sha256,
                 "request_sha256": request_sha,
+                "claim_ir_binding": claim_binding,
                 "diagnostics": diagnostics,
                 "explanation_ir": decision.get("explanation") if verdict == "ACCEPTED" else None,
                 "limitations": ["Compiled checker integrity pinned, but kernel/source/compiler correspondence externally trusted",
@@ -159,12 +163,18 @@ def main(argv: list[str] | None = None) -> int:
     for field in ("binary", "binary-sha256", "authority", "authority-sha256", "request"):
         p.add_argument("--" + field, required=True)
     p.add_argument("--output")
+    p.add_argument("--claim-ir")
+    p.add_argument("--binding")
+    p.add_argument("--approved-binding-sha256")
     a = p.parse_args(argv)
     try:
         result = evaluate(a.binary, binary_sha256=a.binary_sha256,
                           authority_bytes=Path(a.authority).read_bytes(),
                           authority_sha256=a.authority_sha256,
-                          request_bytes=Path(a.request).read_bytes())
+                          request_bytes=Path(a.request).read_bytes(),
+                          claim_ir=strict_decode(Path(a.claim_ir).read_bytes()) if a.claim_ir else None,
+                          binding=strict_decode(Path(a.binding).read_bytes()) if a.binding else None,
+                          approved_binding_sha256=a.approved_binding_sha256)
     except OSError:
         result = rejected("INPUT_IO_FAILED")
     output = json.dumps(result, sort_keys=True, indent=2) + "\n"
