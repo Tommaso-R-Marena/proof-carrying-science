@@ -132,7 +132,7 @@ def test_assumption_order_not_semantically_significant():
     ("unsupported", lambda h,c: c.update(formula={"op":"until","left":{"op":"true"},"right":{"op":"true"}}), "UNSUPPORTED_CONSTRUCT"),
     ("extra_field", lambda h,c: c["formula"].update(unknown="ignored"), "MALFORMED_CANDIDATE"),
     ("confidence_attack", lambda h,c: (c.update(model_confidence=1.0), c["formula"].update(op="exists")), "QUANTIFIER_MISMATCH"),
-    ("claimed_proof_receipt", lambda h,c: (c.update(proof_receipt={"verified":True}),c["formula"].update(op="exists")), "QUANTIFIER_MISMATCH"),
+    ("claimed_proof_receipt", lambda h,c: (c.update(proof_receipt={"verified":True}),c["formula"].update(op="exists")), "UNVERIFIED_EXTERNAL_RECEIPT"),
     ("candidate_free_variable", lambda h,c: c.update(free_variables=[{"name":"z","sort":"Trace"}]), "BINDING_MISMATCH"),
     ("claim_binding", lambda h,c: c.update(claim_id="ANOTHER"), "CLAIM_BINDING_MISMATCH"),
     ("changed_atom", lambda h,c: c["formula"]["body"]["body"]["left"].update(symbol="safety.unsafe"), "SYMBOL_MISMATCH"),
@@ -274,3 +274,65 @@ def test_cli_end_to_end_positive_and_negative(tmp_path):
     (tmp_path/"candidate.json").write_text(json.dumps(c))
     assert main(args+["--output",str(out)])==1
     assert "QUANTIFIER_MISMATCH" in {x["code"] for x in json.loads(out.read_text())["diagnostics"]}
+
+
+@pytest.mark.parametrize("receipt", ["proof_receipt", "elaboration_receipt"])
+def test_untrusted_credential_claim_alone_rejected(receipt):
+    reg, human, candidate = fixture()
+    candidate[receipt] = {"verified": True, "issuer": "pretend-Lean-kernel"}
+    out = check_translation(reg, human, candidate, approved_registry_sha256=sha256(reg),
+                            confirmed_interpretation_sha256=interpretation_digest(human))
+    assert out["decision"] == "REJECTED"
+    assert "UNVERIFIED_EXTERNAL_RECEIPT" in codes(out)
+    assert out["authoritative"] is False
+
+
+@pytest.mark.parametrize("confidence", [True, -0.1, 1.1, float("nan"), float("inf"), "1.0"])
+def test_invalid_model_confidence_rejected(confidence):
+    reg, human, candidate = fixture()
+    candidate["model_confidence"] = confidence
+    out = check_translation(reg, human, candidate, approved_registry_sha256=sha256(reg),
+                            confirmed_interpretation_sha256=interpretation_digest(human))
+    assert out["decision"] == "REJECTED"
+    assert "MALFORMED_CANDIDATE" in codes(out)
+
+
+def test_same_canonical_definition_with_two_symbols_rejected():
+    reg, human, candidate = fixture()
+    reg["symbols"][1]["definition_id"] = reg["symbols"][0]["definition_id"]
+    out = check_translation(reg, human, candidate, approved_registry_sha256=sha256(reg),
+                            confirmed_interpretation_sha256=interpretation_digest(human))
+    assert "SHADOWED_OR_DUPLICATE_GROUNDING" in codes(out)
+
+
+@pytest.mark.parametrize("change", [
+    lambda e: e["conclusion"].__setitem__(0, "exists"),
+    lambda e: e["grounding"].pop(),
+    lambda e: e["assumptions"].clear(),
+    lambda e: e["scope"].__setitem__(0, "other-context"),
+    lambda e: e.__setitem__("limitations", []),
+])
+def test_structural_explanation_roundtrip_fails_closed(change):
+    from pcs.semantic_translation_v1 import explanation_roundtrip_check
+    reg, human, candidate = fixture()
+    pinned = validate_registry(reg, sha256(reg))
+    compiled = compile_claim(human, pinned, human=True, path="interpretation")
+    exp = explanation_ir(compiled, pinned, human_digest=interpretation_digest(human))
+    assert explanation_roundtrip_check(exp, compiled, pinned, human_digest=interpretation_digest(human))["equivalent"]
+    change(exp)
+    bad = explanation_roundtrip_check(exp, compiled, pinned, human_digest=interpretation_digest(human))
+    assert not bad["equivalent"] and bad["authoritative"] is False
+    assert bad["diagnostics"][0]["code"] == "ROUNDTRIP_MISMATCH"
+
+
+def test_overlay_recomputes_existing_claim_ir_commitment_on_export():
+    reg, human, candidate = fixture()
+    ir = {"format": "pcs-claim-ir-v1", "claims": [{"claim_id": "C_SAFE", "statement": human["statement"]}],
+          "summary": {"claims": 1}}
+    ir["claim_ir_sha256"] = sha256(ir)
+    out = check_translation(reg, human, candidate, approved_registry_sha256=sha256(reg),
+                            confirmed_interpretation_sha256=interpretation_digest(human), claim_ir=ir)
+    assert attach_to_claim_ir(ir, out)["pcs_authority_granted"] is False
+    ir["summary"]["claims"] = 7
+    with pytest.raises(SemanticError, match="changed since its commitment"):
+        attach_to_claim_ir(ir, out)
