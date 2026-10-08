@@ -1,0 +1,184 @@
+name: PCS Public Full Verification
+
+# Never enable hosted runner usage in the private repository. This is a
+# no-secret pull_request pipeline, not a privileged deploy/release workflow.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcs-public-verified-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-policy:
+    name: source-policy
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out proposed PR merge commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit revision, repository governance, and Python source
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          echo "PCS_PUBLIC_TESTED_MERGE_SHA=$(git rev-parse HEAD)"
+          echo "PCS_PUBLIC_SOURCE_HEAD_SHA=$PR_HEAD_SHA"
+          python scripts/check_repository_integrity.py
+          python -m compileall -q pcs scripts tests
+      - name: Verify public release policies are present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f LICENSE
+          test -f NOTICE
+          test -f SECURITY.md
+          test -f CODE_OF_CONDUCT.md
+          test -f CONTRIBUTING.md
+          test -f docs/PUBLIC_RELEASE_GATE.md
+          grep -q 'TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION' LICENSE
+      - name: Exercise disclosure-audit unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check pytest
+          python -m pytest -q tests/test_public_release_history_audit.py
+
+  core-full-gate:
+    name: core-full-gate
+    needs: source-policy
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - name: Check out proposed integration commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node 22 for Python/JavaScript byte-contract tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm immutable tested source
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          echo "PCS_PUBLIC_TESTED_MERGE_SHA=$(git rev-parse HEAD)"
+          echo "PCS_PUBLIC_SOURCE_HEAD_SHA=$PR_HEAD_SHA"
+          test -f scripts/core_ci_cloudflare.sh
+      - name: Full Lean kernel, real compiled authority, Python, and adversarial gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/core_ci_cloudflare.sh
+      - name: Independent Python/JavaScript serialization stress gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_v06_serialization_gate.py
+      - name: Frozen complete cross-language v0.6 byte-contract gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_v06_contract_gate.py
+      - name: Retain exact-source toolchain evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p results/public-ci-evidence
+          {
+            echo "PCS_PUBLIC_COMPLETE_GATE_PASS"
+            echo "tested_merge_sha=$(git rev-parse HEAD)"
+            echo "source_head_sha=${{ github.event.pull_request.head.sha || github.sha }}"
+            python --version
+            node --version
+            lean --version || "$HOME/.elan/bin/lean" --version
+            lake --version || "$HOME/.elan/bin/lake" --version
+          } | tee results/public-ci-evidence/build-identity.txt
+      - name: Upload cross-language and toolchain evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pcs-public-full-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            results/public-ci-evidence/
+            results/v06-contract-runs/
+          if-no-files-found: warn
+          retention-days: 14
+
+  python-portability:
+    name: portability-${{ matrix.os }}-py${{ matrix.python }}
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-24.04, python: "3.11"}
+          - {os: ubuntu-24.04, python: "3.13"}
+          - {os: windows-2022, python: "3.12"}
+          - {os: macos-15, python: "3.12"}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install public Python verification dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Compile all PCS Python sources
+        run: python -m compileall -q pcs scripts tests
+      - name: Run cross-platform parser, canonicalization, and disclosure checks
+        run: python -m pytest -q tests/test_strict_json.py tests/test_canonical_json_v06.py tests/test_public_release_history_audit.py
+
+  verified-public-integration:
+    name: verified-public-integration
+    needs: [source-policy, core-full-gate, python-portability]
+    if: ${{ always() && github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Reject skipped, missing, cancelled, and failed prerequisite checks
+        shell: bash
+        env:
+          SOURCE_POLICY: ${{ needs.source-policy.result }}
+          FULL_CORE: ${{ needs.core-full-gate.result }}
+          PORTABILITY: ${{ needs.python-portability.result }}
+        run: |
+          set -euo pipefail
+          test "$SOURCE_POLICY" = success || { echo "::error::Source policy did not succeed ($SOURCE_POLICY)"; exit 1; }
+          test "$FULL_CORE" = success || { echo "::error::Full Lean/Python/adversarial gate did not succeed ($FULL_CORE)"; exit 1; }
+          test "$PORTABILITY" = success || { echo "::error::Python portability suite did not succeed ($PORTABILITY)"; exit 1; }
+          echo "PCS_PUBLIC_VERIFIED_INTEGRATION_PASS"
