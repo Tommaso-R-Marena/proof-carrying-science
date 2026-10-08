@@ -4,8 +4,8 @@ defaultTargets = ["PCS", "pcs-lean-authority"]
 
 [[lean_lib]]
 name = "PCS"
-# Elaborate and kernel-check the entire proof-only umbrella without emitting native objects.
-defaultFacets = ["elabArts"]
+# Elaborate and kernel-check the entire proof-only umbrella without emitting native object files (Lean 4.28 uses leanArts).
+defaultFacets = ["leanArts"]
 
 [[lean_exe]]
 name = "pcs-lean-authority"
