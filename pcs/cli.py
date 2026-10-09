@@ -2401,6 +2401,11 @@ def build_parser():
     cm.add_argument("input", help="pcs-countermodel-witness-v1 JSON file")
     cm.set_defaults(func=countermodel_command)
 
+    from pcs.countermodel_v1 import replay_command as countermodel_replay_command
+    cm_replay = sub.add_parser("countermodel-replay-v1", help="independently replay every Arena search move; no PCS authority")
+    cm_replay.add_argument("input", help="typed session or downloaded local search notebook JSON")
+    cm_replay.set_defaults(func=countermodel_replay_command)
+
     from pcs.experimental.omega.cli import register as register_omega
     register_omega(sub)
 
