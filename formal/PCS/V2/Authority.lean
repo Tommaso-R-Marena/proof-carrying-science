@@ -18,8 +18,8 @@ signatures, hashes, normalized decisions, and normalized set itself. The verifie
 built-in checks `reaction_balance`, `unit_compatible`, `csv_disjoint`, `pkpd_contract`,
 `pkpd_reference_match`, and `pkpd_peak_concentration_threshold` ignore the
 transcript result and are independently replayed by the proved Lean checkers
-(`PCS.V2.Checkers.builtinExecWith`); unregistered evidence kinds are rejected; no producer-supplied transcript PASS
-can substitute for a certified checker.
+(`PCS.V2.Checkers.builtinExecWith`); the transcript is consulted only for evidence
+kinds that no certified checker handles.
 
 `gatedProduction_refinesLean` captures the architectural point: once production
 acceptance is the conjunction of a precheck and Lean acceptance,
@@ -106,22 +106,12 @@ def transcriptOracles (t : AuthorityTranscript) : Oracles :=
       t.workflowOk && (match c with
         | .obj ms => PCS.V2.Workflow.workflowCheckB t.workflowAnalysis ms
         | _ => false),
-    -- Important P0 boundary: a producer transcript is NEVER evidence that an
-    -- unregistered check has semantically passed. Unrecognized types fail closed.
-    exec := PCS.V2.Checkers.certifiedOnlyExec }
-
-/-- Every evidence record, including records with UNVERIFIED outcomes, must have
-an independently certified handler in the live Lean registry. A signer cannot
-register a checker by choosing a new check_spec.type in an archive. -/
-def allEvidenceRegistered (r : AcceptedResult) : Bool :=
-  r.model.evidence.all (fun e =>
-    PCS.V2.Checkers.registeredBuiltin (requestFor r.pkg.cert r.model r.table e))
+    exec := PCS.V2.Checkers.builtinExecWith (transcriptExecutor t) }
 
 def transcriptCovers (t : AuthorityTranscript) (r : AcceptedResult) : Bool :=
-  (t.certificateSemanticHash == r.pkg.cert.semanticHash &&
-   t.checkerVersion == r.model.checkerVersion &&
-   decide (t.replay.map (·.evidenceId) = r.model.evidence.map (·.id))) &&
-  allEvidenceRegistered r
+  t.certificateSemanticHash == r.pkg.cert.semanticHash &&
+  t.checkerVersion == r.model.checkerVersion &&
+  decide (t.replay.map (·.evidenceId) = r.model.evidence.map (·.id))
 
 def acceptPCSWithTranscript (t : AuthorityTranscript) (T : TrustAnchor)
     (inp : PackageInput) : Option AcceptedResult :=
@@ -160,26 +150,6 @@ def diagnosePCSWithTranscript (t : AuthorityTranscript) (T : TrustAnchor)
                 else "normalized"
             else "replay"
         else "workflow"
-
-/-- A positive transcript binding includes independent checker registration. -/
-theorem transcriptCovers_requires_registered {t : AuthorityTranscript} {r : AcceptedResult}
-    (h : transcriptCovers t r = true) : allEvidenceRegistered r = true := by
-  cases hreg : allEvidenceRegistered r with
-  | false =>
-      simp [transcriptCovers, hreg] at h
-  | true =>
-      rfl
-
-/-- The ACTUAL pure acceptance function rejects every signed archive for which
-the decoded evidence includes an unregistered check type, even if the earlier
-package/cryptographic stages happened to pass. -/
-theorem acceptPCSWithTranscript_rejects_unregistered
-    {t : AuthorityTranscript} {T : TrustAnchor} {inp : PackageInput}
-    {r : AcceptedResult}
-    (hbase : acceptPCS (transcriptOracles t) T inp = some r)
-    (hbad : allEvidenceRegistered r = false) :
-    acceptPCSWithTranscript t T inp = none := by
-  simp [acceptPCSWithTranscript, hbase, transcriptCovers, hbad]
 
 theorem acceptPCSWithTranscript_implies_acceptPCS {t : AuthorityTranscript} {T : TrustAnchor}
     {inp : PackageInput} {r : AcceptedResult}

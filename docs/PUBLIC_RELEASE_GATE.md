@@ -1,5 +1,7 @@
 # PCS public-release decision gate
 
+**Public follow-up, 2026-10-08:** The owner made all three repositories public and explicitly confirmed complete first-party ownership and publication authority. See PUBLIC_INTEGRATION_2026-10-08.md. Private-status/missing-owner-decision statements below are historical and superseded. Third-party license obligations and actual technical gates remain distinct.
+
 **Status: HOLD / NOT APPROVED.** The repo is intentionally private pre-publication. Public visibility cannot be treated as a temporary CI workaround.
 
 ## Founder decisions and external clearances required
@@ -14,3 +16,7 @@
 Until all are complete: **keep the core private** and use a narrow public tutorial/sample repository or a sanitized snapshot (as a separate repository) for community onboarding if necessary. Neither action occurs automatically from this document.
 
 Source: GitHub official docs on [repository visibility](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility) and [Actions usage](https://docs.github.com/en/actions/concepts/billing-and-usage).
+
+## Integrated campaign checkpoint
+
+The 2026-10-08 campaign remains HOLD. See RELEASE_CAMPAIGN_PR_DISPOSITIONS.md, RELEASE_CAMPAIGN_SECURITY_AND_RIGHTS.md, CERTIFORGE_ADAPTER_V1.md and RELEASE_CAMPAIGN_RESEARCH_DRAFT.md. Passing local computational/formal checks is not source/data rights clearance, provider token revocation, complete disclosure-surface audit, protected required CI enforcement or deployment evidence. No missing semantic-source gate may be bypassed.

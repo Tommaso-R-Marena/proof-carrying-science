@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pcs:schema:semantic-translation-v1",
+  "title": "PCS Semantic Translation Contract v1 — untrusted proposals and registry",
+  "description": "Schema validation never confers semantic or Lean authority; use pinned registry and executable validation.",
+  "oneOf": [
+    {"$ref": "#/$defs/registry"},
+    {"$ref": "#/$defs/interpretation"},
+    {"$ref": "#/$defs/candidate"}
+  ],
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "scope": {"type": "object", "additionalProperties": false, "required": ["context_id", "description"], "properties": {
+      "context_id": {"$ref": "#/$defs/id"}, "description": {"type": "string", "minLength": 1, "maxLength": 4000}
+    }},
+    "free": {"type": "array", "maxItems": 256, "items": {"type": "object", "additionalProperties": false, "required": ["name", "sort"], "properties": {
+      "name": {"$ref": "#/$defs/id"}, "sort": {"$ref": "#/$defs/id"}
+    }}},
+    "term": {"oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["var"], "properties": {"var": {"$ref": "#/$defs/id"}}},
+      {"type": "object", "additionalProperties": false, "required": ["constant"], "properties": {"constant": {"$ref": "#/$defs/id"}}}
+    ]},
+    "formula": {"oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["op"], "properties": {"op": {"enum": ["true", "false"]}}},
+      {"type": "object", "additionalProperties": false, "required": ["op", "symbol", "args"], "properties": {"op": {"const": "atom"}, "symbol": {"$ref": "#/$defs/id"}, "args": {"type": "array", "maxItems": 12, "items": {"$ref": "#/$defs/term"}}}},
+      {"type": "object", "additionalProperties": false, "required": ["op", "left", "right"], "properties": {"op": {"enum": ["eq", "neq"]}, "left": {"$ref": "#/$defs/term"}, "right": {"$ref": "#/$defs/term"}}},
+      {"type": "object", "additionalProperties": false, "required": ["op", "body"], "properties": {"op": {"const": "not"}, "body": {"$ref": "#/$defs/formula"}}},
+      {"type": "object", "additionalProperties": false, "required": ["op", "left", "right"], "properties": {"op": {"enum": ["and", "or", "implies"]}, "left": {"$ref": "#/$defs/formula"}, "right": {"$ref": "#/$defs/formula"}}},
+      {"type": "object", "additionalProperties": false, "required": ["op", "var", "sort", "body"], "properties": {"op": {"enum": ["forall", "exists"]}, "var": {"$ref": "#/$defs/id"}, "sort": {"$ref": "#/$defs/id"}, "body": {"$ref": "#/$defs/formula"}}}
+    ]},
+    "symbol": {"oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "args", "definition_id", "definition_sha256", "provenance"], "properties": {
+        "id": {"$ref": "#/$defs/id"}, "kind": {"const": "predicate"}, "args": {"type": "array", "maxItems": 12, "items": {"$ref": "#/$defs/id"}}, "definition_id": {"$ref": "#/$defs/id"}, "definition_sha256": {"$ref": "#/$defs/sha"}, "provenance": {"type": "string", "minLength": 1, "maxLength": 1024}
+      }},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "sort", "definition_id", "definition_sha256", "provenance"], "properties": {
+        "id": {"$ref": "#/$defs/id"}, "kind": {"const": "constant"}, "sort": {"$ref": "#/$defs/id"}, "definition_id": {"$ref": "#/$defs/id"}, "definition_sha256": {"$ref": "#/$defs/sha"}, "provenance": {"type": "string", "minLength": 1, "maxLength": 1024}
+      }}
+    ]},
+    "registry": {"type": "object", "additionalProperties": false, "required": ["format", "sorts", "symbols"], "properties": {
+      "format": {"const": "pcs-semantic-symbol-registry-v1"}, "sorts": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+      "symbols": {"type": "array", "maxItems": 256, "items": {"$ref": "#/$defs/symbol"}}
+    }},
+    "interpretation": {"type": "object", "additionalProperties": false, "required": ["format", "claim_id", "statement", "formula", "assumptions", "free_variables", "scope"], "properties": {
+      "format": {"const": "pcs-human-interpretation-v1"}, "claim_id": {"$ref": "#/$defs/id"}, "statement": {"type": "string", "minLength": 1, "maxLength": 4000},
+      "formula": {"$ref": "#/$defs/formula"}, "assumptions": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/formula"}},
+      "free_variables": {"$ref": "#/$defs/free"}, "scope": {"$ref": "#/$defs/scope"},
+      "ambiguities": {"type": "array", "maxItems": 64, "items": {"type": "object"}}, "provenance": {"type": "object"}
+    }},
+    "candidate": {"type": "object", "additionalProperties": false, "required": ["format", "claim_id", "formula", "assumptions", "free_variables", "scope", "grounding"], "properties": {
+      "format": {"const": "pcs-semantic-translation-candidate-v1"}, "claim_id": {"$ref": "#/$defs/id"},
+      "formula": {"$ref": "#/$defs/formula"}, "assumptions": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/formula"}},
+      "free_variables": {"$ref": "#/$defs/free"}, "scope": {"$ref": "#/$defs/scope"},
+      "grounding": {"type": "array", "maxItems": 256, "items": {"type": "object", "additionalProperties": false, "required": ["symbol", "definition_sha256"], "properties": {"symbol": {"$ref": "#/$defs/id"}, "definition_sha256": {"$ref": "#/$defs/sha"}}}},
+      "model_confidence": {"type": "number", "minimum": 0, "maximum": 1}, "proposer": {"type": "object"},
+      "proof_receipt": {"type": "object"}, "elaboration_receipt": {"type": "object"}
+    }}
+  }
+}

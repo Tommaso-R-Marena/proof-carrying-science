@@ -453,7 +453,16 @@ def _claim_ir_v06(
 
 
 def _snapshot_bytes(root: Path, item: Mapping[str, Any]) -> bytes:
-    path = (root / str(item["path"])).resolve()
+    relative = item.get("path")
+    if (not isinstance(relative, str) or not relative or "\\" in relative or
+            relative.startswith("/") or any(part in {"", ".", ".."} for part in relative.split("/"))):
+        raise V06ProofTranslationError("grounding artifact requires a canonical relative path")
+    path = root
+    for part in relative.split("/"):
+        path = path / part
+        if path.is_symlink():
+            raise V06ProofTranslationError("grounding artifact path contains a symlink")
+    path = path.resolve()
     try:
         path.relative_to(root)
     except ValueError as exc:

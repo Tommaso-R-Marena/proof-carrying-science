@@ -6,12 +6,5 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 lake build PCSReal
-if grep -R --line-number -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' formal/real; then
-  echo "ERROR: proof placeholder found in formal/real" >&2
-  exit 3
-fi
-if grep -R --line-number -E '^[[:space:]]*(axiom|unsafe|implemented_by|extern|native_decide)([[:space:]]|$)' formal/real; then
-  echo "ERROR: forbidden declaration found in formal/real" >&2
-  exit 4
-fi
+python "$ROOT/scripts/audit_lean_source.py" formal/real
 echo "Real-analysis bridge build and audits passed."

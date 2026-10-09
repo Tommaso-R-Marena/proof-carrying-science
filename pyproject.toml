@@ -17,9 +17,14 @@ standalone = ["pyinstaller>=6.11"]
 [project.scripts]
 pcs = "pcs.cli:main"
 pcs-verifier-v06 = "pcs.verifier_entrypoint:main"
+pcs-certiforge-v1 = "pcs.certiforge_adapter_v1:main"
 
 [tool.setuptools.packages.find]
+where = [".", "formal/python"]
 include = ["pcs*"]
+
+[tool.setuptools.package-dir]
+pcs_semantic = "formal/python/pcs_semantic"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

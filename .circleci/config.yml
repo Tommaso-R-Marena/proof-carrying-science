@@ -1,17 +1,12 @@
 version: 2.1
 
-# PCS compute CI has moved to Cloudflare Workers Builds so verification does not
-# depend on exhausted hosted-runner credits. Keep the CircleCI VCS integration
-# alive with a zero-credit no-op only; substantive assurance runs in the
-# Cloudflare "pcs-core-ci-gate" / "pcs-core-ci-only" builds.
-#
-# IMPORTANT: GitHub's legacy required status "ci/circleci: repository-integrity"
-# must not be used as an authority gate after this migration. The protected-main
-# ruleset should require the Cloudflare check run instead.
+# Public hosted verification is in pcs-public-full-verification.yml. Preserve
+# this legacy VCS compatibility status only; it supplies no assurance. Migrate
+# protected main to verified-public-integration after its full jobs really pass.
 
 jobs:
   # Compatibility status only. This does NOT certify the commit; the real
-  # assurance result is the Cloudflare Workers Builds check run.
+  # assurance result is the complete public GitHub Actions aggregate.
   repository-integrity:
     type: no-op
 
