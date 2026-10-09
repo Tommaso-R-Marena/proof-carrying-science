@@ -226,7 +226,13 @@ def check_countermodel_session_file(path):
         raw = handle.read(32769)
     if len(raw) > 32768:
         raise ValueError("Search notebook exceeds 32 KiB")
-    document = json.loads(raw, object_pairs_hook=_unique)
+    def reject_constant(_value):
+        raise ValueError("Non-finite JSON constant")
+
+    try:
+        document = json.loads(raw, object_pairs_hook=_unique, parse_constant=reject_constant)
+    except RecursionError as error:
+        raise ValueError("JSON nesting exceeds parser limit") from error
     if isinstance(document, dict) and document.get("format") == "pcs-countermodel-local-trace-v1":
         if (set(document) != {"format", "scope", "version", "mission_id", "actions"}
                 or document["scope"] != "unverified player-recorded action trace; replay on PCS Worker required"):

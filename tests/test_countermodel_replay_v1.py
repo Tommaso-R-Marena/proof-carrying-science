@@ -85,6 +85,12 @@ def test_file_budget_duplicates_and_downloaded_notebook(tmp_path):
     file.write_text('{"version":"x","version":"y"}')
     with pytest.raises(ValueError, match="Duplicate"):
         check_countermodel_session_file(file)
+    file.write_text('[' * 2000 + '0' + ']' * 2000)
+    with pytest.raises(ValueError):
+        check_countermodel_session_file(file)
+    file.write_text('{"actions":NaN}')
+    with pytest.raises(ValueError, match="Non-finite"):
+        check_countermodel_session_file(file)
     file.write_text(" " * 32769)
     with pytest.raises(ValueError, match="32 KiB"):
         check_countermodel_session_file(file)
@@ -102,3 +108,10 @@ def test_actual_cli_distinguishes_checked_unsuccessful_and_invalid(tmp_path):
                              capture_output=True, text=True, check=False)
         assert run.returncode == expected, run.stderr
         assert json.loads(run.stdout)["pcs_authoritative"] is False
+    # Exercise the real CLI's default parser recursion limit, independently of
+    # pytest's process-wide recursion settings.
+    file.write_text('[' * 12000 + '0' + ']' * 12000)
+    run = subprocess.run([sys.executable, "-m", "pcs.cli", "countermodel-replay-v1", str(file)],
+                         capture_output=True, text=True, check=False)
+    assert run.returncode == 2
+    assert "nesting" in json.loads(run.stdout)["error"]
