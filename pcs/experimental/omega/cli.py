@@ -35,7 +35,20 @@ def emit(value, output=None):
 def command(args):
     try:
         op = args.omega_command
-        if op == "intake":
+        if op.startswith("adaptive-"):
+            from . import adaptive
+            if op == 'adaptive-train':
+                result=adaptive.train(read(args.input,4*1024*1024),seed=args.seed,epochs=args.epochs)
+            elif op == 'adaptive-search':
+                result=adaptive.search(read(args.input),model=read(args.model) if args.model else None,
+                    checks=args.checks,depth=args.depth,proposals=args.proposals)
+            elif op == 'adaptive-replay':
+                result={'replayed':adaptive.replay(read(args.input,4*1024*1024)),'pcs_authority':False}
+            else:
+                from .adaptive_experiments import reproduce as reproduce_adaptive
+                reproduce_adaptive(args.output,per_family=args.per_family)
+                return 0
+        elif op == "intake":
             result = compile_project(read(args.input))
         elif op == "impact":
             result = invalidate(read(args.input), args.changed)
@@ -88,7 +101,7 @@ def command(args):
         else:
             raise ValueError("Unknown Omega operation")
         emit(result, getattr(args, "output", None))
-        if op == "check" and not result["equivalent"] or op == "search" and result["solution"] is None:
+        if op == "check" and not result["equivalent"] or op in {"search", "adaptive-search"} and result["solution"] is None:
             return 1
         if op == "optimize-check" and result["receipt"]["state"] != "CHECKED_EXHAUSTIVE":
             return 1
@@ -101,6 +114,16 @@ def command(args):
 def register(sub):
     parser = sub.add_parser("omega", help="Experimental scientific reasoning: explicit intake, CPU learning, independent checking")
     ops = parser.add_subparsers(dest="omega_command", required=True)
+    for name in ('adaptive-train','adaptive-search','adaptive-replay','adaptive-reproduce'):
+        p=ops.add_parser(name);p.set_defaults(func=command)
+        if name!='adaptive-reproduce':p.add_argument('input')
+        p.add_argument('--output',required=name=='adaptive-reproduce')
+        if name=='adaptive-train':
+            p.add_argument('--seed',type=int,default=20261009);p.add_argument('--epochs',type=int,default=24)
+        if name=='adaptive-reproduce':p.add_argument('--per-family',type=int,default=24)
+        if name=='adaptive-search':
+            p.add_argument('--model');p.add_argument('--checks',type=int,default=8)
+            p.add_argument('--depth',type=int,default=3);p.add_argument('--proposals',type=int,default=128)
     for name in ("intake", "impact", "check", "search", "replay", "generate", "train", "bandit", "evaluate", "reproduce", "verify-lean", "memory", "env", "optimize-check"):
         p = ops.add_parser(name)
         p.set_defaults(func=command)
