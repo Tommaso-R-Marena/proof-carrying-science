@@ -30,7 +30,7 @@ Contributors may use AI assistants with disclosure where required. Acceptance in
 
 The public core repository and website repository are distinct. Publicly accessible source code does **not** make production Cloudflare Worker secrets, D1 database rows, account sessions, private research submissions, contributor training records, draft task solutions or admin interfaces public.
 
-The website can openly link to public verifier/proof source, specs and issues **without** allowing unauthenticated access to private user data, unreleased submissions or reviewer authorization. The website source may stay private under its own rights/security decision; users can still inspect the public PCS core on GitHub.
+The website can openly link to public verifier/proof source, specs and issues **without** allowing unauthenticated access to private user data, unreleased submissions or reviewer authorization. The website source is also public under Apache-2.0. Production credentials and contributor data remain private; public source is not permission to access that data.
 
 Training-data collection from contributors requires transparent consent, provenance and use constraints. Public GitHub contributions do not automatically authorize redistribution of private PCS Arena user data.
 
@@ -44,6 +44,6 @@ Training-data collection from contributors requires transparent consent, provena
 
 ## 6. Release status
 
-As of this charter's drafting date the existing core repository remains private. A founder declaration of original IP ownership is on record, but the complete history, upstream third-party asset rights, and privileged-CI isolation require separate verification. Public conversion must be an explicit release event with a dated evidence manifest.
+The owner made all three repositories public and reaffirmed ownership of first-party IP. Protected integration PR #82 merged on 2026-10-08. The mandatory `verified-public-integration` GitHub Actions gate passed on main `4b4ecb306016cf27cfc94d0f8164cc63ecd73163` in run 37878961119. Apache-2.0 remains the deliberate first-party license selection. This records public source and executed verification; it does not claim completion of external pilot, independent legal review, production deployment, or complete historical artifact disclosure inspection. See `docs/PUBLIC_INTEGRATION_2026-10-08.md`.
 
 See `LICENSE`, `NOTICE`, `SECURITY.md`, `CONTRIBUTING.md`, `docs/PUBLIC_RELEASE_EXECUTION_2026-10-08.md` and `docs/PUBLIC_RELEASE_RIGHTS_LEDGER.md`.
