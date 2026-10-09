@@ -71,7 +71,7 @@ def dimension(mode):
 
 
 def source_digest():
-    return digest({p.name: p.read_text() for p in sorted(Path(__file__).parent.glob('*.py'))})
+    return digest({p.name: p.read_text(encoding="utf-8") for p in sorted(Path(__file__).parent.glob('*.py'))})
 
 
 def validate_model(model):

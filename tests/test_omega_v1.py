@@ -2,8 +2,11 @@
 from copy import deepcopy
 import hashlib
 import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
+import subprocess
+import sys
 
 import pytest
 
@@ -234,3 +237,13 @@ def test_modified_proof_program_is_rejected_before_execution(project, corpus, tm
     monkeypatch.setattr(experiments.subprocess, "check_output", lambda *a, **k: pytest.fail("Execution started before proof validation"))
     with pytest.raises(ValueError, match="exact regenerated"):
         experiments.verify_lean(tmp_path)
+
+
+def test_source_fingerprint_survives_non_utf8_runtime_locale():
+    from pcs.experimental.omega.learning import source_digest
+    # Source contains Unicode documentation. An ASCII/default legacy locale
+    # must not change its fingerprint or make an otherwise valid run fail.
+    env = {k: os.environ[k] for k in ("PATH", "SYSTEMROOT", "WINDIR") if k in os.environ}
+    env.update(PYTHONUTF8="0", PYTHONCOERCECLOCALE="0", LC_ALL="C", LANG="C", PYTHONPATH=str(ROOT))
+    actual = subprocess.check_output([sys.executable, "-c", "from pcs.experimental.omega.learning import source_digest; print(source_digest())"], cwd=ROOT, env=env, text=True, timeout=30).strip()
+    assert actual == source_digest()
