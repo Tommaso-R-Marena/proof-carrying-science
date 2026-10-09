@@ -12,6 +12,16 @@ sys.path.insert(0, str(ROOT))
 from pcs.countermodel_v1 import RULESET_SHA256, _missions, _verdict
 from generate_countermodel_missions import main as check_generated
 
+PRINCIPAL = {
+    'evalBool_iff_holds', 'checker_iff', 'allWorlds_complete', 'enumeration_covers',
+    'searchAt_none_iff', 'search_sound', 'search_minimal', 'search_none',
+    'search_none_not_unbounded', 'lower_sound', 'lower_closed_sound',
+    'lower_isSome_iff', 'namedChecker_sound', 'namedChecker_isSome_iff',
+}
+FIXTURES = {'implicationFlip_lowering', 'implicationFlip_checker_accepts',
+            'implicationFlip_counterexample', 'implicationFlip_named_counterexample',
+            'implicationFlip_search_size', 'capture_search_size'}
+
 
 def run(*args):
     return subprocess.run(args, cwd=ROOT / 'formal', capture_output=True, text=True, timeout=120)
@@ -20,18 +30,27 @@ def run(*args):
 def main():
     check_generated()
     audit_count = 0
-    for file, count in [('PCSCountermodel/Audit.lean', 20), ('PCSCountermodel/Missions.lean', 28)]:
+    inventories = [
+        ('PCSCountermodel/Audit.lean',
+         {'PCSCountermodel.' + n for n in PRINCIPAL} |
+         {'PCSCountermodel.Fixtures.' + n for n in FIXTURES}),
+        ('PCSCountermodel/Missions.lean',
+         {f'PCSCountermodel.Missions.{tag}{i}' for i in range(7)
+          for tag in ('lowering', 'witness', 'disagreement', 'minimum')}),
+    ]
+    for file, expected_names in inventories:
         result = run('lake', 'env', 'lean', file)
         if result.returncode:
             raise RuntimeError(result.stdout + result.stderr)
         declarations = re.findall(r"'([^']+)' depends on axioms: \[([^]]*)\]", result.stdout)
-        if len(declarations) != count or len({name for name, _ in declarations}) != count:
-            raise RuntimeError(f'Missing or duplicate axiom inventory: {file}')
+        if (len(declarations) != len(expected_names)
+                or {name for name, _ in declarations} != expected_names):
+            raise RuntimeError(f'Missing, duplicate or substituted axiom inventory: {file}')
         for name, axioms in declarations:
             used = {a.strip() for a in axioms.split(',') if a.strip()}
             if not used <= {'propext', 'Quot.sound'}:
                 raise RuntimeError(f'Forbidden kernel dependency: {name}: {used}')
-        audit_count += count
+        audit_count += len(expected_names)
     negative = run('lake', 'env', 'lean', 'PCSCountermodel/Negative/WrongEquivalence.lean')
     if (negative.returncode == 0 or 'Tactic `decide` proved that the proposition' not in negative.stdout
             or 'is false' not in negative.stdout):
