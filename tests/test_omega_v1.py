@@ -247,3 +247,33 @@ def test_source_fingerprint_survives_non_utf8_runtime_locale():
     env.update(PYTHONUTF8="0", PYTHONCOERCECLOCALE="0", LC_ALL="C", LANG="C", PYTHONPATH=str(ROOT))
     actual = subprocess.check_output([sys.executable, "-c", "from pcs.experimental.omega.learning import source_digest; print(source_digest())"], cwd=ROOT, env=env, text=True, timeout=30).strip()
     assert actual == source_digest()
+
+
+def test_proof_file_replacement_race_cannot_change_executed_template(project, corpus, tmp_path, monkeypatch):
+    import pcs.experimental.omega.experiments as experiments
+    episode = search(project["claims"][0]["task"])
+    positive = lean_source({**episode["original_task"], "candidate": episode["solution"]["candidate"]}).replace("omega_equivalence", "omega_equivalence_0")
+    negative = lean_source(corpus["records"][0]["task"])
+    config = {"seed": 1, "source_commit": "test-only", "source_worktree_dirty": False, "omega_source_digest": "test-only",
+              "dataset_counts": {}, "training_wall_seconds": {}, "proposed_lean_theorems": 1, "lean_kernel_checked": False,
+              "per_family": 2, "epochs": 1, "bandit_episodes": 1}
+    for name, value in (("run.json", config), ("trajectories.json", [episode]), ("corpus.json", corpus), ("evaluation.json", {"rows": [], "comparison": []})):
+        (tmp_path / name).write_text(json.dumps(value))
+    (tmp_path / "VerifiedSolutions.lean").write_text(positive)
+    (tmp_path / "RejectOriginal.lean").write_text(negative)
+    calls = []
+    monkeypatch.setattr(experiments.subprocess, "check_output", lambda *a, **k: "Lean (version 4.28.0)")
+
+    def substituted_invocation(args, **kwargs):
+        (tmp_path / "VerifiedSolutions.lean").write_text('#eval IO.println "replaced after validation"')
+        invoked = Path(args[-1])
+        assert invoked.parent != tmp_path
+        assert invoked.read_text() == (positive if not calls else negative)
+        assert not any("TOKEN" in key or "SECRET" in key for key in kwargs["env"])
+        calls.append(str(invoked))
+        return SimpleNamespace(returncode=0 if len(calls) == 1 else 1,
+                               stdout="'omega_equivalence_0' does not depend on any axioms\n" if len(calls) == 1 else "negative control rejected\n", stderr="")
+
+    monkeypatch.setattr(experiments.subprocess, "run", substituted_invocation)
+    experiments.verify_lean(tmp_path)
+    assert len(calls) == 2

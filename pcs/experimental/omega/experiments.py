@@ -9,6 +9,7 @@ from pathlib import Path
 import platform
 import subprocess
 import sys
+import tempfile
 import time
 
 from pcs.jsonio import strict_json_loads
@@ -25,12 +26,16 @@ def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
 
 
-def read_artifact(path):
+def read_text_artifact(path):
     with Path(path).open("rb") as handle:
         raw = handle.read(4 * 1024 * 1024 + 1)
     if len(raw) > 4 * 1024 * 1024:
         raise ValueError("Experiment artifact exceeds byte bound")
-    return strict_json_loads(raw.decode("utf-8"))
+    return raw.decode("utf-8")
+
+
+def read_artifact(path):
+    return strict_json_loads(read_text_artifact(path))
 
 
 def wilson(solved, total):
@@ -166,8 +171,10 @@ def verify_lean(output):
             value = {**episode["original_task"], "candidate": episode["solution"]["candidate"]}
             expected.append(lean_source(value).replace("omega_equivalence", f"omega_equivalence_{index}"))
     corpus = validate_corpus(read_artifact(output / "corpus.json"))
-    if ((output / "VerifiedSolutions.lean").read_text() != "\n".join(expected) or
-            (output / "RejectOriginal.lean").read_text() != lean_source(corpus["records"][0]["task"])):
+    positive_source = "\n".join(expected)
+    negative_source = lean_source(corpus["records"][0]["task"])
+    if (read_text_artifact(output / "VerifiedSolutions.lean") != positive_source or
+            read_text_artifact(output / "RejectOriginal.lean") != negative_source):
         raise ValueError("Only exact regenerated fixed proof templates may execute")
     if not expected:
         raise ValueError("No independently solved targets to kernel-check")
@@ -177,8 +184,14 @@ def verify_lean(output):
     version = subprocess.check_output(["lean", "--version"], text=True, timeout=30, env=environment)
     if "version 4.28.0" not in version:
         raise ValueError("Use the project-pinned Lean 4.28.0")
-    positive = subprocess.run(["lean", str((output / "VerifiedSolutions.lean").resolve())], capture_output=True, text=True, timeout=180, env=environment)
-    negative = subprocess.run(["lean", str((output / "RejectOriginal.lean").resolve())], capture_output=True, text=True, timeout=30, env=environment)
+    # Execute regenerated snapshots, never mutable files in the imported run.
+    # A replacement between validation and invocation cannot change the code.
+    with tempfile.TemporaryDirectory(prefix="pcs-omega-lean-") as temporary:
+        positive_file, negative_file = Path(temporary) / "Positive.lean", Path(temporary) / "Negative.lean"
+        positive_file.write_text(positive_source, encoding="utf-8")
+        negative_file.write_text(negative_source, encoding="utf-8")
+        positive = subprocess.run(["lean", str(positive_file)], capture_output=True, text=True, timeout=180, env=environment)
+        negative = subprocess.run(["lean", str(negative_file)], capture_output=True, text=True, timeout=30, env=environment)
     (output / "lean-positive.log").write_text(positive.stdout + positive.stderr)
     (output / "lean-negative.log").write_text(negative.stdout + negative.stderr)
     if positive.returncode != 0 or negative.returncode == 0:
