@@ -1,6 +1,6 @@
 name = "PCS"
 version = "0.5.0"
-defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check"]
+defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check", "PCSCountermodel", "pcs-countermodel-replay"]
 
 [[lean_lib]]
 name = "PCS"
@@ -14,3 +14,12 @@ root = "PCSAuthority"
 [[lean_exe]]
 name = "pcs-semantic-check"
 root = "PCSSemanticCheck"
+
+[[lean_lib]]
+name = "PCSCountermodel"
+roots = ["PCSCountermodel"]
+defaultFacets = ["leanArts"]
+
+[[lean_exe]]
+name = "pcs-countermodel-replay"
+root = "PCSCountermodelReplay"
