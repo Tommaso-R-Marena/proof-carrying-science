@@ -161,6 +161,13 @@ jobs:
               model = json.loads((root / 'models' / (name + '.json')).read_text())
               assert any(model['weights']) and model['authority'] == 'NONE'
           PY
+      - name: Counterexample memory and trained nonlinear search with independent Lean controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pcs.cli omega adaptive-reproduce --output "$RUNNER_TEMP/omega-adaptive-ci" --per-family 4
+          python scripts/verify_adaptive_lean.py "$RUNNER_TEMP/omega-adaptive-ci"
       - name: Retain exact-source toolchain evidence
         shell: bash
         run: |
@@ -186,6 +193,7 @@ jobs:
             ${{ runner.temp }}/v06-contract-runs/
             ${{ runner.temp }}/semantic-cross-language-evidence.json
             ${{ runner.temp }}/omega-ci/
+            ${{ runner.temp }}/omega-adaptive-ci/
           if-no-files-found: warn
           retention-days: 14
 
