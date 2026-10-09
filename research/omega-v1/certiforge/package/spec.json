@@ -1,0 +1,12 @@
+{
+  "name": "proposed",
+  "provenance": "equiv-to-program",
+  "description": "Phase I functional spec: optimized equiv reference",
+  "reference_program": "fn proposed(x: u8, y: u8) -> u8 {\n  add(and(x, y), xor(x, y))\n}\n",
+  "precondition": {
+    "kind": "true"
+  },
+  "postcondition": {
+    "kind": "equiv_to_reference"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "certiforge_commit": "758c2c7d1ef0b0c68dda09938420aa6755c581cb",
+  "checker_sha256": "4bfc4d763b6164b4ed224472cd90bb85c6887ca6c1fada09f73636e8e56aef2b",
+  "control": {
+    "actual_effect_count": 1,
+    "audit": [
+      {
+        "event_sha256": "bcb6b42f69c66e1c8d3c67e233cf95e67e7013f0de8efe2b4926f20270fc7521",
+        "lean_kernel_checked": false,
+        "nonce": "demo-1",
+        "pcs_authority": false,
+        "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "previous_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "sequence": 0,
+        "state": "REJECTED_OPERATION"
+      },
+      {
+        "event_sha256": "6f8f00254b5fdeed6d612cd80de0b0ae55cd35e043828cf0ed175db6d6150dba",
+        "lean_kernel_checked": false,
+        "nonce": null,
+        "pcs_authority": false,
+        "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "previous_sha256": "bcb6b42f69c66e1c8d3c67e233cf95e67e7013f0de8efe2b4926f20270fc7521",
+        "sequence": 1,
+        "state": "REJECTED_SCHEMA"
+      },
+      {
+        "event_sha256": "ea96599eddca7012f6a721f595404458656df9296a4b0ab546137c3341f26f58",
+        "lean_kernel_checked": false,
+        "nonce": "demo-1",
+        "pcs_authority": false,
+        "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "previous_sha256": "6f8f00254b5fdeed6d612cd80de0b0ae55cd35e043828cf0ed175db6d6150dba",
+        "sequence": 2,
+        "state": "REJECTED_POLICY_MISMATCH"
+      },
+      {
+        "event_sha256": "432bb3103a53609b2c6f356e674f3f9cd624cb20ff434769ecbd84d1bab15833",
+        "lean_kernel_checked": false,
+        "nonce": "demo-1",
+        "pcs_authority": false,
+        "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "previous_sha256": "ea96599eddca7012f6a721f595404458656df9296a4b0ab546137c3341f26f58",
+        "sequence": 3,
+        "state": "EXECUTED"
+      },
+      {
+        "event_sha256": "3bf5f033200a8b513a7377a08b4672dcd8a35c09f8d77df8102bc12eadc8b59d",
+        "lean_kernel_checked": false,
+        "nonce": "demo-1",
+        "pcs_authority": false,
+        "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "previous_sha256": "432bb3103a53609b2c6f356e674f3f9cd624cb20ff434769ecbd84d1bab15833",
+        "sequence": 4,
+        "state": "REJECTED_REPLAY"
+      },
+      {
+        "event_sha256": "3d7f5cbb59b4b8184909071f07c0c8c5c692c9f8abc280e5f04daaec960fb45e",
+        "lean_kernel_checked": false,
+        "nonce": "after-revocation",
+        "pcs_authority": false,
+        "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a",
+        "previous_sha256": "3bf5f033200a8b513a7377a08b4672dcd8a35c09f8d77df8102bc12eadc8b59d",
+        "sequence": 5,
+        "state": "REJECTED_REVOKED"
+      }
+    ],
+    "policy_sha256": "7c37a98c471e34c7c8be21748d994efffcad2d15f3dfa0599038ed60eaee9b1a"
+  },
+  "core_commit": "71601011781d833886c207a1d9a1593acf67ad24",
+  "formal_promotion": false,
+  "format": "pcs-integrated-demo-v1",
+  "limitations": [
+    "No AST-bound Lean certificate or Rust/Lean refinement",
+    "External compiler/build correspondence trusted",
+    "No native executable guarantee",
+    "Proposal-only monitor assumes exclusive trusted effect interface and faithful logging",
+    "No claim of general AI alignment",
+    "Public component subject to its license and attribution obligations"
+  ],
+  "malicious_rebound_optimization": {
+    "diagnostics": [
+      "SEMANTIC_CHECK_REJECTED"
+    ],
+    "format": "pcs-certiforge-result-v1",
+    "lean_kernel_checked": false,
+    "pcs_authority": false,
+    "state": "REJECTED"
+  },
+  "optimization": {
+    "artifact_sha256": {
+      "certificates/equivalence.lean": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+      "certificates/functional.lean": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+      "effects.json": "46d4538152be6a23d50d1204e229ec5e71edffb0dac91cfba4cf5e6674acf338",
+      "manifest.json": "75b1677cb2bf8456f88da9a3ba19252ab96ce3971cb9248221a651ce261c3a68",
+      "optimized.certir": "bc922837cac886fdab0a0ea6c07c451b4900fa0318889743ca31ecb8e5e55f29",
+      "program.certir": "90649392e9296be4cdd44510e81eea2bbe6ebacee7f368fa88d632dc0faa5753",
+      "spec.json": "9729cfeb02426bb7569c3cad37b24c2dad1e616e65ec12e51af6b04d172c93dd"
+    },
+    "checker": {
+      "build_correspondence": "EXTERNALLY_TRUSTED",
+      "sha256": "4bfc4d763b6164b4ed224472cd90bb85c6887ca6c1fada09f73636e8e56aef2b",
+      "source_commit": "758c2c7d1ef0b0c68dda09938420aa6755c581cb",
+      "version": "0.1.0"
+    },
+    "claim_id": "or-optimization",
+    "cost": {
+      "objective": "CERTIR_AST_NODE_COUNT",
+      "optimized": 3,
+      "original": 7
+    },
+    "diagnostics": [],
+    "domain_size": 65536,
+    "format": "pcs-certiforge-result-v1",
+    "lean_kernel_checked": false,
+    "pcs_authority": false,
+    "proof_status": "COMPUTATIONALLY_REPLAYED_NOT_FORMALLY_PROVED",
+    "source": {
+      "commit": "758c2c7d1ef0b0c68dda09938420aa6755c581cb",
+      "disclosure": "public",
+      "repository": "Tommaso-R-Marena/certiforge"
+    },
+    "source_provenance_verified": false,
+    "state": "CHECKED_EXHAUSTIVE",
+    "trusted_computing_base": [
+      "pinned Rust checker, parser and interpreter",
+      "SHA-256",
+      "OS/process isolation",
+      "reviewer checker/build provenance"
+    ],
+    "unsolved_obligations": [
+      "AST-bound Lean/LRAT certificate verification",
+      "Rust-to-Lean refinement",
+      "specification intent",
+      "native executable semantics"
+    ]
+  },
+  "optimizer_weighted_cost": {
+    "best": 1,
+    "original": 4
+  },
+  "seed": 42,
+  "source_date_epoch": 0
+}

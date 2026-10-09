@@ -1,0 +1,330 @@
+{
+  "claim_ir": {
+    "claim_ir_sha256": "c299f592dd351379e7eaa8ed17a06000303cc1a40a39939bd68a7132fc8e54bb",
+    "claims": [
+      {
+        "authority": {
+          "children_can_set_parent_authority": false,
+          "composition_semantics_certified": false,
+          "human_review_required_for_uncertified_composition": true
+        },
+        "candidate_status": "COMPUTATIONALLY_REPLAYED_NOT_FORMALLY_PROVED",
+        "claim_id": "or-optimization",
+        "closure_state": "BLOCKED",
+        "decomposition": null,
+        "formalizable": false,
+        "kind": "computational",
+        "predicate": {
+          "artifact_sha256": {
+            "certificates/equivalence.lean": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+            "certificates/functional.lean": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+            "effects.json": "46d4538152be6a23d50d1204e229ec5e71edffb0dac91cfba4cf5e6674acf338",
+            "manifest.json": "75b1677cb2bf8456f88da9a3ba19252ab96ce3971cb9248221a651ce261c3a68",
+            "optimized.certir": "bc922837cac886fdab0a0ea6c07c451b4900fa0318889743ca31ecb8e5e55f29",
+            "program.certir": "90649392e9296be4cdd44510e81eea2bbe6ebacee7f368fa88d632dc0faa5753",
+            "spec.json": "9729cfeb02426bb7569c3cad37b24c2dad1e616e65ec12e51af6b04d172c93dd"
+          },
+          "checker": {
+            "build_correspondence": "EXTERNALLY_TRUSTED",
+            "sha256": "4bfc4d763b6164b4ed224472cd90bb85c6887ca6c1fada09f73636e8e56aef2b",
+            "source_commit": "758c2c7d1ef0b0c68dda09938420aa6755c581cb",
+            "version": "0.1.0"
+          },
+          "cost": {
+            "objective": "CERTIR_AST_NODE_COUNT",
+            "optimized": 3,
+            "original": 7
+          },
+          "domain_size": 65536,
+          "format": "pcs-certiforge-proposal-v1",
+          "scope": "Bool/u8/u16 Cartesian domains of at most 65536 inputs; Rust semantics"
+        },
+        "proposal_id": "or-optimization",
+        "selected": false,
+        "statement": "The optimized pure CertIR program preserves the original program over the complete admitted input domain and satisfies the stated AST-node cost objective."
+      }
+    ],
+    "format": "pcs-claim-ir-v1",
+    "relations": [],
+    "roots": [],
+    "summary": {
+      "claims": 1,
+      "decomposed_claims": 0,
+      "decomposition_relations": 0,
+      "decomposition_roots": 0,
+      "dependency_relations": 0,
+      "max_decomposition_depth": 0
+    }
+  },
+  "format": "pcs-certiforge-research-claim-graph-v1",
+  "obligation_graph": {
+    "claim_ir_sha256": "c299f592dd351379e7eaa8ed17a06000303cc1a40a39939bd68a7132fc8e54bb",
+    "edges": [
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:0"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:1"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:2"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:3"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:4"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:5"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "references_artifact",
+        "to": "artifact:6"
+      },
+      {
+        "blocking": false,
+        "from": "proposal:or-optimization",
+        "relation": "interprets_as_claim",
+        "to": "claim:or-optimization"
+      },
+      {
+        "blocking": true,
+        "from": "proposal:or-optimization",
+        "relation": "has_blocking_obligation",
+        "to": "obligation:O_or-optimization_22483d7c4fe2"
+      },
+      {
+        "blocking": true,
+        "from": "proposal:or-optimization",
+        "relation": "has_blocking_obligation",
+        "to": "obligation:O_or-optimization_33c16ad3f6a8"
+      },
+      {
+        "blocking": true,
+        "from": "proposal:or-optimization",
+        "relation": "has_blocking_obligation",
+        "to": "obligation:O_or-optimization_5ef7356ac053"
+      },
+      {
+        "blocking": true,
+        "from": "proposal:or-optimization",
+        "relation": "has_blocking_obligation",
+        "to": "obligation:O_or-optimization_9a3b15c25ebc"
+      }
+    ],
+    "format": "pcs-proof-obligation-graph-v1",
+    "graph_sha256": "2b084480914420ff12a59b287b4b4999ecf00ce7d53c75f23ef83ceb20a23a85",
+    "nodes": [
+      {
+        "artifact_id": "0",
+        "id": "artifact:0",
+        "media_type": null,
+        "path": "certificates/equivalence.lean",
+        "sha256": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+        "size": 82,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "artifact_id": "1",
+        "id": "artifact:1",
+        "media_type": null,
+        "path": "certificates/functional.lean",
+        "sha256": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+        "size": 82,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "artifact_id": "2",
+        "id": "artifact:2",
+        "media_type": null,
+        "path": "effects.json",
+        "sha256": "46d4538152be6a23d50d1204e229ec5e71edffb0dac91cfba4cf5e6674acf338",
+        "size": 80,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "artifact_id": "3",
+        "id": "artifact:3",
+        "media_type": null,
+        "path": "manifest.json",
+        "sha256": "75b1677cb2bf8456f88da9a3ba19252ab96ce3971cb9248221a651ce261c3a68",
+        "size": 891,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "artifact_id": "4",
+        "id": "artifact:4",
+        "media_type": null,
+        "path": "optimized.certir",
+        "sha256": "bc922837cac886fdab0a0ea6c07c451b4900fa0318889743ca31ecb8e5e55f29",
+        "size": 51,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "artifact_id": "5",
+        "id": "artifact:5",
+        "media_type": null,
+        "path": "program.certir",
+        "sha256": "90649392e9296be4cdd44510e81eea2bbe6ebacee7f368fa88d632dc0faa5753",
+        "size": 64,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "artifact_id": "6",
+        "id": "artifact:6",
+        "media_type": null,
+        "path": "spec.json",
+        "sha256": "9729cfeb02426bb7569c3cad37b24c2dad1e616e65ec12e51af6b04d172c93dd",
+        "size": 329,
+        "status": "BOUND_TO_INVENTORY",
+        "type": "artifact"
+      },
+      {
+        "claim_id": "or-optimization",
+        "decomposition": null,
+        "id": "claim:or-optimization",
+        "kind": "computational",
+        "predicate": {
+          "artifact_sha256": {
+            "certificates/equivalence.lean": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+            "certificates/functional.lean": "2171218edfefedbfb09c1a51e41684001fdd72bf2f778e498d923a18b24a29d9",
+            "effects.json": "46d4538152be6a23d50d1204e229ec5e71edffb0dac91cfba4cf5e6674acf338",
+            "manifest.json": "75b1677cb2bf8456f88da9a3ba19252ab96ce3971cb9248221a651ce261c3a68",
+            "optimized.certir": "bc922837cac886fdab0a0ea6c07c451b4900fa0318889743ca31ecb8e5e55f29",
+            "program.certir": "90649392e9296be4cdd44510e81eea2bbe6ebacee7f368fa88d632dc0faa5753",
+            "spec.json": "9729cfeb02426bb7569c3cad37b24c2dad1e616e65ec12e51af6b04d172c93dd"
+          },
+          "checker": {
+            "build_correspondence": "EXTERNALLY_TRUSTED",
+            "sha256": "4bfc4d763b6164b4ed224472cd90bb85c6887ca6c1fada09f73636e8e56aef2b",
+            "source_commit": "758c2c7d1ef0b0c68dda09938420aa6755c581cb",
+            "version": "0.1.0"
+          },
+          "cost": {
+            "objective": "CERTIR_AST_NODE_COUNT",
+            "optimized": 3,
+            "original": 7
+          },
+          "domain_size": 65536,
+          "format": "pcs-certiforge-proposal-v1",
+          "scope": "Bool/u8/u16 Cartesian domains of at most 65536 inputs; Rust semantics"
+        },
+        "statement": "The optimized pure CertIR program preserves the original program over the complete admitted input domain and satisfies the stated AST-node cost objective.",
+        "status": "PROPOSED",
+        "type": "typed_claim"
+      },
+      {
+        "blocking": true,
+        "details": null,
+        "id": "obligation:O_or-optimization_22483d7c4fe2",
+        "kind": "CERTIFORGE_RESIDUAL_OBLIGATION",
+        "message": "specification intent",
+        "obligation_id": "O_or-optimization_22483d7c4fe2",
+        "proposal_id": "or-optimization",
+        "repair": null,
+        "status": "OPEN_BLOCKING",
+        "type": "obligation"
+      },
+      {
+        "blocking": true,
+        "details": null,
+        "id": "obligation:O_or-optimization_33c16ad3f6a8",
+        "kind": "CERTIFORGE_RESIDUAL_OBLIGATION",
+        "message": "native executable semantics",
+        "obligation_id": "O_or-optimization_33c16ad3f6a8",
+        "proposal_id": "or-optimization",
+        "repair": null,
+        "status": "OPEN_BLOCKING",
+        "type": "obligation"
+      },
+      {
+        "blocking": true,
+        "details": null,
+        "id": "obligation:O_or-optimization_5ef7356ac053",
+        "kind": "CERTIFORGE_RESIDUAL_OBLIGATION",
+        "message": "Rust-to-Lean refinement",
+        "obligation_id": "O_or-optimization_5ef7356ac053",
+        "proposal_id": "or-optimization",
+        "repair": null,
+        "status": "OPEN_BLOCKING",
+        "type": "obligation"
+      },
+      {
+        "blocking": true,
+        "details": null,
+        "id": "obligation:O_or-optimization_9a3b15c25ebc",
+        "kind": "CERTIFORGE_RESIDUAL_OBLIGATION",
+        "message": "AST-bound Lean/LRAT certificate verification",
+        "obligation_id": "O_or-optimization_9a3b15c25ebc",
+        "proposal_id": "or-optimization",
+        "repair": null,
+        "status": "OPEN_BLOCKING",
+        "type": "obligation"
+      },
+      {
+        "candidate_status": "COMPUTATIONALLY_REPLAYED_NOT_FORMALLY_PROVED",
+        "confidence": null,
+        "finding": null,
+        "formalizable": false,
+        "id": "proposal:or-optimization",
+        "proposal_id": "or-optimization",
+        "selected": false,
+        "source": {
+          "commit": "758c2c7d1ef0b0c68dda09938420aa6755c581cb",
+          "disclosure": "public",
+          "repository": "Tommaso-R-Marena/certiforge"
+        },
+        "status": "BLOCKED",
+        "type": "proposal"
+      }
+    ],
+    "repair_queue": [],
+    "roots": [
+      "proposal:or-optimization"
+    ],
+    "summary": {
+      "blocking_obligations": 4,
+      "closure_state_counts": {
+        "BLOCKED": 1
+      },
+      "edges": 12,
+      "node_type_counts": {
+        "artifact": 7,
+        "obligation": 4,
+        "proposal": 1,
+        "typed_claim": 1
+      },
+      "nodes": 13,
+      "repair_actions": 0
+    }
+  },
+  "pcs_authority": false,
+  "verifier_registered": false
+}
