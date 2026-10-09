@@ -118,7 +118,7 @@ jobs:
         run: python scripts/run_v06_contract_gate.py
       - name: Upload frozen gate evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: pcs-v06-byte-contract-gate
           path: results/v06-contract-runs/

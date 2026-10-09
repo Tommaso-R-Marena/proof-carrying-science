@@ -29,7 +29,7 @@ jobs:
         run: |
           python scripts/cross_machine_oci_campaign.py produce \
             --output cross-machine-bundles
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: pcs-cross-machine-bundles
           path: cross-machine-bundles
@@ -74,7 +74,7 @@ jobs:
             --input cross-machine-bundles \
             --output "cross-machine-results/${{ matrix.machine_id }}" \
             --machine-id "${{ matrix.machine_id }}"
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ always() && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
         with:
           name: pcs-cross-machine-results-${{ matrix.machine_id }}
@@ -104,7 +104,7 @@ jobs:
             --input downloaded-results \
             --output cross-machine-summary.json
           cat cross-machine-summary.json
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: pcs-cross-machine-summary
           path: cross-machine-summary.json
