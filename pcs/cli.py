@@ -2396,6 +2396,11 @@ def build_parser():
     pd6.add_argument("right")
     pd6.set_defaults(func=cmd_provenance_diff_v06)
 
+    from pcs.countermodel_v1 import command as countermodel_command
+    cm = sub.add_parser("countermodel-check-v1", help="independently check a bounded Arena witness; no PCS authority")
+    cm.add_argument("input", help="pcs-countermodel-witness-v1 JSON file")
+    cm.set_defaults(func=countermodel_command)
+
     return p
 
 
