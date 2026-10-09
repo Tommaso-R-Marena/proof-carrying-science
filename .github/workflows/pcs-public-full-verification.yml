@@ -139,6 +139,23 @@ jobs:
           set -euo pipefail
           git status --short
           python scripts/run_v06_contract_gate.py --results-root "$RUNNER_TEMP/v06-contract-runs"
+      - name: Actual Omega CPU training, held-out replay and Lean rejection control
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pcs.cli omega reproduce --output "$RUNNER_TEMP/omega-ci" --per-family 4 --epochs 4 --bandit-episodes 32
+          python -m pcs.cli omega verify-lean "$RUNNER_TEMP/omega-ci"
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'omega-ci'
+          report = json.loads((root / 'lean-result.json').read_text())
+          assert report['positive_theorems'] > 0 and report['negative_target_rejected']
+          assert report['pcs_authority'] is False
+          for name in ('bag', 'graph', 'bandit'):
+              model = json.loads((root / 'models' / (name + '.json')).read_text())
+              assert any(model['weights']) and model['authority'] == 'NONE'
+          PY
       - name: Retain exact-source toolchain evidence
         shell: bash
         run: |
@@ -163,6 +180,7 @@ jobs:
             ${{ runner.temp }}/public-ci-evidence/
             ${{ runner.temp }}/v06-contract-runs/
             ${{ runner.temp }}/semantic-cross-language-evidence.json
+            ${{ runner.temp }}/omega-ci/
           if-no-files-found: warn
           retention-days: 14
 
