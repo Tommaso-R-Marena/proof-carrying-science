@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out proposed PR merge commit
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -74,7 +74,7 @@ jobs:
     timeout-minutes: 300
     steps:
       - name: Check out proposed integration commit
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -173,7 +173,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
@@ -197,12 +197,12 @@ jobs:
     env:
       CARGO_BUILD_JOBS: '4'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
       - name: Retrieve exact public component source
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: Tommaso-R-Marena/certiforge
           ref: b27729cd47f04fb0d022ce817042bbceaab9c5f4
@@ -264,7 +264,7 @@ jobs:
           - {os: windows-2022, python: "3.12"}
           - {os: macos-15, python: "3.12"}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
