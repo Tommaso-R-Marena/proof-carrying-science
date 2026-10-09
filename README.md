@@ -9,7 +9,7 @@ Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
 
 # Proof-Carrying Science — Founding Architecture v0.5
 
-> **Pre-publication / private founding build.** PCS is maintained in its own standalone repository and deliberately isolated from constituent research projects so those works can be published on their own terms first. See `docs/PUBLICATION_FIREWALL.md`.
+> **Public source; scoped assurance.** PCS core, its website and CertiForge are public. Constituent research and external participant artifacts retain their own disclosure boundaries; see `docs/PUBLICATION_FIREWALL.md` and `docs/PUBLIC_RELEASE_GATE.md`.
 
 > **Repository integrity.** `main` is the authoritative integration branch. Before contributing, read `CONTRIBUTING.md` and `docs/REPOSITORY_INTEGRITY_POLICY.md`. Run `python scripts/check_repository_integrity.py` before every PR or release. The 2026-10-04 branch/CI reconciliation is recorded in `docs/BRANCH_RECONCILIATION_2026-10-04.md`.
 
@@ -18,6 +18,8 @@ Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
 **Long-term scope:** critical computation across biology, chemistry, AI, medicine, engineering, and other high-consequence sectors.
 
 ## Mission
+
+The [PCS Omega experimental reasoning loop](docs/OMEGA_V1.md) connects explicit scientific source ranges to the existing Claim IR, bounded repair search, actual CPU-trained rankers, independently checked trajectories and concrete Lean proofs. Run `pcs omega --help`. Its experimental Boolean results do not grant scientific authority; the production verifier remains the authority boundary.
 
 **Make critical computation worthy of trust.**
 

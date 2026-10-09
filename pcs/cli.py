@@ -2401,6 +2401,9 @@ def build_parser():
     cm.add_argument("input", help="pcs-countermodel-witness-v1 JSON file")
     cm.set_defaults(func=countermodel_command)
 
+    from pcs.experimental.omega.cli import register as register_omega
+    register_omega(sub)
+
     return p
 
 
