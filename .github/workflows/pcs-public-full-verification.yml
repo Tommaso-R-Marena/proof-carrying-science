@@ -45,6 +45,11 @@ jobs:
           echo "PCS_PUBLIC_SOURCE_HEAD_SHA=$PR_HEAD_SHA"
           python scripts/check_repository_integrity.py
           python -m compileall -q pcs scripts tests
+      - name: Bind contribution file gates to required PR verification
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python scripts/check_pr_contributions.py
       - name: Verify public release policies are present
         shell: bash
         run: |

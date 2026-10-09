@@ -9,13 +9,14 @@ permissions:
 jobs:
   promotion:
     name: PCS Promotion Verification
-    # No hosted minutes, and never run fork PR code on a personal machine.
-    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
-    timeout-minutes: 35
+    # Public PRs run on disposable hosted runners without production secrets.
+    if: ${{ github.repository_owner == 'Tommaso-R-Marena' && github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -28,7 +29,9 @@ jobs:
       - name: Verify repository integrity, file modes and governance
         run: python scripts/check_repository_integrity.py
       - name: Install test dependencies
-        run: python -m pip install -e '.[dev]'
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
       - name: Build Lean 4 authority with project-source hygiene
         uses: leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865
         with:
