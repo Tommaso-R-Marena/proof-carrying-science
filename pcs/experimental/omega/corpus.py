@@ -111,6 +111,34 @@ def generate(*, seed=20261009, per_family=24):
     return validate_corpus(core)
 
 
+def family_matches(family, value):
+    """Validate family construction; a changed label cannot import a holdout."""
+    source, candidate = value["source"], value["candidate"]
+    try:
+        if family == "connective-confusion":
+            return source["op"] == "and" and candidate == binary("or", source["left"], source["right"])
+        if family == "negation-loss":
+            return source["op"] == "not" and candidate == source["body"]
+        if family == "swapped-implication":
+            return source["op"] == "implies" and candidate == binary("implies", source["right"], source["left"])
+        if family == "nested-connective":
+            body = source["body"]
+            return source["op"] == "not" and body["op"] == "or" and candidate == unary(binary("and", body["left"], body["right"]))
+        if family == "de-morgan":
+            body = source["body"]
+            return source["op"] == "not" and body["op"] == "and" and candidate == binary("or", unary(body["left"]), body["right"])
+        if family == "implication-expansion":
+            return source["op"] == "implies" and candidate == binary("or", source["left"], source["right"])
+        if family == "distribution":
+            a, body = source["left"], source["right"]
+            return source["op"] == "and" and body["op"] == "or" and candidate == binary("or", binary("and", a, body["left"]), binary("or", a, body["right"]))
+        if family == "absorption":
+            return candidate["op"] == "and" and candidate["left"] == source and candidate["right"]["op"] == "or" and candidate["right"]["left"] == unary(source)
+    except (KeyError, TypeError):
+        return False
+    return False
+
+
 def validate_corpus(corpus):
     exact(corpus, {"format", "generator", "seed", "per_family", "records", "corpus_sha256"}, "corpus")
     if corpus["format"] != "pcs-omega-corpus-v1" or corpus["generator"] != GENERATOR:
@@ -127,6 +155,8 @@ def validate_corpus(corpus):
                 type(r["id"]) is not str or r["id"] in ids):
             raise ValueError("Family split drift or duplicate ID")
         task(r["task"])
+        if not family_matches(r["family"], r["task"]):
+            raise ValueError("Task construction does not match its declared family")
         if (r["task_sha256"] != digest(r["task"]) or r["source_group"] != alpha_source(r["task"]["source"]) or
                 r["semantic_group"] != semantic_signature(r["task"])):
             raise ValueError("Forged corpus binding or semantics")

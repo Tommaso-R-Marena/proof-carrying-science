@@ -7,7 +7,7 @@ import random
 import re
 
 from .logic import action_id, actions, apply_action, check, digest, exact, integer, task, verify_receipt
-from .learning import features, rank, checkpoint, dimension, source_digest
+from .learning import features, rank, checkpoint, dimension, source_digest, validate_model
 
 
 def structural_distance(a, b):
@@ -22,7 +22,7 @@ def structural_distance(a, b):
 
 
 def search(value, *, strategy="structural", model=None, checks=8, depth=3, seed=42):
-    task(value)
+    value = deepcopy(task(value))
     integer(checks, 1, 128, "checker budget")
     integer(depth, 1, 4, "search depth")
     integer(seed, 0, 2**32 - 1, "search seed")
@@ -30,6 +30,8 @@ def search(value, *, strategy="structural", model=None, checks=8, depth=3, seed=
         raise ValueError("Unsupported search strategy")
     if strategy == "learned" and model is None:
         raise ValueError("Learned search requires an actual checkpoint")
+    if model is not None:
+        model = deepcopy(validate_model(model))
     initial, attempts, solved = check(value), [], None
     frontier = [(deepcopy(value["candidate"]), 0)]
     seen = {digest(value["candidate"])}
@@ -117,7 +119,7 @@ def verify_episode(episode):
         states[key] = (candidate, level + 1)
         if entry["receipt"]["equivalent"]:
             solved = {"candidate": candidate, "receipt": entry["receipt"]}
-    if episode["solution"] != solved or episode["status"] != ("BOOLEAN_VERIFIED" if solved else "BUDGET_OR_SEARCH_EXHAUSTED"):
+    if digest(episode["solution"]) != digest(solved) or episode["status"] != ("BOOLEAN_VERIFIED" if solved else "BUDGET_OR_SEARCH_EXHAUSTED"):
         raise ValueError("False terminal reward or solution")
     if episode["episode_sha256"] != digest({k: v for k, v in episode.items() if k != "episode_sha256"}):
         raise ValueError("Episode commitment mismatch")

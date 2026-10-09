@@ -100,7 +100,7 @@ def test_dependencies_reopen_transitively_and_reject_cycles(project):
         validate_project(project)
 
 
-@pytest.mark.parametrize("field", ["receipt", "parent", "depth", "goal", "solution", "accounting", "authority"])
+@pytest.mark.parametrize("field", ["receipt", "parent", "depth", "goal", "solution", "solution_boolean", "accounting", "authority"])
 def test_even_rehashed_forged_trajectories_are_rejected(project, field):
     episode = search(project["claims"][0]["task"], checks=8)
     assert verify_episode(episode)
@@ -115,6 +115,8 @@ def test_even_rehashed_forged_trajectories_are_rejected(project, field):
         episode["original_task_sha256"] = digest(episode["original_task"])
     elif field == "solution":
         episode["solution"] = None
+    elif field == "solution_boolean":
+        episode["solution"]["receipt"]["equivalent"] = 1
     elif field == "accounting":
         episode["checks_used"] += 1
     else:
@@ -164,7 +166,7 @@ def test_graph_features_have_no_checker_or_future_feedback(project, monkeypatch)
     assert len(features(value, action, "graph")) == 91
 
 
-@pytest.mark.parametrize("attack", ["partition", "duplicate", "provenance", "counts"])
+@pytest.mark.parametrize("attack", ["partition", "duplicate", "provenance", "counts", "balanced_relabel"])
 def test_corpus_leakage_and_provenance_rejected_after_rehash(corpus, attack):
     broken = deepcopy(corpus)
     if attack == "partition":
@@ -174,11 +176,23 @@ def test_corpus_leakage_and_provenance_rejected_after_rehash(corpus, attack):
         broken["records"][-1]["id"] = "a-new-name-cannot-hide-leakage"
     elif attack == "provenance":
         broken["records"][0]["provenance"]["personal_data"] = 0
+    elif attack == "balanced_relabel":
+        a = broken["records"][0]
+        b = next(r for r in broken["records"] if r["partition"] == "test")
+        a["family"], b["family"] = b["family"], a["family"]
+        a["partition"], b["partition"] = b["partition"], a["partition"]
     else:
         broken["per_family"] += 1
     rehash(broken, "corpus_sha256")
     with pytest.raises(ValueError):
         validate_corpus(broken)
+
+
+def test_already_equivalent_goal_still_requires_a_valid_learned_checkpoint(project):
+    value = project["claims"][0]["task"]
+    value["candidate"] = deepcopy(value["source"])
+    with pytest.raises(ValueError):
+        search(value, strategy="learned", model={"model_sha256": "0" * 64})
 
 
 def test_invalid_reward_actions_consume_budget_and_observations_are_copies(project):
