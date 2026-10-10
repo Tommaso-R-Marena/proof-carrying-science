@@ -27,19 +27,19 @@ root = "PCSCountermodelReplay"
 # Experimental typed reference models (no PCS authority; not imported by PCS/PCSAuthority).
 [[lean_lib]]
 name = "PCSOmega"
-moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+moreLeanArgs = ["-j1", "-M14000", "-D", "Elab.async=false"]
 roots = ["PCSOmega"]
 defaultFacets = ["leanArts"]
 
 [[lean_lib]]
 name = "PCSDecisionDiagram"
-moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+moreLeanArgs = ["-j1", "-M14000", "-D", "Elab.async=false"]
 roots = ["PCSDecisionDiagram"]
 defaultFacets = ["leanArts"]
 
 # Executed positive controls for the experimental models (kernel-checked `decide`).
 [[lean_lib]]
 name = "PCSControls"
-moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+moreLeanArgs = ["-j1", "-M14000", "-D", "Elab.async=false"]
 roots = ["PCSOmega.Controls", "PCSDecisionDiagram.Controls"]
 defaultFacets = ["leanArts"]
