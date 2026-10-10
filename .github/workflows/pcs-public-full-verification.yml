@@ -163,6 +163,19 @@ jobs:
         run: |
           set -euo pipefail
           bash scripts/core_ci_cloudflare.sh
+      - name: Check out pinned browser reasoning implementations for reference parity
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Tommaso-R-Marena/proof-carrying-science-site
+          ref: 711acdcb088654904e42d7cb94cbdd400df6eb7d
+          path: .ci-components/pcs-site
+          persist-credentials: false
+      - name: Compare actual Lean, Python and JavaScript bounded reasoning outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python scripts/verify_omega_dd_parity.py --site .ci-components/pcs-site --output "$RUNNER_TEMP/omega-dd-parity"
       - name: Genuine compiled semantic authority fixtures and Python client
         shell: bash
         run: |

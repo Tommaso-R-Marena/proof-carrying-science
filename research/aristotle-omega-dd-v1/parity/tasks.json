@@ -1,0 +1,7075 @@
+[
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [],
+        "source": {
+          "op": "true"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {},
+      "costs": {},
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [],
+        "source": {
+          "op": "false"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {},
+      "costs": {},
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [],
+        "source": {
+          "op": "true"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "false"
+          }
+        ]
+      },
+      "baseline": {},
+      "costs": {},
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 3,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A",
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A",
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A",
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": true,
+        "B": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 1
+      },
+      "locked": [
+        "A",
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "E"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          },
+          "right": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            }
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": true,
+        "E": false
+      },
+      "costs": {
+        "A": 7,
+        "B": 9,
+        "E": 9
+      },
+      "locked": [
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "true"
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": false,
+        "D": false,
+        "E": true
+      },
+      "costs": {
+        "A": 3,
+        "B": 9,
+        "D": 3,
+        "E": 4
+      },
+      "locked": [
+        "A",
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C",
+          "D"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "C",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "true"
+              }
+            }
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "C": false,
+        "D": true
+      },
+      "costs": {
+        "C": 6,
+        "D": 7
+      },
+      "locked": [
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          },
+          "right": {
+            "op": "not",
+            "body": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "D": true,
+        "E": false,
+        "F": false
+      },
+      "costs": {
+        "A": 8,
+        "D": 2,
+        "E": 1,
+        "F": 9
+      },
+      "locked": [
+        "D",
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "C": false,
+        "D": true,
+        "E": true,
+        "F": false
+      },
+      "costs": {
+        "A": 4,
+        "C": 5,
+        "D": 9,
+        "E": 3,
+        "F": 4
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true,
+        "E": true
+      },
+      "costs": {
+        "A": 6,
+        "B": 4,
+        "C": 4,
+        "D": 5,
+        "E": 1
+      },
+      "locked": [
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [],
+        "source": {
+          "op": "false"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {},
+      "costs": {},
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "false"
+              }
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false,
+        "E": true,
+        "F": false
+      },
+      "costs": {
+        "A": 8,
+        "B": 6,
+        "C": 7,
+        "D": 5,
+        "E": 3,
+        "F": 3
+      },
+      "locked": [
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "D",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "D": false
+      },
+      "costs": {
+        "D": 9
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "implies",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          },
+          {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "D",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "D": true,
+        "E": true,
+        "F": true
+      },
+      "costs": {
+        "D": 7,
+        "E": 7,
+        "F": 3
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "C": true,
+        "D": true,
+        "E": true,
+        "F": false
+      },
+      "costs": {
+        "A": 1,
+        "C": 7,
+        "D": 8,
+        "E": 5,
+        "F": 2
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "D",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "D": false,
+        "E": true
+      },
+      "costs": {
+        "A": 3,
+        "D": 8,
+        "E": 3
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "not",
+            "body": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "C": true
+      },
+      "costs": {
+        "C": 9
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "implies",
+            "left": {
+              "op": "true"
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "F": true
+      },
+      "costs": {
+        "F": 7
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": true,
+        "D": true,
+        "E": true,
+        "F": true
+      },
+      "costs": {
+        "A": 3,
+        "B": 9,
+        "D": 3,
+        "E": 3,
+        "F": 6
+      },
+      "locked": [
+        "A",
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "true"
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "B": true,
+        "C": false,
+        "D": true
+      },
+      "costs": {
+        "A": 8,
+        "B": 2,
+        "C": 6,
+        "D": 1
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "E"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "B": false,
+        "E": false
+      },
+      "costs": {
+        "B": 6,
+        "E": 3
+      },
+      "locked": [
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": true,
+        "C": false,
+        "D": false,
+        "E": true,
+        "F": true
+      },
+      "costs": {
+        "B": 1,
+        "C": 4,
+        "D": 6,
+        "E": 5,
+        "F": 1
+      },
+      "locked": [
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            }
+          },
+          {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "C": true,
+        "E": false,
+        "F": true
+      },
+      "costs": {
+        "A": 4,
+        "C": 2,
+        "E": 7,
+        "F": 5
+      },
+      "locked": [
+        "A",
+        "C"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "D",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": true,
+        "C": true,
+        "D": false,
+        "E": false
+      },
+      "costs": {
+        "A": 2,
+        "B": 4,
+        "C": 9,
+        "D": 6,
+        "E": 4
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "D",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "D": false,
+        "E": false
+      },
+      "costs": {
+        "D": 9,
+        "E": 8
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "not",
+            "body": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "D": true,
+        "F": false
+      },
+      "costs": {
+        "D": 1,
+        "F": 1
+      },
+      "locked": [
+        "D",
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "F"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "F",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "B": false,
+        "F": true
+      },
+      "costs": {
+        "B": 4,
+        "F": 5
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "D",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "C",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "atom",
+              "symbol": "C",
+              "args": []
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "C": true,
+        "D": true,
+        "F": true
+      },
+      "costs": {
+        "A": 9,
+        "C": 2,
+        "D": 9,
+        "F": 6
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "C",
+          "E"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "true"
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": false,
+        "C": true,
+        "E": true
+      },
+      "costs": {
+        "B": 8,
+        "C": 7,
+        "E": 6
+      },
+      "locked": [
+        "C",
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "true"
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "D",
+              "args": []
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": true,
+        "D": false,
+        "E": false,
+        "F": true
+      },
+      "costs": {
+        "B": 8,
+        "D": 8,
+        "E": 3,
+        "F": 6
+      },
+      "locked": [
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "F"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "F",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "F": false
+      },
+      "costs": {
+        "F": 4
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "F",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "C": false,
+        "D": false,
+        "E": false,
+        "F": false
+      },
+      "costs": {
+        "C": 4,
+        "D": 6,
+        "E": 7,
+        "F": 7
+      },
+      "locked": [
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "C": true,
+        "D": false,
+        "E": false,
+        "F": true
+      },
+      "costs": {
+        "A": 3,
+        "C": 4,
+        "D": 3,
+        "E": 3,
+        "F": 6
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "D"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "true"
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": false,
+        "D": false
+      },
+      "costs": {
+        "A": 1,
+        "B": 8,
+        "D": 5
+      },
+      "locked": [
+        "B",
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [],
+        "source": {
+          "op": "true"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {},
+      "costs": {},
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": false,
+        "C": false,
+        "D": true,
+        "E": false,
+        "F": false
+      },
+      "costs": {
+        "A": 2,
+        "B": 1,
+        "C": 6,
+        "D": 3,
+        "E": 4,
+        "F": 6
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          },
+          "right": {
+            "op": "not",
+            "body": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "true"
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "false"
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": true,
+        "D": false,
+        "F": true
+      },
+      "costs": {
+        "A": 5,
+        "B": 7,
+        "D": 2,
+        "F": 9
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "C": true
+      },
+      "costs": {
+        "C": 7
+      },
+      "locked": [
+        "C"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "B",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "true"
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": false,
+        "C": false,
+        "D": false,
+        "E": false,
+        "F": false
+      },
+      "costs": {
+        "A": 8,
+        "B": 3,
+        "C": 5,
+        "D": 7,
+        "E": 7,
+        "F": 1
+      },
+      "locked": [
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "D",
+              "args": []
+            }
+          },
+          "right": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "true"
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "C": false,
+        "D": false,
+        "E": true,
+        "F": false
+      },
+      "costs": {
+        "A": 2,
+        "C": 1,
+        "D": 8,
+        "E": 8,
+        "F": 8
+      },
+      "locked": [
+        "A",
+        "C",
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "C": true
+      },
+      "costs": {
+        "C": 9
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "not",
+            "body": {
+              "op": "true"
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "false"
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "D": true
+      },
+      "costs": {
+        "D": 9
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          },
+          "right": {
+            "op": "not",
+            "body": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": true,
+        "F": false
+      },
+      "costs": {
+        "A": 8,
+        "B": 1,
+        "F": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "C": true,
+        "D": false,
+        "E": true,
+        "F": true
+      },
+      "costs": {
+        "A": 8,
+        "C": 9,
+        "D": 7,
+        "E": 8,
+        "F": 8
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "E",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": false,
+        "E": false,
+        "F": false
+      },
+      "costs": {
+        "B": 1,
+        "E": 5,
+        "F": 8
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "C",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "not",
+            "body": {
+              "op": "and",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": false,
+        "C": false,
+        "D": true,
+        "F": true
+      },
+      "costs": {
+        "B": 6,
+        "C": 8,
+        "D": 2,
+        "F": 7
+      },
+      "locked": [
+        "C"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "C": true,
+        "D": true,
+        "E": false,
+        "F": true
+      },
+      "costs": {
+        "A": 8,
+        "C": 9,
+        "D": 2,
+        "E": 4,
+        "F": 9
+      },
+      "locked": [
+        "C"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": false,
+        "F": true
+      },
+      "costs": {
+        "A": 9,
+        "B": 5,
+        "F": 9
+      },
+      "locked": [
+        "B",
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": true,
+        "C": true,
+        "D": false,
+        "F": true
+      },
+      "costs": {
+        "A": 5,
+        "B": 5,
+        "C": 8,
+        "D": 2,
+        "F": 5
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "E"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "true"
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": true,
+        "C": true,
+        "E": true
+      },
+      "costs": {
+        "A": 1,
+        "B": 9,
+        "C": 6,
+        "E": 7
+      },
+      "locked": [
+        "A",
+        "C",
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "D": true
+      },
+      "costs": {
+        "D": 9
+      },
+      "locked": [
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "A": false,
+        "F": true
+      },
+      "costs": {
+        "A": 1,
+        "F": 2
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "D",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "D": true
+      },
+      "costs": {
+        "D": 6
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "false"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "C",
+              "args": []
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "and",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "C": true,
+        "D": false,
+        "E": true,
+        "F": true
+      },
+      "costs": {
+        "C": 2,
+        "D": 6,
+        "E": 5,
+        "F": 3
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "E"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "implies",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "E": false
+      },
+      "costs": {
+        "E": 3
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": false,
+        "C": false,
+        "D": false,
+        "E": false,
+        "F": false
+      },
+      "costs": {
+        "A": 3,
+        "B": 3,
+        "C": 1,
+        "D": 5,
+        "E": 7,
+        "F": 5
+      },
+      "locked": [
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "not",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "true"
+              }
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "B": true,
+        "D": true,
+        "E": true
+      },
+      "costs": {
+        "A": 9,
+        "B": 1,
+        "D": 1,
+        "E": 7
+      },
+      "locked": [
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "C",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            }
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "F",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "false"
+          },
+          {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": true,
+        "C": false,
+        "F": true
+      },
+      "costs": {
+        "B": 1,
+        "C": 7,
+        "F": 8
+      },
+      "locked": [
+        "C"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "E"
+        ],
+        "source": {
+          "op": "atom",
+          "symbol": "E",
+          "args": []
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "true"
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "B": false,
+        "E": false
+      },
+      "costs": {
+        "B": 1,
+        "E": 8
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "true"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          },
+          {
+            "op": "not",
+            "body": {
+              "op": "atom",
+              "symbol": "F",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": true,
+        "C": false,
+        "D": false,
+        "F": false
+      },
+      "costs": {
+        "A": 4,
+        "B": 6,
+        "C": 8,
+        "D": 7,
+        "F": 2
+      },
+      "locked": [
+        "B",
+        "D"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "or",
+            "left": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "not",
+            "body": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            }
+          },
+          {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": false,
+        "B": true,
+        "C": false,
+        "D": false,
+        "E": true,
+        "F": false
+      },
+      "costs": {
+        "A": 3,
+        "B": 2,
+        "C": 6,
+        "D": 8,
+        "E": 5,
+        "F": 8
+      },
+      "locked": [
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 1,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "C",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "true"
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "B": false,
+        "C": true,
+        "D": true,
+        "F": false
+      },
+      "costs": {
+        "B": 3,
+        "C": 8,
+        "D": 8,
+        "F": 4
+      },
+      "locked": [
+        "F"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "A",
+          "F"
+        ],
+        "source": {
+          "op": "true"
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "false"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "A",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          },
+          {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "false"
+              }
+            },
+            "right": {
+              "op": "atom",
+              "symbol": "A",
+              "args": []
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "A": true,
+        "F": true
+      },
+      "costs": {
+        "A": 2,
+        "F": 1
+      },
+      "locked": [
+        "A"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C",
+          "D",
+          "E"
+        ],
+        "source": {
+          "op": "implies",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "true"
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "E",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          }
+        ]
+      },
+      "baseline": {
+        "C": false,
+        "D": false,
+        "E": false
+      },
+      "costs": {
+        "C": 5,
+        "D": 7,
+        "E": 4
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "E"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "or",
+            "left": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            },
+            "right": {
+              "op": "not",
+              "body": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "false"
+            },
+            "right": {
+              "op": "false"
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "B": false,
+        "E": false
+      },
+      "costs": {
+        "B": 5,
+        "E": 7
+      },
+      "locked": [
+        "B"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "D",
+          "E",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "E",
+              "args": []
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "atom",
+                "symbol": "D",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "false"
+          }
+        ]
+      },
+      "baseline": {
+        "D": true,
+        "E": true,
+        "F": true
+      },
+      "costs": {
+        "D": 7,
+        "E": 1,
+        "F": 9
+      },
+      "locked": [
+        "D",
+        "E"
+      ]
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "C",
+          "D",
+          "F"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "D",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": [
+          {
+            "op": "and",
+            "left": {
+              "op": "atom",
+              "symbol": "D",
+              "args": []
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              }
+            }
+          }
+        ]
+      },
+      "baseline": {
+        "C": true,
+        "D": false,
+        "F": true
+      },
+      "costs": {
+        "C": 9,
+        "D": 7,
+        "F": 2
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "B",
+          "C",
+          "F"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "or",
+            "left": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "C",
+                "args": []
+              },
+              "right": {
+                "op": "atom",
+                "symbol": "B",
+                "args": []
+              }
+            },
+            "right": {
+              "op": "implies",
+              "left": {
+                "op": "atom",
+                "symbol": "F",
+                "args": []
+              },
+              "right": {
+                "op": "true"
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "B": true,
+        "C": true,
+        "F": true
+      },
+      "costs": {
+        "B": 3,
+        "C": 3,
+        "F": 3
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "V00",
+          "V01",
+          "V02",
+          "V03",
+          "V04",
+          "V05",
+          "V06",
+          "V07",
+          "V08",
+          "V09",
+          "V10",
+          "V11",
+          "V12",
+          "V13",
+          "V14",
+          "V15",
+          "V16",
+          "V17",
+          "V18",
+          "V19",
+          "V20",
+          "V21",
+          "V22",
+          "V23"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "or",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V00",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V01",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V02",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V03",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V04",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V05",
+                    "args": []
+                  }
+                }
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "or",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V06",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V07",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V08",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V09",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V10",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V11",
+                    "args": []
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "or",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V12",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V13",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V14",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V15",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V16",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V17",
+                    "args": []
+                  }
+                }
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "or",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V18",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V19",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V20",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V21",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "or",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V22",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V23",
+                    "args": []
+                  }
+                }
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "V00": false,
+        "V01": false,
+        "V02": false,
+        "V03": false,
+        "V04": false,
+        "V05": false,
+        "V06": false,
+        "V07": false,
+        "V08": false,
+        "V09": false,
+        "V10": false,
+        "V11": false,
+        "V12": false,
+        "V13": false,
+        "V14": false,
+        "V15": false,
+        "V16": false,
+        "V17": false,
+        "V18": false,
+        "V19": false,
+        "V20": false,
+        "V21": false,
+        "V22": false,
+        "V23": false
+      },
+      "costs": {
+        "V00": 1,
+        "V01": 1,
+        "V02": 1,
+        "V03": 1,
+        "V04": 1,
+        "V05": 1,
+        "V06": 1,
+        "V07": 1,
+        "V08": 1,
+        "V09": 1,
+        "V10": 1,
+        "V11": 1,
+        "V12": 1,
+        "V13": 1,
+        "V14": 1,
+        "V15": 1,
+        "V16": 1,
+        "V17": 1,
+        "V18": 1,
+        "V19": 1,
+        "V20": 1,
+        "V21": 1,
+        "V22": 1,
+        "V23": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "V00",
+          "V01",
+          "V02",
+          "V03",
+          "V04",
+          "V05",
+          "V06",
+          "V07",
+          "V08",
+          "V09",
+          "V10",
+          "V11",
+          "V12",
+          "V13",
+          "V14",
+          "V15",
+          "V16",
+          "V17",
+          "V18",
+          "V19",
+          "V20",
+          "V21",
+          "V22",
+          "V23"
+        ],
+        "source": {
+          "op": "not",
+          "body": {
+            "op": "and",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V00",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V01",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V02",
+                      "args": []
+                    }
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V03",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V04",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V05",
+                      "args": []
+                    }
+                  }
+                }
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V06",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V07",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V08",
+                      "args": []
+                    }
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V09",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V10",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V11",
+                      "args": []
+                    }
+                  }
+                }
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V12",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V13",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V14",
+                      "args": []
+                    }
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V15",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V16",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V17",
+                      "args": []
+                    }
+                  }
+                }
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V18",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V19",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V20",
+                      "args": []
+                    }
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V21",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "atom",
+                      "symbol": "V22",
+                      "args": []
+                    },
+                    "right": {
+                      "op": "atom",
+                      "symbol": "V23",
+                      "args": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "V00": false,
+        "V01": false,
+        "V02": false,
+        "V03": false,
+        "V04": false,
+        "V05": false,
+        "V06": false,
+        "V07": false,
+        "V08": false,
+        "V09": false,
+        "V10": false,
+        "V11": false,
+        "V12": false,
+        "V13": false,
+        "V14": false,
+        "V15": false,
+        "V16": false,
+        "V17": false,
+        "V18": false,
+        "V19": false,
+        "V20": false,
+        "V21": false,
+        "V22": false,
+        "V23": false
+      },
+      "costs": {
+        "V00": 1,
+        "V01": 1,
+        "V02": 1,
+        "V03": 1,
+        "V04": 1,
+        "V05": 1,
+        "V06": 1,
+        "V07": 1,
+        "V08": 1,
+        "V09": 1,
+        "V10": 1,
+        "V11": 1,
+        "V12": 1,
+        "V13": 1,
+        "V14": 1,
+        "V15": 1,
+        "V16": 1,
+        "V17": 1,
+        "V18": 1,
+        "V19": 1,
+        "V20": 1,
+        "V21": 1,
+        "V22": 1,
+        "V23": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    }
+  },
+  {
+    "task": {
+      "format": "pcs-intervention-task-v1",
+      "problem": {
+        "format": "pcs-conditional-boolean-task-v1",
+        "variables": [
+          "V00",
+          "V01",
+          "V02",
+          "V03",
+          "V04",
+          "V05",
+          "V06",
+          "V07",
+          "V08",
+          "V09",
+          "V10",
+          "V11",
+          "V12",
+          "V13",
+          "V14",
+          "V15",
+          "V16",
+          "V17",
+          "V18",
+          "V19",
+          "V20",
+          "V21",
+          "V22",
+          "V23"
+        ],
+        "source": {
+          "op": "or",
+          "left": {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V00",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V12",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "or",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V01",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V13",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V02",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V14",
+                    "args": []
+                  }
+                }
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V03",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V15",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "or",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V04",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V16",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V05",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V17",
+                    "args": []
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "or",
+            "left": {
+              "op": "or",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V06",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V18",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "or",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V07",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V19",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V08",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V20",
+                    "args": []
+                  }
+                }
+              }
+            },
+            "right": {
+              "op": "or",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "atom",
+                  "symbol": "V09",
+                  "args": []
+                },
+                "right": {
+                  "op": "atom",
+                  "symbol": "V21",
+                  "args": []
+                }
+              },
+              "right": {
+                "op": "or",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V10",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V22",
+                    "args": []
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "atom",
+                    "symbol": "V11",
+                    "args": []
+                  },
+                  "right": {
+                    "op": "atom",
+                    "symbol": "V23",
+                    "args": []
+                  }
+                }
+              }
+            }
+          }
+        },
+        "candidate": {
+          "op": "false"
+        },
+        "assumptions": []
+      },
+      "baseline": {
+        "V00": false,
+        "V01": false,
+        "V02": false,
+        "V03": false,
+        "V04": false,
+        "V05": false,
+        "V06": false,
+        "V07": false,
+        "V08": false,
+        "V09": false,
+        "V10": false,
+        "V11": false,
+        "V12": false,
+        "V13": false,
+        "V14": false,
+        "V15": false,
+        "V16": false,
+        "V17": false,
+        "V18": false,
+        "V19": false,
+        "V20": false,
+        "V21": false,
+        "V22": false,
+        "V23": false
+      },
+      "costs": {
+        "V00": 1,
+        "V01": 1,
+        "V02": 1,
+        "V03": 1,
+        "V04": 1,
+        "V05": 1,
+        "V06": 1,
+        "V07": 1,
+        "V08": 1,
+        "V09": 1,
+        "V10": 1,
+        "V11": 1,
+        "V12": 1,
+        "V13": 1,
+        "V14": 1,
+        "V15": 1,
+        "V16": 1,
+        "V17": 1,
+        "V18": 1,
+        "V19": 1,
+        "V20": 1,
+        "V21": 1,
+        "V22": 1,
+        "V23": 1
+      },
+      "locked": []
+    },
+    "limits": {
+      "nodes": 40,
+      "operations": 100000
+    }
+  }
+]
