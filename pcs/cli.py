@@ -2410,6 +2410,8 @@ def build_parser():
     register_omega(sub)
     from pcs.experimental.conditional_cli import register as register_conditional
     register_conditional(sub)
+    from pcs.experimental.intervention_cli import register as register_intervention
+    register_intervention(sub)
 
     return p
 
