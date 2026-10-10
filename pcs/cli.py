@@ -2408,6 +2408,8 @@ def build_parser():
 
     from pcs.experimental.omega.cli import register as register_omega
     register_omega(sub)
+    from pcs.experimental.conditional_cli import register as register_conditional
+    register_conditional(sub)
 
     return p
 
