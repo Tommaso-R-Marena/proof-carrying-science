@@ -44,6 +44,10 @@ The DP adds at most 4,096 node visits and two branch inspections per node.
 The full receipt records the original task, symbolic receipt, all Bellman cells,
 assignment, costs, counts and masks. Verification independently regenerates the
 entire deterministic receipt and compares canonical content, including scope flags.
+Before returning a plan, a direct AST evaluation also checks its target, every
+premise, all locks and the reported objective. This guard remains active under
+Python optimization. It checks the concrete point; global optimality/count still
+depend on the diagram/Bellman algorithms and their open general proof obligations.
 Hashes identify content; they do not authenticate an authority or prove correctness.
 
 ```sh

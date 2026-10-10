@@ -91,6 +91,15 @@ def plan(task, limits=None):
                 assignment[names[var]] = value
                 root = high if value else low
             assert root == 1
+            # Check the chosen point against the AST as well as the diagram.
+            # This guard remains active under python -O; a bad internal witness
+            # must never escape as an accepted plan even with an unproved bridge.
+            valid = evaluate(task['problem']['source'], assignment) and all(
+                evaluate(f, assignment) for f in task['problem']['assumptions'])
+            valid = valid and all(assignment[n] == task['baseline'][n] for n in task['locked'])
+            actual_cost = sum(task['costs'][n] for n in names if assignment[n] != task['baseline'][n])
+            if not valid or actual_cost != cell[0]:
+                raise ValueError('Internal plan witness does not match the declared task or cost')
             result.update(decision='optimal_plan', minimum_cost=cell[0], optimal_count=cell[1],
                           assignment=assignment, flips=[n for n in names if assignment[n] != task['baseline'][n]],
                           mandatory_flips=[n for i, n in enumerate(names) if cell[2] & (1 << i)],

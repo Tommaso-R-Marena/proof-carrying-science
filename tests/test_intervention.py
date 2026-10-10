@@ -131,3 +131,37 @@ def test_model_proposals_receive_real_feasibility_and_cost_gaps():
     assert r['lock_violations'] == ['B'] and not r['feasible'] and r['optimality_gap'] is None
     r = audit_proposal(task('A AND B'), {'A': True, 'B': True}, {'nodes': 1, 'operations': 100000})
     assert r['feasible'] and r['optimality_gap'] is None
+
+
+@pytest.mark.parametrize('corruption', ['goal', 'cost'])
+def test_internal_witness_guard_remains_active_under_python_optimization(corruption):
+    # Model a fault in the still-unproved compilation/Bellman bridge. Neither a
+    # false goal nor a wrong claimed objective may be returned as an accepted plan.
+    code = '''
+import sys
+import pcs.experimental.intervention as m
+from pcs.experimental.conditional import from_text
+p=from_text('A OR B','FALSE')
+t={'format':m.TASK,'problem':p,'baseline':{'A':False,'B':False},'costs':{'A':1,'B':1},'locked':[]}
+if sys.argv[1]=='goal':
+ original=m.check
+ def bad(*args):
+  r=original(*args);r['diagram']['difference']=1;return r
+ m.check=bad
+else:
+ original=m.bellman
+ def bad(*args):
+  cells,choices=original(*args)
+  for cell in cells:
+   if cell is not None:cell[0]=0
+  return cells,choices
+ m.bellman=bad
+try:m.plan(t)
+except ValueError as error:
+ if 'Internal plan witness' not in str(error):raise
+ print('corrupted internal witness rejected');sys.exit(0)
+raise SystemExit('corrupted internal witness escaped')
+'''
+    run = subprocess.run([sys.executable, '-O', '-c', code, corruption], text=True, capture_output=True)
+    assert run.returncode == 0, run.stdout + run.stderr
+    assert 'corrupted internal witness rejected' in run.stdout
