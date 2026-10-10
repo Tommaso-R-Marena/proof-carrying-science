@@ -1,0 +1,47 @@
+name: PCS Public Lean Research
+run-name: PCS public Lean ${{ inputs.request_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: Receiver-generated public request identifier
+        required: true
+        type: string
+      statement:
+        description: Public CC0 mathematical English; never executable code
+        required: true
+        type: string
+      interpretation:
+        description: Optional selected interpretation index
+        required: false
+        type: string
+permissions:
+  contents: read
+jobs:
+  public-lean:
+    name: public-lean
+    if: ${{ github.event.repository.private == false && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12.14"
+      - name: Pinned CPU implementation and Lean 4.28
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock -r requirements-prover.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Run immutable theorem through trained policy and fresh kernel check
+        env:
+          PCS_PUBLIC_REQUEST_ID: ${{ inputs.request_id }}
+          PCS_PUBLIC_STATEMENT: ${{ inputs.statement }}
+          PCS_PUBLIC_INTERPRETATION: ${{ inputs.interpretation }}
+        run: python -m pcs.experimental.prover.public_job
+      # No artifact uploads or paid runners; exact result is in public job logs.
