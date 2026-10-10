@@ -29,3 +29,27 @@ def test_only_expected_semantic_rejection_is_accepted():
                       (1, text + "error: unexpected token"), (1, text.replace("some 0", "some 2"))]:
         with pytest.raises(ValueError):
             check_negative(code, log, ["some 1 = some 0"])
+
+
+from scripts.verify_omega_dd_formal import check_control_overlay
+ORIGINAL='''def smallLim : Limits := ⟨40, 100000⟩
+example : (check tDense smallLim).decision = .resourceLimit := by decide
+
+theorem count_control : count = 4096 := by decide
+example : flag = false := by decide
+example : flag = false := by decide
+'''
+def test_proof_changes_preserve_original_obligations():
+    changed=ORIGINAL.replace('by decide','by exact independentlyCheckedEvidence')
+    assert check_control_overlay(ORIGINAL,changed)['original_assertions_preserved']==4
+@pytest.mark.parametrize('old,new',[
+ ('count = 4096','count = 4095'),
+ ('.resourceLimit','.counterexample'),
+ ('⟨40, 100000⟩','⟨41, 100000⟩'),
+ ('flag = false','flag = true'),
+])
+def test_weakened_or_modified_control_is_rejected(old,new):
+    with pytest.raises(ValueError):check_control_overlay(ORIGINAL,ORIGINAL.replace(old,new))
+def test_duplicate_anonymous_obligations_cannot_be_dropped():
+    changed=ORIGINAL.replace('example : flag = false := by decide\n','',1)
+    with pytest.raises(ValueError):check_control_overlay(ORIGINAL,changed)

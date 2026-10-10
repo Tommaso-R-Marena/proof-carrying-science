@@ -34,8 +34,8 @@ not an exhaustive evaluation of the 24-variable input domain or an implementatio
 The JavaScript receipts also match the Python receipts including canonical content hashes.
 
 The 457 targeted Omega, conditional, intervention and integration tests pass locally.
-Seven gate integrity tests reject missing/duplicate/substituted axiom inventories, custom
-axioms, non-semantic negative failures, extra compiler errors and false success statuses.
+Thirteen gate integrity tests reject missing/duplicate/substituted axiom inventories, custom
+axioms, non-semantic negative failures, extra compiler errors, false success statuses, changed control conclusions/limits and dropped duplicate assertions.
 
 ## Reproduction
 
@@ -72,7 +72,7 @@ proof modules and existing authorities completed. `independent-build.json` recor
 `general-audit.json` independently records 214 checked general theorem inventories
 and all three intended false-claim rejections.
 
-Integration preserves every returned Lean source byte. The Lake configuration builds
+The initial integration candidate preserved every returned Lean source byte. The Lake configuration builds
 reference libraries with the authorities and runs `PCSControls` afterward through the
 required `verify_lean.sh` gate. New library compilation uses `-j1 -M40000` with
 synchronous elaboration (`Elab.async=false`). This changes resources, not assertions,
@@ -93,3 +93,15 @@ the swap file is never uploaded. Full compilation, all 226 axiom inventories and
 semantic negative controls must pass in protected CI before merge. Source identity,
 finite runtime comparisons and the general local proof audit are already recorded;
 this report does not substitute returned logs or a cancelled diagnostic for CI.
+
+## Kernel computation certificates
+
+The initial standard-runner full-control attempt (run 38069883455) was cancelled after nearly two hours without control completion. It is a failed release attempt. The new proof-only integration retains all original reference algorithms, control declarations, theorem types, authority imports, toolchain and lock. Twenty-one returned source files remain byte-identical; the original decision-diagram Controls file is preserved byte-for-byte under `returned-source/`. Three control proof bodies now use ordinary-kernel computation certificates, with one generic summary lemma added. `check_control_overlay` independently enforces every original executable definition and all 57 decision-diagram assertions, including duplicate anonymous assertions.
+
+`PCSReferenceCertificates.FuelStable` proves successful apply computations preserve their complete result and work manager under additional structural fuel. `Compile` derives the unchanged compiler/pipeline output from typed compositional certificates. `Apply` derives each exact apply transition from its operation guard, memo lookup, terminal or recursive low/high/node steps. `Plan` proves substitution through the unchanged checker and complete planner body. The native fixed-task generators are untrusted proposal programs; byte reproduction does not verify a theorem. The Lean kernel checks every generated certificate separately. There is no alternative semantic authority.
+
+The exact successful prototype sources, commands, process limits, exit statuses and complete axiom inventory are retained in [kernel-portability](kernel-portability/result.json). The 24-variable De Morgan module passes in 308.1 seconds at 5,671,352 KiB peak process RSS; the complete 12-choice/24-variable intervention receipt passes in 68.0 seconds at 2,327,700 KiB; the dense 12-variable check passes in 620.2 seconds at 6,165,916 KiB. All use the ordinary Lean 4.28 kernel with `-M6000`. The dense module needs a 12 GiB address-space allowance for export; earlier 8 GiB attempts completed the theorem axiom audit but failed module export and are not successful builds. The complete original decision-diagram controls then pass in 29.0 seconds at 1,322,960 KiB. These wall times are specific to this CPU workspace, not a hardware-matched speed comparison.
+
+The independent complete prototype inventory checks all 226 original named positive theorems plus 1,071 computation-certificate helper lemmas against only `propext`, `Classical.choice`, and `Quot.sound`. Helper lemmas are individual proof transitions, not extra benchmark problems, model solves, human data or newly discovered mathematics. All 66 original positive executable controls remain required. The 31-source manifest distinguishes integrated sources from all 22 original returned source digests and the archived original control/audit files.
+
+`verify_lean.sh` first checks generator byte reproduction, builds the three large certificate targets sequentially, then compiles the full mandatory `PCSControls` target and runs the principal, complete and semantic-negative audits. The existing standard public runner and bounded temporary swap remain; no paid runner, GPU, artifact upload or financial information is introduced. Exact integrated-source compilation and protected CI must also pass before merge. Successful prototype evidence is not substituted for those release checks. Python/JavaScript refinement and all scientific authority obligations remain open.

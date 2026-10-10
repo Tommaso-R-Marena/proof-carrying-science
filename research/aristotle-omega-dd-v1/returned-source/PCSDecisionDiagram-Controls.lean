@@ -1,17 +1,13 @@
-import PCSReferenceCertificates.DeMorgan
-import PCSReferenceCertificates.Choices
-import PCSReferenceCertificates.DenseControl
 import PCSDecisionDiagram.Intervention
 import PCSDecisionDiagram.Validate
 
 /-!
 # Executed controls for the conditional checker and the intervention planner
 
-Small examples are closed by ordinary kernel-checked `decide` or `decide +kernel` (no
+Every example is closed by ordinary kernel-checked `decide` or `decide +kernel` (no
 `native_decide`, no `Lean.ofReduceBool`; `+kernel` skips the slow elaborator pre-evaluation and
 leaves the check to the kernel), combined
-with the general theorems where a semantic statement is required. The three larger controls use
-ordinary-kernel computation certificates proved equivalent to the original computations.  The 24-variable controls are
+with the general theorems where a semantic statement is required.  The 24-variable controls are
 evaluated through the bounded symbolic pipeline (diagram compilation and the Bellman pass), never
 by enumerating `2^24` assignments.
 -/
@@ -63,7 +59,7 @@ def dm24 : CTask 24 := ⟨.not (balR vr .and 6 0 24), balR (fun i => .not (vr i)
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 theorem dm24_decision : (check dm24 DEFAULT_LIMITS).decision = .equivalentUnderAssumptions := by
-  exact equivalent_from_certificates (t := dm24) (by rfl) StagedControl.c0 StagedControl.c48 StagedControl.hx StagedControl.ha (by decide)
+  decide +kernel
 theorem dm24_equivalent : ∀ ρ, dm24.source.eval ρ = dm24.candidate.eval ρ := fun ρ =>
   (check_equivalent dm24 DEFAULT_LIMITS dm24_decision).2.2 ρ (by simp [allEval, dm24])
 
@@ -75,8 +71,7 @@ example : (check tDense smallLim).decision = .resourceLimit := by decide +kernel
 example : (check tDense smallLim).limitReached = some .nodes := by decide +kernel
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-example : (check tDense DEFAULT_LIMITS).decision = .counterexample := by
-  exact StagedDense.result
+example : (check tDense DEFAULT_LIMITS).decision = .counterexample := by decide +kernel
 theorem tDense_nothing_claimed :
     (check tDense smallLim).counterexample = none ∧ (check tDense smallLim).diagram = none :=
   have h := check_resource_limit tDense smallLim (by decide +kernel)
@@ -135,15 +130,6 @@ theorem lockBoth_infeasible : ∀ a, ¬ IFeasible lockBoth a := by
 def skipB : ITask 2 := ⟨⟨.or A2 (.and B2 (.not B2)), .ff, []⟩, [false, true], [5, 7], []⟩
 example : isum skipB = some ⟨.optimalPlan, some 5, some 1, some [true, true], some [0], some [0]⟩ := by decide +kernel
 
-theorem isum_of_plan {t : ITask n} {lim : Limits} {r : IReceipt n} {s : ISum}
-    (h : plan t lim = .ok r)
-    (hs : (⟨r.decision, r.minimumCost, r.optimalCount, r.assignment, r.mandatory, r.possible⟩ : ISum) = s) :
-    isum t lim = some s := by
-  unfold isum
-  rw [h]
-  dsimp only
-  rw [hs]
-
 /-- Twelve disjoint two-variable choices over 24 variables: minimum 12, count 4096. -/
 def pairs12 : BForm 24 := balR (fun k => .or (vr (2 * k)) (vr (2 * k + 1))) .and 5 0 12
 def choices12 : ITask 24 :=
@@ -153,7 +139,7 @@ set_option maxHeartbeats 0 in
 theorem choices12_summary : isum choices12 = some ⟨.optimalPlan, some 12, some 4096,
     some ((List.replicate 12 [false, true]).flatten), some [],
     some (List.range 24)⟩ := by
-  exact isum_of_plan (t := choices12) StagedChoices.result (by rfl)
+  decide +kernel
 
 /-- `n = 0`: target `TRUE` has the empty optimal plan; target `FALSE` is infeasible. -/
 def zeroT : ITask 0 := ⟨⟨.tt, .ff, []⟩, [], [], []⟩

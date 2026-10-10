@@ -9,7 +9,12 @@ echo "Lean toolchain:"
 lean --version
 
 lake build
-# Keep expensive controls apart from the authority build to bound peak memory.
+python "$ROOT/scripts/generate_omega_dd_control_certificates.py"
+# Build each large proof certificate separately to bound peak memory across Lean processes.
+for certificate in DeMorgan Choices DenseControl; do
+  lake build "+PCSReferenceCertificates.$certificate:leanArts"
+done
+# Keep all original positive controls mandatory.
 lake build PCSControls
 
 # Avoid ambiguous escaped word-boundary regexes. Match identifiers as tokens.

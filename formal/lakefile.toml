@@ -43,3 +43,10 @@ name = "PCSControls"
 moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
 roots = ["PCSOmega.Controls", "PCSDecisionDiagram.Controls"]
 defaultFacets = ["leanArts"]
+
+# Proof-only computation certificates; no changes to the reference algorithms.
+[[lean_lib]]
+name = "PCSReferenceCertificates"
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+roots = ["PCSReferenceCertificates"]
+defaultFacets = ["leanArts"]
