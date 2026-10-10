@@ -74,8 +74,22 @@ and all three intended false-claim rejections.
 
 Integration preserves every returned Lean source byte. The Lake configuration builds
 reference libraries with the authorities and runs `PCSControls` afterward through the
-required `verify_lean.sh` gate. New library compilation uses one Lean thread and a
-14000 MB limit with synchronous elaboration (`Elab.async=false`). This is a resource profile change, not a reduced assertion, admitted
-proof or weakened theorem. The original returned configuration hash is retained
-separately from the integration configuration hash. Heavy control verification and
-protected CI remain release prerequisites.
+required `verify_lean.sh` gate. New library compilation uses `-j1 -M40000` with
+synchronous elaboration (`Elab.async=false`). This changes resources, not assertions,
+proof admissions or theorem statements. The returned configuration hash remains
+separate from the integration configuration hash.
+
+The 14 GB diagnostic reported a kernel excessive-memory error at the 24-variable
+De Morgan control. Terminal failure formatting subsequently became expensive.
+Per-command progress messages cannot establish success: Lean resets them between
+declarations. The isolated 28 GB terminal run was cancelled after 547 seconds and is
+not a passed build; `resource-diagnosis.json` records that distinction.
+
+The required release gate uses the existing standard public Ubuntu runner, with a
+bounded 32 GiB temporary swap file and a 34 GiB available-disk guard. It removes only
+unused preinstalled .NET, Android and Haskell SDK directories from the ephemeral
+runner image and removes the swap file afterward. No paid runner is selected and
+the swap file is never uploaded. Full compilation, all 226 axiom inventories and
+semantic negative controls must pass in protected CI before merge. Source identity,
+finite runtime comparisons and the general local proof audit are already recorded;
+this report does not substitute returned logs or a cancelled diagnostic for CI.

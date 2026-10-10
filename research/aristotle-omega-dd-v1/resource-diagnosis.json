@@ -1,0 +1,33 @@
+{
+  "format": "pcs-omega-dd-resource-diagnosis-v1",
+  "profile": "-j1 -M14000 Elab.async=false",
+  "actual_structured_error_locations": [
+    "error at line 62, column 2",
+    "error at line 74, column 73"
+  ],
+  "progress_log_validity": "invalid: Command.State.messages resets for each command",
+  "unmodified_14gb_terminal_run": "cancelled after independent structured error detection; no successful build claimed",
+  "source_modified": false,
+  "direct_kernel_error": "(kernel) excessive memory consumption detected",
+  "direct_diagnostic_scope": "Temporary first-control tactic reports the original kernel exception without costly elaborator re-evaluation; it is not a substitute for the unmodified source build.",
+  "28gb_terminal_run": {
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-M28000",
+      "-D",
+      "Elab.async=false",
+      "-o",
+      "/workspace/.onboarding/aristotle-omega-dd-v1/returned/aristotle-consolidated-input-v1_aristotle/proof-carrying-science/formal/.lake/build/lib/lean/PCSDecisionDiagram/Controls.olean",
+      "PCSDecisionDiagram/Controls.lean"
+    ],
+    "exit_code": 143,
+    "wall_seconds": 547.3685196650003,
+    "peak_child_rss_kib": 28673200,
+    "user_seconds": 578.974319,
+    "system_seconds": 23.241173,
+    "source_modified": false
+  }
+}

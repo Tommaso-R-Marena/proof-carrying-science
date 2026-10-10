@@ -158,6 +158,26 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/check_aristotle_semantic_source_v1.py
+      - name: Bounded temporary swap for large kernel controls on the standard public runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Keep the existing free standard runner; never request a paid large runner.
+          # These are preinstalled SDKs unused by this Python/Node/Rust/Lean job.
+          # Only runner image directories are removed; no repository/user files.
+          sudo -n rm -rf -- /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          python - <<'PYSPACE'
+          import os
+          st = os.statvfs(os.environ['RUNNER_TEMP'])
+          assert st.f_bavail * st.f_frsize >= 34 * 1024**3, 'Insufficient disk for bounded kernel swap'
+          PYSPACE
+          SWAP_FILE="$RUNNER_TEMP/pcs-kernel-controls.swap"
+          test ! -e "$SWAP_FILE"
+          sudo -n fallocate -l 32G "$SWAP_FILE"
+          sudo -n chmod 600 "$SWAP_FILE"
+          sudo -n mkswap "$SWAP_FILE"
+          sudo -n swapon "$SWAP_FILE"
+          free -m
       - name: Full Lean kernel, real compiled authority, Python, and adversarial gate
         shell: bash
         run: |
@@ -275,6 +295,19 @@ jobs:
             ${{ runner.temp }}/intervention-ci/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Remove temporary kernel swap
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          SWAP_FILE="$RUNNER_TEMP/pcs-kernel-controls.swap"
+          if test -f "$SWAP_FILE"; then
+            if sudo -n swapon --noheadings --show=NAME | grep -Fxq "$SWAP_FILE"; then
+              sudo -n swapoff "$SWAP_FILE"
+            fi
+            sudo -n rm -- "$SWAP_FILE"
+          fi
 
   real-analysis-bridge:
     name: real-analysis-bridge
