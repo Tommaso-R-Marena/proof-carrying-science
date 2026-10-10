@@ -75,7 +75,7 @@ and all three intended false-claim rejections.
 Integration preserves every returned Lean source byte. The Lake configuration builds
 reference libraries with the authorities and runs `PCSControls` afterward through the
 required `verify_lean.sh` gate. New library compilation uses one Lean thread and a
-6000 MB limit. This is a resource profile change, not a reduced assertion, admitted
+6000 MB limit with synchronous elaboration (`Elab.async=false`). This is a resource profile change, not a reduced assertion, admitted
 proof or weakened theorem. The original returned configuration hash is retained
 separately from the integration configuration hash. Heavy control verification and
 protected CI remain release prerequisites.
