@@ -6,6 +6,7 @@ Output must be a new directory; evaluation statements freeze before training.
 import argparse
 import gzip
 import json
+import subprocess
 from pathlib import Path
 
 from pcs.experimental.prover.cli import run
@@ -34,8 +35,9 @@ def main():
     try:
         heldout = [t for t in tasks() if t["split"] != "train"]
         extra = [{"goal": formalize(s)["candidates"][0]["ir"]} for s in protocol["evaluation_statements"]]
+        source_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
         eligible = intake_feedback(env, result["training_feedback"], heldout + extra,
-                                   license="Apache-2.0", source_revision=entry["sha256"])
+                                   license="Apache-2.0", source_revision=source_revision)
         before = [search(env, t["goal"], model.rank, budget=96, beam=4) for t in extra]
         training = imitate(model, [eligible], epochs=4)
         checkpoint_sha = model.save(out / "feedback-generation.json", {"parent": entry["sha256"], "training": training})
