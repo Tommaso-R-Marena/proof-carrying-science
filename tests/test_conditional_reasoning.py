@@ -127,3 +127,22 @@ def test_actual_cli_outcomes_and_exclusive_output(tmp_path):
     before=out.read_bytes();assert subprocess.run(command+['check',str(t),'--output',str(out)],capture_output=True).returncode==4;assert out.read_bytes()==before
     for raw in ['{"format":1,"format":2}', '{"format":NaN}', ' '*262145]:
         t.write_text(raw);assert subprocess.run(command+['check',str(t)],capture_output=True).returncode==4
+
+
+def test_large_valid_receipt_round_trips_through_bounded_cli(tmp_path):
+    pairs=[]
+    for i in range(9):
+        a,b=f'A{i:02d}',f'B{i:02d}'
+        if i<6:a,b=f'(NOT NOT {a})',f'(NOT NOT {b})'
+        pairs.append(f'(({a} -> {b}) AND ({b} -> {a}))')
+    premises='\n'.join([' AND '.join(['(LONG_SYMBOL_NAME OR NOT LONG_SYMBOL_NAME)']*25)]*8)
+    task=from_text(' AND '.join(pairs),'TRUE',premises)
+    receipt=check(task)
+    assert receipt['decision']=='counterexample'
+    assert len(json.dumps(receipt,indent=2).encode())>262144
+    source=tmp_path/'task.json';output=tmp_path/'receipt.json'
+    source.write_text(json.dumps(task))
+    command=[sys.executable,'-m','pcs.cli','conditional']
+    assert subprocess.run(command+['check',str(source),'--output',str(output)],capture_output=True).returncode==1
+    assert output.stat().st_size<=262144
+    assert subprocess.run(command+['verify',str(output)],capture_output=True).returncode==0

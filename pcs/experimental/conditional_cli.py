@@ -17,7 +17,8 @@ def execute(args):
         if args.operation == 'verify':
             decision = verify(load(args.input)); print(json.dumps({'receipt_verified':True,'decision':decision,'pcs_authority':False})); return 0
         receipt = check(load(args.input), {'nodes':args.nodes,'operations':args.operations})
-        text = json.dumps(receipt, indent=2, allow_nan=False)+'\n'
+        # Compact exports preserve replayability under the bounded file reader.
+        text = json.dumps(receipt, separators=(',', ':'), allow_nan=False)+'\n'
         if args.output:
             with Path(args.output).open('x', encoding='utf-8') as stream: stream.write(text)
         else: print(text, end='')
