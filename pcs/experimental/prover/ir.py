@@ -5,8 +5,11 @@ import hashlib
 import json
 import re
 
-TYPES = {"Prop": "Prop", "Nat": "Nat", "Int": "Int", "NatFn": "Nat → Nat"}
+TYPES = {"Prop": "Prop", "Nat": "Nat", "Int": "Int", "NatFn": "Nat → Nat", "NatPred": "Nat → Prop"}
 NAME = re.compile(r"[A-Za-z][A-Za-z0-9_]{0,23}\Z")
+RESERVED = {"Prop", "Nat", "Int", "Type", "Sort", "True", "False", "theorem", "axiom", "def",
+            "fun", "forall", "exists", "sorry", "admit", "by", "let", "in", "if", "then", "else",
+            "match", "with", "where", "class", "instance", "unsafe", "namespace", "end", "import", "set_option"}
 OPS = {"and": ("Prop", "Prop", "∧"), "or": ("Prop", "Prop", "∨"),
        "implies": ("Prop", "Prop", "→"), "iff": ("Prop", "Prop", "↔"),
        "add": (None, None, "+"), "mul": (None, None, "*"),
@@ -39,9 +42,11 @@ def expression(e, variables, depth=0):
         at, a = expression(e["arg"], variables, depth + 1)
         if ft == "NatFn" and at == "Nat":
             return "Nat", f"({f} {a})"
+        if ft == "NatPred" and at == "Nat":
+            return "Prop", f"({f} {a})"
     if op in {"forall", "exists"} and set(e) == {"op", "name", "type", "body"}:
         n, t = e["name"], e["type"]
-        if type(n) is not str or not NAME.fullmatch(n) or n in variables or t not in TYPES:
+        if type(n) is not str or not NAME.fullmatch(n) or n in RESERVED or n in variables or t not in TYPES:
             raise ValueError("invalid binder or name shadowing")
         bt, b = expression(e["body"], {**variables, n: t}, depth + 1)
         if bt == "Prop":
@@ -66,7 +71,7 @@ def theorem(obj):
         if type(b) is not dict or set(b) != {"name", "type"}:
             raise ValueError("invalid binder")
         n, t = b["name"], b["type"]
-        if type(n) is not str or not NAME.fullmatch(n) or n in variables or t not in TYPES:
+        if type(n) is not str or not NAME.fullmatch(n) or n in RESERVED or n in variables or t not in TYPES:
             raise ValueError("unknown type or duplicate binder")
         variables[n] = t
         prefix.append(f"({n} : {TYPES[t]})")

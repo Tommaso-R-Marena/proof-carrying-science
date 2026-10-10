@@ -55,7 +55,8 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           python -m pcs.experimental.prover.experiment --output "$RUNNER_TEMP/lean-smoke" --epochs 3 --episodes 3 --seeds 17
-          python -m pcs.experimental.prover.cli 'For every natural number t, (t + 0) * 1 equals t.' --models research/lean-learning-v1 --output "$RUNNER_TEMP/end-to-end.json"
+          python -m pcs.experimental.prover.cli 'For every natural number t, (t + 0) * 1 equals t.' --models research/lean-learning-v2 --output "$RUNNER_TEMP/end-to-end.json"
+          python scripts/evaluate_lean_formalization.py --models research/lean-learning-v2 --output "$RUNNER_TEMP/formalization-fidelity.json"
           python - <<'PY'
           import json, os, pathlib
           root = pathlib.Path(os.environ['RUNNER_TEMP'])
@@ -376,7 +377,7 @@ jobs:
 
   verified-public-integration:
     name: verified-public-integration
-    needs: [source-policy, core-full-gate, real-analysis-bridge, certiforge-integration, python-portability]
+    needs: [source-policy, core-full-gate, real-analysis-bridge, certiforge-integration, python-portability, lean-learning-loop]
     if: ${{ always() && github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -389,6 +390,7 @@ jobs:
           REAL_ANALYSIS: ${{ needs.real-analysis-bridge.result }}
           CERTIFORGE: ${{ needs.certiforge-integration.result }}
           PORTABILITY: ${{ needs.python-portability.result }}
+          LEAN_LEARNING: ${{ needs.lean-learning-loop.result }}
         run: |
           set -euo pipefail
           test "$SOURCE_POLICY" = success || { echo "::error::Source policy did not succeed ($SOURCE_POLICY)"; exit 1; }
@@ -396,4 +398,5 @@ jobs:
           test "$REAL_ANALYSIS" = success || { echo "::error::Real-analysis kernel and axiom audit did not succeed ($REAL_ANALYSIS)"; exit 1; }
           test "$CERTIFORGE" = success || { echo "::error::PCS/CertiForge integration did not succeed ($CERTIFORGE)"; exit 1; }
           test "$PORTABILITY" = success || { echo "::error::Python portability suite did not succeed ($PORTABILITY)"; exit 1; }
+          test "$LEAN_LEARNING" = success || { echo "::error::Actual Lean learning loop did not succeed ($LEAN_LEARNING)"; exit 1; }
           echo "PCS_PUBLIC_VERIFIED_INTEGRATION_PASS"

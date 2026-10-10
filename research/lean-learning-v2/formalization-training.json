@@ -1,0 +1,2171 @@
+{
+  "checkpoint_sha256": "6f5ad926f3f833cd1d98c13c5e358dec83d8a83642f8704b109ab6ffea53a739",
+  "parameters": 4452,
+  "epochs": 60,
+  "examples": 75,
+  "dataset_sha256": "623bff8f7224196212fd8f5e4f8d77ba4beab9c1afd6201c375e222f42ed4efd",
+  "weights_changed": true,
+  "pairs": [
+    {
+      "text": "For all propositions a, a implies a.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers a, a + 0 equals a.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers a, a equals a.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions a, a implies a.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers a, a + 0 equals a.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers a, a equals a.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions a, a implies a.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers a, a + 0 equals a.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers a, a equals a.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions b, b implies b.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers b, b + 0 equals b.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers b, b equals b.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions b, b implies b.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers b, b + 0 equals b.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers b, b equals b.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions b, b implies b.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers b, b + 0 equals b.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers b, b equals b.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "b",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions c, c implies c.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers c, c + 0 equals c.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "c"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers c, c equals c.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions c, c implies c.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers c, c + 0 equals c.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "c"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers c, c equals c.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions c, c implies c.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers c, c + 0 equals c.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "c"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers c, c equals c.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "c",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions x, x implies x.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "x"
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers x, x + 0 equals x.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "x"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers x, x equals x.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "x"
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions x, x implies x.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "x"
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers x, x + 0 equals x.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "x"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers x, x equals x.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "x"
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions x, x implies x.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "x"
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers x, x + 0 equals x.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "x"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers x, x equals x.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "x",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "x"
+          },
+          "right": {
+            "op": "var",
+            "name": "x"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions y, y implies y.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "y"
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers y, y + 0 equals y.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "y"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers y, y equals y.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "y"
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions y, y implies y.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "y"
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers y, y + 0 equals y.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "y"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers y, y equals y.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "y"
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions y, y implies y.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "y"
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers y, y + 0 equals y.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "y"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers y, y equals y.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "y",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "y"
+          },
+          "right": {
+            "op": "var",
+            "name": "y"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions z, z implies z.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "z"
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers z, z + 0 equals z.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "z"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers z, z equals z.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "z"
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions z, z implies z.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "z"
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers z, z + 0 equals z.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "z"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers z, z equals z.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "z"
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions z, z implies z.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "z"
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers z, z + 0 equals z.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "z"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers z, z equals z.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "z",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "z"
+          },
+          "right": {
+            "op": "var",
+            "name": "z"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions u, u implies u.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "u"
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers u, u + 0 equals u.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "u"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers u, u equals u.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "u"
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions u, u implies u.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "u"
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers u, u + 0 equals u.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "u"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers u, u equals u.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "u"
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions u, u implies u.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "u"
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers u, u + 0 equals u.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "u"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers u, u equals u.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "u",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "u"
+          },
+          "right": {
+            "op": "var",
+            "name": "u"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all propositions v, v implies v.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "v"
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all natural numbers v, v + 0 equals v.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "v"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all integers v, v equals v.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "v"
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every propositions v, v implies v.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "v"
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every natural numbers v, v + 0 equals v.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "v"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For every integers v, v equals v.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "v"
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any propositions v, v implies v.",
+      "label": 0,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "v"
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any natural numbers v, v + 0 equals v.",
+      "label": 1,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "v"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For any integers v, v equals v.",
+      "label": 2,
+      "ir": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "v",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "v"
+          },
+          "right": {
+            "op": "var",
+            "name": "v"
+          }
+        }
+      },
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "Prove everything.",
+      "label": 3,
+      "ir": null,
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "Every graph is connected.",
+      "label": 3,
+      "ir": null,
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "text": "For all real numbers x, x is blue.",
+      "label": 3,
+      "ir": null,
+      "license": "Apache-2.0",
+      "source": "PCS authored",
+      "split": "train"
+    }
+  ],
+  "limitations": "Learns restricted domain/abstention ranking; does not learn general structured output or certify English intent."
+}

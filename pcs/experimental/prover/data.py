@@ -11,18 +11,18 @@ from .ir import digest, theorem
 def structural_fingerprint(ir):
     theorem(ir)
     variables = {}
-    def normalize(e):
-        if e["op"] == "var": return {"op": "var", "name": variables[e["name"]]}
+    def normalize(e, scope):
+        if e["op"] == "var": return {"op": "var", "name": scope[e["name"]]}
         if e["op"] in {"forall", "exists"}:
-            name = f"v{len(variables)}"
-            variables[e["name"]] = name
-            return {"op": e["op"], "name": name, "type": e["type"], "body": normalize(e["body"])}
-        return {k: normalize(v) if type(v) is dict else v for k, v in e.items()}
+            name = f"v{len(scope)}"
+            nested = {**scope, e["name"]: name}
+            return {"op": e["op"], "name": name, "type": e["type"], "body": normalize(e["body"], nested)}
+        return {k: normalize(v, scope) if type(v) is dict else v for k, v in e.items()}
     binders = []
     for b in ir["binders"]:
         name = f"v{len(variables)}"; variables[b["name"]] = name
         binders.append({"name": name, "type": b["type"]})
-    return digest({"binders": binders, "body": normalize(ir["body"])})
+    return digest({"binders": binders, "body": normalize(ir["body"], variables)})
 
 
 def replay_receipt(env, goal, receipt):

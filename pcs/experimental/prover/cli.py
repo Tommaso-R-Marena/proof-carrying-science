@@ -40,7 +40,7 @@ def run(statement, registry_dir=None, budget=96, interpretation=None):
     if type(chosen) is not int or not 0 <= chosen < len(language["candidates"]):
         raise ValueError("invalid selected interpretation")
     candidate = language["candidates"][chosen]
-    env = LeanEnvironment()
+    env = LeanEnvironment(timeout=30)
     try:
         observed = env.observe(candidate["ir"], [])
         roundtrip = parse_lean(candidate["lean"])
@@ -62,6 +62,11 @@ def run(statement, registry_dir=None, budget=96, interpretation=None):
                 "states": solved["states"], "model": model_id, "split": "unassigned",
                 "hint_exposure": "model proposals", "automatic_training_authorization": False,
                 "human_consent": False, "source_license": "unspecified", "checker": env.version}
+        return result
+    except RuntimeError as error:
+        result["status"] = "resource_exhaustion" if "resource exhaustion" in str(error) else "unknown"
+        result["reason"] = str(error)
+        result["training_feedback"] = None
         return result
     finally:
         env.close()

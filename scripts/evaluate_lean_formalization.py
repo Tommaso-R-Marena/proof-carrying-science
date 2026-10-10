@@ -26,6 +26,16 @@ def main():
         ("For all natural numbers n, there exists a natural number m such that n equals m.", declaration(["n"], {"op": "exists", "name": "m", "type": "Nat", "body": b("eq", n, m)}, "Nat")),
         ("For all integers n and m, n + m equals m + n.", declaration(["n", "m"], b("eq", b("add", n, m), b("add", m, n)), "Int")),
     ]
+    app = lambda f, x: {"op": "apply", "fn": var(f), "arg": var(x)}
+    quant = lambda x, body: {"op": "forall", "name": x, "type": "Nat", "body": body}
+    inj = lambda f, x, y: quant(x, quant(y, b("implies", b("eq", app(f, x), app(f, y)), b("eq", var(x), var(y)))))
+    comp = lambda x: {"op": "apply", "fn": var("g"), "arg": app("f", x)}
+    composition = quant("v0", quant("v1", b("implies", b("eq", comp("v0"), comp("v1")), b("eq", var("v0"), var("v1")))))
+    cases.append(("For all functions from natural numbers to natural numbers f and g, if (f is injective and g is injective) then (the composition g after f is injective).",
+        declaration(["f", "g"], b("implies", b("and", inj("f", "v2", "v3"), inj("g", "v4", "v5")), composition), "NatFn")))
+    cases.append(("For all predicates on natural numbers P, Q and R, if ((∀ (n : Nat), P(n) implies Q(n)) and (∀ (m : Nat), Q(m) implies R(m))) then (∀ (k : Nat), P(k) implies R(k)).",
+        declaration(["P", "Q", "R"], b("implies", b("and", quant("n", b("implies", app("P", "n"), app("Q", "n"))),
+            quant("m", b("implies", app("Q", "m"), app("R", "m")))), quant("k", b("implies", app("P", "k"), app("R", "k")))), "NatPred")))
     env = LeanEnvironment(timeout=30)
     try:
         labels = []

@@ -46,7 +46,9 @@ class Parser:
             while self.peek() == "(":
                 self.take("("); name = self.take(); self.take(":"); domain = self.take()
                 if domain == "Nat" and self.peek() == "→":
-                    self.take("→"); self.take("Nat"); domain = "NatFn"
+                    self.take("→"); codomain = self.take()
+                    if codomain not in {"Nat", "Prop"}: raise ValueError("unsupported function codomain")
+                    domain = "NatFn" if codomain == "Nat" else "NatPred"
                 self.take(")")
                 if name in self.variables or domain not in TYPES:
                     raise ValueError("invalid type or shadowed name")
@@ -70,7 +72,7 @@ class Parser:
             left = {"op": "number", "value": int(tok), "type": domain}
         elif tok in self.variables:
             left = var(tok)
-            if self.variables[tok] == "NatFn" and self.peek() and (self.peek() == "(" or self.peek() in self.variables):
+            if self.variables[tok] in {"NatFn", "NatPred"} and self.peek() and (self.peek() == "(" or self.peek() in self.variables):
                 left = {"op": "apply", "fn": left, "arg": self.parse(8)}
         else:
             raise ValueError("unknown or unresolved symbol: " + tok)
@@ -105,7 +107,7 @@ def parse_lean(source):
 
 
 DOMAINS = {"propositions": "Prop", "natural numbers": "Nat", "integers": "Int",
-           "functions from natural numbers to natural numbers": "NatFn"}
+           "functions from natural numbers to natural numbers": "NatFn", "predicates on natural numbers": "NatPred"}
 
 
 def formalize(source, ranker=None):
@@ -128,6 +130,20 @@ def formalize(source, ranker=None):
     if domain is None:
         return {"status": "unsupported", "source": source, "source_sha256": digest(source),
                 "candidates": [], "reason": "Use explicit typed quantifiers in the supported grammar."}
+    if domain == "NatFn":
+        serial = [0]
+        def injective(fn, inner=None):
+            if fn not in names or (inner is not None and inner not in names): raise ValueError("unresolved function definition")
+            available = ["v" + str(i) for i in range(30) if "v" + str(i) not in names]
+            x, y = available[serial[0]:serial[0]+2]; serial[0] += 2
+            left = f"{fn} ({inner} {x})" if inner else f"{fn} {x}"
+            right = f"{fn} ({inner} {y})" if inner else f"{fn} {y}"
+            return f"(∀ ({x} : Nat) ({y} : Nat), ({left} = {right}) → ({x} = {y}))"
+        try:
+            body = re.sub(r"the composition ([A-Za-z][A-Za-z0-9_]*) after ([A-Za-z][A-Za-z0-9_]*) is injective", lambda m: injective(m[1], m[2]), body, flags=re.I)
+            body = re.sub(r"([A-Za-z][A-Za-z0-9_]*) is injective", lambda m: injective(m[1]), body, flags=re.I)
+        except (ValueError, IndexError) as ex:
+            return {"status": "unsupported", "source": source, "candidates": [], "reason": str(ex)}
     def nested_exists(match):
         t = {"natural number": "Nat", "integer": "Int", "proposition": "Prop"}[match[1].lower()]
         return f"∃ ({match[2]} : {t}), "

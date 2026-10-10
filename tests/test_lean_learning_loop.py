@@ -53,6 +53,10 @@ def test_ambiguity_and_scope_are_explicit():
     assert formalize("For all real numbers x, x equals x.")["status"] == "unsupported"
     assert formalize("For all natural numbers n, n equals P.")["status"] == "unsupported"
     assert formalize("For all propositions P and P, P.")["status"] == "unsupported"
+    for name in ["True", "False", "Nat", "theorem", "sorry", "unsafe"]:
+        assert formalize(f"For all propositions {name}, {name}.")["status"] == "unsupported"
+        with pytest.raises(ValueError):
+            parse_lean(f"∀ ({name} : Prop), {name}")
 
 
 @pytest.mark.parametrize("source", ["theorem x : False := by sorry", "axiom evil : False", "∀ (n : Nat), (n ∧ n)",
@@ -71,6 +75,26 @@ def test_quantifier_order_negation_implication_domain():
     assert digest(p) != digest(q)
     assert parse_lean("∀ (P : Prop), ¬ P")["body"]["op"] == "not"
     with pytest.raises(ValueError): parse_lean("∀ (n : Nat) (z : Int), n = z")
+
+
+def test_alpha_firewall_uses_lexical_quantifier_scopes():
+    a = parse_lean("(∀ (n : Nat), n = n) ∧ (∀ (n : Nat), n = n)")
+    b = parse_lean("(∀ (x : Nat), x = x) ∧ (∀ (y : Nat), y = y)")
+    assert structural_fingerprint(a) == structural_fingerprint(b)
+
+
+def test_function_definition_lowering_and_typed_predicates():
+    text = "For all functions from natural numbers to natural numbers f and g, if (f is injective and g is injective) then (the composition g after f is injective)."
+    result = formalize(text)
+    assert result["status"] == "supported"
+    ir = result["candidates"][0]["ir"]
+    assert [b["type"] for b in ir["binders"]] == ["NatFn", "NatFn"]
+    conclusion = ir["body"]["right"]["body"]["body"]["left"]
+    assert conclusion["left"]["fn"]["name"] == "g"
+    assert conclusion["left"]["arg"]["fn"]["name"] == "f"
+    assert parse_lean(result["candidates"][0]["lean"]) == ir
+    predicate = parse_lean("∀ (P : Nat → Prop), ∀ (n : Nat), P n → P n")
+    assert predicate["binders"][0]["type"] == "NatPred"
 
 
 @pytest.mark.parametrize("action", [

@@ -38,6 +38,17 @@ def tasks():
     ]:
         result.append({"id": name, "family": name, "split": split, "goal": declaration(names, body, "Nat"),
                        "license": "Apache-2.0", "source": "PCS authored"})
+    result.append({"id": "projected_application", "family": "projected_application", "split": "train",
+        "goal": declaration(["P", "Q"], b("implies", b("and", b("implies", p, q), p), q)),
+        "license": "Apache-2.0", "source": "PCS authored"})
+    from .language import formalize
+    for split, name, source in [
+        ("train", "function_injective_composition", "For all functions from natural numbers to natural numbers f and g, if (f is injective and g is injective) then (the composition g after f is injective)."),
+        ("final", "predicate_subset_transitivity", "For all predicates on natural numbers P, Q and R, if ((∀ (n : Nat), P(n) implies Q(n)) and (∀ (m : Nat), Q(m) implies R(m))) then (∀ (k : Nat), P(k) implies R(k)).")]:
+        parsed = formalize(source)
+        if parsed["status"] != "supported": raise ValueError("new mathematical domain does not lower: " + str(parsed))
+        result.append({"id": name, "family": name, "split": split, "goal": parsed["candidates"][0]["ir"],
+                       "original_statement": source, "license": "Apache-2.0", "source": "PCS authored"})
     if len({digest(t["goal"]) for t in result}) != len(result):
         raise ValueError("duplicate theorem across partitions")
     return result

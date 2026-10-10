@@ -63,6 +63,11 @@ def candidates(state):
     def head(expr):
         while expr["kind"] == "application": expr = expr["children"][0]
         return expr["value"].split(":")[0] if expr["kind"] == "constant" else ""
+    def contains(expr, sought):
+        return expr == sought or any(contains(child, sought) for child in expr["children"])
+    def equality_left(expr):
+        if head(expr) != "Eq" or expr["kind"] != "application": return None
+        return expr["children"][0]["children"][1]
     target_head = head(g["expression"])
     result = [act("assumption")]
     if g["expression"]["kind"] == "forall":
@@ -76,16 +81,18 @@ def candidates(state):
         name = local["name"]
         if not REFERENCE.fullmatch(name):
             continue
-        if local["type"] not in {"Prop", "Nat", "Int", "Nat → Nat"}:
+        if local["type"] not in {"Prop", "Nat", "Int", "Nat → Nat", "Nat → Prop"}:
             for suffix in ["", ".1", ".2", ".1.1", ".1.2", ".2.1", ".2.2"]:
                 if reference_expression(state, name + suffix) is not None:
                     result.append(act("exact", name + suffix))
-            if local["expression"]["kind"] == "forall": result.append(act("apply", name))
+                    if reference_expression(state, name + suffix)["kind"] == "forall":
+                        result.append(act("apply", name + suffix))
             if head(local["expression"]) == "Or": result.append(act("cases", name))
-            if "=" in local["type"]:
+            left_side = equality_left(local["expression"])
+            if left_side is not None and contains(g["expression"], left_side):
                 result.append(act("rewrite", name))
     if "Nat" in g["target"] or any(l["type"] == "Nat" for l in g["locals"]):
-        result.append(act("simp"))
+        if "+" in g["target"] or "*" in g["target"]: result.append(act("simp"))
         result.extend(act("lemma", n) for n in sorted(LEMMAS) if ("add" in n and "+" in g["target"]) or ("mul" in n and "*" in g["target"]))
         if "∃" in g["target"]:
             result.extend(act("witness", n) for n in [0, 1, 2])
@@ -97,6 +104,7 @@ def _symbolic_priority(state, action):
     kind = action["kind"]
     if kind == "exact" and reference_expression(state, action["argument"]) == g["expression"]:
         return 12
+    if kind == "exact": return -1
     if kind == "apply":
         premise = reference_expression(state, action["argument"])
         if premise and premise["kind"] == "forall" and premise["children"][1] == g["expression"]:
