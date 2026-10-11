@@ -36,10 +36,12 @@ class Parser:
     def peek(self):
         return self.tokens[self.i] if self.i < len(self.tokens) else ""
 
-    def parse(self, minimum=0):
+    def parse(self, minimum=0, depth=0):
+        if depth > 256:
+            raise ValueError("statement nesting exceeds language bound")
         tok = self.take()
         if tok == "(":
-            left = self.parse()
+            left = self.parse(0, depth + 1)
             self.take(")")
         elif tok in {"∀", "∃"}:
             binders = []
@@ -57,12 +59,12 @@ class Parser:
             if not binders:
                 raise ValueError("typed binders required")
             self.take(",")
-            left = self.parse()
+            left = self.parse(0, depth + 1)
             for name, domain in reversed(binders):
                 del self.variables[name]
                 left = {"op": "forall" if tok == "∀" else "exists", "name": name, "type": domain, "body": left}
         elif tok == "¬":
-            left = {"op": "not", "arg": self.parse(8)}
+            left = {"op": "not", "arg": self.parse(8, depth + 1)}
         elif tok in {"True", "False"}:
             left = {"op": tok.lower()}
         elif tok.isdigit():
@@ -73,13 +75,13 @@ class Parser:
         elif tok in self.variables:
             left = var(tok)
             if self.variables[tok] in {"NatFn", "NatPred"} and self.peek() and (self.peek() == "(" or self.peek() in self.variables):
-                left = {"op": "apply", "fn": left, "arg": self.parse(8)}
+                left = {"op": "apply", "fn": left, "arg": self.parse(8, depth + 1)}
         else:
             raise ValueError("unknown or unresolved symbol: " + tok)
         while self.peek() in self.precedence and self.precedence[self.peek()] >= minimum:
             symbol = self.take()
             p = self.precedence[symbol]
-            right = self.parse(p if symbol == "→" else p + 1)
+            right = self.parse(p if symbol == "→" else p + 1, depth + 1)
             left = binary(SYMBOLS[symbol], left, right)
         return left
 

@@ -7,4 +7,5 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 lake build PCSReal
 python "$ROOT/scripts/audit_lean_source.py" formal/real
+python "$ROOT/scripts/verify_statistics_formal.py"
 echo "Real-analysis bridge build and audits passed."

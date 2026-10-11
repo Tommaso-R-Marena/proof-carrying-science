@@ -1,0 +1,75 @@
+import PCSRuntimeRefinement
+import PCSMathLanguage
+import PCSReasoningLibrary
+import PCSAssumptionDiscovery
+import PCSVerifiedLearning
+import PCSForgeRefinement
+import PCSStatisticsCore
+import PCSEndToEnd
+
+/-! Transitive axiom inventory of every principal theorem (run:
+`lake env lean tools/PrintPrincipalAxioms.lean`).  Expected for every entry: a subset of
+`[propext, Classical.choice, Quot.sound]`. -/
+
+-- §3 runtime correspondence
+#print axioms PCSRuntimeRefinement.PyIntervention.python_intervention_refines_reference
+#print axioms PCSRuntimeRefinement.JsIntervention.javascript_intervention_refines_reference
+#print axioms PCSRuntimeRefinement.source_extraction_certificate_sound
+#print axioms PCSRuntimeRefinement.runtime_result_semantics
+#print axioms PCSRuntimeRefinement.OmegaReplay.omega_execution_replay_correct
+-- §4 language, goals, receipts
+#print axioms PCSMathLanguage.Language.language_candidates_exact
+#print axioms PCSMathLanguage.typed_lowering_preserves_denotation
+#print axioms PCSMathLanguage.RoundTrip.render_parse_alpha_roundtrip
+#print axioms PCSMathLanguage.action_rendering_closed
+#print axioms PCSMathLanguage.transition_preserves_original_goal
+#print axioms PCSMathLanguage.all_branches_required
+#print axioms PCSMathLanguage.final_receipt_sound
+#print axioms PCSMathLanguage.replay_reestablishes_original_claim
+-- §5 library, search, separation
+#print axioms PCSReasoningLibrary.admitted_library_conservative
+#print axioms PCSReasoningLibrary.macro_expansion_preserves_proof
+#print axioms PCSReasoningLibrary.research_plan_composes_checked_results
+#print axioms PCSReasoningLibrary.adaptive_fair_search_complete
+#print axioms PCSReasoningLibrary.resume_budget_monotone
+#print axioms PCSReasoningLibrary.cost_guided_search_optimal
+#print axioms PCSReasoningLibrary.Separation.shared_reasoning_family_upper_bound
+#print axioms PCSReasoningLibrary.Separation.baseline_family_lower_bound
+#print axioms PCSReasoningLibrary.Separation.certified_reuse_complexity_separation
+-- §6 assumption discovery
+#print axioms PCSAssumptionDiscovery.selector_projection_exact
+#print axioms PCSAssumptionDiscovery.abduction_feasible_iff
+#print axioms PCSAssumptionDiscovery.abduction_global_optimum
+#print axioms PCSAssumptionDiscovery.abduction_optimal_count
+#print axioms PCSAssumptionDiscovery.abduction_mandatory_possible_exact
+#print axioms PCSAssumptionDiscovery.Cegar.counterexample_clause_necessary
+#print axioms PCSAssumptionDiscovery.Cegar.cegar_optimum_preserved
+#print axioms PCSAssumptionDiscovery.Cegar.cegar_finite_termination
+#print axioms PCSAssumptionDiscovery.abduction_result_replay_sound
+-- §7 verified learning
+#print axioms PCSVerifiedLearning.episode_success_reward_requires_proof
+#print axioms PCSVerifiedLearning.eligible_feedback_reverified
+#print axioms PCSVerifiedLearning.Shaping.potential_return_telescopes
+#print axioms PCSVerifiedLearning.Shaping.potential_shaping_preserves_policy_order
+#print axioms PCSVerifiedLearning.Shaping.macro_discount_correct
+#print axioms PCSMathLanguage.alpha_firewall_exact
+#print axioms PCSVerifiedLearning.training_export_label_noninterference
+#print axioms PCSVerifiedLearning.generation_preserves_verifier_authority
+-- §8 CertIR
+#print axioms PCSForgeRefinement.Rust.rust_certir_extraction_sound
+#print axioms PCSForgeRefinement.Rust.rust_certificate_preserves_eval_expr
+#print axioms PCSForgeRefinement.Rust.interp_eval_expr_source_bound
+#print axioms PCSForgeRefinement.certir_eval_correspondence
+#print axioms PCSForgeRefinement.rewrite_certificate_universally_sound
+#print axioms PCSForgeRefinement.optimization_sequence_preserves_program
+#print axioms PCSForgeRefinement.verified_static_cost_improvement
+#print axioms PCSForgeRefinement.optimization_episode_reward_sound
+-- §9 Std statistical core
+#print axioms PCSStatisticsCore.exposure_ledger_enforces_test_protocol
+#print axioms PCSStatisticsCore.union_bound_generations
+-- §1 end-to-end
+#print axioms PCSEndToEnd.end_to_end_acceptance_sound
+#print axioms PCSEndToEnd.policy_cannot_manufacture_acceptance
+#print axioms PCSEndToEnd.success_independent_of_claims
+#print axioms PCSEndToEnd.end_to_end_abduction_sound
+#print axioms PCSEndToEnd.abduction_policy_cannot_change_result

@@ -1,0 +1,68 @@
+{
+  "local_sources": {
+    "formal/lakefile.toml": "3aaad652ac3f4bebe37ed04781f3f2edf14e86e91fb947170b808cc737369fd9",
+    "formal/lean-toolchain": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028",
+    "formal/lake-manifest.json": "3fe0ad014355a903eb6f03c0f7063de6eb2569666cbd893b8031ad7158462071",
+    "pcs/experimental/prover/language.py": "065b27117af33f9df19273af8b2e4cb45cbfe39429f1415037ed99f6fd0ba4c0",
+    "pcs/experimental/prover/ir.py": "13c856dabb653148ceb1fd77cdac7c4a3f26abebbca4e3f6c08fd5902c6c853c"
+  },
+  "source_windows": [
+    {
+      "component": "proof-carrying-science",
+      "source": "pcs/experimental/intervention.py",
+      "snapshot": "formal/source_reference/proof-carrying-science/pcs/experimental/intervention.py.txt",
+      "windows": [
+        [
+          33,
+          62
+        ]
+      ]
+    },
+    {
+      "component": "proof-carrying-science-site",
+      "source": "public/intervention-core.mjs",
+      "snapshot": "formal/source_reference/proof-carrying-science-site/public/intervention-core.mjs.txt",
+      "windows": [
+        [
+          14,
+          27
+        ]
+      ]
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir/src/lib.rs",
+      "snapshot": "formal/source_reference/certiforge/crates/certir/src/lib.rs.txt",
+      "windows": [
+        [
+          20,
+          35
+        ]
+      ]
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "snapshot": "formal/source_reference/certiforge/crates/certir-interpreter/src/lib.rs.txt",
+      "windows": [
+        [
+          14,
+          19
+        ],
+        [
+          39,
+          66
+        ],
+        [
+          68,
+          77
+        ],
+        [
+          79,
+          137
+        ]
+      ]
+    }
+  ],
+  "scope": "Kernel-checked extraction of these windows under the declared subset semantics; parser is a tested transcription, not a byte-extracted refinement."
+}

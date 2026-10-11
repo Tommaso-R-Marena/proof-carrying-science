@@ -215,9 +215,23 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: Tommaso-R-Marena/proof-carrying-science-site
-          ref: 711acdcb088654904e42d7cb94cbdd400df6eb7d
+          ref: 543f70844987e659d0d5320a8f701bc1e07facca
           path: .ci-components/pcs-site
           persist-credentials: false
+      - name: Check out source-bound CertiForge interpreter and repaired type checker
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Tommaso-R-Marena/certiforge
+          ref: 415a1de40eaeadc366ac2d824c05ee52bb2bd66e
+          path: .ci-components/certiforge
+          persist-credentials: false
+      - name: Verify runtime extraction windows against exact component sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python scripts/verify_runtime_refinement.py --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-refinement.json"
+          python scripts/verify_math_language_parity.py --output "$RUNNER_TEMP/math-language-parity.json"
       - name: Compare actual Lean, Python and JavaScript bounded reasoning outputs
         shell: bash
         run: |
@@ -376,7 +390,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: Tommaso-R-Marena/certiforge
-          ref: b27729cd47f04fb0d022ce817042bbceaab9c5f4
+          ref: 415a1de40eaeadc366ac2d824c05ee52bb2bd66e
           path: .ci-components/certiforge
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -392,7 +406,7 @@ jobs:
           python -m pip install --no-deps --no-build-isolation -e .
           rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
           cd "$RUNNER_TEMP/pcs-certiforge"
-          test "$(git rev-parse HEAD)" = b27729cd47f04fb0d022ce817042bbceaab9c5f4
+          test "$(git rev-parse HEAD)" = 415a1de40eaeadc366ac2d824c05ee52bb2bd66e
           rustup override set 1.99.0
           cargo fmt --all --check
           cargo test --workspace --locked

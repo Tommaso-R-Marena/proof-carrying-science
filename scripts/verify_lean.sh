@@ -17,6 +17,13 @@ done
 # Keep all original positive controls mandatory.
 lake build PCSControls
 
+# Independent source-window refinement and reference models. Existing targets,
+# controls, and authority imports remain mandatory and unchanged.
+lake build PCSRuntimeRefinement PCSMathLanguage PCSReasoningLibrary PCSAssumptionDiscovery \
+  PCSVerifiedLearning PCSForgeRefinement PCSStatisticsCore PCSEndToEnd PCSNewControls
+python "$ROOT/scripts/verify_runtime_refinement.py"
+python "$ROOT/scripts/verify_math_language_parity.py"
+
 # Avoid ambiguous escaped word-boundary regexes. Match identifiers as tokens.
 python "$ROOT/scripts/audit_lean_source.py" PCS.lean PCS PCSAuthority.lean PCSSemanticCheck.lean PCSCountermodel.lean PCSCountermodel PCSCountermodelReplay.lean
 python "$ROOT/scripts/verify_countermodel_formal.py"
