@@ -29,7 +29,7 @@ class ReuseNetwork(ReasoningNetwork):
         additions = []
         for action in options:
             expression = catalog.get(action["argument"])
-            if action["kind"] == "apply" and expression is not None:
+            if action["kind"] in {"apply", "rewrite", "rewrite_back"} and expression is not None:
                 premise = self.encode({"goals": [{"target": "checked lemma", "locals": [], "expression": expression}]})
                 attention = (self.goal_query(goal) * self.premise_key(premise)).sum() / self.width ** .5
                 gate = self.premise_gate(torch.cat([goal, premise])).squeeze()

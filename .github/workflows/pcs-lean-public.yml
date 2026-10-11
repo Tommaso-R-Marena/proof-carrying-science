@@ -15,6 +15,14 @@ on:
         description: Optional selected interpretation index
         required: false
         type: string
+      proof_actions:
+        description: Optional exact typed human proof actions; never Lean source
+        required: false
+        type: string
+      model_family:
+        description: Optional frozen induction-abstraction-v2 experiment
+        required: false
+        type: string
 permissions:
   contents: read
 jobs:
@@ -43,6 +51,8 @@ jobs:
           PCS_PUBLIC_REQUEST_ID: ${{ inputs.request_id }}
           PCS_PUBLIC_STATEMENT: ${{ inputs.statement }}
           PCS_PUBLIC_INTERPRETATION: ${{ inputs.interpretation }}
+          PCS_PUBLIC_PROOF_ACTIONS: ${{ inputs.proof_actions }}
+          PCS_PUBLIC_MODEL_FAMILY: ${{ inputs.model_family }}
         # Enforce the execution budget independently of the hosted job timeout.
         # Failure/cancellation never produces accepted proof evidence.
         run: timeout --kill-after=10s 600s python -u -m pcs.experimental.prover.public_job

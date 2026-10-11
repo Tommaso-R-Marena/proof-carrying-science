@@ -1,0 +1,1128 @@
+[
+  {
+    "id": "list_length_append",
+    "family": "list_length",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, the length of (xs appended to ys) equals (the length of xs + the length of ys).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "list_append_associativity",
+    "family": "list_association",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "append",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "zs"
+          }
+        },
+        "right": {
+          "op": "append",
+          "left": {
+            "op": "var",
+            "name": "xs"
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "ys"
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, ((xs appended to ys) appended to zs) equals (xs appended to (ys appended to zs)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "successor_congruence",
+    "family": "nat_congruence",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "succ",
+            "arg": {
+              "op": "var",
+              "name": "a"
+            }
+          },
+          "right": {
+            "op": "succ",
+            "arg": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a and b, if a equals b then the successor of a equals the successor of b.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "arithmetic_nested",
+    "family": "nat_identities",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "mul",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "n"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "number",
+            "value": 1,
+            "type": "Nat"
+          }
+        },
+        "right": {
+          "op": "var",
+          "name": "n"
+        }
+      }
+    },
+    "original_statement": "For all natural numbers n, ((n + 0) * 1) equals n.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "logical_bridge",
+    "family": "logical_chain",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "A",
+          "type": "Prop"
+        },
+        {
+          "name": "B",
+          "type": "Prop"
+        },
+        {
+          "name": "C",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "var",
+              "name": "A"
+            },
+            "right": {
+              "op": "var",
+              "name": "B"
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "var",
+              "name": "B"
+            },
+            "right": {
+              "op": "var",
+              "name": "C"
+            }
+          }
+        },
+        "right": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "A"
+          },
+          "right": {
+            "op": "var",
+            "name": "C"
+          }
+        }
+      }
+    },
+    "original_statement": "For all propositions A, B and C, if ((A implies B) and (B implies C)) then (A implies C).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "quantified_bridge",
+    "family": "predicate_chain",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        },
+        {
+          "name": "Q",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "forall",
+            "name": "n",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "n"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "Q"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "m",
+            "type": "Nat",
+            "body": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "P"
+              },
+              "arg": {
+                "op": "var",
+                "name": "m"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "Q"
+            },
+            "arg": {
+              "op": "var",
+              "name": "k"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all predicates on natural numbers P and Q, if ((\u2200 (n : Nat), P(n) implies Q(n)) and (\u2200 (m : Nat), P(m))) then (\u2200 (k : Nat), Q(k)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "length_pair",
+    "family": "paired_list_length",
+    "split": "validation",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "and",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "nil"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "xs"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, ((the length of (xs appended to ys) equals (the length of xs + the length of ys)) and (xs appended to the empty list equals xs)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "association_pair",
+    "family": "paired_list_association",
+    "split": "validation",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "and",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "ys"
+              },
+              "right": {
+                "op": "var",
+                "name": "zs"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "ys"
+            },
+            "right": {
+              "op": "nil"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "ys"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, ((((xs appended to ys) appended to zs) equals (xs appended to (ys appended to zs))) and (ys appended to the empty list equals ys)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "successor_twice",
+    "family": "iterated_successor",
+    "split": "validation",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "succ",
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "a"
+              }
+            }
+          },
+          "right": {
+            "op": "succ",
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "b"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a and b, if a equals b then the successor of (the successor of a) equals the successor of (the successor of b).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "false_length",
+    "family": "false_list_bound",
+    "split": "validation",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "var",
+            "name": "xs"
+          }
+        },
+        "right": {
+          "op": "number",
+          "value": 0,
+          "type": "Nat"
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, the length of xs equals 0.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "length_under_successor",
+    "family": "successor_list_length",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "succ",
+          "arg": {
+            "op": "length",
+            "arg": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "succ",
+          "arg": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, the successor of (the length of (xs appended to ys)) equals the successor of (the length of xs + the length of ys).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "two_inductions",
+    "family": "joint_inductive_laws",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "and",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "ys"
+              },
+              "right": {
+                "op": "var",
+                "name": "zs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, ((the length of (xs appended to ys) equals (the length of xs + the length of ys)) and (((xs appended to ys) appended to zs) equals (xs appended to (ys appended to zs)))).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "relation_transport",
+    "family": "transported_list_equality",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "xs"
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "ys"
+              },
+              "right": {
+                "op": "var",
+                "name": "zs"
+              }
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "xs"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, if ((xs appended to ys) appended to zs) equals xs then (xs appended to (ys appended to zs)) equals xs.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "arithmetic_bundle",
+    "family": "mixed_nat_bundle",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "a"
+              }
+            },
+            "right": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "b"
+              }
+            }
+          },
+          "right": {
+            "op": "eq",
+            "left": {
+              "op": "mul",
+              "left": {
+                "op": "add",
+                "left": {
+                  "op": "var",
+                  "name": "a"
+                },
+                "right": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "number",
+                "value": 1,
+                "type": "Nat"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a and b, if a equals b then ((the successor of a equals the successor of b) and ((a + 0) * 1 equals b)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "unseen_reverse",
+    "family": "list_reversal",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "reverse",
+          "arg": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          }
+        },
+        "right": {
+          "op": "var",
+          "name": "xs"
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, the reversal of (the reversal of xs) equals xs.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "unseen_distributivity",
+    "family": "nat_distributivity",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "mul",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          },
+          "right": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, a * (b + c) equals ((a * b) + (a * c)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "false_function",
+    "family": "false_function_equality",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "forall",
+        "name": "n",
+        "type": "Nat",
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "f"
+            },
+            "arg": {
+              "op": "var",
+              "name": "n"
+            }
+          },
+          "right": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "g"
+            },
+            "arg": {
+              "op": "var",
+              "name": "n"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f and g, (\u2200 (n : Nat), f(n) equals g(n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  },
+  {
+    "id": "false_successor",
+    "family": "false_successor_identity",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "succ",
+          "arg": {
+            "op": "var",
+            "name": "n"
+          }
+        },
+        "right": {
+          "op": "var",
+          "name": "n"
+        }
+      }
+    },
+    "original_statement": "For all natural numbers n, the successor of n equals n.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public induction benchmark"
+  }
+]

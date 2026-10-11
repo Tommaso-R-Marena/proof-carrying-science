@@ -94,7 +94,10 @@ class ReasoningNetwork(nn.Module):
         h = self.encode(state)
         device = h.device
         if options:
-            a = self.actions(torch.tensor([KINDS.index(o["kind"]) for o in options], device=device))
+            # Keep published checkpoint shapes compatible. Distinct induction
+            # and normalization arguments still enter the learned token input.
+            aliases = {"induct_nat": "cases", "induct_list": "cases", "normalize": "simp", "rewrite_back": "rewrite"}
+            a = self.actions(torch.tensor([KINDS.index(aliases.get(o["kind"], o["kind"])) for o in options], device=device))
             a = a + self.tokens(torch.tensor([token("action:" + str(o["argument"])) for o in options], device=device))
             f = torch.tensor([features(state, o) for o in options], device=device)
             logits = self.policy(torch.cat([h.expand(len(options), -1), a, f], dim=1)).squeeze(1)

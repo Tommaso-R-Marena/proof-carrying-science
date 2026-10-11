@@ -19,7 +19,7 @@ import queue
 import threading
 import time
 
-from .ir import digest, theorem
+from .induction_ir import digest, theorem
 
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT / "formal/PCSProofProbe.lean"
@@ -30,6 +30,10 @@ LEMMAS = {"Nat.add_zero", "Nat.zero_add", "Nat.add_comm", "Nat.add_assoc",
           "Nat.mul_zero", "Nat.zero_mul", "Nat.mul_comm", "Nat.mul_one", "Nat.one_mul",
           "Nat.le_refl", "Nat.le_trans", "Nat.le_antisymm", "Int.le_refl", "Int.le_trans", "Int.le_antisymm"}
 REFERENCE = re.compile(r"[A-Za-z][A-Za-z0-9_]{0,23}(?:\.[12]){0,3}\Z")
+NORMALIZERS = {
+    "nat": "simp only [Nat.add_zero, Nat.zero_add, Nat.add_succ, Nat.succ_add, Nat.mul_zero, Nat.zero_mul, Nat.mul_succ, Nat.succ_mul]",
+    "list": "simp only [List.nil_append, List.cons_append, List.append_nil, List.length_nil, List.length_cons, Nat.add_zero, Nat.zero_add, Nat.add_succ, Nat.succ_add]",
+}
 
 
 def render_action(action):
@@ -40,13 +44,24 @@ def render_action(action):
         return SIMPLE[k]
     if k == "intro" and type(a) is str and re.fullmatch(r"h[0-9]{1,2}", a):
         return "intro " + a
+    if k in {"induct_nat", "induct_list"} and type(a) is str:
+        names = a.split()
+        arity = 3 if k == "induct_nat" else 4
+        if len(names) == arity and len(set(names)) == arity and all(re.fullmatch(r"h[0-9]{1,2}", n) for n in names):
+            # No branch blocks: unresolved cases remain in the tactic state's
+            # goal list, rather than being finalized as unfinished branches.
+            recursor = "Nat.rec" if k == "induct_nat" else "List.rec"
+            case = "succ" if k == "induct_nat" else "cons"
+            return f"(induction {names[0]} using {recursor}; case' {case} {' '.join(names[1:])} => skip)"
+    if k == "normalize" and type(a) is str and a in NORMALIZERS:
+        return NORMALIZERS[a]
     if k == "cases" and type(a) is str:
         branch = re.fullmatch(r"([A-Za-z][A-Za-z0-9_]{0,23}(?:\.[12]){0,3}) as (h[0-9]{1,2})", a)
         if branch and branch[1].split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
             # Retain both open goals with accessible names in disjoint contexts.
             return f"rcases {branch[1]} with {branch[2]} | {branch[2]}"
-    if k in {"exact", "apply", "cases", "rewrite"} and type(a) is str and REFERENCE.fullmatch(a) and a.split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
-        return f"rw [{a}]" if k == "rewrite" else f"{k} {a}"
+    if k in {"exact", "apply", "cases", "rewrite", "rewrite_back"} and type(a) is str and REFERENCE.fullmatch(a) and a.split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
+        return f"rw [← {a}]" if k == "rewrite_back" else f"rw [{a}]" if k == "rewrite" else f"{k} {a}"
     if k == "lemma" and type(a) is str and a in LEMMAS:
         return "apply " + a
     if k == "simp" and a is None:
@@ -64,7 +79,14 @@ def act(kind, argument=None):
     return obj
 
 
-def candidates(state):
+def state_nodes(state):
+    """Receiver resource count matching the policy graph representation."""
+    def count(e): return 1 + sum(count(c) for c in e["children"])
+    return 1 + sum(1 + count(g["expression"]) + sum(1+count(l["expression"]) for l in g["locals"])
+                   for g in state["goals"])
+
+
+def candidates(state, *, induction=False):
     if not state["goals"]:
         return []
     g = state["goals"][0]
@@ -98,7 +120,7 @@ def candidates(state):
         name = local["name"]
         if not REFERENCE.fullmatch(name):
             continue
-        if local["type"] not in {"Prop", "Nat", "Int", "Nat → Nat", "Nat → Prop"}:
+        if local["type"] not in {"Prop", "Nat", "Int", "Nat → Nat", "Nat → Prop", "List Nat"}:
             for suffix in ["", ".1", ".2", ".1.1", ".1.2", ".2.1", ".2.2"]:
                 if reference_expression(state, name + suffix) is not None:
                     result.append(act("exact", name + suffix))
@@ -128,6 +150,22 @@ def candidates(state):
         result.extend(act("lemma", n) for n in sorted(LEMMAS) if ("add" in n and "+" in g["target"]) or ("mul" in n and "*" in g["target"]))
         if "∃" in g["target"]:
             result.extend(act("witness", n) for n in [0, 1, 2])
+    # Receiver-owned names; the induction tactic leaves base and step goals.
+    if not induction: return result[:96]
+    fresh_names = [f"h{i}" for i in range(100) if f"h{i}" not in used][:3]
+    induction_context_safe = all(l["type"] in {"Prop", "Nat", "Int", "Nat → Nat", "Nat → Prop", "List Nat"}
+                                 for goal in state["goals"] for l in goal["locals"])
+    for local in g["locals"]:
+        name = local["name"]
+        if not re.fullmatch(r"h[0-9]{1,2}", name): continue
+        if induction_context_safe and local["type"] == "Nat" and len(fresh_names) >= 2:
+            result.append(act("induct_nat", " ".join([name, *fresh_names[:2]])))
+        if induction_context_safe and local["type"] == "List Nat" and len(fresh_names) >= 3:
+            result.append(act("induct_list", " ".join([name, *fresh_names])))
+    if any(l["type"] == "List Nat" for l in g["locals"]) or "List" in g["target"]:
+        result.append(act("normalize", "list"))
+    elif any(l["type"] == "Nat" for l in g["locals"]) and "=" in g["target"]:
+        result.append(act("normalize", "nat"))
     return result[:96]
 
 
@@ -143,6 +181,9 @@ def _symbolic_priority(state, action):
             return 11
     if kind == "intro":
         return 9  # Receiver offers intro only for a forall or a negated goal.
+    if kind == "normalize": return 8
+    if kind == "induct_list": return 6
+    if kind == "induct_nat": return 3
     if kind == "constructor":
         return 8 if "∧" in g["target"] or "↔" in g["target"] else -3
     if kind == "lemma":
@@ -334,7 +375,9 @@ class LeanEnvironment:
 
     def candidates(self, state):
         """Receiver-owned action provider; experimental environments may extend it."""
-        return candidates(state)
+        has_new_terms = any("List" in g["target"] or ".succ" in g["target"] or
+                            any(l["type"] == "List Nat" for l in g["locals"]) for g in state["goals"])
+        return candidates(state, induction=has_new_terms)
 
     def verify(self, goal, actions):
         statement = theorem(goal)
@@ -401,8 +444,12 @@ def search(env, goal, rank=None, budget=96, depth=18, beam=8):
     for _ in range(depth):
         next_frontier = []
         for path, state in frontier:
+            if state_nodes(state) > 4096:
+                # Both learned and deterministic search obey this receiver
+                # limit. An oversized open state never becomes a success.
+                continue
             options = env.candidates(state)
-            scores = rank(deepcopy(state), deepcopy(options)) if rank else [_symbolic_priority(state, a) for a in options]
+            scores = rank(deepcopy(state), deepcopy(options)) if rank else getattr(env, "default_rank", lambda s, opts: [_symbolic_priority(s, a) for a in opts])(state, options)
             if len(scores) != len(options) or any(type(v) not in {float, int} or not math.isfinite(v) for v in scores):
                 raise ValueError("invalid policy scores")
             for index in sorted(range(len(options)), key=lambda i: (-scores[i], i))[:beam]:

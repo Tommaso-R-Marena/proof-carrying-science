@@ -7,10 +7,10 @@ from __future__ import annotations
 
 from copy import deepcopy
 from .environment import search
-from .ir import digest, theorem
+from .induction_ir import digest, theorem
 
 
-def investigate(env, plan, rank=None, budget=96, *, reuse=False, source_revision=None, source_license=None):
+def investigate(env, plan, rank=None, budget=96, *, reuse=False, source_revision=None, source_license=None, abstraction=False):
     if type(plan) is not dict or set(plan) != {"format", "nodes"} or plan["format"] != "pcs-research-plan-v1":
         raise ValueError("invalid research plan")
     nodes = deepcopy(plan["nodes"])
@@ -33,7 +33,7 @@ def investigate(env, plan, rank=None, budget=96, *, reuse=False, source_revision
         visiting.remove(name); order.append(name)
     for name in by_id: visit(name)
     from .library import LICENSES
-    if type(reuse) is not bool or (reuse and (type(source_revision) is not str or not source_revision or source_license not in LICENSES)):
+    if type(abstraction) is not bool or (abstraction and not reuse) or type(reuse) is not bool or (reuse and (type(source_revision) is not str or not source_revision or source_license not in LICENSES)):
         raise ValueError("explicit checked-reuse mode and source provenance required")
     memory = {}
     library = {"format": "pcs-checked-lemma-library-v1", "entries": []}
@@ -47,10 +47,18 @@ def investigate(env, plan, rank=None, budget=96, *, reuse=False, source_revision
             memory[name] = search(env, node["goal"], rank, budget=budget, beam=4)
         else:
             from .library import LibraryEnvironment
-            reusable = LibraryEnvironment(library, cache=env.cache, timeout=env.timeout, max_steps=env.max_steps)
+            if abstraction:
+                from .abstraction_environment import AbstractionEnvironment
+                environment=AbstractionEnvironment
+            else:environment=LibraryEnvironment
+            reusable = environment(library, cache=env.cache, timeout=env.timeout, max_steps=env.max_steps)
             try:
                 from .library import reuse_priority
-                memory[name] = search(reusable, node["goal"], rank or reuse_priority, budget=budget, beam=4)
+                if abstraction:
+                    from .abstraction_environment import abstraction_priority
+                    priority=abstraction_priority
+                else:priority=reuse_priority
+                memory[name] = search(reusable, node["goal"], rank or priority, budget=budget, beam=4)
                 memory[name]["available_verified_nodes"] = list(library_ids)
                 construction_calls += reusable.construction_invocations
                 construction_seconds += reusable.construction_seconds

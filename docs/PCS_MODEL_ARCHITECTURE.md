@@ -13,3 +13,9 @@ See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
 ## Checked mathematical reuse and verified feedback
 
 ReuseNetwork adds 1,201 trainable goal/premise matching parameters to the existing network (11,620 total), consuming actual audited Lean theorem signatures. Graph/bag and RL negative results are preserved. [Training, checkpoints and comparison](PCS_CHECKED_REUSE_REPORT.md).
+
+## October 11 induction and grounded abstraction update
+
+See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
+
+GroundedNetwork has 12,924 parameters, trainable message/update layers, binding edges, selected local/global premise attention, policy/value/uncertainty heads and checker-response training. Bag and ungrounded ablations solve the same 4/8; structural superiority remains unestablished.

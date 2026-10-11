@@ -13,3 +13,11 @@ See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
 ## Checked mathematical reuse and verified feedback
 
 The existing typed Nat/Int/Prop/function grammar is preserved. New proof capabilities operate on its existing quantified/order expressions and retain the original English, selected IR, exact Lean type and explicit semantic-grounding boundary. [Working mathematical examples](PCS_CHECKED_REUSE_REPORT.md).
+
+## October 11 induction and grounded abstraction update
+
+See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
+
+NatList, nil/cons/append/length/reverse and Nat.succ have explicit typed IR, bounded controlled-English parsing, Lean lowering and structured explanation. Outer-universal canonicalization preserves scope and strengthens the duplicate firewall. These extensions are tested, not covered by the earlier source-bound parser proof.
+
+The release leaves Aristotle byte-pinned `language.py` and `ir.py` unchanged. Explicit `induction_language.py` and `induction_ir.py` implement the extended fragment. They are proposal representations and receiver-owned renderers, with mathematical acceptance still requiring the same Lean kernel boundary.

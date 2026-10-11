@@ -13,3 +13,9 @@ See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
 ## Checked mathematical reuse and verified feedback
 
 Checked-reuse V1 adds 36 actual sequential actor-critic episodes (129 environment steps), across three seeds and two generations. All six runs changed weights; one seed improved solve count, one regressed, one stayed unchanged. No robust RL superiority is claimed. [Complete reports](PCS_CHECKED_REUSE_REPORT.md).
+
+## October 11 induction and grounded abstraction update
+
+See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
+
+V2 executes 32 sequential actor–critic episodes across two seeds/two generations, up to ten actions, including 24 verified training proofs. Rewards derive from checker transitions and terminal immutable-goal verification. All generations solve 4/8 final tasks: real weight updates, no measured solve-rate improvement.
