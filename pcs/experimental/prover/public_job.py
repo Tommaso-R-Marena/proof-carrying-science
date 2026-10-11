@@ -8,9 +8,9 @@ import subprocess
 import time
 
 from .cli import run
-from .ir import digest
+from .induction_ir import digest
 from .environment import LeanEnvironment, render_action
-from .language import formalize, explain
+from .induction_language import formalize, explain
 
 
 def check_actions(statement, actions, interpretation=None):

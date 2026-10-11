@@ -11,9 +11,9 @@ import subprocess
 
 from .environment import LeanEnvironment, search, _symbolic_priority,reference_expression
 from .induction_environment import InductionEnvironment
-from .ir import digest,expression
+from .induction_ir import digest,expression
 from .discovery import decode,type_of
-from .language import formalize
+from .induction_language import formalize
 from .induction_corpus import tasks
 
 VERSION = "pcs-bridge-builder-v1"

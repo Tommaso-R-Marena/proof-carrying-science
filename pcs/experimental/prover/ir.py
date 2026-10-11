@@ -4,22 +4,16 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from copy import deepcopy
 
-TYPES = {"Prop": "Prop", "Nat": "Nat", "Int": "Int", "NatFn": "Nat → Nat", "NatPred": "Nat → Prop",
-         "NatList": "List Nat"}
+TYPES = {"Prop": "Prop", "Nat": "Nat", "Int": "Int", "NatFn": "Nat → Nat", "NatPred": "Nat → Prop"}
 NAME = re.compile(r"[A-Za-z][A-Za-z0-9_]{0,23}\Z")
 RESERVED = {"Prop", "Nat", "Int", "Type", "Sort", "True", "False", "theorem", "axiom", "def",
             "fun", "forall", "exists", "sorry", "admit", "by", "let", "in", "if", "then", "else",
-            "match", "with", "where", "class", "instance", "unsafe", "namespace", "end", "import", "set_option",
-            "List", "NatList"}
+            "match", "with", "where", "class", "instance", "unsafe", "namespace", "end", "import", "set_option"}
 OPS = {"and": ("Prop", "Prop", "∧"), "or": ("Prop", "Prop", "∨"),
        "implies": ("Prop", "Prop", "→"), "iff": ("Prop", "Prop", "↔"),
        "add": (None, None, "+"), "mul": (None, None, "*"),
-       "eq": (None, "Prop", "="), "le": (None, "Prop", "≤"),
-       "append": ("NatList", "NatList", "++")}
-UNARY = {"succ": ("Nat", "Nat", "Nat.succ"), "length": ("NatList", "Nat", "List.length"),
-         "reverse": ("NatList", "NatList", "List.reverse")}
+       "eq": (None, "Prop", "="), "le": (None, "Prop", "≤")}
 
 
 def digest(obj):
@@ -39,18 +33,6 @@ def expression(e, variables, depth=0):
             return t, f"({n} : {t})"
     if op in {"true", "false"} and set(e) == {"op"}:
         return "Prop", op.title()
-    if op == "nil" and set(e) == {"op"}:
-        return "NatList", "(List.nil : List Nat)"
-    if op in UNARY and set(e) == {"op", "arg"}:
-        at, a = expression(e["arg"], variables, depth + 1)
-        expected, result, name = UNARY[op]
-        if at == expected:
-            return result, f"({name} {a})"
-    if op == "cons" and set(e) == {"op", "head", "tail"}:
-        ht, h = expression(e["head"], variables, depth + 1)
-        tt, t = expression(e["tail"], variables, depth + 1)
-        if ht == "Nat" and tt == "NatList":
-            return "NatList", f"(List.cons {h} {t})"
     if op == "not" and set(e) == {"op", "arg"}:
         t, a = expression(e["arg"], variables, depth + 1)
         if t == "Prop":
@@ -73,7 +55,7 @@ def expression(e, variables, depth=0):
         lt, l = expression(e["left"], variables, depth + 1)
         rt, r = expression(e["right"], variables, depth + 1)
         expected, result, symbol = OPS[op]
-        allowed = lt == rt and (lt == expected if expected else lt in ({"Nat", "Int", "NatList"} if op == "eq" else {"Nat", "Int"}))
+        allowed = lt == rt and (lt == expected if expected else lt in {"Nat", "Int"})
         if allowed:
             return result or lt, f"({l} {symbol} {r})"
     raise ValueError("unsupported or ill-typed expression")
@@ -111,19 +93,3 @@ def declaration(names, body, domain="Prop"):
     obj = {"format": "pcs-math-ir-v1", "binders": [{"name": n, "type": domain} for n in names], "body": body}
     theorem(obj)
     return obj
-
-
-def canonical_declaration(obj):
-    """Normalize grouping of consecutive outer universal binders only.
-
-    Quantifier order and binders under implication/existence are preserved.
-    The receiver's type validator rejects capture and name shadowing first.
-    """
-    theorem(obj)
-    result=deepcopy(obj)
-    while result["body"]["op"]=="forall":
-        b=result["body"]
-        result["binders"].append({"name":b["name"],"type":b["type"]})
-        result["body"]=b["body"]
-    theorem(result)
-    return result

@@ -12,8 +12,8 @@ import uuid
 from pcs.jsonio import strict_json_loads
 from .cli import run
 from .environment import LeanEnvironment, candidates, render_action
-from .language import formalize, parse_lean, explain
-from .ir import digest
+from .induction_language import formalize, parse_lean, explain
+from .induction_ir import digest
 
 PUBLIC_ORIGIN = "https://proof-carrying-science-site.marenatommaso.workers.dev"
 

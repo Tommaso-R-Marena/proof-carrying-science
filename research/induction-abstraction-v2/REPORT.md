@@ -62,3 +62,5 @@ Bridge Builder exposes four public training missions built from actual Lean tran
 A separate [cold end-to-end run](cold-end-to-end.json.gz) includes fresh environment construction, fixed-library compilation and model loading: the new five-action statement verifies in 16.18 s using the learned policy/library and 5.38 s using symbolic search. Offline discovery/training costs remain additional.
 
 The posthoc deterministic retrieval repair solves 5/8 of the v2 final set, versus its original 1/8. This is a human scheduler fix after inspecting failures, separately labeled and not evidence of autonomous model self-improvement.
+
+The release preserves the exact Aristotle-bound legacy `language.py` and `ir.py`; current induction consumers explicitly import `induction_language.py` and `induction_ir.py`. The archived experimental source snapshot retains its actual original file layout for reproducibility and does not acquire the legacy parser proof by this later relocation. Neither extension is covered by that refinement theorem.

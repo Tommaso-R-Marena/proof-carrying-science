@@ -19,7 +19,7 @@ import queue
 import threading
 import time
 
-from .ir import digest, theorem
+from .induction_ir import digest, theorem
 
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT / "formal/PCSProofProbe.lean"

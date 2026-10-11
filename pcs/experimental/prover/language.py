@@ -7,11 +7,11 @@ from __future__ import annotations
 
 import re
 
-from .ir import TYPES, OPS, UNARY, binary, var, declaration, theorem, expression, digest
+from .ir import TYPES, OPS, binary, var, declaration, theorem, expression, digest
 
-TOKEN = re.compile(r"∀|∃|→|↔|∧|∨|¬|≤|\+\+|(?:List|Nat)\.[A-Za-z]+|[A-Za-z][A-Za-z0-9_]*|[0-9]+|[(),:+*=]")
+TOKEN = re.compile(r"∀|∃|→|↔|∧|∨|¬|≤|[A-Za-z][A-Za-z0-9_]*|[0-9]+|[(),:+*=]")
 SYMBOLS = {v[2]: k for k, v in OPS.items()}
-PRECEDENCE = {"↔": 1, "→": 2, "∨": 3, "∧": 4, "=": 5, "≤": 5, "+": 6, "++": 6, "*": 7}
+PRECEDENCE = {"↔": 1, "→": 2, "∨": 3, "∧": 4, "=": 5, "≤": 5, "+": 6, "*": 7}
 
 
 class Parser:
@@ -47,8 +47,6 @@ class Parser:
             binders = []
             while self.peek() == "(":
                 self.take("("); name = self.take(); self.take(":"); domain = self.take()
-                if domain == "List":
-                    self.take("Nat"); domain = "NatList"
                 if domain == "Nat" and self.peek() == "→":
                     self.take("→"); codomain = self.take()
                     if codomain not in {"Nat", "Prop"}: raise ValueError("unsupported function codomain")
@@ -69,15 +67,6 @@ class Parser:
             left = {"op": "not", "arg": self.parse(8, depth + 1)}
         elif tok in {"True", "False"}:
             left = {"op": tok.lower()}
-        elif tok in {"List.nil", "nil"}:
-            if self.peek() == ":":
-                self.take(":"); self.take("List"); self.take("Nat")
-            left = {"op": "nil"}
-        elif tok in {v[2] for v in UNARY.values()} | set(UNARY):
-            op = next((k for k, v in UNARY.items() if v[2] == tok), tok)
-            left = {"op": op, "arg": self.parse(8, depth + 1)}
-        elif tok == "List.cons":
-            left = {"op": "cons", "head": self.parse(8, depth + 1), "tail": self.parse(8, depth + 1)}
         elif tok.isdigit():
             domain = next((v for v in self.variables.values() if v in {"Nat", "Int"}), "Nat")
             if self.peek() == ":":
@@ -120,8 +109,7 @@ def parse_lean(source):
 
 
 DOMAINS = {"propositions": "Prop", "natural numbers": "Nat", "integers": "Int",
-           "functions from natural numbers to natural numbers": "NatFn", "predicates on natural numbers": "NatPred",
-           "lists of natural numbers": "NatList"}
+           "functions from natural numbers to natural numbers": "NatFn", "predicates on natural numbers": "NatPred"}
 
 
 def formalize(source, ranker=None):
@@ -162,11 +150,6 @@ def formalize(source, ranker=None):
         t = {"natural number": "Nat", "integer": "Int", "proposition": "Prop"}[match[1].lower()]
         return f"∃ ({match[2]} : {t}), "
     body = re.sub(r"there exists (?:a|an) (natural number|integer|proposition) ([A-Za-z][A-Za-z0-9_]*) such that ", nested_exists, body, flags=re.I)
-    # These are explicit unary operators, with scope determined by parentheses.
-    for words, symbol in [("the length of", "length"), ("the reversal of", "reverse"),
-                          ("the successor of", "succ"), ("the empty list", "nil"),
-                          ("appended to", "++")]:
-        body = re.sub(r"\b" + words + r"\b", symbol, body, flags=re.I)
     if re.match(r"if ", body, re.I):
         pieces = re.split(r"\bthen\b", body[3:], maxsplit=1, flags=re.I)
         if len(pieces) != 2:
@@ -210,15 +193,11 @@ def explain(ir):
         if op == "var": return e["name"]
         if op == "number": return str(e["value"])
         if op in {"true", "false"}: return op
-        if op == "nil": return "the empty list"
-        if op in UNARY:
-            return {"succ": "the successor of", "length": "the length of", "reverse": "the reversal of"}[op] + " (" + render(e["arg"]) + ")"
-        if op == "cons": return "the list with head " + render(e["head"]) + " and tail (" + render(e["tail"]) + ")"
         if op == "not": return "not (" + render(e["arg"]) + ")"
         if op == "apply": return render(e["fn"]) + " applied to " + render(e["arg"])
         if op in {"forall", "exists"}:
             return ("for every " if op == "forall" else "there exists ") + e["name"] + " of type " + e["type"] + ", " + render(e["body"])
-        return "(" + render(e["left"]) + " " + ("appended to" if op == "append" else words[op]) + " " + render(e["right"]) + ")"
+        return "(" + render(e["left"]) + " " + words[op] + " " + render(e["right"]) + ")"
     binders = ir["binders"]
     statement = "; ".join("For all " + domains[b["type"]] + " " + b["name"] for b in binders)
     statement += (", " if statement else "") + render(ir["body"])

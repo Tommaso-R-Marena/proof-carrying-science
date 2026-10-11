@@ -6,9 +6,9 @@ import pytest
 from pcs.experimental.prover.bridge_data import intake
 from pcs.experimental.prover.bridge_catalog import build
 from pcs.experimental.prover.environment import LeanEnvironment
-from pcs.experimental.prover.language import formalize
+from pcs.experimental.prover.induction_language import formalize
 from pcs.experimental.prover.data import structural_fingerprint
-from pcs.experimental.prover.ir import canonical_declaration
+from pcs.experimental.prover.induction_ir import canonical_declaration
 
 def test_outer_quantifier_grouping_cannot_bypass_holdout_firewall():
     goal=formalize("For all functions from natural numbers to natural numbers f and g, (∀ (n : Nat), f(n) equals g(n)).")["candidates"][0]["ir"]
@@ -19,7 +19,7 @@ def test_independent_session_intake_and_consent_firewall(tmp_path):
     # is mandatory for core CI. A small fixture uses real freshly checked states.
     if not __import__("shutil").which("lean"):pytest.skip("Lean unavailable")
     from pcs.experimental.prover.environment import act
-    from pcs.experimental.prover.ir import digest
+    from pcs.experimental.prover.induction_ir import digest
     from pcs.experimental.prover.bridge_catalog import compact, VERSION
     goal=formalize("For all propositions P, if P then P.")["candidates"][0]["ir"]
     actions=[act("intro","h0"),act("intro","h1"),act("exact","h1")]

@@ -13,8 +13,8 @@ from .abstraction_environment import AbstractionEnvironment
 from .grounded_model import GroundedNetwork
 from .reuse_model import ReuseNetwork
 from .discovery import decode
-from .ir import canonical_declaration,digest
-from .language import explain
+from .induction_ir import canonical_declaration,digest
+from .induction_language import explain
 from .data import structural_fingerprint
 
 SOURCES=[

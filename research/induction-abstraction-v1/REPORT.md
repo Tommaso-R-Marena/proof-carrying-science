@@ -48,3 +48,5 @@ Lean verifies the exact typed theorem. It does not certify unrestricted English 
 ## Negative result
 
 Every learned final checkpoint solved 0/8; symbolic search solved 2/8. The first incomplete run exceeded the state graph bound during validation; its log and checkpoint fingerprints are preserved in `incomplete-attempt.log` and `implementation-repair.json`. The corrected run retained only five reuse imitation transitions. This experiment does not establish self-improvement.
+
+The release preserves the exact Aristotle-bound legacy `language.py` and `ir.py`; current induction consumers explicitly import `induction_language.py` and `induction_ir.py`. The archived experimental source snapshot retains its actual original file layout for reproducibility and does not acquire the legacy parser proof by this later relocation. Neither extension is covered by that refinement theorem.

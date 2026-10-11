@@ -17,7 +17,7 @@ import time
 
 from .data import structural_fingerprint
 from .environment import LeanEnvironment, candidates, render_action, _symbolic_priority, ROOT
-from .ir import digest, theorem
+from .induction_ir import digest, theorem
 
 FORMAT = "pcs-checked-lemma-library-v1"
 PREFIX = "PCSReuseL"

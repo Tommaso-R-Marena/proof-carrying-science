@@ -3,8 +3,8 @@ import copy
 import os
 import shutil
 import pytest
-from pcs.experimental.prover.ir import theorem, expression, digest, canonical_declaration
-from pcs.experimental.prover.language import formalize, parse_lean, explain
+from pcs.experimental.prover.induction_ir import theorem, expression, digest, canonical_declaration
+from pcs.experimental.prover.induction_language import formalize, parse_lean, explain
 from pcs.experimental.prover.environment import act, render_action, search
 from pcs.experimental.prover.induction_environment import InductionEnvironment
 from pcs.experimental.prover.induction_corpus import tasks

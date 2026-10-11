@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from .environment import search
-from .ir import digest, theorem
+from .induction_ir import digest, theorem
 
 
 def investigate(env, plan, rank=None, budget=96, *, reuse=False, source_revision=None, source_license=None, abstraction=False):

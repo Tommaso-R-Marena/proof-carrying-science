@@ -3,7 +3,7 @@
 Transfer problems reuse mathematical laws across new compositions; they are not
 external or secret theorem benchmarks. Separate family probes use unseen laws.
 """
-from .language import formalize
+from .induction_language import formalize
 from .data import structural_fingerprint
 
 

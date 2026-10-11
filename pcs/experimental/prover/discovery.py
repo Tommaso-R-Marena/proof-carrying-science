@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from .ir import TYPES, UNARY, binary, var, theorem, expression, digest
+from .induction_ir import TYPES, UNARY, binary, var, theorem, expression, digest
 from .data import structural_fingerprint
 from .environment import search
 from .library import FORMAT, validate_library

@@ -5,7 +5,7 @@ from copy import deepcopy
 import hashlib
 
 from pcs.proof_translation_v06 import _claim_ir_v06, _obligation, _proof_obligation_graph
-from .ir import digest, theorem, canonical_declaration
+from .induction_ir import digest, theorem, canonical_declaration
 
 
 def structural_fingerprint(ir):

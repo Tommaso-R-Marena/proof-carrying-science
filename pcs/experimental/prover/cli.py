@@ -6,8 +6,8 @@ import json
 from pathlib import Path
 
 from .environment import LeanEnvironment, search
-from .ir import digest, canonical_declaration
-from .language import formalize, explain, parse_lean
+from .induction_ir import digest, canonical_declaration
+from .induction_language import formalize, explain, parse_lean
 
 
 def run(statement, registry_dir=None, budget=96, interpretation=None, library_path=None, prepared_env=None, domain=None):
