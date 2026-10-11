@@ -230,7 +230,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          python scripts/verify_runtime_refinement.py --site .ci-components/pcs-site --certiforge .ci-components/certiforge --output "$RUNNER_TEMP/runtime-refinement.json"
+          python scripts/verify_runtime_refinement.py --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-refinement.json"
           python scripts/verify_math_language_parity.py --output "$RUNNER_TEMP/math-language-parity.json"
       - name: Compare actual Lean, Python and JavaScript bounded reasoning outputs
         shell: bash

@@ -29,7 +29,7 @@ substitute for compilation or the complete theorem inventory.
 | CertiForge | `crates/certir-interpreter/src/lib.rs` | 14–19, 39–66, 68–77, 79–137 | Value constructor, binary operations, bit-vector comparisons and `eval_expr` |
 
 The gate checks exact window bytes against receiver-selected component checkouts,
-then the kernel checks extraction certificates and semantic theorems. Rust binding
+then fresh elaboration checks the three source-reading extraction modules before the complete axiom inventory. Cached extraction oleans cannot substitute for today’s auxiliary source bytes. The kernel checks extraction certificates and semantic theorems. Rust binding
 itself compares lexer tokens and validates precedence. This is a proof under the
 declared Rust-subset semantics, not a formal verification of rustc, native machine
 code, allocation, the operating system or all runtime files. Source readers and

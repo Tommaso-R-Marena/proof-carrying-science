@@ -70,6 +70,15 @@ def main():
     findings = audit(paths)
     if findings:
         raise ValueError("\n".join(findings))
+    # SourceText reads auxiliary files during elaboration. Re-elaborate these
+    # certificates so a cached olean cannot substitute for today's source bytes.
+    extraction_modules = ["PCSRuntimeRefinement/Python.lean", "PCSRuntimeRefinement/JavaScript.lean",
+                          "PCSForgeRefinement/RustSyntax.lean"]
+    for module in extraction_modules:
+        compiled = subprocess.run(["lake", "env", "lean", module], cwd=ROOT / "formal",
+                                  text=True, capture_output=True, timeout=600)
+        if compiled.returncode:
+            raise RuntimeError(compiled.stdout + compiled.stderr)
     driver = ROOT / "formal/tools/PrintPrincipalAxioms.lean"
     names = re.findall(r"^#print axioms (\S+)$", driver.read_text(), re.M)
     proc = subprocess.run(["lake", "env", "lean", str(driver)], cwd=ROOT / "formal",
@@ -78,6 +87,7 @@ def main():
         raise RuntimeError(proc.stdout + proc.stderr)
     axioms = check_inventory(proc.stdout, names)
     report = {"format": "pcs-runtime-refinement-integration-v1", "proof_sources": len(paths),
+              "fresh_extraction_certificates": extraction_modules,
               "kernel_checked_inventory": axioms, "source_windows": windows,
               "conditional_runtime_refinements_proved": False, "parser_source_refinement_proved": False,
               "rust_top_level_eval_extracted": False, "pcs_scientific_authority": False}
