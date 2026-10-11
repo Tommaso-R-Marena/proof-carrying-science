@@ -137,3 +137,7 @@ Registry entries explicitly bind checkpoint, training source archive, dataset ma
 ### Ordinary-kernel control portability
 
 The Aristotle integration now includes proof-only computation certificates for the three expensive fixed controls, preserving all original algorithms and control statements. The independent prototype build and axiom inventory cover all 226 original named positive theorems and 1,071 intermediate certificate lemmas; these helpers add zero model benchmark tasks. See the [exact sources, commands, resource measurements and scope](../research/aristotle-omega-dd-v1/kernel-portability/result.json). Generator byte reproduction and source-overlay integrity are mandatory alongside the unchanged full control and negative gates. Integrated-source compilation and protected CI remain release prerequisites. This work trains no model and proves no Python/JavaScript refinement or scientific acceptance.
+
+## Checked mathematical reuse and verified feedback
+
+Checked lemma reuse, real quantified witnesses/function rewriting/order proofs, a trainable goal/premise graph head and independently verified feedback refinement now execute. The validation-selected feedback model improved 0→5/8 on new authored compositions; other seeds did not improve and the symbolic baseline still solves 6/8. See [complete artifacts and limitations](PCS_CHECKED_REUSE_REPORT.md).

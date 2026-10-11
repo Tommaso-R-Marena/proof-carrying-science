@@ -30,6 +30,8 @@ def replay_receipt(env, goal, receipt):
         raise ValueError("receipt not bound to requested theorem")
     # Ignore producer success, reward, kernel and authority assertions.
     fresh = env.verify(goal, receipt["actions"])
+    if fresh.get("library_sha256") != receipt.get("library_sha256") or fresh.get("library") != receipt.get("library"):
+        raise ValueError("receipt library generation mismatch")
     if fresh["proof"] != receipt.get("proof") or fresh["adapter_sha256"] != receipt.get("adapter_sha256") or fresh["lean"] != receipt.get("lean"):
         raise ValueError("receipt provenance or source mismatch")
     return fresh

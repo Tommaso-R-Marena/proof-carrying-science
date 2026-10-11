@@ -9,3 +9,7 @@ See [the consolidated execution report](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md) 
 V2 freezes another actual feedback protocol before fitting, kernel-checks the authored six-action theorem, replays intake, updates the next checkpoint and retains 2/2 additional evaluations before and after. This is real iterative training, without a demonstrated improvement claim. The complete replayable cycle and separate checkpoints live in research/lean-learning-v2.
 
 See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
+
+## Checked mathematical reuse and verified feedback
+
+Verified feedback refinement prioritizes failures solved independently, freezes new evaluation, and selects a candidate on validation before final search. Selected checkpoint 0→5/8; two other seeds 0/8; symbolic baseline/portfolio 6/8. This is a genuine but seed-sensitive measured learning cycle. [Provenance and results](PCS_CHECKED_REUSE_REPORT.md).

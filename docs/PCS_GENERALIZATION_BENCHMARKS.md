@@ -9,3 +9,7 @@ See [the consolidated execution report](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md) 
 V2 expands to twelve training families and six public final tasks. Injective Nat→Nat composition is a real training proof; Nat→Prop predicate transitivity is held out and requires nine Lean actions. Selected graph solves 4/6; other graph seeds and bag/symbolic solve 5/6. One missing-assumption task remains unknown. General sets, induction, external projects, real algebra and scientific empirical transfer remain unresolved.
 
 See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
+
+## Checked mathematical reuse and verified feedback
+
+New actual Lean tests cover Nat/Int order chains and antisymmetry, quantified function rewriting, local existential witnesses and checked lemma transfer. Evaluation is authored compositional transfer with shared families, not external mathematics or private blind testing. [Frozen tasks and all results](PCS_CHECKED_REUSE_REPORT.md).

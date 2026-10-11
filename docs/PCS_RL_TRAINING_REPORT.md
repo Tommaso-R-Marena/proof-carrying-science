@@ -9,3 +9,7 @@ See [the consolidated execution report](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md) 
 V2 ran 72 sequential episodes across the expanded twelve training tasks, three seeds and two generations. Actual RL parameter updates persist; final solve counts remain 4/6, 5/6, 5/6 before and after RL. The trained symbolic/bag baselines remain available. No long-horizon discovery or RL superiority is established.
 
 See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
+
+## Checked mathematical reuse and verified feedback
+
+Checked-reuse V1 adds 36 actual sequential actor-critic episodes (129 environment steps), across three seeds and two generations. All six runs changed weights; one seed improved solve count, one regressed, one stayed unchanged. No robust RL superiority is claimed. [Complete reports](PCS_CHECKED_REUSE_REPORT.md).

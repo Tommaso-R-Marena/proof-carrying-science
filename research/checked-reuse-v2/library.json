@@ -1,0 +1,536 @@
+{
+  "entries": [
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": null,
+          "kind": "constructor"
+        },
+        {
+          "argument": "h2.2",
+          "kind": "exact"
+        },
+        {
+          "argument": "h2.1",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "Q",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "P",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "4034db308d171b46c41e7e9ba2723e7fe4db6647"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2.1",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "name": "P",
+            "op": "var"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "4034db308d171b46c41e7e9ba2723e7fe4db6647"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "h3",
+          "kind": "intro"
+        },
+        {
+          "argument": null,
+          "kind": "constructor"
+        },
+        {
+          "argument": "h2",
+          "kind": "exact"
+        },
+        {
+          "argument": "h3",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "Q",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "left": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "and",
+              "right": {
+                "name": "Q",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "4034db308d171b46c41e7e9ba2723e7fe4db6647"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "4034db308d171b46c41e7e9ba2723e7fe4db6647"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "Nat.add_comm",
+          "kind": "lemma"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          },
+          {
+            "name": "m",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "n",
+              "op": "var"
+            },
+            "op": "add",
+            "right": {
+              "name": "m",
+              "op": "var"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "left": {
+              "name": "m",
+              "op": "var"
+            },
+            "op": "add",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "4034db308d171b46c41e7e9ba2723e7fe4db6647"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "h3",
+          "kind": "intro"
+        },
+        {
+          "argument": "h4",
+          "kind": "intro"
+        },
+        {
+          "argument": "h5",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2.1",
+          "kind": "apply"
+        },
+        {
+          "argument": "h2.2",
+          "kind": "apply"
+        },
+        {
+          "argument": "h5",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "f",
+            "type": "NatFn"
+          },
+          {
+            "name": "g",
+            "type": "NatFn"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "body": {
+                  "left": {
+                    "left": {
+                      "arg": {
+                        "name": "v2",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "arg": {
+                        "name": "v3",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    }
+                  },
+                  "op": "implies",
+                  "right": {
+                    "left": {
+                      "name": "v2",
+                      "op": "var"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "name": "v3",
+                      "op": "var"
+                    }
+                  }
+                },
+                "name": "v3",
+                "op": "forall",
+                "type": "Nat"
+              },
+              "name": "v2",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "body": {
+                  "left": {
+                    "left": {
+                      "arg": {
+                        "name": "v4",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "g",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "arg": {
+                        "name": "v5",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "g",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    }
+                  },
+                  "op": "implies",
+                  "right": {
+                    "left": {
+                      "name": "v4",
+                      "op": "var"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "name": "v5",
+                      "op": "var"
+                    }
+                  }
+                },
+                "name": "v5",
+                "op": "forall",
+                "type": "Nat"
+              },
+              "name": "v4",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "body": {
+                "left": {
+                  "left": {
+                    "arg": {
+                      "arg": {
+                        "name": "v0",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "fn": {
+                      "name": "g",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "arg": {
+                      "arg": {
+                        "name": "v1",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "fn": {
+                      "name": "g",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  }
+                },
+                "op": "implies",
+                "right": {
+                  "left": {
+                    "name": "v0",
+                    "op": "var"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "name": "v1",
+                    "op": "var"
+                  }
+                }
+              },
+              "name": "v1",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "name": "v0",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "4034db308d171b46c41e7e9ba2723e7fe4db6647"
+    }
+  ],
+  "format": "pcs-checked-lemma-library-v1"
+}

@@ -9,3 +9,7 @@ See [the consolidated execution report](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md) 
 The public lab exposes the same bounded pipeline and independent proof evidence. Research planning still executes a prescribed dependency graph with three arithmetic proofs and failure propagation; it is not a learned autonomous scientific-discovery agent.
 
 See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
+
+## Checked mathematical reuse and verified feedback
+
+The explicit research scheduler can now apply preceding independently proved lemmas, with declared provenance and construction accounting. Scheduling, conjectures and literature search remain unlearned. [Actual dependency-reuse test](../tests/test_checked_reuse.py) and [report](PCS_CHECKED_REUSE_REPORT.md).

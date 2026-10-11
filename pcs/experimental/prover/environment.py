@@ -27,7 +27,8 @@ WORKER = ROOT / "formal/PCSProofWorker.lean"
 SIMPLE = {"constructor": "constructor", "assumption": "assumption", "rfl": "rfl",
           "left": "left", "right": "right", "contradiction": "contradiction"}
 LEMMAS = {"Nat.add_zero", "Nat.zero_add", "Nat.add_comm", "Nat.add_assoc",
-          "Nat.mul_zero", "Nat.zero_mul", "Nat.mul_comm", "Nat.mul_one", "Nat.one_mul"}
+          "Nat.mul_zero", "Nat.zero_mul", "Nat.mul_comm", "Nat.mul_one", "Nat.one_mul",
+          "Nat.le_refl", "Nat.le_trans", "Nat.le_antisymm", "Int.le_refl", "Int.le_trans", "Int.le_antisymm"}
 REFERENCE = re.compile(r"[A-Za-z][A-Za-z0-9_]{0,23}(?:\.[12]){0,3}\Z")
 
 
@@ -52,6 +53,8 @@ def render_action(action):
         return "simp only [Nat.add_zero, Nat.zero_add, Nat.mul_zero, Nat.zero_mul, Nat.mul_one, Nat.one_mul]"
     if k == "witness" and type(a) is int and 0 <= a <= 8:
         return f"refine ⟨{a}, ?_⟩"
+    if k == "witness" and type(a) is str and REFERENCE.fullmatch(a) and a.split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
+        return f"refine ⟨{a}, ?_⟩"
     raise ValueError("unsupported proof action")
 
 
@@ -70,6 +73,13 @@ def candidates(state):
         return expr["value"].split(":")[0] if expr["kind"] == "constant" else ""
     def contains(expr, sought):
         return expr == sought or any(contains(child, sought) for child in expr["children"])
+    def matches_pattern(pattern, expr):
+        if pattern["kind"] == "bound": return True
+        return (pattern["kind"] == expr["kind"] and pattern["value"] == expr["value"] and
+                len(pattern["children"]) == len(expr["children"]) and
+                all(matches_pattern(a, b) for a, b in zip(pattern["children"], expr["children"])))
+    def contains_pattern(expr, pattern):
+        return matches_pattern(pattern, expr) or any(contains_pattern(child, pattern) for child in expr["children"])
     def equality_left(expr):
         if head(expr) != "Eq" or expr["kind"] != "application": return None
         return expr["children"][0]["children"][1]
@@ -98,8 +108,21 @@ def candidates(state):
                     left_side = equality_left(premise)
                     if left_side is not None and contains(g["expression"], left_side):
                         result.append(act("rewrite", name + suffix))
+                    elif premise["kind"] == "forall":
+                        body = premise
+                        while body["kind"] == "forall": body = body["children"][1]
+                        left_side = equality_left(body)
+                        if left_side is not None and contains_pattern(g["expression"], left_side):
+                            result.append(act("rewrite", name + suffix))
             if head(local["expression"]) == "Or" and fresh is not None:
                 result.append(act("cases", name + " as " + fresh))
+    if target_head == "Exists":
+        result.extend(act("witness", l["name"]) for l in g["locals"]
+                      if l["type"] in {"Nat", "Int"} and REFERENCE.fullmatch(l["name"]))
+    if "≤" in g["target"] or any("≤" in l["type"] for l in g["locals"]):
+        domains = {l["type"] for l in g["locals"]} & {"Nat", "Int"}
+        result.extend(act("lemma", f"{domain}.{name}") for domain in sorted(domains)
+                      for name in ["le_refl", "le_trans", "le_antisymm"])
     if "Nat" in g["target"] or any(l["type"] == "Nat" for l in g["locals"]):
         if "+" in g["target"] or "*" in g["target"]: result.append(act("simp"))
         result.extend(act("lemma", n) for n in sorted(LEMMAS) if ("add" in n and "+" in g["target"]) or ("mul" in n and "*" in g["target"]))
@@ -111,7 +134,7 @@ def candidates(state):
 def _symbolic_priority(state, action):
     g = state["goals"][0]
     kind = action["kind"]
-    if kind == "exact" and reference_expression(state, action["argument"]) == g["expression"]:
+    if kind == "exact" and premise_matches(g["expression"], reference_expression(state, action["argument"])):
         return 12
     if kind == "exact": return -1
     if kind == "apply":
@@ -123,6 +146,12 @@ def _symbolic_priority(state, action):
     if kind == "constructor":
         return 8 if "∧" in g["target"] or "↔" in g["target"] else -3
     if kind == "lemma":
+        if action["argument"].endswith(".le_antisymm") and "=" in g["target"] and any("≤" in l["type"] for l in g["locals"]):
+            return 11
+        if action["argument"].endswith(".le_refl") and "≤" in g["target"]:
+            return 12
+        if action["argument"].endswith(".le_trans") and "≤" in g["target"]:
+            return 11
         for operation, word in [("+", "add"), ("*", "mul")]:
             pattern = r"([A-Za-z0-9_]+) " + re.escape(operation) + r" ([A-Za-z0-9_]+) = \2 " + re.escape(operation) + r" \1"
             if action["argument"] == "Nat." + word + "_comm" and re.fullmatch(pattern, g["target"]):
@@ -146,6 +175,26 @@ def reference_expression(state, reference):
             return None
         value = left if projection == "1" else right
     return value
+
+
+def premise_matches(target, premise):
+    """Rigid structural match with consistent target metavariable substitution.
+
+    Binder display names are alpha-irrelevant. This is a retrieval hint, not an
+    elaborator or type checker: Lean must still execute and verify the action.
+    """
+    if premise is None: return False
+    substitutions = {}
+    def match(t, p):
+        if t["kind"] == "goal":
+            key = t["value"]
+            if key in substitutions: return substitutions[key] == p
+            substitutions[key] = p
+            return True
+        if t["kind"] != p["kind"] or len(t["children"]) != len(p["children"]): return False
+        if t["kind"] not in {"forall", "lambda"} and t["value"] != p["value"]: return False
+        return all(match(a,b) for a,b in zip(t["children"],p["children"]))
+    return match(target,premise)
 
 
 class LeanEnvironment:
@@ -186,14 +235,20 @@ class LeanEnvironment:
                 self.worker.wait()
             self.worker = None
 
+    def _lean_path(self):
+        return str(self.cache)
+
+    def _worker_file(self):
+        return WORKER
+
     def _worker_source(self, text):
         if self.worker is None:
-            command = [self.lean, "--run", str(WORKER)]
+            command = [self.lean, "--run", str(self._worker_file())]
             limiter = shutil.which("prlimit")
             if limiter:
                 command = [limiter, "--as=8589934592", "--cpu=1800", "--", *command]
             self.worker = subprocess.Popen(command,
-                cwd=ROOT, env={"PATH": os.environ.get("PATH", ""), "LEAN_PATH": str(self.cache)},
+                cwd=ROOT, env={"PATH": os.environ.get("PATH", ""), "LEAN_PATH": self._lean_path()},
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, bufsize=1)
             self.lines = queue.Queue()
@@ -234,7 +289,7 @@ class LeanEnvironment:
     def _run(self, arguments, build=False):
         # Credentials are not inherited by Lean, and submitted data never selects
         # a binary, imports or filesystem location. No privilege assertion is made.
-        env = {"PATH": os.environ.get("PATH", ""), "LEAN_PATH": str(self.cache)}
+        env = {"PATH": os.environ.get("PATH", ""), "LEAN_PATH": self._lean_path()}
         started = time.monotonic()
         try:
             command = [self.lean, *arguments]
@@ -276,6 +331,10 @@ class LeanEnvironment:
             self.observations[key] = self._source(
                 f"#pcs_probe ({statement}) => [{', '.join(tactics)}]\n", "PCS_STATE:")
         return deepcopy(self.observations[key])
+
+    def candidates(self, state):
+        """Receiver-owned action provider; experimental environments may extend it."""
+        return candidates(state)
 
     def verify(self, goal, actions):
         statement = theorem(goal)
@@ -342,7 +401,7 @@ def search(env, goal, rank=None, budget=96, depth=18, beam=8):
     for _ in range(depth):
         next_frontier = []
         for path, state in frontier:
-            options = candidates(state)
+            options = env.candidates(state)
             scores = rank(deepcopy(state), deepcopy(options)) if rank else [_symbolic_priority(state, a) for a in options]
             if len(scores) != len(options) or any(type(v) not in {float, int} or not math.isfinite(v) for v in scores):
                 raise ValueError("invalid policy scores")

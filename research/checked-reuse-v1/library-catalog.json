@@ -1,0 +1,1395 @@
+[
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "Q",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "P",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "kernel": {
+      "axioms": [],
+      "expression": {
+        "children": [
+          {
+            "children": [],
+            "kind": "sort",
+            "value": "0"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "kind": "sort",
+                "value": "0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "1"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "0"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "1"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "2"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              }
+            ],
+            "kind": "forall",
+            "value": "Q"
+          }
+        ],
+        "kind": "forall",
+        "value": "P"
+      },
+      "format": "pcs-lean-kernel-v1"
+    },
+    "name": "PCSReuseL0",
+    "proof_steps": 6,
+    "statement": "\u2200 (P : Prop) (Q : Prop), ((P \u2227 Q) \u2192 (Q \u2227 P))"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "name": "P",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "kernel": {
+      "axioms": [],
+      "expression": {
+        "children": [
+          {
+            "children": [],
+            "kind": "sort",
+            "value": "0"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "kind": "sort",
+                "value": "0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "1"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "0"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "bound",
+                    "value": "2"
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              }
+            ],
+            "kind": "forall",
+            "value": "Q"
+          }
+        ],
+        "kind": "forall",
+        "value": "P"
+      },
+      "format": "pcs-lean-kernel-v1"
+    },
+    "name": "PCSReuseL1",
+    "proof_steps": 4,
+    "statement": "\u2200 (P : Prop) (Q : Prop), ((P \u2227 Q) \u2192 P)"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "Q",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "kernel": {
+      "axioms": [],
+      "expression": {
+        "children": [
+          {
+            "children": [],
+            "kind": "sort",
+            "value": "0"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "kind": "sort",
+                "value": "0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "bound",
+                    "value": "1"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "1"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "3"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "2"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "a._@._internal._hyg.0"
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              }
+            ],
+            "kind": "forall",
+            "value": "Q"
+          }
+        ],
+        "kind": "forall",
+        "value": "P"
+      },
+      "format": "pcs-lean-kernel-v1"
+    },
+    "name": "PCSReuseL2",
+    "proof_steps": 7,
+    "statement": "\u2200 (P : Prop) (Q : Prop), (P \u2192 (Q \u2192 (P \u2227 Q)))"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "kernel": {
+      "axioms": [],
+      "expression": {
+        "children": [
+          {
+            "children": [],
+            "kind": "sort",
+            "value": "0"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "kind": "sort",
+                "value": "0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "1"
+                      },
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "1"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "a._@._internal._hyg.0"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "2"
+                      },
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "2"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "a._@._internal._hyg.0"
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              }
+            ],
+            "kind": "forall",
+            "value": "Q"
+          }
+        ],
+        "kind": "forall",
+        "value": "P"
+      },
+      "format": "pcs-lean-kernel-v1"
+    },
+    "name": "PCSReuseL3",
+    "proof_steps": 4,
+    "statement": "\u2200 (P : Prop) (Q : Prop), ((P \u2192 Q) \u2192 (P \u2192 Q))"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        },
+        {
+          "name": "m",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "n",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "name": "m",
+            "op": "var"
+          }
+        },
+        "op": "eq",
+        "right": {
+          "left": {
+            "name": "m",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "name": "n",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "kernel": {
+      "axioms": [],
+      "expression": {
+        "children": [
+          {
+            "children": [],
+            "kind": "constant",
+            "value": "Nat:[]"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "kind": "constant",
+                "value": "Nat:[]"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "Eq:[1]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "Nat:[]"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "HAdd.hAdd:[0, 0, 0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "instHAdd:[0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "instAddNat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "1"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "0"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "HAdd.hAdd:[0, 0, 0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "Nat:[]"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "instHAdd:[0]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "instAddNat:[]"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "0"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "bound",
+                        "value": "1"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              }
+            ],
+            "kind": "forall",
+            "value": "m"
+          }
+        ],
+        "kind": "forall",
+        "value": "n"
+      },
+      "format": "pcs-lean-kernel-v1"
+    },
+    "name": "PCSReuseL4",
+    "proof_steps": 3,
+    "statement": "\u2200 (n : Nat) (m : Nat), ((n + m) = (m + n))"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "body": {
+              "body": {
+                "left": {
+                  "left": {
+                    "arg": {
+                      "name": "v2",
+                      "op": "var"
+                    },
+                    "fn": {
+                      "name": "f",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "arg": {
+                      "name": "v3",
+                      "op": "var"
+                    },
+                    "fn": {
+                      "name": "f",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  }
+                },
+                "op": "implies",
+                "right": {
+                  "left": {
+                    "name": "v2",
+                    "op": "var"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "name": "v3",
+                    "op": "var"
+                  }
+                }
+              },
+              "name": "v3",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "name": "v2",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "op": "and",
+          "right": {
+            "body": {
+              "body": {
+                "left": {
+                  "left": {
+                    "arg": {
+                      "name": "v4",
+                      "op": "var"
+                    },
+                    "fn": {
+                      "name": "g",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "arg": {
+                      "name": "v5",
+                      "op": "var"
+                    },
+                    "fn": {
+                      "name": "g",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  }
+                },
+                "op": "implies",
+                "right": {
+                  "left": {
+                    "name": "v4",
+                    "op": "var"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "name": "v5",
+                    "op": "var"
+                  }
+                }
+              },
+              "name": "v5",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "name": "v4",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "body": {
+              "left": {
+                "left": {
+                  "arg": {
+                    "arg": {
+                      "name": "v0",
+                      "op": "var"
+                    },
+                    "fn": {
+                      "name": "f",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "arg": {
+                    "arg": {
+                      "name": "v1",
+                      "op": "var"
+                    },
+                    "fn": {
+                      "name": "f",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "op": "implies",
+              "right": {
+                "left": {
+                  "name": "v0",
+                  "op": "var"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "v1",
+                  "op": "var"
+                }
+              }
+            },
+            "name": "v1",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "name": "v0",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "kernel": {
+      "axioms": [],
+      "expression": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [],
+                "kind": "constant",
+                "value": "Nat:[]"
+              },
+              {
+                "children": [],
+                "kind": "constant",
+                "value": "Nat:[]"
+              }
+            ],
+            "kind": "forall",
+            "value": "a._@._internal._hyg.0"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "Nat:[]"
+                  },
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "Nat:[]"
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "Nat:[]"
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "Nat:[]"
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Eq:[1]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "bound",
+                                                    "value": "3"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "bound",
+                                                    "value": "1"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "3"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "0"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Eq:[1]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "2"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "1"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "forall",
+                                    "value": "a._@._internal._hyg.0"
+                                  }
+                                ],
+                                "kind": "forall",
+                                "value": "v3"
+                              }
+                            ],
+                            "kind": "forall",
+                            "value": "v2"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "Nat:[]"
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "Nat:[]"
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Eq:[1]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "2"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "1"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "2"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Eq:[1]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "2"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "1"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "forall",
+                                "value": "a._@._internal._hyg.0"
+                              }
+                            ],
+                            "kind": "forall",
+                            "value": "v5"
+                          }
+                        ],
+                        "kind": "forall",
+                        "value": "v4"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "Nat:[]"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "Nat:[]"
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Eq:[1]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "3"
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "4"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "1"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "3"
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "4"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Eq:[1]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "2"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "forall",
+                            "value": "a._@._internal._hyg.0"
+                          }
+                        ],
+                        "kind": "forall",
+                        "value": "v1"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "v0"
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              }
+            ],
+            "kind": "forall",
+            "value": "g"
+          }
+        ],
+        "kind": "forall",
+        "value": "f"
+      },
+      "format": "pcs-lean-kernel-v1"
+    },
+    "name": "PCSReuseL5",
+    "proof_steps": 9,
+    "statement": "\u2200 (f : Nat \u2192 Nat) (g : Nat \u2192 Nat), (((\u2200 (v2 : Nat), (\u2200 (v3 : Nat), (((f v2) = (f v3)) \u2192 (v2 = v3)))) \u2227 (\u2200 (v4 : Nat), (\u2200 (v5 : Nat), (((g v4) = (g v5)) \u2192 (v4 = v5))))) \u2192 (\u2200 (v0 : Nat), (\u2200 (v1 : Nat), (((g (f v0)) = (g (f v1))) \u2192 (v0 = v1)))))"
+  }
+]

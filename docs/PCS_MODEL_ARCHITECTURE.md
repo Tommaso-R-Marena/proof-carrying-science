@@ -9,3 +9,7 @@ See [the consolidated execution report](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md) 
 V2 additionally trains on projected quantified premise use and injective function composition. Parameters remain 10,419; graph message/update parameters change in real training. Three seeds show final graph 4/6, 5/6, 5/6; bag 5/6 each and symbolic 5/6. Structural advantage is not demonstrated.
 
 See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
+
+## Checked mathematical reuse and verified feedback
+
+ReuseNetwork adds 1,201 trainable goal/premise matching parameters to the existing network (11,620 total), consuming actual audited Lean theorem signatures. Graph/bag and RL negative results are preserved. [Training, checkpoints and comparison](PCS_CHECKED_REUSE_REPORT.md).

@@ -9,3 +9,7 @@ See [the consolidated execution report](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md) 
 V2 adds explicit Nat→Nat injectivity/composition lowering and Nat→Prop predicate quantification, with ten independent meaning labels and four actual checked declarations explained. Reserved Lean/type/constant binder names are rejected. Chained implication follows documented right association; parentheses determine scope. The language classifier is reused, not trained to generate unrestricted Lean.
 
 See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
+
+## Checked mathematical reuse and verified feedback
+
+The existing typed Nat/Int/Prop/function grammar is preserved. New proof capabilities operate on its existing quantified/order expressions and retain the original English, selected IR, exact Lean type and explicit semantic-grounding boundary. [Working mathematical examples](PCS_CHECKED_REUSE_REPORT.md).

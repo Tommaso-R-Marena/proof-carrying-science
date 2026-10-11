@@ -1,0 +1,1849 @@
+{
+  "foundations": [
+    {
+      "family": "conjunction_swap",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "Q",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "P",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "conjunction_swap",
+      "license": "Apache-2.0",
+      "role": "library_foundation",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "conjunction_project",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "name": "P",
+            "op": "var"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "conjunction_project",
+      "license": "Apache-2.0",
+      "role": "library_foundation",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "conjunction_intro",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "Q",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "left": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "and",
+              "right": {
+                "name": "Q",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "conjunction_intro",
+      "license": "Apache-2.0",
+      "role": "library_foundation",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "modus_ponens",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "Prop"
+          },
+          {
+            "name": "Q",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "modus_ponens",
+      "license": "Apache-2.0",
+      "role": "library_foundation",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "nat_add_comm",
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          },
+          {
+            "name": "m",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "n",
+              "op": "var"
+            },
+            "op": "add",
+            "right": {
+              "name": "m",
+              "op": "var"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "left": {
+              "name": "m",
+              "op": "var"
+            },
+            "op": "add",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "nat_add_comm",
+      "license": "Apache-2.0",
+      "role": "library_foundation",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "function_injective_composition",
+      "goal": {
+        "binders": [
+          {
+            "name": "f",
+            "type": "NatFn"
+          },
+          {
+            "name": "g",
+            "type": "NatFn"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "body": {
+                  "left": {
+                    "left": {
+                      "arg": {
+                        "name": "v2",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "arg": {
+                        "name": "v3",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    }
+                  },
+                  "op": "implies",
+                  "right": {
+                    "left": {
+                      "name": "v2",
+                      "op": "var"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "name": "v3",
+                      "op": "var"
+                    }
+                  }
+                },
+                "name": "v3",
+                "op": "forall",
+                "type": "Nat"
+              },
+              "name": "v2",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "body": {
+                  "left": {
+                    "left": {
+                      "arg": {
+                        "name": "v4",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "g",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "arg": {
+                        "name": "v5",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "g",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    }
+                  },
+                  "op": "implies",
+                  "right": {
+                    "left": {
+                      "name": "v4",
+                      "op": "var"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "name": "v5",
+                      "op": "var"
+                    }
+                  }
+                },
+                "name": "v5",
+                "op": "forall",
+                "type": "Nat"
+              },
+              "name": "v4",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "body": {
+                "left": {
+                  "left": {
+                    "arg": {
+                      "arg": {
+                        "name": "v0",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "fn": {
+                      "name": "g",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "arg": {
+                      "arg": {
+                        "name": "v1",
+                        "op": "var"
+                      },
+                      "fn": {
+                        "name": "f",
+                        "op": "var"
+                      },
+                      "op": "apply"
+                    },
+                    "fn": {
+                      "name": "g",
+                      "op": "var"
+                    },
+                    "op": "apply"
+                  }
+                },
+                "op": "implies",
+                "right": {
+                  "left": {
+                    "name": "v0",
+                    "op": "var"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "name": "v1",
+                    "op": "var"
+                  }
+                }
+              },
+              "name": "v1",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "name": "v0",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "function_injective_composition",
+      "license": "Apache-2.0",
+      "original_statement": "For all functions from natural numbers to natural numbers f and g, if (f is injective and g is injective) then (the composition g after f is injective).",
+      "role": "library_foundation",
+      "source": "PCS authored",
+      "split": "train"
+    }
+  ],
+  "problems": [
+    {
+      "family": "nested_pair_swap",
+      "goal": {
+        "binders": [
+          {
+            "name": "A",
+            "type": "Prop"
+          },
+          {
+            "name": "B",
+            "type": "Prop"
+          },
+          {
+            "name": "C",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "A",
+                "op": "var"
+              },
+              "op": "and",
+              "right": {
+                "name": "B",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "name": "C",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "C",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "A",
+                "op": "var"
+              },
+              "op": "and",
+              "right": {
+                "name": "B",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "nested_pair_swap",
+      "license": "Apache-2.0",
+      "original_statement": "For all propositions A, B and C, if ((A and B) and C) then (C and (A and B)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "pair_of_implications",
+      "goal": {
+        "binders": [
+          {
+            "name": "A",
+            "type": "Prop"
+          },
+          {
+            "name": "B",
+            "type": "Prop"
+          },
+          {
+            "name": "C",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "A",
+                "op": "var"
+              },
+              "op": "implies",
+              "right": {
+                "name": "B",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "B",
+                "op": "var"
+              },
+              "op": "implies",
+              "right": {
+                "name": "C",
+                "op": "var"
+              }
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "left": {
+                "name": "B",
+                "op": "var"
+              },
+              "op": "implies",
+              "right": {
+                "name": "C",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "A",
+                "op": "var"
+              },
+              "op": "implies",
+              "right": {
+                "name": "B",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "pair_of_implications",
+      "license": "Apache-2.0",
+      "original_statement": "For all propositions A, B and C, if ((A implies B) and (B implies C)) then ((B implies C) and (A implies B)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "predicate_pair_swap",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "NatPred"
+          },
+          {
+            "name": "Q",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "arg": {
+                  "name": "n",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "name": "n",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "arg": {
+                  "name": "m",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "Q",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "name": "m",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "body": {
+                "arg": {
+                  "name": "k",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "Q",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "name": "k",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "arg": {
+                  "name": "j",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "name": "j",
+              "op": "forall",
+              "type": "Nat"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "predicate_pair_swap",
+      "license": "Apache-2.0",
+      "original_statement": "For all predicates on natural numbers P and Q, if ((\u2200 (n : Nat), P(n)) and (\u2200 (m : Nat), Q(m))) then ((\u2200 (k : Nat), Q(k)) and (\u2200 (j : Nat), P(j))).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "integer_equality_pair",
+      "goal": {
+        "binders": [
+          {
+            "name": "x",
+            "type": "Int"
+          },
+          {
+            "name": "y",
+            "type": "Int"
+          },
+          {
+            "name": "z",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "x",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "y",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "y",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "z",
+                "op": "var"
+              }
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "left": {
+                "name": "y",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "z",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "x",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "y",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "integer_equality_pair",
+      "license": "Apache-2.0",
+      "original_statement": "For all integers x, y and z, if ((x equals y) and (y equals z)) then ((y equals z) and (x equals y)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "nat_witness",
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "body": {
+            "left": {
+              "name": "m",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          },
+          "name": "m",
+          "op": "exists",
+          "type": "Nat"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "nat_witness",
+      "license": "Apache-2.0",
+      "original_statement": "For all natural numbers n, there exists a natural number m such that m equals n.",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "pair_projection_composed",
+      "goal": {
+        "binders": [
+          {
+            "name": "A",
+            "type": "Prop"
+          },
+          {
+            "name": "B",
+            "type": "Prop"
+          },
+          {
+            "name": "C",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "A",
+                "op": "var"
+              },
+              "op": "and",
+              "right": {
+                "name": "B",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "name": "C",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "A",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "B",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "pair_projection_composed",
+      "license": "Apache-2.0",
+      "original_statement": "For all propositions A, B and C, if ((A and B) and C) then (A and B).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "train"
+    },
+    {
+      "family": "universal_pair_reverse",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "NatPred"
+          },
+          {
+            "name": "Q",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "a",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "b",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "c",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "d",
+              "op": "forall",
+              "type": "Nat"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "universal_pair_reverse",
+      "license": "Apache-2.0",
+      "original_statement": "For all predicates on natural numbers P and Q, if ((\u2200 (a : Nat), P(a) implies Q(a)) and (\u2200 (b : Nat), Q(b) implies P(b))) then ((\u2200 (c : Nat), Q(c) implies P(c)) and (\u2200 (d : Nat), P(d) implies Q(d))).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "validation"
+    },
+    {
+      "family": "integer_witness",
+      "goal": {
+        "binders": [
+          {
+            "name": "z",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "body": {
+            "left": {
+              "name": "w",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "z",
+              "op": "var"
+            }
+          },
+          "name": "w",
+          "op": "exists",
+          "type": "Int"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "integer_witness",
+      "license": "Apache-2.0",
+      "original_statement": "For all integers z, there exists an integer w such that w equals z.",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "validation"
+    },
+    {
+      "family": "nested_right_projection",
+      "goal": {
+        "binders": [
+          {
+            "name": "A",
+            "type": "Prop"
+          },
+          {
+            "name": "B",
+            "type": "Prop"
+          },
+          {
+            "name": "C",
+            "type": "Prop"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "A",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "B",
+                "op": "var"
+              },
+              "op": "and",
+              "right": {
+                "name": "C",
+                "op": "var"
+              }
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "B",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "C",
+              "op": "var"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "nested_right_projection",
+      "license": "Apache-2.0",
+      "original_statement": "For all propositions A, B and C, if (A and (B and C)) then (B and C).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "validation"
+    },
+    {
+      "family": "predicate_implication_exchange",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "NatPred"
+          },
+          {
+            "name": "Q",
+            "type": "NatPred"
+          },
+          {
+            "name": "R",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "a",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "R",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "b",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "R",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "c",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "d",
+              "op": "forall",
+              "type": "Nat"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "predicate_implication_exchange",
+      "license": "Apache-2.0",
+      "original_statement": "For all predicates on natural numbers P, Q and R, if ((\u2200 (a : Nat), P(a) implies Q(a)) and (\u2200 (b : Nat), Q(b) implies R(b))) then ((\u2200 (c : Nat), Q(c) implies R(c)) and (\u2200 (d : Nat), P(d) implies Q(d))).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "arithmetic_relation_exchange",
+      "goal": {
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          },
+          {
+            "name": "b",
+            "type": "Nat"
+          },
+          {
+            "name": "c",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "left": {
+                "left": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "op": "add",
+                "right": {
+                  "name": "b",
+                  "op": "var"
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "left": {
+                  "name": "c",
+                  "op": "var"
+                },
+                "op": "mul",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 1
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "left": {
+                "left": {
+                  "name": "c",
+                  "op": "var"
+                },
+                "op": "mul",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 1
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "left": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "op": "add",
+                "right": {
+                  "name": "b",
+                  "op": "var"
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "arithmetic_relation_exchange",
+      "license": "Apache-2.0",
+      "original_statement": "For all natural numbers a, b and c, if ((a + b equals c) and (c * 1 equals c)) then ((c * 1 equals c) and (a + b equals c)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "existential_relation_exchange",
+      "goal": {
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "left": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "b",
+                  "op": "var"
+                }
+              },
+              "name": "b",
+              "op": "exists",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "left": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "op": "add",
+                  "right": {
+                    "op": "number",
+                    "type": "Nat",
+                    "value": 0
+                  }
+                },
+                "op": "eq",
+                "right": {
+                  "name": "c",
+                  "op": "var"
+                }
+              },
+              "name": "c",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "body": {
+                "left": {
+                  "left": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "op": "add",
+                  "right": {
+                    "op": "number",
+                    "type": "Nat",
+                    "value": 0
+                  }
+                },
+                "op": "eq",
+                "right": {
+                  "name": "d",
+                  "op": "var"
+                }
+              },
+              "name": "d",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "e",
+                  "op": "var"
+                }
+              },
+              "name": "e",
+              "op": "exists",
+              "type": "Nat"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "existential_relation_exchange",
+      "license": "Apache-2.0",
+      "original_statement": "For all natural numbers a, if ((\u2203 (b : Nat), a equals b) and (\u2200 (c : Nat), c + 0 equals c)) then ((\u2200 (d : Nat), d + 0 equals d) and (\u2203 (e : Nat), a equals e)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "functional_relation_exchange",
+      "goal": {
+        "binders": [
+          {
+            "name": "f",
+            "type": "NatFn"
+          },
+          {
+            "name": "g",
+            "type": "NatFn"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "a",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "b",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "arg": {
+                    "name": "c",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "c",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "arg": {
+                    "name": "d",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "d",
+              "op": "forall",
+              "type": "Nat"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "functional_relation_exchange",
+      "license": "Apache-2.0",
+      "original_statement": "For all functions from natural numbers to natural numbers f and g, if ((\u2200 (a : Nat), f(a) equals g(a)) and (\u2200 (b : Nat), g(b) equals f(b))) then ((\u2200 (c : Nat), g(c) equals f(c)) and (\u2200 (d : Nat), f(d) equals g(d))).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "quantified_projection",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "NatPred"
+          },
+          {
+            "name": "Q",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "P",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "Q",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "a",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "name": "b",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "c",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "implies",
+              "right": {
+                "arg": {
+                  "name": "c",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "Q",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "name": "c",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "quantified_projection",
+      "license": "Apache-2.0",
+      "original_statement": "For all predicates on natural numbers P and Q, if ((\u2200 (a : Nat), P(a) implies Q(a)) and (\u2200 (b : Nat), P(b))) then (\u2200 (c : Nat), P(c) implies Q(c)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "quantified_witness",
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "body": {
+            "left": {
+              "left": {
+                "name": "m",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "n",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "left": {
+                  "name": "m",
+                  "op": "var"
+                },
+                "op": "add",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 0
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "n",
+                "op": "var"
+              }
+            }
+          },
+          "name": "m",
+          "op": "exists",
+          "type": "Nat"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "quantified_witness",
+      "license": "Apache-2.0",
+      "original_statement": "For all natural numbers n, there exists a natural number m such that (m equals n and m + 0 equals n).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "missing_premise",
+      "goal": {
+        "binders": [
+          {
+            "name": "P",
+            "type": "NatPred"
+          },
+          {
+            "name": "Q",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "body": {
+              "arg": {
+                "name": "n",
+                "op": "var"
+              },
+              "fn": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "name": "n",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "arg": {
+                "name": "m",
+                "op": "var"
+              },
+              "fn": {
+                "name": "Q",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "name": "m",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "missing_premise",
+      "license": "Apache-2.0",
+      "original_statement": "For all predicates on natural numbers P and Q, if (\u2200 (n : Nat), P(n)) then (\u2200 (m : Nat), Q(m)).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    },
+    {
+      "family": "wrong_quantifier",
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "body": {
+            "body": {
+              "left": {
+                "name": "k",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "m",
+                "op": "var"
+              }
+            },
+            "name": "k",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "name": "m",
+          "op": "exists",
+          "type": "Nat"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "wrong_quantifier",
+      "license": "Apache-2.0",
+      "original_statement": "For all natural numbers n, there exists a natural number m such that (\u2200 (k : Nat), k equals m).",
+      "role": "transfer_problem",
+      "source": "PCS authored",
+      "split": "final"
+    }
+  ]
+}
