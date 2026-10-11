@@ -21,3 +21,9 @@ These are action-generation improvements, not training gains. Earlier frozen mod
 ## Checked mathematical reuse and verified feedback
 
 LibraryEnvironment reconstructs typed proofs, audits axioms, compiles a fixed source-bound module, checks artifact digests including cached observations, and independently verifies final statements. The action receiver now supports local Nat/Int witnesses, quantified equality rewriting and actual Nat/Int order premises. [Interfaces and evidence](PCS_CHECKED_REUSE_REPORT.md).
+
+## October 11 induction and grounded abstraction update
+
+See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
+
+Typed induct_nat/induct_list retain both actual goals, with explicitly named induction hypotheses. Controlled normalize and backwards rewrite are isolated actions. InductionEnvironment opts into the extended action space while preserving prior model dimensions and legacy defaults; AbstractionEnvironment admits only fixed independently checked lemmas. No arbitrary shell actions or goal mutation are supported.

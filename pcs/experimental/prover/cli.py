@@ -6,17 +6,20 @@ import json
 from pathlib import Path
 
 from .environment import LeanEnvironment, search
-from .ir import digest
+from .ir import digest, canonical_declaration
 from .language import formalize, explain, parse_lean
 
 
-def run(statement, registry_dir=None, budget=96, interpretation=None, library_path=None, prepared_env=None):
+def run(statement, registry_dir=None, budget=96, interpretation=None, library_path=None, prepared_env=None, domain=None):
+    if domain not in {None,"induction"}: raise ValueError("unsupported reasoning domain")
     ranker, model, model_id = None, None, "symbolic"
+    abstraction = False
     if registry_dir:
         from .model import ReasoningNetwork
         from .formalization_model import FormalizationRanker
         folder = Path(registry_dir)
         registry = json.loads((folder / "registry.json").read_text())
+        abstraction = registry.get("environment") == "AbstractionEnvironment"
         model_id = registry["selected_local_experiment"]
         entry = next(e for e in registry["models"] if e["id"] == model_id)
         # Only a basename in the receiver-selected registry folder may resolve.
@@ -24,7 +27,10 @@ def run(statement, registry_dir=None, budget=96, interpretation=None, library_pa
             raise ValueError("invalid registry checkpoint path")
         if registry.get("format") == "pcs-reuse-model-registry-v1":
             from .reuse_model import ReuseNetwork
-            model = ReuseNetwork.load(folder / entry["checkpoint"], entry["sha256"])
+            if entry.get("network")=="grounded":
+                from .grounded_model import GroundedNetwork
+                model = GroundedNetwork.load(folder / entry["checkpoint"], entry["sha256"])
+            else:model = ReuseNetwork.load(folder / entry["checkpoint"], entry["sha256"])
             if library_path is None: library_path = folder / "library.json"
         else:
             model = ReasoningNetwork.load(folder / entry["checkpoint"], entry["sha256"])
@@ -48,7 +54,9 @@ def run(statement, registry_dir=None, budget=96, interpretation=None, library_pa
     owns_env = prepared_env is None
     if prepared_env is not None:
         from .library import LibraryEnvironment
-        if type(prepared_env) is not LibraryEnvironment or not registry_dir or registry.get("format") != "pcs-reuse-model-registry-v1":
+        from .abstraction_environment import AbstractionEnvironment
+        expected_environment = AbstractionEnvironment if abstraction else LibraryEnvironment
+        if type(prepared_env) is not expected_environment or not registry_dir or registry.get("format") != "pcs-reuse-model-registry-v1":
             raise ValueError("a receiver-created checked library environment requires its bound model registry")
         if prepared_env.library_sha256 != registry["library_sha256"]:
             raise ValueError("prepared environment library identity mismatch")
@@ -64,19 +72,25 @@ def run(statement, registry_dir=None, budget=96, interpretation=None, library_pa
         library = strict_json_loads(raw.decode())
         if registry_dir and registry.get("format") == "pcs-reuse-model-registry-v1" and digest(library) != registry["library_sha256"]:
             raise ValueError("model registry library identity mismatch")
-        env = LibraryEnvironment(library, timeout=30)
+        if abstraction:
+            from .abstraction_environment import AbstractionEnvironment
+            env = AbstractionEnvironment(library, timeout=30)
+        else: env = LibraryEnvironment(library, timeout=30)
         result["library"] = {"sha256": env.library_sha256, "lemmas": env.catalog,
                              "construction_invocations": env.construction_invocations,
                              "construction_seconds": env.construction_seconds}
     else:
-        env = LeanEnvironment(timeout=30)
+        if domain=="induction":
+            from .induction_environment import InductionEnvironment
+            env = InductionEnvironment(timeout=30)
+        else: env = LeanEnvironment(timeout=30)
     try:
         observed = env.observe(candidate["ir"], [])
         roundtrip = parse_lean(candidate["lean"])
-        if digest(roundtrip) != digest(candidate["ir"]):
+        if digest(roundtrip) != digest(canonical_declaration(candidate["ir"])):
             raise RuntimeError("typed statement roundtrip failed")
         result["elaboration"] = observed["states"][0]
-        if registry_dir and registry.get("format") == "pcs-reuse-model-registry-v1":
+        if registry_dir and registry.get("format") == "pcs-reuse-model-registry-v1" and not abstraction:
             from .portfolio import search_portfolio
             solved = search_portfolio(env, candidate["ir"], model.rank, budget=budget, beam=4)
         else:

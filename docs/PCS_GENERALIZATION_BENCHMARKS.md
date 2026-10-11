@@ -13,3 +13,9 @@ See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
 ## Checked mathematical reuse and verified feedback
 
 New actual Lean tests cover Nat/Int order chains and antisymmetry, quantified function rewriting, local existential witnesses and checked lemma transfer. Evaluation is authored compositional transfer with shared families, not external mathematics or private blind testing. [Frozen tasks and all results](PCS_CHECKED_REUSE_REPORT.md).
+
+## October 11 induction and grounded abstraction update
+
+See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
+
+Eight prospective authored composition tasks span list induction, Nat successor, equality and logical transfer, with semantic alpha-duplicate guards. Three actual Std held-out declaration probes are unknown for both policies; broader external-project/Mathlib competence remains unsolved. Shared primitive laws and public evaluation are explicit limitations.

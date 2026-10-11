@@ -96,7 +96,7 @@ class ReasoningNetwork(nn.Module):
         if options:
             # Keep published checkpoint shapes compatible. Distinct induction
             # and normalization arguments still enter the learned token input.
-            aliases = {"induct_nat": "cases", "induct_list": "cases", "normalize": "simp"}
+            aliases = {"induct_nat": "cases", "induct_list": "cases", "normalize": "simp", "rewrite_back": "rewrite"}
             a = self.actions(torch.tensor([KINDS.index(aliases.get(o["kind"], o["kind"])) for o in options], device=device))
             a = a + self.tokens(torch.tensor([token("action:" + str(o["argument"])) for o in options], device=device))
             f = torch.tensor([features(state, o) for o in options], device=device)

@@ -18,20 +18,31 @@ from .ir import digest
 PUBLIC_ORIGIN = "https://proof-carrying-science-site.marenatommaso.workers.dev"
 
 
-def serve(models, public, port=8766, reuse_models=None):
+def serve(models, public, port=8766, reuse_models=None, abstraction_models=None):
     models = Path(models).resolve()
     public = Path(public).resolve()
     lock = threading.BoundedSemaphore(1)
     sessions = {}
     env = LeanEnvironment(timeout=30)
     reuse_env = None
+    abstraction_env=None
+    if abstraction_models is not None:
+        from .abstraction_environment import AbstractionEnvironment
+        abstraction_models=Path(abstraction_models).resolve()
+        registry=json.loads((abstraction_models/"registry.json").read_text())
+        library=json.loads((abstraction_models/"library.json").read_text())
+        if registry.get("environment")!="AbstractionEnvironment" or digest(library)!=registry["library_sha256"]:raise ValueError("abstraction registry mismatch")
+        abstraction_env=AbstractionEnvironment(library,timeout=30)
     if reuse_models is not None:
         from .library import LibraryEnvironment
         reuse_models = Path(reuse_models).resolve()
         registry = json.loads((reuse_models / "registry.json").read_text())
         library = json.loads((reuse_models / "library.json").read_text())
         if digest(library) != registry["library_sha256"]: raise ValueError("checked library registry mismatch")
-        reuse_env = LibraryEnvironment(library, timeout=30)
+        if registry.get("environment") == "AbstractionEnvironment":
+            from .abstraction_environment import AbstractionEnvironment
+            reuse_env = AbstractionEnvironment(library, timeout=30)
+        else: reuse_env = LibraryEnvironment(library, timeout=30)
 
     class Handler(BaseHTTPRequestHandler):
         def allowed(self):
@@ -64,6 +75,7 @@ def serve(models, public, port=8766, reuse_models=None):
             if not self.allowed(): return self.reply(403, {"error": "origin or host rejected"})
             if self.path == "/api/health":
                 return self.reply(200, {"status": "ready", "lean": env.version, "mode": "local CPU", "pcs_authority": False,
+                    "abstraction_configured":abstraction_env is not None,
                     "checked_reuse": reuse_env is not None, "checked_lemmas": reuse_env.catalog if reuse_env else []})
             if self.path == "/api/models":
                 return self.reply(200, json.loads((models / "registry.json").read_text()))
@@ -77,6 +89,8 @@ def serve(models, public, port=8766, reuse_models=None):
                              "/checked-reuse/library.json": "checked-reuse/library.json",
                              "/checked-reuse/REPORT.md": "checked-reuse/REPORT.md",
                              "/checked-reuse/transfer-proof.lean": "checked-reuse/transfer-proof.lean"}
+            for name in ["bridge-builder.html", "bridge-builder.css", "bridge-builder.mjs", "bridge-builder-core.mjs", "bridge-builder-catalog.json", "bridge-builder-catalog.mjs"]:
+                allowed_files["/"+name] = name
             for name in ["nat_three_edge_chain", "int_three_edge_chain", "nat_order_cycle", "triple_function_congruence",
                          "two_rule_function_chain", "three_part_nat_witness"]:
                 allowed_files[f"/checked-reuse/{name}.lean"] = f"checked-reuse/{name}.lean"
@@ -106,9 +120,14 @@ def serve(models, public, port=8766, reuse_models=None):
                     ir = parse_lean(obj["declaration"])
                     result = {"explanation": explain(ir), "elaboration": env.observe(ir, [])}
                 elif self.path == "/api/solve" and set(obj) == {"statement", "mode", "interpretation", "budget"}:
-                    if obj["mode"] not in {"model", "symbolic", "reuse-model", "reuse-symbolic"} or type(obj["budget"]) is not int or not 1 <= obj["budget"] <= 96:
+                    if obj["mode"] not in {"model", "symbolic", "reuse-model", "reuse-symbolic", "abstraction-model", "abstraction-symbolic"} or type(obj["budget"]) is not int or not 1 <= obj["budget"] <= 96:
                         raise ValueError("invalid model mode or budget")
-                    if obj["mode"].startswith("reuse-"):
+                    if obj["mode"]=="abstraction-model":
+                        if abstraction_env is None:raise ValueError("abstraction model not configured")
+                        result=run(obj["statement"],abstraction_models,obj["budget"],obj["interpretation"],prepared_env=abstraction_env)
+                    elif obj["mode"]=="abstraction-symbolic":
+                        result=run(obj["statement"],None,obj["budget"],obj["interpretation"],domain="induction")
+                    elif obj["mode"].startswith("reuse-"):
                         if reuse_env is None: raise ValueError("checked reuse backend not configured")
                         if obj["mode"] == "reuse-model":
                             result = run(obj["statement"], reuse_models, obj["budget"], obj["interpretation"], prepared_env=reuse_env)
@@ -126,7 +145,7 @@ def serve(models, public, port=8766, reuse_models=None):
                                       "explanation": explain(goal), "model": "symbolic-reuse", "pcs_authority": False}
                     else:
                         result = run(obj["statement"], models if obj["mode"] == "model" else None, obj["budget"], obj["interpretation"])
-                elif self.path == "/api/session" and set(obj) in ({"statement", "interpretation"}, {"statement", "interpretation", "reuse"}):
+                elif self.path == "/api/session" and set(obj) in ({"statement", "interpretation"}, {"statement", "interpretation", "reuse"}, {"statement", "interpretation", "reuse", "abstraction"}):
                     for key in list(sessions):
                         if time.monotonic() - sessions[key]["time"] > 600: del sessions[key]
                     if len(sessions) >= 16: raise ValueError("session capacity reached")
@@ -136,17 +155,19 @@ def serve(models, public, port=8766, reuse_models=None):
                     goal = formal["candidates"][index]["ir"]
                     use_reuse = obj.get("reuse", False)
                     if type(use_reuse) is not bool or (use_reuse and reuse_env is None): raise ValueError("invalid checked reuse session")
-                    proof_env = reuse_env if use_reuse else env
+                    use_abstraction = obj.get("abstraction", False)
+                    if type(use_abstraction) is not bool or (use_abstraction and (use_reuse or abstraction_env is None)): raise ValueError("invalid abstraction session")
+                    proof_env = abstraction_env if use_abstraction else reuse_env if use_reuse else env
                     observed = proof_env.observe(goal, [])
                     key = uuid.uuid4().hex
-                    sessions[key] = {"goal": goal, "hash": digest(goal), "actions": [], "time": time.monotonic(), "history": [], "reuse": use_reuse}
-                    result = {"id": key, "goal_sha256": digest(goal), "state": observed["states"][-1], "actions": proof_env.candidates(observed["states"][-1]), "status": "open"}
+                    sessions[key] = {"goal": goal, "hash": digest(goal), "actions": [], "time": time.monotonic(), "history": [], "reuse": use_reuse, "abstraction": use_abstraction}
+                    result = {"id": key, "goal_sha256": digest(goal), "state": observed["states"][-1], "actions": proof_env.candidates(observed["states"][-1]), "status": "open", "checked_lemmas": getattr(proof_env, "catalog", [])}
                 elif self.path == "/api/step" and set(obj) == {"id", "action"}:
                     session = sessions.get(obj["id"])
                     if not session or time.monotonic() - session["time"] > 600: raise ValueError("session expired")
                     if digest(session["goal"]) != session["hash"]: raise ValueError("immutable goal changed")
                     action = obj["action"]
-                    proof_env = reuse_env if session["reuse"] else env
+                    proof_env = abstraction_env if session["abstraction"] else reuse_env if session["reuse"] else env
                     observed = proof_env.observe(session["goal"], session["actions"])
                     available = proof_env.candidates(observed["states"][-1])
                     if action not in available: raise ValueError("action is not available in this proof state")
@@ -173,6 +194,7 @@ def serve(models, public, port=8766, reuse_models=None):
     finally:
         server.server_close(); env.close()
         if reuse_env is not None: reuse_env.close()
+        if abstraction_env is not None:abstraction_env.close()
 
 
 def main():
@@ -181,8 +203,9 @@ def main():
     p.add_argument("--public", required=True)
     p.add_argument("--port", type=int, default=8766)
     p.add_argument("--reuse-models", help="Receiver-selected checked reuse experiment directory")
+    p.add_argument("--abstraction-models", help="Receiver-selected experimental grounded induction registry")
     args = p.parse_args()
-    serve(args.models, args.public, args.port, args.reuse_models)
+    serve(args.models, args.public, args.port, args.reuse_models,args.abstraction_models)
 
 
 if __name__ == "__main__": main()

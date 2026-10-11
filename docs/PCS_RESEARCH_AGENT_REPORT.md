@@ -13,3 +13,9 @@ See [v2 reproducible artifacts](../research/lean-learning-v2/SHA256.json).
 ## Checked mathematical reuse and verified feedback
 
 The explicit research scheduler can now apply preceding independently proved lemmas, with declared provenance and construction accounting. Scheduling, conjectures and literature search remain unlearned. [Actual dependency-reuse test](../tests/test_checked_reuse.py) and [report](PCS_CHECKED_REUSE_REPORT.md).
+
+## October 11 induction and grounded abstraction update
+
+See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
+
+A fixed human-authored dependency graph association → reverse_association → length_transport completes three independently checked obligations with repaired deterministic retrieval scheduling. The initial unknown result and posthoc repair are retained. State-derived lemma proposals are automatic; mathematical novelty and learned autonomous research planning are not claimed.

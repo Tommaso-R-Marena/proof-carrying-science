@@ -60,8 +60,8 @@ def render_action(action):
         if branch and branch[1].split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
             # Retain both open goals with accessible names in disjoint contexts.
             return f"rcases {branch[1]} with {branch[2]} | {branch[2]}"
-    if k in {"exact", "apply", "cases", "rewrite"} and type(a) is str and REFERENCE.fullmatch(a) and a.split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
-        return f"rw [{a}]" if k == "rewrite" else f"{k} {a}"
+    if k in {"exact", "apply", "cases", "rewrite", "rewrite_back"} and type(a) is str and REFERENCE.fullmatch(a) and a.split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
+        return f"rw [← {a}]" if k == "rewrite_back" else f"rw [{a}]" if k == "rewrite" else f"{k} {a}"
     if k == "lemma" and type(a) is str and a in LEMMAS:
         return "apply " + a
     if k == "simp" and a is None:
@@ -79,7 +79,14 @@ def act(kind, argument=None):
     return obj
 
 
-def candidates(state):
+def state_nodes(state):
+    """Receiver resource count matching the policy graph representation."""
+    def count(e): return 1 + sum(count(c) for c in e["children"])
+    return 1 + sum(1 + count(g["expression"]) + sum(1+count(l["expression"]) for l in g["locals"])
+                   for g in state["goals"])
+
+
+def candidates(state, *, induction=False):
     if not state["goals"]:
         return []
     g = state["goals"][0]
@@ -144,13 +151,16 @@ def candidates(state):
         if "∃" in g["target"]:
             result.extend(act("witness", n) for n in [0, 1, 2])
     # Receiver-owned names; the induction tactic leaves base and step goals.
+    if not induction: return result[:96]
     fresh_names = [f"h{i}" for i in range(100) if f"h{i}" not in used][:3]
+    induction_context_safe = all(l["type"] in {"Prop", "Nat", "Int", "Nat → Nat", "Nat → Prop", "List Nat"}
+                                 for goal in state["goals"] for l in goal["locals"])
     for local in g["locals"]:
         name = local["name"]
         if not re.fullmatch(r"h[0-9]{1,2}", name): continue
-        if local["type"] == "Nat" and len(fresh_names) >= 2:
+        if induction_context_safe and local["type"] == "Nat" and len(fresh_names) >= 2:
             result.append(act("induct_nat", " ".join([name, *fresh_names[:2]])))
-        if local["type"] == "List Nat" and len(fresh_names) >= 3:
+        if induction_context_safe and local["type"] == "List Nat" and len(fresh_names) >= 3:
             result.append(act("induct_list", " ".join([name, *fresh_names])))
     if any(l["type"] == "List Nat" for l in g["locals"]) or "List" in g["target"]:
         result.append(act("normalize", "list"))
@@ -174,7 +184,6 @@ def _symbolic_priority(state, action):
     if kind == "normalize": return 8
     if kind == "induct_list": return 6
     if kind == "induct_nat": return 3
-    if kind == "rewrite": return 10
     if kind == "constructor":
         return 8 if "∧" in g["target"] or "↔" in g["target"] else -3
     if kind == "lemma":
@@ -366,7 +375,9 @@ class LeanEnvironment:
 
     def candidates(self, state):
         """Receiver-owned action provider; experimental environments may extend it."""
-        return candidates(state)
+        has_new_terms = any("List" in g["target"] or ".succ" in g["target"] or
+                            any(l["type"] == "List Nat" for l in g["locals"]) for g in state["goals"])
+        return candidates(state, induction=has_new_terms)
 
     def verify(self, goal, actions):
         statement = theorem(goal)
@@ -433,8 +444,12 @@ def search(env, goal, rank=None, budget=96, depth=18, beam=8):
     for _ in range(depth):
         next_frontier = []
         for path, state in frontier:
+            if state_nodes(state) > 4096:
+                # Both learned and deterministic search obey this receiver
+                # limit. An oversized open state never becomes a success.
+                continue
             options = env.candidates(state)
-            scores = rank(deepcopy(state), deepcopy(options)) if rank else [_symbolic_priority(state, a) for a in options]
+            scores = rank(deepcopy(state), deepcopy(options)) if rank else getattr(env, "default_rank", lambda s, opts: [_symbolic_priority(s, a) for a in opts])(state, options)
             if len(scores) != len(options) or any(type(v) not in {float, int} or not math.isfinite(v) for v in scores):
                 raise ValueError("invalid policy scores")
             for index in sorted(range(len(options)), key=lambda i: (-scores[i], i))[:beam]:

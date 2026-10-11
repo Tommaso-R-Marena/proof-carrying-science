@@ -56,6 +56,7 @@ def decode(e, locals_, bound=(), depth=0):
         return binary({"And": "and", "Or": "or", "Iff": "iff"}[name], dec(args[0]), dec(args[1]))
     if name == "Not" and len(args) == 1: return {"op": "not", "arg": dec(args[0])}
     if name == "Eq" and len(args) == 3: return binary("eq", dec(args[1]), dec(args[2]))
+    if name == "Ne" and len(args) == 3: return {"op":"not","arg":binary("eq",dec(args[1]),dec(args[2]))}
     if name in {"HAdd.hAdd", "HMul.hMul", "HAppend.hAppend", "LE.le"} and len(args) >= 3:
         return binary({"HAdd.hAdd": "add", "HMul.hMul": "mul", "HAppend.hAppend": "append", "LE.le": "le"}[name], dec(args[-2]), dec(args[-1]))
     if name in {"Nat.add", "Nat.mul", "Nat.le", "List.append"} and len(args) >= 2:
@@ -91,12 +92,14 @@ def lift_state(state, *, assumptions=True):
         for v in e.values():
             if isinstance(v, dict): names(v)
     names(body)
+    while body["op"] == "forall":
+        binders.append({"name": body["name"], "type": body["type"]}); body = body["body"]
     result = {"format": "pcs-math-ir-v1", "binders": [b for b in binders if b["name"] in used], "body": body}
     theorem(result)
     return result
 
 
-def propose(trajectories, *, maximum=24):
+def _propose(trajectories, *, maximum=24):
     """Harvest actual open states, plus cuts of their conjunction/implication IR.
 
     Removing assumptions proposes stronger claims; their truth is NOT assumed.
@@ -125,12 +128,28 @@ def propose(trajectories, *, maximum=24):
                 for goal in cuts:
                     try: identity = structural_fingerprint(goal)
                     except ValueError: continue
-                    if identity in seen or identity in training_goals: continue
+                    if identity in seen: continue
                     seen.add(identity)
                     result.append({"goal": goal, "source_task": record["id"], "source_family": record["family"],
                                    "source_state_index": index, "source_state_sha256": digest(state),
                                    "assumptions_retained": assumptions, "candidate_sha256": identity})
+                    result[-1]["whole_training_goal"] = identity in training_goals
                     if len(result) >= maximum: return result
+    return result
+
+
+def propose(trajectories, *, maximum=24):
+    """Round-robin tasks, so one long proof cannot consume the mining budget."""
+    if not 1 <= maximum <= 64: raise ValueError("invalid discovery bound")
+    pools = [_propose([t], maximum=maximum) for t in trajectories]
+    result, seen = [], set()
+    for index in range(maximum):
+        for pool in pools:
+            if index >= len(pool): continue
+            candidate = pool[index]
+            if candidate["candidate_sha256"] in seen: continue
+            seen.add(candidate["candidate_sha256"]); result.append(candidate)
+            if len(result) >= maximum: return result
     return result
 
 

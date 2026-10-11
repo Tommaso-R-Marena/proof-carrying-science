@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from copy import deepcopy
 
 TYPES = {"Prop": "Prop", "Nat": "Nat", "Int": "Int", "NatFn": "Nat → Nat", "NatPred": "Nat → Prop",
          "NatList": "List Nat"}
@@ -110,3 +111,19 @@ def declaration(names, body, domain="Prop"):
     obj = {"format": "pcs-math-ir-v1", "binders": [{"name": n, "type": domain} for n in names], "body": body}
     theorem(obj)
     return obj
+
+
+def canonical_declaration(obj):
+    """Normalize grouping of consecutive outer universal binders only.
+
+    Quantifier order and binders under implication/existence are preserved.
+    The receiver's type validator rejects capture and name shadowing first.
+    """
+    theorem(obj)
+    result=deepcopy(obj)
+    while result["body"]["op"]=="forall":
+        b=result["body"]
+        result["binders"].append({"name":b["name"],"type":b["type"]})
+        result["body"]=b["body"]
+    theorem(result)
+    return result

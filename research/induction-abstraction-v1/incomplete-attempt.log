@@ -1,0 +1,45 @@
+Collect list_length_append verified
+Collect list_append_associativity verified
+Collect successor_congruence verified
+Collect arithmetic_nested verified
+Collect logical_bridge verified
+Collect quantified_bridge verified
+Discovered 8 checked lemmas from 24 candidates
+Train seed 17
+Train seed 31
+validation symbolic {'verified': 1, 'tasks': 4, 'expansions': 307, 'lean_invocations': 308, 'wall_seconds': 16.273325832982664, 'proof_actions': 4, 'proofs_using_lemmas': 0}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/abstraction_experiment.py", line 174, in <module>
+    if __name__ == "__main__": main()
+                               ^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/abstraction_experiment.py", line 171, in main
+    reproduce(args.output)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/abstraction_experiment.py", line 116, in reproduce
+    records = [measured_search(env, t, rank, protocol) for t in parts[split]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/abstraction_experiment.py", line 35, in measured_search
+    result = search(env, task["goal"], rank, budget=protocol["budget"],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/environment.py", line 437, in search
+    scores = rank(deepcopy(state), deepcopy(options)) if rank else [_symbolic_priority(state, a) for a in options]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/model.py", line 111, in rank
+    return self(state, options)[0].cpu().tolist()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/model.py", line 94, in forward
+    h = self.encode(state)
+        ^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/model.py", line 82, in encode
+    nodes, edges = graph(state)
+                   ^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/model.py", line 50, in graph
+    raise ValueError("state graph exceeds bound")
+ValueError: state graph exceeds bound
