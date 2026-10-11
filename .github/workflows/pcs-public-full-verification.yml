@@ -127,6 +127,9 @@ jobs:
     if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 300
+    defaults:
+      run:
+        working-directory: pcs-core
     steps:
       - name: Check out proposed integration commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -134,6 +137,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
+          path: pcs-core
       - name: Set up Python 3.12
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
@@ -195,7 +199,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          python scripts/verify_omega_dd_parity.py --site .ci-components/pcs-site --output "$RUNNER_TEMP/omega-dd-parity"
+          python scripts/verify_omega_dd_parity.py --site ../.ci-components/pcs-site --output "$RUNNER_TEMP/omega-dd-parity"
       - name: Genuine compiled semantic authority fixtures and Python client
         shell: bash
         run: |
