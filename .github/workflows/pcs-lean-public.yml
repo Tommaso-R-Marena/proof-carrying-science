@@ -43,5 +43,7 @@ jobs:
           PCS_PUBLIC_REQUEST_ID: ${{ inputs.request_id }}
           PCS_PUBLIC_STATEMENT: ${{ inputs.statement }}
           PCS_PUBLIC_INTERPRETATION: ${{ inputs.interpretation }}
-        run: python -m pcs.experimental.prover.public_job
+        # Enforce the execution budget independently of the hosted job timeout.
+        # Failure/cancellation never produces accepted proof evidence.
+        run: timeout --kill-after=10s 600s python -u -m pcs.experimental.prover.public_job
       # No artifact uploads or paid runners; exact result is in public job logs.

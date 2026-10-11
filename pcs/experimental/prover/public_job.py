@@ -5,9 +5,20 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import time
 
 from .cli import run
 from .ir import digest
+
+
+def run_stage(name, statement, registry, interpretation):
+    # Operational diagnostics only: no user text, credentials or proof authority.
+    print("PCS_LEAN_PROGRESS_V1:" + json.dumps({"stage": name, "status": "started"}), flush=True)
+    started = time.monotonic()
+    result = run(statement, registry, budget=96, interpretation=interpretation)
+    print("PCS_LEAN_PROGRESS_V1:" + json.dumps({"stage": name, "status": result["status"],
+                                               "wall_seconds": time.monotonic() - started}), flush=True)
+    return result
 
 
 def main():
@@ -18,9 +29,10 @@ def main():
         raise ValueError("invalid public request")
     if choice and not re.fullmatch(r"[0-9]{1,2}", choice): raise ValueError("invalid interpretation")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    result = run(statement, "research/checked-reuse-v2", budget=96, interpretation=int(choice) if choice else None)
-    previous = run(statement, "research/lean-learning-v2", budget=96, interpretation=int(choice) if choice else None)
-    baseline = run(statement, budget=96, interpretation=int(choice) if choice else None)
+    interpretation = int(choice) if choice else None
+    result = run_stage("checked_reuse", statement, "research/checked-reuse-v2", interpretation)
+    previous = run_stage("previous_policy", statement, "research/lean-learning-v2", interpretation)
+    baseline = run_stage("symbolic", statement, None, interpretation)
     for observation in [result, previous, baseline]:
         if observation.get("search"):
             observation["search"]["attempts"] = [{k: v for k, v in a.items() if k != "state"} for a in observation["search"]["attempts"]]

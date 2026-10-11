@@ -90,6 +90,10 @@ proved for the current small correlated benchmark suites. These theorems do not
 retroactively establish model superiority, robust RL gains or autonomous discovery.
 Checkpoint registry membership, proofs and receipts confer no scientific authority.
 
+## Public-job operational boundary
+
+The prior live proof request stalled without diagnostic evidence and was cancelled; its cause is not yet established. The public job now emits bounded stage/status timing records without user text or credentials, and GNU timeout independently enforces a 600-second execution cutoff with a ten-second kill grace. Only the final result marker can supply proof evidence; progress, failure and cancellation cannot. A local real-kernel smoke produced all three sixteen-action proofs and exactly one final result marker (`public-job-observability-smoke.json`). This is operational testing on an already known theorem, not new research or a claim that remote hosting has recovered.
+
 ## Remaining obligations
 
 1. Python and JavaScript **conditional checker** refinements: classes, mutable attributes,
