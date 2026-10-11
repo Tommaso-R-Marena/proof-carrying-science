@@ -141,3 +141,7 @@ The Aristotle integration now includes proof-only computation certificates for t
 ## Checked mathematical reuse and verified feedback
 
 Checked lemma reuse, real quantified witnesses/function rewriting/order proofs, a trainable goal/premise graph head and independently verified feedback refinement now execute. The validation-selected feedback model improved 0→5/8 on new authored compositions; other seeds did not improve and the symbolic baseline still solves 6/8. See [complete artifacts and limitations](PCS_CHECKED_REUSE_REPORT.md).
+
+## Source-window refinement and verified reasoning package
+
+The subsequent Aristotle package is independently integrated in [the runtime-refinement report](../research/aristotle-runtime-refinement-v1/REPORT.md): 54 audited Std theorems plus three Mathlib statistical gates, seven source-window checks, and 1,523 actual patched-parser differential cases. Source-bound results now cover the intervention Bellman functions and Rust `eval_expr` with its callees under explicit subset semantics. This narrows the earlier broad refinement obligations; it does not prove the full conditional checkers, English rewriting, top-level Rust evaluation, native certificate verification, or all deployed learning/search controllers. The parser depth exhaustion and unsupported Boolean ordering counterexamples are repaired. Formal search/complexity/statistical results retain their stated algorithms, cost models and assumptions; no new learned-performance superiority or scientific acceptance is established.
