@@ -39,6 +39,11 @@ def render_action(action):
         return SIMPLE[k]
     if k == "intro" and type(a) is str and re.fullmatch(r"h[0-9]{1,2}", a):
         return "intro " + a
+    if k == "cases" and type(a) is str:
+        branch = re.fullmatch(r"([A-Za-z][A-Za-z0-9_]{0,23}(?:\.[12]){0,3}) as (h[0-9]{1,2})", a)
+        if branch and branch[1].split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
+            # Retain both open goals with accessible names in disjoint contexts.
+            return f"rcases {branch[1]} with {branch[2]} | {branch[2]}"
     if k in {"exact", "apply", "cases", "rewrite"} and type(a) is str and REFERENCE.fullmatch(a) and a.split(".")[0] not in {"sorry", "admit", "axiom", "unsafe", "native_decide"}:
         return f"rw [{a}]" if k == "rewrite" else f"{k} {a}"
     if k == "lemma" and type(a) is str and a in LEMMAS:
@@ -69,9 +74,11 @@ def candidates(state):
         if head(expr) != "Eq" or expr["kind"] != "application": return None
         return expr["children"][0]["children"][1]
     target_head = head(g["expression"])
+    used = {l["name"] for l in g["locals"]}
+    fresh = next((f"h{i}" for i in range(100) if f"h{i}" not in used), None)
     result = [act("assumption")]
-    if g["expression"]["kind"] == "forall":
-        result.insert(0, act("intro", f"h{len(g['locals'])}"))
+    if fresh is not None and (g["expression"]["kind"] == "forall" or target_head == "Not"):
+        result.insert(0, act("intro", fresh))
     if target_head in {"And", "Iff", "Eq"}:
         result.append(act("constructor"))
     if target_head in {"Eq", "Iff"}: result.append(act("rfl"))
@@ -85,12 +92,14 @@ def candidates(state):
             for suffix in ["", ".1", ".2", ".1.1", ".1.2", ".2.1", ".2.2"]:
                 if reference_expression(state, name + suffix) is not None:
                     result.append(act("exact", name + suffix))
-                    if reference_expression(state, name + suffix)["kind"] == "forall":
+                    premise = reference_expression(state, name + suffix)
+                    if premise["kind"] == "forall" or head(premise) == "Not":
                         result.append(act("apply", name + suffix))
-            if head(local["expression"]) == "Or": result.append(act("cases", name))
-            left_side = equality_left(local["expression"])
-            if left_side is not None and contains(g["expression"], left_side):
-                result.append(act("rewrite", name))
+                    left_side = equality_left(premise)
+                    if left_side is not None and contains(g["expression"], left_side):
+                        result.append(act("rewrite", name + suffix))
+            if head(local["expression"]) == "Or" and fresh is not None:
+                result.append(act("cases", name + " as " + fresh))
     if "Nat" in g["target"] or any(l["type"] == "Nat" for l in g["locals"]):
         if "+" in g["target"] or "*" in g["target"]: result.append(act("simp"))
         result.extend(act("lemma", n) for n in sorted(LEMMAS) if ("add" in n and "+" in g["target"]) or ("mul" in n and "*" in g["target"]))
@@ -110,7 +119,7 @@ def _symbolic_priority(state, action):
         if premise and premise["kind"] == "forall" and premise["children"][1] == g["expression"]:
             return 11
     if kind == "intro":
-        return 9 if g["expression"]["kind"] == "forall" else -5
+        return 9  # Receiver offers intro only for a forall or a negated goal.
     if kind == "constructor":
         return 8 if "∧" in g["target"] or "↔" in g["target"] else -3
     if kind == "lemma":

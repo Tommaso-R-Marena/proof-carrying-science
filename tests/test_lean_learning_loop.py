@@ -16,6 +16,73 @@ def identity(name="P"):
     return declaration([name], binary("implies", var(name), var(name)))
 
 
+@pytest.mark.parametrize("statement", [
+    "For all natural numbers a, b and c, if (a equals b and b equals c) then (a + 0) equals c.",
+    "For all propositions A and B, if (A or (A and B)) then A.",
+    "For all propositions A and B, if ((A implies B) and (not B)) then (not A).",
+])
+@pytest.mark.parametrize("policy", ["symbolic", "published_graph"])
+def test_real_projected_equalities_disjunction_and_negation(lean, statement, policy):
+    """Actual kernel proofs exercise useful transitions absent from old masks."""
+    goal = formalize(statement)["candidates"][0]["ir"]
+    original = copy.deepcopy(goal)
+    rank = None
+    if policy == "published_graph":
+        import importlib.util
+        if os.environ.get("PCS_REQUIRE_PROVER") == "1":
+            assert importlib.util.find_spec("torch"), "required PyTorch unavailable"
+        pytest.importorskip("torch")
+        from pathlib import Path
+        from pcs.experimental.prover.model import ReasoningNetwork
+        folder = Path(__file__).resolve().parents[1] / "research/lean-learning-v2"
+        registry = json.loads((folder / "registry.json").read_text())
+        entry = next(m for m in registry["models"] if m["id"] == registry["selected_local_experiment"])
+        rank = ReasoningNetwork.load(folder / entry["checkpoint"], entry["sha256"]).rank
+    result = search(lean, goal, rank, budget=96, beam=4)
+    assert result["status"] == "verified"
+    assert len(result["receipt"]["actions"]) >= 5
+    assert result["receipt"]["goal_sha256"] == digest(original)
+    assert goal == original
+    assert result["receipt"]["pcs_scientific_authority"] is False
+    checked = lean.verify(original, result["receipt"]["actions"])
+    assert set(checked["kernel"]["axioms"]) <= {"propext", "Classical.choice", "Quot.sound"}
+
+
+def test_named_case_split_keeps_the_unproved_other_branch(lean):
+    goal = formalize("For all propositions A and B, if (A or B) then A.")["candidates"][0]["ir"]
+    actions = [act("intro", "h0"), act("intro", "h1"), act("intro", "h2"),
+               act("cases", "h2 as h3")]
+    split = lean.observe(goal, actions)
+    assert split["status"] == "open"
+    assert len(split["states"][-1]["goals"]) == 2
+    partial = actions + [act("exact", "h3")]
+    remaining = lean.observe(goal, partial)
+    assert remaining["status"] == "open"
+    assert len(remaining["states"][-1]["goals"]) == 1
+    with pytest.raises(RuntimeError):
+        lean.verify(goal, partial)
+    result = search(lean, goal, budget=96, beam=4)
+    assert result["status"] == "unknown" and result["receipt"] is None
+
+
+def test_fresh_introduction_uses_real_local_names(lean):
+    from pcs.experimental.prover.environment import candidates
+    goal = formalize("For all propositions A and B, if A then A.")["candidates"][0]["ir"]
+    state = lean.observe(goal, [act("intro", "h1")])["states"][-1]
+    intro = next(a for a in candidates(state) if a["kind"] == "intro")
+    assert intro["argument"] not in {l["name"] for l in state["goals"][0]["locals"]}
+    assert lean.observe(goal, [act("intro", "h1"), intro])["status"] == "open"
+
+
+@pytest.mark.parametrize("argument", [
+    "sorry as h3", "h2 as h3; sorry", "h2 as h3\naxiom bad : False",
+    "h2 as h100", "h2 as native_decide", "h2 as h3 | h4", "h2.unsafe as h3",
+])
+def test_named_case_split_rejects_tactic_injection(argument):
+    with pytest.raises(ValueError):
+        act("cases", argument)
+
+
 @pytest.fixture
 def lean(tmp_path):
     if not shutil.which("lean"):
