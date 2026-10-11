@@ -1,5 +1,7 @@
 # PCS Omega: instantiated Lean learning loops v1 and v2
 
+Public proof results now use a [bounded lossless log transport](PCS_PUBLIC_LEAN_TRANSPORT.md). The complete induction result originally required a 1.28 MB single log line; gzip preserves the complete result within 35.4 KB. Hosted completion is checked separately from local proofs and protocol tests.
+
 Date: 2026-10-10. Status: experimental working vertical implementation; the broader scientific-intelligence directive remains incomplete.
 
 ## What actually executes

@@ -1,6 +1,8 @@
 """Fresh-kernel induction/reuse/public-path gate; no model assertions are authority."""
 import base64
 import gzip
+import io
+import gzip
 import json
 import os
 from pathlib import Path
@@ -39,9 +41,14 @@ def check():
     variables={**os.environ,"PCS_PUBLIC_REQUEST_ID":"a"*32,"PCS_PUBLIC_STATEMENT":statement,
                "PCS_PUBLIC_INTERPRETATION":"0","PCS_PUBLIC_PROOF_ACTIONS":json.dumps(actions),"PCS_PUBLIC_MODEL_FAMILY":""}
     output=subprocess.check_output([sys.executable,"-m","pcs.experimental.prover.public_job"],cwd=ROOT,env=variables,text=True,timeout=90)
-    markers=[s for s in output.splitlines() if s.startswith("PCS_LEAN_RESULT_V1:")]
+    markers=[s for s in output.splitlines() if s.startswith("PCS_LEAN_RESULT_GZIP_V1:")]
     assert len(markers)==1
-    evidence=json.loads(base64.b64decode(markers[0].split(":",1)[1]))
+    compressed=base64.b64decode(markers[0].split(":",1)[1],validate=True)
+    assert len(compressed)<=48000 and len(markers[0])<65536
+    with gzip.GzipFile(fileobj=io.BytesIO(compressed)) as stream:
+        raw=stream.read(1000001)
+    assert len(raw)<=1000000
+    evidence=json.loads(raw)
     assert evidence["result"]["status"]=="verified" and evidence["actions_sha256"]==digest(actions)
     assert evidence["previous"] is None and evidence["automatic_training_authorization"] is False
     print(json.dumps({"fresh_library_proofs":independently_checked,"unseen_model_actions":len(receipt["actions"]),

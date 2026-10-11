@@ -1,5 +1,4 @@
 """Receiver-owned public CI proof request; no submitted source/code execution."""
-import base64
 import json
 import os
 from pathlib import Path
@@ -11,6 +10,7 @@ from .cli import run
 from .induction_ir import digest
 from .environment import LeanEnvironment, render_action
 from .induction_language import formalize, explain
+from .public_transport import serialize_result
 
 
 def check_actions(statement, actions, interpretation=None):
@@ -86,15 +86,9 @@ def main():
                 "source_license": "CC0-1.0", "automatic_training_authorization": False}
     if actions is not None: response["actions_sha256"] = digest(actions)
     if family:response["model_family"]=family
-    raw = json.dumps(response, separators=(",", ":"), ensure_ascii=False).encode()
-    if len(raw) > 1_000_000:
-        response["result"] = {"status": "resource_exhaustion", "reason": "public result exceeds 1 MB", "pcs_authority": False}
-        response.pop("baseline", None)
-        response.pop("previous", None)
-        raw = json.dumps(response, separators=(",", ":"), ensure_ascii=False).encode()
     # One mandatory marker. A fabricated marker in submitted text would produce
     # duplicates and is rejected by the receiver; failed jobs cannot authorize.
-    print("PCS_LEAN_RESULT_V1:" + base64.b64encode(raw).decode(), flush=True)
+    print(serialize_result(response), flush=True)
 
 
 if __name__ == "__main__": main()
