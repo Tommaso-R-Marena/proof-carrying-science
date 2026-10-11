@@ -127,6 +127,9 @@ jobs:
     if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 300
+    defaults:
+      run:
+        working-directory: proof-carrying-science
     steps:
       - name: Check out proposed integration commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -134,6 +137,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
+          path: proof-carrying-science
       - name: Set up Python 3.12
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
@@ -158,11 +162,44 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/check_aristotle_semantic_source_v1.py
+      - name: Bounded temporary swap for large kernel controls on the standard public runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Keep the existing free standard runner; never request a paid large runner.
+          # These are preinstalled SDKs unused by this Python/Node/Rust/Lean job.
+          # Only runner image directories are removed; no repository/user files.
+          sudo -n rm -rf -- /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          python - <<'PYSPACE'
+          import os
+          st = os.statvfs(os.environ['RUNNER_TEMP'])
+          assert st.f_bavail * st.f_frsize >= 34 * 1024**3, 'Insufficient disk for bounded kernel swap'
+          PYSPACE
+          SWAP_FILE="$RUNNER_TEMP/pcs-kernel-controls.swap"
+          test ! -e "$SWAP_FILE"
+          sudo -n fallocate -l 32G "$SWAP_FILE"
+          sudo -n chmod 600 "$SWAP_FILE"
+          sudo -n mkswap "$SWAP_FILE"
+          sudo -n swapon "$SWAP_FILE"
+          free -m
       - name: Full Lean kernel, real compiled authority, Python, and adversarial gate
         shell: bash
         run: |
           set -euo pipefail
           bash scripts/core_ci_cloudflare.sh
+      - name: Check out pinned browser reasoning implementations for reference parity
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Tommaso-R-Marena/proof-carrying-science-site
+          ref: 711acdcb088654904e42d7cb94cbdd400df6eb7d
+          path: .ci-components/pcs-site
+          persist-credentials: false
+      - name: Compare actual Lean, Python and JavaScript bounded reasoning outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python scripts/verify_omega_dd_parity.py --site ../.ci-components/pcs-site --output "$RUNNER_TEMP/omega-dd-parity"
       - name: Genuine compiled semantic authority fixtures and Python client
         shell: bash
         run: |
@@ -262,6 +299,19 @@ jobs:
             ${{ runner.temp }}/intervention-ci/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Remove temporary kernel swap
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          SWAP_FILE="$RUNNER_TEMP/pcs-kernel-controls.swap"
+          if test -f "$SWAP_FILE"; then
+            if sudo -n swapon --noheadings --show=NAME | grep -Fxq "$SWAP_FILE"; then
+              sudo -n swapoff "$SWAP_FILE"
+            fi
+            sudo -n rm -- "$SWAP_FILE"
+          fi
 
   real-analysis-bridge:
     name: real-analysis-bridge

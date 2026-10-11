@@ -47,7 +47,7 @@ entire deterministic receipt and compares canonical content, including scope fla
 Before returning a plan, a direct AST evaluation also checks its target, every
 premise, all locks and the reported objective. This guard remains active under
 Python optimization. It checks the concrete point; global optimality/count still
-depend on the diagram/Bellman algorithms and their open general proof obligations.
+depend on the actual diagram/Bellman implementations. General correctness is now proved for the typed Lean reference models; Python/JavaScript refinement remains open.
 Hashes identify content; they do not authenticate an authority or prove correctness.
 
 ```sh
@@ -74,8 +74,7 @@ is a deliberately simple baseline, not a learned-model performance comparison.
 
 Lean 4.28 kernel-checks 12 selected minimum-cost/count propositions with no axioms
 and rejects an intentionally false minimum. This does not prove the general BDD
-or Bellman implementation correct. The consolidated Aristotle request specifies
-those general theorems and the remaining parser/refinement boundaries.
+or Bellman implementation correct. The completed [Aristotle package](../research/aristotle-omega-dd-v1/REPORT.md) proves general reference-model compilation, Bellman optimality/count/mask semantics, lexicographic reconstruction, positive-cost skipped-variable behavior and replay contracts. The release gate checks its kernel controls and complete axiom inventories. Its finite three-language receipt comparisons do not prove implementation refinement. Parser/decoder, serialization/authentication and scientific grounding boundaries remain open.
 Existing learned Omega weights, source provenance and four-variable scope are
 preserved. This release does not establish a new trained-model accuracy result,
 a scientific discovery or algorithmic novelty.

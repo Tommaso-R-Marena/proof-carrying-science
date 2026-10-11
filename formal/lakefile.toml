@@ -1,6 +1,6 @@
 name = "PCS"
 version = "0.5.0"
-defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check", "PCSCountermodel", "pcs-countermodel-replay"]
+defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check", "PCSCountermodel", "pcs-countermodel-replay", "PCSOmega", "PCSDecisionDiagram"]
 
 [[lean_lib]]
 name = "PCS"
@@ -23,3 +23,30 @@ defaultFacets = ["leanArts"]
 [[lean_exe]]
 name = "pcs-countermodel-replay"
 root = "PCSCountermodelReplay"
+
+# Experimental typed reference models (no PCS authority; not imported by PCS/PCSAuthority).
+[[lean_lib]]
+name = "PCSOmega"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSOmega"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSDecisionDiagram"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSDecisionDiagram"]
+defaultFacets = ["leanArts"]
+
+# Executed positive controls for the experimental models (kernel-checked `decide`).
+[[lean_lib]]
+name = "PCSControls"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSOmega.Controls", "PCSDecisionDiagram.Controls"]
+defaultFacets = ["leanArts"]
+
+# Proof-only computation certificates; no changes to the reference algorithms.
+[[lean_lib]]
+name = "PCSReferenceCertificates"
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+roots = ["PCSReferenceCertificates"]
+defaultFacets = ["leanArts"]
