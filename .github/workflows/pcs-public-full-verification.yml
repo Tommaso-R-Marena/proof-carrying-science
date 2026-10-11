@@ -38,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py
+          PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py tests/test_checked_reuse.py
           lean -o "$RUNNER_TEMP/PCSProofBoundary.olean" formal/PCSProofBoundary.lean
           cat > "$RUNNER_TEMP/FalseCertificate.lean" <<'LEAN'
           import PCSProofBoundary
@@ -56,6 +56,27 @@ jobs:
           source scripts/activate_lean_428.sh
           python -m pcs.experimental.prover.experiment --output "$RUNNER_TEMP/lean-smoke" --epochs 3 --episodes 3 --seeds 17
           python -m pcs.experimental.prover.cli 'For every natural number t, (t + 0) * 1 equals t.' --models research/lean-learning-v2 --output "$RUNNER_TEMP/end-to-end.json"
+          python -m pcs.experimental.prover.cli 'For all natural numbers a, b and c, if ((a + b equals c) and (c * 1 equals c)) then ((c * 1 equals c) and (a + b equals c)).' --models research/checked-reuse-v1 --output "$RUNNER_TEMP/checked-reuse.json"
+          python scripts/check_reuse_evidence.py
+          python - <<'PYREUSE'
+          import json, os
+          from pathlib import Path
+          from pcs.experimental.prover.environment import search
+          from pcs.experimental.prover.library import LibraryEnvironment
+          from pcs.experimental.prover.reuse_model import ReuseNetwork
+          folder = Path('research/checked-reuse-v2')
+          registry = json.loads((folder / 'registry.json').read_text())
+          entry = next(e for e in registry['models'] if e['id'] == registry['selected_local_experiment'])
+          model = ReuseNetwork.load(folder / entry['checkpoint'], entry['sha256'])
+          task = next(t for t in json.loads((folder / 'tasks.json').read_text()) if t['id'] == 'nat_three_edge_chain')
+          env = LibraryEnvironment(json.loads((folder / 'library.json').read_text()), timeout=30)
+          try:
+              result = search(env, task['goal'], model.rank, budget=64, beam=4)
+              assert result['status'] == 'verified' and len(result['receipt']['actions']) >= 5
+              (Path(os.environ['RUNNER_TEMP']) / 'feedback-proof.json').write_text(json.dumps(result))
+          finally:
+              env.close()
+          PYREUSE
           python scripts/evaluate_lean_formalization.py --models research/lean-learning-v2 --output "$RUNNER_TEMP/formalization-fidelity.json"
           python - <<'PY'
           import json, os, pathlib
@@ -63,6 +84,9 @@ jobs:
           result = json.loads((root / 'end-to-end.json').read_text())
           assert result['status'] == 'verified' and result['pcs_authority'] is False
           assert result['search']['receipt']['kernel']['axioms'] == []
+          reused = json.loads((root / 'checked-reuse.json').read_text())
+          assert reused['status'] == 'verified' and reused['pcs_authority'] is False
+          assert any(a['argument'] and a['argument'].startswith('PCSReuseL') for a in reused['search']['receipt']['actions'])
           report = json.loads((root / 'lean-smoke/rl-training.json').read_text())
           assert all(r['weights_changed'] for r in report.values())
           PY

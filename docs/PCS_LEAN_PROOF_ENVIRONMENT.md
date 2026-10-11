@@ -17,3 +17,7 @@ The receiver now offers introductions for negated goals, applications of negated
 The two branches remain separate Lean obligations. A regression closes the first branch of `A ∨ B → A` and requires both an open remaining goal and rejection by the independent final verifier. Additional regressions prove equality transitivity with zero, disjunction absorption and contraposition using both symbolic search and the existing pinned graph checkpoint. Invalid names and tactic injection are rejected. Run `PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py` with the pinned environment.
 
 These are action-generation improvements, not training gains. Earlier frozen model/RL benchmarks retain their original source and results; their reported solve rates are not recomputed or relabeled. No new model kind, checkpoint promotion, Lean axiom, theorem weakening or scientific authority is introduced.
+
+## Checked mathematical reuse and verified feedback
+
+LibraryEnvironment reconstructs typed proofs, audits axioms, compiles a fixed source-bound module, checks artifact digests including cached observations, and independently verifies final statements. The action receiver now supports local Nat/Int witnesses, quantified equality rewriting and actual Nat/Int order premises. [Interfaces and evidence](PCS_CHECKED_REUSE_REPORT.md).

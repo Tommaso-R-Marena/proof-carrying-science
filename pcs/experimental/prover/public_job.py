@@ -18,18 +18,20 @@ def main():
         raise ValueError("invalid public request")
     if choice and not re.fullmatch(r"[0-9]{1,2}", choice): raise ValueError("invalid interpretation")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    result = run(statement, "research/lean-learning-v2", budget=96, interpretation=int(choice) if choice else None)
+    result = run(statement, "research/checked-reuse-v2", budget=96, interpretation=int(choice) if choice else None)
+    previous = run(statement, "research/lean-learning-v2", budget=96, interpretation=int(choice) if choice else None)
     baseline = run(statement, budget=96, interpretation=int(choice) if choice else None)
-    for observation in [result, baseline]:
+    for observation in [result, previous, baseline]:
         if observation.get("search"):
             observation["search"]["attempts"] = [{k: v for k, v in a.items() if k != "state"} for a in observation["search"]["attempts"]]
     response = {"format": "pcs-public-lean-result-v1", "request_id": request_id,
-                "source_sha256": digest(statement), "core_sha": revision, "result": result, "baseline": baseline,
+                "source_sha256": digest(statement), "core_sha": revision, "result": result, "previous": previous, "baseline": baseline,
                 "source_license": "CC0-1.0", "automatic_training_authorization": False}
     raw = json.dumps(response, separators=(",", ":"), ensure_ascii=False).encode()
     if len(raw) > 1_000_000:
         response["result"] = {"status": "resource_exhaustion", "reason": "public result exceeds 1 MB", "pcs_authority": False}
         response.pop("baseline", None)
+        response.pop("previous", None)
         raw = json.dumps(response, separators=(",", ":"), ensure_ascii=False).encode()
     # One mandatory marker. A fabricated marker in submitted text would produce
     # duplicates and is rejected by the receiver; failed jobs cannot authorize.

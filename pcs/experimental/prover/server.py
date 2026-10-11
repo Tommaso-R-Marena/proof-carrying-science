@@ -18,12 +18,20 @@ from .ir import digest
 PUBLIC_ORIGIN = "https://proof-carrying-science-site.marenatommaso.workers.dev"
 
 
-def serve(models, public, port=8766):
+def serve(models, public, port=8766, reuse_models=None):
     models = Path(models).resolve()
     public = Path(public).resolve()
     lock = threading.BoundedSemaphore(1)
     sessions = {}
     env = LeanEnvironment(timeout=30)
+    reuse_env = None
+    if reuse_models is not None:
+        from .library import LibraryEnvironment
+        reuse_models = Path(reuse_models).resolve()
+        registry = json.loads((reuse_models / "registry.json").read_text())
+        library = json.loads((reuse_models / "library.json").read_text())
+        if digest(library) != registry["library_sha256"]: raise ValueError("checked library registry mismatch")
+        reuse_env = LibraryEnvironment(library, timeout=30)
 
     class Handler(BaseHTTPRequestHandler):
         def allowed(self):
@@ -55,18 +63,28 @@ def serve(models, public, port=8766):
         def do_GET(self):
             if not self.allowed(): return self.reply(403, {"error": "origin or host rejected"})
             if self.path == "/api/health":
-                return self.reply(200, {"status": "ready", "lean": env.version, "mode": "local CPU", "pcs_authority": False})
+                return self.reply(200, {"status": "ready", "lean": env.version, "mode": "local CPU", "pcs_authority": False,
+                    "checked_reuse": reuse_env is not None, "checked_lemmas": reuse_env.catalog if reuse_env else []})
             if self.path == "/api/models":
                 return self.reply(200, json.loads((models / "registry.json").read_text()))
             allowed_files = {"/": "lean-learning-lab.html", "/lean-learning-lab": "lean-learning-lab.html",
                              "/lean-learning-lab.html": "lean-learning-lab.html", "/lean-learning-lab.css": "lean-learning-lab.css",
                              "/lean-learning-lab.mjs": "lean-learning-lab.mjs",
-                             "/lean-learning/summary.json": "lean-learning/summary.json"}
+                             "/lean-learning/summary.json": "lean-learning/summary.json",
+                             "/checked-reuse/summary.json": "checked-reuse/summary.json",
+                             "/checked-reuse/catalog.json": "checked-reuse/catalog.json",
+                             "/checked-reuse/refinement-summary.json": "checked-reuse/refinement-summary.json",
+                             "/checked-reuse/library.json": "checked-reuse/library.json",
+                             "/checked-reuse/REPORT.md": "checked-reuse/REPORT.md",
+                             "/checked-reuse/transfer-proof.lean": "checked-reuse/transfer-proof.lean"}
+            for name in ["nat_three_edge_chain", "int_three_edge_chain", "nat_order_cycle", "triple_function_congruence",
+                         "two_rule_function_chain", "three_part_nat_witness"]:
+                allowed_files[f"/checked-reuse/{name}.lean"] = f"checked-reuse/{name}.lean"
             if self.path not in allowed_files: return self.reply(404, {"error": "not found"})
             p = public / allowed_files[self.path]
             raw = p.read_bytes()
             self.send_response(200)
-            self.send_header("Content-Type", {".html": "text/html", ".css": "text/css", ".mjs": "application/javascript", ".json": "application/json"}[p.suffix])
+            self.send_header("Content-Type", {".html": "text/html", ".css": "text/css", ".mjs": "application/javascript", ".json": "application/json", ".md": "text/plain", ".lean": "text/plain"}[p.suffix])
             self.send_header("Content-Security-Policy", "default-src 'self'; connect-src 'self' http://127.0.0.1:8766 http://localhost:8766; object-src 'none'; base-uri 'none'")
             self.send_header("X-Content-Type-Options", "nosniff")
             self.send_header("Content-Length", str(len(raw)))
@@ -88,10 +106,27 @@ def serve(models, public, port=8766):
                     ir = parse_lean(obj["declaration"])
                     result = {"explanation": explain(ir), "elaboration": env.observe(ir, [])}
                 elif self.path == "/api/solve" and set(obj) == {"statement", "mode", "interpretation", "budget"}:
-                    if obj["mode"] not in {"model", "symbolic"} or type(obj["budget"]) is not int or not 1 <= obj["budget"] <= 96:
+                    if obj["mode"] not in {"model", "symbolic", "reuse-model", "reuse-symbolic"} or type(obj["budget"]) is not int or not 1 <= obj["budget"] <= 96:
                         raise ValueError("invalid model mode or budget")
-                    result = run(obj["statement"], models if obj["mode"] == "model" else None, obj["budget"], obj["interpretation"])
-                elif self.path == "/api/session" and set(obj) == {"statement", "interpretation"}:
+                    if obj["mode"].startswith("reuse-"):
+                        if reuse_env is None: raise ValueError("checked reuse backend not configured")
+                        if obj["mode"] == "reuse-model":
+                            result = run(obj["statement"], reuse_models, obj["budget"], obj["interpretation"], prepared_env=reuse_env)
+                        else:
+                            from .library import reuse_priority
+                            formal = formalize(obj["statement"])
+                            index = obj["interpretation"]
+                            if formal["status"] != "supported" and index is None: raise ValueError("select a supported interpretation")
+                            index = 0 if index is None else index
+                            if type(index) is not int or not 0 <= index < len(formal["candidates"]): raise ValueError("select a valid interpretation")
+                            goal = formal["candidates"][index]["ir"]
+                            from .environment import search
+                            solved = search(reuse_env, goal, reuse_priority, budget=obj["budget"], beam=4)
+                            result = {"status": solved["status"], "search": solved, "formalization": formal,
+                                      "explanation": explain(goal), "model": "symbolic-reuse", "pcs_authority": False}
+                    else:
+                        result = run(obj["statement"], models if obj["mode"] == "model" else None, obj["budget"], obj["interpretation"])
+                elif self.path == "/api/session" and set(obj) in ({"statement", "interpretation"}, {"statement", "interpretation", "reuse"}):
                     for key in list(sessions):
                         if time.monotonic() - sessions[key]["time"] > 600: del sessions[key]
                     if len(sessions) >= 16: raise ValueError("session capacity reached")
@@ -99,26 +134,30 @@ def serve(models, public, port=8766):
                     index = obj["interpretation"]
                     if type(index) is not int or not 0 <= index < len(formal["candidates"]): raise ValueError("select a valid interpretation")
                     goal = formal["candidates"][index]["ir"]
-                    observed = env.observe(goal, [])
+                    use_reuse = obj.get("reuse", False)
+                    if type(use_reuse) is not bool or (use_reuse and reuse_env is None): raise ValueError("invalid checked reuse session")
+                    proof_env = reuse_env if use_reuse else env
+                    observed = proof_env.observe(goal, [])
                     key = uuid.uuid4().hex
-                    sessions[key] = {"goal": goal, "hash": digest(goal), "actions": [], "time": time.monotonic(), "history": []}
-                    result = {"id": key, "goal_sha256": digest(goal), "state": observed["states"][-1], "actions": candidates(observed["states"][-1]), "status": "open"}
+                    sessions[key] = {"goal": goal, "hash": digest(goal), "actions": [], "time": time.monotonic(), "history": [], "reuse": use_reuse}
+                    result = {"id": key, "goal_sha256": digest(goal), "state": observed["states"][-1], "actions": proof_env.candidates(observed["states"][-1]), "status": "open"}
                 elif self.path == "/api/step" and set(obj) == {"id", "action"}:
                     session = sessions.get(obj["id"])
                     if not session or time.monotonic() - session["time"] > 600: raise ValueError("session expired")
                     if digest(session["goal"]) != session["hash"]: raise ValueError("immutable goal changed")
                     action = obj["action"]
-                    observed = env.observe(session["goal"], session["actions"])
-                    available = candidates(observed["states"][-1])
+                    proof_env = reuse_env if session["reuse"] else env
+                    observed = proof_env.observe(session["goal"], session["actions"])
+                    available = proof_env.candidates(observed["states"][-1])
                     if action not in available: raise ValueError("action is not available in this proof state")
                     path = session["actions"] + [action]
-                    result = env.observe(session["goal"], path)
+                    result = proof_env.observe(session["goal"], path)
                     if result["status"] != "invalid": session["actions"] = path
                     session["history"].append({"action": action, "status": result["status"], "error": result["error"]})
-                    receipt = env.verify(session["goal"], path) if result["status"] == "closed" else None
+                    receipt = proof_env.verify(session["goal"], path) if result["status"] == "closed" else None
                     state = result["states"][-1] if result["status"] != "invalid" else observed["states"][-1]
                     result = {"status": "verified" if receipt else result["status"], "state": state,
-                              "actions": candidates(state), "history": session["history"], "receipt": receipt}
+                              "actions": proof_env.candidates(state), "history": session["history"], "receipt": receipt}
                 else: raise ValueError("unknown route or unexpected fields")
                 self.reply(200, result)
             except (ValueError, RuntimeError, KeyError, TypeError) as ex:
@@ -131,7 +170,9 @@ def serve(models, public, port=8766):
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     print(f"PCS local Lean backend ready on port {port}; no external model service or donation.", flush=True)
     try: server.serve_forever()
-    finally: server.server_close(); env.close()
+    finally:
+        server.server_close(); env.close()
+        if reuse_env is not None: reuse_env.close()
 
 
 def main():
@@ -139,8 +180,9 @@ def main():
     p.add_argument("--models", required=True)
     p.add_argument("--public", required=True)
     p.add_argument("--port", type=int, default=8766)
+    p.add_argument("--reuse-models", help="Receiver-selected checked reuse experiment directory")
     args = p.parse_args()
-    serve(args.models, args.public, args.port)
+    serve(args.models, args.public, args.port, args.reuse_models)
 
 
 if __name__ == "__main__": main()

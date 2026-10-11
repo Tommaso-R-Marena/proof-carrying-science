@@ -12,7 +12,7 @@ from pathlib import Path
 import torch
 from torch import nn
 
-from .environment import candidates, reference_expression
+from .environment import candidates, reference_expression, premise_matches
 from .ir import digest
 
 torch.set_num_threads(2)
@@ -55,7 +55,7 @@ def features(state, action):
     g = state["goals"][0] if state["goals"] else {"target": "", "locals": [], "expression": {"kind": ""}}
     arg = str(action["argument"] or "")
     direct = next((l["type"] for l in g["locals"] if l["name"] == arg), "")
-    matching = bool(state["goals"]) and action["kind"] == "exact" and reference_expression(state, arg) == g["expression"]
+    matching = bool(state["goals"]) and action["kind"] == "exact" and premise_matches(g["expression"], reference_expression(state, arg))
     return [float(matching), float("∧" in direct),
             float("→" in direct), float("=" in direct), float(g["expression"]["kind"] == "forall"),
             float("∧" in g["target"]), float("∨" in g["target"]), float("=" in g["target"]),
@@ -130,7 +130,7 @@ class ReasoningNetwork(nn.Module):
         return model
 
 
-def imitate(model, episodes, epochs=40, seed=17):
+def imitate(model, episodes, epochs=40, seed=17, candidate_provider=candidates):
     torch.manual_seed(seed)
     opt = torch.optim.Adam(model.parameters(), lr=.008)
     examples = []
@@ -140,7 +140,7 @@ def imitate(model, episodes, epochs=40, seed=17):
         actions = episode["result"]["receipt"]["actions"]
         for i, action in enumerate(actions):
             state = episode["result"]["states"][i]
-            options = candidates(state)
+            options = candidate_provider(state)
             if action in options:
                 examples.append((state, options, options.index(action), len(actions) - i))
     if not examples:
@@ -174,7 +174,7 @@ def actor_critic(model, env, training_tasks, episodes=16, seed=31):
         state, info = env.reset(task["goal"])
         logs, values, rewards, entropies, trace = [], [], [], [], []
         for step in range(env.max_steps):
-            options = candidates(state)
+            options = env.candidates(state)
             logits, value, _ = model(state, options)
             distribution = torch.distributions.Categorical(logits=logits)
             selected = distribution.sample()

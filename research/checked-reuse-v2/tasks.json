@@ -1,0 +1,809 @@
+[
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "n",
+          "op": "var"
+        },
+        "op": "le",
+        "right": {
+          "name": "n",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_reflexive_order",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers n, n is less than or equal to n.",
+    "split": "validation"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "z",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "z",
+          "op": "var"
+        },
+        "op": "le",
+        "right": {
+          "name": "z",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "int_reflexive_order",
+    "license": "Apache-2.0",
+    "original_statement": "For all integers z, z is less than or equal to z.",
+    "split": "validation"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        },
+        {
+          "name": "Q",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "n",
+                "op": "var"
+              },
+              "fn": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "implies",
+            "right": {
+              "arg": {
+                "name": "n",
+                "op": "var"
+              },
+              "fn": {
+                "name": "Q",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "n",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "m",
+                "op": "var"
+              },
+              "fn": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "implies",
+            "right": {
+              "arg": {
+                "name": "m",
+                "op": "var"
+              },
+              "fn": {
+                "name": "Q",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "m",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "double_function_rule",
+    "license": "Apache-2.0",
+    "original_statement": "For all predicates on natural numbers P and Q, if (\u2200 (n : Nat), P(n) implies Q(n)) then (\u2200 (m : Nat), P(m) implies Q(m)).",
+    "split": "validation"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        },
+        {
+          "name": "d",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "name": "b",
+                "op": "var"
+              },
+              "op": "le",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "c",
+                "op": "var"
+              },
+              "op": "le",
+              "right": {
+                "name": "d",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "le",
+          "right": {
+            "name": "d",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_three_edge_chain",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a, b, c and d, if ((a is less than or equal to b) and ((b is less than or equal to c) and (c is less than or equal to d))) then (a is less than or equal to d).",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Int"
+        },
+        {
+          "name": "b",
+          "type": "Int"
+        },
+        {
+          "name": "c",
+          "type": "Int"
+        },
+        {
+          "name": "d",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "name": "b",
+                "op": "var"
+              },
+              "op": "le",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "c",
+                "op": "var"
+              },
+              "op": "le",
+              "right": {
+                "name": "d",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "le",
+          "right": {
+            "name": "d",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "int_three_edge_chain",
+    "license": "Apache-2.0",
+    "original_statement": "For all integers a, b, c and d, if ((a is less than or equal to b) and ((b is less than or equal to c) and (c is less than or equal to d))) then (a is less than or equal to d).",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "name": "b",
+                "op": "var"
+              },
+              "op": "le",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "c",
+                "op": "var"
+              },
+              "op": "le",
+              "right": {
+                "name": "a",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "c",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_order_cycle",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a, b and c, if ((a is less than or equal to b) and ((b is less than or equal to c) and (c is less than or equal to a))) then (a equals c).",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "a",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "arg": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "g",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "fn": {
+                  "name": "g",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "triple_function_congruence",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f and g, if (\u2200 (a : Nat), f(a) equals g(a)) then (\u2200 (b : Nat), f(f(f(b))) equals g(g(g(b)))).",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        },
+        {
+          "name": "h",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "arg": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "g",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "name": "a",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "op": "and",
+          "right": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "g",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "h",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "name": "b",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "c",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "arg": {
+                  "name": "c",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "h",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "h",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "c",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "two_rule_function_chain",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f, g and h, if ((\u2200 (a : Nat), f(a) equals g(a)) and (\u2200 (b : Nat), g(b) equals h(b))) then (\u2200 (c : Nat), f(f(c)) equals h(h(c))).",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "body": {
+          "left": {
+            "left": {
+              "name": "m",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "left": {
+                  "name": "m",
+                  "op": "var"
+                },
+                "op": "add",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 0
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "n",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "left": {
+                  "name": "m",
+                  "op": "var"
+                },
+                "op": "mul",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 1
+                }
+              },
+              "op": "eq",
+              "right": {
+                "name": "n",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "name": "m",
+        "op": "exists",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "three_part_nat_witness",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers n, there exists a natural number m such that ((m equals n) and ((m + 0 equals n) and (m * 1 equals n))).",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "le",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "false_order_equality",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a and b, if (a is less than or equal to b) then a equals b.",
+    "split": "final"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "a",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "b",
+                "op": "var"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "false_function_identity",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f and g, if (\u2200 (a : Nat), f(a) equals g(a)) then (\u2200 (b : Nat), f(b) equals b).",
+    "split": "final"
+  }
+]
