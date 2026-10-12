@@ -9,6 +9,7 @@ from .memory_environment import MemoryEnvironment,structural_rank,replay_memory_
 from .memory_discovery import admitted_pool,marginal_utility,choose_memory
 from .memory_model import MemoryNetwork,fit_utility
 from .memory_search import memory_search
+from .memory_cost import MeasuredMemoryEnvironment,MeasuredInductionEnvironment
 from .model import imitate,actor_critic
 from .library import FORMAT
 
@@ -18,9 +19,9 @@ def write(p,value):
     else:p.write_bytes(raw)
 
 def measured(env,task,rank,protocol,*,engine=search):
-    env.observations.clear();calls,seconds,start=env.invocations,env.seconds,time.monotonic()
+    env.observations.clear();calls,seconds,start=env.actual_calls,env.seconds,time.monotonic()
     result=engine(env,task['goal'],rank,budget=protocol['budget'],beam=protocol['beam'],depth=protocol['depth'])
-    return {**task,'result':result,'cost':{'all_lean_calls':env.invocations-calls,
+    return {**task,'result':result,'cost':{'all_lean_calls':env.actual_calls-calls,
              'lean_seconds':env.seconds-seconds,'wall_seconds':time.monotonic()-start}}
 
 def metrics(records):
@@ -42,7 +43,7 @@ def lexical(state,options):
     return scores
 
 def tactic_baseline(env,task):
-    start,calls,seconds=time.monotonic(),env.invocations,env.seconds;attempts=[];receipt=None
+    start,calls,seconds=time.monotonic(),env.actual_calls,env.seconds;attempts=[];receipt=None
     # Strong ordinary Lean tactics; these are fixed trusted commands, not an
     # arbitrary submitted tactic interface. Each complete proof is audited.
     for tactic in ['simp_all','omega','grind']:
@@ -55,7 +56,7 @@ def tactic_baseline(env,task):
             attempts.append({'tactic':tactic,'status':'verified'});break
         except RuntimeError as ex:attempts.append({'tactic':tactic,'status':'failed','error':str(ex)[-1000:]})
     return {**task,'result':{'status':'verified' if receipt else 'unknown','receipt':receipt,
-            'expansions':len(attempts),'attempts':attempts},'cost':{'all_lean_calls':env.invocations-calls,
+            'expansions':len(attempts),'attempts':attempts},'cost':{'all_lean_calls':env.actual_calls-calls,
             'lean_seconds':env.seconds-seconds,'wall_seconds':time.monotonic()-start}}
 
 def run(folder):
@@ -70,9 +71,9 @@ def run(folder):
         for x in sorted(paths):archive.add(x,arcname=str(x.relative_to(ROOT)))
     start=time.monotonic();envs=[];replay_calls=0;training_reports={};models={}
     def make(library=None):
-        e=MemoryEnvironment(library,heldout=splits['selection']+splits['final'],timeout=30);envs.append(e);return e
+        e=MeasuredMemoryEnvironment(library,heldout=splits['selection']+splits['final'],timeout=30);envs.append(e);return e
     try:
-        base=make();legacy=InductionEnvironment(timeout=30);envs.append(legacy)
+        base=make();legacy=MeasuredInductionEnvironment(timeout=30);envs.append(legacy)
         records=[measured(base,t,structural_rank,p) for t in splits['train']]
         write(folder/'training-source-trajectories.json',records)
         print('Training coverage',metrics(records),flush=True)
@@ -116,9 +117,15 @@ def run(folder):
         registry=[]
         for seed in p['seeds']:
             torch.manual_seed(seed);m=MemoryNetwork();models[f'untrained-{seed}']=copy.deepcopy(m)
+            print('Fit actual paired utility',seed,flush=True)
             training_reports[f'utility-{seed}']=fit_utility(m,utility_examples,epochs=10,seed=seed)
+            m.save(folder/f'utility-stage-{seed}.json',{'stage':'utility_complete','seed':seed,'source_manifest_sha256':digest(manifest),'protocol_sha256':digest(p)})
+            write(folder/'training-progress.json',training_reports)
+            print('Fit checked imitation',seed,flush=True)
             training_reports[f'imitation-{seed}']=imitate(m,training,epochs=p['epochs'],seed=seed,candidate_provider=selected_env.candidates)
             models[f'supervised-{seed}']=copy.deepcopy(m)
+            m.save(folder/f'supervised-stage-{seed}.json',{'stage':'imitation_complete','seed':seed,'source_manifest_sha256':digest(manifest),'protocol_sha256':digest(p)})
+            write(folder/'training-progress.json',training_reports)
             torch.manual_seed(seed);bag=MemoryNetwork(architecture='bag')
             training_reports[f'bag-{seed}']=fit_utility(bag,utility_examples,epochs=10,seed=seed)
             training_reports[f'bag-imitation-{seed}']=imitate(bag,training,epochs=p['epochs'],seed=seed,candidate_provider=selected_env.candidates)
@@ -126,6 +133,8 @@ def run(folder):
             for generation in range(1,p['generations']+1):
                 report=actor_critic(m,selected_env,splits['train'],episodes=p['rl_episodes_per_generation'],seed=seed+generation)
                 training_reports[f'rl{generation}-{seed}']=report;models[f'rl{generation}-{seed}']=copy.deepcopy(m)
+                m.save(folder/f'rl-stage-{generation}-{seed}.json',{'stage':'rl_generation_complete','seed':seed,'generation':generation,'source_manifest_sha256':digest(manifest),'protocol_sha256':digest(p)})
+                write(folder/'training-progress.json',training_reports)
                 print('Actual RL',seed,generation,report.get('weights_changed'),flush=True)
         write(folder/'training.json',training_reports)
         for name,model in models.items():
@@ -160,18 +169,21 @@ def run(folder):
         for name in [selected_model,'selected_memory_structural','grounded_std_structural']:
             for r in evaluations['final'][name]:
                 if r['result']['status']!='verified':continue
-                checked=replay_memory_receipt(r['goal'],r['result']['receipt'],heldout=splits['final'],cache=base.cache)
-                # Every replay reconstructs primitives and memory independently;
-                # count those compiler audits as well as the final compilation.
-                replay_calls+=len(selected_env.primitives)+len(checked['library']['entries'])+2
+                receipt=r['result']['receipt'];fresh=MeasuredMemoryEnvironment(receipt['library'],heldout=splits['final'],cache=base.cache,timeout=30)
+                try:
+                    checked=fresh.verify(r['goal'],receipt['actions'])
+                    for key in ['proof','goal_sha256','library_sha256','primitive_catalog_sha256','memory_source_sha256','library_declarations','lean']:
+                        if checked.get(key)!=receipt.get(key):raise ValueError('independent replay binding mismatch')
+                    replay_calls+=fresh.actual_calls
+                finally:fresh.close()
                 replay.append({'policy':name,'task_id':r['id'],'receipt_sha256':digest(checked),'axioms':checked['kernel']['axioms']})
         write(folder/'independent-final-replay.json',replay)
         summary={'metrics':{s:{n:metrics(rs) for n,rs in rows.items()} for s,rows in evaluations.items()},
                  'selected':selected_model,'pool_size':len(pool),'memory_size':len(library['entries']),
                  'trainable_parameters':{n:sum(x.numel() for x in m.parameters()) for n,m in models.items()},
                  'combined_memory_utility':metrics(synergy),'without_memory_utility':metrics(utility_base),
-                 'total_wall_seconds':time.monotonic()-start,'all_actual_Lean_calls':sum(e.invocations+1 for e in envs)+replay_calls,
-                 'independent_replays':len(replay),'torch':torch.__version__,'CPU_threads':torch.get_num_threads(),
+                 'total_wall_seconds':time.monotonic()-start,'all_actual_Lean_calls':sum(e.actual_calls for e in envs)+replay_calls,
+                 'compiler_attempts_including_failures':sum(e.compiler_attempts for e in envs),'worker_request_attempts':sum(e.worker_request_attempts for e in envs),'independent_replay_calls':replay_calls,'independent_replays':len(replay),'torch':torch.__version__,'CPU_threads':torch.get_num_threads(),
                  'gpu_used':False,'financial_spend':0,'source_manifest_sha256':digest(manifest),
                  'claim':'Measured public mathematical transfer; no automatic breakthrough, novelty, intelligence or production promotion claim.'}
         write(folder/'summary.json',summary)
