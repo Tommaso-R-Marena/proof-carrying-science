@@ -1,0 +1,784 @@
+{
+  "format": "pcs-scientific-assurance-v1",
+  "pcs_package_valid": true,
+  "pcs_verification": {
+    "format": "pcs-end-to-end-verifier-v06-v1",
+    "authority_required": true,
+    "authoritative": true,
+    "valid": true,
+    "failed_stage": null,
+    "errors": [],
+    "stages": {
+      "canonical_inputs": true,
+      "certificate_signature": true,
+      "package_binding": true,
+      "provenance": true,
+      "environment_replay": true,
+      "workflow_replay": true,
+      "replay": true,
+      "normalized_set": true,
+      "lean_authority": true
+    },
+    "certificate_semantic_hash": "842c47bb2350b3f3a56ff62424832b692f7918d71e96f5d3e2e29ec1e98278a9",
+    "certificate_integrity_hash": "c59c915651913a374e00f7d3561efff5215454c2e55c6be1ee88f026ed22129c",
+    "public_key_fingerprint": "5c1688ef48cdd60f06323727b9e3f6deda1ab5a84572625a7dda39ca0a104e7b",
+    "normalized_index_semantic_hash": "dc1e51e0a69a3f2c22312febbbdbad3c9a0ff186fdce17fbde4aa43b6313e754",
+    "verified_members": [
+      "artifacts/06dff6ce4aac3e110a334e1e/payload",
+      "artifacts/11f34a63ab63d6d0012b0385/payload",
+      "artifacts/1f65fe5e956caf3153723bbe/payload",
+      "artifacts/2a31c2ec2586b295387d758b/payload",
+      "artifacts/87efcbdc617f850f5e73a22f/payload",
+      "artifacts/8bc8486cec20feaef5ae691c/payload",
+      "artifacts/8f4342f6b3c4078753f5e3ff/payload",
+      "artifacts/94ae2d4ed366dc629ecebfb6/payload",
+      "artifacts/9658a017cd34e55a9568f04c/payload",
+      "artifacts/972ffb597d197d002e49350f/payload",
+      "artifacts/bbe8ff92f3b8074f18aef7d0/payload",
+      "artifacts/cf648e4dea2e4f31df49ec08/payload",
+      "artifacts/d1aebcd79336fc3b3bf518c4/payload",
+      "artifacts/e3e0b732fd48e120a3360c67/payload",
+      "certificate.json",
+      "normalized/044d7db0cfddbd4ba6d073c5aef11c9ea70b8fe7baac06acc98adad6005af0e9.json",
+      "normalized/0b3705d887d7206aebf8c3a4461acec12a972961343e43608dfc1bd97febefe8.json",
+      "normalized/73a003919a9a208e523d8c624e7c9ea621e896c5290dad7cc1be4b66e9d1f3ec.json",
+      "normalized/79654e243d8c608f63c73053a9ba82937398606f903bf6daa33e4b71bb9a23f2.json",
+      "normalized/d248c7abe5536b2f37024ee4519b2dadd038f7d0849f4803dab429de8226419e.json",
+      "normalized/index.json"
+    ],
+    "provenance": {
+      "mode": "none",
+      "semantic_hash": null,
+      "entries": [],
+      "reviewer_expectations": {
+        "applied": false,
+        "build_provenance_fingerprint": null,
+        "subject_sha256": []
+      }
+    },
+    "environment_replay": {
+      "mode": "static-environment-rederived",
+      "hermeticity": "environment_unspecified",
+      "source_files_checked": 1,
+      "dependency_records": 0,
+      "unresolved_items": 0,
+      "replay_plan": {
+        "format": "pcs-environment-replay-plan-v1",
+        "hermeticity": "environment_unspecified",
+        "required_tools": [
+          "python"
+        ],
+        "steps": [
+          {
+            "kind": "pip_install",
+            "source_path": "requirements.txt",
+            "command_template": "python -m pip install -r requirements.txt",
+            "network_required": true,
+            "executes_project_build_instructions": true
+          }
+        ],
+        "automatic_execution_permitted_by_pcs": false,
+        "reason": "PCS emits a reconstruction plan but does not execute environment or project installation/build commands during verification."
+      }
+    },
+    "workflow_replay": {
+      "nodes_checked": 1,
+      "mode": "static-source-replay"
+    },
+    "claims": [
+      {
+        "claim_id": "C_balance_cleavage",
+        "kind": "computational",
+        "decision": "COMPUTATIONALLY_SUPPORTED",
+        "predicate": {
+          "products": [
+            {
+              "coefficient": 2,
+              "formula": "C3H6O3"
+            }
+          ],
+          "reactants": [
+            {
+              "coefficient": 1,
+              "formula": "C6H12O6"
+            }
+          ],
+          "type": "reaction_balance"
+        },
+        "normalized_path": "normalized/044d7db0cfddbd4ba6d073c5aef11c9ea70b8fe7baac06acc98adad6005af0e9.json",
+        "wire_semantic_hash": "f698375b5087608f23c4802e24b8cfe271e9f951a5c7f07307b9fca5af498986"
+      },
+      {
+        "claim_id": "C_dimensions_cleavage",
+        "kind": "computational",
+        "decision": "COMPUTATIONALLY_SUPPORTED",
+        "predicate": {
+          "left_unit": "s^-1",
+          "right_unit": "s^-1",
+          "type": "unit_compatible"
+        },
+        "normalized_path": "normalized/73a003919a9a208e523d8c624e7c9ea621e896c5290dad7cc1be4b66e9d1f3ec.json",
+        "wire_semantic_hash": "91ee0f35036e612d2b024bb7ed7a3233cfc3ecdecffa0b5ab209b5eaa538a505"
+      },
+      {
+        "claim_id": "C_balance_isomerization",
+        "kind": "computational",
+        "decision": "COMPUTATIONALLY_SUPPORTED",
+        "predicate": {
+          "products": [
+            {
+              "coefficient": 1,
+              "formula": "C3H6O3"
+            }
+          ],
+          "reactants": [
+            {
+              "coefficient": 1,
+              "formula": "C3H6O3"
+            }
+          ],
+          "type": "reaction_balance"
+        },
+        "normalized_path": "normalized/d248c7abe5536b2f37024ee4519b2dadd038f7d0849f4803dab429de8226419e.json",
+        "wire_semantic_hash": "093d45f231e4ebee890e294b42b9c036c44057cb1cd437d8697308052f1d244f"
+      },
+      {
+        "claim_id": "C_dimensions_isomerization",
+        "kind": "computational",
+        "decision": "COMPUTATIONALLY_SUPPORTED",
+        "predicate": {
+          "left_unit": "s^-1",
+          "right_unit": "s^-1",
+          "type": "unit_compatible"
+        },
+        "normalized_path": "normalized/0b3705d887d7206aebf8c3a4461acec12a972961343e43608dfc1bd97febefe8.json",
+        "wire_semantic_hash": "fe642ed6a187a28455c1b2918444e994dc85a5fc0d509d4adeb9c29915e4bf92"
+      },
+      {
+        "claim_id": "C_NUMERICAL",
+        "kind": "computational",
+        "decision": "OPEN",
+        "predicate": {
+          "namespace": "pcs-bounded-mass-action-replay/v1",
+          "proposition": "The bound concentration table satisfies the bound finite rational mass-action contract, including declared dimensions, grid, nonnegativity, reference tolerances and elemental conservation.",
+          "type": "external"
+        },
+        "normalized_path": "normalized/79654e243d8c608f63c73053a9ba82937398606f903bf6daa33e4b71bb9a23f2.json",
+        "wire_semantic_hash": "61b1c7ab63af6b4f8a18dcdf1008d1a316c217085954193cce44458d5c409e51"
+      }
+    ],
+    "lean_authority": {
+      "format": "pcs-lean-authority-result-v1",
+      "required": true,
+      "accepted": true,
+      "verdict": "ACCEPT",
+      "rejecting_stage": null,
+      "mode": "repository-binary",
+      "authority_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49",
+      "observation_transcript_sha256": "d896d3aba4d88f83ad95ec7f7aed0df4f2a1e8390d2ddc5dbe3a45dac1b6e13a",
+      "certificate_semantic_hash": "842c47bb2350b3f3a56ff62424832b692f7918d71e96f5d3e2e29ec1e98278a9",
+      "archive_mode": "lean-decoded-canonical-zip"
+    },
+    "formal_coverage": {
+      "format": "pcs-formal-coverage-v1",
+      "checker_classification_scope": "CHECK_TYPE_ONLY",
+      "execution_authority_scope": "EXACT_PACKAGE_VERIFICATION",
+      "certified_checker_types": [
+        "csv_disjoint",
+        "pkpd_contract",
+        "pkpd_peak_concentration_threshold",
+        "pkpd_reference_match",
+        "reaction_balance",
+        "unit_compatible"
+      ],
+      "evidence_total": 4,
+      "certified_type_evidence": 4,
+      "outside_certified_type_evidence": 0,
+      "signed_external_validator_evidence": 0,
+      "package_authority": "LEAN_AUTHORITATIVE_ACCEPT",
+      "evidence": [
+        {
+          "evidence_id": "E_balance_cleavage",
+          "check_type": "reaction_balance",
+          "checker_semantics": "PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE",
+          "execution_authority": "AUTHORITATIVELY_REPLAYED_BY_LEAN"
+        },
+        {
+          "evidence_id": "E_dimensions_cleavage",
+          "check_type": "unit_compatible",
+          "checker_semantics": "PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE",
+          "execution_authority": "AUTHORITATIVELY_REPLAYED_BY_LEAN"
+        },
+        {
+          "evidence_id": "E_balance_isomerization",
+          "check_type": "reaction_balance",
+          "checker_semantics": "PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE",
+          "execution_authority": "AUTHORITATIVELY_REPLAYED_BY_LEAN"
+        },
+        {
+          "evidence_id": "E_dimensions_isomerization",
+          "check_type": "unit_compatible",
+          "checker_semantics": "PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE",
+          "execution_authority": "AUTHORITATIVELY_REPLAYED_BY_LEAN"
+        }
+      ]
+    },
+    "archive_assurance": "lean-decoded-canonical-zip",
+    "bundle_sha256": "22a279a03c71a7bf0e08e00c16a71109f270a180c0e13d7ad8f5c88fb25b17cf",
+    "archive_bytes": 83047,
+    "archive_format": "zip",
+    "accepted": true,
+    "reviewer_policy": {
+      "applied": false,
+      "pass": null,
+      "policy_sha256": null,
+      "failures": []
+    }
+  },
+  "independent_replay_consistent": true,
+  "bounded_contract_satisfied": false,
+  "scientific_acceptance": false,
+  "independent_human_review": false,
+  "errors": [],
+  "domain_replay": {
+    "format": "pcs-mass-action-replay-v1",
+    "authority": "BOUNDED_PYTHON_REPLAY_ONLY",
+    "pcs_authority": false,
+    "clinical_or_biological_acceptance": false,
+    "contract_sha256": "771131fdc40e0d2a6f5c042caaf1ed2601ed2aca1bb1b51a6451cd05d0b97484",
+    "observations_sha256": "ba9ae507bd37de28bcf564991791c67e670cce2fe44559dee402e57c2987645e",
+    "limits": {
+      "steps": 128,
+      "species": 16,
+      "reactions": 32,
+      "rational_bits": 4096
+    },
+    "limitations": [
+      "rational Euler replay is not continuous-ODE accuracy",
+      "no proof relates this Python adapter to a Lean reference model",
+      "no biological, clinical, causal or general empirical adequacy is certified",
+      "producing source code is bound but never executed or proved by this adapter"
+    ],
+    "outcome": "FAIL",
+    "checks": [
+      {
+        "id": "balance_cleavage",
+        "outcome": "PASS",
+        "witness": {
+          "reactant_atoms": {
+            "C": 6,
+            "H": 12,
+            "O": 6
+          },
+          "product_atoms": {
+            "C": 6,
+            "H": 12,
+            "O": 6
+          },
+          "delta_product_minus_reactant": {}
+        }
+      },
+      {
+        "id": "dimensions_cleavage",
+        "outcome": "PASS",
+        "witness": {
+          "left_dimensions": {
+            "T": -1
+          },
+          "right_dimensions": {
+            "T": -1
+          }
+        }
+      },
+      {
+        "id": "balance_isomerization",
+        "outcome": "PASS",
+        "witness": {
+          "reactant_atoms": {
+            "C": 3,
+            "H": 6,
+            "O": 3
+          },
+          "product_atoms": {
+            "C": 3,
+            "H": 6,
+            "O": 3
+          },
+          "delta_product_minus_reactant": {}
+        }
+      },
+      {
+        "id": "dimensions_isomerization",
+        "outcome": "PASS",
+        "witness": {
+          "left_dimensions": {
+            "T": -1
+          },
+          "right_dimensions": {
+            "T": -1
+          }
+        }
+      },
+      {
+        "id": "time_grid",
+        "outcome": "PASS",
+        "witness": null
+      },
+      {
+        "id": "nonnegative",
+        "outcome": "PASS",
+        "witness": null
+      },
+      {
+        "id": "reference_match",
+        "outcome": "FAIL",
+        "witness": {
+          "row": 12,
+          "species": "glucose",
+          "expected": "12381557655576425121/16777216000000000000",
+          "actual": "100",
+          "tolerance": "0"
+        }
+      },
+      {
+        "id": "element_conservation",
+        "outcome": "FAIL",
+        "witness": {
+          "row": 12,
+          "element": "C",
+          "expected": "6",
+          "actual": "5046351775033270724637/8388608000000000000",
+          "tolerance": "0"
+        }
+      }
+    ],
+    "resources": {
+      "rational_euler_steps": 12,
+      "reaction_step_evaluations": 24,
+      "observations": 13,
+      "input_bytes": 2404
+    },
+    "diagnostics": []
+  },
+  "obligation_results": {
+    "format": "pcs-scientific-obligation-result-v1",
+    "plan_sha256": "70df47d368a32509b0e9698789af18defb3ec15e3fac38a99471ba1e82ed3abb",
+    "source_contract_sha256": "771131fdc40e0d2a6f5c042caaf1ed2601ed2aca1bb1b51a6451cd05d0b97484",
+    "pcs_authority": false,
+    "scientific_acceptance": false,
+    "execution_order": [
+      "assumption_closed_volume",
+      "assumption_declared_kinetics",
+      "assumption_finite_method",
+      "balance_cleavage",
+      "balance_isomerization",
+      "dimensions_cleavage",
+      "dimensions_isomerization",
+      "time_grid",
+      "element_conservation",
+      "nonnegative",
+      "reference_match",
+      "workflow",
+      "biological_adequacy"
+    ],
+    "nodes": [
+      {
+        "id": "assumption_closed_volume",
+        "definition_sha256": "0ce51d3c5e76b1d33cdbff25038f37a2f906882c3ca3c34904781db762eae5b8",
+        "status": "ASSUMED",
+        "reason": "explicit premise; not independently established",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [],
+        "authority": "EXPLICIT_UNVERIFIED_PREMISE",
+        "attempt": null,
+        "pcs_authority": false
+      },
+      {
+        "id": "assumption_declared_kinetics",
+        "definition_sha256": "190972ffbd5ee484bde91dd4152da0235ecd78ea728ad08207e0909070997e65",
+        "status": "ASSUMED",
+        "reason": "explicit premise; not independently established",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [],
+        "authority": "EXPLICIT_UNVERIFIED_PREMISE",
+        "attempt": null,
+        "pcs_authority": false
+      },
+      {
+        "id": "assumption_finite_method",
+        "definition_sha256": "0c4c06700a552bc95705282748aa5fa9bef29b46b7c50dc44a2d923a3a2ad63a",
+        "status": "ASSUMED",
+        "reason": "explicit premise; not independently established",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [],
+        "authority": "EXPLICIT_UNVERIFIED_PREMISE",
+        "attempt": null,
+        "pcs_authority": false
+      },
+      {
+        "id": "balance_cleavage",
+        "definition_sha256": "b2211e47de8daf4065cba5b886d157597d71ee8df9396bee745f297c4b1ee576",
+        "status": "SATISFIED_WITHIN_SCOPE",
+        "reason": "bounded predicate replay passed; authority scope remains explicit",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method"
+        ],
+        "authority": "EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED",
+        "attempt": {
+          "id": "balance_cleavage",
+          "outcome": "PASS",
+          "witness": {
+            "reactant_atoms": {
+              "C": 6,
+              "H": 12,
+              "O": 6
+            },
+            "product_atoms": {
+              "C": 6,
+              "H": 12,
+              "O": 6
+            },
+            "delta_product_minus_reactant": {}
+          }
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "balance_isomerization",
+        "definition_sha256": "6921ecd771e6d50200677c9ce76381277bbcae8c72011fae0d5059f23c03a150",
+        "status": "SATISFIED_WITHIN_SCOPE",
+        "reason": "bounded predicate replay passed; authority scope remains explicit",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method"
+        ],
+        "authority": "EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED",
+        "attempt": {
+          "id": "balance_isomerization",
+          "outcome": "PASS",
+          "witness": {
+            "reactant_atoms": {
+              "C": 3,
+              "H": 6,
+              "O": 3
+            },
+            "product_atoms": {
+              "C": 3,
+              "H": 6,
+              "O": 3
+            },
+            "delta_product_minus_reactant": {}
+          }
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "dimensions_cleavage",
+        "definition_sha256": "bb1ff979d5fe2b23648504a3629faaa2d84d75d9f80d112d55bec9d8226eeca6",
+        "status": "SATISFIED_WITHIN_SCOPE",
+        "reason": "bounded predicate replay passed; authority scope remains explicit",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method"
+        ],
+        "authority": "EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED",
+        "attempt": {
+          "id": "dimensions_cleavage",
+          "outcome": "PASS",
+          "witness": {
+            "left_dimensions": {
+              "T": -1
+            },
+            "right_dimensions": {
+              "T": -1
+            }
+          }
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "dimensions_isomerization",
+        "definition_sha256": "1f5add9b0ea2c0ffded93e41435ac8d5c9fc6ceff52f93fc6a25264f50eeb563",
+        "status": "SATISFIED_WITHIN_SCOPE",
+        "reason": "bounded predicate replay passed; authority scope remains explicit",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method"
+        ],
+        "authority": "EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED",
+        "attempt": {
+          "id": "dimensions_isomerization",
+          "outcome": "PASS",
+          "witness": {
+            "left_dimensions": {
+              "T": -1
+            },
+            "right_dimensions": {
+              "T": -1
+            }
+          }
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "time_grid",
+        "definition_sha256": "51702155059c545a0a9b7a106c0893591a4c7ff3731688c8135741d09b1c6ebd",
+        "status": "SATISFIED_WITHIN_SCOPE",
+        "reason": "bounded predicate replay passed; authority scope remains explicit",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method"
+        ],
+        "authority": "EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY",
+        "attempt": {
+          "id": "time_grid",
+          "outcome": "PASS",
+          "witness": null
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "element_conservation",
+        "definition_sha256": "bded9fc2ed246378fa14965d24fcecc540fa3006b639807ccea752c91c671410",
+        "status": "FAILED",
+        "reason": "independently replayed bounded predicate has a counterexample",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method",
+          "balance_cleavage",
+          "balance_isomerization",
+          "time_grid"
+        ],
+        "authority": "EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY",
+        "attempt": {
+          "id": "element_conservation",
+          "outcome": "FAIL",
+          "witness": {
+            "row": 12,
+            "element": "C",
+            "expected": "6",
+            "actual": "5046351775033270724637/8388608000000000000",
+            "tolerance": "0"
+          }
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "nonnegative",
+        "definition_sha256": "9aa4328fac4157d2fe222f2586e4843bdfd9ae70c6dbcc5adfa4283114e46c74",
+        "status": "SATISFIED_WITHIN_SCOPE",
+        "reason": "bounded predicate replay passed; authority scope remains explicit",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method",
+          "time_grid"
+        ],
+        "authority": "EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY",
+        "attempt": {
+          "id": "nonnegative",
+          "outcome": "PASS",
+          "witness": null
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "reference_match",
+        "definition_sha256": "8cc951d0c44d73a6b64191e06a18d7329dfdc820e1a497198f92edc8575e1a4e",
+        "status": "FAILED",
+        "reason": "independently replayed bounded predicate has a counterexample",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "assumption_closed_volume",
+          "assumption_declared_kinetics",
+          "assumption_finite_method",
+          "time_grid",
+          "nonnegative"
+        ],
+        "authority": "EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY",
+        "attempt": {
+          "id": "reference_match",
+          "outcome": "FAIL",
+          "witness": {
+            "row": 12,
+            "species": "glucose",
+            "expected": "12381557655576425121/16777216000000000000",
+            "actual": "100",
+            "tolerance": "0"
+          }
+        },
+        "pcs_authority": false
+      },
+      {
+        "id": "workflow",
+        "definition_sha256": "c839bde48e17f77766dbba065d94db1b17f065412d889cb24c0853e16a9007ac",
+        "status": "BLOCKED",
+        "reason": "failed prerequisites: reference_match, element_conservation",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "balance_cleavage",
+          "dimensions_cleavage",
+          "balance_isomerization",
+          "dimensions_isomerization",
+          "time_grid",
+          "nonnegative",
+          "reference_match",
+          "element_conservation"
+        ],
+        "authority": "CONDITIONAL_PLANNING_SUMMARY_ONLY",
+        "attempt": null,
+        "pcs_authority": false
+      },
+      {
+        "id": "biological_adequacy",
+        "definition_sha256": "6b445443c952c9f195b981f9f7fad9f7800aeef47cd907031461daa2005010c0",
+        "status": "BLOCKED",
+        "reason": "unresolved prerequisites: workflow",
+        "invalidated": false,
+        "invalidated_by": [],
+        "assumption_change": false,
+        "dependencies": [
+          "workflow"
+        ],
+        "authority": "NONE",
+        "attempt": null,
+        "pcs_authority": false
+      }
+    ]
+  },
+  "external_numerical_signature": {
+    "valid": true,
+    "errors": [],
+    "outcome": "FAIL",
+    "kind": "empirical_validation",
+    "validator": "pcs-rational-mass-action-validator/1",
+    "validator_public_key_fingerprint": "5c1688ef48cdd60f06323727b9e3f6deda1ab5a84572625a7dda39ca0a104e7b",
+    "receipt_payload_sha256": "7a966f3566ffa830e813b87b394b45882806c98490700150ca06546c6b954eaa",
+    "artifact_bindings": [
+      {
+        "artifact_id": "artifact_LICENSE",
+        "sha256": "d18ff60f3bea278d1f7349edfe6871d25660e79af5aee15ec2887b48f827bfb0"
+      },
+      {
+        "artifact_id": "artifact_model",
+        "sha256": "771131fdc40e0d2a6f5c042caaf1ed2601ed2aca1bb1b51a6451cd05d0b97484"
+      },
+      {
+        "artifact_id": "artifact_observations",
+        "sha256": "ba9ae507bd37de28bcf564991791c67e670cce2fe44559dee402e57c2987645e"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_adapter.py",
+        "sha256": "d621cdf0612ce5cfe7a875f3b4bf97b4476e0c68ab2bb7292d1999a48bd6c4c3"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_binding",
+        "sha256": "6cfb6149719fbdaffb9f94838db96837440f87d937ef7c111f048400d2d31807"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_domain-replay",
+        "sha256": "b1629579e1fd9356cb1ccf7b66beb5ee699479e9a34d0e84d3e2dc4e09910c1d"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_numerical-spec",
+        "sha256": "b6c81a249196de0c77b1cca57d06effd0a4696400f0fc20a87c3a881431c4097"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_obligation-results",
+        "sha256": "8dd512fa3619d1e76cd8cca77d722333c173f5b931830f82dbe73d1250d3ea7e"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_obligations",
+        "sha256": "70df47d368a32509b0e9698789af18defb3ec15e3fac38a99471ba1e82ed3abb"
+      },
+      {
+        "artifact_id": "artifact_pcs-scientific_validator-trust",
+        "sha256": "bf6093197b9cfdf1805125ebc04d40bdaba1abd3b4ab5f106a5414f1f0a0127e"
+      },
+      {
+        "artifact_id": "artifact_requirements",
+        "sha256": "e4d695478c734a3438c4d62f00dac8b94a765d2d6acbfbd1feb255ab817f9d1e"
+      },
+      {
+        "artifact_id": "artifact_run_workflow",
+        "sha256": "4e5dea27f777a6a2790362d7065e88b101875132be9a9378ff9bd7fdcd1fc056"
+      }
+    ],
+    "trust_contract": {
+      "format": "pcs-external-validator-trust-contract-v1",
+      "pcs_verifies": [
+        "ed25519_receipt_signature",
+        "pinned_validator_key_fingerprint",
+        "project_pinned_validator_trust_policy",
+        "exact_external_predicate",
+        "exact_artifact_sha256_bindings",
+        "reported_outcome"
+      ],
+      "pcs_does_not_verify": [
+        "validator_algorithm_correctness",
+        "validator_policy_scientific_adequacy",
+        "biological_or_clinical_truth"
+      ],
+      "pass_meaning": "PASS means only that the pinned validator key signed PASS for the exact predicate and artifact bytes named by this receipt."
+    },
+    "validator_trust_policy": {
+      "format": "pcs-external-validator-trust-policy-v1",
+      "validator": "pcs-rational-mass-action-validator/1",
+      "validator_public_key_fingerprint": "5c1688ef48cdd60f06323727b9e3f6deda1ab5a84572625a7dda39ca0a104e7b",
+      "allowed_check_types": [
+        "external_empirical_validation"
+      ],
+      "allowed_predicate_namespaces": [
+        "pcs-bounded-mass-action-replay/v1"
+      ]
+    },
+    "semantic_authority": "EXTERNAL_VALIDATOR_TRUST_REQUIRED"
+  },
+  "bundle_sha256": "22a279a03c71a7bf0e08e00c16a71109f270a180c0e13d7ad8f5c88fb25b17cf",
+  "cross_component_contract": {
+    "sender": "pcs-rational-mass-action-validator/1",
+    "receiver": "pcs-scientific-receiver/1",
+    "certificate_authority": "existing PCS v0.6",
+    "numerical_authority": "external trust plus bounded fresh Python replay",
+    "kernel_refinement_proved": false,
+    "scientific_acceptance": false
+  }
+}

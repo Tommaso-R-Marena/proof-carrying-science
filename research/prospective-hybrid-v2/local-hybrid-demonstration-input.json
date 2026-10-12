@@ -1,0 +1,107 @@
+{
+  "statement": "For all predicates on natural numbers R, if (R(0) and (\u2200 (j : Nat), R(j) implies R(the successor of j))) then (\u2200 (u : Nat), R(the successor of ((u * u) * (u * u)))).",
+  "goal": {
+    "format": "pcs-math-ir-v1",
+    "binders": [
+      {
+        "name": "R",
+        "type": "NatPred"
+      }
+    ],
+    "body": {
+      "op": "implies",
+      "left": {
+        "op": "and",
+        "left": {
+          "op": "apply",
+          "fn": {
+            "op": "var",
+            "name": "R"
+          },
+          "arg": {
+            "op": "number",
+            "value": 0,
+            "type": "Nat"
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "j",
+          "type": "Nat",
+          "body": {
+            "op": "implies",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "R"
+              },
+              "arg": {
+                "op": "var",
+                "name": "j"
+              }
+            },
+            "right": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "R"
+              },
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "j"
+                }
+              }
+            }
+          }
+        }
+      },
+      "right": {
+        "op": "forall",
+        "name": "u",
+        "type": "Nat",
+        "body": {
+          "op": "apply",
+          "fn": {
+            "op": "var",
+            "name": "R"
+          },
+          "arg": {
+            "op": "succ",
+            "arg": {
+              "op": "mul",
+              "left": {
+                "op": "mul",
+                "left": {
+                  "op": "var",
+                  "name": "u"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "u"
+                }
+              },
+              "right": {
+                "op": "mul",
+                "left": {
+                  "op": "var",
+                  "name": "u"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "u"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "source_license": "CC0-1.0",
+  "split": "post-evaluation demonstration, excluded from training",
+  "exact_alpha_overlaps": [],
+  "scope": "New authored index expression; same known induction family, not independent mathematical novelty."
+}

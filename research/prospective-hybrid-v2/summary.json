@@ -1,0 +1,103 @@
+{
+  "format": "pcs-prospective-hybrid-summary-v2",
+  "counts": {
+    "typed:utility:symbolic": {
+      "tasks": 4,
+      "verified": 1
+    },
+    "typed:utility:memory_structural": {
+      "tasks": 4,
+      "verified": 2
+    },
+    "typed:utility:memory_learned": {
+      "tasks": 4,
+      "verified": 2
+    },
+    "typed:utility:Std": {
+      "tasks": 4,
+      "verified": 3
+    },
+    "typed:utility:hybrid": {
+      "tasks": 4,
+      "verified": 4
+    },
+    "typed:selection:symbolic": {
+      "tasks": 4,
+      "verified": 2
+    },
+    "typed:selection:memory_structural": {
+      "tasks": 4,
+      "verified": 2
+    },
+    "typed:selection:memory_learned": {
+      "tasks": 4,
+      "verified": 2
+    },
+    "typed:selection:Std": {
+      "tasks": 4,
+      "verified": 3
+    },
+    "typed:selection:hybrid": {
+      "tasks": 4,
+      "verified": 3
+    },
+    "typed:final:symbolic": {
+      "tasks": 8,
+      "verified": 2
+    },
+    "typed:final:memory_structural": {
+      "tasks": 8,
+      "verified": 4
+    },
+    "typed:final:memory_learned": {
+      "tasks": 8,
+      "verified": 4
+    },
+    "typed:final:Std": {
+      "tasks": 8,
+      "verified": 5
+    },
+    "typed:final:hybrid": {
+      "tasks": 8,
+      "verified": 7
+    },
+    "mathlib:selection:lexical": {
+      "tasks": 2,
+      "verified": 1
+    },
+    "mathlib:selection:structural": {
+      "tasks": 2,
+      "verified": 1
+    },
+    "mathlib:selection:standard": {
+      "tasks": 2,
+      "verified": 1
+    },
+    "mathlib:final:lexical": {
+      "tasks": 6,
+      "verified": 2
+    },
+    "mathlib:final:structural": {
+      "tasks": 6,
+      "verified": 4
+    },
+    "mathlib:final:standard": {
+      "tasks": 6,
+      "verified": 3
+    }
+  },
+  "completed_main_comparisons": 104,
+  "all_frozen_comparisons_including_transfer": 144,
+  "complete": true,
+  "new_training": false,
+  "automatic_promotion": false,
+  "evidence_audit_sha256": "6371f45756bb47bc2a6c42c2d6c4eeb67939828be8927728915e91d61c7fd895",
+  "previous_incomplete_summary": "history/initial-incomplete-summary.json",
+  "limitations": [
+    "Public developer-authored benchmarks, not blind/private",
+    "Historical trained checkpoints unchanged; no final fitting or reselection",
+    "Earlier incomplete costs not reconstructed",
+    "Cold legacy rows, pooled library loading, warm search, and full-library replay costs are distinct",
+    "Ordinary tactic invocations and typed action expansions differ in internal work"
+  ]
+}

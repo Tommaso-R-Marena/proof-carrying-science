@@ -38,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py tests/test_checked_reuse.py tests/test_induction_discovery.py tests/test_bridge_data.py tests/test_public_proof_transport.py tests/test_verified_memory.py tests/test_memory_wire.py tests/test_memory_resume.py tests/test_memory_recording.py
+          PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py tests/test_checked_reuse.py tests/test_induction_discovery.py tests/test_bridge_data.py tests/test_public_proof_transport.py tests/test_verified_memory.py tests/test_memory_wire.py tests/test_memory_resume.py tests/test_memory_recording.py tests/test_prospective_hybrid.py tests/test_hybrid_cli.py tests/test_mathematical_evidence.py
           python scripts/check_memory_evidence.py
           python scripts/check_memory_runtime.py
           lean formal/PCSVerifiedMemoryBoundary.lean
@@ -123,6 +123,7 @@ jobs:
           echo "PCS_PUBLIC_TESTED_MERGE_SHA=$(git rev-parse HEAD)"
           echo "PCS_PUBLIC_SOURCE_HEAD_SHA=$PR_HEAD_SHA"
           python scripts/check_repository_integrity.py
+          python scripts/check_research_platform_evidence.py
           python -m compileall -q pcs scripts tests
       - name: Bind contribution file gates to required PR verification
         if: ${{ github.event_name == 'pull_request' }}
@@ -149,6 +150,11 @@ jobs:
           python -m pytest -q tests/test_public_release_history_audit.py
           python -m pytest -q tests/test_semantic_translation_v1.py tests/test_semantic_confirmation_v1.py
           python -m pytest -q tests/test_semantic_kernel_bridge_v1.py tests/test_semantic_golden_benchmark_v1.py tests/test_semantic_claim_binding_v1.py
+      - name: Reject forged qualification, provenance and signing-policy evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_release_qualification_v1.py tests/test_release_provenance_inventory.py tests/test_signing_policy_v1.py tests/test_signing_recovery_drill.py
 
   core-full-gate:
     name: core-full-gate
@@ -220,14 +226,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: Tommaso-R-Marena/proof-carrying-science-site
-          ref: 543f70844987e659d0d5320a8f701bc1e07facca
+          ref: 1a351144cac080a990ab6f75fe8b57b476c3b08a
           path: .ci-components/pcs-site
           persist-credentials: false
       - name: Check out source-bound CertiForge interpreter and repaired type checker
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: Tommaso-R-Marena/certiforge
-          ref: 415a1de40eaeadc366ac2d824c05ee52bb2bd66e
+          ref: c71e8575db2800b015a9d444f8ed572490f3a871
           path: .ci-components/certiforge
           persist-credentials: false
       - name: Verify runtime extraction windows against exact component sources
@@ -237,6 +243,22 @@ jobs:
           source scripts/activate_lean_428.sh
           python scripts/verify_runtime_refinement.py --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-refinement.json"
           python scripts/verify_math_language_parity.py --output "$RUNNER_TEMP/math-language-parity.json"
+      - name: Kernel-check the Rust helper extraction and canonical-input boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python scripts/verify_runtime_value_type.py --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-value-type.json"
+          python scripts/verify_runtime_canonical_boundary.py --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-canonical-boundary.json"
+      - name: Bounded real conditional runtime differential smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          # Native Rust regressions are checked by certiforge-integration. The
+          # low-level Rust extraction requires canonical inputs; do not compare
+          # an unextracted historical top-level loop with a changed public guard.
+          python scripts/runtime_differential.py --mode conditional --cases 8 --seed 20261012 --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-conditional-smoke.json"
       - name: Compare actual Lean, Python and JavaScript bounded reasoning outputs
         shell: bash
         run: |
@@ -340,6 +362,11 @@ jobs:
             ${{ runner.temp }}/omega-adaptive-ci/
             ${{ runner.temp }}/conditional-ci/
             ${{ runner.temp }}/intervention-ci/
+            ${{ runner.temp }}/runtime-refinement.json
+            ${{ runner.temp }}/math-language-parity.json
+            ${{ runner.temp }}/runtime-value-type.json
+            ${{ runner.temp }}/runtime-canonical-boundary.json
+            ${{ runner.temp }}/runtime-conditional-smoke.json
           if-no-files-found: warn
           retention-days: 14
 
@@ -395,7 +422,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: Tommaso-R-Marena/certiforge
-          ref: 415a1de40eaeadc366ac2d824c05ee52bb2bd66e
+          ref: c71e8575db2800b015a9d444f8ed572490f3a871
           path: .ci-components/certiforge
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -411,7 +438,7 @@ jobs:
           python -m pip install --no-deps --no-build-isolation -e .
           rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
           cd "$RUNNER_TEMP/pcs-certiforge"
-          test "$(git rev-parse HEAD)" = 415a1de40eaeadc366ac2d824c05ee52bb2bd66e
+          test "$(git rev-parse HEAD)" = c71e8575db2800b015a9d444f8ed572490f3a871
           rustup override set 1.99.0
           cargo fmt --all --check
           cargo test --workspace --locked

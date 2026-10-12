@@ -1,0 +1,760 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PCS bounded scientific replay</title><style>body{font-family:system-ui;max-width:70rem;margin:auto;padding:2rem}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>Bounded scientific replay</h1><p>The existing signed PCS certificate controls package authority. Numerical replay checks the explicit finite contract. It does not establish biological, clinical or general scientific acceptance.</p><pre>{
+  &quot;format&quot;: &quot;pcs-scientific-assurance-v1&quot;,
+  &quot;pcs_package_valid&quot;: true,
+  &quot;pcs_verification&quot;: {
+    &quot;format&quot;: &quot;pcs-end-to-end-verifier-v06-v1&quot;,
+    &quot;authority_required&quot;: true,
+    &quot;authoritative&quot;: true,
+    &quot;valid&quot;: true,
+    &quot;failed_stage&quot;: null,
+    &quot;errors&quot;: [],
+    &quot;stages&quot;: {
+      &quot;canonical_inputs&quot;: true,
+      &quot;certificate_signature&quot;: true,
+      &quot;package_binding&quot;: true,
+      &quot;provenance&quot;: true,
+      &quot;environment_replay&quot;: true,
+      &quot;workflow_replay&quot;: true,
+      &quot;replay&quot;: true,
+      &quot;normalized_set&quot;: true,
+      &quot;lean_authority&quot;: true
+    },
+    &quot;certificate_semantic_hash&quot;: &quot;05d466d26e8c15c77d96da4f1e3d037798c753ba3085aa8e00907bdb5a768811&quot;,
+    &quot;certificate_integrity_hash&quot;: &quot;3c69d437f573d8f2ca84c7ced105486ebd5c7503d4ecd156a889566915aca87d&quot;,
+    &quot;public_key_fingerprint&quot;: &quot;5c1688ef48cdd60f06323727b9e3f6deda1ab5a84572625a7dda39ca0a104e7b&quot;,
+    &quot;normalized_index_semantic_hash&quot;: &quot;95dc249e020531a8ef4e004c58311f55872d661bc2d591e9a0b39d5ac71f2e43&quot;,
+    &quot;verified_members&quot;: [
+      &quot;artifacts/06dff6ce4aac3e110a334e1e/payload&quot;,
+      &quot;artifacts/11f34a63ab63d6d0012b0385/payload&quot;,
+      &quot;artifacts/1f65fe5e956caf3153723bbe/payload&quot;,
+      &quot;artifacts/2a31c2ec2586b295387d758b/payload&quot;,
+      &quot;artifacts/87efcbdc617f850f5e73a22f/payload&quot;,
+      &quot;artifacts/8bc8486cec20feaef5ae691c/payload&quot;,
+      &quot;artifacts/8f4342f6b3c4078753f5e3ff/payload&quot;,
+      &quot;artifacts/94ae2d4ed366dc629ecebfb6/payload&quot;,
+      &quot;artifacts/9658a017cd34e55a9568f04c/payload&quot;,
+      &quot;artifacts/972ffb597d197d002e49350f/payload&quot;,
+      &quot;artifacts/bbe8ff92f3b8074f18aef7d0/payload&quot;,
+      &quot;artifacts/cf648e4dea2e4f31df49ec08/payload&quot;,
+      &quot;artifacts/d1aebcd79336fc3b3bf518c4/payload&quot;,
+      &quot;artifacts/e3e0b732fd48e120a3360c67/payload&quot;,
+      &quot;certificate.json&quot;,
+      &quot;normalized/044d7db0cfddbd4ba6d073c5aef11c9ea70b8fe7baac06acc98adad6005af0e9.json&quot;,
+      &quot;normalized/0b3705d887d7206aebf8c3a4461acec12a972961343e43608dfc1bd97febefe8.json&quot;,
+      &quot;normalized/73a003919a9a208e523d8c624e7c9ea621e896c5290dad7cc1be4b66e9d1f3ec.json&quot;,
+      &quot;normalized/79654e243d8c608f63c73053a9ba82937398606f903bf6daa33e4b71bb9a23f2.json&quot;,
+      &quot;normalized/d248c7abe5536b2f37024ee4519b2dadd038f7d0849f4803dab429de8226419e.json&quot;,
+      &quot;normalized/index.json&quot;
+    ],
+    &quot;provenance&quot;: {
+      &quot;mode&quot;: &quot;none&quot;,
+      &quot;semantic_hash&quot;: null,
+      &quot;entries&quot;: [],
+      &quot;reviewer_expectations&quot;: {
+        &quot;applied&quot;: false,
+        &quot;build_provenance_fingerprint&quot;: null,
+        &quot;subject_sha256&quot;: []
+      }
+    },
+    &quot;environment_replay&quot;: {
+      &quot;mode&quot;: &quot;static-environment-rederived&quot;,
+      &quot;hermeticity&quot;: &quot;environment_unspecified&quot;,
+      &quot;source_files_checked&quot;: 1,
+      &quot;dependency_records&quot;: 0,
+      &quot;unresolved_items&quot;: 0,
+      &quot;replay_plan&quot;: {
+        &quot;format&quot;: &quot;pcs-environment-replay-plan-v1&quot;,
+        &quot;hermeticity&quot;: &quot;environment_unspecified&quot;,
+        &quot;required_tools&quot;: [
+          &quot;python&quot;
+        ],
+        &quot;steps&quot;: [
+          {
+            &quot;kind&quot;: &quot;pip_install&quot;,
+            &quot;source_path&quot;: &quot;requirements.txt&quot;,
+            &quot;command_template&quot;: &quot;python -m pip install -r requirements.txt&quot;,
+            &quot;network_required&quot;: true,
+            &quot;executes_project_build_instructions&quot;: true
+          }
+        ],
+        &quot;automatic_execution_permitted_by_pcs&quot;: false,
+        &quot;reason&quot;: &quot;PCS emits a reconstruction plan but does not execute environment or project installation/build commands during verification.&quot;
+      }
+    },
+    &quot;workflow_replay&quot;: {
+      &quot;nodes_checked&quot;: 1,
+      &quot;mode&quot;: &quot;static-source-replay&quot;
+    },
+    &quot;claims&quot;: [
+      {
+        &quot;claim_id&quot;: &quot;C_balance_cleavage&quot;,
+        &quot;kind&quot;: &quot;computational&quot;,
+        &quot;decision&quot;: &quot;COMPUTATIONALLY_SUPPORTED&quot;,
+        &quot;predicate&quot;: {
+          &quot;products&quot;: [
+            {
+              &quot;coefficient&quot;: 2,
+              &quot;formula&quot;: &quot;C3H6O3&quot;
+            }
+          ],
+          &quot;reactants&quot;: [
+            {
+              &quot;coefficient&quot;: 1,
+              &quot;formula&quot;: &quot;C6H12O6&quot;
+            }
+          ],
+          &quot;type&quot;: &quot;reaction_balance&quot;
+        },
+        &quot;normalized_path&quot;: &quot;normalized/044d7db0cfddbd4ba6d073c5aef11c9ea70b8fe7baac06acc98adad6005af0e9.json&quot;,
+        &quot;wire_semantic_hash&quot;: &quot;ae2faff743a85ff34671ba3469a30d939dfce357d1d3d533ffd6ef7f15d59461&quot;
+      },
+      {
+        &quot;claim_id&quot;: &quot;C_dimensions_cleavage&quot;,
+        &quot;kind&quot;: &quot;computational&quot;,
+        &quot;decision&quot;: &quot;COMPUTATIONALLY_SUPPORTED&quot;,
+        &quot;predicate&quot;: {
+          &quot;left_unit&quot;: &quot;s^-1&quot;,
+          &quot;right_unit&quot;: &quot;s^-1&quot;,
+          &quot;type&quot;: &quot;unit_compatible&quot;
+        },
+        &quot;normalized_path&quot;: &quot;normalized/73a003919a9a208e523d8c624e7c9ea621e896c5290dad7cc1be4b66e9d1f3ec.json&quot;,
+        &quot;wire_semantic_hash&quot;: &quot;9587474d9b61758c7067f982d426999fda05c0f7411a5ee0a80e74344d03a350&quot;
+      },
+      {
+        &quot;claim_id&quot;: &quot;C_balance_isomerization&quot;,
+        &quot;kind&quot;: &quot;computational&quot;,
+        &quot;decision&quot;: &quot;COMPUTATIONALLY_SUPPORTED&quot;,
+        &quot;predicate&quot;: {
+          &quot;products&quot;: [
+            {
+              &quot;coefficient&quot;: 1,
+              &quot;formula&quot;: &quot;C3H6O3&quot;
+            }
+          ],
+          &quot;reactants&quot;: [
+            {
+              &quot;coefficient&quot;: 1,
+              &quot;formula&quot;: &quot;C3H6O3&quot;
+            }
+          ],
+          &quot;type&quot;: &quot;reaction_balance&quot;
+        },
+        &quot;normalized_path&quot;: &quot;normalized/d248c7abe5536b2f37024ee4519b2dadd038f7d0849f4803dab429de8226419e.json&quot;,
+        &quot;wire_semantic_hash&quot;: &quot;8260cea61566fca42851fa589b26ef32c7f01ee7fecdf42004e995d13ba1a972&quot;
+      },
+      {
+        &quot;claim_id&quot;: &quot;C_dimensions_isomerization&quot;,
+        &quot;kind&quot;: &quot;computational&quot;,
+        &quot;decision&quot;: &quot;COMPUTATIONALLY_SUPPORTED&quot;,
+        &quot;predicate&quot;: {
+          &quot;left_unit&quot;: &quot;s^-1&quot;,
+          &quot;right_unit&quot;: &quot;s^-1&quot;,
+          &quot;type&quot;: &quot;unit_compatible&quot;
+        },
+        &quot;normalized_path&quot;: &quot;normalized/0b3705d887d7206aebf8c3a4461acec12a972961343e43608dfc1bd97febefe8.json&quot;,
+        &quot;wire_semantic_hash&quot;: &quot;615fe93a52914a551d5cfecb876ff4a379c30f7de073f661bc99ca090664934a&quot;
+      },
+      {
+        &quot;claim_id&quot;: &quot;C_NUMERICAL&quot;,
+        &quot;kind&quot;: &quot;computational&quot;,
+        &quot;decision&quot;: &quot;OPEN&quot;,
+        &quot;predicate&quot;: {
+          &quot;namespace&quot;: &quot;pcs-bounded-mass-action-replay/v1&quot;,
+          &quot;proposition&quot;: &quot;The bound concentration table satisfies the bound finite rational mass-action contract, including declared dimensions, grid, nonnegativity, reference tolerances and elemental conservation.&quot;,
+          &quot;type&quot;: &quot;external&quot;
+        },
+        &quot;normalized_path&quot;: &quot;normalized/79654e243d8c608f63c73053a9ba82937398606f903bf6daa33e4b71bb9a23f2.json&quot;,
+        &quot;wire_semantic_hash&quot;: &quot;7ed56afe46ed4032d421930483fd20b51a45cf49522bc0f007736a660f53d663&quot;
+      }
+    ],
+    &quot;lean_authority&quot;: {
+      &quot;format&quot;: &quot;pcs-lean-authority-result-v1&quot;,
+      &quot;required&quot;: true,
+      &quot;accepted&quot;: true,
+      &quot;verdict&quot;: &quot;ACCEPT&quot;,
+      &quot;rejecting_stage&quot;: null,
+      &quot;mode&quot;: &quot;repository-binary&quot;,
+      &quot;authority_sha256&quot;: &quot;3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49&quot;,
+      &quot;observation_transcript_sha256&quot;: &quot;12a261dfe5281f23d4d9c8cfb02d894843857c8a7b58d0a70fb84a6c4371c4a1&quot;,
+      &quot;certificate_semantic_hash&quot;: &quot;05d466d26e8c15c77d96da4f1e3d037798c753ba3085aa8e00907bdb5a768811&quot;,
+      &quot;archive_mode&quot;: &quot;lean-decoded-canonical-zip&quot;
+    },
+    &quot;formal_coverage&quot;: {
+      &quot;format&quot;: &quot;pcs-formal-coverage-v1&quot;,
+      &quot;checker_classification_scope&quot;: &quot;CHECK_TYPE_ONLY&quot;,
+      &quot;execution_authority_scope&quot;: &quot;EXACT_PACKAGE_VERIFICATION&quot;,
+      &quot;certified_checker_types&quot;: [
+        &quot;csv_disjoint&quot;,
+        &quot;pkpd_contract&quot;,
+        &quot;pkpd_peak_concentration_threshold&quot;,
+        &quot;pkpd_reference_match&quot;,
+        &quot;reaction_balance&quot;,
+        &quot;unit_compatible&quot;
+      ],
+      &quot;evidence_total&quot;: 4,
+      &quot;certified_type_evidence&quot;: 4,
+      &quot;outside_certified_type_evidence&quot;: 0,
+      &quot;signed_external_validator_evidence&quot;: 0,
+      &quot;package_authority&quot;: &quot;LEAN_AUTHORITATIVE_ACCEPT&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;evidence_id&quot;: &quot;E_balance_cleavage&quot;,
+          &quot;check_type&quot;: &quot;reaction_balance&quot;,
+          &quot;checker_semantics&quot;: &quot;PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE&quot;,
+          &quot;execution_authority&quot;: &quot;AUTHORITATIVELY_REPLAYED_BY_LEAN&quot;
+        },
+        {
+          &quot;evidence_id&quot;: &quot;E_dimensions_cleavage&quot;,
+          &quot;check_type&quot;: &quot;unit_compatible&quot;,
+          &quot;checker_semantics&quot;: &quot;PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE&quot;,
+          &quot;execution_authority&quot;: &quot;AUTHORITATIVELY_REPLAYED_BY_LEAN&quot;
+        },
+        {
+          &quot;evidence_id&quot;: &quot;E_balance_isomerization&quot;,
+          &quot;check_type&quot;: &quot;reaction_balance&quot;,
+          &quot;checker_semantics&quot;: &quot;PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE&quot;,
+          &quot;execution_authority&quot;: &quot;AUTHORITATIVELY_REPLAYED_BY_LEAN&quot;
+        },
+        {
+          &quot;evidence_id&quot;: &quot;E_dimensions_isomerization&quot;,
+          &quot;check_type&quot;: &quot;unit_compatible&quot;,
+          &quot;checker_semantics&quot;: &quot;PROVED_IN_LEAN_FOR_THIS_CHECK_TYPE&quot;,
+          &quot;execution_authority&quot;: &quot;AUTHORITATIVELY_REPLAYED_BY_LEAN&quot;
+        }
+      ]
+    },
+    &quot;archive_assurance&quot;: &quot;lean-decoded-canonical-zip&quot;,
+    &quot;bundle_sha256&quot;: &quot;73b5b6c2f98852f7181b31b7fe507a657ed30a7900f9412d4d39528efbc33f41&quot;,
+    &quot;archive_bytes&quot;: 82726,
+    &quot;archive_format&quot;: &quot;zip&quot;,
+    &quot;accepted&quot;: true,
+    &quot;reviewer_policy&quot;: {
+      &quot;applied&quot;: false,
+      &quot;pass&quot;: null,
+      &quot;policy_sha256&quot;: null,
+      &quot;failures&quot;: []
+    }
+  },
+  &quot;independent_replay_consistent&quot;: true,
+  &quot;bounded_contract_satisfied&quot;: true,
+  &quot;scientific_acceptance&quot;: false,
+  &quot;independent_human_review&quot;: false,
+  &quot;errors&quot;: [],
+  &quot;domain_replay&quot;: {
+    &quot;format&quot;: &quot;pcs-mass-action-replay-v1&quot;,
+    &quot;authority&quot;: &quot;BOUNDED_PYTHON_REPLAY_ONLY&quot;,
+    &quot;pcs_authority&quot;: false,
+    &quot;clinical_or_biological_acceptance&quot;: false,
+    &quot;contract_sha256&quot;: &quot;771131fdc40e0d2a6f5c042caaf1ed2601ed2aca1bb1b51a6451cd05d0b97484&quot;,
+    &quot;observations_sha256&quot;: &quot;78cc777ccb866c4ec9ded5f6ae5ac1bcae150da0ce9f633369e53ca94b59a2c3&quot;,
+    &quot;limits&quot;: {
+      &quot;steps&quot;: 128,
+      &quot;species&quot;: 16,
+      &quot;reactions&quot;: 32,
+      &quot;rational_bits&quot;: 4096
+    },
+    &quot;limitations&quot;: [
+      &quot;rational Euler replay is not continuous-ODE accuracy&quot;,
+      &quot;no proof relates this Python adapter to a Lean reference model&quot;,
+      &quot;no biological, clinical, causal or general empirical adequacy is certified&quot;,
+      &quot;producing source code is bound but never executed or proved by this adapter&quot;
+    ],
+    &quot;outcome&quot;: &quot;PASS&quot;,
+    &quot;checks&quot;: [
+      {
+        &quot;id&quot;: &quot;balance_cleavage&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: {
+          &quot;reactant_atoms&quot;: {
+            &quot;C&quot;: 6,
+            &quot;H&quot;: 12,
+            &quot;O&quot;: 6
+          },
+          &quot;product_atoms&quot;: {
+            &quot;C&quot;: 6,
+            &quot;H&quot;: 12,
+            &quot;O&quot;: 6
+          },
+          &quot;delta_product_minus_reactant&quot;: {}
+        }
+      },
+      {
+        &quot;id&quot;: &quot;dimensions_cleavage&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: {
+          &quot;left_dimensions&quot;: {
+            &quot;T&quot;: -1
+          },
+          &quot;right_dimensions&quot;: {
+            &quot;T&quot;: -1
+          }
+        }
+      },
+      {
+        &quot;id&quot;: &quot;balance_isomerization&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: {
+          &quot;reactant_atoms&quot;: {
+            &quot;C&quot;: 3,
+            &quot;H&quot;: 6,
+            &quot;O&quot;: 3
+          },
+          &quot;product_atoms&quot;: {
+            &quot;C&quot;: 3,
+            &quot;H&quot;: 6,
+            &quot;O&quot;: 3
+          },
+          &quot;delta_product_minus_reactant&quot;: {}
+        }
+      },
+      {
+        &quot;id&quot;: &quot;dimensions_isomerization&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: {
+          &quot;left_dimensions&quot;: {
+            &quot;T&quot;: -1
+          },
+          &quot;right_dimensions&quot;: {
+            &quot;T&quot;: -1
+          }
+        }
+      },
+      {
+        &quot;id&quot;: &quot;time_grid&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: null
+      },
+      {
+        &quot;id&quot;: &quot;nonnegative&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: null
+      },
+      {
+        &quot;id&quot;: &quot;reference_match&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: null
+      },
+      {
+        &quot;id&quot;: &quot;element_conservation&quot;,
+        &quot;outcome&quot;: &quot;PASS&quot;,
+        &quot;witness&quot;: null
+      }
+    ],
+    &quot;resources&quot;: {
+      &quot;rational_euler_steps&quot;: 12,
+      &quot;reaction_step_evaluations&quot;: 24,
+      &quot;observations&quot;: 13,
+      &quot;input_bytes&quot;: 2442
+    },
+    &quot;diagnostics&quot;: []
+  },
+  &quot;obligation_results&quot;: {
+    &quot;format&quot;: &quot;pcs-scientific-obligation-result-v1&quot;,
+    &quot;plan_sha256&quot;: &quot;70df47d368a32509b0e9698789af18defb3ec15e3fac38a99471ba1e82ed3abb&quot;,
+    &quot;source_contract_sha256&quot;: &quot;771131fdc40e0d2a6f5c042caaf1ed2601ed2aca1bb1b51a6451cd05d0b97484&quot;,
+    &quot;pcs_authority&quot;: false,
+    &quot;scientific_acceptance&quot;: false,
+    &quot;execution_order&quot;: [
+      &quot;assumption_closed_volume&quot;,
+      &quot;assumption_declared_kinetics&quot;,
+      &quot;assumption_finite_method&quot;,
+      &quot;balance_cleavage&quot;,
+      &quot;balance_isomerization&quot;,
+      &quot;dimensions_cleavage&quot;,
+      &quot;dimensions_isomerization&quot;,
+      &quot;time_grid&quot;,
+      &quot;element_conservation&quot;,
+      &quot;nonnegative&quot;,
+      &quot;reference_match&quot;,
+      &quot;workflow&quot;,
+      &quot;biological_adequacy&quot;
+    ],
+    &quot;nodes&quot;: [
+      {
+        &quot;id&quot;: &quot;assumption_closed_volume&quot;,
+        &quot;definition_sha256&quot;: &quot;0ce51d3c5e76b1d33cdbff25038f37a2f906882c3ca3c34904781db762eae5b8&quot;,
+        &quot;status&quot;: &quot;ASSUMED&quot;,
+        &quot;reason&quot;: &quot;explicit premise; not independently established&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [],
+        &quot;authority&quot;: &quot;EXPLICIT_UNVERIFIED_PREMISE&quot;,
+        &quot;attempt&quot;: null,
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;assumption_declared_kinetics&quot;,
+        &quot;definition_sha256&quot;: &quot;190972ffbd5ee484bde91dd4152da0235ecd78ea728ad08207e0909070997e65&quot;,
+        &quot;status&quot;: &quot;ASSUMED&quot;,
+        &quot;reason&quot;: &quot;explicit premise; not independently established&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [],
+        &quot;authority&quot;: &quot;EXPLICIT_UNVERIFIED_PREMISE&quot;,
+        &quot;attempt&quot;: null,
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;assumption_finite_method&quot;,
+        &quot;definition_sha256&quot;: &quot;0c4c06700a552bc95705282748aa5fa9bef29b46b7c50dc44a2d923a3a2ad63a&quot;,
+        &quot;status&quot;: &quot;ASSUMED&quot;,
+        &quot;reason&quot;: &quot;explicit premise; not independently established&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [],
+        &quot;authority&quot;: &quot;EXPLICIT_UNVERIFIED_PREMISE&quot;,
+        &quot;attempt&quot;: null,
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;balance_cleavage&quot;,
+        &quot;definition_sha256&quot;: &quot;b2211e47de8daf4065cba5b886d157597d71ee8df9396bee745f297c4b1ee576&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;
+        ],
+        &quot;authority&quot;: &quot;EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;balance_cleavage&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: {
+            &quot;reactant_atoms&quot;: {
+              &quot;C&quot;: 6,
+              &quot;H&quot;: 12,
+              &quot;O&quot;: 6
+            },
+            &quot;product_atoms&quot;: {
+              &quot;C&quot;: 6,
+              &quot;H&quot;: 12,
+              &quot;O&quot;: 6
+            },
+            &quot;delta_product_minus_reactant&quot;: {}
+          }
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;balance_isomerization&quot;,
+        &quot;definition_sha256&quot;: &quot;6921ecd771e6d50200677c9ce76381277bbcae8c72011fae0d5059f23c03a150&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;
+        ],
+        &quot;authority&quot;: &quot;EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;balance_isomerization&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: {
+            &quot;reactant_atoms&quot;: {
+              &quot;C&quot;: 3,
+              &quot;H&quot;: 6,
+              &quot;O&quot;: 3
+            },
+            &quot;product_atoms&quot;: {
+              &quot;C&quot;: 3,
+              &quot;H&quot;: 6,
+              &quot;O&quot;: 3
+            },
+            &quot;delta_product_minus_reactant&quot;: {}
+          }
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;dimensions_cleavage&quot;,
+        &quot;definition_sha256&quot;: &quot;bb1ff979d5fe2b23648504a3629faaa2d84d75d9f80d112d55bec9d8226eeca6&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;
+        ],
+        &quot;authority&quot;: &quot;EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;dimensions_cleavage&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: {
+            &quot;left_dimensions&quot;: {
+              &quot;T&quot;: -1
+            },
+            &quot;right_dimensions&quot;: {
+              &quot;T&quot;: -1
+            }
+          }
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;dimensions_isomerization&quot;,
+        &quot;definition_sha256&quot;: &quot;1f5add9b0ea2c0ffded93e41435ac8d5c9fc6ceff52f93fc6a25264f50eeb563&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;
+        ],
+        &quot;authority&quot;: &quot;EXISTING_PCS_BUILTIN_CERTIFICATE_REQUIRED&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;dimensions_isomerization&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: {
+            &quot;left_dimensions&quot;: {
+              &quot;T&quot;: -1
+            },
+            &quot;right_dimensions&quot;: {
+              &quot;T&quot;: -1
+            }
+          }
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;time_grid&quot;,
+        &quot;definition_sha256&quot;: &quot;51702155059c545a0a9b7a106c0893591a4c7ff3731688c8135741d09b1c6ebd&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;
+        ],
+        &quot;authority&quot;: &quot;EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;time_grid&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: null
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;element_conservation&quot;,
+        &quot;definition_sha256&quot;: &quot;bded9fc2ed246378fa14965d24fcecc540fa3006b639807ccea752c91c671410&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;,
+          &quot;balance_cleavage&quot;,
+          &quot;balance_isomerization&quot;,
+          &quot;time_grid&quot;
+        ],
+        &quot;authority&quot;: &quot;EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;element_conservation&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: null
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;nonnegative&quot;,
+        &quot;definition_sha256&quot;: &quot;9aa4328fac4157d2fe222f2586e4843bdfd9ae70c6dbcc5adfa4283114e46c74&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;,
+          &quot;time_grid&quot;
+        ],
+        &quot;authority&quot;: &quot;EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;nonnegative&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: null
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;reference_match&quot;,
+        &quot;definition_sha256&quot;: &quot;8cc951d0c44d73a6b64191e06a18d7329dfdc820e1a497198f92edc8575e1a4e&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded predicate replay passed; authority scope remains explicit&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;assumption_closed_volume&quot;,
+          &quot;assumption_declared_kinetics&quot;,
+          &quot;assumption_finite_method&quot;,
+          &quot;time_grid&quot;,
+          &quot;nonnegative&quot;
+        ],
+        &quot;authority&quot;: &quot;EXTERNAL_TRUST_PLUS_INDEPENDENT_BOUNDED_REPLAY&quot;,
+        &quot;attempt&quot;: {
+          &quot;id&quot;: &quot;reference_match&quot;,
+          &quot;outcome&quot;: &quot;PASS&quot;,
+          &quot;witness&quot;: null
+        },
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;workflow&quot;,
+        &quot;definition_sha256&quot;: &quot;c839bde48e17f77766dbba065d94db1b17f065412d889cb24c0853e16a9007ac&quot;,
+        &quot;status&quot;: &quot;SATISFIED_WITHIN_SCOPE&quot;,
+        &quot;reason&quot;: &quot;bounded obligations passed under explicit unverified premises&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;balance_cleavage&quot;,
+          &quot;dimensions_cleavage&quot;,
+          &quot;balance_isomerization&quot;,
+          &quot;dimensions_isomerization&quot;,
+          &quot;time_grid&quot;,
+          &quot;nonnegative&quot;,
+          &quot;reference_match&quot;,
+          &quot;element_conservation&quot;
+        ],
+        &quot;authority&quot;: &quot;CONDITIONAL_PLANNING_SUMMARY_ONLY&quot;,
+        &quot;attempt&quot;: null,
+        &quot;pcs_authority&quot;: false
+      },
+      {
+        &quot;id&quot;: &quot;biological_adequacy&quot;,
+        &quot;definition_sha256&quot;: &quot;6b445443c952c9f195b981f9f7fad9f7800aeef47cd907031461daa2005010c0&quot;,
+        &quot;status&quot;: &quot;OPEN&quot;,
+        &quot;reason&quot;: &quot;adapter does not establish biological/clinical adequacy&quot;,
+        &quot;invalidated&quot;: false,
+        &quot;invalidated_by&quot;: [],
+        &quot;assumption_change&quot;: false,
+        &quot;dependencies&quot;: [
+          &quot;workflow&quot;
+        ],
+        &quot;authority&quot;: &quot;NONE&quot;,
+        &quot;attempt&quot;: null,
+        &quot;pcs_authority&quot;: false
+      }
+    ]
+  },
+  &quot;external_numerical_signature&quot;: {
+    &quot;valid&quot;: true,
+    &quot;errors&quot;: [],
+    &quot;outcome&quot;: &quot;PASS&quot;,
+    &quot;kind&quot;: &quot;empirical_validation&quot;,
+    &quot;validator&quot;: &quot;pcs-rational-mass-action-validator/1&quot;,
+    &quot;validator_public_key_fingerprint&quot;: &quot;5c1688ef48cdd60f06323727b9e3f6deda1ab5a84572625a7dda39ca0a104e7b&quot;,
+    &quot;receipt_payload_sha256&quot;: &quot;8c0a5f6c1097fbc5307d6f77b5caf0cc315d93d07bb8c21d41b63f64f7fa57a7&quot;,
+    &quot;artifact_bindings&quot;: [
+      {
+        &quot;artifact_id&quot;: &quot;artifact_LICENSE&quot;,
+        &quot;sha256&quot;: &quot;d18ff60f3bea278d1f7349edfe6871d25660e79af5aee15ec2887b48f827bfb0&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_model&quot;,
+        &quot;sha256&quot;: &quot;771131fdc40e0d2a6f5c042caaf1ed2601ed2aca1bb1b51a6451cd05d0b97484&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_observations&quot;,
+        &quot;sha256&quot;: &quot;78cc777ccb866c4ec9ded5f6ae5ac1bcae150da0ce9f633369e53ca94b59a2c3&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_adapter.py&quot;,
+        &quot;sha256&quot;: &quot;d621cdf0612ce5cfe7a875f3b4bf97b4476e0c68ab2bb7292d1999a48bd6c4c3&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_binding&quot;,
+        &quot;sha256&quot;: &quot;b925cb71d0c8cba7cf8306a91473271ae3ff0cd9c85e211c4e7ea68227d49535&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_domain-replay&quot;,
+        &quot;sha256&quot;: &quot;6ad0dac7e1c4d1cd799a86fbd3656587bb5a5d1ebbc7f35b7e61f3b9d8ed3a40&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_numerical-spec&quot;,
+        &quot;sha256&quot;: &quot;b6c81a249196de0c77b1cca57d06effd0a4696400f0fc20a87c3a881431c4097&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_obligation-results&quot;,
+        &quot;sha256&quot;: &quot;ba3e039cc9375752c63def055125c809b1afd75bfdfe0e2320da976a8f9e6ad7&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_obligations&quot;,
+        &quot;sha256&quot;: &quot;70df47d368a32509b0e9698789af18defb3ec15e3fac38a99471ba1e82ed3abb&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_pcs-scientific_validator-trust&quot;,
+        &quot;sha256&quot;: &quot;bf6093197b9cfdf1805125ebc04d40bdaba1abd3b4ab5f106a5414f1f0a0127e&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_requirements&quot;,
+        &quot;sha256&quot;: &quot;e4d695478c734a3438c4d62f00dac8b94a765d2d6acbfbd1feb255ab817f9d1e&quot;
+      },
+      {
+        &quot;artifact_id&quot;: &quot;artifact_run_workflow&quot;,
+        &quot;sha256&quot;: &quot;4e5dea27f777a6a2790362d7065e88b101875132be9a9378ff9bd7fdcd1fc056&quot;
+      }
+    ],
+    &quot;trust_contract&quot;: {
+      &quot;format&quot;: &quot;pcs-external-validator-trust-contract-v1&quot;,
+      &quot;pcs_verifies&quot;: [
+        &quot;ed25519_receipt_signature&quot;,
+        &quot;pinned_validator_key_fingerprint&quot;,
+        &quot;project_pinned_validator_trust_policy&quot;,
+        &quot;exact_external_predicate&quot;,
+        &quot;exact_artifact_sha256_bindings&quot;,
+        &quot;reported_outcome&quot;
+      ],
+      &quot;pcs_does_not_verify&quot;: [
+        &quot;validator_algorithm_correctness&quot;,
+        &quot;validator_policy_scientific_adequacy&quot;,
+        &quot;biological_or_clinical_truth&quot;
+      ],
+      &quot;pass_meaning&quot;: &quot;PASS means only that the pinned validator key signed PASS for the exact predicate and artifact bytes named by this receipt.&quot;
+    },
+    &quot;validator_trust_policy&quot;: {
+      &quot;format&quot;: &quot;pcs-external-validator-trust-policy-v1&quot;,
+      &quot;validator&quot;: &quot;pcs-rational-mass-action-validator/1&quot;,
+      &quot;validator_public_key_fingerprint&quot;: &quot;5c1688ef48cdd60f06323727b9e3f6deda1ab5a84572625a7dda39ca0a104e7b&quot;,
+      &quot;allowed_check_types&quot;: [
+        &quot;external_empirical_validation&quot;
+      ],
+      &quot;allowed_predicate_namespaces&quot;: [
+        &quot;pcs-bounded-mass-action-replay/v1&quot;
+      ]
+    },
+    &quot;semantic_authority&quot;: &quot;EXTERNAL_VALIDATOR_TRUST_REQUIRED&quot;
+  },
+  &quot;bundle_sha256&quot;: &quot;73b5b6c2f98852f7181b31b7fe507a657ed30a7900f9412d4d39528efbc33f41&quot;,
+  &quot;cross_component_contract&quot;: {
+    &quot;sender&quot;: &quot;pcs-rational-mass-action-validator/1&quot;,
+    &quot;receiver&quot;: &quot;pcs-scientific-receiver/1&quot;,
+    &quot;certificate_authority&quot;: &quot;existing PCS v0.6&quot;,
+    &quot;numerical_authority&quot;: &quot;external trust plus bounded fresh Python replay&quot;,
+    &quot;kernel_refinement_proved&quot;: false,
+    &quot;scientific_acceptance&quot;: false
+  }
+}</pre></html>

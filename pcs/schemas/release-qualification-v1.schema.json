@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proof-carrying-science.org/schemas/release-qualification-v1",
+  "title": "Unsigned exact-source local qualification evidence; not deployment authority",
+  "type": "object",
+  "required": [
+    "format",
+    "source",
+    "source_after",
+    "environment",
+    "required_local_gates",
+    "local_gates",
+    "blockers",
+    "provider_ci",
+    "deployment",
+    "migration_readiness",
+    "deployment_eligible",
+    "authority"
+  ],
+  "properties": {
+    "format": {
+      "const": "pcs-release-qualification-v1"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "commit",
+        "tree",
+        "dirty_status",
+        "files",
+        "snapshot_sha256",
+        "dependency_manifests"
+      ]
+    },
+    "source_after": {
+      "type": "object"
+    },
+    "environment": {
+      "type": "object"
+    },
+    "required_local_gates": {
+      "const": [
+        "python-baseline",
+        "source-integrity",
+        "memory-evidence",
+        "induction-evidence",
+        "lean-full"
+      ]
+    },
+    "local_gates": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "recipe",
+          "argv",
+          "exit_code",
+          "outcome",
+          "wall_seconds",
+          "child_cpu_seconds",
+          "child_cumulative_peak_rss_kib",
+          "timeout_seconds",
+          "log",
+          "log_sha256"
+        ],
+        "properties": {
+          "recipe": {
+            "enum": [
+              "python-baseline",
+              "source-integrity",
+              "memory-evidence",
+              "induction-evidence",
+              "lean-full"
+            ]
+          },
+          "exit_code": {
+            "type": "integer"
+          },
+          "outcome": {
+            "enum": [
+              "passed",
+              "failed",
+              "resource_exhausted"
+            ]
+          },
+          "timeout_seconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 18000
+          },
+          "log_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provider_ci": {
+      "type": "object"
+    },
+    "deployment": {
+      "type": "object"
+    },
+    "migration_readiness": {
+      "type": "object"
+    },
+    "deployment_eligible": {
+      "const": false
+    },
+    "authority": {
+      "type": "string"
+    },
+    "cross_repository_snapshots": {
+      "type": "object",
+      "maxProperties": 4,
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "cross_repository_snapshots_after": {
+      "type": "object",
+      "maxProperties": 4,
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  }
+}

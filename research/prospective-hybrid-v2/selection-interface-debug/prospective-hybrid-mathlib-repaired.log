@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py", line 169, in <module>
+    main()
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py", line 165, in main
+    evaluate(args.folder, kind=args.kind)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py", line 130, in evaluate
+    retriever = MathlibRetriever()
+                ^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_retrieval.py", line 93, in __init__
+    self.catalog = self._record(CATALOG_COMMAND + "\n#pcs_external_catalog\n", "PCS_EXTERNAL_CATALOG:")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_retrieval.py", line 117, in _record
+    raise RuntimeError((output.stdout + output.stderr)[-2000:])
+RuntimeError: /workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-0mqjoz7w/Request.lean:17:16: error(lean.invalidField): Invalid field `isTheorem`: The environment does not contain `Lean.ConstantInfo.isTheorem`, so it is not possible to project the field `isTheorem` from an expression
+  info
+of type `ConstantInfo`
+/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-0mqjoz7w/Request.lean:24:0: error: elaboration function for `«command#pcs_external_catalog»` has not been implemented
+

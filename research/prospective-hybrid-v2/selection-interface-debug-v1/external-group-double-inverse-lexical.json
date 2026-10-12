@@ -1,0 +1,138 @@
+{
+  "task": {
+    "id": "external-group-double-inverse",
+    "split": "selection",
+    "statement": "∀ (G : Type) [Group G] (a : G), (a⁻¹)⁻¹ = a",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  "mode": "lexical",
+  "result": {
+    "status": "unknown",
+    "receipt": null,
+    "mode": "lexical",
+    "retrieved": [
+      {
+        "name": "inv_mul_cancel",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_cancel_left",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_cancel_right",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_eq_iff_eq_mul",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_eq_of_eq_mul",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_eq_one",
+        "score": 5
+      },
+      {
+        "name": "mul_inv_cancel",
+        "score": 5
+      },
+      {
+        "name": "mul_inv_cancel_left",
+        "score": 5
+      }
+    ],
+    "attempts": [
+      {
+        "action": "inv_mul_cancel:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-r1p1tiyy/Request.lean:11:33: error: Tactic `apply` failed: could not unify the conclusion of `@inv_mul_cancel`\n  ?a⁻¹ * ?a = 1\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@inv_mul_cancel` is\n  ∀ {G : Type ?u.80} [inst : Group G] (a : G), a⁻¹ * a = 1\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_cancel:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-6emegdxe/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?a⁻¹ * ?a\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_cancel_left:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-7ehrbm3m/Request.lean:11:38: error: Tactic `apply` failed: could not unify the conclusion of `@inv_mul_cancel_left`\n  ?a⁻¹ * (?a * ?b) = ?b\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@inv_mul_cancel_left` is\n  ∀ {G : Type ?u.81} [inst : Group G] (a b : G), a⁻¹ * (a * b) = b\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_cancel_left:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-5s6hbdwh/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?a⁻¹ * (?a * ?b)\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_cancel_right:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-l7ia3ph3/Request.lean:11:39: error: Tactic `apply` failed: could not unify the conclusion of `@inv_mul_cancel_right`\n  ?a * ?b⁻¹ * ?b = ?a\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@inv_mul_cancel_right` is\n  ∀ {G : Type ?u.81} [inst : Group G] (a b : G), a * b⁻¹ * b = a\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_cancel_right:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-nm2k3e1q/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?a * ?b⁻¹ * ?b\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_eq_iff_eq_mul:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-9kvfpobz/Request.lean:11:40: error: Tactic `apply` failed: could not unify the conclusion of `@inv_mul_eq_iff_eq_mul`\n  ?a⁻¹ * ?b = ?c ↔ ?b = ?a * ?c\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@inv_mul_eq_iff_eq_mul` is\n  ∀ {G : Type ?u.82} [inst : Group G] {a b c : G}, a⁻¹ * b = c ↔ b = a * c\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_eq_iff_eq_mul:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-yaeigjyv/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?m.15⁻¹ * ?m.16 = ?m.17\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_eq_of_eq_mul:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-d_v6vgta/Request.lean:11:39: error: Tactic `apply` failed: could not unify the conclusion of `@inv_mul_eq_of_eq_mul`\n  ?a⁻¹ * ?b = ?c\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@inv_mul_eq_of_eq_mul` is\n  ∀ {G : Type ?u.83} [inst : Group G] {a b c : G}, b = a * c → a⁻¹ * b = c\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_eq_of_eq_mul:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-gwn64wa3/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?m.15⁻¹ * ?m.16\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_eq_one:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-a4xob090/Request.lean:11:33: error: Tactic `apply` failed: could not unify the conclusion of `@inv_mul_eq_one`\n  ?a⁻¹ * ?b = 1 ↔ ?a = ?b\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@inv_mul_eq_one` is\n  ∀ {G : Type ?u.81} [inst : Group G] {a b : G}, a⁻¹ * b = 1 ↔ a = b\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "inv_mul_eq_one:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-wba0p776/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?m.15⁻¹ * ?m.16 = 1\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "mul_inv_cancel:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-hq7_1p27/Request.lean:11:33: error: Tactic `apply` failed: could not unify the conclusion of `@mul_inv_cancel`\n  ?a * ?a⁻¹ = 1\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@mul_inv_cancel` is\n  ∀ {G : Type ?u.80} [inst : Group G] (a : G), a * a⁻¹ = 1\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "mul_inv_cancel:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-glk2k_kr/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?a * ?a⁻¹\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "mul_inv_cancel_left:apply",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-9yg5mha8/Request.lean:11:38: error: Tactic `apply` failed: could not unify the conclusion of `@mul_inv_cancel_left`\n  ?a * (?a⁻¹ * ?b) = ?b\nwith the goal\n  a✝⁻¹⁻¹ = a✝\n\nNote: The full type of `@mul_inv_cancel_left` is\n  ∀ {G : Type ?u.81} [inst : Group G] (a b : G), a * (a⁻¹ * b) = b\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      },
+      {
+        "action": "mul_inv_cancel_left:rewrite",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-uulsrwyx/Request.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?a * (?a⁻¹ * ?b)\nin the target expression\n  a✝⁻¹⁻¹ = a✝\n\nG✝ : Type\ninst✝ : Group G✝\na✝ : G✝\n⊢ a✝⁻¹⁻¹ = a✝"
+      }
+    ],
+    "cost": {
+      "physical_lean_calls": 17,
+      "retrieval_seconds": 0.0033709770000314165,
+      "wall_seconds": 127.12519234699994
+    },
+    "pcs_scientific_authority": false
+  }
+}

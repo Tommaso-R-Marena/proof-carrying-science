@@ -1,0 +1,313 @@
+........................................................................ [  5%]
+........................................................................ [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+........................................................................ [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+........................................................................ [ 45%]
+........................................................................ [ 50%]
+........................................................................ [ 55%]
+........................................................................ [ 60%]
+........................................................................ [ 65%]
+........................................................................ [ 71%]
+.....................................F....FF............................ [ 76%]
+........................................................................ [ 81%]
+....................................................F.F.FF.FFF.......... [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+...................................................                      [100%]
+=================================== FAILURES ===================================
+_ ContributionGateTests.test_normal_change_does_not_require_a_nonexistent_archive _
+
+self = <test_pr_contribution_gate.ContributionGateTests testMethod=test_normal_change_does_not_require_a_nonexistent_archive>
+
+    def test_normal_change_does_not_require_a_nonexistent_archive(self):
+        self.write("docs/ordinary.md", "Reviewed source change\n")
+        self.commit()
+        r = self.gate()
+>       self.assertEqual(r.returncode, 0, r.stderr)
+E       AssertionError: 1 != 0 : Protected contribution gate FAIL: Expected an owner repository and exact PR base SHA
+
+tests/test_pr_contribution_gate.py:77: AssertionError
+___ ContributionGateTests.test_valid_archive_runs_the_actual_digest_checker ____
+
+self = <test_pr_contribution_gate.ContributionGateTests testMethod=test_valid_archive_runs_the_actual_digest_checker>
+
+    def test_valid_archive_runs_the_actual_digest_checker(self):
+        self.archive()
+        self.commit()
+        r = self.gate()
+>       self.assertEqual(r.returncode, 0, r.stderr)
+E       AssertionError: 1 != 0 : Protected contribution gate FAIL: Expected an owner repository and exact PR base SHA
+
+tests/test_pr_contribution_gate.py:84: AssertionError
+_ ContributionGateTests.test_valid_promotion_runs_exact_archive_to_source_checker _
+
+self = <test_pr_contribution_gate.ContributionGateTests testMethod=test_valid_promotion_runs_exact_archive_to_source_checker>
+
+    def test_valid_promotion_runs_exact_archive_to_source_checker(self):
+        self.promotion()
+        self.commit()
+        r = self.gate()
+>       self.assertEqual(r.returncode, 0, r.stderr)
+E       AssertionError: 1 != 0 : Protected contribution gate FAIL: Expected an owner repository and exact PR base SHA
+
+tests/test_pr_contribution_gate.py:105: AssertionError
+_____ test_actual_certification_then_replay_and_claim_ir_stays_unpromoted ______
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+
+    def test_actual_certification_then_replay_and_claim_ir_stays_unpromoted(setup_authority):
+        args, request, binding = setup_authority
+>       authority = SemanticAuthority(**args)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_authority_v3.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pcs/semantic_authority_v3.py:89: in __init__
+    path = regular_file(binary, 64 * 1024 * 1024)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check')
+limit = 67108864
+
+    def regular_file(path: str | Path, limit: int) -> Path:
+        path = Path(path).absolute()
+        if ".." in path.parts or any(p.is_symlink() for p in [path, *path.parents]):
+>           raise ValueError("SYMLINK_OR_ALIAS_PATH")
+E           ValueError: SYMLINK_OR_ALIAS_PATH
+
+pcs/semantic_authority_v3.py:30: ValueError
+__________________ test_untrusted_pin_rejected[binary_sha256] __________________
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+field = 'binary_sha256'
+
+    @pytest.mark.parametrize("field", ["binary_sha256", "authority_sha256"])
+    def test_untrusted_pin_rejected(setup_authority, field):
+        args, _, _ = setup_authority
+>       with pytest.raises(ValueError, match="PIN_MISMATCH"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'PIN_MISMATCH'
+E         Actual message: 'SYMLINK_OR_ALIAS_PATH'
+
+tests/test_semantic_authority_v3.py:71: AssertionError
+_____________ test_edited_claim_ir_rejected_before_any_consumption _____________
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+
+    def test_edited_claim_ir_rejected_before_any_consumption(setup_authority):
+        args, request, binding = setup_authority
+        changed = copy.deepcopy(binding)
+        changed["claim_ir"]["claims"][0]["statement"] = "A different scientific statement"
+>       authority = SemanticAuthority(**args)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_authority_v3.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pcs/semantic_authority_v3.py:89: in __init__
+    path = regular_file(binary, 64 * 1024 * 1024)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check')
+limit = 67108864
+
+    def regular_file(path: str | Path, limit: int) -> Path:
+        path = Path(path).absolute()
+        if ".." in path.parts or any(p.is_symlink() for p in [path, *path.parents]):
+>           raise ValueError("SYMLINK_OR_ALIAS_PATH")
+E           ValueError: SYMLINK_OR_ALIAS_PATH
+
+pcs/semantic_authority_v3.py:30: ValueError
+______________ test_legacy_request_and_duplicate_json_fail_closed ______________
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+
+    def test_legacy_request_and_duplicate_json_fail_closed(setup_authority):
+        args, request, binding = setup_authority
+>       authority = SemanticAuthority(**args)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_authority_v3.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pcs/semantic_authority_v3.py:89: in __init__
+    path = regular_file(binary, 64 * 1024 * 1024)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check')
+limit = 67108864
+
+    def regular_file(path: str | Path, limit: int) -> Path:
+        path = Path(path).absolute()
+        if ".." in path.parts or any(p.is_symlink() for p in [path, *path.parents]):
+>           raise ValueError("SYMLINK_OR_ALIAS_PATH")
+E           ValueError: SYMLINK_OR_ALIAS_PATH
+
+pcs/semantic_authority_v3.py:30: ValueError
+__________________ test_revocation_is_read_from_actual_store ___________________
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+
+    def test_revocation_is_read_from_actual_store(setup_authority):
+        args, request, binding = setup_authority
+>       authority = SemanticAuthority(**args)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_authority_v3.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pcs/semantic_authority_v3.py:89: in __init__
+    path = regular_file(binary, 64 * 1024 * 1024)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check')
+limit = 67108864
+
+    def regular_file(path: str | Path, limit: int) -> Path:
+        path = Path(path).absolute()
+        if ".." in path.parts or any(p.is_symlink() for p in [path, *path.parents]):
+>           raise ValueError("SYMLINK_OR_ALIAS_PATH")
+E           ValueError: SYMLINK_OR_ALIAS_PATH
+
+pcs/semantic_authority_v3.py:30: ValueError
+________________ test_lost_store_is_not_silently_reinitialized _________________
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-4/test_lost_store_is_not_silentl0')
+
+    def test_lost_store_is_not_silently_reinitialized(setup_authority, tmp_path):
+        args, _, _ = setup_authority
+>       with pytest.raises(ValueError, match="MISSING"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'MISSING'
+E         Actual message: 'SYMLINK_OR_ALIAS_PATH'
+
+tests/test_semantic_authority_v3.py:117: AssertionError
+__________ test_installed_cli_uses_actual_checker_and_committed_store __________
+
+setup_authority = ({'binary': PosixPath('/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check'), 'binary_sha256': '...9ef66144202e354', ...}, 'approved_binding_sha256': 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c'})
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-4/test_installed_cli_uses_actual0')
+
+    def test_installed_cli_uses_actual_checker_and_committed_store(setup_authority, tmp_path):
+        args, request, binding = setup_authority
+        inputs = {"authority": args["authority_bytes"], "request": canonical_bytes(request),
+                  "claim-ir": canonical_bytes(binding["claim_ir"]), "binding": canonical_bytes(binding["binding"])}
+        command = [sys.executable, "-m", "pcs.cli", "semantic-authority-v3", "--binary", str(BIN),
+                   "--approved-binary-sha256", args["binary_sha256"],
+                   "--approved-authority-sha256", args["authority_sha256"],
+                   "--approved-binding-sha256", binding["approved_binding_sha256"],
+                   "--store", str(args["store"]), "--allow-public-fixtures", "--fixture-clock", "2000"]
+        for name, data in inputs.items():
+            path = tmp_path / (name + ".json")
+            path.write_bytes(data)
+            command.extend(["--" + name, str(path)])
+>       run = subprocess.run(command, capture_output=True, check=True, cwd=ROOT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_authority_v3.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = True, timeout = None, check = True
+popenargs = (['/workspace/proof-carrying-science/.venv/bin/python', '-m', 'pcs.cli', 'semantic-authority-v3', '--binary', '/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check', ...],)
+kwargs = {'cwd': PosixPath('/tmp/pcs-platform-baseline-e106'), 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/workspace/proof-carrying-science/.venv/bin/python', '-m', 'pcs.cli', 'semantic-authority-v3', '--binary', '/tmp/pcs-platform-baseline-e106/formal/.lake/build/bin/pcs-semantic-check', '--approved-binary-sha256', '626bb01b37a62c47278ac651cc36ccc37aa3813b76b6bd72352423f82c6c1126', '--approved-authority-sha256', '3b15694a8b695f11e751655cd2898fa8b8cc688585c1c8fd1d0b48d1c069a9d1', '--approved-binding-sha256', 'cd7fb8e1b247684d1cb4fb806a65e18a7ba3194e3ba1c58f87980f37159cba9c', '--store', '/tmp/pytest-of-agent/pytest-4/test_installed_cli_uses_actual0/receipts.sqlite', '--allow-public-fixtures', '--fixture-clock', '2000', '--authority', '/tmp/pytest-of-agent/pytest-4/test_installed_cli_uses_actual0/authority.json', '--request', '/tmp/pytest-of-agent/pytest-4/test_installed_cli_uses_actual0/request.json', '--claim-ir', '/tmp/pytest-of-agent/pytest-4/test_installed_cli_uses_actual0/claim-ir.json', '--binding', '/tmp/pytest-of-agent/pytest-4/test_installed_cli_uses_actual0/binding.json']' returned non-zero exit status 1.
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py:571: CalledProcessError
+=============================== warnings summary ===============================
+pcs/limitations.py:56
+pcs/limitations.py:56
+  /tmp/pcs-platform-baseline-e106/pcs/limitations.py:56: SyntaxWarning: invalid escape sequence '\`'
+    f"Certificate semantic hash: \`{certificate.get('semantic_hash', '')}\`",
+
+tests/test_zip_verify_v06.py::test_v06_zip_rejects_duplicate_member
+  /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/zipfile/__init__.py:1625: UserWarning: Duplicate name: 'certificate.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_pr_contribution_gate.py::ContributionGateTests::test_normal_change_does_not_require_a_nonexistent_archive
+FAILED tests/test_pr_contribution_gate.py::ContributionGateTests::test_valid_archive_runs_the_actual_digest_checker
+FAILED tests/test_pr_contribution_gate.py::ContributionGateTests::test_valid_promotion_runs_exact_archive_to_source_checker
+FAILED tests/test_semantic_authority_v3.py::test_actual_certification_then_replay_and_claim_ir_stays_unpromoted
+FAILED tests/test_semantic_authority_v3.py::test_untrusted_pin_rejected[binary_sha256]
+FAILED tests/test_semantic_authority_v3.py::test_edited_claim_ir_rejected_before_any_consumption
+FAILED tests/test_semantic_authority_v3.py::test_legacy_request_and_duplicate_json_fail_closed
+FAILED tests/test_semantic_authority_v3.py::test_revocation_is_read_from_actual_store
+FAILED tests/test_semantic_authority_v3.py::test_lost_store_is_not_silently_reinitialized
+FAILED tests/test_semantic_authority_v3.py::test_installed_cli_uses_actual_checker_and_committed_store
+10 failed, 1409 passed, 3 warnings in 1267.26s (0:21:07)

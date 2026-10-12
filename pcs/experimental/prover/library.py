@@ -1,9 +1,11 @@
 """Kernel-checked reusable lemmas, reconstructed from typed goals and actions.
 
 No serialized receipt, proposed declaration, imported code or success flag is
-trusted. Each library is rebuilt and axiom-audited in a fresh Lean process. Its
-definitions are replayed before each independent request, including final proof
-checking. Library construction is experimental and grants no PCS authority.
+trusted. Each library is rebuilt and axiom-audited before its receiver-owned
+module is compiled. Requests import that fixed source/artifact-bound module;
+final proofs run in fresh compiler processes. Independent full-library replay
+constructs a separate environment from the typed source and actions. Library
+construction is experimental and grants no PCS authority.
 """
 from __future__ import annotations
 

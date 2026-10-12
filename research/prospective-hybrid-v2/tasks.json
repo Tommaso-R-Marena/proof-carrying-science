@@ -1,0 +1,1309 @@
+[
+  {
+    "id": "utility-cancel-chain",
+    "split": "utility",
+    "statement": "For all natural numbers a, b, c and d, if (a + c) equals (b + c) and (b + d) equals (c + d) then a equals c.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        },
+        {
+          "name": "d",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "eq",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "d"
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "c"
+              },
+              "right": {
+                "op": "var",
+                "name": "d"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "utility-reverse-congruence",
+    "split": "utility",
+    "statement": "For all lists of natural numbers xs and ys, if xs equals ys then the reversal of xs equals the reversal of ys.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "xs"
+          },
+          "right": {
+            "op": "var",
+            "name": "ys"
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          },
+          "right": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "utility-successor-double",
+    "split": "utility",
+    "statement": "For all natural numbers a and b, if the successor of (the successor of a) equals the successor of (the successor of b) then a equals b.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "succ",
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "a"
+              }
+            }
+          },
+          "right": {
+            "op": "succ",
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "b"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "utility-predicate-persist",
+    "split": "utility",
+    "statement": "For all predicates on natural numbers P, if (P(0) and (∀ (n : Nat), P(n) implies P(the successor of n))) then (∀ (k : Nat), P(k + (k * k))).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "n",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "n"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "k"
+              },
+              "right": {
+                "op": "mul",
+                "left": {
+                  "op": "var",
+                  "name": "k"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "k"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "selection-cancel-reversed",
+    "split": "selection",
+    "statement": "For all natural numbers a, b and c, if (a + c) equals (b + c) then the successor of a equals the successor of b.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "succ",
+            "arg": {
+              "op": "var",
+              "name": "a"
+            }
+          },
+          "right": {
+            "op": "succ",
+            "arg": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "selection-reverse-triple",
+    "split": "selection",
+    "statement": "For all lists of natural numbers xs, the reversal of (the reversal of (the reversal of xs)) equals the reversal of xs.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "reverse",
+          "arg": {
+            "op": "reverse",
+            "arg": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "reverse",
+          "arg": {
+            "op": "var",
+            "name": "xs"
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "selection-order-chain",
+    "split": "selection",
+    "statement": "For all natural numbers a, b and c, if (a + c) ≤ (b + c) then a ≤ b.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "le",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "le",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "selection-function-recurrence",
+    "split": "selection",
+    "statement": "For all functions from natural numbers to natural numbers f, if ((f(0) equals 0) and (∀ (n : Nat), f(the successor of n) equals the successor of f(n))) then (∀ (k : Nat), f(k) equals k).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "number",
+                "value": 0,
+                "type": "Nat"
+              }
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "n",
+            "type": "Nat",
+            "body": {
+              "op": "eq",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "n"
+                  }
+                }
+              },
+              "right": {
+                "op": "succ",
+                "arg": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "var",
+                "name": "k"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "k"
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-cancel-common-function",
+    "split": "final",
+    "statement": "For all functions from natural numbers to natural numbers f, (∀ (a : Nat), ∀ (b : Nat), ∀ (c : Nat), ((f(a) + c) equals (f(b) + c)) implies (f(a) equals f(b))).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "forall",
+        "name": "a",
+        "type": "Nat",
+        "body": {
+          "op": "forall",
+          "name": "b",
+          "type": "Nat",
+          "body": {
+            "op": "forall",
+            "name": "c",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "eq",
+                "left": {
+                  "op": "add",
+                  "left": {
+                    "op": "apply",
+                    "fn": {
+                      "op": "var",
+                      "name": "f"
+                    },
+                    "arg": {
+                      "op": "var",
+                      "name": "a"
+                    }
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "c"
+                  }
+                },
+                "right": {
+                  "op": "add",
+                  "left": {
+                    "op": "apply",
+                    "fn": {
+                      "op": "var",
+                      "name": "f"
+                    },
+                    "arg": {
+                      "op": "var",
+                      "name": "b"
+                    }
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "c"
+                  }
+                }
+              },
+              "right": {
+                "op": "eq",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "a"
+                  }
+                },
+                "right": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "b"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-cancel-context",
+    "split": "final",
+    "statement": "For all natural numbers a, b, c and d, if (a + c) equals (b + c) then (a + d) equals (b + d).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        },
+        {
+          "name": "d",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "d"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "d"
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-nested-successor-context",
+    "split": "final",
+    "statement": "For all natural numbers a and b, if the successor of (the successor of a) equals the successor of (the successor of b) then (a + a) equals (b + b).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "succ",
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "a"
+              }
+            }
+          },
+          "right": {
+            "op": "succ",
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "b"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "a"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-list-reverse-quad",
+    "split": "final",
+    "statement": "For all lists of natural numbers xs, the reversal of (the reversal of (the reversal of (the reversal of xs))) equals xs.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "reverse",
+          "arg": {
+            "op": "reverse",
+            "arg": {
+              "op": "reverse",
+              "arg": {
+                "op": "reverse",
+                "arg": {
+                  "op": "var",
+                  "name": "xs"
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "var",
+          "name": "xs"
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-list-length-context",
+    "split": "final",
+    "statement": "For all lists of natural numbers xs and ys, the length of ((the reversal of xs) appended to (the reversal of ys)) equals the length of (xs appended to ys).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "length",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-predicate-renamed",
+    "split": "final",
+    "statement": "For all predicates on natural numbers Q, if (Q(0) and (∀ (t : Nat), Q(t) implies Q(the successor of t))) then (∀ (m : Nat), Q((m * m) + (m * m))).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "Q",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "Q"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "t",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "Q"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "t"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "Q"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "t"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "m",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "Q"
+            },
+            "arg": {
+              "op": "add",
+              "left": {
+                "op": "mul",
+                "left": {
+                  "op": "var",
+                  "name": "m"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "m"
+                }
+              },
+              "right": {
+                "op": "mul",
+                "left": {
+                  "op": "var",
+                  "name": "m"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "m"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-function-offset",
+    "split": "final",
+    "statement": "For all functions from natural numbers to natural numbers g, (∀ (a : Nat), ((g(0) equals a) and (∀ (t : Nat), g(the successor of t) equals the successor of g(t))) implies (∀ (m : Nat), g(m) equals (a + m))).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "forall",
+        "name": "a",
+        "type": "Nat",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "and",
+            "left": {
+              "op": "eq",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "g"
+                },
+                "arg": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "var",
+                "name": "a"
+              }
+            },
+            "right": {
+              "op": "forall",
+              "name": "t",
+              "type": "Nat",
+              "body": {
+                "op": "eq",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "g"
+                  },
+                  "arg": {
+                    "op": "succ",
+                    "arg": {
+                      "op": "var",
+                      "name": "t"
+                    }
+                  }
+                },
+                "right": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "apply",
+                    "fn": {
+                      "op": "var",
+                      "name": "g"
+                    },
+                    "arg": {
+                      "op": "var",
+                      "name": "t"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "m",
+            "type": "Nat",
+            "body": {
+              "op": "eq",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "g"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "m"
+                }
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "var",
+                  "name": "a"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "m"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "final-predicate-successor",
+    "split": "final",
+    "statement": "For all predicates on natural numbers Q, if (Q(0) and (∀ (t : Nat), Q(t) implies Q(the successor of t))) then (∀ (m : Nat), Q(the successor of (m * m))).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "Q",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "Q"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "t",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "Q"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "t"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "Q"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "t"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "m",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "Q"
+            },
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "mul",
+                "left": {
+                  "op": "var",
+                  "name": "m"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "m"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored prospective v2",
+    "kind": "typed"
+  },
+  {
+    "id": "external-function-composition",
+    "split": "selection",
+    "statement": "∀ (f g : Nat → Nat), Function.Injective f → Function.Injective g → Function.Injective (f ∘ g)",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-group-double-inverse",
+    "split": "selection",
+    "statement": "∀ (G : Type) [Group G] (a : G), (a⁻¹)⁻¹ = a",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-image-composition",
+    "split": "final",
+    "statement": "∀ (f g : Nat → Nat) (s : Set Nat), (g ∘ f) '' s = g '' (f '' s)",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-preimage-union",
+    "split": "final",
+    "statement": "∀ (f : Nat → Nat) (s t : Set Nat), f ⁻¹' (s ∪ t) = (f ⁻¹' s) ∪ (f ⁻¹' t)",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-injective-cancel-context",
+    "split": "final",
+    "statement": "∀ (f : Nat → Nat), Function.Injective f → ∀ a b, f a = f b → a = b",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-surjective-composition",
+    "split": "final",
+    "statement": "∀ (f g : Nat → Nat), Function.Surjective f → Function.Surjective g → Function.Surjective (g ∘ f)",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-group-right-inverse",
+    "split": "final",
+    "statement": "∀ (G : Type) [Group G] (a b : G), a * b * b⁻¹ = a",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  {
+    "id": "external-factorial-positive",
+    "split": "final",
+    "statement": "∀ n : Nat, 0 < n.factorial",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  }
+]

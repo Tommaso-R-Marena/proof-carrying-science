@@ -1,0 +1,170 @@
+[
+  {
+    "id": "transfer-0",
+    "statement": "For all natural numbers a, b and c, if (a + (7 + c)) equals (b + (7 + c)) then (a + 1) equals (b + 1).",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "number",
+                "value": 7,
+                "type": "Nat"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "number",
+                "value": 7,
+                "type": "Nat"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "number",
+              "value": 1,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "number",
+              "value": 1,
+              "type": "Nat"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "transfer-1",
+    "statement": "For all natural numbers a, b and c, if (a + (9 + c)) equals (b + (9 + c)) then a equals b.",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "number",
+                "value": 9,
+                "type": "Nat"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "number",
+                "value": 9,
+                "type": "Nat"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    }
+  }
+]

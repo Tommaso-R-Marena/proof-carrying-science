@@ -1,0 +1,762 @@
+{
+  "format": "pcs-technical-rights-and-provenance-inventory-v1",
+  "source_sha": "e1067e406a1a1991497e7130e1f209239e5607cc",
+  "source_tree": "be27e0371215e2cc59f1d0c4bbbba79f9602afd1",
+  "dirty_status": "M pcs/experimental/prover/server.py\n?? docs/PCS_59_WORKSTREAM_IMPLEMENTATION_LEDGER.json\n?? docs/PCS_59_WORKSTREAM_IMPLEMENTATION_LEDGER.md\n?? docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md\n?? docs/PCS_PUBLIC_PLATFORM_VALIDATION.md\n?? docs/PCS_RELEASE_PROVENANCE_INVENTORY.json\n?? docs/PCS_RELEASE_READINESS.md\n?? docs/PCS_RESEARCH_PLATFORM_TECHNICAL_REPORT.md\n?? docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md\n?? docs/SIGNING_POLICY_AND_RECOVERY_V1.md\n?? examples/scientific_mass_action/\n?? formal/tools/RuntimeCanonicalInputs.lean\n?? formal/tools/RuntimeValueType.lean\n?? pcs/experimental/prover/abstraction_repair_v2.py\n?? pcs/experimental/prover/checkpoint_transfer_v2.py\n?? pcs/experimental/prover/evidence_storage.py\n?? pcs/experimental/prover/hybrid.py\n?? pcs/experimental/prover/hybrid_cli.py\n?? pcs/experimental/prover/mathematical_evidence.py\n?? pcs/experimental/prover/mathlib_retrieval.py\n?? pcs/experimental/prover/pooled_hybrid_evaluation.py\n?? pcs/experimental/prover/promotion.py\n?? pcs/experimental/prover/prospective_hybrid.py\n?? pcs/experimental/prover/state_graph.py\n?? pcs/release_qualification_v1.py\n?? pcs/schemas/release-qualification-v1.schema.json\n?? pcs/scientific_assurance_v1.py\n?? pcs/scientific_contracts_v1.py\n?? pcs/scientific_obligations_v1.py\n?? pcs/scientific_research_v1.py\n?? pcs/signing_policy_v1.py\n?? research/abstraction-repair-v2/\n?? research/platform-security-v1/\n?? research/prospective-hybrid-v2/\n?? research/scientific-assurance-v1/\n?? scripts/exercise_signing_recovery.py\n?? scripts/inventory_release_provenance.py\n?? scripts/qualify_release.py\n?? scripts/replay_scientific_bundle_v1.py\n?? scripts/run_scientific_assurance_v1.py\n?? scripts/runtime_differential.py\n?? scripts/runtime_differential/\n?? scripts/verify_runtime_canonical_boundary.py\n?? scripts/verify_runtime_value_type.py\n?? tests/test_evidence_storage.py\n?? tests/test_hybrid_cli.py\n?? tests/test_mathematical_evidence.py\n?? tests/test_prospective_hybrid.py\n?? tests/test_release_provenance_inventory.py\n?? tests/test_release_qualification_v1.py\n?? tests/test_runtime_differential.py\n?? tests/test_scientific_assurance_v1.py\n?? tests/test_scientific_contracts_v1.py\n?? tests/test_signing_policy_v1.py\n?? tests/test_signing_recovery_drill.py",
+  "inventory_scope": "Tracked and nonignored untracked regular files; development overlay is not the HEAD commit alone.",
+  "tracked_path_count": 1672,
+  "nonignored_untracked_path_count": 256,
+  "first_party_license_file_sha256": "b1d2870f1a00e4d7f56576e5f0870cba109e041f8af66866cf5b499478e654e7",
+  "rights_files": [
+    {
+      "path": "LICENSE",
+      "sha256": "b1d2870f1a00e4d7f56576e5f0870cba109e041f8af66866cf5b499478e654e7",
+      "scope": "File name indicates rights/provenance material; content requires review."
+    },
+    {
+      "path": "NOTICE",
+      "sha256": "3b32e551dd123da8b5979b54a8779adde7df29353a3e0c4ed73ae8dcd8248c9e",
+      "scope": "File name indicates rights/provenance material; content requires review."
+    },
+    {
+      "path": "docs/PUBLIC_RELEASE_RIGHTS_LEDGER.md",
+      "sha256": "f193210a693b983752e09c33ff6b65e6ea7f77ab39442eb63d8e5336185d7880",
+      "scope": "File name indicates rights/provenance material; content requires review."
+    },
+    {
+      "path": "docs/RELEASE_CAMPAIGN_SECURITY_AND_RIGHTS.md",
+      "sha256": "0d3e34228c0f2ce3a71b644f61fef85e0cff282e4703b95ae97b2e963670e6bb",
+      "scope": "File name indicates rights/provenance material; content requires review."
+    },
+    {
+      "path": "docs/THIRD_PARTY_LICENSE_MANIFEST.json",
+      "sha256": "c0bdbfc4333fc78d837259e1d73e54727b10411cb1a3611d477f5cb8d39b18d6",
+      "scope": "File name indicates rights/provenance material; content requires review."
+    },
+    {
+      "path": "examples/scientific_mass_action/LICENSE",
+      "sha256": "d18ff60f3bea278d1f7349edfe6871d25660e79af5aee15ec2887b48f827bfb0",
+      "scope": "File name indicates rights/provenance material; content requires review."
+    }
+  ],
+  "dependency_manifests": [
+    {
+      "path": "examples/scientific_mass_action/requirements.txt",
+      "sha256": "e4d695478c734a3438c4d62f00dac8b94a765d2d6acbfbd1feb255ab817f9d1e"
+    },
+    {
+      "path": "formal/lake-manifest.json",
+      "sha256": "3fe0ad014355a903eb6f03c0f7063de6eb2569666cbd893b8031ad7158462071"
+    },
+    {
+      "path": "formal/lean-toolchain",
+      "sha256": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028"
+    },
+    {
+      "path": "formal/statistics/lean-toolchain",
+      "sha256": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "7b49d7117ecb598826b32894d328c968212417a99eb02e8c1ac9fe0ed3d6350e"
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "a6f78ddcdb8aafa0bbb62749d9dda0f420ae46bca51b2fc09383ea0a2bf3d276"
+    },
+    {
+      "path": "requirements-build.lock",
+      "sha256": "34ebebabc67b2b73044dd29b565c479660b6069e7b12b4b09583c443f1ce31a3"
+    },
+    {
+      "path": "requirements-dev.lock",
+      "sha256": "b1f321c05fdfad0631f4eaae93b32fb9044d77d2b1d3a081b66477b1e784d644"
+    },
+    {
+      "path": "requirements-prover.lock",
+      "sha256": "b6618bfd683e92d691cfe40ffb208e1ab7720f585c532ef38a1323d1d366f68a"
+    }
+  ],
+  "workflow_actions": [
+    {
+      "path": ".github/workflows/build-verifier-artifacts.yml",
+      "line": 43,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/build-verifier-artifacts.yml",
+      "line": 44,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/build-verifier-artifacts.yml",
+      "line": 81,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 29,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 32,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 45,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 48,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 81,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 85,
+      "reference": "leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 102,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 105,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 108,
+      "reference": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-ci.yml",
+      "line": 121,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-lean-public.yml",
+      "line": 35,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-lean-public.yml",
+      "line": 39,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-promotion.yml",
+      "line": 17,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-promotion.yml",
+      "line": 22,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-promotion.yml",
+      "line": 36,
+      "reference": "leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-codeql.yml",
+      "line": 30,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-codeql.yml",
+      "line": 34,
+      "reference": "github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-codeql.yml",
+      "line": 39,
+      "reference": "github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 26,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 29,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 106,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 112,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 164,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 171,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 175,
+      "reference": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 220,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 227,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 332,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 366,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 370,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 390,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 395,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 401,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 435,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 457,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-public-full-verification.yml",
+      "line": 461,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-required-self-hosted.yml",
+      "line": 25,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-required-self-hosted.yml",
+      "line": 30,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-required-self-hosted.yml",
+      "line": 49,
+      "reference": "leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-selfhosted-zero-minutes.yml",
+      "line": 21,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-submission.yml",
+      "line": 17,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-submission.yml",
+      "line": 21,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/pcs-submission.yml",
+      "line": 34,
+      "reference": "leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/product-hardening.yml",
+      "line": 21,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/product-hardening.yml",
+      "line": 22,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 19,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 20,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 32,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 58,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 59,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 67,
+      "reference": "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 77,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 92,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 93,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 96,
+      "reference": "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-cross-machine-oci.yml",
+      "line": 107,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-normalized-set.yml",
+      "line": 27,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-normalized-set.yml",
+      "line": 29,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-normalized-set.yml",
+      "line": 34,
+      "reference": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-normalized-set.yml",
+      "line": 48,
+      "reference": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-replay-slim-evidence.yml",
+      "line": 17,
+      "reference": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "immutable_commit_pin": true,
+      "local_action": false
+    },
+    {
+      "path": ".github/workflows/v06-replay-slim-evidence.yml",
+      "line": 18,
+      "reference": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "immutable_commit_pin": true,
+      "local_action": false
+    }
+  ],
+  "experiment_manifests": [
+    {
+      "path": "research/abstraction-repair-v2/protocol.json",
+      "sha256": "cded411cafdd080707719b2cccde7e2eddfbc0a5a88ee316e80a23704bfac1ee",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/aristotle-omega-dd-v1/source-manifest.json",
+      "sha256": "520389f1237afe4b4776d57d8b9eaac6c7feaa2277a21c52f71b542029ea3f51",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/EVIDENCE_SHA256.json",
+      "sha256": "f314804619fc52b28b6226e9fb216af6218cf12882e336e3b84d75bf25564172",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/cold-audit/protocol.json",
+      "sha256": "d018ed4d310802dca50ebda4ee6a7c49d4564ea1c1c17c04b2d32a2debaf2075",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/cold-audit/source-manifest.json",
+      "sha256": "49ce7a2c3e7b90d26ea3e492158cc780dff4040eb2334118be45e0eb1dddf8fe",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/prospective/protocol.json",
+      "sha256": "e0cd2e7a7102fa88d6d1e55c83dfdfa6d7223b62c902bd730b7f51d8f0e9a8e3",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/prospective/source-manifest.json",
+      "sha256": "8d7088755052602bed8d21672311a8018029ab5ad55d5d85463c7be57aa1c398",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/protocol.json",
+      "sha256": "434bfc1dfb697ef11ae8609f39fd261a4bc262ccf53cfddb7cf1a24a9715a6ec",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/registry.json",
+      "sha256": "bdbd01994a4f864ee331e23916fe0c0e80caa8526ed31303f9bff2eb1aee695f",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/retrieval-audit/protocol.json",
+      "sha256": "e0cd2e7a7102fa88d6d1e55c83dfdfa6d7223b62c902bd730b7f51d8f0e9a8e3",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/retrieval-audit/source-manifest.json",
+      "sha256": "5696e07e0e5a8aa2eaeb43286d7eba9fb4c5020cacb225fcb7016ff8a98161d0",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v1/source-manifest.json",
+      "sha256": "12f1d280efcb388b0dcd484d83d06b6dd35b97e7c3be787f03e90dfc522b21cc",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v2/EVIDENCE_SHA256.json",
+      "sha256": "d41505af09b37868d19c4aeceae6ab7d705acac9cfd50f1e6b48772bf494e9c0",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v2/protocol.json",
+      "sha256": "27f8bd79ff18f6c4338694360c018bbf288971ff2e9a77265011c45d4d75a693",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v2/registry.json",
+      "sha256": "7cd32586f9bbec6e40f43241635f02066369e2f0f8784fba0ce33681e1056417",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/checked-reuse-v2/source-manifest.json",
+      "sha256": "a51ad49a3a066b1cb66cf714ad8dd85b57e03d455aad6fbd59cc20733e127831",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v1/EVIDENCE_SHA256.json",
+      "sha256": "55f76f58921ae8c1bac029af87e7cd1298a61f170feeea438808d9a4ac86f2cc",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v1/protocol.json",
+      "sha256": "3316f9ecec9d18a75fbfe0a3c1d3b3355bea01b6d4dfc8ea42fec8f4909615be",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v1/registry.json",
+      "sha256": "6e79e3b9e5ee8735ba7c096dd4876a6d2b044297fb72cef8f8a2285c7983357d",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v1/source-manifest.json",
+      "sha256": "76c11c279147c526269be666a7b396f695d147271dfe360823c96b00f2b13b7a",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v2/EVIDENCE_SHA256.json",
+      "sha256": "caeac8f15469e3ade4a0f6a60e56db5ca0bc7a4aaf89a4c118af0f16cb94556a",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v2/protocol.json",
+      "sha256": "bad6cb855dab1a1c1eec7438dd8cb9e87699cbe955fb25cd653b87299e570638",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v2/registry.json",
+      "sha256": "2697c3b02e18084b4caef1536dba54399dfa6c31ea38b52e24a4a25f5000a8c7",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/induction-abstraction-v2/source-manifest.json",
+      "sha256": "25d455a15f20100c770e3dc014f3727109196b1dde70020997d9e97f98f0f11f",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v1/data-manifest.json",
+      "sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v1/protocol.json",
+      "sha256": "6613b3d21f7a69b2e224cf43ee3c01b54072b6ae23d6d76e9a5603b81189fe1f",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v1/registry.json",
+      "sha256": "8bafb2f993c8e173f560a2710d224745df484418032472a8f0ce9553199d5c06",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v1/source-manifest.json",
+      "sha256": "0e12f59ae7b9c6967c251fcbc8e81480c50ca2e40749f8bdf1e1d429f9d76fc1",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v2/data-manifest.json",
+      "sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v2/protocol.json",
+      "sha256": "6613b3d21f7a69b2e224cf43ee3c01b54072b6ae23d6d76e9a5603b81189fe1f",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v2/registry.json",
+      "sha256": "923ed1e13bb97f249921585d605b03537f6f01bf3f06dbed59eec2a76b1bd2ba",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/lean-learning-v2/source-manifest.json",
+      "sha256": "f42ade34d59f9b68566e4207bd4c7bd48dafb52de1a587904cbdad37758755e3",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/prospective-hybrid-v2/protocol.json",
+      "sha256": "4d57db6e9578a9aef23eeccbb81d638e2130932ebd6f058cdd15dbe17492b412",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/prospective-hybrid-v2/source-manifest.json",
+      "sha256": "eef4658dba3db95350a0f5a188484f77b5e3ebf3b1d9e48fa38b81b5f97b20e9",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/scientific-assurance-v1/ARTIFACT_SHA256.json",
+      "sha256": "807c4911c1b00e3ff0598f23d51b315acb2cb437947783c048b93df26608e2b7",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/scientific-assurance-v1/PROTOCOL.json",
+      "sha256": "75cfa3d866df7c139ec32afdc21748aaddfcf985de10adc994148d5541211deb",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/verified-memory-demonstration/ARTIFACT_SHA256.json",
+      "sha256": "2a918606ead7e9983cea9bed4b0581085527094b3b2e3f8925dea57892d8b1eb",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/verified-memory-integration/ARTIFACT_SHA256.json",
+      "sha256": "4475b51cc7a4815d395b2944a17c056885faa23df55120661539c05532dcde50",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/verified-memory-v1/EVIDENCE_SHA256.json",
+      "sha256": "6fe643bc75f3c83a4b34ad2429cc622e67fd895bc4d6e4d8b622bbc96eef090b",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/verified-memory-v1/protocol.json",
+      "sha256": "521579e62f7a388af13610934365d7915bad4b67bf96f5fb3e8bba024a5508c2",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/verified-memory-v1/registry.json",
+      "sha256": "ce59604b57ed256abae3581fa131d60f0d7bbf3bf5821986a21b95ca19014cd5",
+      "rights_status": "not_inferred_from_presence"
+    },
+    {
+      "path": "research/verified-memory-v1/source-manifest.json",
+      "sha256": "dc70fbe26bdb0151ed588c304cbcef442cb54a2ad2d82d546ddb088a078e8029",
+      "rights_status": "not_inferred_from_presence"
+    }
+  ],
+  "legal_clearance": false,
+  "automatic_distribution_authority": false,
+  "unresolved": [
+    "Transitive package license review is not complete.",
+    "Generated assets and contributors require source-specific review.",
+    "Academic or institutional rights cannot be established by a repository scan.",
+    "Tagged actions are mutable unless separately source-bound."
+  ],
+  "preservation": "Existing first-party license files are unchanged; owner publication authorization is separate from third-party rights."
+}

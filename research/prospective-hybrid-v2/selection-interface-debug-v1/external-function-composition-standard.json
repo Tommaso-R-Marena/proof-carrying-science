@@ -1,0 +1,554 @@
+{
+  "task": {
+    "id": "external-function-composition",
+    "split": "selection",
+    "statement": "∀ (f g : Nat → Nat), Function.Injective f → Function.Injective g → Function.Injective (f ∘ g)",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  "mode": "standard",
+  "result": {
+    "status": "verified",
+    "receipt": {
+      "statement": "∀ (f g : Nat → Nat), Function.Injective f → Function.Injective g → Function.Injective (f ∘ g)",
+      "proof": "  repeat intro\n  aesop",
+      "kernel": {
+        "axioms": [
+          "propext"
+        ],
+        "expression": {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "constant",
+                  "value": "Nat:[]"
+                },
+                {
+                  "children": [],
+                  "kind": "constant",
+                  "value": "Nat:[]"
+                }
+              ],
+              "kind": "forall",
+              "value": "a._@._internal._hyg.0"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "Nat:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "Nat:[]"
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Function.Injective:[1, 1]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Nat:[]"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "Nat:[]"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "1"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Function.Injective:[1, 1]"
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Nat:[]"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Nat:[]"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Function.Injective:[1, 1]"
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Nat:[]"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Nat:[]"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [],
+                                                  "kind": "constant",
+                                                  "value": "Function.comp:[1, 1, 1]"
+                                                },
+                                                {
+                                                  "children": [],
+                                                  "kind": "constant",
+                                                  "value": "Nat:[]"
+                                                }
+                                              ],
+                                              "kind": "application",
+                                              "value": ""
+                                            },
+                                            {
+                                              "children": [],
+                                              "kind": "constant",
+                                              "value": "Nat:[]"
+                                            }
+                                          ],
+                                          "kind": "application",
+                                          "value": ""
+                                        },
+                                        {
+                                          "children": [],
+                                          "kind": "constant",
+                                          "value": "Nat:[]"
+                                        }
+                                      ],
+                                      "kind": "application",
+                                      "value": ""
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "bound",
+                                      "value": "3"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "forall",
+                      "value": "a._@._internal._hyg.0"
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "g"
+            }
+          ],
+          "kind": "forall",
+          "value": "f"
+        },
+        "format": "pcs-lean-kernel-v1"
+      },
+      "independent_kernel": {
+        "axioms": [
+          "propext"
+        ],
+        "expression": {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "constant",
+                  "value": "Nat:[]"
+                },
+                {
+                  "children": [],
+                  "kind": "constant",
+                  "value": "Nat:[]"
+                }
+              ],
+              "kind": "forall",
+              "value": "a._@._internal._hyg.0"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "Nat:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "Nat:[]"
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Function.Injective:[1, 1]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Nat:[]"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "Nat:[]"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "1"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Function.Injective:[1, 1]"
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Nat:[]"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Nat:[]"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Function.Injective:[1, 1]"
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "Nat:[]"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "Nat:[]"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [],
+                                                  "kind": "constant",
+                                                  "value": "Function.comp:[1, 1, 1]"
+                                                },
+                                                {
+                                                  "children": [],
+                                                  "kind": "constant",
+                                                  "value": "Nat:[]"
+                                                }
+                                              ],
+                                              "kind": "application",
+                                              "value": ""
+                                            },
+                                            {
+                                              "children": [],
+                                              "kind": "constant",
+                                              "value": "Nat:[]"
+                                            }
+                                          ],
+                                          "kind": "application",
+                                          "value": ""
+                                        },
+                                        {
+                                          "children": [],
+                                          "kind": "constant",
+                                          "value": "Nat:[]"
+                                        }
+                                      ],
+                                      "kind": "application",
+                                      "value": ""
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "bound",
+                                      "value": "3"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "forall",
+                      "value": "a._@._internal._hyg.0"
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "g"
+            }
+          ],
+          "kind": "forall",
+          "value": "f"
+        },
+        "format": "pcs-lean-kernel-v1"
+      },
+      "goal_sha256": "1590835bb4f2d0f4dd1d79cbefcb97a5068801c2e01fb51c7431774104e96743",
+      "mathlib_revision": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+      "imports": [
+        "Mathlib.Data.Set.Function",
+        "Mathlib.Algebra.Group.Basic",
+        "Mathlib.Data.Nat.Factorial.Basic"
+      ],
+      "import_artifact_sha256": {
+        "Mathlib.Data.Set.Function": "285c4489085ac7993f40dc9ebf75cd238b66ef53f1025481f4e06ce60272a3ed",
+        "Mathlib.Algebra.Group.Basic": "630a553d42136b5cac8d206bb30f5ce7421b53e204927f9899a145e1189ad642",
+        "Mathlib.Data.Nat.Factorial.Basic": "190de61623c5267a6d077b80f774c5826ce436c0feaec69c800d79aea7a4954e"
+      },
+      "catalog_sha256": "01fa6c8568d7599669e940e70150ac5d723b6bff57f4893d5c32cac7edd3588a",
+      "retrieval_source_sha256": "d63adab1ea76499dce95ff2b1b0b50db8f75a1fe469d40851e545b49b9342778",
+      "winning_action": "standard_aesop",
+      "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+      "pcs_scientific_authority": false
+    },
+    "mode": "standard_tactics",
+    "retrieved": [
+      {
+        "name": "Function.Injective.comp",
+        "score": 6.0
+      },
+      {
+        "name": "Function.Injective.comp_left",
+        "score": 6.0
+      },
+      {
+        "name": "Function.Injective.of_comp",
+        "score": 6.0
+      },
+      {
+        "name": "Function.Injective.iterate",
+        "score": 5.75
+      },
+      {
+        "name": "Function.Injective.of_comp_iff",
+        "score": 5.75
+      },
+      {
+        "name": "Function.Injective.of_comp_iff._simp_1",
+        "score": 5.75
+      },
+      {
+        "name": "Function.Injective.of_comp_right",
+        "score": 5.75
+      },
+      {
+        "name": "Function.Injective.surjective_comp_right'",
+        "score": 5.75
+      }
+    ],
+    "attempts": [
+      {
+        "action": "standard_simp_all",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-z6xdkn3k/Request.lean:7:127: error: unsolved goals\nf✝ g✝ : ℕ → ℕ\na✝² : Function.Injective f✝\na✝¹ : Function.Injective g✝\na₁✝ a₂✝ : ℕ\na✝ : f✝ (g✝ a₁✝) = f✝ (g✝ a₂✝)\n⊢ a₁✝ = a₂✝"
+      },
+      {
+        "action": "standard_omega",
+        "status": "failed",
+        "error": "/workspace/proof-carrying-science/.lake/pcs-prover/mathlib-request-hld3pqax/Request.lean:9:2: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  c ≥ 0\n  b ≥ 0\n  b - c ≥ 1\n  a ≥ 0\nwhere\n a := ↑((f✝ ∘ g✝) a₂✝)\n b := ↑a₂✝\n c := ↑a₁✝"
+      },
+      {
+        "action": "standard_aesop",
+        "status": "verified"
+      }
+    ],
+    "cost": {
+      "physical_lean_calls": 5,
+      "retrieval_seconds": 0.1393472629997632,
+      "wall_seconds": 26.55357304900008
+    },
+    "pcs_scientific_authority": false
+  }
+}
