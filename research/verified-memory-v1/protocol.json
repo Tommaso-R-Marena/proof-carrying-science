@@ -1,0 +1,40 @@
+{
+  "format": "pcs-verified-memory-protocol-v1",
+  "baseline_commit": "68bac9b0d6e2d04cb16968fdb24e8308473c5485",
+  "tasks_sha256": "f7b9cc28e24384694ef820ec4fc520dfc0b0cc3b2f645962d54d88a89b525dda",
+  "splits": {
+    "train": 10,
+    "utility": 6,
+    "selection": 6,
+    "final": 12
+  },
+  "budget": 96,
+  "beam": 4,
+  "depth": 18,
+  "seeds": [
+    17,
+    31
+  ],
+  "candidate_limit": 24,
+  "memory_capacity": 6,
+  "utility_budget": 64,
+  "epochs": 20,
+  "rl_episodes_per_generation": 8,
+  "generations": 2,
+  "promotion_rule": "Selection solve count must not decrease; break ties by total Lean calls including initial state. Final is evaluated once after all choices freeze. No production authority.",
+  "baselines": [
+    "original_symbolic",
+    "grounded_std_structural",
+    "lexical_retrieval",
+    "all_verified_memory",
+    "selected_memory_structural",
+    "untrained_hybrid",
+    "supervised_hybrid",
+    "rl_generation_1",
+    "rl_generation_2",
+    "bounded_Std_simp_omega_grind"
+  ],
+  "cost_accounting": "Include primitive audit, discovery, falsification, marginal-utility paired searches, model training, evaluation, independent replay and cold construction; dependency install excluded explicitly.",
+  "contamination": "No reference proofs in tasks; shared primitive laws explicit. Final goals/solutions never enter labels, retrieval library admission or checkpoint selection. Exact alpha-equivalent evaluation lemmas excluded.",
+  "claim": "Public authored mathematical transfer; no prior-art novelty or general mathematical intelligence claim."
+}

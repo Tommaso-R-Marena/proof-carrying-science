@@ -1,0 +1,2236 @@
+[
+  {
+    "id": "length_append",
+    "family": "list_length",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, the length of (xs appended to ys) equals (the length of xs + the length of ys).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "append_assoc",
+    "family": "list_association",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "append",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "zs"
+          }
+        },
+        "right": {
+          "op": "append",
+          "left": {
+            "op": "var",
+            "name": "xs"
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "ys"
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, ((xs appended to ys) appended to zs) equals (xs appended to (ys appended to zs)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "nat_left_cancel",
+    "family": "nat_cancellation",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if (a + b) equals (a + c) then b equals c.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "successor_injective",
+    "family": "nat_injectivity",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "succ",
+            "arg": {
+              "op": "var",
+              "name": "a"
+            }
+          },
+          "right": {
+            "op": "succ",
+            "arg": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a and b, if the successor of a equals the successor of b then a equals b.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "reverse_length",
+    "family": "list_reverse_length",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          }
+        },
+        "right": {
+          "op": "length",
+          "arg": {
+            "op": "var",
+            "name": "xs"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, the length of (the reversal of xs) equals the length of xs.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "reverse_append",
+    "family": "list_reverse_append",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "reverse",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        },
+        "right": {
+          "op": "append",
+          "left": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          },
+          "right": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, the reversal of (xs appended to ys) equals ((the reversal of ys) appended to (the reversal of xs)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "nat_distribution",
+    "family": "nat_distributivity",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "mul",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          },
+          "right": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, a * (b + c) equals ((a * b) + (a * c)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "logical_rule",
+    "family": "logic_transitivity",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        },
+        {
+          "name": "R",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "implies",
+            "left": {
+              "op": "var",
+              "name": "P"
+            },
+            "right": {
+              "op": "var",
+              "name": "Q"
+            }
+          },
+          "right": {
+            "op": "implies",
+            "left": {
+              "op": "var",
+              "name": "Q"
+            },
+            "right": {
+              "op": "var",
+              "name": "R"
+            }
+          }
+        },
+        "right": {
+          "op": "implies",
+          "left": {
+            "op": "var",
+            "name": "P"
+          },
+          "right": {
+            "op": "var",
+            "name": "R"
+          }
+        }
+      }
+    },
+    "original_statement": "For all propositions P, Q and R, if ((P implies Q) and (Q implies R)) then (P implies R).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "nat_order_cancel",
+    "family": "nat_order_cancellation",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "le",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "le",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if (a + c) \u2264 (b + c) then a \u2264 b.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "list_right_cancel",
+    "family": "list_cancellation",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "ys"
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "xs"
+          },
+          "right": {
+            "op": "var",
+            "name": "ys"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, if (xs appended to zs) equals (ys appended to zs) then xs equals ys.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "reverse_append_length",
+    "family": "reverse_append_size",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "reverse",
+            "arg": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, the length of (the reversal of (xs appended to ys)) equals (the length of xs + the length of ys).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "triple_append_length",
+    "family": "triple_size",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, the length of ((xs appended to ys) appended to zs) equals ((the length of xs + the length of ys) + the length of zs).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "cancel_successors",
+    "family": "cancel_constructor",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "b"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "c"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if (a + the successor of b) equals (a + the successor of c) then b equals c.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "context_distribution",
+    "family": "distribution_context",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "succ",
+          "arg": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "succ",
+          "arg": {
+            "op": "add",
+            "left": {
+              "op": "mul",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "b"
+              }
+            },
+            "right": {
+              "op": "mul",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, the successor of (a * (b + c)) equals the successor of ((a * b) + (a * c)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "order_successors",
+    "family": "order_constructor",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "le",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "a"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "b"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "le",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if (the successor of a + c) \u2264 (the successor of b + c) then a \u2264 b.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "reverse_append_cancel",
+    "family": "reverse_list_cancel",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "xs"
+          },
+          "right": {
+            "op": "var",
+            "name": "ys"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, if ((the reversal of xs) appended to zs) equals ((the reversal of ys) appended to zs) then xs equals ys.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "double_reverse_append_size",
+    "family": "nested_reverse_size",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "reverse",
+            "arg": {
+              "op": "reverse",
+              "arg": {
+                "op": "append",
+                "left": {
+                  "op": "var",
+                  "name": "xs"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "ys"
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "xs"
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, the length of (the reversal of (the reversal of (xs appended to ys))) equals (the length of xs + the length of ys).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "cancel_rule_chain",
+    "family": "cancellation_chain",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "b"
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "eq",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "number",
+            "value": 0,
+            "type": "Nat"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if ((a + b) equals (a + c) and (b equals 0)) then c equals 0.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "associated_reverse",
+    "family": "reverse_association",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "reverse",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        },
+        "right": {
+          "op": "append",
+          "left": {
+            "op": "reverse",
+            "arg": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys and zs, the reversal of ((xs appended to ys) appended to zs) equals ((the reversal of zs) appended to ((the reversal of ys) appended to (the reversal of xs))).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "order_rule_chain",
+    "family": "order_cancellation_chain",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "le",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "le",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "var",
+              "name": "a"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if (((a + c) \u2264 (b + c)) and (b \u2264 a)) then a equals b.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "false_size",
+    "family": "negative_size",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "var",
+            "name": "xs"
+          }
+        },
+        "right": {
+          "op": "number",
+          "value": 0,
+          "type": "Nat"
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, the length of xs equals 0.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "false_nat",
+    "family": "negative_successor",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "succ",
+          "arg": {
+            "op": "var",
+            "name": "n"
+          }
+        },
+        "right": {
+          "op": "var",
+          "name": "n"
+        }
+      }
+    },
+    "original_statement": "For all natural numbers n, the successor of n equals n.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "reverse_size_bundle",
+    "family": "final_reversed_size_bundle",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "and",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "reverse",
+              "arg": {
+                "op": "append",
+                "left": {
+                  "op": "var",
+                  "name": "xs"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "ys"
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "reverse",
+            "arg": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "ys"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, ((the length of (the reversal of (xs appended to ys)) equals (the length of xs + the length of ys)) and (the reversal of (the reversal of ys) equals ys)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "four_train_length",
+    "family": "final_four_train_size",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        },
+        {
+          "name": "ws",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "length",
+          "arg": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "zs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ws"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ys"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "zs"
+              }
+            },
+            "right": {
+              "op": "length",
+              "arg": {
+                "op": "var",
+                "name": "ws"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys, zs and ws, the length of ((xs appended to ys) appended to (zs appended to ws)) equals ((the length of xs + the length of ys) + (the length of zs + the length of ws)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "cancel_under_function",
+    "family": "final_cancellation_function",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "forall",
+        "name": "a",
+        "type": "Nat",
+        "body": {
+          "op": "forall",
+          "name": "b",
+          "type": "Nat",
+          "body": {
+            "op": "forall",
+            "name": "c",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "eq",
+                "left": {
+                  "op": "add",
+                  "left": {
+                    "op": "var",
+                    "name": "a"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "b"
+                  }
+                },
+                "right": {
+                  "op": "add",
+                  "left": {
+                    "op": "var",
+                    "name": "a"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "c"
+                  }
+                }
+              },
+              "right": {
+                "op": "eq",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "b"
+                  }
+                },
+                "right": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "c"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, (\u2200 (a : Nat), \u2200 (b : Nat), \u2200 (c : Nat), ((a + b) equals (a + c)) implies (f(b) equals f(c))).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "two_cancel_chain",
+    "family": "final_nested_cancellation",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        },
+        {
+          "name": "d",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "d"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "c"
+          },
+          "right": {
+            "op": "var",
+            "name": "d"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b, c and d, if (a + (b + c)) equals (a + (b + d)) then c equals d.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "reverse_length_transport",
+    "family": "final_reverse_length_transport",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "xs"
+          },
+          "right": {
+            "op": "var",
+            "name": "ys"
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "reverse",
+              "arg": {
+                "op": "var",
+                "name": "xs"
+              }
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "var",
+              "name": "ys"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, if xs equals ys then the length of (the reversal of xs) equals the length of ys.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "list_double_cancel",
+    "family": "final_nested_list_cancellation",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        },
+        {
+          "name": "ws",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ws"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "ys"
+          },
+          "right": {
+            "op": "var",
+            "name": "ws"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, ys, zs and ws, if ((xs appended to ys) appended to zs) equals ((xs appended to ws) appended to zs) then ys equals ws.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "double_distribution",
+    "family": "final_two_distributive_contexts",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        },
+        {
+          "name": "d",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "mul",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "d"
+            }
+          }
+        },
+        "right": {
+          "op": "add",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "mul",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "b"
+              }
+            },
+            "right": {
+              "op": "mul",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "d"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b, c and d, a * ((b + c) + d) equals (((a * b) + (a * c)) + (a * d)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "order_succ_cancel",
+    "family": "final_order_two_constructors",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "le",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "succ",
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "a"
+                }
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "succ",
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "b"
+                }
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "c"
+            }
+          }
+        },
+        "right": {
+          "op": "le",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a, b and c, if (the successor of (the successor of a) + c) \u2264 (the successor of (the successor of b) + c) then a \u2264 b.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "predicate_cancel",
+    "family": "final_predicate_transport",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "forall",
+        "name": "a",
+        "type": "Nat",
+        "body": {
+          "op": "forall",
+          "name": "b",
+          "type": "Nat",
+          "body": {
+            "op": "forall",
+            "name": "c",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "and",
+                "left": {
+                  "op": "eq",
+                  "left": {
+                    "op": "add",
+                    "left": {
+                      "op": "var",
+                      "name": "a"
+                    },
+                    "right": {
+                      "op": "var",
+                      "name": "b"
+                    }
+                  },
+                  "right": {
+                    "op": "add",
+                    "left": {
+                      "op": "var",
+                      "name": "a"
+                    },
+                    "right": {
+                      "op": "var",
+                      "name": "c"
+                    }
+                  }
+                },
+                "right": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "P"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "b"
+                  }
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "c"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all predicates on natural numbers P, (\u2200 (a : Nat), \u2200 (b : Nat), \u2200 (c : Nat), (((a + b) equals (a + c)) and P(b)) implies P(c)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "empty_suffix",
+    "family": "final_list_empty_suffix",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "var",
+              "name": "ys"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "xs"
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "ys"
+          },
+          "right": {
+            "op": "nil"
+          }
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs and ys, if (xs appended to ys) equals xs then ys equals the empty list.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "false_reverse",
+    "family": "final_negative_reversal",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "reverse",
+          "arg": {
+            "op": "var",
+            "name": "xs"
+          }
+        },
+        "right": {
+          "op": "var",
+          "name": "xs"
+        }
+      }
+    },
+    "original_statement": "For all lists of natural numbers xs, the reversal of xs equals xs.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "false_order",
+    "family": "final_negative_order",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "le",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        },
+        "right": {
+          "op": "le",
+          "left": {
+            "op": "var",
+            "name": "b"
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      }
+    },
+    "original_statement": "For all natural numbers a and b, if a \u2264 b then b \u2264 a.",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  }
+]
