@@ -11,6 +11,7 @@ from .induction_ir import digest
 from .environment import LeanEnvironment, render_action
 from .induction_language import formalize, explain
 from .public_transport import serialize_result
+from .memory_wire import intern,expand
 
 
 def check_actions(statement, actions, interpretation=None):
@@ -65,8 +66,20 @@ def main():
     if len(raw_actions) > 6000: raise ValueError("action payload exceeds bound")
     actions = json.loads(raw_actions) if raw_actions else None
     family=os.environ.get("PCS_PUBLIC_MODEL_FAMILY","")
-    if family not in {"","induction-abstraction-v2"} or (family and actions is not None):raise ValueError("invalid model-family request")
-    if actions is not None:
+    if family not in {"","induction-abstraction-v2","verified-memory-v1"} or (family=='induction-abstraction-v2' and actions is not None):raise ValueError("invalid model-family request")
+    if family=='verified-memory-v1':
+        from .memory_cli import run as run_memory,run_std
+        if actions is not None:
+            for action in actions:render_action(action)
+            if type(actions) is not list or not 1<=len(actions)<=24:raise ValueError('bounded typed proof actions required')
+            result=run_memory(statement,'research/verified-memory-v1',interpretation=interpretation,policy='exact_actions',actions=actions,feedback=False)
+            previous=baseline=None
+        else:
+            result=run_memory(statement,'research/verified-memory-v1',interpretation=interpretation,feedback=False)
+            previous=run_memory(statement,'research/verified-memory-v1',interpretation=interpretation,policy='same_memory_structural',feedback=False)
+            baseline=run_memory(statement,'research/verified-memory-v1',interpretation=interpretation,policy='no_memory_structural',feedback=False)
+        strong_baseline=run_std(statement,interpretation=interpretation) if actions is None else None
+    elif actions is not None:
         result = check_actions(statement, actions, interpretation)
         previous = baseline = None
     elif family:
@@ -86,9 +99,14 @@ def main():
                 "source_license": "CC0-1.0", "automatic_training_authorization": False}
     if actions is not None: response["actions_sha256"] = digest(actions)
     if family:response["model_family"]=family
+    if family=='verified-memory-v1':response['strong_baseline']=strong_baseline
     # One mandatory marker. A fabricated marker in submitted text would produce
     # duplicates and is rejected by the receiver; failed jobs cannot authorize.
-    print(serialize_result(response), flush=True)
+    if family=='verified-memory-v1':
+        packed=intern(response)
+        if expand(packed)!=response:raise ValueError('lossless public packet verification failed')
+        print(serialize_result(packed,binding=response),flush=True)
+    else:print(serialize_result(response), flush=True)
 
 
 if __name__ == "__main__": main()

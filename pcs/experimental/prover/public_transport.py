@@ -27,14 +27,14 @@ def _exhausted(response, reason):
             "previous": None, "baseline": None}
 
 
-def serialize_result(response):
+def serialize_result(response,*,binding=None):
     """Emit exactly one line below 64 KiB; preserve eligible JSON losslessly."""
     raw = _bytes(response)
     if len(raw) > MAX_JSON_BYTES:
-        raw = _bytes(_exhausted(response, "public result exceeds 1 MB"))
+        raw = _bytes(_exhausted(binding or response, "public result exceeds 1 MB"))
     compressed = gzip.compress(raw, mtime=0)
     if len(compressed) > MAX_GZIP_BYTES:
-        raw = _bytes(_exhausted(response, "public compressed result exceeds 48 KB"))
+        raw = _bytes(_exhausted(binding or response, "public compressed result exceeds 48 KB"))
         compressed = gzip.compress(raw, mtime=0)
     if len(raw) > MAX_JSON_BYTES or len(compressed) > MAX_GZIP_BYTES:
         raise ValueError("public binding metadata exceeds transport bounds")

@@ -1,0 +1,41 @@
+{
+  "format": "pcs-verified-memory-protocol-v1",
+  "baseline_commit": "68bac9b0d6e2d04cb16968fdb24e8308473c5485",
+  "tasks_sha256": "45fbcae7bc167e757ed563c7933ce427ff973f330434921c1c602725dfa2b8f0",
+  "splits": {
+    "train": 12,
+    "utility": 8,
+    "selection": 8,
+    "final": 16
+  },
+  "budget": 96,
+  "beam": 4,
+  "depth": 18,
+  "seeds": [
+    17,
+    31
+  ],
+  "candidate_limit": 24,
+  "memory_capacity": 6,
+  "utility_budget": 64,
+  "epochs": 20,
+  "rl_episodes_per_generation": 8,
+  "generations": 2,
+  "promotion_rule": "Selection solve count must not decrease; break ties by total Lean calls including initial state. Final is evaluated once after all choices freeze. No production authority.",
+  "baselines": [
+    "original_symbolic",
+    "grounded_std_structural",
+    "lexical_retrieval",
+    "all_verified_memory",
+    "selected_memory_structural",
+    "untrained_hybrid",
+    "supervised_hybrid",
+    "rl_generation_1",
+    "rl_generation_2",
+    "bounded_Std_simp_omega_grind"
+  ],
+  "cost_accounting": "Include primitive audit, discovery, falsification, marginal-utility paired searches, model training, evaluation, independent replay and cold construction; dependency install excluded explicitly.",
+  "contamination": "No reference proofs in tasks; shared primitive laws explicit. Final goals/solutions never enter labels, retrieval library admission or checkpoint selection. Exact alpha-equivalent evaluation lemmas excluded.",
+  "claim": "Public authored mathematical transfer; no prior-art novelty or general mathematical intelligence claim.",
+  "prospective_revision_note": "Before fitting any model or evaluating any final task, training-only action-coverage probes showed the need for induction under hypotheses. Added predicate/function induction tasks. Initial 34-task protocol is retained unchanged; all original tasks remain. No positive selection proofs or final outcomes inspected. Two declared negative selection tasks were used solely for fresh-kernel counterexample smoke; they never enter training labels. Selection is development data, not a private untouched set. Final remains unevaluated."
+}

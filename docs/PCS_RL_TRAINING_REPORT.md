@@ -19,3 +19,12 @@ Checked-reuse V1 adds 36 actual sequential actor-critic episodes (129 environmen
 See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
 
 V2 executes 32 sequential actor–critic episodes across two seeds/two generations, up to ten actions, including 24 verified training proofs. Rewards derive from checker transitions and terminal immutable-goal verification. All generations solve 4/8 final tasks: real weight updates, no measured solve-rate improvement.
+
+
+## Verified Memory v1, October 12, 2026
+
+Verified-memory v1 executed 32 real sequential actor–critic episodes across two seeds and two generations, with multi-step seven/eight-action episodes and verifier-derived rewards. All four generations changed weights. The first eight ordered tasks supply RL; appended predicate/function tasks supply imitation/memory data. No policy improvement is inferred from weight changes.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

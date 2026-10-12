@@ -35,6 +35,9 @@ def replay_receipt(env, goal, receipt):
         raise ValueError("receipt library generation mismatch")
     if fresh["proof"] != receipt.get("proof") or fresh["adapter_sha256"] != receipt.get("adapter_sha256") or fresh["lean"] != receipt.get("lean"):
         raise ValueError("receipt provenance or source mismatch")
+    if fresh.get('environment')=='pcs-grounded-memory-v1':
+        for name in ['environment','primitive_catalog_sha256','memory_source_sha256','library_declarations']:
+            if fresh[name]!=receipt.get(name):raise ValueError('memory receipt provenance mismatch')
     return fresh
 
 

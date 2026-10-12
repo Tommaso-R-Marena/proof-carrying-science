@@ -19,3 +19,12 @@ New actual Lean tests cover Nat/Int order chains and antisymmetry, quantified fu
 See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
 
 Eight prospective authored composition tasks span list induction, Nat successor, equality and logical transfer, with semantic alpha-duplicate guards. Three actual Std held-out declaration probes are unknown for both policies; broader external-project/Mathlib competence remains unsolved. Shared primitive laws and public evaluation are explicit limitations.
+
+
+## Verified Memory v1, October 12, 2026
+
+The prospective 44-task suite separates 12 train, eight utility, eight selection and 16 final tasks; exact alpha duplicates are excluded from admission. Two negative development smoke exposures and the unused utility-budget field are disclosed. Final remains separate from model/memory selection. This public authored suite is not an external/private benchmark.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

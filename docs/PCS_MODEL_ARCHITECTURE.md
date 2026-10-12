@@ -19,3 +19,12 @@ ReuseNetwork adds 1,201 trainable goal/premise matching parameters to the existi
 See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
 
 GroundedNetwork has 12,924 parameters, trainable message/update layers, binding edges, selected local/global premise attention, policy/value/uncertainty heads and checker-response training. Bag and ungrounded ablations solve the same 4/8; structural superiority remains unestablished.
+
+
+## Verified Memory v1, October 12, 2026
+
+MemoryNetwork adds a learned verifier-cost head to grounded trainable term/context graphs and a bounded residual over structural action ranking. Graph weights changed through real utility and imitation gradients; bag, untrained, supervised and successive RL checkpoints are retained. Neural ranking did not beat same-memory structural search.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

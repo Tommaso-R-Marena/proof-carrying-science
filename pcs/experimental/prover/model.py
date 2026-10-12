@@ -133,9 +133,10 @@ class ReasoningNetwork(nn.Module):
         return model
 
 
-def imitate(model, episodes, epochs=40, seed=17, candidate_provider=candidates):
-    torch.manual_seed(seed)
-    opt = torch.optim.Adam(model.parameters(), lr=.008)
+def imitate(model, episodes, epochs=40, seed=17, candidate_provider=candidates, *, optimizer=None, resume=False):
+    if not resume:torch.manual_seed(seed)
+    elif optimizer is None:raise ValueError('resumed imitation requires restored optimizer and RNG state')
+    opt = optimizer if optimizer is not None else torch.optim.Adam(model.parameters(), lr=.008)
     examples = []
     for episode in episodes:
         if episode["split"] != "train" or episode["result"]["status"] != "verified":

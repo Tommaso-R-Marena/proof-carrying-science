@@ -90,11 +90,12 @@ class LibraryEnvironment(LeanEnvironment):
         library = deepcopy(validate_library(deepcopy(library), heldout))
         self._library_json = json.dumps(library, sort_keys=True, separators=(",", ":"))
         self.library_sha256 = digest(library)
-        self._declarations = ""
+        self._declarations = self._initial_declarations()
         self.catalog = []
         self._compiled = False
         super().__init__(**kwargs)
         try:
+            self.catalog.extend(self._initial_catalog())
             for i, entry in enumerate(library["entries"]):
                 name = f"{PREFIX}{i}"
                 proof = "\n".join("  " + render_action(a) for a in entry["actions"])
@@ -109,7 +110,7 @@ class LibraryEnvironment(LeanEnvironment):
             # Compile once after every entry was independently audited. Requests
             # import this fixed module instead of elaborating the same proofs
             # repeatedly. No producer-supplied olean is ever loaded.
-            self._module_dir = self.cache / ("reuse-" + self.library_sha256)
+            self._module_dir = self.cache / ("reuse-" + self._cache_identity())
             self._module_dir.mkdir(exist_ok=True)
             self._module_source = self._module_dir / "PCSReuseActive.lean"
             self._module_olean = self._module_dir / "PCSReuseActive.olean"
@@ -135,6 +136,15 @@ class LibraryEnvironment(LeanEnvironment):
     @property
     def library(self):
         return json.loads(self._library_json)
+
+    def _initial_declarations(self):
+        return ""
+
+    def _initial_catalog(self):
+        return []
+
+    def _cache_identity(self):
+        return self.library_sha256
 
     def _source(self, text, prefix):
         if not self._compiled:
