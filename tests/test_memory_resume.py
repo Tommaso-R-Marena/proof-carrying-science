@@ -1,7 +1,11 @@
 """Actual Lean-labelled training interrupted at an epoch boundary and resumed."""
 import copy,gzip,hashlib,json
 from pathlib import Path
-import pytest,torch
+import pytest,os
+if os.environ.get("PCS_REQUIRE_PROVER")=="1":
+    import torch
+else:
+    torch=pytest.importorskip("torch",reason="CPU research extra; mandatory in lean-learning-loop CI")
 from pcs.experimental.prover.memory_cli import load as load_model
 from pcs.experimental.prover.memory_environment import MemoryEnvironment
 from pcs.experimental.prover.memory_resume import save,load

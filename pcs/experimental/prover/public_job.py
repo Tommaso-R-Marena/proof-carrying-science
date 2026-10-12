@@ -11,7 +11,6 @@ from .induction_ir import digest
 from .environment import LeanEnvironment, render_action
 from .induction_language import formalize, explain
 from .public_transport import serialize_result
-from .memory_cli import run as run_memory,run_std
 from .memory_wire import intern,expand
 
 
@@ -69,6 +68,7 @@ def main():
     family=os.environ.get("PCS_PUBLIC_MODEL_FAMILY","")
     if family not in {"","induction-abstraction-v2","verified-memory-v1"} or (family=='induction-abstraction-v2' and actions is not None):raise ValueError("invalid model-family request")
     if family=='verified-memory-v1':
+        from .memory_cli import run as run_memory,run_std
         if actions is not None:
             for action in actions:render_action(action)
             if type(actions) is not list or not 1<=len(actions)<=24:raise ValueError('bounded typed proof actions required')

@@ -1,6 +1,6 @@
 """Lossless bounded-buffer artifact recording; no full-run JSON allocation."""
 import gzip,json
-from pcs.experimental.prover.memory_experiment import write
+from pcs.experimental.prover.memory_recording import write
 
 def test_streamed_recording_preserves_complete_json_and_stable_compression(tmp_path):
     large={'states':[{'goal':'∀ n, n = n','typed':{'children':list(range(30))},'index':i} for i in range(6000)]}
