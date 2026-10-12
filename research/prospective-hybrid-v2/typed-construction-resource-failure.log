@@ -1,0 +1,47 @@
+{"task": "utility-cancel-chain", "mode": "symbolic", "status": "unknown"}
+{"task": "utility-cancel-chain", "mode": "memory_structural", "status": "unknown"}
+{"task": "utility-cancel-chain", "mode": "memory_learned", "status": "unknown"}
+{"task": "utility-cancel-chain", "mode": "Std", "status": "verified"}
+{"task": "utility-cancel-chain", "mode": "hybrid", "status": "verified"}
+{"task": "utility-reverse-congruence", "mode": "symbolic", "status": "verified"}
+{"task": "utility-reverse-congruence", "mode": "memory_structural", "status": "verified"}
+{"task": "utility-reverse-congruence", "mode": "memory_learned", "status": "verified"}
+{"task": "utility-reverse-congruence", "mode": "Std", "status": "verified"}
+{"task": "utility-reverse-congruence", "mode": "hybrid", "status": "verified"}
+{"task": "utility-successor-double", "mode": "symbolic", "status": "unknown"}
+{"task": "utility-successor-double", "mode": "memory_structural", "status": "unknown"}
+{"task": "utility-successor-double", "mode": "memory_learned", "status": "unknown"}
+{"task": "utility-successor-double", "mode": "Std", "status": "verified"}
+{"task": "utility-successor-double", "mode": "hybrid", "status": "verified"}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py", line 169, in <module>
+    main()
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py", line 165, in main
+    evaluate(args.folder, kind=args.kind)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py", line 111, in evaluate
+    env = MeasuredInductionEnvironment(timeout=30) if mode == "Std" else MeasuredMemoryEnvironment(library if mode != "symbolic" else None, timeout=30)
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/memory_cost.py", line 15, in __init__
+    super().__init__(*args,**kwargs)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/memory_environment.py", line 187, in __init__
+    super().__init__(library,heldout=heldout,**kwargs)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/library.py", line 98, in __init__
+    self.catalog.extend(self._initial_catalog())
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/memory_environment.py", line 197, in _initial_catalog
+    audit=self._source(f'#pcs_audit {p["name"]}\n','PCS_KERNEL:')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/library.py", line 151, in _source
+    result = super()._source(self._declarations + text, prefix)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/environment.py", line 359, in _source
+    raw = self._run([str(p)])
+          ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/memory_cost.py", line 19, in _run
+    try:return super()._run(arguments,build=build)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/environment.py", line 343, in _run
+    raise RuntimeError("Lean resource exhaustion") from None
+RuntimeError: Lean resource exhaustion

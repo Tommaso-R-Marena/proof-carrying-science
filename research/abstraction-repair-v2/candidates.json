@@ -1,0 +1,320 @@
+[
+  {
+    "id": "shared-offset-cancellation",
+    "source_statements": [
+      "For all natural numbers a, b and c, if (a + (0 + c)) equals (b + (0 + c)) then a equals b.",
+      "For all natural numbers a, b and c, if (a + (1 + c)) equals (b + (1 + c)) then a equals b."
+    ],
+    "source_goals": [
+      {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          },
+          {
+            "name": "b",
+            "type": "Nat"
+          },
+          {
+            "name": "c",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "c"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "c"
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "eq",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        }
+      },
+      {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          },
+          {
+            "name": "b",
+            "type": "Nat"
+          },
+          {
+            "name": "c",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "a"
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "number",
+                  "value": 1,
+                  "type": "Nat"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "c"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "b"
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "number",
+                  "value": 1,
+                  "type": "Nat"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "c"
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "eq",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "var",
+              "name": "b"
+            }
+          }
+        }
+      }
+    ],
+    "candidate": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        },
+        {
+          "name": "w0",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "w0"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          },
+          "right": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "b"
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "w0"
+              },
+              "right": {
+                "op": "var",
+                "name": "c"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "eq",
+          "left": {
+            "op": "var",
+            "name": "a"
+          },
+          "right": {
+            "op": "var",
+            "name": "b"
+          }
+        }
+      }
+    },
+    "source_license": "CC0-1.0"
+  },
+  {
+    "id": "invalid-identity-generalization",
+    "source_statements": [
+      "For all natural numbers a, (a + 0) equals a.",
+      "For all natural numbers a, (a * 1) equals a."
+    ],
+    "source_goals": [
+      {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      },
+      {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "a",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "mul",
+            "left": {
+              "op": "var",
+              "name": "a"
+            },
+            "right": {
+              "op": "number",
+              "value": 1,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "var",
+            "name": "a"
+          }
+        }
+      }
+    ],
+    "candidate": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "w0",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "op": "eq",
+        "left": {
+          "op": "var",
+          "name": "w0"
+        },
+        "right": {
+          "op": "var",
+          "name": "a"
+        }
+      }
+    },
+    "source_license": "CC0-1.0"
+  }
+]

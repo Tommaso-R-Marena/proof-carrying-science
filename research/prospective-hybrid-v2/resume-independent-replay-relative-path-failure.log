@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathematical_evidence.py", line 168, in <module>
+    report = replay_sample(args.folder) if args.replay else audit(args.folder)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathematical_evidence.py", line 150, in replay_sample
+    fresh = replay_memory_receipt(task["goal"], result["receipt"], cache=folder / "replay-cache")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/memory_environment.py", line 257, in replay_memory_receipt
+    env=MemoryEnvironment(receipt['library'],heldout=heldout,cache=cache,timeout=30)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/memory_environment.py", line 187, in __init__
+    super().__init__(library,heldout=heldout,**kwargs)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/library.py", line 96, in __init__
+    super().__init__(**kwargs)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/environment.py", line 262, in __init__
+    self._run(["-o", str(compiled), str(SOURCE)], build=True)
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/environment.py", line 347, in _run
+    raise RuntimeError((result.stdout + result.stderr)[-4000:])
+RuntimeError: failed to write 'research/prospective-hybrid-v2/replay-cache/PCSProofProbe.olean': failed to create file 'research/prospective-hybrid-v2/replay-cache/PCSProofProbe.olean'
+

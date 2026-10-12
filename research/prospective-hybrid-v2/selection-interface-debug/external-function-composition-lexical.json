@@ -1,0 +1,138 @@
+{
+  "task": {
+    "id": "external-function-composition",
+    "split": "selection",
+    "statement": "∀ (f g : Nat → Nat), Function.Injective f → Function.Injective g → Function.Injective (f ∘ g)",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  "mode": "lexical",
+  "result": {
+    "status": "unknown",
+    "receipt": null,
+    "mode": "lexical",
+    "retrieved": [
+      {
+        "name": "Function.Injective.bijective₂_of_surjective",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.comp",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.comp_injOn",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.extend_apply",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.extend_comp",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.factorsThrough",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.injOn_range",
+        "score": 4
+      },
+      {
+        "name": "Function.Injective.leftInverse",
+        "score": 4
+      }
+    ],
+    "attempts": [
+      {
+        "action": "Function.Injective.bijective₂_of_surjective:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.bijective₂_of_surjective:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.comp:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.comp:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.comp_injOn:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.comp_injOn:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.extend_apply:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.extend_apply:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.extend_comp:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.extend_comp:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.factorsThrough:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.factorsThrough:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.injOn_range:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.injOn_range:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.leftInverse:apply",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "Function.Injective.leftInverse:rewrite",
+        "status": "failed",
+        "error": "ren\":[],\"kind\":\"constant\",\"value\":\"Function.Injective:[1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Function.comp:[1, 1, 1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"g\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      }
+    ],
+    "cost": {
+      "physical_lean_calls": 17,
+      "retrieval_seconds": 0.008148665000135225,
+      "wall_seconds": 57.47436237000011
+    },
+    "pcs_scientific_authority": false
+  }
+}
