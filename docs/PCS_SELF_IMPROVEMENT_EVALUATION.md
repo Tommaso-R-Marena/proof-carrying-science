@@ -19,3 +19,12 @@ Verified feedback refinement prioritizes failures solved independently, freezes 
 See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
 
 V1 is retained as a negative result. V2 freezes new validation/final compositions before training and selects supervised graph-17 by validation; it improves over its untrained model on the same final set but not over symbolic search. No paired cross-generation improvement is inferred from different v1/v2 final sets. Explicit new feedback updates a candidate without promotion or an unperformed held-out claim.
+
+
+## Verified Memory v1, October 12, 2026
+
+Utility calibration, supervised fitting, two RL generations, development selection and one final evaluation were actually run under the frozen protocol. The post-training licensed feedback update creates a separate candidate and leaves active registry/evaluator untouched. Neither retraining nor final-regressed models are claimed to self-improve.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

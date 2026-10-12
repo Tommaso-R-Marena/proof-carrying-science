@@ -27,3 +27,12 @@ LibraryEnvironment reconstructs typed proofs, audits axioms, compiles a fixed so
 See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
 
 Typed induct_nat/induct_list retain both actual goals, with explicitly named induction hypotheses. Controlled normalize and backwards rewrite are isolated actions. InductionEnvironment opts into the extended action space while preserving prior model dimensions and legacy defaults; AbstractionEnvironment admits only fixed independently checked lemmas. No arbitrary shell actions or goal mutation are supported.
+
+
+## Verified Memory v1, October 12, 2026
+
+MemoryEnvironment independently audits 13 source-grounded Std aliases and checked memory, exports structured goal/local/premise states, permits typed induction under hypotheses and backward equalities, and requires fresh kernel verification. MeasuredMemoryEnvironment counts compiler and worker attempts including rejected/failed calls.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

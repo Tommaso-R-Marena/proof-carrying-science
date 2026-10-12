@@ -175,3 +175,12 @@ Donation requires a verified account, adult confirmation and CC0 research/traini
 Reproduction and release checks: `python scripts/check_induction_evidence.py`, `python scripts/check_abstraction_proofs.py`, `PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py tests/test_checked_reuse.py tests/test_induction_discovery.py tests/test_bridge_data.py`. These extend the existing protected gates; full formal controls, source-policy, portability and integration checks remain required. Website tests additionally replay every catalog edge in Lean, compile browser proof downloads and check four viewport widths. Protected merge and live deployment are distinct obligations until successful checks are recorded.
 
 New list/successor syntax lies outside the earlier Aristotle parser theorem. Controlled English fidelity and round trips are tested, not a proof of unrestricted intent. Induction under arbitrary proof hypotheses, unrestricted nested induction, general Mathlib retrieval, cancellation/reversal lemmas, broad language generation, useful autonomous conjecture discovery, robust active learning and full runtime refinement remain open. Existing Aristotle source-window results and authority boundaries are preserved.
+
+
+## Verified Memory v1, October 12, 2026
+
+A real verified-memory engine, actual 14,773-parameter graph training, two sequential RL generations, public proof/game integration and a six-step post-training function transfer now run. This is a measured narrow component, not fulfillment of unrestricted scientific AI.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

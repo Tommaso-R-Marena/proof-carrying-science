@@ -25,8 +25,9 @@ def anti_unify(left,right):
         if at!=bt:raise ValueError('incompatible abstraction types')
         identity=digest([a,b])
         if identity not in holes:
-            name='w'+str(len(holes))
-            while name in variables:name='w'+str(len(variables))
+            index=len(holes);name='w'+str(index)
+            while name in variables:
+                index+=1;name='w'+str(index)
             holes[identity]=name;variables[name]=at;binders.append({'name':name,'type':at})
         return var(holes[identity])
     result={'format':'pcs-math-ir-v1','binders':binders,'body':merge(left['body'],right['body'])}

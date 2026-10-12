@@ -53,23 +53,33 @@ def intake(catalog, export, *, heldout=(), cache=None):
     if digest({k:v for k,v in catalog.items() if k!="content_sha256"})!=catalog["content_sha256"]: raise ValueError("changed catalog")
     if export.get("format")!="pcs-bridge-consented-export-v1" or export.get("version")!=VERSION or type(export.get("entries")) is not list or len(export["entries"])>25:
         raise ValueError("authorized export envelope required")
-    env=LeanEnvironment(cache=cache,timeout=30);entries=[];negatives=[]
+    if catalog.get('environment')=='pcs-grounded-memory-v1':
+        from .memory_environment import MemoryEnvironment
+        env=MemoryEnvironment(catalog['library'],cache=cache,timeout=30)
+        if env.primitive_catalog_sha256!=catalog['primitive_catalog_sha256']:env.close();raise ValueError('primitive catalog changed')
+    elif catalog.get('environment') is not None:raise ValueError('unsupported checker environment')
+    else:env=LeanEnvironment(cache=cache,timeout=30)
+    entries=[];negatives=[];calibration=[]
     try:
         for record in export["entries"]:
             if record.get("license")!="CC0-1.0" or record.get("adult_consented") is not True or record.get("training_consented") is not True:
                 raise ValueError("explicit adult CC0 research provenance required")
             mission,transitions,receipt,hints=replay_session(env,catalog,record["session"])
+            source_split=catalog.get('dataset_split_by_mission',{}).get(mission['id'],'train')
+            if source_split not in {'train','utility'}:raise ValueError('public game contains evaluation task')
             if structural_fingerprint(mission["goal"]) in {structural_fingerprint(t["goal"]) for t in heldout}:
                 raise ValueError("evaluation contamination")
-            negatives.extend({"source_session_sha256":digest(record["session"]),**t} for t in transitions if t["checker_status"]=="invalid")
+            negatives.extend({"source_session_sha256":digest(record["session"]),'split':source_split,**t} for t in transitions if t["checker_status"]=="invalid")
             if receipt:
                 entry=intake_feedback(env,{"goal":mission["goal"],"receipt":receipt,"original_statement":mission["statement"],"hint_exposure":hints>0},
                     heldout,license="CC0-1.0",source_revision=catalog["core_revision"])
                 entry.update(source="consented Bridge Builder export",source_session_sha256=digest(record["session"]),
                     human_transitions=transitions,automatic_setup_actions=mission["automatic_setup_actions"],
                     consent_boundary="Application-authenticated adult CC0 opt-in; not mathematically proved consent")
-                entries.append(entry)
+                entry['split']=source_split
+                (calibration if source_split=='utility' else entries).append(entry)
         return {"format":"pcs-bridge-kernel-intake-v1","verified_training_examples":entries,
+                "verified_calibration_examples":calibration,
                 "independently_checked_invalid_transitions":negatives,"automatic_training_authorization":False,"pcs_authority":False,
                 "source_catalog_sha256":catalog["content_sha256"],"source_export_sha256":digest(export)}
     finally:env.close()
@@ -80,7 +90,7 @@ def main():
     paths=[Path(a.catalog),Path(a.export),Path(a.heldout)]
     if any(x.stat().st_size>2_000_000 for x in paths): raise ValueError("dataset bound")
     c,e,h=[json.loads(x.read_text()) for x in paths]
-    result=intake(c,e,heldout=[t for t in h if t["split"]!="train"])
+    result=intake(c,e,heldout=[t for t in h if t['split'] in {'selection','final'}] if c.get('environment')=='pcs-grounded-memory-v1' else [t for t in h if t["split"]!="train"])
     Path(a.output).write_text(json.dumps(result,indent=2)+"\n")
 
 

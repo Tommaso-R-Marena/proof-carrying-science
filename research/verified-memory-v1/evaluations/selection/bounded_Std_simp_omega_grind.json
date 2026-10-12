@@ -1,0 +1,2788 @@
+[
+  {
+    "cost": {
+      "all_lean_calls": 1,
+      "lean_seconds": 1.0603467570035718,
+      "wall_seconds": 1.0637162479979452
+    },
+    "family": "nested_reverse_size",
+    "goal": {
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "left": {
+          "arg": {
+            "arg": {
+              "arg": {
+                "left": {
+                  "name": "xs",
+                  "op": "var"
+                },
+                "op": "append",
+                "right": {
+                  "name": "ys",
+                  "op": "var"
+                }
+              },
+              "op": "reverse"
+            },
+            "op": "reverse"
+          },
+          "op": "length"
+        },
+        "op": "eq",
+        "right": {
+          "left": {
+            "arg": {
+              "name": "xs",
+              "op": "var"
+            },
+            "op": "length"
+          },
+          "op": "add",
+          "right": {
+            "arg": {
+              "name": "ys",
+              "op": "var"
+            },
+            "op": "length"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "double_reverse_append_size",
+    "license": "Apache-2.0",
+    "original_statement": "For all lists of natural numbers xs and ys, the length of (the reversal of (the reversal of (xs appended to ys))) equals (the length of xs + the length of ys).",
+    "result": {
+      "attempts": [
+        {
+          "status": "verified",
+          "tactic": "simp_all"
+        }
+      ],
+      "expansions": 1,
+      "receipt": {
+        "format": "pcs-std-baseline-proof-v1",
+        "goal_sha256": "e563c5a641a42ea3e3d12cbe3459aceaa86f218dab998570a60a022306377557",
+        "kernel": {
+          "axioms": [
+            "propext"
+          ],
+          "expression": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "List:[0]"
+                  },
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "Nat:[]"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "List:[0]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "Nat:[]"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "Eq:[1]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "Nat:[]"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "List.length:[0]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "Nat:[]"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "List.reverse:[0]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "List.reverse:[0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "HAppend.hAppend:[0, 0, 0]"
+                                                              },
+                                                              {
+                                                                "children": [
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "List:[0]"
+                                                                  },
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "Nat:[]"
+                                                                  }
+                                                                ],
+                                                                "kind": "application",
+                                                                "value": ""
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "List:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "List:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "instHAppendOfAppend:[0]"
+                                                          },
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "List:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "List.instAppend:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "1"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "HAdd.hAdd:[0, 0, 0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "instHAdd:[0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "instAddNat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "List.length:[0]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "List.length:[0]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "Nat:[]"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "0"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "forall",
+                "value": "ys"
+              }
+            ],
+            "kind": "forall",
+            "value": "xs"
+          },
+          "format": "pcs-lean-kernel-v1"
+        },
+        "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+        "pcs_scientific_authority": false,
+        "proof": "  repeat intro\n  simp_all",
+        "statement": "\u2200 (xs : List Nat) (ys : List Nat), ((List.length (List.reverse (List.reverse (xs ++ ys)))) = ((List.length xs) + (List.length ys)))"
+      },
+      "status": "verified"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 2,
+      "lean_seconds": 1.102215441991575,
+      "wall_seconds": 2.142461176990764
+    },
+    "family": "cancellation_chain",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "b",
+                "op": "var"
+              }
+            },
+            "op": "eq",
+            "right": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "op": "number",
+              "type": "Nat",
+              "value": 0
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "c",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "op": "number",
+            "type": "Nat",
+            "value": 0
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "cancel_rule_chain",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a, b and c, if ((a + b) equals (a + c) and (b equals 0)) then c equals 0.",
+    "result": {
+      "attempts": [
+        {
+          "error": "\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"c\"}],\"kind\":\"forall\",\"value\":\"b\"}],\"kind\":\"forall\",\"value\":\"a\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "simp_all"
+        },
+        {
+          "status": "verified",
+          "tactic": "omega"
+        }
+      ],
+      "expansions": 2,
+      "receipt": {
+        "format": "pcs-std-baseline-proof-v1",
+        "goal_sha256": "9acebfa6a5dfbf6659742ad0e1670ea6c2a41085f0c1e6b3b50c9133a8eacc4f",
+        "kernel": {
+          "axioms": [
+            "propext",
+            "Quot.sound"
+          ],
+          "expression": {
+            "children": [
+              {
+                "children": [],
+                "kind": "constant",
+                "value": "Nat:[]"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "Nat:[]"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "Nat:[]"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Eq:[1]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "HAdd.hAdd:[0, 0, 0]"
+                                                                  },
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "Nat:[]"
+                                                                  }
+                                                                ],
+                                                                "kind": "application",
+                                                                "value": ""
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "instHAdd:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "instAddNat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "bound",
+                                                    "value": "2"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "1"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "HAdd.hAdd:[0, 0, 0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "instHAdd:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "instAddNat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "2"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Eq:[1]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "1"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "OfNat.ofNat:[0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "natural",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "instOfNatNat:[]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "natural",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Eq:[1]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "OfNat.ofNat:[0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "natural",
+                                        "value": "0"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "instOfNatNat:[]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "natural",
+                                        "value": "0"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "forall",
+                        "value": "a._@._internal._hyg.0"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "c"
+                  }
+                ],
+                "kind": "forall",
+                "value": "b"
+              }
+            ],
+            "kind": "forall",
+            "value": "a"
+          },
+          "format": "pcs-lean-kernel-v1"
+        },
+        "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+        "pcs_scientific_authority": false,
+        "proof": "  repeat intro\n  omega",
+        "statement": "\u2200 (a : Nat) (b : Nat) (c : Nat), ((((a + b) = (a + c)) \u2227 (b = (0 : Nat))) \u2192 (c = (0 : Nat)))"
+      },
+      "status": "verified"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 1,
+      "lean_seconds": 0.9834180969919544,
+      "wall_seconds": 0.9842223190062214
+    },
+    "family": "reverse_association",
+    "goal": {
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        },
+        {
+          "name": "zs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "left": {
+          "arg": {
+            "left": {
+              "left": {
+                "name": "xs",
+                "op": "var"
+              },
+              "op": "append",
+              "right": {
+                "name": "ys",
+                "op": "var"
+              }
+            },
+            "op": "append",
+            "right": {
+              "name": "zs",
+              "op": "var"
+            }
+          },
+          "op": "reverse"
+        },
+        "op": "eq",
+        "right": {
+          "left": {
+            "arg": {
+              "name": "zs",
+              "op": "var"
+            },
+            "op": "reverse"
+          },
+          "op": "append",
+          "right": {
+            "left": {
+              "arg": {
+                "name": "ys",
+                "op": "var"
+              },
+              "op": "reverse"
+            },
+            "op": "append",
+            "right": {
+              "arg": {
+                "name": "xs",
+                "op": "var"
+              },
+              "op": "reverse"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "associated_reverse",
+    "license": "Apache-2.0",
+    "original_statement": "For all lists of natural numbers xs, ys and zs, the reversal of ((xs appended to ys) appended to zs) equals ((the reversal of zs) appended to ((the reversal of ys) appended to (the reversal of xs))).",
+    "result": {
+      "attempts": [
+        {
+          "status": "verified",
+          "tactic": "simp_all"
+        }
+      ],
+      "expansions": 1,
+      "receipt": {
+        "format": "pcs-std-baseline-proof-v1",
+        "goal_sha256": "87401826a94007b4e2c503477a37f4c9d2a1b969399e8838062c0cf59b6378fe",
+        "kernel": {
+          "axioms": [
+            "propext"
+          ],
+          "expression": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "List:[0]"
+                  },
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "Nat:[]"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "List:[0]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "Nat:[]"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "List:[0]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "Nat:[]"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "Eq:[1]"
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "List:[0]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "List.reverse:[0]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "HAppend.hAppend:[0, 0, 0]"
+                                                          },
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "List:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "List:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "List:[0]"
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "instHAppendOfAppend:[0]"
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "List:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "List.instAppend:[0]"
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "HAppend.hAppend:[0, 0, 0]"
+                                                                  },
+                                                                  {
+                                                                    "children": [
+                                                                      {
+                                                                        "children": [],
+                                                                        "kind": "constant",
+                                                                        "value": "List:[0]"
+                                                                      },
+                                                                      {
+                                                                        "children": [],
+                                                                        "kind": "constant",
+                                                                        "value": "Nat:[]"
+                                                                      }
+                                                                    ],
+                                                                    "kind": "application",
+                                                                    "value": ""
+                                                                  }
+                                                                ],
+                                                                "kind": "application",
+                                                                "value": ""
+                                                              },
+                                                              {
+                                                                "children": [
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "List:[0]"
+                                                                  },
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "Nat:[]"
+                                                                  }
+                                                                ],
+                                                                "kind": "application",
+                                                                "value": ""
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "List:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "instHAppendOfAppend:[0]"
+                                                              },
+                                                              {
+                                                                "children": [
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "List:[0]"
+                                                                  },
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "Nat:[]"
+                                                                  }
+                                                                ],
+                                                                "kind": "application",
+                                                                "value": ""
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "List.instAppend:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "bound",
+                                                    "value": "2"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "1"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "0"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "HAppend.hAppend:[0, 0, 0]"
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "List:[0]"
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "List:[0]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "List:[0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "instHAppendOfAppend:[0]"
+                                              },
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "List:[0]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "List.instAppend:[0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "List.reverse:[0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "0"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "HAppend.hAppend:[0, 0, 0]"
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "List:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "List:[0]"
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "List:[0]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "instHAppendOfAppend:[0]"
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "List:[0]"
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "List.instAppend:[0]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "List.reverse:[0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "1"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "List.reverse:[0]"
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "Nat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "2"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "zs"
+                  }
+                ],
+                "kind": "forall",
+                "value": "ys"
+              }
+            ],
+            "kind": "forall",
+            "value": "xs"
+          },
+          "format": "pcs-lean-kernel-v1"
+        },
+        "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+        "pcs_scientific_authority": false,
+        "proof": "  repeat intro\n  simp_all",
+        "statement": "\u2200 (xs : List Nat) (ys : List Nat) (zs : List Nat), ((List.reverse ((xs ++ ys) ++ zs)) = ((List.reverse zs) ++ ((List.reverse ys) ++ (List.reverse xs))))"
+      },
+      "status": "verified"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 2,
+      "lean_seconds": 1.0264330850041006,
+      "wall_seconds": 1.975640085991472
+    },
+    "family": "order_cancellation_chain",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "le",
+            "right": {
+              "left": {
+                "name": "b",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "a",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "order_rule_chain",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a, b and c, if (((a + c) \u2264 (b + c)) and (b \u2264 a)) then a equals b.",
+    "result": {
+      "attempts": [
+        {
+          "error": "nd\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"LE.le:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"instLENat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"3\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"c\"}],\"kind\":\"forall\",\"value\":\"b\"}],\"kind\":\"forall\",\"value\":\"a\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "simp_all"
+        },
+        {
+          "status": "verified",
+          "tactic": "omega"
+        }
+      ],
+      "expansions": 2,
+      "receipt": {
+        "format": "pcs-std-baseline-proof-v1",
+        "goal_sha256": "e77bda8215b44e6256a121b3620f2187efd6dc4b91ef8f765bf24bc6c15378b0",
+        "kernel": {
+          "axioms": [
+            "propext",
+            "Quot.sound"
+          ],
+          "expression": {
+            "children": [
+              {
+                "children": [],
+                "kind": "constant",
+                "value": "Nat:[]"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "constant",
+                    "value": "Nat:[]"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "Nat:[]"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "LE.le:[0]"
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "constant",
+                                                    "value": "Nat:[]"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "instLENat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "HAdd.hAdd:[0, 0, 0]"
+                                                                  },
+                                                                  {
+                                                                    "children": [],
+                                                                    "kind": "constant",
+                                                                    "value": "Nat:[]"
+                                                                  }
+                                                                ],
+                                                                "kind": "application",
+                                                                "value": ""
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "instHAdd:[0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "instAddNat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [],
+                                                    "kind": "bound",
+                                                    "value": "2"
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "0"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "HAdd.hAdd:[0, 0, 0]"
+                                                              },
+                                                              {
+                                                                "children": [],
+                                                                "kind": "constant",
+                                                                "value": "Nat:[]"
+                                                              }
+                                                            ],
+                                                            "kind": "application",
+                                                            "value": ""
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "Nat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  },
+                                                  {
+                                                    "children": [
+                                                      {
+                                                        "children": [
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "instHAdd:[0]"
+                                                          },
+                                                          {
+                                                            "children": [],
+                                                            "kind": "constant",
+                                                            "value": "Nat:[]"
+                                                          }
+                                                        ],
+                                                        "kind": "application",
+                                                        "value": ""
+                                                      },
+                                                      {
+                                                        "children": [],
+                                                        "kind": "constant",
+                                                        "value": "instAddNat:[]"
+                                                      }
+                                                    ],
+                                                    "kind": "application",
+                                                    "value": ""
+                                                  }
+                                                ],
+                                                "kind": "application",
+                                                "value": ""
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "bound",
+                                                "value": "1"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "bound",
+                                            "value": "0"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "LE.le:[0]"
+                                              },
+                                              {
+                                                "children": [],
+                                                "kind": "constant",
+                                                "value": "Nat:[]"
+                                              }
+                                            ],
+                                            "kind": "application",
+                                            "value": ""
+                                          },
+                                          {
+                                            "children": [],
+                                            "kind": "constant",
+                                            "value": "instLENat:[]"
+                                          }
+                                        ],
+                                        "kind": "application",
+                                        "value": ""
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "1"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "2"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Eq:[1]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "Nat:[]"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "3"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "2"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "forall",
+                        "value": "a._@._internal._hyg.0"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "c"
+                  }
+                ],
+                "kind": "forall",
+                "value": "b"
+              }
+            ],
+            "kind": "forall",
+            "value": "a"
+          },
+          "format": "pcs-lean-kernel-v1"
+        },
+        "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+        "pcs_scientific_authority": false,
+        "proof": "  repeat intro\n  omega",
+        "statement": "\u2200 (a : Nat) (b : Nat) (c : Nat), ((((a + c) \u2264 (b + c)) \u2227 (b \u2264 a)) \u2192 (a = b))"
+      },
+      "status": "verified"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 3,
+      "lean_seconds": 0.0,
+      "wall_seconds": 3.0633918850217015
+    },
+    "family": "negative_size",
+    "goal": {
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "left": {
+          "arg": {
+            "name": "xs",
+            "op": "var"
+          },
+          "op": "length"
+        },
+        "op": "eq",
+        "right": {
+          "op": "number",
+          "type": "Nat",
+          "value": 0
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "false_size",
+    "license": "Apache-2.0",
+    "original_statement": "For all lists of natural numbers xs, the length of xs equals 0.",
+    "result": {
+      "attempts": [
+        {
+          "error": "children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"List.length:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"xs\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "simp_all"
+        },
+        {
+          "error": "children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"List.length:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"xs\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "omega"
+        },
+        {
+          "error": "children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"List.length:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"xs\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "grind"
+        }
+      ],
+      "expansions": 3,
+      "receipt": null,
+      "status": "unknown"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 3,
+      "lean_seconds": 0.0,
+      "wall_seconds": 2.9750081530073658
+    },
+    "family": "negative_successor",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "arg": {
+            "name": "n",
+            "op": "var"
+          },
+          "op": "succ"
+        },
+        "op": "eq",
+        "right": {
+          "name": "n",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "false_nat",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers n, the successor of n equals n.",
+    "result": {
+      "attempts": [
+        {
+          "error": "/workspace/.onboarding/verified-memory/recovery-cache/selection-bounded_Std_simp_omega_grind/request-6kdjgbcn/Request.lean:4:62: error: unsolved goals\nn\u271d : Nat\n\u22a2 False\nPCS_KERNEL:{\"axioms\":[\"propext\",\"Classical.choice\",\"Quot.sound\",\"sorryAx\"],\"expression\":{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "simp_all"
+        },
+        {
+          "error": "/workspace/.onboarding/verified-memory/recovery-cache/selection-bounded_Std_simp_omega_grind/request-gwsgyorl/Request.lean:6:2: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 0\nwhere\n a := \u2191n\u271d\nPCS_KERNEL:{\"axioms\":[\"sorryAx\"],\"expression\":{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "omega"
+        },
+        {
+          "error": "/workspace/.onboarding/verified-memory/recovery-cache/selection-bounded_Std_simp_omega_grind/request-le_l6dpf/Request.lean:6:2: error: `grind` failed\ncase grind\nn : Nat\n\u22a2 False\n[grind] Goal diagnostics\n  [facts] Asserted facts\nPCS_KERNEL:{\"axioms\":[\"sorryAx\"],\"expression\":{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Eq:[1]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "grind"
+        }
+      ],
+      "expansions": 3,
+      "receipt": null,
+      "status": "unknown"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 3,
+      "lean_seconds": 0.0,
+      "wall_seconds": 3.220549767022021
+    },
+    "family": "predicate_shift",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "arg": {
+              "op": "number",
+              "type": "Nat",
+              "value": 0
+            },
+            "fn": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "apply"
+          },
+          "op": "and",
+          "right": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "k",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "implies",
+              "right": {
+                "arg": {
+                  "arg": {
+                    "name": "k",
+                    "op": "var"
+                  },
+                  "op": "succ"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "name": "k",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "arg": {
+              "arg": {
+                "name": "n",
+                "op": "var"
+              },
+              "op": "succ"
+            },
+            "fn": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "apply"
+          },
+          "name": "n",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "predicate_shift_index",
+    "license": "Apache-2.0",
+    "original_statement": "For all predicates on natural numbers P, if (P(0) and (\u2200 (k : Nat), P(k) implies P(the successor of k))) then (\u2200 (n : Nat), P(the successor of n)).",
+    "result": {
+      "attempts": [
+        {
+          "error": "\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"k\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"P\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "simp_all"
+        },
+        {
+          "error": "\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"k\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"P\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "omega"
+        },
+        {
+          "error": "\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"k\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"P\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "grind"
+        }
+      ],
+      "expansions": 3,
+      "receipt": null,
+      "status": "unknown"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  },
+  {
+    "cost": {
+      "all_lean_calls": 3,
+      "lean_seconds": 0.0,
+      "wall_seconds": 3.2603155309916474
+    },
+    "family": "recurrence_shift",
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "k",
+                  "op": "var"
+                },
+                "op": "succ"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "left": {
+                "arg": {
+                  "name": "k",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Nat",
+                "value": 1
+              }
+            }
+          },
+          "name": "k",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "n",
+                  "op": "var"
+                },
+                "op": "succ"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "left": {
+                "arg": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 0
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "add",
+              "right": {
+                "arg": {
+                  "name": "n",
+                  "op": "var"
+                },
+                "op": "succ"
+              }
+            }
+          },
+          "name": "n",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "function_shift_index",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f, if (\u2200 (k : Nat), f(the successor of k) equals (f(k) + 1)) then (\u2200 (n : Nat), f(the successor of n) equals (f(0) + the successor of n)).",
+    "result": {
+      "attempts": [
+        {
+          "error": "]\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "simp_all"
+        },
+        {
+          "error": "]\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "omega"
+        },
+        {
+          "error": "]\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"},{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"OfNat.ofNat:[0]\"},{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat:[]\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"instOfNatNat:[]\"},{\"children\":[],\"kind\":\"natural\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Nat.succ:[]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"n\"}],\"kind\":\"forall\",\"value\":\"a._@._internal._hyg.0\"}],\"kind\":\"forall\",\"value\":\"f\"},\"format\":\"pcs-lean-kernel-v1\"}\n",
+          "status": "failed",
+          "tactic": "grind"
+        }
+      ],
+      "expansions": 3,
+      "receipt": null,
+      "status": "unknown"
+    },
+    "source": "PCS authored public verified-memory benchmark",
+    "split": "selection"
+  }
+]

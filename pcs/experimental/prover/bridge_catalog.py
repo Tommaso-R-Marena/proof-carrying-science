@@ -23,10 +23,10 @@ def compact(state):
     return {"goals": [{"target": g["target"], "locals": [{"name": l["name"], "type": l["type"]} for l in g["locals"]]} for g in state["goals"]]}
 
 
-def build(output):
+def build(output,*,environment=None,authored_missions=None,filename='bridge-builder-catalog',metadata=None,rank=None,primary_paths=None):
     output = Path(output); output.mkdir(exist_ok=True, parents=True)
-    env = InductionEnvironment(timeout=30)
-    authored = [
+    env = environment or InductionEnvironment(timeout=30)
+    authored = authored_missions or [
         ("tutorial", "First bridge", "Carry a fact through two rules.", "For all propositions A, B and C, if ((A implies B) and (B implies C)) then (A implies C)."),
         ("cargo", "Cargo exchange", "Unpack two facts and deliver them in the opposite order.", "For all propositions A and B, if (A and B) then (B and A)."),
         ("length", "Endless railway", "Prove a rule for every finite train using a shorter train.", tasks()[0]["original_statement"]),
@@ -37,16 +37,22 @@ def build(output):
         "adapter_sha256": env.source_sha, "lean": env.version, "missions": [],
         "boundary": "Archived real Lean transitions and proofs. Browser/Worker graph replay is not a fresh kernel invocation. Fresh checks use the exact path in protected CI.",
         "pcs_authority": False}
+    if metadata:catalog.update(metadata)
     try:
         for identity, title, description, statement in authored:
             goal = formalize(statement)["candidates"][0]["ir"]
-            result = search(env, goal, budget=192, beam=4)
-            if result["status"] != "verified": raise RuntimeError("cannot build checked game "+identity)
-            primary = result["receipt"]["actions"]
+            if primary_paths and identity in primary_paths:
+                primary=primary_paths[identity];env.verify(goal,primary)
+            else:
+                result = search(env, goal, rank, budget=192, beam=4,depth=18)
+                if result["status"] != "verified": raise RuntimeError("cannot build checked game "+identity)
+                primary = result["receipt"]["actions"]
             paths = [primary]
             for i in range(len(primary)):
                 state = env.observe(goal, primary[:i])["states"][-1]
-                options = sorted(env.candidates(state), key=lambda a: -_symbolic_priority(state,a))
+                candidates=env.candidates(state)
+                scores=rank(state,candidates) if rank else [_symbolic_priority(state,a) for a in candidates]
+                options=[a for _,a in sorted(zip(scores,candidates),key=lambda row:-row[0])]
                 for alternative in options[:5]:
                     if alternative == primary[i]: continue
                     path = primary[:i]+[alternative]+primary[i+1:]
@@ -109,8 +115,8 @@ def build(output):
             print(identity,len(nodes),len(receipts),flush=True)
         catalog["content_sha256"] = digest(catalog)
         raw = json.dumps(catalog,ensure_ascii=False,sort_keys=True,separators=(",", ":"))
-        (output/"bridge-builder-catalog.json").write_text(raw+"\n")
-        (output/"bridge-builder-catalog.mjs").write_text("// Generated from actual Lean 4.28. Do not hand-edit; run bridge_catalog.\nexport default "+raw+";\n")
+        (output/(filename+".json")).write_text(raw+"\n")
+        (output/(filename+".mjs")).write_text("// Generated from actual Lean 4.28. Do not hand-edit; run bridge_catalog.\nexport default "+raw+";\n")
         return catalog
     finally: env.close()
 
@@ -118,7 +124,11 @@ def build(output):
 def verify(catalog):
     expected = {k:v for k,v in catalog.items() if k != "content_sha256"}
     if digest(expected) != catalog["content_sha256"]: raise ValueError("catalog identity changed")
-    env = LeanEnvironment(timeout=30)
+    if catalog.get('environment')=='pcs-grounded-memory-v1':
+        from .memory_environment import MemoryEnvironment
+        env=MemoryEnvironment(catalog['library'],timeout=30)
+        if env.primitive_catalog_sha256!=catalog['primitive_catalog_sha256']:env.close();raise ValueError('primitive catalog changed')
+    else:env = LeanEnvironment(timeout=30)
     checks = 0
     try:
         for mission in catalog["missions"]:

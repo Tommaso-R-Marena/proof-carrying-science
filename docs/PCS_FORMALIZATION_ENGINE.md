@@ -21,3 +21,12 @@ See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANT
 NatList, nil/cons/append/length/reverse and Nat.succ have explicit typed IR, bounded controlled-English parsing, Lean lowering and structured explanation. Outer-universal canonicalization preserves scope and strengthens the duplicate firewall. These extensions are tested, not covered by the earlier source-bound parser proof.
 
 The release leaves Aristotle byte-pinned `language.py` and `ir.py` unchanged. Explicit `induction_language.py` and `induction_ir.py` implement the extended fragment. They are proposal representations and receiver-owned renderers, with mathematical acceptance still requiring the same Lean kernel boundary.
+
+
+## Verified Memory v1, October 12, 2026
+
+The induction extension supports typed Nat predicates/functions and scoped universal recurrence hypotheses in the actual controlled-English → IR → Lean → explanation workflow. Original Aristotle-bound language/IR bytes remain unchanged. A successful Lean proof still does not certify arbitrary English intent.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.

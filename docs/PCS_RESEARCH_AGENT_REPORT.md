@@ -19,3 +19,12 @@ The explicit research scheduler can now apply preceding independently proved lem
 See the [consolidated executable results and limitations](PCS_OMEGA_FULL_INSTANTIATION_REPORT.md#induction-grounded-abstraction-and-bridge-builder--october-11-2026) and [complete prospective experiment](../research/induction-abstraction-v2/REPORT.md). This supersedes earlier absence of implemented list/Nat induction, trainable binding graphs, independently checked state-derived lemma admission and sequential induction RL. It does not supersede the documented limits on unrestricted English, autonomous discovery or runtime refinement.
 
 A fixed human-authored dependency graph association → reverse_association → length_transport completes three independently checked obligations with repaired deterministic retrieval scheduling. The initial unknown result and posthoc repair are retained. State-derived lemma proposals are automatic; mathematical novelty and learned autonomous research planning are not claimed.
+
+
+## Verified Memory v1, October 12, 2026
+
+The bounded investigation implements kernel-state cuts, typed anti-unification, actual counterexample proofs, independent lemma admission and paired reuse-value experiments. Both anti-unification proposals were refuted; no new mathematical discovery is claimed. Verified reusable knowledge helps bounded transfer while unsupported research obligations remain open.
+
+Final structural solve count: 3/16 without discovered memory, 6/16 with memory; development-selected trained checkpoint supervised-17: 5/16. [Complete measured report and reproducible artifacts](VERIFIED_MEMORY_V1_REPORT.md).
+
+Archival recovery repeated the frozen evaluations after a serialization resource failure; no weights or checkpoint selection changed. Full-cycle compute totals were not preserved and are not invented.
