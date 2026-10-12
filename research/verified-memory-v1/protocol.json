@@ -1,12 +1,12 @@
 {
   "format": "pcs-verified-memory-protocol-v1",
   "baseline_commit": "68bac9b0d6e2d04cb16968fdb24e8308473c5485",
-  "tasks_sha256": "f7b9cc28e24384694ef820ec4fc520dfc0b0cc3b2f645962d54d88a89b525dda",
+  "tasks_sha256": "45fbcae7bc167e757ed563c7933ce427ff973f330434921c1c602725dfa2b8f0",
   "splits": {
-    "train": 10,
-    "utility": 6,
-    "selection": 6,
-    "final": 12
+    "train": 12,
+    "utility": 8,
+    "selection": 8,
+    "final": 16
   },
   "budget": 96,
   "beam": 4,
@@ -36,5 +36,6 @@
   ],
   "cost_accounting": "Include primitive audit, discovery, falsification, marginal-utility paired searches, model training, evaluation, independent replay and cold construction; dependency install excluded explicitly.",
   "contamination": "No reference proofs in tasks; shared primitive laws explicit. Final goals/solutions never enter labels, retrieval library admission or checkpoint selection. Exact alpha-equivalent evaluation lemmas excluded.",
-  "claim": "Public authored mathematical transfer; no prior-art novelty or general mathematical intelligence claim."
+  "claim": "Public authored mathematical transfer; no prior-art novelty or general mathematical intelligence claim.",
+  "prospective_revision_note": "Before fitting any model or evaluating any final task, training-only action-coverage probes showed the need for induction under hypotheses. Added predicate/function induction tasks. Initial 34-task protocol is retained unchanged; all original tasks remain. No final or selection solutions inspected."
 }

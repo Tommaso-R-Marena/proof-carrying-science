@@ -41,6 +41,16 @@ STATEMENTS = [
  ('final','empty_suffix','final_list_empty_suffix','For all lists of natural numbers xs and ys, if (xs appended to ys) equals xs then ys equals the empty list.'),
  ('final','false_reverse','final_negative_reversal','For all lists of natural numbers xs, the reversal of xs equals xs.'),
  ('final','false_order','final_negative_order','For all natural numbers a and b, if a ≤ b then b ≤ a.'),
+ ('train','predicate_induction','predicate_induction_principle','For all predicates on natural numbers P, if (P(0) and (∀ (k : Nat), P(k) implies P(the successor of k))) then (∀ (n : Nat), P(n)).'),
+ ('train','function_unit_recurrence','unit_recurrence','For all functions from natural numbers to natural numbers f, if (∀ (k : Nat), f(the successor of k) equals (f(k) + 1)) then (∀ (n : Nat), f(n) equals (f(0) + n)).'),
+ ('utility','predicate_double_index','predicate_index_transfer','For all predicates on natural numbers P, if (P(0) and (∀ (k : Nat), P(k) implies P(the successor of k))) then (∀ (n : Nat), P(n + n)).'),
+ ('utility','function_double_index','recurrence_index_transfer','For all functions from natural numbers to natural numbers f, if (∀ (k : Nat), f(the successor of k) equals (f(k) + 1)) then (∀ (n : Nat), f(n + n) equals (f(0) + (n + n))).'),
+ ('selection','predicate_shift_index','predicate_shift','For all predicates on natural numbers P, if (P(0) and (∀ (k : Nat), P(k) implies P(the successor of k))) then (∀ (n : Nat), P(the successor of n)).'),
+ ('selection','function_shift_index','recurrence_shift','For all functions from natural numbers to natural numbers f, if (∀ (k : Nat), f(the successor of k) equals (f(k) + 1)) then (∀ (n : Nat), f(the successor of n) equals (f(0) + the successor of n)).'),
+ ('final','general_function_recurrence','final_parametric_recurrence','For all functions from natural numbers to natural numbers f, (∀ (d : Nat), (∀ (k : Nat), f(the successor of k) equals (f(k) + d)) implies (∀ (n : Nat), f(n) equals (f(0) + (n * d)))).'),
+ ('final','function_zero_invariant','final_function_invariant','For all functions from natural numbers to natural numbers f, if ((f(0) equals 0) and (∀ (k : Nat), (f(k) equals 0) implies (f(the successor of k) equals 0))) then (∀ (n : Nat), f(n) equals 0).'),
+ ('final','predicate_square_index','final_polynomial_index','For all predicates on natural numbers P, if (P(0) and (∀ (k : Nat), P(k) implies P(the successor of k))) then (∀ (n : Nat), P(n * n)).'),
+ ('final','function_triple_index','final_recurrence_composed_index','For all functions from natural numbers to natural numbers f, if (∀ (k : Nat), f(the successor of k) equals (f(k) + 1)) then (∀ (n : Nat), f((n + n) + n) equals (f(0) + ((n + n) + n))).'),
 ]
 
 def tasks():

@@ -2232,5 +2232,1028 @@
     "original_statement": "For all natural numbers a and b, if a \u2264 b then b \u2264 a.",
     "license": "Apache-2.0",
     "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "predicate_induction",
+    "family": "predicate_induction_principle",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "k",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "var",
+              "name": "n"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all predicates on natural numbers P, if (P(0) and (\u2200 (k : Nat), P(k) implies P(the successor of k))) then (\u2200 (n : Nat), P(n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "function_unit_recurrence",
+    "family": "unit_recurrence",
+    "split": "train",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "number",
+                "value": 1,
+                "type": "Nat"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "var",
+                "name": "n"
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "var",
+                "name": "n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, if (\u2200 (k : Nat), f(the successor of k) equals (f(k) + 1)) then (\u2200 (n : Nat), f(n) equals (f(0) + n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "predicate_double_index",
+    "family": "predicate_index_transfer",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "k",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "add",
+              "left": {
+                "op": "var",
+                "name": "n"
+              },
+              "right": {
+                "op": "var",
+                "name": "n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all predicates on natural numbers P, if (P(0) and (\u2200 (k : Nat), P(k) implies P(the successor of k))) then (\u2200 (n : Nat), P(n + n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "function_double_index",
+    "family": "recurrence_index_transfer",
+    "split": "utility",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "number",
+                "value": 1,
+                "type": "Nat"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "add",
+                "left": {
+                  "op": "var",
+                  "name": "n"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "var",
+                  "name": "n"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, if (\u2200 (k : Nat), f(the successor of k) equals (f(k) + 1)) then (\u2200 (n : Nat), f(n + n) equals (f(0) + (n + n))).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "predicate_shift_index",
+    "family": "predicate_shift",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "k",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "succ",
+              "arg": {
+                "op": "var",
+                "name": "n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all predicates on natural numbers P, if (P(0) and (\u2200 (k : Nat), P(k) implies P(the successor of k))) then (\u2200 (n : Nat), P(the successor of n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "function_shift_index",
+    "family": "recurrence_shift",
+    "split": "selection",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "number",
+                "value": 1,
+                "type": "Nat"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, if (\u2200 (k : Nat), f(the successor of k) equals (f(k) + 1)) then (\u2200 (n : Nat), f(the successor of n) equals (f(0) + the successor of n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "general_function_recurrence",
+    "family": "final_parametric_recurrence",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "forall",
+        "name": "d",
+        "type": "Nat",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "forall",
+            "name": "k",
+            "type": "Nat",
+            "body": {
+              "op": "eq",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                }
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                },
+                "right": {
+                  "op": "var",
+                  "name": "d"
+                }
+              }
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "n",
+            "type": "Nat",
+            "body": {
+              "op": "eq",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "n"
+                }
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "number",
+                    "value": 0,
+                    "type": "Nat"
+                  }
+                },
+                "right": {
+                  "op": "mul",
+                  "left": {
+                    "op": "var",
+                    "name": "n"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "d"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, (\u2200 (d : Nat), (\u2200 (k : Nat), f(the successor of k) equals (f(k) + d)) implies (\u2200 (n : Nat), f(n) equals (f(0) + (n * d)))).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "function_zero_invariant",
+    "family": "final_function_invariant",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "number",
+                "value": 0,
+                "type": "Nat"
+              }
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "k",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "eq",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                },
+                "right": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "eq",
+                "left": {
+                  "op": "apply",
+                  "fn": {
+                    "op": "var",
+                    "name": "f"
+                  },
+                  "arg": {
+                    "op": "succ",
+                    "arg": {
+                      "op": "var",
+                      "name": "k"
+                    }
+                  }
+                },
+                "right": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "var",
+                "name": "n"
+              }
+            },
+            "right": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, if ((f(0) equals 0) and (\u2200 (k : Nat), (f(k) equals 0) implies (f(the successor of k) equals 0))) then (\u2200 (n : Nat), f(n) equals 0).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "predicate_square_index",
+    "family": "final_polynomial_index",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "number",
+              "value": 0,
+              "type": "Nat"
+            }
+          },
+          "right": {
+            "op": "forall",
+            "name": "k",
+            "type": "Nat",
+            "body": {
+              "op": "implies",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "P"
+                },
+                "arg": {
+                  "op": "succ",
+                  "arg": {
+                    "op": "var",
+                    "name": "k"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "apply",
+            "fn": {
+              "op": "var",
+              "name": "P"
+            },
+            "arg": {
+              "op": "mul",
+              "left": {
+                "op": "var",
+                "name": "n"
+              },
+              "right": {
+                "op": "var",
+                "name": "n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all predicates on natural numbers P, if (P(0) and (\u2200 (k : Nat), P(k) implies P(the successor of k))) then (\u2200 (n : Nat), P(n * n)).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
+  },
+  {
+    "id": "function_triple_index",
+    "family": "final_recurrence_composed_index",
+    "split": "final",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "forall",
+          "name": "k",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "succ",
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "var",
+                  "name": "k"
+                }
+              },
+              "right": {
+                "op": "number",
+                "value": 1,
+                "type": "Nat"
+              }
+            }
+          }
+        },
+        "right": {
+          "op": "forall",
+          "name": "n",
+          "type": "Nat",
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "apply",
+              "fn": {
+                "op": "var",
+                "name": "f"
+              },
+              "arg": {
+                "op": "add",
+                "left": {
+                  "op": "add",
+                  "left": {
+                    "op": "var",
+                    "name": "n"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "n"
+                  }
+                },
+                "right": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            },
+            "right": {
+              "op": "add",
+              "left": {
+                "op": "apply",
+                "fn": {
+                  "op": "var",
+                  "name": "f"
+                },
+                "arg": {
+                  "op": "number",
+                  "value": 0,
+                  "type": "Nat"
+                }
+              },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "add",
+                  "left": {
+                    "op": "var",
+                    "name": "n"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "n"
+                  }
+                },
+                "right": {
+                  "op": "var",
+                  "name": "n"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "original_statement": "For all functions from natural numbers to natural numbers f, if (\u2200 (k : Nat), f(the successor of k) equals (f(k) + 1)) then (\u2200 (n : Nat), f((n + n) + n) equals (f(0) + ((n + n) + n))).",
+    "license": "Apache-2.0",
+    "source": "PCS authored public verified-memory benchmark"
   }
 ]
