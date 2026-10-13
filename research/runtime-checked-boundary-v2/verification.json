@@ -1,0 +1,166 @@
+{
+  "format": "pcs-runtime-checked-boundary-v2",
+  "current_certiforge_revision": "c71e8575db2800b015a9d444f8ed572490f3a871",
+  "current_source_sha256": "d47541b04c9d30a86aef8738b9917e4bf0398d57692c81d60e8fbf1e16557f6d",
+  "source_window": [
+    168,
+    179
+  ],
+  "window_sha256": "a6463dde9f0e25f2a0e0be48b5d2c6950d291ceeb5627faa9554b150df52906b",
+  "wrapper_snapshot_sha256": "a6463dde9f0e25f2a0e0be48b5d2c6950d291ceeb5627faa9554b150df52906b",
+  "proof_source_sha256": "87f32c0dead53e8a04628ede69ca1b47dc0a9133ffb143a107e83eff98378835",
+  "existing_certiforge_windows": [
+    {
+      "component": "certiforge",
+      "source": "crates/certir/src/lib.rs",
+      "lines": [
+        20,
+        35
+      ],
+      "sha256": "da05c845f0858efa7d84baa3fb3ebd7c0e6f89183976dbab6ef2567ef6a748f8",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        14,
+        19
+      ],
+      "sha256": "c0be679c86d57d0a5ebad45e218cfcfae7fadbca34056ed64c28abd7962808f0",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        39,
+        66
+      ],
+      "sha256": "125d6bcc93ab146624f8583ab7ab7885bc44708098395dac1fbceac0f62a54e3",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        68,
+        77
+      ],
+      "sha256": "d258b70c02523ecbd69e3dd7c1fb60aa6042da9795b5bde353a43fe739077583",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        79,
+        137
+      ],
+      "sha256": "e4fb94f8e531618627ad2508bf39afda4b38005271ec30b12633140fa514f44d",
+      "current_checkout_checked": true
+    }
+  ],
+  "kernel_theorems": {
+    "PCSRuntimeCheckedBoundary.checked_wrapper_source_bound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_expression_precedence": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.canonicalB_iff": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.iteration_exact": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.condition_eval": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.loop_exact": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_wrapper_refines": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_reference_rejects_noncanonical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_reference_accepts_canonical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.guard_order_independent": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.encoded_store_canonical": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_certificate_preserves": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.iterator_exhaustion": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.bad_payload_rejected_all_widths": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_error_controls": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_native_u64_max_and_zero": [
+      "propext"
+    ],
+    "PCSRuntimeCheckedBoundary.checked_call_exhaustion": [
+      "propext"
+    ]
+  },
+  "axiom_log": "'PCSRuntimeCheckedBoundary.checked_wrapper_source_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_expression_precedence' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.canonicalB_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.iteration_exact' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.condition_eval' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.loop_exact' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_wrapper_refines' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_reference_rejects_noncanonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_reference_accepts_canonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.guard_order_independent' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.encoded_store_canonical' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.iterator_exhaustion' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.bad_payload_rejected_all_widths' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_error_controls' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_native_u64_max_and_zero' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_call_exhaustion' depends on axioms: [propext]\n",
+  "kernel_wall_seconds": 10.105542,
+  "checked_wrapper_fragment_refinement_proved": true,
+  "rust_top_level_eval_extracted": false,
+  "native_compiler_refinement_proved": false,
+  "hashmap_implementation_refinement_proved": false,
+  "conditional_python_javascript_refinements_proved": false,
+  "pcs_scientific_authority": false,
+  "scope": "Exact wrapper tokens; finite HashMap values snapshots in arbitrary iteration order; transparent immutable references; existing source-extracted Rust expression semantics; sufficient separate call-depth and iterator fuel. Native controls are testing, not a Rust compiler proof. Nat payloads above u64 are model-only; native u64 values are within this stronger domain.",
+  "native_controls": {
+    "checks": 31,
+    "widths": 4,
+    "failed": 0,
+    "wall_seconds": 0.415786,
+    "test_source_sha256": "239654296b62eca27448461432224203ac24442db05739c3a44f9f6d2e3b60a4"
+  },
+  "kernel_negative_controls": [
+    {
+      "name": "inverted-condition",
+      "source_mutation_sha256": "161727677024ae34f46419f2f27f1d3e8506a31e4ce974bc1e3932ac247a6c75",
+      "returncode": 1,
+      "rejected": true,
+      "wall_seconds": 8.696831,
+      "log": "/tmp/pcs-checked-negative-ur35s5lq/tools/RuntimeCheckedBoundary.lean:49:2: error: Tactic `decide` proved that the proposition\n  lexLines currentWrapperSource = checkedFn.toks\nis false\n'PCSRuntimeCheckedBoundary.checked_wrapper_source_bound' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_expression_precedence' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.canonicalB_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.iteration_exact' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.condition_eval' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.loop_exact' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_wrapper_refines' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_reference_rejects_noncanonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_reference_accepts_canonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.guard_order_independent' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.encoded_store_canonical' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.iterator_exhaustion' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.bad_payload_rejected_all_widths' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_error_controls' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_native_u64_max_and_zero' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_call_exhaustion' depends on axioms: [propext]\n"
+    },
+    {
+      "name": "changed-mask",
+      "source_mutation_sha256": "45c74e9dc7588a263e068e9f9e9d1f6fcad723fda077e4c74f440e6b10047a9f",
+      "returncode": 1,
+      "rejected": true,
+      "wall_seconds": 7.929859,
+      "log": "/tmp/pcs-checked-negative-i6qcsdhn/tools/RuntimeCheckedBoundary.lean:49:2: error: Tactic `decide` proved that the proposition\n  lexLines currentWrapperSource = checkedFn.toks\nis false\n'PCSRuntimeCheckedBoundary.checked_wrapper_source_bound' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_expression_precedence' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.canonicalB_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.iteration_exact' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.condition_eval' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.loop_exact' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_wrapper_refines' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_reference_rejects_noncanonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_reference_accepts_canonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeCheckedBoundary.guard_order_independent' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.encoded_store_canonical' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.iterator_exhaustion' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.bad_payload_rejected_all_widths' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeCheckedBoundary.checked_error_controls' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_native_u64_max_and_zero' depends on axioms: [propext]\n'PCSRuntimeCheckedBoundary.checked_call_exhaustion' depends on axioms: [propext]\n"
+    }
+  ]
+}

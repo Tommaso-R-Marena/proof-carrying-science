@@ -1,0 +1,33 @@
+{
+  "architectures": [
+    "dag",
+    "bag"
+  ],
+  "beam": 4,
+  "budget": 48,
+  "depth": 18,
+  "epochs": 20,
+  "format": "pcs-dag-transfer-protocol-v3",
+  "limitations": [
+    "author-known mathematical structures; not a private blind benchmark",
+    "domain split does not establish exhaustive semantic contamination freedom",
+    "no novel mathematics claim"
+  ],
+  "per_lean_call_timeout_seconds": 30,
+  "seed": 43,
+  "selection": "no model selection or retuning; both frozen models reported",
+  "split": "logic-only training; arithmetic/list/function domain transfer final",
+  "tasks_sha256": "0a0bf32c39a6a589a9b19622dff7cf600f2e07713b180630aeb8cfe4aac44e3a",
+  "training_ids": [
+    "identity",
+    "conjunction_swap",
+    "conjunction_project",
+    "conjunction_intro",
+    "disjunction_left",
+    "disjunction_right",
+    "modus_ponens",
+    "projected_application"
+  ],
+  "training_source": "research/lean-learning-v2/training-trajectories.json.gz",
+  "training_source_sha256": "4b7e6f3de83bb25c33622ab0c06de02015c0b11a1187fa337831a45b7fd0335b"
+}

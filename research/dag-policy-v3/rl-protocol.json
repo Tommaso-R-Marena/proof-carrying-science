@@ -1,0 +1,276 @@
+{
+  "algorithm": "existing sequential-on-policy-actor-critic-v1",
+  "beam": 4,
+  "checkpoint_sha256": "4af8b94a6be4996d3f08e73b9b0d6a91610ef5c4b88d783f185c630076a8d8a6",
+  "depth": 18,
+  "environment_source_sha256": "1e1cc0755b480a393eb783fff38ae54c69201d6d37be63bfd5513813c03e6a5f",
+  "episode_max_steps": 12,
+  "episodes": 8,
+  "format": "pcs-dag-sequential-rl-v3",
+  "limitations": [
+    "four author-known new structures, not private blind generalization",
+    "single seed; no superiority significance claim"
+  ],
+  "no_retuning": true,
+  "reward_authority": "LeanEnvironment.step immutable goal and kernel verification; model supplies only candidate action index",
+  "search_budget": 48,
+  "seed": 59,
+  "selection": "report supervised and RL; never promote automatically",
+  "tasks": [
+    {
+      "family": "successor_existential",
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "n",
+                "op": "var"
+              },
+              "op": "succ"
+            },
+            "op": "eq",
+            "right": {
+              "name": "m",
+              "op": "var"
+            }
+          },
+          "name": "m",
+          "op": "exists",
+          "type": "Nat"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "successor_existential",
+      "license": "Apache-2.0",
+      "source": "PCS authored fresh bounded RL transfer diagnostic",
+      "split": "final",
+      "statement": "For all natural numbers n, there exists a natural number m such that the successor of n equals m."
+    },
+    {
+      "family": "universal_function_identity",
+      "goal": {
+        "binders": [
+          {
+            "name": "f",
+            "type": "NatFn"
+          }
+        ],
+        "body": {
+          "body": {
+            "left": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "x",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "x",
+                  "op": "var"
+                }
+              },
+              "name": "x",
+              "op": "forall",
+              "type": "Nat"
+            },
+            "op": "implies",
+            "right": {
+              "left": {
+                "arg": {
+                  "arg": {
+                    "name": "n",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "name": "n",
+                "op": "var"
+              }
+            }
+          },
+          "name": "n",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "universal_function_identity",
+      "license": "Apache-2.0",
+      "source": "PCS authored fresh bounded RL transfer diagnostic",
+      "split": "final",
+      "statement": "For all functions from natural numbers to natural numbers f, \u2200 (n : Nat), (\u2200 (x : Nat), f(x) = x) \u2192 (f(f(n)) = n)."
+    },
+    {
+      "family": "reverse_length_conjunction",
+      "goal": {
+        "binders": [
+          {
+            "name": "xs",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "xs",
+                  "op": "var"
+                },
+                "op": "reverse"
+              },
+              "op": "reverse"
+            },
+            "op": "eq",
+            "right": {
+              "name": "xs",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "xs",
+                  "op": "var"
+                },
+                "op": "reverse"
+              },
+              "op": "length"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "xs",
+                "op": "var"
+              },
+              "op": "length"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "reverse_length_conjunction",
+      "license": "Apache-2.0",
+      "source": "PCS authored fresh bounded RL transfer diagnostic",
+      "split": "final",
+      "statement": "For all lists of natural numbers xs, ((the reversal of (the reversal of xs)) equals xs and (the length of (the reversal of xs)) equals the length of xs)."
+    },
+    {
+      "family": "integer_equality_transport_sum",
+      "goal": {
+        "binders": [
+          {
+            "name": "a",
+            "type": "Int"
+          },
+          {
+            "name": "b",
+            "type": "Int"
+          },
+          {
+            "name": "c",
+            "type": "Int"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "b",
+                "op": "var"
+              }
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "b",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            },
+            "op": "eq",
+            "right": {
+              "left": {
+                "name": "c",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "c",
+                "op": "var"
+              }
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "id": "integer_equality_transport_sum",
+      "license": "Apache-2.0",
+      "source": "PCS authored fresh bounded RL transfer diagnostic",
+      "split": "final",
+      "statement": "For all integers a, b and c, if (a equals b and b equals c) then (a + c) equals (c + c)."
+    }
+  ],
+  "training_data_sha256": "5bb928fd2a1093b45a9fe2fe1bb756f7133dcc3ce6dd5cbc4b32b62899fc56da",
+  "training_ids": [
+    "identity",
+    "conjunction_swap",
+    "conjunction_project",
+    "conjunction_intro",
+    "disjunction_left",
+    "disjunction_right",
+    "modus_ponens",
+    "projected_application"
+  ]
+}

@@ -1,0 +1,788 @@
+[
+  {
+    "family": "natural_conjunctive_normalization",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "add",
+            "right": {
+              "op": "number",
+              "type": "Nat",
+              "value": 0
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "a",
+            "op": "var"
+          }
+        },
+        "op": "and",
+        "right": {
+          "left": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "mul",
+            "right": {
+              "op": "number",
+              "type": "Nat",
+              "value": 1
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "natural_conjunctive_normalization",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all natural numbers a and b, ((a + 0) equals a and (b * 1) equals b)."
+  },
+  {
+    "family": "natural_successor_congruence",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "arg": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "a",
+                "op": "var"
+              }
+            },
+            "op": "succ"
+          },
+          "op": "eq",
+          "right": {
+            "arg": {
+              "left": {
+                "name": "b",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "name": "b",
+                "op": "var"
+              }
+            },
+            "op": "succ"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "natural_successor_congruence",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all natural numbers a and b, if a equals b then the successor of (a + a) equals the successor of (b + b)."
+  },
+  {
+    "family": "integer_two_step_order",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Int"
+        },
+        {
+          "name": "b",
+          "type": "Int"
+        },
+        {
+          "name": "c",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "c",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "le",
+          "right": {
+            "name": "c",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "integer_two_step_order",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all integers a, b and c, if (a \u2264 b and b \u2264 c) then a \u2264 c."
+  },
+  {
+    "family": "integer_antisymmetric_pair",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Int"
+        },
+        {
+          "name": "b",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "a",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "a",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "integer_antisymmetric_pair",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all integers a and b, if (a \u2264 b and b \u2264 a) then (a equals b and b equals a)."
+  },
+  {
+    "family": "function_repeated_argument",
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "body": {
+          "body": {
+            "left": {
+              "left": {
+                "name": "a",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "name": "b",
+                "op": "var"
+              }
+            },
+            "op": "implies",
+            "right": {
+              "left": {
+                "arg": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "arg": {
+                  "arg": {
+                    "name": "b",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "name": "a",
+        "op": "forall",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "function_repeated_argument",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all functions from natural numbers to natural numbers f, \u2200 (a : Nat) (b : Nat), (a = b) \u2192 (f(f(a)) = f(f(b)))."
+  },
+  {
+    "family": "predicate_pair_transport",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "body": {
+          "body": {
+            "left": {
+              "left": {
+                "left": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "b",
+                  "op": "var"
+                }
+              },
+              "op": "and",
+              "right": {
+                "arg": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "op": "implies",
+            "right": {
+              "arg": {
+                "name": "b",
+                "op": "var"
+              },
+              "fn": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "name": "a",
+        "op": "forall",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "predicate_pair_transport",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all predicates on natural numbers P, \u2200 (a : Nat) (b : Nat), ((a = b) and P(a)) \u2192 P(b)."
+  },
+  {
+    "family": "list_append_left_unit_pair",
+    "goal": {
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "op": "nil"
+            },
+            "op": "append",
+            "right": {
+              "name": "xs",
+              "op": "var"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "xs",
+            "op": "var"
+          }
+        },
+        "op": "and",
+        "right": {
+          "left": {
+            "left": {
+              "op": "nil"
+            },
+            "op": "append",
+            "right": {
+              "name": "ys",
+              "op": "var"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "ys",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "list_append_left_unit_pair",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all lists of natural numbers xs and ys, ((nil appended to xs) equals xs and (nil appended to ys) equals ys)."
+  },
+  {
+    "family": "list_length_cons_zero",
+    "goal": {
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "body": {
+          "left": {
+            "arg": {
+              "head": {
+                "name": "n",
+                "op": "var"
+              },
+              "op": "cons",
+              "tail": {
+                "name": "xs",
+                "op": "var"
+              }
+            },
+            "op": "length"
+          },
+          "op": "eq",
+          "right": {
+            "arg": {
+              "arg": {
+                "name": "xs",
+                "op": "var"
+              },
+              "op": "length"
+            },
+            "op": "succ"
+          }
+        },
+        "name": "n",
+        "op": "forall",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "list_length_cons_zero",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all lists of natural numbers xs, \u2200 (n : Nat), the length of (List.cons n xs) equals the successor of (the length of xs)."
+  },
+  {
+    "family": "list_append_right_unit_pair",
+    "goal": {
+      "binders": [
+        {
+          "name": "xs",
+          "type": "NatList"
+        },
+        {
+          "name": "ys",
+          "type": "NatList"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "xs",
+              "op": "var"
+            },
+            "op": "append",
+            "right": {
+              "op": "nil"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "xs",
+            "op": "var"
+          }
+        },
+        "op": "and",
+        "right": {
+          "left": {
+            "left": {
+              "name": "ys",
+              "op": "var"
+            },
+            "op": "append",
+            "right": {
+              "op": "nil"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "ys",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "list_append_right_unit_pair",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all lists of natural numbers xs and ys, ((xs appended to nil) equals xs and (ys appended to nil) equals ys)."
+  },
+  {
+    "family": "natural_witness_pair",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "body": {
+          "left": {
+            "left": {
+              "name": "x",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "name": "x",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Nat",
+                "value": 0
+              }
+            },
+            "op": "eq",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          }
+        },
+        "name": "x",
+        "op": "exists",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "natural_witness_pair",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all natural numbers n, there exists a natural number x such that (x equals n and (x + 0) equals n)."
+  },
+  {
+    "family": "natural_disjunctive_order",
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "or",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "a",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "a",
+              "op": "var"
+            }
+          },
+          "op": "or",
+          "right": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "natural_disjunctive_order",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all natural numbers a and b, if (a \u2264 b or b \u2264 a) then (b \u2264 a or a \u2264 b)."
+  },
+  {
+    "family": "function_conditional_rewrite",
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "body": {
+          "body": {
+            "left": {
+              "left": {
+                "left": {
+                  "arg": {
+                    "name": "a",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "f",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "b",
+                  "op": "var"
+                }
+              },
+              "op": "and",
+              "right": {
+                "left": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "op": "eq",
+                "right": {
+                  "name": "a",
+                  "op": "var"
+                }
+              }
+            },
+            "op": "implies",
+            "right": {
+              "left": {
+                "arg": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "name": "a",
+                "op": "var"
+              }
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "name": "a",
+        "op": "forall",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "function_conditional_rewrite",
+    "license": "Apache-2.0",
+    "source": "PCS authored cross-domain transfer challenge; known elementary mathematics",
+    "split": "final",
+    "statement": "For all functions from natural numbers to natural numbers f, \u2200 (a : Nat) (b : Nat), ((f(a) = b) and (b = a)) \u2192 (f(a) = a)."
+  }
+]

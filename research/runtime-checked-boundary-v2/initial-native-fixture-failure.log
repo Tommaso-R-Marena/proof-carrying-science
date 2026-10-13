@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/workspace/proof-carrying-science/scripts/verify_runtime_checked_boundary.py", line 134, in <module>
+    main()
+  File "/workspace/proof-carrying-science/scripts/verify_runtime_checked_boundary.py", line 123, in main
+    report = verify(args.certiforge, native=args.native)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/scripts/verify_runtime_checked_boundary.py", line 113, in verify
+    report["native_controls"] = run_native(certiforge)
+                                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/scripts/verify_runtime_checked_boundary.py", line 69, in run_native
+    raise RuntimeError("native checked-wrapper controls failed\n" + proc.stdout + proc.stderr)
+RuntimeError: native checked-wrapper controls failed
+error[E0599]: no method named `clone` found for enum `EvalError` in the current scope
+  --> src/main.rs:34:82
+   |
+34 |             assert_eq!(eval_expr_checked(&store, &variable), Err(canonical_error.clone()));
+   |                                                                                  ^^^^^ method not found in `EvalError`
+
+error[E0599]: no method named `clone` found for enum `EvalError` in the current scope
+  --> src/main.rs:37:106
+   |
+37 |             assert_eq!(eval_expr_checked(&unused, &Expr::ConstBool { value: true }), Err(canonical_error.clone()));
+   |                                                                                                          ^^^^^ method not found in `EvalError`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `pcs-checked-native-controls` (bin "pcs-checked-native-controls") due to 2 previous errors
+

@@ -145,6 +145,36 @@ def test_honest_failed_numerical_case_is_integrity_valid_but_not_satisfied(prepa
     assert result["pcs_numerical_claim"] == "OPEN"
 
 
+def test_compiled_claim_decisions_cannot_be_replaced_by_package_acceptance(prepared_case, monkeypatch):
+    from pcs import scientific_assurance_v1 as receiver
+    case = prepared_case
+    checked = verify_package_zip_end_to_end_v06(case["bundle"], case["public"], expected_fingerprint=case["fingerprint"])
+    assert checked["valid"] is True and checked["accepted"] is True
+    # Inject an explicit divergent authority decision after actually verifying
+    # the package. The receiver must not treat package acceptance as claim proof.
+    checked["claims"][0]["decision"] = "FALSIFIED"
+    monkeypatch.setattr(receiver, "verify_package_zip_end_to_end_v06", lambda *a, **k: checked)
+    result = receiver.verify_scientific_bundle(case["bundle"], case["public"], expected_fingerprint=case["fingerprint"])
+    assert result["independent_replay_consistent"] is True
+    assert result["compiled_builtin_obligations_supported"] is False
+    assert result["bounded_contract_satisfied"] is False
+
+
+def test_existing_builder_rejects_misbound_builtin_claim_before_signing(prepared_case):
+    from pcs.attest_v06 import V06AttestationError
+    case = prepared_case
+    project = case["directory"] / "misbound-claim-project"
+    shutil.copytree(case["directory"] / "positive-work/project", project)
+    manifest_path = project / "manifest.confirmed.json"
+    manifest = strict_json_load(manifest_path)
+    manifest["claims"][0]["predicate"] = manifest["claims"][1]["predicate"]
+    manifest_path.write_bytes(canonicalize_jcs_bytes(manifest))
+    package = case["directory"] / "misbound-claim-package"
+    with pytest.raises(V06AttestationError, match="predicate differs from required evidence"):
+        build_attestation_directory_v06(manifest_path, package, case["private"], case["public"],
+            expected_fingerprint=case["fingerprint"], generated_at="2026-10-12T00:00:00+00:00")
+
+
 def test_wrong_caller_pinned_identity_cannot_acquire_scientific_authority(prepared_case):
     case = prepared_case
     result = verify_scientific_bundle(case["bundle"], case["public"], expected_fingerprint="0" * 64)
