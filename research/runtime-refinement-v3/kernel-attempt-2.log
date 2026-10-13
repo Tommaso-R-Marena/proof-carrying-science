@@ -1,0 +1,37 @@
+tools/RuntimeOutputBoundaryV3.lean:110:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  derivedTypeEq (encTy ?a) (encTy ?b)
+in the target expression
+  fixRet
+      (match some (Out.val (encTy value.ty)) with
+      | some (Out.val actual) =>
+        match derivedTypeEq actual (encTy expected) with
+        | some true => evalE (runFn [] 1) [("out", encVal value)] outputFn.result Out.val
+        | some false => evalE (runFn [] 1) [("out", encVal value)] outputFn.rejection Out.ret
+        | none => Out.stuck "unsupported type equality"
+      | some out => out
+      | none => Out.stuck "missing Value::ty") =
+    Out.val (encRes (finishReference expected (Except.ok value)))
+
+case ok
+expected : Ty
+extra : Nat
+value : Value
+⊢ fixRet
+      (match some (Out.val (encTy value.ty)) with
+      | some (Out.val actual) =>
+        match derivedTypeEq actual (encTy expected) with
+        | some true => evalE (runFn [] 1) [("out", encVal value)] outputFn.result Out.val
+        | some false => evalE (runFn [] 1) [("out", encVal value)] outputFn.rejection Out.ret
+        | none => Out.stuck "unsupported type equality"
+      | some out => out
+      | none => Out.stuck "missing Value::ty") =
+    Out.val (encRes (finishReference expected (Except.ok value)))
+'PCSRuntimeOutputBoundaryV3.output_boundary_source_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCSRuntimeOutputBoundaryV3.derived_type_eq_exact' depends on axioms: [propext]
+'PCSRuntimeOutputBoundaryV3.continuation_exact' depends on axioms: [propext, sorryAx]
+'PCSRuntimeOutputBoundaryV3.checked_output_continuation_refines' depends on axioms: [propext, sorryAx, Quot.sound]
+'PCSRuntimeOutputBoundaryV3.output_acceptance_requires_declared_type' depends on axioms: [propext]
+'PCSRuntimeOutputBoundaryV3.output_preserves_all_checked_errors' depends on axioms: [propext]
+'PCSRuntimeOutputBoundaryV3.output_preserves_resource_failure' depends on axioms: [propext]
+'PCSRuntimeOutputBoundaryV3.output_type_resource_failure' depends on axioms: [propext]
+'PCSRuntimeOutputBoundaryV3.output_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]

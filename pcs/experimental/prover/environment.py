@@ -298,7 +298,28 @@ class LeanEnvironment:
                     lines.put(line)
                 lines.put(None)
             threading.Thread(target=read, args=(self.worker.stdout, self.lines), daemon=True).start()
+            # Receiver-owned initialization is separate from a user tactic's
+            # deadline. The open True probe is discarded, never a certificate.
+            self.worker_initialization_requests = getattr(self, "worker_initialization_requests", 0) + 1
+            initialization_started = time.monotonic()
+            action_timeout = self.timeout
+            self.timeout = 60
+            try:
+                ready = LeanEnvironment._worker_source(self, "#pcs_probe (True) => []\n")
+                goals = ready["states"][0]["goals"]
+                if (ready["format"] != "pcs-lean-state-v1" or ready["status"] != "open"
+                        or len(ready["states"]) != 1 or len(goals) != 1
+                        or goals[0]["expression"] != {"kind": "constant", "value": "True:[]", "children": []}
+                        or goals[0]["locals"]):
+                    raise RuntimeError("Lean worker initialization mismatch")
+            except (KeyError, IndexError, TypeError, ValueError, OSError, RuntimeError):
+                self.close()
+                raise RuntimeError("Lean worker initialization failed") from None
+            finally:
+                self.timeout = action_timeout
+                self.worker_initialization_seconds = getattr(self, "worker_initialization_seconds", 0.) + time.monotonic() - initialization_started
         started = time.monotonic()
+        self.worker_wire_requests = getattr(self, "worker_wire_requests", 0) + 1
         self.worker.stdin.write(json.dumps(text) + "\n")
         self.worker.stdin.flush()
         records, size = [], 0

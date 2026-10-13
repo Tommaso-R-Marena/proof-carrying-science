@@ -1,0 +1,26 @@
+[
+  {
+    "id": "group-right-cancellation",
+    "domain": "Group",
+    "module": "Mathlib.Algebra.Group.Basic",
+    "statement": "\u2200 (G : Type) [Group G] (f : G \u2192 Nat) (a b c k : G), Function.Injective f \u2192 f (a * k) = f (b * k) \u2192 f (b * k) = f (c * k) \u2192 a = c"
+  },
+  {
+    "id": "real-order-from-image-chain",
+    "domain": "Real order",
+    "module": "Mathlib.Data.Real.Basic",
+    "statement": "\u2200 (f : \u211d \u2192 Nat) (a b c : \u211d), Function.Injective f \u2192 f a = f b \u2192 f b = f c \u2192 a \u2264 c"
+  },
+  {
+    "id": "list-length-congruence",
+    "domain": "List length",
+    "module": "Mathlib.Data.List.Basic",
+    "statement": "\u2200 (f : List Nat \u2192 Nat) (a b c : List Nat), Function.Injective f \u2192 f a = f b \u2192 f b = f c \u2192 a.length = c.length"
+  },
+  {
+    "id": "set-membership-transport",
+    "domain": "Set membership",
+    "module": "Mathlib.Data.Set.Basic",
+    "statement": "\u2200 (f : Nat \u2192 Nat) (a b c : Nat) (s : Set Nat), Function.Injective f \u2192 f a = f b \u2192 f b = f c \u2192 a \u2208 s \u2192 c \u2208 s"
+  }
+]

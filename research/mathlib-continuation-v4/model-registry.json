@@ -1,0 +1,126 @@
+{
+  "format": "pcs-mathlib-model-registry-v4",
+  "models": [
+    {
+      "model_id": "pcs-mathlib-v4-graph_71",
+      "architecture": "graph",
+      "allocated_parameters": 10627,
+      "seed": 71,
+      "checkpoint": "research/mathlib-learning-v4-kernel-checked/graph-71.json",
+      "checkpoint_sha256": "2dda734ec84354efe2ab850e43dc4ced72a57afa75f8cbcec137db71f93fa583",
+      "training_data_sha256": "44fe9c923ecaf55afa31779c5bedf3f9b1bee0e7b22e32a20187c876b50cac42",
+      "final_result": {
+        "solved": 0,
+        "tasks": 22,
+        "unique_beyond_strong_portfolio": [],
+        "wall_seconds": 142.54770978400484,
+        "physical_lean_calls": 1003
+      },
+      "approval_status": "experimental_not_promoted",
+      "supported_domain": "Trusted developer-local typed Lean goals in the pinned selected-import environment",
+      "production_authority": false
+    },
+    {
+      "model_id": "pcs-mathlib-v4-bag_71",
+      "architecture": "bag",
+      "allocated_parameters": 10627,
+      "seed": 71,
+      "checkpoint": "research/mathlib-learning-v4-kernel-checked/bag-71.json",
+      "checkpoint_sha256": "2f17e2d9788a9542bde49185db389774d30e16821a5d9c5e958a9ed2b603f1c3",
+      "training_data_sha256": "44fe9c923ecaf55afa31779c5bedf3f9b1bee0e7b22e32a20187c876b50cac42",
+      "final_result": {
+        "solved": 0,
+        "tasks": 22,
+        "unique_beyond_strong_portfolio": [],
+        "wall_seconds": 110.555848657983,
+        "physical_lean_calls": 1003
+      },
+      "approval_status": "experimental_not_promoted",
+      "supported_domain": "Trusted developer-local typed Lean goals in the pinned selected-import environment",
+      "production_authority": false
+    },
+    {
+      "model_id": "pcs-mathlib-v4-graph_79",
+      "architecture": "graph",
+      "allocated_parameters": 10627,
+      "seed": 79,
+      "checkpoint": "research/mathlib-learning-v4-kernel-checked/graph-79.json",
+      "checkpoint_sha256": "16aebce60ca503d6aca8fe2bab8e29f2a4d2e14c96fcf10f9320c7730336f677",
+      "training_data_sha256": "44fe9c923ecaf55afa31779c5bedf3f9b1bee0e7b22e32a20187c876b50cac42",
+      "final_result": {
+        "solved": 0,
+        "tasks": 22,
+        "unique_beyond_strong_portfolio": [],
+        "wall_seconds": 142.29125302296598,
+        "physical_lean_calls": 1003
+      },
+      "approval_status": "experimental_not_promoted",
+      "supported_domain": "Trusted developer-local typed Lean goals in the pinned selected-import environment",
+      "production_authority": false
+    },
+    {
+      "model_id": "pcs-mathlib-v4-bag_79",
+      "architecture": "bag",
+      "allocated_parameters": 10627,
+      "seed": 79,
+      "checkpoint": "research/mathlib-learning-v4-kernel-checked/bag-79.json",
+      "checkpoint_sha256": "aef6dcf64b63bcfe38a7c47105e4f98ca11c60a0456466c0e54f49ef6e2c0453",
+      "training_data_sha256": "44fe9c923ecaf55afa31779c5bedf3f9b1bee0e7b22e32a20187c876b50cac42",
+      "final_result": {
+        "solved": 0,
+        "tasks": 22,
+        "unique_beyond_strong_portfolio": [],
+        "wall_seconds": 110.58779553197382,
+        "physical_lean_calls": 1003
+      },
+      "approval_status": "experimental_not_promoted",
+      "supported_domain": "Trusted developer-local typed Lean goals in the pinned selected-import environment",
+      "production_authority": false
+    },
+    {
+      "model_id": "pcs-mathlib-v4-rl-71",
+      "architecture": "graph_actor_critic",
+      "allocated_parameters": 10627,
+      "seed": 71,
+      "checkpoint": "research/mathlib-rl-v4/graph-rl-71.json",
+      "checkpoint_sha256": "c29176fb70610311d3ac0ddaa8fd9d658be70891a6347c3924ce8bbe28e4fd39",
+      "training_data_sha256": "44fe9c923ecaf55afa31779c5bedf3f9b1bee0e7b22e32a20187c876b50cac42",
+      "final_result": {
+        "solved": 0,
+        "tasks": 22,
+        "unique_beyond_strong_portfolio": [],
+        "wall_seconds": 119.42877080397739,
+        "physical_lean_calls": 1003
+      },
+      "approval_status": "experimental_not_promoted",
+      "supported_domain": "Bounded developer-local Mathlib environment",
+      "production_authority": false
+    },
+    {
+      "model_id": "pcs-mathlib-v4-rl-79",
+      "architecture": "graph_actor_critic",
+      "allocated_parameters": 10627,
+      "seed": 79,
+      "checkpoint": "research/mathlib-rl-v4/graph-rl-79.json",
+      "checkpoint_sha256": "17f16b4e51dacb8590f1753c0af6b0d7a7fd538b1132d63eaaa671a5e4bfd238",
+      "training_data_sha256": "44fe9c923ecaf55afa31779c5bedf3f9b1bee0e7b22e32a20187c876b50cac42",
+      "final_result": {
+        "solved": 0,
+        "tasks": 22,
+        "unique_beyond_strong_portfolio": [],
+        "wall_seconds": 115.39995531803288,
+        "physical_lean_calls": 1003
+      },
+      "approval_status": "experimental_not_promoted",
+      "supported_domain": "Bounded developer-local Mathlib environment",
+      "production_authority": false
+    }
+  ],
+  "known_limitations": [
+    "All trained policies solve zero of 22 frozen public external-source tasks.",
+    "No autonomous abstraction advantage.",
+    "Eight authored Set/logic training tasks, not broad mathematics.",
+    "No general English-to-Lean or whole-runtime refinement."
+  ],
+  "automatic_promotion": false
+}

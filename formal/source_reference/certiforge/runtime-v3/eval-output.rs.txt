@@ -1,0 +1,5 @@
+    let out = eval_expr_checked(&store, &program.body)?;
+    if out.ty() != program.ret_ty {
+        return Err(EvalError::Runtime("return type mismatch".into()));
+    }
+    Ok(out)

@@ -1,0 +1,345 @@
+[
+  {
+    "id": "group-right-cancellation",
+    "domain": "Group",
+    "module": "Mathlib.Algebra.Group.Basic",
+    "statement": "\u2200 (G : Type) [Group G] (f : G \u2192 Nat) (a b c k : G), Function.Injective f \u2192 f (a * k) = f (b * k) \u2192 f (b * k) = f (c * k) \u2192 a = c",
+    "no_library_actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "intro",
+        "argument": "h6"
+      },
+      {
+        "kind": "intro",
+        "argument": "h7"
+      },
+      {
+        "kind": "intro",
+        "argument": "h8"
+      },
+      {
+        "kind": "intro",
+        "argument": "h9"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "mul_right_cancel"
+      },
+      {
+        "kind": "apply_local",
+        "argument": "h7"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Eq.trans"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h8"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h9"
+      }
+    ],
+    "discovered_library_actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "intro",
+        "argument": "h6"
+      },
+      {
+        "kind": "intro",
+        "argument": "h7"
+      },
+      {
+        "kind": "intro",
+        "argument": "h8"
+      },
+      {
+        "kind": "intro",
+        "argument": "h9"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "mul_right_cancel"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "PCSAbstractL0"
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      }
+    ]
+  },
+  {
+    "id": "list-length-congruence",
+    "domain": "List length",
+    "module": "Mathlib.Data.List.Basic",
+    "statement": "\u2200 (f : List Nat \u2192 Nat) (a b c : List Nat), Function.Injective f \u2192 f a = f b \u2192 f b = f c \u2192 a.length = c.length",
+    "no_library_actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "intro",
+        "argument": "h6"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "congrArg"
+      },
+      {
+        "kind": "apply_local",
+        "argument": "h4"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Eq.trans"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h5"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h6"
+      }
+    ],
+    "discovered_library_actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "intro",
+        "argument": "h6"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "congrArg"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "PCSAbstractL0"
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      }
+    ]
+  },
+  {
+    "id": "corrected-real-order-from-image-chain",
+    "domain": "Real order",
+    "module": "Mathlib.Data.Real.Basic",
+    "statement": "\u2200 (f : \u211d \u2192 \u211d) (a b c : \u211d), Function.Injective f \u2192 f a = f b \u2192 f b = f c \u2192 a \u2264 c",
+    "semantic_correction": "Injective Real\u2192Real has realizable witnesses; original Real\u2192Nat fixture remains preserved and excluded from substantive transfer.",
+    "no_library_actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "intro",
+        "argument": "h6"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "le_of_eq"
+      },
+      {
+        "kind": "apply_local",
+        "argument": "h4"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Eq.trans"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h5"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h6"
+      }
+    ],
+    "discovered_library_actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "intro",
+        "argument": "h6"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "le_of_eq"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "PCSAbstractL0"
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      },
+      {
+        "kind": "assumption",
+        "argument": null
+      }
+    ]
+  }
+]
