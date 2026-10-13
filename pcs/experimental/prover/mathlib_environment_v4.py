@@ -89,8 +89,9 @@ class MathlibEnvironmentV4(MathlibRetriever):
         if 'version 4.28.0,' not in self.version:raise RuntimeError('Lean4.28 required')
         self.cache=Path(cache or ROOT/'.lake/pcs-prover');self.cache.mkdir(parents=True,exist_ok=True)
         if not (self.cache/'PCSProofProbe.olean').exists():
-            from .memory_cost import MeasuredInductionEnvironment
-            env=MeasuredInductionEnvironment(cache=self.cache);env.close()
+            # Probe compilation needs the stdlib-only receiver, not research
+            # data/signing dependencies or a trained model.
+            env=LeanEnvironment(cache=self.cache);env.close()
         self.paths=[self.cache,self.mathlib/'.lake/build/lib/lean']+sorted((ROOT/'.lake/packages').glob('*/.lake/build/lib/lean'))
         configured_timeout=timeout
         self.timeout=max(60,timeout);self.calls=0;self.seconds=0.
