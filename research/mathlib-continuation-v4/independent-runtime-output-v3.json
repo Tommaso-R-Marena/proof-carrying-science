@@ -1,0 +1,292 @@
+{
+  "format": "pcs-runtime-output-boundary-v3",
+  "certiforge_revision": "c71e8575db2800b015a9d444f8ed572490f3a871",
+  "actual_source_sha256": {
+    "crates/certir-interpreter/src/lib.rs": "d47541b04c9d30a86aef8738b9917e4bf0398d57692c81d60e8fbf1e16557f6d",
+    "crates/certir/src/lib.rs": "38a7500fec7d3a71c88aef0e248d334a4ebaf5d95152dc6293e329237ce7db30"
+  },
+  "source_windows": [
+    {
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        158,
+        162
+      ],
+      "snapshot": "eval-output.rs.txt",
+      "sha256": "8598d9359ed8fe892ac10941491ed64baf2396ce6531dde1c4c771a266748344"
+    },
+    {
+      "source": "crates/certir/src/lib.rs",
+      "lines": [
+        10,
+        17
+      ],
+      "snapshot": "width-equality.rs.txt",
+      "sha256": "7d4dedb833bf7bf3350699005d5a1438bd6fbf1ea11050f3c4c91914e53e0b6c"
+    },
+    {
+      "source": "crates/certir/src/lib.rs",
+      "lines": [
+        59,
+        64
+      ],
+      "snapshot": "type-equality.rs.txt",
+      "sha256": "c51526fcf87a2b2a3986343f906f17d3b0b44295224bab946330708e121933ec"
+    }
+  ],
+  "original_certiforge_windows": [
+    {
+      "component": "certiforge",
+      "source": "crates/certir/src/lib.rs",
+      "lines": [
+        20,
+        35
+      ],
+      "sha256": "da05c845f0858efa7d84baa3fb3ebd7c0e6f89183976dbab6ef2567ef6a748f8",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        14,
+        19
+      ],
+      "sha256": "c0be679c86d57d0a5ebad45e218cfcfae7fadbca34056ed64c28abd7962808f0",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        39,
+        66
+      ],
+      "sha256": "125d6bcc93ab146624f8583ab7ab7885bc44708098395dac1fbceac0f62a54e3",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        68,
+        77
+      ],
+      "sha256": "d258b70c02523ecbd69e3dd7c1fb60aa6042da9795b5bde353a43fe739077583",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        79,
+        137
+      ],
+      "sha256": "e4fb94f8e531618627ad2508bf39afda4b38005271ec30b12633140fa514f44d",
+      "current_checkout_checked": true
+    }
+  ],
+  "value_type_helper_lines": [
+    21,
+    26
+  ],
+  "value_type_helper_sha256": "4e178ceb1051ad8a1617e013785356cc8353344d2b7619df452eab47b5bfe0ed",
+  "proof_source_sha256": "444ee9d23b83d676ffb2c5ea2e77165ef32787f503a9a694a133c1cd73b1fd56",
+  "fresh_dependency_checks": [
+    {
+      "module": "formal/tools/RuntimeCheckedBoundary.lean",
+      "source_sha256": "87f32c0dead53e8a04628ede69ca1b47dc0a9133ffb143a107e83eff98378835",
+      "kernel_theorems": {
+        "PCSRuntimeCheckedBoundary.checked_wrapper_source_bound": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_expression_precedence": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.canonicalB_iff": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.iteration_exact": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.condition_eval": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.loop_exact": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_wrapper_refines": [
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_reference_rejects_noncanonical": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_reference_accepts_canonical": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.guard_order_independent": [
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.encoded_store_canonical": [
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_certificate_preserves": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.iterator_exhaustion": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.bad_payload_rejected_all_widths": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_error_controls": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_native_u64_max_and_zero": [
+          "propext"
+        ],
+        "PCSRuntimeCheckedBoundary.checked_call_exhaustion": [
+          "propext"
+        ]
+      },
+      "cost": {
+        "wall_seconds": 9.651449,
+        "child_cpu_user_seconds": 9.412956,
+        "child_cpu_system_seconds": 1.259871,
+        "process_cumulative_max_child_rss_kib": 1717476
+      }
+    },
+    {
+      "module": "formal/tools/RuntimeValueType.lean",
+      "source_sha256": "8bb8edf3b7ccce2346b3e04cffa2b95e5edb601d017e0f5fbe39761bd93e51af",
+      "kernel_theorems": {
+        "PCSForgeRefinement.Rust.value_ty_source_bound": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "PCSForgeRefinement.Rust.value_ty_precedence_checked": [
+          "propext"
+        ],
+        "PCSForgeRefinement.Rust.rust_value_ty": [
+          "propext"
+        ],
+        "PCSForgeRefinement.Rust.rust_value_ty_zero_fuel": [
+          "propext"
+        ]
+      },
+      "cost": {
+        "wall_seconds": 4.086807,
+        "child_cpu_user_seconds": 4.387892,
+        "child_cpu_system_seconds": 0.634795,
+        "process_cumulative_max_child_rss_kib": 1717476
+      }
+    }
+  ],
+  "verifier_source_sha256": "e5ce6abd213da540f1335b5cd9507feda80a802d4ffda768201546665939a351",
+  "kernel_theorems": {
+    "PCSRuntimeOutputBoundaryV3.output_boundary_source_bound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.derived_type_eq_exact": [
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.continuation_exact": [
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.checked_output_continuation_refines": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.output_acceptance_requires_declared_type": [
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.output_preserves_all_checked_errors": [
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.output_preserves_resource_failure": [
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.output_type_resource_failure": [
+      "propext"
+    ],
+    "PCSRuntimeOutputBoundaryV3.output_certificate_preserves": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "axiom_log": "'PCSRuntimeOutputBoundaryV3.output_boundary_source_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSRuntimeOutputBoundaryV3.derived_type_eq_exact' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.continuation_exact' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.checked_output_continuation_refines' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeOutputBoundaryV3.output_acceptance_requires_declared_type' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_preserves_all_checked_errors' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_preserves_resource_failure' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_type_resource_failure' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "cost": {
+    "wall_seconds": 7.044722,
+    "child_cpu_user_seconds": 7.965854,
+    "child_cpu_system_seconds": 0.693361,
+    "process_cumulative_max_child_rss_kib": 1717476
+  },
+  "kernel_negative_controls": [
+    {
+      "name": "inverted-return-guard",
+      "rejected": true,
+      "returncode": 1,
+      "changed_source_sha256": "cd97f6c28059ab2008760990da4cc0e13e9c45db35da8dbd46231138c45cdf43",
+      "cost": {
+        "wall_seconds": 4.367079,
+        "child_cpu_user_seconds": 5.970928,
+        "child_cpu_system_seconds": 0.87292,
+        "process_cumulative_max_child_rss_kib": 1717476
+      },
+      "log": "/tmp/pcs-output-lean-v3-tffj_sb5/negative/tools/RuntimeOutputBoundaryV3.lean:64:50: error: Tactic `decide` proved that the proposition\n  lexLines outputSource = outputFn.toks \u2227\n    lexLines widthSource = widthDeclaration \u2227 lexLines typeSource = typeDeclaration\nis false\n'PCSRuntimeOutputBoundaryV3.output_boundary_source_bound' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeOutputBoundaryV3.derived_type_eq_exact' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.continuation_exact' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.checked_output_continuation_refines' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeOutputBoundaryV3.output_acceptance_requires_declared_type' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_preserves_all_checked_errors' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_preserves_resource_failure' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_type_resource_failure' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "name": "unchecked-expression-call",
+      "rejected": true,
+      "returncode": 1,
+      "changed_source_sha256": "afb59ee47b2e38d18b4a6f818fc5db19862ef9ca56116442dd5e6634a41100a5",
+      "cost": {
+        "wall_seconds": 3.884859,
+        "child_cpu_user_seconds": 4.39871,
+        "child_cpu_system_seconds": 0.866348,
+        "process_cumulative_max_child_rss_kib": 1717476
+      },
+      "log": "/tmp/pcs-output-lean-v3-tffj_sb5/negative/tools/RuntimeOutputBoundaryV3.lean:64:50: error: Tactic `decide` proved that the proposition\n  lexLines outputSource = outputFn.toks \u2227\n    lexLines widthSource = widthDeclaration \u2227 lexLines typeSource = typeDeclaration\nis false\n'PCSRuntimeOutputBoundaryV3.output_boundary_source_bound' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'PCSRuntimeOutputBoundaryV3.derived_type_eq_exact' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.continuation_exact' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.checked_output_continuation_refines' depends on axioms: [propext, Quot.sound]\n'PCSRuntimeOutputBoundaryV3.output_acceptance_requires_declared_type' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_preserves_all_checked_errors' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_preserves_resource_failure' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_type_resource_failure' depends on axioms: [propext]\n'PCSRuntimeOutputBoundaryV3.output_certificate_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "source_bound_output_continuation_refinement_proved": true,
+  "complete_top_level_eval_extracted": false,
+  "input_binding_loop_extracted": false,
+  "native_compiler_correctness_proved": false,
+  "hashmap_implementation_refinement_proved": false,
+  "python_javascript_conditional_refinements_proved": false,
+  "pcs_scientific_authority": false,
+  "scope": "Current eval lines 158\u2013162 after input binding; exact Value::ty helper, derived typed enum equality, checked expression wrapper, question-mark error propagation and return-type rejection. Store is receiver-supplied result of the unextracted input phase. Native executions test the complete function without proving the omitted phase or compiler.",
+  "native_controls": {
+    "checks": 40,
+    "type_pairs": 25,
+    "widths": 4,
+    "failed": 0,
+    "cost": {
+      "wall_seconds": 0.659142,
+      "child_cpu_user_seconds": 0.28455,
+      "child_cpu_system_seconds": 0.376864,
+      "process_cumulative_max_child_rss_kib": 1717476
+    },
+    "test_source_sha256": "cca3318479e48978e810edb03a764d5469831c95efc3cf9138d379f61f4632ae"
+  }
+}
