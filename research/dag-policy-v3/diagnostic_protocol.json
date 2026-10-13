@@ -1,0 +1,30 @@
+{
+  "format": "pcs-post-evaluation-diagnostics-v3",
+  "limitations": [
+    "Mathlib retrieval uses existing symbolic ranker, not the trained DAG policy",
+    "whole-goal Std tactics are not action-budget-equivalent to primitive search",
+    "author-known elementary tasks, not blind evaluation"
+  ],
+  "mathlib_retrieval_limit": 3,
+  "mathlib_revision": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+  "mathlib_tasks": [
+    {
+      "id": "preimage_intersection",
+      "statement": "\u2200 (f : Nat \u2192 Nat) (s t : Set Nat), f \u207b\u00b9' (s \u2229 t) = (f \u207b\u00b9' s) \u2229 (f \u207b\u00b9' t)"
+    },
+    {
+      "id": "preimage_union",
+      "statement": "\u2200 (f : Nat \u2192 Nat) (s t : Set Nat), f \u207b\u00b9' (s \u222a t) = (f \u207b\u00b9' s) \u222a (f \u207b\u00b9' t)"
+    },
+    {
+      "id": "group_inverse_product",
+      "statement": "\u2200 (G : Type) [Group G] (a b : G), (a * b)\u207b\u00b9 = b\u207b\u00b9 * a\u207b\u00b9"
+    },
+    {
+      "id": "group_right_cancellation",
+      "statement": "\u2200 (G : Type) [Group G] (a b c : G), a * c = b * c \u2192 a = b"
+    }
+  ],
+  "status": "fixed before diagnostic execution, after frozen model evaluation; no training/selection use",
+  "tasks_sha256": "0a0bf32c39a6a589a9b19622dff7cf600f2e07713b180630aeb8cfe4aac44e3a"
+}

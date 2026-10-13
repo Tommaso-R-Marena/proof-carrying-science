@@ -1,0 +1,69 @@
+{
+  "child_cpu_system_seconds": 23.265917,
+  "child_cpu_user_seconds": 47.786505,
+  "comparisons": 36,
+  "format": "pcs-dag-policy-transfer-evaluation-v3",
+  "independently_replayed_proofs": 12,
+  "max_process_rss_kib": 273004,
+  "physical_lean_calls": 1555,
+  "promoted": false,
+  "scientific_authority": false,
+  "solved": {
+    "bag": 3,
+    "dag": 4,
+    "symbolic": 5
+  },
+  "tasks": 12,
+  "total_wall_seconds": 110.42804379799782,
+  "training": [
+    {
+      "architecture": "dag",
+      "changed_parameters": [
+        "tokens.weight",
+        "actions.weight",
+        "edge_types.weight",
+        "message.weight",
+        "message.bias",
+        "update.weight",
+        "update.bias",
+        "policy.0.weight",
+        "policy.0.bias",
+        "policy.2.weight",
+        "policy.2.bias",
+        "value.weight",
+        "value.bias",
+        "uncertainty.weight",
+        "uncertainty.bias"
+      ],
+      "checkpoint_sha256": "4af8b94a6be4996d3f08e73b9b0d6a91610ef5c4b88d783f185c630076a8d8a6",
+      "epochs": 20,
+      "examples": 39,
+      "last_loss": 0.0023067814763635397,
+      "parameters": 6099,
+      "training_data_sha256": "1a851684ecb478b698551f3120a6b67eefe6c8733b5d7eb33160535baa69706f",
+      "wall_seconds": 3.462198986002477
+    },
+    {
+      "architecture": "bag",
+      "changed_parameters": [
+        "tokens.weight",
+        "actions.weight",
+        "policy.0.weight",
+        "policy.0.bias",
+        "policy.2.weight",
+        "policy.2.bias",
+        "value.weight",
+        "value.bias",
+        "uncertainty.weight",
+        "uncertainty.bias"
+      ],
+      "checkpoint_sha256": "8d18bd319a6da1626bedf84e95480668790e71e7b4800218ab9f1d204d2720f2",
+      "epochs": 20,
+      "examples": 39,
+      "last_loss": 0.00743525754660368,
+      "parameters": 6099,
+      "training_data_sha256": "1a851684ecb478b698551f3120a6b67eefe6c8733b5d7eb33160535baa69706f",
+      "wall_seconds": 1.180090885995014
+    }
+  ]
+}

@@ -331,6 +331,7 @@ def verify_scientific_bundle(bundle: str | Path, public_key_path: str | Path, *,
                 raise ScientificAssuranceError("builtin certificate predicate is not the source-derived scientific obligation")
             claim = claims[f"C_{check['id']}"]
             if (claim["kind"] != "computational" or claim["required_evidence"] != [eid]
+                    or claim["predicate"] != predicate_from_manifest_check_v06(check)
                     or claim["assumptions"] != [x["id"] for x in contract["assumptions"]]):
                 raise ScientificAssuranceError("builtin claim lost its exact original evidence/assumption chain")
         external_spec = strict_json_loads(by_source[_FILES["spec"]].decode("utf-8"))
@@ -355,8 +356,13 @@ def verify_scientific_bundle(bundle: str | Path, public_key_path: str | Path, *,
             *(item["path"] for item in binding["original_source_inventory"])}
         if not required_paths.issubset({by_id[ident]["source_path"] for ident in bound_ids}):
             raise ScientificAssuranceError("numerical signature omits a required scientific source/assumption/evidence binding")
+        decisions = {item["claim_id"]: item["decision"] for item in verification["claims"]}
+        builtin_supported = all(decisions.get(f"C_{check['id']}") == "COMPUTATIONALLY_SUPPORTED"
+                                for check in primitive_checks(contract))
         return {**base, "independent_replay_consistent": True,
-            "bounded_contract_satisfied": replay["outcome"] == "PASS" and verification.get("accepted") is True,
+            "bounded_contract_satisfied": (replay["outcome"] == "PASS"
+                and verification.get("accepted") is True and builtin_supported),
+            "compiled_builtin_obligations_supported": builtin_supported,
             "domain_replay": replay, "obligation_results": resolved,
             "external_numerical_signature": numerical,
             "bundle_sha256": loaded["bundle_sha256"],

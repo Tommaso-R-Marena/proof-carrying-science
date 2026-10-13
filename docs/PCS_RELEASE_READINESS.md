@@ -16,9 +16,9 @@ New workstream tests and experiment reports are reported independently. The Rust
 
 ## Release vetoes and pending evidence
 
-- Protected CI for the final exact core and website revisions: **pending**.
-- Cross-repository compatibility bound to those final revisions: **pending**.
-- Live deployment at the tested website revision and its exact core binding: **not observed for these changes**.
+- Protected CI for release core fd4ddaf and website 72a47c9: **passed**, respectively runs 38312790669 and 38319164005. New continuation changes remain separately unqualified until their own gates pass.
+- Cross-repository compatibility: **tested**, pinned CertiForge c71e857 and protected core fd4ddaf.
+- Live deployment: Cloudflare build ed195caf-8037-40dc-a51c-5b4b06322b0b succeeded at 72a47c9; ten live asset hashes match, source-bound public proof and fresh local replay succeeded.
 - Actual remote D1 reconciliation, backup restoration or destructive schema migration: **not performed**. The new job journal uses existing audit infrastructure and does not require a new D1 schema.
 - Independent external scientific review: **not performed**.
 - Complete transitive source/dataset/institutional rights clearance: **not inferred**. The technical rights inventory identifies evidence and unresolved questions; existing first-party licensing is preserved.

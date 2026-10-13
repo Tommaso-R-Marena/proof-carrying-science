@@ -1,0 +1,23 @@
+{
+  "format": "pcs-scientific-workflow-evidence-index-v2",
+  "current_acceptance_directory": "final",
+  "historical_runs": [
+    {
+      "directory": "initial-invalid-dimension-expression",
+      "valid_positive_evidence": false,
+      "reason": "Historical false-positive aggregate: signed package accepted but compiled slope dimension claim FALSIFIED_OR_CHECK_FAILED."
+    },
+    {
+      "directory": "preceding-no-data-invalidation",
+      "valid_positive_evidence": true,
+      "superseded": true,
+      "reason": "Prior source version before explicit dataset-change propagation; final version is authoritative for current release."
+    }
+  ],
+  "current_test_log": "TESTS-final.log",
+  "current_test_log_sha256": "28254bf6e77bd25f9d11164b893efe6c80d404247541089e5c7511fde79fbf20",
+  "current_seal_sha256": "63d5bae1493098525085f69138c9a6bb44d7ea05ccf0dbf6f63b8928890e53e7",
+  "independent_human_review": false,
+  "scientific_acceptance": false,
+  "model_promotion": false
+}

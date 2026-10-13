@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import stat
 import tempfile
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -249,11 +250,31 @@ def _decode_registry(raw: bytes) -> dict[str, Any]:
     return validate_registry(value)
 
 
+def _read_regular_file(path: str | Path, label: str) -> bytes:
+    # Inspect the caller's leaf before resolving: resolve() erases symlinks.
+    # Parent directories are an operator-controlled filesystem trust boundary.
+    source = Path(path)
+    try:
+        before = source.lstat()
+        if not stat.S_ISREG(before.st_mode):
+            raise KeyLifecycleError(f"{label} must be a regular file")
+        flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+        fd = os.open(source, flags)
+        with os.fdopen(fd, "rb") as handle:
+            opened = os.fstat(handle.fileno())
+            if (not stat.S_ISREG(opened.st_mode)
+                    or (opened.st_dev, opened.st_ino) != (before.st_dev, before.st_ino)):
+                raise KeyLifecycleError(f"{label} changed while opening")
+            raw = handle.read(1_048_577)
+            if len(raw) > 1_048_576:
+                raise KeyLifecycleError(f"{label} exceeds byte limit")
+            return raw
+    except OSError as exc:
+        raise KeyLifecycleError(f"cannot safely read {label}") from exc
+
+
 def load_registry(path: str | Path) -> dict[str, Any]:
-    source = Path(path).resolve()
-    if source.is_symlink() or not source.is_file():
-        raise KeyLifecycleError(f"key registry must be a regular file: {source}")
-    return _decode_registry(source.read_bytes())
+    return _decode_registry(_read_regular_file(path, "key registry"))
 
 
 def _write_registry(
@@ -263,7 +284,12 @@ def _write_registry(
     overwrite: bool,
 ) -> Path:
     checked = validate_registry(registry)
-    target = Path(path).resolve()
+    requested = Path(path)
+    if requested.is_symlink():
+        raise KeyLifecycleError("key registry must not be a symlink")
+    target = requested.parent.resolve() / requested.name
+    if target.exists() and not target.is_file():
+        raise KeyLifecycleError("key registry must be a regular file")
     if target.exists() and not overwrite:
         raise KeyLifecycleError(f"refusing to overwrite existing registry: {target}")
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -276,7 +302,15 @@ def _write_registry(
             handle.write(raw)
             handle.flush()
             os.fsync(handle.fileno())
-        os.replace(tmp_name, target)
+        if overwrite:
+            # Replace the leaf itself, never the target of a swapped symlink.
+            os.replace(tmp_name, target)
+        else:
+            # An atomic no-clobber install closes the exists()/replace() race.
+            try:
+                os.link(tmp_name, target)
+            except FileExistsError as exc:
+                raise KeyLifecycleError("refusing to overwrite existing registry") from exc
     finally:
         try:
             os.unlink(tmp_name)
@@ -292,11 +326,8 @@ def write_new_registry(path: str | Path, registry_id: str) -> dict[str, Any]:
 
 
 def _public_key_metadata(path: str | Path) -> tuple[str, str]:
-    source = Path(path).resolve()
-    if source.is_symlink() or not source.is_file():
-        raise KeyLifecycleError(f"public key must be a regular file: {source}")
     try:
-        key = serialization.load_pem_public_key(source.read_bytes())
+        key = serialization.load_pem_public_key(_read_regular_file(path, "public key"))
     except (ValueError, TypeError) as exc:
         raise KeyLifecycleError(f"cannot decode public key: {exc}") from exc
     if not isinstance(key, Ed25519PublicKey):

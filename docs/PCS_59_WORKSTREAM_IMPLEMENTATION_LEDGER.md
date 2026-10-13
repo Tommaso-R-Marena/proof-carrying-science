@@ -1,12 +1,10 @@
-# PCS 59-workstream implementation ledger
+# PCS59-workstream implementation ledger
 
-Every requested task appears below with its actual implemented scope and remaining acceptance boundary. The JSON companion preserves exact inspected source/evidence hashes. Local source overlays, reference-model proofs, bounded runtime testing, provider CI and deployment are distinct evidence classes. No status authorizes scientific acceptance.
+All59 acceptance boundaries start from independently refreshed protected core fd4ddaf, website72a47c9 and CertiForgec71e857. Historical starting revisions and executed research remain preserved. New continuation source has local execution evidence and still requires protected CI. No status grants scientific authority.
 
-Starting core `e1067e406a1a1991497e7130e1f209239e5607cc`, website `1a351144cac080a990ab6f75fe8b57b476c3b08a`, CertiForge `415a1de40eaeadc366ac2d824c05ee52bb2bd66e`. Final protected release commits/PRs remain pending at this snapshot.
+Status counts: 3 BLOCKED, 5 COMPLETE_TESTED, 51 PARTIAL.
 
-Status counts: 3 BLOCKED, 2 COMPLETE_TESTED, 54 PARTIAL.
-
-Zero human participants, zero independent external human reviewers, zero financial spend. Owner CI diagnostics are distinct from public admissions; existing quotas remain unchanged.
+Zero independent external human reviewers or participants and zero financial spend. Provider fixtures, actual hosted jobs, local kernel replay, formal model proofs and production metadata are distinct evidence classes.
 
 ## Task 1 — Establish a reproducible technical baseline
 
@@ -14,39 +12,31 @@ Zero human participants, zero independent external human reviewers, zero financi
 
 Acceptance: A fresh checkout and documented environment can reproduce the required results, and every exception or environment dependency is recorded.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Protected core full-suite 1519 passes/10 optional skips; mandatory learning lane 114 passes; exact tested and merged trees agree.
 
-New implementation: Added exact-byte qualification and froze the real starting revision. Setup-corrected staggered baseline covers all 1,419 original outcomes without changing tracked source.
+Tests: 21 passed; no missing gate promoted; 1,409 passed/10 setup failures first run; 17 module tests passed after correction; all tracked source unchanged; Protected core full-suite 1519 passes/10 optional skips; mandatory learning lane 114 passes; exact tested and merged trees agree.
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `scripts/qualify_release.py`, `tests/test_release_qualification_v1.py`
+Evidence: `scripts/verify_lean.sh`, `.github/workflows/pcs-public-full-verification.yml`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/evidence/platform-baseline-v1/frozen-python-baseline.json`, `docs/evidence/platform-baseline-v1/frozen-reproduction-correction.json`, `docs/evidence/protected-platform-release-v1/core-protected-release.json`
 
-Tests: 21 passed; no missing gate promoted (local focused); 1,409 passed/10 setup failures first run; 17 module tests passed after correction; all tracked source unchanged (staggered baseline, not a single full green run)
+Remaining: Fresh future environment restoration not tested; optional skips remain explicit.
 
-Evidence: `proof-carrying-science/scripts/verify_lean.sh`, `proof-carrying-science/.github/workflows/pcs-public-full-verification.yml`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `proof-carrying-science/docs/evidence/platform-baseline-v1/frozen-python-baseline.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/frozen-reproduction-correction.json`
-
-Remaining: Final source-revision full single-run gates, cross-repository pins and provider release remain pending.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 2 — Complete actual hosted Lean execution
 
-**Status: PARTIAL.**
+**Status: COMPLETE_TESTED.**
 
 Acceptance: At least ten repeatable real jobs terminate with accurate verified, unknown, failure, or resource-exhaustion outcomes, with no forged or incomplete results accepted.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Ten actual source-bound owner hosted jobs completed with correct verified/unknown/ambiguous/unsupported/rejected outcomes; independently replayed proofs and counterexample. One separate live normal-quota proof also completed.
 
-New implementation: Preserved actual public protected Lean pipeline and normal quotas; new ten-job owner diagnostic matrix awaits provider execution.
+Tests: Ten actual source-bound owner hosted jobs completed with correct verified/unknown/ambiguous/unsupported/rejected outcomes; independently replayed proofs and counterexample. One separate live normal-quota proof also completed.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
+Evidence: `pcs/experimental/prover/public_job.py`, `pcs/experimental/prover/public_transport.py`, `docs/evidence/protected-platform-release-v1/hosted-ten-diagnostics-summary.json`
 
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
+Remaining: Bounded owner operational matrix, not ten public admissions or a blind scientific benchmark. Provider is part of remote execution trust boundary.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/public_job.py`, `proof-carrying-science/pcs/experimental/prover/public_transport.py`
-
-Remaining: Owner-hosted diagnostics and real public admissions must be classified separately. No invented jobs or quota bypass.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 3 — Implement robust job lifecycle and recovery
 
@@ -54,19 +44,17 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Restart, retry, race, and duplicate-request tests preserve one coherent authoritative request outcome.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Persistent recovery now separates known no-dispatch from uncertain POST; initial/created readiness is globally bounded at 240 attempts per 60-minute window. One SQLite statement charges both proof counters or neither.
 
-New implementation: Persistent signed-source-bound job journal preserves a terminal outcome across actual SQLite restart. Nine tests exercised 20 competing timestamp races and ten concurrent cancellation attempts; provider responses were fixed test fixtures.
+Tests: Nine local tests; actual SQLite restart; 20 timestamp races and ten cancellation attempts; Added bounded provider readiness before admission; repeated readiness before POST separates definite not-sent/declined outcomes from uncertainty. Persistent SQLite restart and20-way races retain one admission/dispatch.
 
-Changed files: `proof-carrying-science-site/src/lean-job-journal.js`, `proof-carrying-science-site/tests/lean-job-journal.test.mjs`
+Evidence: `src/lean-research.js`, `docs/PCS_PROVIDER_RECOVERY_V2.md`
 
-Tests: Nine local tests; actual SQLite restart; 20 timestamp races and ten cancellation attempts (Fixed provider fixtures; not ten hosted proof jobs)
+Remaining: Production crash injection and external provider scheduling atomicity remain open.
 
-Evidence: `proof-carrying-science-site/src/lean-research.js`
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
-Remaining: Final hosted restart/retry/race injection and exact provider job receipts pending; local lifecycle evidence does not prove production recovery.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Final continuation tests: 55 focused actual Worker/SQLite and transport-fixture tests; 60 competing clients admit12 without partial charges,20 same-client requests admit2. Actual production EXPLAIN accepted exact SQL with zero writes.
 
 ## Task 4 — Implement end-to-end observability
 
@@ -74,19 +62,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A failed public research request can be diagnosed from bounded, privacy-safe logs without guessing where execution stopped.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: New readiness returns fixed privacy-safe diagnostics; signed job stage events already validated on ten hosted controls and live proof.
 
-New implementation: Existing exact-source receipts and cost ledgers retained; fixed-command qualification records outcome, wall/child CPU/RSS and log identity.
+Tests: 21 passed; no missing gate promoted; New readiness returns fixed privacy-safe diagnostics; signed job stage events already validated on ten hosted controls and live proof.
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `scripts/qualify_release.py`, `tests/test_release_qualification_v1.py`
+Evidence: `pcs/experimental/prover/memory_environment.py`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/PCS_PROVIDER_RECOVERY_V2.md`
 
-Tests: 21 passed; no missing gate promoted (local focused)
+Remaining: No complete concurrent process-tree observability or production failure-injection guarantee.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/memory_environment.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`
-
-Remaining: Full live service tracing and concurrent process-tree resource accounting are not inferred.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 5 — Strengthen resource-exhaustion handling
 
@@ -94,39 +78,33 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Negative tests consistently return bounded and accurately classified failures.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Six-second provider deadlines,32KiB metadata,240 readiness attempts per hour and atomic unchanged2/client+12/global proof caps are exercised. Full-file publication scan rejects delayed private-key markers.
 
-New implementation: Existing typed bounded action/search limits preserved; qualifier terminates timed-out process groups and preserves failure.
+Tests: 21 passed; no missing gate promoted; Bounded6-second metadata/POST deadlines and32KiB metadata; known rejection is failed, uncertainPOST is preserved for polling. Hosted one-expansion control returned UNKNOWN.
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `scripts/qualify_release.py`, `tests/test_release_qualification_v1.py`
+Evidence: `pcs/experimental/prover/memory_wire.py`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/PCS_PROVIDER_RECOVERY_V2.md`
 
-Tests: 21 passed; no missing gate promoted (local focused)
+Remaining: Client/host process-tree accounting and real hosted forced wall-limit cancellation remain incomplete.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/memory_wire.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
-Remaining: Actual final hosted timeout/cancellation receipts remain to be recorded; resource exhaustion never means proof success.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Final continuation tests: 55 job/admission controls plus79 discovery/scientific regressions passed.
 
 ## Task 6 — Verify deployed core revision and evidence bindings
 
-**Status: PARTIAL.**
+**Status: COMPLETE_TESTED.**
 
 Acceptance: Changing any authority-critical bound field causes the corresponding verification to fail.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Exact protected core pin, negative binding tests, ten byte-identical deployed assets and actual remote/local replay bound to the immutable theorem.
 
-New implementation: Preserved exact core/source/model/catalog/receipt bindings; new unsigned qualifier cannot assert deployment.
+Tests: Exact protected core pin, negative binding tests, ten byte-identical deployed assets and actual remote/local replay bound to the immutable theorem.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
+Evidence: `pcs/experimental/prover/public_transport.py`, `docs/evidence/protected-platform-release-v1/cloudflare-platform-live-assets.json`
 
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
+Remaining: One qualified deployment; no universal guarantee over future releases or infrastructure compromise.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/public_transport.py`
-
-Remaining: Final tested core pin, website protected SHA and byte-exact live Cloudflare deployment pending.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 7 — Implement comprehensive failure injection
 
@@ -134,19 +112,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Every security-critical failure mode is rejected without silently promoting an invalid result.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Source drift, missing/forged gates, malformed records, independent scientific false-report replay and browser authorization failures exercised.
 
-New implementation: Source drift, missing/forged gates, malformed records, independent scientific false-report replay and browser authorization failures exercised.
+Tests: 21 passed; no missing gate promoted
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `scripts/qualify_release.py`, `tests/test_release_qualification_v1.py`
-
-Tests: 21 passed; no missing gate promoted (local focused)
-
-Evidence: `proof-carrying-science/tests/test_public_proof_transport.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`
+Evidence: `tests/test_public_proof_transport.py`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`
 
 Remaining: Hosted job-state/provider failure campaign remains separate from these local controls.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 8 — Create a complete release qualification gate
 
@@ -154,19 +128,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Critical release failures block promotion, and a qualified release produces an independently inspectable evidence record.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: All protected core/site/CertiForge gates passed; exact merged feature trees and owner identity checked; no privileged bypass.
 
-New implementation: Implemented fixed reviewed local qualification recipes with immutable-source/dependency/log binding and independent rerun. Missing recipes and source drift veto the real smoke qualification.
+Tests: 21 passed; no missing gate promoted; All protected core/site/CertiForge gates passed; exact merged feature trees and owner identity checked; no privileged bypass.
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `scripts/qualify_release.py`, `tests/test_release_qualification_v1.py`
+Evidence: `pcs/release_qualification_v1.py`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/evidence/protected-platform-release-v1/core-protected-release.json`
 
-Tests: 21 passed; no missing gate promoted (local focused)
+Remaining: Local release JSON is unsigned; external supply-chain attestation and fresh environment restoration remain open.
 
-Evidence: `proof-carrying-science/pcs/release_qualification_v1.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`
-
-Remaining: Unsigned local evidence always deployment-ineligible; final required provider checks remain mandatory.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 9 — Complete external-project adapters
 
@@ -174,19 +144,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: An unfamiliar public/synthetic scientific workflow can be mapped, reviewed, confirmed, attested, and independently replayed.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: New generic typed external scientific workflow runs real CC0 PalmerPenguins data through existing signed PCS bundle and independent receiving processes.
 
-New implementation: Authored unfamiliar standalone biochemical Python project discovered without executing source, explicitly confirmed, packaged and independently replayed.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS; New generic typed external scientific workflow runs real CC0 PalmerPenguins data through existing signed PCS bundle and independent receiving processes.
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
+Evidence: `pcs/workflow_discovery_v06.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
+Remaining: Only versioned bounded length-to-mass linear calibration; no unrestricted arbitrary workflow execution or scientific adequacy.
 
-Evidence: `proof-carrying-science/pcs/workflow_discovery_v06.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
-
-Remaining: General external-project intent inference, arbitrary execution isolation and representative third-party evaluation are open.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 10 — Expand Claim IR and Proof Obligation Graph
 
@@ -194,19 +160,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Every formal outcome has a complete, machine-readable chain to the exact originating scientific claim, evidence, and assumptions.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Workflow obligations include measurement-byte identity, complete-case filtering, unit conversion, finite computation and empirical applicability; changed data or premises invalidate descendants.
 
-New implementation: Scientific typed sidecar supports units, finite indices, exact parameters, assumptions, provenance and dependency invalidation while preserving canonical Claim IR.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS; Workflow obligations include measurement-byte identity, complete-case filtering, unit conversion, finite computation and empirical applicability; changed data or premises invalidate descendants.
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
+Evidence: `pcs/scientific_obligations_v1.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
+Remaining: General inference over unfamiliar scientific claims remains unsupported/OPEN.
 
-Evidence: `proof-carrying-science/pcs/scientific_obligations_v1.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
-
-Remaining: This is a compatible planning sidecar, not broad canonical IR or scientific runtime refinement.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 11 — Automate complete scientific evidence packaging
 
@@ -214,19 +176,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A fresh independent environment can verify the delivered bundle without access to the producer's private state.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual real-data signed bundle, public key, source/license bindings and four fresh receiving processes; false report and FALSIFIED dimension do not become bounded success.
 
-New implementation: Actual canonical signed PCS ZIP and readable/numerical sidecars built; three fresh receiver processes validate positive, failure and producer-signed false-report cases.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS; Actual real-data signed bundle, public key, source/license bindings and four fresh receiving processes; false report and FALSIFIED dimension do not become bounded success.
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
+Evidence: `pcs/package_v06.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
+Remaining: Package integrity is distinct from claim support; empirical/numerical claims remain OPEN under PCS authority.
 
-Evidence: `proof-carrying-science/pcs/package_v06.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
-
-Remaining: Numerical claim stays OPEN in compiled PCS authority; independent authenticated human scientific review remains absent.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 12 — Implement useful unsupported-claim analysis
 
@@ -234,19 +192,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Unsupported claims remain explicitly OPEN and receive useful, nonmisleading diagnostics.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Unsupported/missing-domain claims return OPEN with explicit diagnostic proposals; clinical control stays unsupported.
 
-New implementation: Unsupported/missing-domain claims return OPEN with explicit diagnostic proposals; clinical control stays unsupported.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
-
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
-
-Evidence: `proof-carrying-science/pcs/limitations.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
+Evidence: `pcs/limitations.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
 
 Remaining: Advice is lexical/typed scoped behavior, not a general certified English interpretation.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 13 — Expand domain-specific scientific verification
 
@@ -254,19 +208,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: PCS verifies several nontrivial, clearly scoped properties of an unfamiliar computational-science workflow.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Added actual344-record measurement workflow,342completepairs, exact rational calibration and independent NumPy least-squares baseline.
 
-New implementation: Reusable mass-balance, rate-unit, exact rational Euler, grid, nonnegativity and conservation predicates executed against 13 authored observations.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS; Added actual344-record measurement workflow,342completepairs, exact rational calibration and independent NumPy least-squares baseline.
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
+Evidence: `pcs/adapters/pkpd.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
+Remaining: Finite numerical agreement is not biological/causal/population validity; no general scientific acceptance.
 
-Evidence: `proof-carrying-science/pcs/adapters/pkpd.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
-
-Remaining: No continuous ODE approximation proof, floating-point source refinement or empirical biological adequacy.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 14 — Integrate independent reviewer feedback
 
@@ -274,19 +224,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Reviewer concerns can be recorded, traced, and resolved without rewriting the historical evidence.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Append-only evidence-bound reviewer proposal revisions and existing policy passthrough preserved.
 
-New implementation: Append-only evidence-bound reviewer proposal revisions and existing policy passthrough preserved.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
-
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
-
-Evidence: `proof-carrying-science/pcs/external_validator_v06.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
+Evidence: `pcs/external_validator_v06.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
 
 Remaining: Zero independently authenticated external reviewers participated; fixture IDs do not authorize training.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 15 — Expand controlled English-to-Lean
 
@@ -294,19 +240,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: New independently authored meaning fixtures successfully formalize, elaborate, and undergo independent semantic review.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing restricted grammar, typed lowering and learned formalization/search interfaces retained; parser parity and recursion regressions rerun.
 
-New implementation: Existing restricted grammar, typed lowering and learned formalization/search interfaces retained; parser parity and recursion regressions rerun.
+Tests: No new capability execution inferred from protected merge.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
-
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/language.py`
+Evidence: `pcs/experimental/prover/language.py`
 
 Remaining: No newly trained broad English-to-Lean model or unrestricted meaning-preservation claim.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 16 — Implement stronger bidirectional semantic checking
 
@@ -314,19 +256,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The system detects and reports semantic inconsistencies on a meaningful suite of independently authored examples.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Restricted typed round-trip and semantic reference theorems freshly audited; original exact source grounding preserved.
 
-New implementation: Restricted typed round-trip and semantic reference theorems freshly audited; original exact source grounding preserved.
+Tests: No new capability execution inferred from protected merge.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
-
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
-
-Evidence: `proof-carrying-science/pcs/semantic_translation_v1.py`
+Evidence: `pcs/semantic_translation_v1.py`
 
 Remaining: General English explanation equivalence and implementation-wide parser correspondence remain unproved.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 17 — Improve ambiguity detection and abstention
 
@@ -334,19 +272,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Ambiguous inputs produce reviewable alternatives or abstention rather than unreviewed certification.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing ambiguity/unsupported abstention retained; deep input rejects without uncaught recursion.
 
-New implementation: Existing ambiguity/unsupported abstention retained; deep input rejects without uncaught recursion.
+Tests: No new capability execution inferred from protected merge.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
-
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/language.py`
+Evidence: `pcs/experimental/prover/language.py`
 
 Remaining: Broader linguistic ambiguity corpus and independent human fidelity review remain unperformed.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 18 — Integrate actual Mathlib retrieval
 
@@ -354,19 +288,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: PCS uses genuine external Mathlib declarations to solve unfamiliar mathematical problems beyond its authored elementary proof catalogs.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Historical6-task Mathlib experiment completed; four additional actual Mathlib states roundtrip inDAG,2 retrieved proofs fresh-replayed and2UNKNOWN.
 
-New implementation: Actual exact-pinned Mathlib declarations retrieved and used in kernel-checked external theorem search.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Historical6-task Mathlib experiment completed; four additional actual Mathlib states roundtrip inDAG,2 retrieved proofs fresh-replayed and2UNKNOWN.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `pcs/experimental/prover/library.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: Learned policy still lacks a rich receiver-controlled Mathlib action catalog; diagnostics are authored and symbolic, not blind transfer.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/library.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: Grounded retrieval is evaluated on a small public authored set; new complete generalization report records final results when complete.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 19 — Improve structured proof-state representations
 
@@ -374,19 +304,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Actual model features derive from real Lean states, and improvements are evaluated against appropriate ablations.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Real Lean expression DAG now feeds a6099-parameter trainable policy with child-position/binder/role edges.20epochs39verifiedtransitions changed actual message/edge/update weights.
 
-New implementation: Implemented expression/local-context proof-state graph extraction from actual structured Lean states.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Real Lean expression DAG now feeds a6099-parameter trainable policy with child-position/binder/role edges.20epochs39verifiedtransitions changed actual message/edge/update weights.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `pcs/experimental/prover/environment.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: DAG4/12 trails symbolic5/12 and Std12/12; representation accuracy is not neural superiority.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/environment.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: Graph correctness and learned benefit are not inferred from an API or synthetic hand-written goal strings.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 20 — Strengthen verified-memory discovery
 
@@ -394,19 +320,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: PCS automatically proposes and admits useful intermediate lemmas that improve unseen proof-search performance beyond trivial theorem memorization.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Counterexample-guided scoped abstraction-repair experiment extends existing checked cut/memory admission.
 
-New implementation: Counterexample-guided scoped abstraction-repair experiment extends existing checked cut/memory admission.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
-
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/abstraction_experiment.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
+Evidence: `pcs/experimental/prover/abstraction_experiment.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`
 
 Remaining: No mathematical novelty claim; exact utility/final transfer outcomes must come from completed sealed experiment.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 21 — Improve typed anti-unification and generalization
 
@@ -414,19 +336,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Some genuine proposed generalizations survive independent Lean checking and prove useful on held-out problems.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Typed anti-unification and scoped repaired proposal admission implemented with fresh kernel checks.
 
-New implementation: Typed anti-unification and scoped repaired proposal admission implemented with fresh kernel checks.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
-
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/memory_discovery.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
+Evidence: `pcs/experimental/prover/memory_discovery.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`
 
 Remaining: Broader principal anti-unification theory and discovered-mathematics novelty remain unsupported.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 22 — Optimize verified-memory utility
 
@@ -434,19 +352,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A selected memory configuration demonstrates reproducible practical value under a frozen evaluation protocol.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Frozen memory utility protocols and cost/resource receipts retained; separate amortization experiment staged.
 
-New implementation: Frozen memory utility protocols and cost/resource receipts retained; separate amortization experiment staged.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
-
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/memory_experiment.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
+Evidence: `pcs/experimental/prover/memory_experiment.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`
 
 Remaining: Small paired utility results cannot imply submodularity, global optimum or universal efficiency.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 23 — Develop hybrid symbolic-neural search
 
@@ -454,19 +368,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A hybrid system is implemented with reproducible component ablations and measurable performance, without attributing symbolic successes to the neural policy.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing hybrid portfolio remains stable. New DAG/bag policies plug into existing checked memory_search with bounded JSON checkpoint and saved-checkpoint CLI.
 
-New implementation: Real hybrid symbol/premise/checked-memory search with independently kernel-replayed outcomes implemented.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Existing hybrid portfolio remains stable. New DAG/bag policies plug into existing checked memory_search with bounded JSON checkpoint and saved-checkpoint CLI.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `pcs/experimental/prover/memory_search.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: Symbolic/Std remains stronger; new inferior checkpoints are experimental and not promoted.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/memory_search.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: Held-out superiority and larger external project transfer are not preclaimed.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 24 — Improve induction strategy selection
 
@@ -474,19 +384,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: PCS solves additional independently authored induction problems beyond those already supported, with exact verified proofs.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing real under-hypothesis induction actions retained; typed successor/recurrence search compared with symbolic and Std policies.
 
-New implementation: Existing real under-hypothesis induction actions retained; typed successor/recurrence search compared with symbolic and Std policies.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
-
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/induction_environment.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
+Evidence: `pcs/experimental/prover/induction_environment.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`
 
 Remaining: Learned induction strategy improvement requires completed untouched evaluation, not task repetition.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 25 — Implement counterexample-guided proof repair
 
@@ -494,19 +400,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: PCS repairs a reproducible set of previously failed proofs without increasing unsound acceptance.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual bounded counterexamples guide explicit separate abstraction repairs without mutating original goals.
 
-New implementation: Actual bounded counterexamples guide explicit separate abstraction repairs without mutating original goals.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
-
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
-
-Evidence: `proof-carrying-science/pcs/proof_repair_v06.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
+Evidence: `pcs/proof_repair_v06.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`
 
 Remaining: Not unrestricted conjecture repair or a permission to silently strengthen assumptions.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 26 — Improve genuine reinforcement learning
 
@@ -514,19 +416,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Training runs are reproducible, sequential, and independently verified; promotion requires measured held-out performance rather than mere successful gradient updates.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Eight real sequential DAG actor-critic episodes produced seven independently replayed positive terminals and one invalid episode; updated checkpoint saved. Fresh4-task supervised/RL/symbolic all2/4, Std4/4.
 
-New implementation: Historical 32 sequential actor–critic updates and negative held-out result preserved. New policy transfer does not create new RL evidence.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Eight real sequential DAG actor-critic episodes produced seven independently replayed positive terminals and one invalid episode; updated checkpoint saved. Fresh4-task supervised/RL/symbolic all2/4, Std4/4.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `pcs/experimental/prover/memory_experiment.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: One seed, small authored split, no RL improvement or self-improvement claim; checkpoints not promoted.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/memory_experiment.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: No new demonstrated sequential RL improvement; historical weight changes do not imply better held-out search.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 27 — Implement strict model promotion gates
 
@@ -534,19 +432,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The default system cannot be replaced by an inferior or unverified candidate without an explicit authorized override.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Implemented stricter source/dataset/evaluator-bound promotion metadata, exposure bookkeeping and fail-closed decision controls.
 
-New implementation: Implemented stricter source/dataset/evaluator-bound promotion metadata, exposure bookkeeping and fail-closed decision controls.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
-
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/promotion.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
+Evidence: `pcs/experimental/prover/promotion.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`
 
 Remaining: No checkpoint automatically acquires production authority; independent gate integration and full adaptive statistical protocol remain required.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 28 — Build serious independent benchmarks
 
@@ -554,19 +448,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Independent researchers can rerun the comparisons and interpret the results without relying on claims in a summary document.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Frozen12challenge structures,36matched action-search comparisons; separate stronger Std12/12. Four additional frozen RL finaltasks and independent Mathlib diagnostics preserve costs/negative results.
 
-New implementation: Frozen public developer-authored typed/Mathlib partitions, source overlays and contamination inspection established before experiments.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Frozen12challenge structures,36matched action-search comparisons; separate stronger Std12/12. Four additional frozen RL finaltasks and independent Mathlib diagnostics preserve costs/negative results.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `research/verified-memory-v1/protocol.json`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: Author-known public mathematics, not private blind or externally authored evaluation; semantic near-duplicates not exhaustively excluded.
 
-Evidence: `proof-carrying-science/research/verified-memory-v1/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: Benchmarks are not private, blind or previously unseen external repositories. Interface-debug exposure is disclosed.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 29 — Complete conditional-checker refinement
 
@@ -574,19 +464,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Additional real production operations are covered by auditable source-bound refinement theorems with explicit assumptions.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing decision-diagram reference proofs and extracted arithmetic preserved; actual Python/JavaScript/Lean comparisons expanded.
 
-New implementation: Existing decision-diagram reference proofs and extracted arithmetic preserved; actual Python/JavaScript/Lean comparisons expanded.
+Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches
 
-Changed files: `formal/tools/RuntimeCanonicalInputs.lean`, `formal/tools/RuntimeValueType.lean`, `scripts/runtime_differential.py`, `scripts/verify_runtime_canonical_boundary.py`, `scripts/verify_runtime_value_type.py`
-
-Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches (source windows and finite runtime cases, not full conditional/top-level refinement)
-
-Evidence: `proof-carrying-science/research/aristotle-runtime-refinement-v1/REPORT.md`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/value-type-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `proof-carrying-science/docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
+Evidence: `research/aristotle-runtime-refinement-v1/REPORT.md`, `docs/evidence/platform-baseline-v1/runtime-refinement.json`, `docs/evidence/platform-baseline-v1/value-type-refinement.json`, `docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
 
 Remaining: Principal python_conditional_refines_reference and javascript_conditional_refines_reference remain open; unsupported runtime constructs not replaced by a weaker proof.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 30 — Extend formalization parser refinement
 
@@ -594,19 +480,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The supported parser fragment has stronger demonstrated source-to-specification correspondence, and unsupported cases fail safely.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Fresh restricted parser theorem audit, 1,523 runtime parity cases and depth-995 fail-closed regressions executed.
 
-New implementation: Fresh restricted parser theorem audit, 1,523 runtime parity cases and depth-995 fail-closed regressions executed.
+Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches
 
-Changed files: `formal/tools/RuntimeCanonicalInputs.lean`, `formal/tools/RuntimeValueType.lean`, `scripts/runtime_differential.py`, `scripts/verify_runtime_canonical_boundary.py`, `scripts/verify_runtime_value_type.py`
-
-Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches (source windows and finite runtime cases, not full conditional/top-level refinement)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/language.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/value-type-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `proof-carrying-science/docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
+Evidence: `pcs/experimental/prover/language.py`, `docs/evidence/platform-baseline-v1/runtime-refinement.json`, `docs/evidence/platform-baseline-v1/value-type-refinement.json`, `docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
 
 Remaining: English rewriting, JSON/text decoding and whole actual parser-source refinement remain open.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 31 — Expand CertiForge formal refinement
 
@@ -614,19 +496,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: More of CertiForge's real checker and optimizer behavior is connected to explicit Lean theorems, with source revision binding and independent differential validation.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Exact current Rust checked-wrapper source fragment has17fresh kernel theorems: canonicality, iterator/early-return contract, guard order independence, expression refinement and certificate composition.31native checks and2mutated-source kernel rejections passed.
 
-New implementation: Added exact-source Rust Value::ty helper extraction with four kernel theorems; preserved source-bound eval_expr and certificate results. New eval_expr_checked validates canonical public-store payloads; high-level eval routes through it. Rust regression gate pending at this snapshot.
+Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches; Exact current Rust checked-wrapper source fragment has17fresh kernel theorems: canonicality, iterator/early-return contract, guard order independence, expression refinement and certificate composition.31native checks and2mutated-source kernel rejections passed.
 
-Changed files: `formal/tools/RuntimeCanonicalInputs.lean`, `formal/tools/RuntimeValueType.lean`, `scripts/runtime_differential.py`, `scripts/verify_runtime_canonical_boundary.py`, `scripts/verify_runtime_value_type.py`
+Evidence: `pcs/certiforge_adapter_v1.py`, `docs/evidence/platform-baseline-v1/runtime-refinement.json`, `docs/evidence/platform-baseline-v1/value-type-refinement.json`, `docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`, `docs/PCS_RUNTIME_CHECKED_BOUNDARY_REPORT.md`
 
-Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches (source windows and finite runtime cases, not full conditional/top-level refinement)
+Remaining: Compiler/HashMap implementation/top-level eval/type-checker and whole Python/JS conditional source correspondence remain unproved.
 
-Evidence: `proof-carrying-science/pcs/certiforge_adapter_v1.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/value-type-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `proof-carrying-science/docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
-
-Remaining: Full top-level Rust eval loop/type-checker/checked-wrapper extraction and native compiler correspondence remain open. Archived source415 counterexample motivates the new tested guard; low-level eval_expr still requires Value.WF.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: c71e8575db2800b015a9d444f8ed572490f3a871 — https://github.com/Tommaso-R-Marena/certiforge/pull/3
 
 ## Task 32 — Formalize learning-runtime safety invariants
 
@@ -634,19 +512,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Additional learning-system correctness boundaries are formalized, and any claimed runtime guarantees have explicit implementation evidence.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual sequential rewards remain environment/kernel-derived; seven positive terminals independently replayed. Tampered checkpoint/actions rejected; theorem statements stay immutable.
 
-New implementation: Freshly audited existing model-independent reward, replay, conservative library, authority and memory-boundary reference theorems.
+Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches; Actual sequential rewards remain environment/kernel-derived; seven positive terminals independently replayed. Tampered checkpoint/actions rejected; theorem statements stay immutable.
 
-Changed files: `formal/tools/RuntimeCanonicalInputs.lean`, `formal/tools/RuntimeValueType.lean`, `scripts/runtime_differential.py`, `scripts/verify_runtime_canonical_boundary.py`, `scripts/verify_runtime_value_type.py`
+Evidence: `formal/PCSVerifiedMemoryBoundary.lean`, `docs/evidence/platform-baseline-v1/runtime-refinement.json`, `docs/evidence/platform-baseline-v1/value-type-refinement.json`, `docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches (source windows and finite runtime cases, not full conditional/top-level refinement)
+Remaining: Learning runtime has bounded tested invariants; broad source-bound Python learning-runtime refinement remains open.
 
-Evidence: `proof-carrying-science/formal/PCSVerifiedMemoryBoundary.lean`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/value-type-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `proof-carrying-science/docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
-
-Remaining: These are reference interfaces, not whole Python/JavaScript service or evaluator implementation refinement.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 33 — Strengthen cryptographic and serialization assurance
 
@@ -654,19 +528,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Critical serialization and authentication invariants have reproducible positive/negative evidence and, where feasible, formal correspondence results.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Added real authenticated Ed25519 signing policy, trusted observation, expiry/rotation/compromise and exact-object binding controls; existing canonical primitives preserved.
 
-New implementation: Added real authenticated Ed25519 signing policy, trusted observation, expiry/rotation/compromise and exact-object binding controls; existing canonical primitives preserved.
+Tests: 44 focused tests and 17 real cryptographic drill controls passed
 
-Changed files: `pcs/signing_policy_v1.py`, `scripts/exercise_signing_recovery.py`, `tests/test_signing_policy_v1.py`, `tests/test_signing_recovery_drill.py`
-
-Tests: 44 focused tests and 17 real cryptographic drill controls passed (ephemeral test keys, not production custody)
-
-Evidence: `proof-carrying-science/pcs/canonical_json.py`, `proof-carrying-science/pcs/receipt_signature_v06.py`, `proof-carrying-science/research/platform-security-v1/signing-recovery.json`, `proof-carrying-science/docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
+Evidence: `pcs/canonical_json.py`, `pcs/receipt_signature_v06.py`, `research/platform-security-v1/signing-recovery.json`, `docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
 
 Remaining: No formal Ed25519/Python/clock/custody proof or production-root rollout is asserted.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 34 — Expand differential testing
 
@@ -674,19 +544,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The framework finds or rules out mismatches within explicitly defined tested domains, without representing testing as a general proof of equivalence.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Executed 1,618 expanded native/Python/JavaScript/Lean comparisons with zero mismatches; release smoke and deliberate historical mismatch shrinking controls retained.
 
-New implementation: Executed 1,618 expanded native/Python/JavaScript/Lean comparisons with zero mismatches; release smoke and deliberate historical mismatch shrinking controls retained.
+Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches
 
-Changed files: `formal/tools/RuntimeCanonicalInputs.lean`, `formal/tools/RuntimeValueType.lean`, `scripts/runtime_differential.py`, `scripts/verify_runtime_canonical_boundary.py`, `scripts/verify_runtime_value_type.py`
-
-Tests: 54 principal audit entries; four new Value::ty proofs; five canonical-input controls; 1,618 expanded comparisons zero mismatches (source windows and finite runtime cases, not full conditional/top-level refinement)
-
-Evidence: `proof-carrying-science/research/aristotle-runtime-refinement-v1/REPORT.md`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/value-type-refinement.json`, `proof-carrying-science/docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `proof-carrying-science/docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
+Evidence: `research/aristotle-runtime-refinement-v1/REPORT.md`, `docs/evidence/platform-baseline-v1/runtime-refinement.json`, `docs/evidence/platform-baseline-v1/value-type-refinement.json`, `docs/evidence/platform-baseline-v1/runtime-differential-512.json.gz`, `docs/PCS_FORMAL_ASSURANCE_AND_REFINEMENT_REPORT.md`
 
 Remaining: Finite typed-domain testing, not universal equivalence; error-format normalization and JSON/hash authority exclusions explicit.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 35 — Validate end-to-end onboarding
 
@@ -694,19 +560,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Independent testers can complete the workflow, and unauthorized privilege changes are rejected.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual isolated browser account onboarding/manual review/task/submission flow exercised with local verification fixtures.
 
-New implementation: Actual isolated browser account onboarding/manual review/task/submission flow exercised with local verification fixtures.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science-site/src/worker.js`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `src/worker.js`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: No real external user, email delivery or independent assessment participated.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 36 — Strengthen GitHub-backed contribution integration
 
@@ -714,19 +576,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A valid low-risk contribution can be integrated through the documented process, and forged or unauthorized promotion attempts fail.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Preserved GitHub artifact/owner/protected promotion integration and exact source-gate behavior; frozen contribution tests all pass after canonical checkout setup.
 
-New implementation: Preserved GitHub artifact/owner/protected promotion integration and exact source-gate behavior; frozen contribution tests all pass after canonical checkout setup.
+Tests: No new capability execution inferred from protected merge.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
-
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
-
-Evidence: `proof-carrying-science-site/src/contribution-github.js`
+Evidence: `src/contribution-github.js`
 
 Remaining: A new live contributor-authored GitHub low-risk merge was not performed in this campaign.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 37 — Complete scientific task taxonomy
 
@@ -734,19 +592,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A newcomer can select a task and understand exactly what constitutes successful completion.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing scientific task catalog retained; real eligible task intake and skill boundaries validated.
 
-New implementation: Existing scientific task catalog retained; real eligible task intake and skill boundaries validated.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science-site/src/worker.js`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `src/worker.js`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Complete scientific taxonomy and newcomer comprehension are not established by fixture automation.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 38 — Improve task dependencies and review tracking
 
@@ -754,19 +608,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: State transitions remain consistent under concurrent actions, retries, and abandoned tasks.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual needs_changes feedback, repeated-decision rejection and reviewer identity separation exercised.
 
-New implementation: Actual needs_changes feedback, repeated-decision rejection and reviewer identity separation exercised.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science-site/src/worker.js`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `src/worker.js`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Broad dependency/concurrency/abandonment cases and real multi-contributor trials remain limited.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 39 — Reconcile D1 migration history safely
 
@@ -774,19 +624,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Future migrations can execute through a documented, independently checked process without damaging existing accounts, task state, donations, or audit history.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Executed fixed read-only production schema/ledger queries:96objects,no missing source objects,23unrecorded historical migrations. Exact definition/layout/default drifts preserved. Five adversarial/local preflight tests passed.
 
-New implementation: Read-only reconciliation tool executes all 25 migrations on isolated references, inventories actual state, and tests pending changes on copies.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore; Executed fixed read-only production schema/ledger queries:96objects,no missing source objects,23unrecorded historical migrations. Exact definition/layout/default drifts preserved. Five adversarial/local preflight tests passed.
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
+Evidence: `migrations`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`, `docs/PCS_PRODUCTION_D1_PREFLIGHT_V1.md`
 
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
+Remaining: Issue93 remains open: historical data effects and production password-default drift require review; no backfill/migration/production restore performed.
 
-Evidence: `proof-carrying-science-site/migrations`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
-
-Remaining: Issue #93 production reconciliation remains pending; current schema does not authorize historical ledger backfill.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 40 — Improve browser usability and accessibility
 
@@ -794,19 +640,17 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Critical workflows work at representative viewport sizes without blocking usability defects.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Real-data explorer provides actual342 measurement points, filters, keyboard/pointer navigation, conversions, downloads and beginner instructions, linked from the existing Lean lab.
 
-New implementation: Keyboard/reduced-motion game completion and recommendation exercised at 320/768/1440 pixels with no overflow/page exceptions.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
+Evidence: `public/memory-workshop.html`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
+Remaining: Full screen-reader/all-page accessibility and genuine participant assessment remain unperformed.
 
-Evidence: `proof-carrying-science-site/public/memory-workshop.html`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
-Remaining: Not exhaustive all-page or screen-reader accessibility validation; final release browser gates pending.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Final continuation tests: Seven unit tests and actual Chromium at320/768/1440 passed; corrupt or unlisted assets fail closed before fetching. Existing Lean recovery browser also passed.
 
 ## Task 41 — Improve contributor feedback
 
@@ -814,19 +658,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Contributors can meaningfully revise their submissions based on system feedback.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual submission feedback and needs_changes flow supports revision under separate authorized reviewer.
 
-New implementation: Actual submission feedback and needs_changes flow supports revision under separate authorized reviewer.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science-site/src/worker.js`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `src/worker.js`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Synthetic workflow is not real contributor usability evidence or complete feedback taxonomy.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 42 — Complete independent proof trajectory replay
 
@@ -834,19 +674,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Every promoted gameplay success can be independently checked, and forged trajectories are rejected.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual synthetic gameplay export freshly replays Lean transitions and final proof before labels; invalid/forged sessions rejected.
 
-New implementation: Actual synthetic gameplay export freshly replays Lean transitions and final proof before labels; invalid/forged sessions rejected.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/bridge_data.py`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `pcs/experimental/prover/bridge_data.py`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Tested catalogs only; no human participation or archive-only kernel authority claimed.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 43 — Strengthen trajectory provenance
 
@@ -854,19 +690,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Each training example is traceable to genuine, authorized, independently validated events.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Consent/account/source/catalog/goal/split/hint provenance retained with deterministic membership digests.
 
-New implementation: Consent/account/source/catalog/goal/split/hint provenance retained with deterministic membership digests.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/bridge_data.py`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `pcs/experimental/prover/bridge_data.py`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Authenticated account does not establish a genuine human or independent action; zero human trajectories collected.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 44 — Build quality-aware training exports
 
@@ -874,19 +706,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The research export pipeline reliably produces labeled, provenance-preserving datasets without silently mixing incompatible evidence classes.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Added replay-derived quality classes, content/membership identity and separated verified/archived/partial/invalid/utility examples.
 
-New implementation: Added replay-derived quality classes, content/membership identity and separated verified/archived/partial/invalid/utility examples.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science/pcs/experimental/prover/bridge_data.py`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `pcs/experimental/prover/bridge_data.py`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Use must retain split/consent and independent replay; no universal provenance or human-data validity inferred.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 45 — Implement withdrawal and deletion accounting
 
@@ -894,19 +722,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The platform can accurately explain what data was deleted, retained, exported, or previously used, with enforceable controls for future use.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual deletion receipt quarantines export/dataset/checkpoint descendants and denies future ledger-aware use; no silent checkpoint rewrite.
 
-New implementation: Actual deletion receipt quarantines export/dataset/checkpoint descendants and denies future ledger-aware use; no silent checkpoint rewrite.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science-site/src/worker.js`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `src/worker.js`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Not model unlearning, remote distributed-copy deletion or enforcement over arbitrary independent training code.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 46 — Develop adaptive educational curricula
 
@@ -914,19 +738,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Users can progress from beginner exercises toward meaningful formal proof contributions while the research evaluation firewall remains intact.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Implemented replay-driven practice progression and real keyboard next-challenge navigation, all games remain selectable.
 
-New implementation: Implemented replay-driven practice progression and real keyboard next-challenge navigation, all games remain selectable.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science-site/public/memory-workshop.html`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `public/memory-workshop.html`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Local practice completion grants no account skill or research authority; no human engagement/curriculum efficacy study.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 47 — Demonstrate actual game-to-model transfer
 
@@ -934,19 +754,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: A reproducible experiment establishes whether gameplay-derived training examples improve performance, or documents a genuine negative result.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Synthetic browser→D1→Owner export→fresh Lean intake→12 gradient steps→saved 14,773-parameter candidate executed.
 
-New implementation: Synthetic browser→D1→Owner export→fresh Lean intake→12 gradient steps→saved 14,773-parameter candidate executed.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations)
-
-Evidence: `proof-carrying-science/research/verified-memory-integration/ARTIFACT_SHA256.json`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
+Evidence: `research/verified-memory-integration/ARTIFACT_SHA256.json`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
 Remaining: Zero genuine human participants and no held-out transfer evaluation; actual human-game-to-model efficacy remains blocked by absent consented participation.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 48 — Run an authorization attack campaign
 
@@ -954,19 +770,17 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Known attack classes are rejected and critical findings are repaired.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual Worker/D1 admission/race controls preserve one outcome and unchanged limits; new full-file source scan rejects a loadable private key hidden after64KiB or across a1MiB boundary.
 
-New implementation: Actual 33-check Worker/browser campaign rejected unauthorized role/review/export/consent/catalog changes and repaired administrator self-review gap.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore; 44 focused tests and 17 real cryptographic drill controls passed; Protected site gates passed the actual disposable Worker/D1 authorization and withdrawal campaign plus strict source/result rejection.
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`, `pcs/signing_policy_v1.py`, `scripts/exercise_signing_recovery.py`, `tests/test_signing_policy_v1.py`, `tests/test_signing_recovery_drill.py`
+Evidence: `tests/test_adversarial_v06_hardening.py`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`, `research/platform-security-v1/signing-recovery.json`, `docs/SIGNING_POLICY_AND_RECOVERY_V1.md`, `docs/evidence/protected-platform-release-v1/site-protected-release.json`
 
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations); 44 focused tests and 17 real cryptographic drill controls passed (ephemeral test keys, not production custody)
+Remaining: Not exhaustive penetration testing; accounts/provider failures are fixtures, not human/external reviewer acceptance.
 
-Evidence: `proof-carrying-science/tests/test_adversarial_v06_hardening.py`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/research/platform-security-v1/signing-recovery.json`, `proof-carrying-science/docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
-Remaining: Not exhaustive security assurance or a penetration test of live production; final protected checks pending.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Final continuation tests: 55 Worker/admission tests and79 discovery/science regressions passed; pre-existing authored data and signed artifacts remain valid.
 
 ## Task 49 — Verify signing-key lifecycle controls
 
@@ -974,19 +788,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Key lifecycle behavior is documented, tested, and bound to actual verification outcomes.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Fixed legacy resolve-before-symlink defect and atomic no-clobber registry creation; descriptor identity,type and1MiB bounds tested with real filesystem attacks.32lifecycle/signing tests passed.
 
-New implementation: 44 focused signing/lifecycle tests and 17 actual encrypted-key/Ed25519/rotation/compromise/recovery controls passed on ephemeral test identities.
+Tests: 44 focused tests and 17 real cryptographic drill controls passed; Fixed legacy resolve-before-symlink defect and atomic no-clobber registry creation; descriptor identity,type and1MiB bounds tested with real filesystem attacks.32lifecycle/signing tests passed.
 
-Changed files: `pcs/signing_policy_v1.py`, `scripts/exercise_signing_recovery.py`, `tests/test_signing_policy_v1.py`, `tests/test_signing_recovery_drill.py`
+Evidence: `pcs/key_lifecycle.py`, `research/platform-security-v1/signing-recovery.json`, `docs/SIGNING_POLICY_AND_RECOVERY_V1.md`, `docs/PCS_KEY_FILE_BOUNDARY_V2.md`
 
-Tests: 44 focused tests and 17 real cryptographic drill controls passed (ephemeral test keys, not production custody)
+Remaining: Trusted parent directories/OS semantics still required; unsigned legacy registry not an authenticated production root. No production key rotation.
 
-Evidence: `proof-carrying-science/pcs/key_lifecycle.py`, `proof-carrying-science/research/platform-security-v1/signing-recovery.json`, `proof-carrying-science/docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
-
-Remaining: Production root/key custody and revision-floor distribution remain owner operational responsibilities.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 50 — Validate recovery and incident response
 
@@ -994,19 +804,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Critical research-platform state can be restored in a test environment with documented recovery evidence.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Actual populated local D1 online backup/restore and transaction rollback plus isolated encrypted signing recovery succeeded.
 
-New implementation: Actual populated local D1 online backup/restore and transaction rollback plus isolated encrypted signing recovery succeeded.
+Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore; 44 focused tests and 17 real cryptographic drill controls passed
 
-Changed files: `proof-carrying-science-site/public/bridge-builder-core.mjs`, `proof-carrying-science-site/public/research-governance-core.mjs`, `proof-carrying-science-site/scripts/browser_platform_governance.cjs`, `proof-carrying-science-site/scripts/d1_reconcile.py`, `proof-carrying-science-site/scripts/research_lineage.py`, `proof-carrying-science-site/src/worker.js`, `pcs/signing_policy_v1.py`, `scripts/exercise_signing_recovery.py`, `tests/test_signing_policy_v1.py`, `tests/test_signing_recovery_drill.py`
-
-Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore (zero humans, zero production D1 mutations); 44 focused tests and 17 real cryptographic drill controls passed (ephemeral test keys, not production custody)
-
-Evidence: `proof-carrying-science/docs/RELEASE_AND_INCIDENT_RESPONSE.md`, `proof-carrying-science-site/docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `proof-carrying-science-site/docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/research/platform-security-v1/signing-recovery.json`, `proof-carrying-science/docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
+Evidence: `docs/RELEASE_AND_INCIDENT_RESPONSE.md`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`, `research/platform-security-v1/signing-recovery.json`, `docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
 
 Remaining: No remote production backup restoration, Worker rollback or complete hosted-job disaster recovery demonstrated.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 51 — Strengthen supply-chain attestations
 
@@ -1014,19 +820,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Released artifacts have inspectable provenance and tampering can be detected.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Exact source, action/dependency manifests, artifact SHA seals, fixed recipe/log binding and trusted-verifier distinction implemented.
 
-New implementation: Exact source, action/dependency manifests, artifact SHA seals, fixed recipe/log binding and trusted-verifier distinction implemented.
+Tests: 21 passed; no missing gate promoted; 44 focused tests and 17 real cryptographic drill controls passed
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `pcs/signing_policy_v1.py`, `scripts/exercise_signing_recovery.py`, `scripts/qualify_release.py`, `tests/test_release_qualification_v1.py`, `tests/test_signing_policy_v1.py`, `tests/test_signing_recovery_drill.py`
-
-Tests: 21 passed; no missing gate promoted (local focused); 44 focused tests and 17 real cryptographic drill controls passed (ephemeral test keys, not production custody)
-
-Evidence: `proof-carrying-science/pcs/release_qualification_v1.py`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `proof-carrying-science/research/platform-security-v1/signing-recovery.json`, `proof-carrying-science/docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
+Evidence: `pcs/release_qualification_v1.py`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `research/platform-security-v1/signing-recovery.json`, `docs/SIGNING_POLICY_AND_RECOVERY_V1.md`
 
 Remaining: Unsigned local records are not provider-signed supply-chain attestations or release authorization.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 52 — Audit source and dataset rights
 
@@ -1034,19 +836,17 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Technically identifiable rights/provenance issues are cataloged and engineering-controlled distribution restrictions are enforced where appropriate.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Pinned real CC0 measurement corpus is retained with source/license hashes. Full-file hashing also checks private-key markers, closing the reproduced prefix-only discovery bypass before publication.
 
-New implementation: Technical inventory hashes tracked and nonignored overlay rights/dependency/workflow/research material; existing first-party licensing preserved.
+Tests: 21 passed; no missing gate promoted; Real external measurement dataset pinned at upstream8957207b78d6ccd1b4654a9dd9c9041b657478ab with exact CSV hash and upstream CC0 license.
 
-Changed files: `pcs/release_qualification_v1.py`, `pcs/schemas/release-qualification-v1.schema.json`, `scripts/inventory_release_provenance.py`, `scripts/qualify_release.py`, `tests/test_release_provenance_inventory.py`, `tests/test_release_qualification_v1.py`
+Evidence: `docs/PUBLIC_RELEASE_RIGHTS_LEDGER.md`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/PCS_RELEASE_PROVENANCE_INVENTORY.json`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 21 passed; no missing gate promoted (local focused)
+Remaining: Complete institutional/legal rights clearance and exhaustive secret detection remain outside this bounded control.
 
-Evidence: `proof-carrying-science/docs/PUBLIC_RELEASE_RIGHTS_LEDGER.md`, `proof-carrying-science/docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `proof-carrying-science/docs/PCS_RELEASE_PROVENANCE_INVENTORY.json`
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
-Remaining: Transitive, asset, contributor and institutional legal clearance not inferred; no unsupported distribution permission.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Final continuation tests: Actual cryptography loader confirms both temporary delayed-key inputs are valid; neither is inventoried. Normal large public source retains exact SHA.
 
 ## Task 53 — Strengthen evaluation firewalls
 
@@ -1054,19 +854,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: Benchmark provenance and leakage controls are independently testable, with no misleading claims about private or untouched evaluation sets.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Frozen training/final task hashes,alpha-duplicate checks and separately frozen RL split precede updates; stronger post-evaluation diagnostics clearly labeled.
 
-New implementation: New public authored partitions and explicit source/exposure/contamination controls retained; historical public test limitations disclosed.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Frozen training/final task hashes,alpha-duplicate checks and separately frozen RL split precede updates; stronger post-evaluation diagnostics clearly labeled.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `pcs/experimental/prover/data.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: Not a private evaluation firewall or exhaustive semantic near-duplicate detection; developer knows mathematical structures.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/data.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: No truly private untouched external evaluation exists here; public benchmark exposure is not hidden.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 54 — Reconcile public status and reality
 
@@ -1074,19 +870,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: The public website accurately describes which capabilities have been demonstrated, their scope, and their limitations.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Corrected stale website release-pending fields using exact prior protected runs/deployment/live replay; source record now states its last-qualified-release scope.
 
-New implementation: Reports separate historical, fresh local, provider CI and live statuses, negative results and numerical OPEN authority.
+Tests: Protected releases and live evidence reconciled; website status still contains stale release-pending fields scheduled for correction.; Corrected stale website release-pending fields using exact prior protected runs/deployment/live replay; source record now states its last-qualified-release scope.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
+Evidence: `public/status.json`, `docs/evidence/protected-platform-release-v1/site-protected-release.json`, `docs/PCS_RESEARCH_PLATFORM_PROTECTED_RELEASE.md`
 
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
+Remaining: New status correction still needs its own protected website CI/deployment; no prospective result asserted.
 
-Evidence: `proof-carrying-science-site/public/status.json`
-
-Remaining: New exact production website/source status pending final protected deployment evidence.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
 
 ## Task 55 — Build a general scientific reasoning agent
 
@@ -1094,19 +886,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: PCS can execute a multi-obligation scientific reasoning workflow, including meaningful failures and independently checkable intermediate results, with no unsupported claim of autonomous scientific discovery.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Bounded scientific plan includes actual data identity,units,filtering,numerical and empirical obligations; receiver propagates changed data/premises and keeps unsupported science OPEN.
 
-New implementation: Real bounded dependent scientific investigation preserves failure, checked witnesses and separately rechecked repair proposal under original typed contract.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS; Bounded scientific plan includes actual data identity,units,filtering,numerical and empirical obligations; receiver propagates changed data/premises and keeps unsupported science OPEN.
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
+Evidence: `pcs/scheduler_v06.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
+Remaining: No autonomous novel discovery/general research planning or literature authority.
 
-Evidence: `proof-carrying-science/pcs/scheduler_v06.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
-
-Remaining: Deterministic bounded planner, not general autonomous scientific discovery or learned advantage.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 56 — Integrate a real AI-safety assurance adapter
 
@@ -1114,19 +902,15 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: One bounded AI-agent safety case is represented as explicit proof obligations and checked evidence, without overstating guarantees.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Existing bounded reference-monitor/trace/AI-safety adapters and formal contracts preserved.
 
-New implementation: Existing bounded reference-monitor/trace/AI-safety adapters and formal contracts preserved.
+Tests: No new capability execution inferred from protected merge.
 
-Changed files: Historical source retained; no new corresponding implementation claimed.
-
-Tests: No new completed acceptance run; historical/source inventory is not a fresh test.
-
-Evidence: `proof-carrying-science/pcs/control_monitor_v1.py`
+Evidence: `pcs/control_monitor_v1.py`
 
 Remaining: No new independently executed multi-obligation deployed AI-agent safety case in this workstream.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 57 — Build a computational biology assurance library
 
@@ -1134,39 +918,31 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: At least one substantive computational-biology case study uses multiple reusable PCS domain contracts with independently checkable evidence.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Substantive authored three-species/two-reaction biochemical library case uses eight independently replayed bounded predicates and actual signed authority packages.
 
-New implementation: Substantive authored three-species/two-reaction biochemical library case uses eight independently replayed bounded predicates and actual signed authority packages.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
-
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
-
-Evidence: `proof-carrying-science/pcs/adapters/pkpd.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
+Evidence: `pcs/adapters/pkpd.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
 
 Remaining: Synthetic kinetic assumptions explicit; numerical claim remains OPEN in PCS, no empirical/clinical validity or continuous solver guarantee.
 
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 58 — Investigate stronger proof-search architectures
 
-**Status: PARTIAL.**
+**Status: COMPLETE_TESTED.**
 
 Acceptance: At least one new architecture or search strategy is implemented, ablated, and evaluated rigorously; superiority is claimed only if supported.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Added trained DAG/bag and genuine sequential RL plus actual frozen comparisons and strong Std baselines. Negative transfer and zero RL gain are preserved without promotion.
 
-New implementation: Implemented actual hybrid search/state-graph/retrieval and scoped abstraction architecture experiments with explicit baselines/ablations.
+Tests: Frozen144 comparisons completed and audited; full measured results in PCS_GENERALIZATION_AND_LEARNING_EVALUATION.md. No neural/RL gain inferred.; Frozen 144 comparisons completed: hybrid 7/8, Std 5/8, structural and learned 4/8. Ablations attribute gains to symbolic/structural stages, no unique neural success.; Added trained DAG/bag and genuine sequential RL plus actual frozen comparisons and strong Std baselines. Negative transfer and zero RL gain are preserved without promotion.
 
-Changed files: `pcs/experimental/prover/abstraction_repair_v2.py`, `pcs/experimental/prover/checkpoint_transfer_v2.py`, `pcs/experimental/prover/hybrid.py`, `pcs/experimental/prover/mathlib_retrieval.py`, `pcs/experimental/prover/promotion.py`, `pcs/experimental/prover/prospective_hybrid.py`, `pcs/experimental/prover/state_graph.py`
+Evidence: `pcs/experimental/prover/prospective_hybrid.py`, `research/prospective-hybrid-v2/protocol.json`, `research/prospective-hybrid-v2/summary.json`, `research/abstraction-repair-v2/protocol.json`, `docs/evidence/protected-platform-release-v1/core-protected-release.json`, `docs/PCS_DAG_POLICY_V3_REPORT.md`
 
-Tests: Actual completed receipt files preserved; ongoing results require final experiment report, no planned result counted (public authored partitions; no new model superiority claim)
+Remaining: Small author-known corpus; learned Mathlib retrieval/action integration and broad superiority unresolved.
 
-Evidence: `proof-carrying-science/pcs/experimental/prover/prospective_hybrid.py`, `proof-carrying-science/research/prospective-hybrid-v2/protocol.json`, `proof-carrying-science/research/prospective-hybrid-v2/summary.json`, `proof-carrying-science/research/abstraction-repair-v2/protocol.json`
-
-Remaining: Final experiments still being completed; no preclaimed superiority or breakthrough from a small authored corpus.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
 
 ## Task 59 — Implement cross-project verification contracts
 
@@ -1174,19 +950,12 @@ Commit/PR: final protected integration pending; exact baseline and source-overla
 
 Acceptance: At least two substantive PCS components exchange independently checkable proof/evidence contracts end-to-end, with invalid and mismatched cases rejected.
 
-Existing functionality: Existing bounded source/artifacts identified; presence is not completion.
+Implementation: Real external measurement workflow exchanges typed obligations,signed PCS packages,compiled dimension decisions and fresh independent numerical replay; contradictory signed reports/dimensions rejected.
 
-New implementation: Existing PCS compiled authority and signed numerical validator exchange exact evidence contracts; false/mismatched reports rejected in fresh processes.
+Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS; Real external measurement workflow exchanges typed obligations,signed PCS packages,compiled dimension decisions and fresh independent numerical replay; contradictory signed reports/dimensions rejected.
 
-Changed files: `pcs/scientific_assurance_v1.py`, `pcs/scientific_contracts_v1.py`, `pcs/scientific_obligations_v1.py`, `pcs/scientific_research_v1.py`, `scripts/replay_scientific_bundle_v1.py`, `scripts/run_scientific_assurance_v1.py`
+Evidence: `pcs/certiforge_adapter_v1.py`, `pcs/scientific_contracts_v1.py`, `research/scientific-assurance-v1/SUMMARY.json`, `research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Tests: 37 focused tests passed; three fresh scientific receiver processes; eight bounded numerical predicates PASS (synthetic authored computational science, not clinical validity)
+Remaining: Executable scientific adapter refinement and broad learned PCS-CertiForge transfers remain open.
 
-Evidence: `proof-carrying-science/pcs/certiforge_adapter_v1.py`, `proof-carrying-science/pcs/scientific_contracts_v1.py`, `proof-carrying-science/research/scientific-assurance-v1/SUMMARY.json`, `proof-carrying-science/research/scientific-assurance-v1/ARTIFACT_SHA256.json`, `proof-carrying-science/docs/PCS_SCIENTIFIC_WORKSTREAM_REPORT.md`
-
-Remaining: Cross-project broad model/CertiForge transfers and source-level scientific adapter correspondence remain partial.
-
-Commit/PR: final protected integration pending; exact baseline and source-overlay digests retained in machine-readable evidence.
-
-
-The latest integration delta adds a persistent request journal, explicit browser recovery/cancellation, finite source-correlated operational events and a selectable independently replayed hybrid portfolio. Three fixed Lean diagnostic commands passed locally; ten owner-hosted diagnostic jobs remain distinct from public Worker admissions. CertiForge PR #3 passed protected CI and merged as `c71e8575db2800b015a9d444f8ed572490f3a871` with an identical tested tree.
+Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105

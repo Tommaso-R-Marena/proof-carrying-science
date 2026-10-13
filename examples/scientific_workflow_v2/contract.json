@@ -1,0 +1,17 @@
+{
+  "format": "pcs-linear-calibration-contract-v2",
+  "question": "Reproduce the descriptive linear least-squares association of measured body mass with flipper length in the supplied Palmer Penguins observations, with explicit unit conversion and complete-case accounting.",
+  "data_path": "penguins.csv",
+  "provenance_path": "provenance.json",
+  "result_path": "result.json",
+  "x": {"column": "flipper_length_mm", "source_unit": "mm", "target_unit": "m", "scale": "1/1000"},
+  "y": {"column": "body_mass_g", "source_unit": "g", "target_unit": "kg", "scale": "1/1000"},
+  "missing_value": "NA",
+  "missing_policy": "exclude_pair_if_either_missing",
+  "minimum_complete_rows": 2,
+  "license": "CC0-1.0",
+  "assumptions": [
+    {"id": "A_MEASUREMENTS", "statement": "Upstream records and measurement-unit labels are taken as supplied; PCS does not attest field instrument accuracy."},
+    {"id": "A_DESCRIPTIVE", "statement": "Ordinary least squares describes these observed complete pairs only; linear biological adequacy, missingness independence, causal effects and population generalization are not asserted."}
+  ]
+}

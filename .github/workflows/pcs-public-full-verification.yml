@@ -38,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py tests/test_checked_reuse.py tests/test_induction_discovery.py tests/test_bridge_data.py tests/test_public_proof_transport.py tests/test_verified_memory.py tests/test_memory_wire.py tests/test_memory_resume.py tests/test_memory_recording.py tests/test_prospective_hybrid.py tests/test_hybrid_cli.py tests/test_mathematical_evidence.py
+          PCS_REQUIRE_PROVER=1 python -m pytest -q tests/test_lean_learning_loop.py tests/test_checked_reuse.py tests/test_induction_discovery.py tests/test_bridge_data.py tests/test_public_proof_transport.py tests/test_verified_memory.py tests/test_memory_wire.py tests/test_memory_resume.py tests/test_memory_recording.py tests/test_prospective_hybrid.py tests/test_hybrid_cli.py tests/test_mathematical_evidence.py tests/test_dag_policy_v3.py tests/test_dag_policy_v3_research.py
           python scripts/check_memory_evidence.py
           python scripts/check_memory_runtime.py
           lean formal/PCSVerifiedMemoryBoundary.lean
@@ -62,6 +62,7 @@ jobs:
           python -m pcs.experimental.prover.experiment --output "$RUNNER_TEMP/lean-smoke" --epochs 3 --episodes 3 --seeds 17
           python -m pcs.experimental.prover.cli 'For every natural number t, (t + 0) * 1 equals t.' --models research/lean-learning-v2 --output "$RUNNER_TEMP/end-to-end.json"
           python -m pcs.experimental.prover.cli 'For all natural numbers a, b and c, if ((a + b equals c) and (c * 1 equals c)) then ((c * 1 equals c) and (a + b equals c)).' --models research/checked-reuse-v1 --output "$RUNNER_TEMP/checked-reuse.json"
+          python -m pcs.experimental.prover.dag_experiment_v3 solve --checkpoint research/dag-policy-v3/dag.json --sha256 4af8b94a6be4996d3f08e73b9b0d6a91610ef5c4b88d783f185c630076a8d8a6 --goal research/dag-policy-v3/checkpoint-cli-goal.json --output "$RUNNER_TEMP/dag-proof.json"
           python scripts/check_reuse_evidence.py
           python - <<'PYREUSE'
           import json, os
@@ -154,7 +155,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pytest -q tests/test_release_qualification_v1.py tests/test_release_provenance_inventory.py tests/test_signing_policy_v1.py tests/test_signing_recovery_drill.py
+          python -m pytest -q tests/test_release_qualification_v1.py tests/test_release_provenance_inventory.py tests/test_signing_policy_v1.py tests/test_signing_recovery_drill.py tests/test_key_lifecycle.py tests/test_key_lifecycle_files.py
 
   core-full-gate:
     name: core-full-gate
@@ -250,6 +251,8 @@ jobs:
           source scripts/activate_lean_428.sh
           python scripts/verify_runtime_value_type.py --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-value-type.json"
           python scripts/verify_runtime_canonical_boundary.py --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --output "$RUNNER_TEMP/runtime-canonical-boundary.json"
+          cargo fetch --locked --manifest-path "$GITHUB_WORKSPACE/.ci-components/certiforge/Cargo.toml"
+          python scripts/verify_runtime_checked_boundary.py --certiforge "$GITHUB_WORKSPACE/.ci-components/certiforge" --native --negative-controls --output "$RUNNER_TEMP/runtime-checked-boundary.json"
       - name: Bounded real conditional runtime differential smoke
         shell: bash
         run: |
