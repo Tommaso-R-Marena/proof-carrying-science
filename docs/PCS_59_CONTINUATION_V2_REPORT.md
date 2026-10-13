@@ -43,3 +43,9 @@ Root's combined focused verification passed **73 tests**, followed by **39 scien
 No money, financial information, private human trajectories, fabricated reviewers, production schema changes, key rotations, quota resets or automatic model promotion were used. All authority-critical changes still require protected CI and normal owner merges. Public reports must distinguish actual deployment from this pre-integration snapshot.
 
 Highest-impact next dependencies: rich receiver-controlled Mathlib actions/premises and module-disjoint training; more difficult induction/abstraction transfer with competitive baselines; complete conditional/parser source semantics; production migration effect reconciliation and recovery; independent external scientific workflow/reviewer acceptance.
+
+## Final publication hardening
+
+The first feature head4005ad passed all ten protected contexts in provider run38337896623. A subsequent audit reproduced a discovery exclusion bypass: a loadable PEM private key after a70,000-byte prefix appeared in the artifact inventory. Discovery now checks markers during the complete bounded hash stream, including chunk boundaries. Both actual delayed-key controls are excluded; ordinary large source keeps its exact digest. Seventy-nine discovery/workflow/scientific regression tests passed. No test private key was retained or published. This extra source change requires a new complete protected gate before merge; first-head checks do not qualify the final head.
+
+The final website implementation additionally bounds readiness globally and atomically charges both existing proof quotas. Actual SQLite races preserve caps without partial charges; production EXPLAIN validates syntax only. The real-data explorer uses literal whitelisted credential-free static reads; actual Chromium checks include unknown-manifest rejection before fetching. Details and source overlays are retained in website reports.

@@ -104,16 +104,29 @@ def _safe_rel(root: Path, path: Path) -> str:
     return rel.as_posix()
 
 
-def _stream_sha256(path: Path) -> tuple[str, int]:
+class _PrivateMaterialFound(Exception):
+    """Internal exclusion signal; never includes key bytes."""
+
+
+def _stream_sha256(path: Path, *, reject_private_material: bool = False) -> tuple[str, int]:
     digest = hashlib.sha256()
     size = 0
+    tail = b""
+    overlap = max(map(len, _PRIVATE_KEY_MARKERS)) - 1
     with path.open("rb") as fh:
         while True:
             chunk = fh.read(1024 * 1024)
             if not chunk:
                 break
+            if reject_private_material:
+                inspected = tail + chunk
+                if any(marker in inspected for marker in _PRIVATE_KEY_MARKERS):
+                    raise _PrivateMaterialFound()
+                tail = inspected[-overlap:]
             digest.update(chunk)
             size += len(chunk)
+            if reject_private_material and size > MAX_PACKAGE_SINGLE_FILE_V06:
+                raise V06DiscoveryError("source grew beyond the discovery file limit")
     return digest.hexdigest(), size
 
 
@@ -736,7 +749,11 @@ def discover_project_v06(
             skipped.append({"path": relative_literal, "reason": "key-material-excluded"})
             continue
 
-        digest, observed_size = _stream_sha256(path)
+        try:
+            digest, observed_size = _stream_sha256(path, reject_private_material=True)
+        except _PrivateMaterialFound:
+            skipped.append({"path": relative_literal, "reason": "key-material-excluded"})
+            continue
         relative = _safe_rel(root, path)
         inventory.append(
             {

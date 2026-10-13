@@ -44,15 +44,17 @@ Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://gi
 
 Acceptance: Restart, retry, race, and duplicate-request tests preserve one coherent authoritative request outcome.
 
-Implementation: Added bounded provider readiness before admission; repeated readiness before POST separates definite not-sent/declined outcomes from uncertainty. Persistent SQLite restart and20-way races retain one admission/dispatch.
+Implementation: Persistent recovery now separates known no-dispatch from uncertain POST; initial/created readiness is globally bounded at 240 attempts per 60-minute window. One SQLite statement charges both proof counters or neither.
 
 Tests: Nine local tests; actual SQLite restart; 20 timestamp races and ten cancellation attempts; Added bounded provider readiness before admission; repeated readiness before POST separates definite not-sent/declined outcomes from uncertainty. Persistent SQLite restart and20-way races retain one admission/dispatch.
 
 Evidence: `src/lean-research.js`, `docs/PCS_PROVIDER_RECOVERY_V2.md`
 
-Remaining: Actual transport preflight passed; failure/race campaign uses provider fixtures. Production process crash injection remains unperformed.
+Remaining: Production crash injection and external provider scheduling atomicity remain open.
 
 Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
+
+Final continuation tests: 55 focused actual Worker/SQLite and transport-fixture tests; 60 competing clients admit12 without partial charges,20 same-client requests admit2. Actual production EXPLAIN accepted exact SQL with zero writes.
 
 ## Task 4 — Implement end-to-end observability
 
@@ -76,15 +78,17 @@ Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://gi
 
 Acceptance: Negative tests consistently return bounded and accurately classified failures.
 
-Implementation: Bounded6-second metadata/POST deadlines and32KiB metadata; known rejection is failed, uncertainPOST is preserved for polling. Hosted one-expansion control returned UNKNOWN.
+Implementation: Six-second provider deadlines,32KiB metadata,240 readiness attempts per hour and atomic unchanged2/client+12/global proof caps are exercised. Full-file publication scan rejects delayed private-key markers.
 
 Tests: 21 passed; no missing gate promoted; Bounded6-second metadata/POST deadlines and32KiB metadata; known rejection is failed, uncertainPOST is preserved for polling. Hosted one-expansion control returned UNKNOWN.
 
 Evidence: `pcs/experimental/prover/memory_wire.py`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/PCS_PROVIDER_RECOVERY_V2.md`
 
-Remaining: Actual hosted wall-limit kill/cancellation campaign not rerun; no resource outcome is proof success.
+Remaining: Client/host process-tree accounting and real hosted forced wall-limit cancellation remain incomplete.
 
 Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
+
+Final continuation tests: 55 job/admission controls plus79 discovery/scientific regressions passed.
 
 ## Task 6 — Verify deployed core revision and evidence bindings
 
@@ -636,15 +640,17 @@ Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://gi
 
 Acceptance: Critical workflows work at representative viewport sizes without blocking usability defects.
 
-Implementation: Keyboard/reduced-motion game completion and recommendation exercised at 320/768/1440 pixels with no overflow/page exceptions.
+Implementation: Real-data explorer provides actual342 measurement points, filters, keyboard/pointer navigation, conversions, downloads and beginner instructions, linked from the existing Lean lab.
 
 Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore
 
 Evidence: `public/memory-workshop.html`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`
 
-Remaining: Not exhaustive all-page or screen-reader accessibility validation; final release browser gates pending.
+Remaining: Full screen-reader/all-page accessibility and genuine participant assessment remain unperformed.
 
 Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
+
+Final continuation tests: Seven unit tests and actual Chromium at320/768/1440 passed; corrupt or unlisted assets fail closed before fetching. Existing Lean recovery browser also passed.
 
 ## Task 41 — Improve contributor feedback
 
@@ -764,15 +770,17 @@ Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://gi
 
 Acceptance: Known attack classes are rejected and critical findings are repaired.
 
-Implementation: Protected site gates passed the actual disposable Worker/D1 authorization and withdrawal campaign plus strict source/result rejection.
+Implementation: Actual Worker/D1 admission/race controls preserve one outcome and unchanged limits; new full-file source scan rejects a loadable private key hidden after64KiB or across a1MiB boundary.
 
 Tests: 33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore; 44 focused tests and 17 real cryptographic drill controls passed; Protected site gates passed the actual disposable Worker/D1 authorization and withdrawal campaign plus strict source/result rejection.
 
 Evidence: `tests/test_adversarial_v06_hardening.py`, `docs/PCS_PLATFORM_WORKSTREAM_REPORT.md`, `docs/evidence/platform-governance-v1/ARTIFACT_SHA256.json`, `research/platform-security-v1/signing-recovery.json`, `docs/SIGNING_POLICY_AND_RECOVERY_V1.md`, `docs/evidence/protected-platform-release-v1/site-protected-release.json`
 
-Remaining: Not exhaustive penetration testing; synthetic accounts and local verified-email fixtures, no external identity-review acceptance.
+Remaining: Not exhaustive penetration testing; accounts/provider failures are fixtures, not human/external reviewer acceptance.
 
 Prior protected release: 72a47c92d47c93249b6c8b9ec0dc70b95232f48c — https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116
+
+Final continuation tests: 55 Worker/admission tests and79 discovery/science regressions passed; pre-existing authored data and signed artifacts remain valid.
 
 ## Task 49 — Verify signing-key lifecycle controls
 
@@ -828,15 +836,17 @@ Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://gi
 
 Acceptance: Technically identifiable rights/provenance issues are cataloged and engineering-controlled distribution restrictions are enforced where appropriate.
 
-Implementation: Real external measurement dataset pinned at upstream8957207b78d6ccd1b4654a9dd9c9041b657478ab with exact CSV hash and upstream CC0 license.
+Implementation: Pinned real CC0 measurement corpus is retained with source/license hashes. Full-file hashing also checks private-key markers, closing the reproduced prefix-only discovery bypass before publication.
 
 Tests: 21 passed; no missing gate promoted; Real external measurement dataset pinned at upstream8957207b78d6ccd1b4654a9dd9c9041b657478ab with exact CSV hash and upstream CC0 license.
 
 Evidence: `docs/PUBLIC_RELEASE_RIGHTS_LEDGER.md`, `docs/evidence/platform-baseline-v1/qualification-focused-final.log`, `docs/PCS_RELEASE_PROVENANCE_INVENTORY.json`, `docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md`
 
-Remaining: No complete historical/institutional/legal rights conclusion; corpus license provenance only.
+Remaining: Complete institutional/legal rights clearance and exhaustive secret detection remain outside this bounded control.
 
 Prior protected release: fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722 — https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105
+
+Final continuation tests: Actual cryptography loader confirms both temporary delayed-key inputs are valid; neither is inventoried. Normal large public source retains exact SHA.
 
 ## Task 53 — Strengthen evaluation firewalls
 

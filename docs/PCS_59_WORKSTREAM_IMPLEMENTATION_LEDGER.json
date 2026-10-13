@@ -184,7 +184,7 @@
       "acceptance": "Restart, retry, race, and duplicate-request tests preserve one coherent authoritative request outcome.",
       "status": "PARTIAL",
       "existing_functionality": "Existing bounded source/artifacts identified; presence is not completion.",
-      "new_implementation": "Added bounded provider readiness before admission; repeated readiness before POST separates definite not-sent/declined outcomes from uncertainty. Persistent SQLite restart and20-way races retain one admission/dispatch.",
+      "new_implementation": "Persistent recovery now separates known no-dispatch from uncertain POST; initial/created readiness is globally bounded at 240 attempts per 60-minute window. One SQLite statement charges both proof counters or neither.",
       "changed_files": [
         "@site/src/lean-job-journal.js",
         "@site/tests/lean-job-journal.test.mjs",
@@ -200,6 +200,11 @@
           "command": "Exact executable commands and artifacts in continuation report",
           "outcome": "Added bounded provider readiness before admission; repeated readiness before POST separates definite not-sent/declined outcomes from uncertainty. Persistent SQLite restart and20-way races retain one admission/dispatch.",
           "scope": "Actual transport preflight passed; failure/race campaign uses provider fixtures. Production process crash injection remains unperformed."
+        },
+        {
+          "command": "Final exact-source controls in continuation reports",
+          "outcome": "55 focused actual Worker/SQLite and transport-fixture tests; 60 competing clients admit12 without partial charges,20 same-client requests admit2. Actual production EXPLAIN accepted exact SQL with zero writes.",
+          "scope": "Production crash injection and external provider scheduling atomicity remain open."
         }
       ],
       "evidence": [
@@ -212,14 +217,15 @@
         {
           "repository": "proof-carrying-science-site",
           "path": "docs/PCS_PROVIDER_RECOVERY_V2.md",
-          "sha256": "66fdff81039417d9f53cc270a1f2099110407035045749e8f94016249828ab59",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "sha256": "31700d614d69f0e38a09e2933c5c521dfde1904ad9ab96e1c9fdd46548b4702a",
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
         "Independent evidence for any broader claimed capability"
       ],
-      "remaining_limitations": "Actual transport preflight passed; failure/race campaign uses provider fixtures. Production process crash injection remains unperformed.",
+      "remaining_limitations": "Production crash injection and external provider scheduling atomicity remain open.",
       "commit_or_pr": "https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105",
       "status_basis": "Historical source/evidence retained; protected release independently refreshed. Completion follows task acceptance, not PR merge.",
       "protected_release_sha": "fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722",
@@ -279,8 +285,9 @@
         {
           "repository": "proof-carrying-science-site",
           "path": "docs/PCS_PROVIDER_RECOVERY_V2.md",
-          "sha256": "66fdff81039417d9f53cc270a1f2099110407035045749e8f94016249828ab59",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "sha256": "31700d614d69f0e38a09e2933c5c521dfde1904ad9ab96e1c9fdd46548b4702a",
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -308,7 +315,7 @@
       "acceptance": "Negative tests consistently return bounded and accurately classified failures.",
       "status": "PARTIAL",
       "existing_functionality": "Existing bounded source/artifacts identified; presence is not completion.",
-      "new_implementation": "Bounded6-second metadata/POST deadlines and32KiB metadata; known rejection is failed, uncertainPOST is preserved for polling. Hosted one-expansion control returned UNKNOWN.",
+      "new_implementation": "Six-second provider deadlines,32KiB metadata,240 readiness attempts per hour and atomic unchanged2/client+12/global proof caps are exercised. Full-file publication scan rejects delayed private-key markers.",
       "changed_files": [
         "pcs/release_qualification_v1.py",
         "pcs/schemas/release-qualification-v1.schema.json",
@@ -325,6 +332,11 @@
           "command": "Exact executable commands and artifacts in continuation report",
           "outcome": "Bounded6-second metadata/POST deadlines and32KiB metadata; known rejection is failed, uncertainPOST is preserved for polling. Hosted one-expansion control returned UNKNOWN.",
           "scope": "Actual hosted wall-limit kill/cancellation campaign not rerun; no resource outcome is proof success."
+        },
+        {
+          "command": "Final exact-source controls in continuation reports",
+          "outcome": "55 job/admission controls plus79 discovery/scientific regressions passed.",
+          "scope": "Client/host process-tree accounting and real hosted forced wall-limit cancellation remain incomplete."
         }
       ],
       "evidence": [
@@ -343,14 +355,15 @@
         {
           "repository": "proof-carrying-science-site",
           "path": "docs/PCS_PROVIDER_RECOVERY_V2.md",
-          "sha256": "66fdff81039417d9f53cc270a1f2099110407035045749e8f94016249828ab59",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "sha256": "31700d614d69f0e38a09e2933c5c521dfde1904ad9ab96e1c9fdd46548b4702a",
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
         "Independent evidence for any broader claimed capability"
       ],
-      "remaining_limitations": "Actual hosted wall-limit kill/cancellation campaign not rerun; no resource outcome is proof success.",
+      "remaining_limitations": "Client/host process-tree accounting and real hosted forced wall-limit cancellation remain incomplete.",
       "commit_or_pr": "https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105",
       "status_basis": "Historical source/evidence retained; protected release independently refreshed. Completion follows task acceptance, not PR merge.",
       "protected_release_sha": "fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722",
@@ -596,7 +609,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -674,7 +688,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -752,7 +767,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -890,7 +906,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -1116,7 +1133,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -1195,7 +1213,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -1457,7 +1476,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -1658,7 +1678,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -1798,7 +1819,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -2011,7 +2033,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_RUNTIME_CHECKED_BOUNDARY_REPORT.md",
           "sha256": "28cd05566166b63f9be5a21a329da55c7d5dfc3b753cfbf0e420b6ce8e27a8d4",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -2094,7 +2117,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -2478,8 +2502,9 @@
         {
           "repository": "proof-carrying-science-site",
           "path": "docs/PCS_PRODUCTION_D1_PREFLIGHT_V1.md",
-          "sha256": "4ad5a6f300f40283cba8dcf5cd39264bd3c529ba706ccd4cb21fef6d0385a22e",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "sha256": "426f1f4655b4a2711aafaa77daaa288b2a5c935bc8d644a9726a460d9846352a",
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -2507,7 +2532,7 @@
       "acceptance": "Critical workflows work at representative viewport sizes without blocking usability defects.",
       "status": "PARTIAL",
       "existing_functionality": "Existing bounded source/artifacts identified; presence is not completion.",
-      "new_implementation": "Keyboard/reduced-motion game completion and recommendation exercised at 320/768/1440 pixels with no overflow/page exceptions.",
+      "new_implementation": "Real-data explorer provides actual342 measurement points, filters, keyboard/pointer navigation, conversions, downloads and beginner instructions, linked from the existing Lean lab.",
       "changed_files": [
         "@site/public/bridge-builder-core.mjs",
         "@site/public/research-governance-core.mjs",
@@ -2521,6 +2546,11 @@
           "command": "Isolated browser_platform_governance.cjs + governance/curriculum/migration/lineage tests",
           "outcome": "33 real Worker/browser controls; five Node and five Python focused tests; actual synthetic game replay/training/withdrawal; populated local backup/restore",
           "scope": "zero humans, zero production D1 mutations"
+        },
+        {
+          "command": "Final exact-source controls in continuation reports",
+          "outcome": "Seven unit tests and actual Chromium at320/768/1440 passed; corrupt or unlisted assets fail closed before fetching. Existing Lean recovery browser also passed.",
+          "scope": "Full screen-reader/all-page accessibility and genuine participant assessment remain unperformed."
         }
       ],
       "evidence": [
@@ -2546,7 +2576,7 @@
       "dependencies": [
         "Independent evidence for any broader claimed capability"
       ],
-      "remaining_limitations": "Not exhaustive all-page or screen-reader accessibility validation; final release browser gates pending.",
+      "remaining_limitations": "Full screen-reader/all-page accessibility and genuine participant assessment remain unperformed.",
       "commit_or_pr": "https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116",
       "status_basis": "Historical source/evidence retained; protected release independently refreshed. Completion follows task acceptance, not PR merge.",
       "protected_release_sha": "72a47c92d47c93249b6c8b9ec0dc70b95232f48c",
@@ -2939,7 +2969,7 @@
       "acceptance": "Known attack classes are rejected and critical findings are repaired.",
       "status": "PARTIAL",
       "existing_functionality": "Existing bounded source/artifacts identified; presence is not completion.",
-      "new_implementation": "Protected site gates passed the actual disposable Worker/D1 authorization and withdrawal campaign plus strict source/result rejection.",
+      "new_implementation": "Actual Worker/D1 admission/race controls preserve one outcome and unchanged limits; new full-file source scan rejects a loadable private key hidden after64KiB or across a1MiB boundary.",
       "changed_files": [
         "@site/public/bridge-builder-core.mjs",
         "@site/public/research-governance-core.mjs",
@@ -2950,7 +2980,9 @@
         "pcs/signing_policy_v1.py",
         "scripts/exercise_signing_recovery.py",
         "tests/test_signing_policy_v1.py",
-        "tests/test_signing_recovery_drill.py"
+        "tests/test_signing_recovery_drill.py",
+        "pcs/discover_v06.py",
+        "tests/test_discovery_private_material.py"
       ],
       "tests_performed": [
         {
@@ -2967,6 +2999,11 @@
           "command": "Provider API reconciliation plus executed exact-source evidence",
           "outcome": "Protected site gates passed the actual disposable Worker/D1 authorization and withdrawal campaign plus strict source/result rejection.",
           "scope": "Not exhaustive penetration testing; synthetic accounts and local verified-email fixtures, no external identity-review acceptance."
+        },
+        {
+          "command": "Final exact-source controls in continuation reports",
+          "outcome": "55 Worker/admission tests and79 discovery/science regressions passed; pre-existing authored data and signed artifacts remain valid.",
+          "scope": "Not exhaustive penetration testing; accounts/provider failures are fixtures, not human/external reviewer acceptance."
         }
       ],
       "evidence": [
@@ -3010,7 +3047,7 @@
       "dependencies": [
         "Independent evidence for any broader claimed capability"
       ],
-      "remaining_limitations": "Not exhaustive penetration testing; synthetic accounts and local verified-email fixtures, no external identity-review acceptance.",
+      "remaining_limitations": "Not exhaustive penetration testing; accounts/provider failures are fixtures, not human/external reviewer acceptance.",
       "commit_or_pr": "https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/116",
       "status_basis": "Historical source/evidence retained; protected release independently refreshed. Completion follows task acceptance, not PR merge.",
       "protected_release_sha": "72a47c92d47c93249b6c8b9ec0dc70b95232f48c",
@@ -3089,7 +3126,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_KEY_FILE_BOUNDARY_V2.md",
           "sha256": "258938e13d9b318975e7d33027255fa0d1c751c1e736ba6051a62d43927a07dc",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -3259,14 +3297,16 @@
       "acceptance": "Technically identifiable rights/provenance issues are cataloged and engineering-controlled distribution restrictions are enforced where appropriate.",
       "status": "PARTIAL",
       "existing_functionality": "Existing bounded source/artifacts identified; presence is not completion.",
-      "new_implementation": "Real external measurement dataset pinned at upstream8957207b78d6ccd1b4654a9dd9c9041b657478ab with exact CSV hash and upstream CC0 license.",
+      "new_implementation": "Pinned real CC0 measurement corpus is retained with source/license hashes. Full-file hashing also checks private-key markers, closing the reproduced prefix-only discovery bypass before publication.",
       "changed_files": [
         "pcs/release_qualification_v1.py",
         "pcs/schemas/release-qualification-v1.schema.json",
         "scripts/inventory_release_provenance.py",
         "scripts/qualify_release.py",
         "tests/test_release_provenance_inventory.py",
-        "tests/test_release_qualification_v1.py"
+        "tests/test_release_qualification_v1.py",
+        "pcs/discover_v06.py",
+        "tests/test_discovery_private_material.py"
       ],
       "tests_performed": [
         {
@@ -3278,6 +3318,11 @@
           "command": "Exact executable commands and artifacts in continuation report",
           "outcome": "Real external measurement dataset pinned at upstream8957207b78d6ccd1b4654a9dd9c9041b657478ab with exact CSV hash and upstream CC0 license.",
           "scope": "No complete historical/institutional/legal rights conclusion; corpus license provenance only."
+        },
+        {
+          "command": "Final exact-source controls in continuation reports",
+          "outcome": "Actual cryptography loader confirms both temporary delayed-key inputs are valid; neither is inventoried. Normal large public source retains exact SHA.",
+          "scope": "Complete institutional/legal rights clearance and exhaustive secret detection remain outside this bounded control."
         }
       ],
       "evidence": [
@@ -3303,13 +3348,14 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
         "Independent evidence for any broader claimed capability"
       ],
-      "remaining_limitations": "No complete historical/institutional/legal rights conclusion; corpus license provenance only.",
+      "remaining_limitations": "Complete institutional/legal rights clearance and exhaustive secret detection remain outside this bounded control.",
       "commit_or_pr": "https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/105",
       "status_basis": "Historical source/evidence retained; protected release independently refreshed. Completion follows task acceptance, not PR merge.",
       "protected_release_sha": "fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722",
@@ -3382,7 +3428,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -3441,7 +3488,8 @@
           "repository": "proof-carrying-science-site",
           "path": "docs/PCS_RESEARCH_PLATFORM_PROTECTED_RELEASE.md",
           "sha256": "15faa66186ac417e1e06fa6e9dc99d864db853e95c4c78a60fb8fc2dcaea9d1a",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -3531,7 +3579,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -3710,7 +3759,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_DAG_POLICY_V3_REPORT.md",
           "sha256": "95623141a9d3707c310fba2e5b3d89d2e2642279bca769708c93a96e7cd59b85",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -3811,7 +3861,8 @@
           "repository": "proof-carrying-science",
           "path": "docs/PCS_SCIENTIFIC_WORKFLOW_V2_REPORT.md",
           "sha256": "5e03f8899ff6c786cee2513823c8d11953423b04f27c28762800c9f9ecf10a42",
-          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release"
+          "evidence_kind": "executed_continuation_report_local_not_yet_protected_release",
+          "source_snapshot_note": "Final local report snapshot before protected continuation integration; provider/source overlays remain in report."
         }
       ],
       "dependencies": [
@@ -3872,11 +3923,15 @@
     }
   },
   "continuation_v2": {
-    "status": "local_execution_complete_protected_ci_pending",
+    "status": "first_feature_qualified_privacy_hardening_requires_final_protected_ci",
     "source_base_core": "fd4ddaf8e106cfb37ced3bd1dc5cffe568f1c722",
     "source_base_site": "72a47c92d47c93249b6c8b9ec0dc70b95232f48c",
     "source_base_certiforge": "c71e8575db2800b015a9d444f8ed572490f3a871",
     "financial_spend": 0,
-    "automatic_model_promotion": false
+    "automatic_model_promotion": false,
+    "first_feature_head_qualified": "4005ad3bc62b49ab53530617de5c5538f07a78e1",
+    "first_feature_run": 38337896623,
+    "core_pull_request": "https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/106",
+    "site_pull_request": "https://github.com/Tommaso-R-Marena/proof-carrying-science-site/pull/117"
   }
 }
