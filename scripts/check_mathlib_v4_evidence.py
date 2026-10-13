@@ -9,11 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / 'docs/evidence/mathlib-continuation-v4/ARTIFACT_SHA256.json'
 
 def main():
+    tracked = set(subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode().split('\0'))
+    if MANIFEST.relative_to(ROOT).as_posix() not in tracked:
+        raise ValueError('continuation manifest must be tracked in a clean checkout')
     manifest = json.loads(MANIFEST.read_text())
     files = manifest['files']
     if manifest.get('format') != 'pcs-continuation-artifact-membership-v4' or type(files) is not dict or not 1 <= len(files) <= 1024:
         raise ValueError('bounded continuation artifact manifest required')
-    tracked = set(subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode().split('\0'))
     for name, expected in files.items():
         p = Path(name)
         if p.is_absolute() or '..' in p.parts or not re.fullmatch('[0-9a-f]{64}', expected):
