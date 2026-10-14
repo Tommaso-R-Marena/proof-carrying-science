@@ -182,6 +182,20 @@ def formal_source() -> bytes:
     return _FORMAL.read_bytes()
 
 
+def admit_action(model_raw: bytes, shield_raw: bytes, state: int, action: int) -> bool:
+    """Bounded runtime proposal filter, with fail-closed certificate validation.
+
+    The decision is a Python implementation result, not a replacement for fresh
+    receiving kernel replay. The caller must establish observation/enforcement
+    correspondence before interpreting it as deployed safety.
+    """
+    state, action = _nat(state), _nat(action)
+    model = load_model(model_raw)
+    shield = load_shield(shield_raw, model, model_sha256=_sha(model_raw))
+    return (evaluate(model_raw, shield_raw)["outcome"] == "PASS" and state in model["safe"]
+            and [state, action] in shield["allowed"])
+
+
 def proof_source(model_raw: bytes, shield_raw: bytes) -> bytes:
     """Generate only literal integer data and fixed first-party proof text."""
     model = load_model(model_raw)
