@@ -61,6 +61,21 @@ def test_actual_guarded_proposals_reject_unlisted_and_unsafe_actions():
         assurance.admit_guarded_action(model, cert, guard, True, 0)
 
 
+def test_equivalent_unsafe_guard_cannot_hide_failed_model_obligation():
+    model_raw, _, _ = inputs()
+    model = json.loads(model_raw)
+    model["initial"] = [2]
+    model_raw = encode(model)
+    cert = encode(shield.propose(model_raw))
+    guard = encode(assurance.guard_task(model_raw, cert))
+    report = assurance.replay(model_raw, cert, guard)
+    assert report["model"]["outcome"] == "FAIL" and report["guard"]["outcome"] == "PASS"
+    graph = assurance.obligations(model_raw, report)
+    assert next(x for x in graph["nodes"] if x["id"] == "model_invariant")["status"] == "FAIL"
+    assert next(x for x in graph["nodes"] if x["id"] == "deployment")["status"] == "OPEN"
+    assert not assurance.admit_guarded_action(model_raw, cert, guard, 0, 0)
+
+
 @pytest.fixture(scope="module")
 def package(tmp_path_factory):
     path = tmp_path_factory.mktemp("shield-package")

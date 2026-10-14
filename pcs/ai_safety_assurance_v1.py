@@ -102,8 +102,10 @@ def obligations(model_raw, report, *, kernel_checked=False):
     return {"format": "pcs-action-shield-obligations-v1", "model_sha256": sha(model_raw),
         "nodes": [
             {"id": "model_invariant", "claim_id": "C_MODEL_SAFE", "dependencies": [],
-             "status": "FORMALLY_SUPPORTED" if kernel_checked and report["model"]["outcome"] == "PASS" else "REQUIRES_FRESH_KERNEL_REPLAY"},
-            {"id": "guard_table", "claim_id": "C_GUARD_EQ", "dependencies": ["model_invariant"],
+             "status": "FAIL" if report["model"]["outcome"] != "PASS" else "FORMALLY_SUPPORTED" if kernel_checked else "REQUIRES_FRESH_KERNEL_REPLAY"},
+            # Guard equivalence is independently meaningful even for an unsafe
+            # table. The safety conclusion below requires both obligations.
+            {"id": "guard_table", "claim_id": "C_GUARD_EQ", "dependencies": [],
              "status": "COMPUTATIONALLY_REPLAYED" if report["guard"]["outcome"] == "PASS" else "FAIL"},
             *[{"id": x["id"], "dependencies": [], "status": "OPEN", "statement": x["statement"]} for x in model["assumptions"]],
             {"id": "deployment", "claim_id": "C_DEPLOYED_SAFE", "dependencies": ["model_invariant", "guard_table", *[x["id"] for x in model["assumptions"]]], "status": "OPEN"},

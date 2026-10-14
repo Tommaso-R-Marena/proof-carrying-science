@@ -11,7 +11,9 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1]
 SID = "11111111-1111-4111-8111-111111111111"
 PID = "22222222-2222-4222-8222-222222222222"
-REPO = "Tommaso-R-Marena/" + SOURCE.name
+# A worktree's directory name is not the repository identity. This fixture
+# exercises the actual allowlisted core repository through the unchanged gate.
+REPO = "Tommaso-R-Marena/proof-carrying-science"
 
 
 class ContributionGateTests(unittest.TestCase):
