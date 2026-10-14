@@ -228,18 +228,40 @@ jobs:
           sudo -n mkswap "$SWAP_FILE"
           sudo -n swapon "$SWAP_FILE"
           free -m
+      - name: Check out pinned browser reasoning implementations for reference parity
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Tommaso-R-Marena/proof-carrying-science-site
+          ref: a6a9a54bb8f2e8fb45f783a9df56929aca11a54b
+          path: .ci-components/pcs-site
+          persist-credentials: false
+      - name: Fresh source-extracted conditional libraries and full axiom audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          (cd formal && lake build PCSOmega PCSDecisionDiagram)
+          # Sequential ordinary-kernel builds preserve every source obligation.
+          # Use only the existing standard runner and bounded swap above.
+          python scripts/verify_conditional_runtime_refinement.py --build --memory-mb 32000 --heavy-timeout 3600 --build-output "$RUNNER_TEMP/conditional-complete-build.json" --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --negative-controls --output "$RUNNER_TEMP/conditional-refinement.json"
+          python scripts/verify_conditional_runtime_parity.py --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --cases 90 --output "$RUNNER_TEMP/conditional-extracted-parity"
+          cd formal
+          for module in PCSActionShield PCSActionShieldControls PCSConditionalShieldBridge PCSConditionalShieldRuntime; do
+            lake env lean -j1 -M1024 -o ".lake/build/lib/lean/$module.olean" "$module.lean"
+          done
+          lake env lean PCSActionShieldAudit.lean
       - name: Full Lean kernel, real compiled authority, Python, and adversarial gate
         shell: bash
         run: |
           set -euo pipefail
           bash scripts/core_ci_cloudflare.sh
-      - name: Check out pinned browser reasoning implementations for reference parity
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          repository: Tommaso-R-Marena/proof-carrying-science-site
-          ref: 1a351144cac080a990ab6f75fe8b57b476c3b08a
-          path: .ci-components/pcs-site
-          persist-credentials: false
+      - name: Independently replay universal shield and signed safety-case attacks
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python scripts/run_action_shield_campaign_v1.py --output "$RUNNER_TEMP/action-shield-campaign"
+          python scripts/run_ai_safety_assurance_v1.py --output "$RUNNER_TEMP/signed-action-shield-case"
       - name: Check out source-bound CertiForge interpreter and repaired type checker
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -381,6 +403,11 @@ jobs:
             ${{ runner.temp }}/runtime-value-type.json
             ${{ runner.temp }}/runtime-canonical-boundary.json
             ${{ runner.temp }}/runtime-conditional-smoke.json
+            ${{ runner.temp }}/conditional-complete-build.json
+            ${{ runner.temp }}/conditional-refinement.json
+            ${{ runner.temp }}/conditional-extracted-parity/
+            ${{ runner.temp }}/action-shield-campaign/
+            ${{ runner.temp }}/signed-action-shield-case/
           if-no-files-found: warn
           retention-days: 14
 

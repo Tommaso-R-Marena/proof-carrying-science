@@ -114,7 +114,9 @@ def obligations(model_raw, report, *, kernel_checked=False):
 def implementation():
     root = Path(__file__).resolve().parents[1]
     paths = ["pcs/action_shield_v1.py", "pcs/ai_safety_assurance_v1.py", "pcs/experimental/conditional.py",
-             "pcs/canonical_json.py", "pcs/jsonio.py", "formal/PCSActionShield.lean", "formal/PCSConditionalShieldBridge.lean"]
+             "pcs/canonical_json.py", "pcs/jsonio.py", "formal/PCSActionShield.lean", "formal/PCSConditionalShieldBridge.lean",
+             "formal/PCSConditionalShieldRuntime.lean", "research/aristotle-conditional-runtime-v1/source-manifest.json",
+             "research/aristotle-conditional-runtime-v1/theorem-inventory.json"]
     return {f"{PREFIX}/sources/{path}.txt": (root / path).read_bytes() for path in paths}
 
 
