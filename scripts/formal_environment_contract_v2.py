@@ -8,8 +8,8 @@ import hashlib
 from pathlib import Path
 
 BASELINE_SHA256 = "3aaad652ac3f4bebe37ed04781f3f2edf14e86e91fb947170b808cc737369fd9"
-EXTENDED_SHA256 = "02b2b42963a7a12f29f07399cfcc018110f0ac8d7fe58beedd370ac3dacae4a6"
-EXTENSION_SHA256 = "c4b7c076d75b0b1cb1895f7e9a2b28d5b4e865537dfa89b80f6851d157f94b0a"
+EXTENDED_SHA256 = "97eb035fd06b11fb1f2ccde06704cde429f8225e27b9a24e22f6a102f3173350"
+EXTENSION_SHA256 = "1f6ddf8c7c2db38f994011713f84ad5885614cebae01eb3aea786f3bd371945c"
 
 
 def check_configuration(path: Path, expected: str) -> str:

@@ -1,10 +1,14 @@
 # Independent conditional runtime integration
 
-**Candidate status: UNVERIFIED_PENDING_PROTECTED_CI.** The full new library,
-both principal theorem closures, complete axiom inventory and finite four-way
-runtime comparison have not yet passed independent execution in this workspace.
-Only the Python source-binding proof and static adversarial gates passed.
-The checked-in LOCAL_CANDIDATE_STATUS.json preserves this dated local boundary.
+**Status: full 68-module build and both principal axiom closures independently
+passed on the standard runner in run 38636060406, source head 8b9001f.** The
+preceding inventory covered only 478 of 673 public declarations. Ninety four-way
+receipt cases passed. Complete 673-name audit, corrected fresh-import selection,
+composition wrapper and protected aggregate qualification remain pending. The
+whole run failed afterward when the wrapper exceeded its 1 GiB import limit;
+that is not a successful protected integration. LOCAL_CANDIDATE_STATUS.json
+preserves the earlier dated local boundary unchanged. Receiving CI evidence is
+retained under ../formal-integration-phase-v1/protected-partial-run38636060406/.
 
 The newly supplied archive `b91723b4-4b89-45e4-95f2-0f158a6ba4d6-aristotle.tar.gz`
 has SHA-256 `8ec6dcfe96c8171ff64343ed53a29e0d1c7af194a323e02c707d5b6e959cebca`.
@@ -57,12 +61,13 @@ is changed.
 negative_controls=False)` checks exact installed source/import identity, both
 current runtime files and the complete public inventory, then freshly elaborates
 source-read certificates, lowerings and both principal modules before the complete
-axiom audit. Its `stable_contract` excludes timings and temporary paths and is
+axiom audit. The resolved pinned Lean executable runs directly with the fresh
+overlay before all cached module paths; Lake is not allowed to reorder it. Its `stable_contract` excludes timings and temporary paths and is
 suitable for receiver comparison with committed evidence. A producer summary
 cannot authorize acceptance. The full independent build must precede replay;
 no missing module or failed compiler output is a pass.
 
-The complete new public inventory has 478 distinct theorem/lemma names. The
+The corrected complete public inventory has 673 distinct theorem/lemma names. The
 returned principal audit prints only 14 names; this integration audits the entire
 public inventory, including supporting lemmas. Source manifests distinguish
 returned and integrated identities. Two source-certificate proof bodies split

@@ -1,9 +1,11 @@
 # PCS formal integration phase: receiving verification
 
-Status at 2026-10-14: implemented and individually checked finite-model action
-shield and signed conditional-guard replay; full new Aristotle library remains
-pending protected kernel qualification. PR #109 is a draft. This report does not
-promote either a partial proof build or producer-supplied proof logs.
+Status at 2026-10-14: all 68 new Aristotle modules independently compiled on the
+standard protected runner; both principal axiom closures and 90-case four-way
+parity passed. The inventory was subsequently corrected from 478 to 673 names.
+The complete corrected audit, corrected fresh-import replay, composition wrapper
+and final protected run remain pending. PR #109 is a draft. Producer-supplied
+proof logs do not authorize acceptance.
 
 ## Current source and supplied research
 
@@ -37,7 +39,10 @@ An untrusted policy proposes actions in a declared finite nondeterministic model
 The receiving checker validates all declared successors, regenerates a private
 literal-model Lean proof, and proves safety by induction for every finite admitted
 history. It checks outcomes absent from a submitted log and does not bound the
-history length. The executable shield rejects unknown, malformed and unsafe
+history length. Existing `PCS.V2.Witnesses.AISafety.traceTestB_sound` and
+`ai_archive_sound` concern committed trace bytes, with `FaithfulLog` needed for
+transport to the recorded deployed episodes. The new model certificate also
+covers unobserved alternatives and histories not supplied in a log. The executable shield rejects unknown, malformed and unsafe
 proposals. Certificate limits are 32 states, 16 actions, 512 edges/allowed pairs,
 and natural identifiers below 65536.
 
@@ -82,10 +87,14 @@ theorems use only `propext` and `Quot.sound`; the conditional bridge also uses
 `Classical.choice`. These are standard Lean axioms. Producer proof text is never
 executed as receiving authority.
 
-Pending full new-library qualification, not yet counted as independently admitted:
+Aristotle principals independently compiled and their standard axiom closures
+checked in run `38636060406`:
 
 - `PCSCR.Py.python_conditional_refines_reference`.
 - `PCSCR.Js.javascript_conditional_refines_reference`.
+
+Pending composition-wrapper qualification:
+
 - `PCSConditionalShield.python_runtime_and_guard_histories_safe`.
 - `PCSConditionalShield.javascript_runtime_and_guard_histories_safe`.
 
@@ -112,6 +121,13 @@ JSON parsing, SHA-256/JCS and deployed-world correspondence are not proved.
   contribution fixture tests and all 15 assurance tests passed (22 total).
   Production contribution rules were unchanged. The assurance regression also
   rejects an equivalent guard on a model with an unsafe initial state.
+- Clean `d02c6df0afb0ca36c5d5f4cf06ce7aeb6d9eef36`: final full Python suite
+  with `PCS_REQUIRE_PROVER=1` passed all 1,790 tests, zero skips or failures,
+  376.49 seconds. One intentional duplicate-ZIP warning remains. Original logs,
+  source/status before and after, summary and byte inventory are retained under
+  `independent-required-full-python-d02c6df/`. After the inventory correction,
+  all 18 inventory/environment tests passed; the fresh-import regression is
+  additionally kernel-backed.
 - At `8b9001f`, existing campaigns rejected all 25 foundational attacks and all
   12 v0.6 hardening attacks, with zero false accepts.
 - Signed campaign at `45cbdb3`: eight independent receiving processes produced
@@ -121,6 +137,12 @@ JSON parsing, SHA-256/JCS and deployed-world correspondence are not proved.
   public key, exact packages, receiver outputs and byte inventory are retained
   in `signed-guarded-shield-45cbdb3/`. Positive package SHA-256 is
   `87a4d8ac46ab0b8f732f9897094ca9f7dc4c8e3c4aabbb08100e5ed60b7ffa04`.
+- Fresh signed campaign at `7cfe8e6688af73197dec5d63846ecbc2a7ca2cf3` after
+  the inventory correction: all eight receiving outcomes passed, 12.538918
+  seconds. Current-source positive package SHA-256
+  `067cfff9d4250e65e34b676df05adafadb4e0e9785175162d888a950924d9a9c`;
+  retained under `signed-guarded-shield-7cfe8e6/`. The earlier 45cb package is
+  historical: exact source pins correctly require its older inventory bytes.
 - Exact unchanged site `a6a9a54`: complete Node suite, 425 passes, zero failures
   or skips, 64.953 seconds. Exact unchanged CertiForge `c71e857`: locked Rust
   workspace suite, 25 passes, zero failures. Their exact protected source checks
@@ -136,11 +158,29 @@ Final independent review found that the first 478-name declaration scan omitted
 the 478-name source gate is partial evidence, not a full axiom audit.
 
 The initial protected run `38591704320` failed because a source-reading
-prerequisite had not been built. The fix explicitly builds it. Current run
-`38636060406` tests head `8b9001f` against current main `c627995`; eight component,
-portability, source-policy and learning-loop lanes passed. Its full core gate is
-still checking the new conditional library. No complete protected pass is claimed.
-The later `45cbdb3` changes require their own final protected run before merge.
+prerequisite had not been built. The fix explicitly builds it. Run
+`38636060406` tested head `8b9001fcc155fb7ff3e84f92d3c13208bde44bdf` through
+merge commit `7d9cd8bbbd08358a014b281e488b12d49b71a9f7`. Eight other required
+lanes passed. Its new-library build passed all 68 modules (1,215.373134 seconds),
+then six source/lowering/principal elaborations, the preceding 478-name axiom
+audit, two false-source controls and 90 four-way receipt cases passed. Every
+compiled Lean source digest matches the current imported source. Four outcomes
+are covered: 11 equivalent, 46 resource-limited, 23 counterexamples and ten
+inconsistent contexts. Digests are explicitly abstracted in this finite test.
+The subsequent combined composition wrapper failed at a 1 GiB interpreter
+memory limit. Its new scoped limit is 6,000 MiB; the new library uses the actual
+qualified 32,000 MiB limit and sequential build recipe. Original baseline settings
+remain byte-identical.
+
+The downloaded CI artifact SHA-256 is
+`9156fe51ee866fe5007d79a7ea5d5cd87c3511559ac86b905c9682434e86eb7c`, retained
+with decoded job logs under `protected-partial-run38636060406/`. This is a
+partially successful run, not a complete protected pass. Review also found that
+Lake could put cached modules before the fresh replay overlay. The full build
+remains valid; final replay now resolves the pinned toolchain environment once
+and invokes Lean directly with the fresh overlay first. A conflicting-module
+kernel regression passes. Final CI must audit all 673 imported declarations and
+all 15 first-party static shield/composition/control declarations.
 
 The approved Lake extension is accepted by two exact full-file hashes and exact
 baseline-prefix/extension-tail checks. Historical manifests are unchanged.
@@ -153,8 +193,8 @@ The independently replayable finite-model shield is useful for bounded research
 models with explicit trusted deployment premises. Signed receiver replay is
 available for researchers to inspect and reproduce. This is experimental,
 reviewable assurance, not a global AI-safety or scientific-validity certificate.
-Full Aristotle build/audit, four-way extracted/native parity and final protected
-integration remain outstanding. The external Windows research remains missing.
+Complete 673-name audit, corrected fresh-import replay, composition-wrapper
+qualification and final protected integration remain outstanding. The external Windows research remains missing.
 
 To reproduce the signed receiving campaign from an installed checkout with
 Lean 4.28.0 on PATH, use a new output directory:
