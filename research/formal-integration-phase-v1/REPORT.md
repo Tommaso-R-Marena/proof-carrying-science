@@ -92,14 +92,14 @@ Pending full new-library qualification, not yet counted as independently admitte
 The latter two explicitly combine extracted heap receipt correspondence and the
 independently established guard-history result. They do not derive a trusted
 decision from an arbitrary producer receipt. Python retains `ValidateAccepts`
-and `DigestOK`; JavaScript additionally retains `JValidateAccepts`, `JExactOK`,
-`JIntegerOK` and bounded task syntax. Actual CPython/V8/compiler/OS behavior,
+and `DigestOK`; JavaScript retains `DigestOK`, `JValidateAccepts`, `JExactOK`,
+`JIntegerOK` and `JsTaskBounds` for bounded task syntax. Actual CPython/V8/compiler/OS behavior,
 JSON parsing, SHA-256/JCS and deployed-world correspondence are not proved.
 
 ## Executed evidence and exact commits
 
 - Shield final campaign: 53 actual kernel cases, 27 accepts and 26 rejects,
-  zero mismatches, 57.331705 seconds. Seven static negative controls and 33 shield
+  zero mismatches, 57.331705 seconds. Seven static kernel controls (including positive contracts) and 33 shield
   tests passed. Cases are first-party synthetic finite models, not external
   empirical observations. Source seals and all individual results are retained
   under `../action-shield-v1/final/`.
@@ -123,7 +123,10 @@ JSON parsing, SHA-256/JCS and deployed-world correspondence are not proved.
   `87a4d8ac46ab0b8f732f9897094ca9f7dc4c8e3c4aabbb08100e5ed60b7ffa04`.
 - Exact unchanged site `a6a9a54`: complete Node suite, 425 passes, zero failures
   or skips, 64.953 seconds. Exact unchanged CertiForge `c71e857`: locked Rust
-  workspace suite, 25 passes, zero failures.
+  workspace suite, 25 passes, zero failures. Their exact protected source checks
+  also succeeded: site `site-full-gate` run `38446031252`; CertiForge
+  `rust-and-lean` run `38311192252`. The core integration CertiForge lane
+  separately built and audited its Lean 4.16 workspace in run `38636060406`.
 - Historical synthetic scientific-transport evidence was independently replayed:
   package validity, replay consistency and its bounded contract passed;
   scientific acceptance stayed false. This is no new scientific discovery.
@@ -152,6 +155,20 @@ available for researchers to inspect and reproduce. This is experimental,
 reviewable assurance, not a global AI-safety or scientific-validity certificate.
 Full Aristotle build/audit, four-way extracted/native parity and final protected
 integration remain outstanding. The external Windows research remains missing.
+
+To reproduce the signed receiving campaign from an installed checkout with
+Lean 4.28.0 on PATH, use a new output directory:
+
+```sh
+python scripts/run_ai_safety_assurance_v1.py --output /tmp/pcs-shield-replay-new
+```
+
+The command creates a synthetic positive package and seven signed attacks,
+replays each in a separate process and retains only the experimental public key.
+Its `SUMMARY.json` and `ARTIFACT_SHA256.json` describe the exact run. Existing
+evidence directories are rejected. Current source pins deliberately prevent an
+old package from silently authorizing changed receiving code. A historical
+package must be replayed against its exact documented source revision.
 
 The mathematical intelligence reports retain their original v4 outcome: primitive,
 neural and reinforcement methods each 0/22, strong portfolio 9/22. No model was
