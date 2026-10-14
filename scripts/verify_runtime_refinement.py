@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from audit_lean_source import audit
 from verify_omega_dd_formal import check_inventory
+from formal_environment_contract_v2 import check_configuration
 
 EVIDENCE = ROOT / "research/aristotle-runtime-refinement-v1"
 
@@ -43,7 +44,9 @@ def check_sources(components):
             raise ValueError("imported proof/reference source changed: " + item["path"])
     binding = json.loads((EVIDENCE / "runtime-bindings.json").read_text())
     for path, expected in binding["local_sources"].items():
-        if sha(ROOT / path) != expected:
+        if path == "formal/lakefile.toml":
+            check_configuration(ROOT / path, expected)
+        elif sha(ROOT / path) != expected:
             raise ValueError("local formal environment or parser identity changed: " + path)
     windows = []
     for item in binding["source_windows"]:

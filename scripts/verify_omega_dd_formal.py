@@ -96,7 +96,10 @@ def verify(formal: Path, output: Path | None = None, returned_environment: bool 
                       ("lake-manifest.json", "lock_sha256")]:
         if returned_environment and name == "lakefile.toml":
             key = "returned_configuration_sha256"
-        if hashlib.sha256((formal / name).read_bytes()).hexdigest() != manifest[key]:
+        if name == "lakefile.toml" and not returned_environment:
+            from formal_environment_contract_v2 import check_configuration
+            check_configuration(formal / name, manifest[key])
+        elif hashlib.sha256((formal / name).read_bytes()).hexdigest() != manifest[key]:
             raise ValueError(f"Formal environment identity changed: {name}")
     overlay = None
     if not returned_environment:
