@@ -107,3 +107,17 @@ bounded swap/resource setup. `--memory-mb` is capped at 32000 and
 `--heavy-timeout` at 3600 seconds. Sequential build and replay fail closed on
 any compiler error, timeout, dropped inventory, source change or nonapproved axiom.
 Higher resources are not proof evidence until every exact command actually succeeds.
+
+## Audit inventory correction
+
+The original line scanner omitted 195 inline `@[simp] theorem`/`lemma`
+declarations. The returned library has **673 named public theorems/lemmas**,
+not 478. The preceding inventory and driver are preserved as explicitly partial
+snapshots (`theorem-inventory-partial478.json`, `audit-driver-partial478.lean.txt`).
+The attribute-aware scanner includes all 673 current source declarations, and a
+regression verifies that adding/removing inline attributes cannot remove a
+statement from the audit. Complete receiving verification requires the entire
+673-name inventory. Earlier references to a complete 478-name audit are incorrect;
+no complete independently passing audit is inferred from that partial inventory.
+The correction changes audit coverage only; it changes no theorem, algorithm,
+source snapshot, toolchain or proof assumption.

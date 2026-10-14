@@ -57,7 +57,7 @@ def declared_inventory() -> list[dict]:
   for line in p.read_text().splitlines():
    m = re.match(r'^namespace (\S+)', line)
    if m: namespace = m[1]
-   m = re.match(r'^(?:theorem|lemma) (\S+)', line)
+   m = re.match(r'^(?:@\[[^\]]+\]\s*)*(?:theorem|lemma) (\S+)', line)
    if m: rows.append({'name': namespace + '.' + m[1], 'path': str(p.relative_to(ROOT))})
  names = [r['name'] for r in rows]
  if not names or len(names) != len(set(names)):
@@ -85,7 +85,7 @@ def check_sources(site: Path) -> dict:
     raise ValueError('source overlay changed declarations, algorithms or theorem types')
  declared = declared_inventory()
  expected = json.loads((EVIDENCE / 'theorem-inventory.json').read_text())
- if declared != expected or len(declared) != 478:
+ if declared != expected or len(declared) != 673:
   raise ValueError('complete theorem inventory changed')
  rows = []
  for language, component, path, name in SOURCES:

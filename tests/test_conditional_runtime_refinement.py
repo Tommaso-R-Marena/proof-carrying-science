@@ -14,7 +14,7 @@ spec.loader.exec_module(gate)
 def test_complete_inventory_includes_both_principals_and_source_certificates():
  rows = gate.declared_inventory()
  names = [r['name'] for r in rows]
- assert len(names) == 478
+ assert len(names) == 673
  assert all(name in names for name in gate.PRINCIPALS)
  assert 'PCSCR.Py.conditional_py_source_bound' in names
  assert 'PCSCR.Js.conditional_js_source_bound' in names
@@ -62,3 +62,14 @@ def test_declaration_inventory_tampering_rejected(tmp_path, monkeypatch, change)
  monkeypatch.setattr(gate, 'declared_inventory', lambda: rows)
  with pytest.raises(ValueError, match='complete theorem inventory changed'):
   gate.check_sources(tmp_path)
+
+
+def test_inline_attributes_do_not_remove_declarations_from_audit(tmp_path, monkeypatch):
+ module = tmp_path / 'Attributed.lean'
+ module.write_text('namespace PCSCR.Py\n@[simp] theorem inline_one : True := trivial\n@[simp] @[grind] lemma inline_two : True := trivial\ntheorem plain : True := trivial\n')
+ monkeypatch.setattr(gate, 'MODULES', tmp_path)
+ monkeypatch.setattr(gate, 'ROOT', tmp_path)
+ names = [row['name'] for row in gate.declared_inventory()]
+ assert names == ['PCSCR.Py.inline_one', 'PCSCR.Py.inline_two', 'PCSCR.Py.plain']
+ module.write_text(module.read_text().replace('@[simp] ', '').replace('@[grind] ', ''))
+ assert [row['name'] for row in gate.declared_inventory()] == names
