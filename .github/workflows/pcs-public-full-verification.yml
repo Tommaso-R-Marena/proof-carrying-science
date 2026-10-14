@@ -240,7 +240,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          (cd formal && lake build PCSOmega PCSDecisionDiagram)
+          (cd formal && lake build +PCSRuntimeRefinement.SourceText:leanArts PCSOmega PCSDecisionDiagram)
           # Sequential ordinary-kernel builds preserve every source obligation.
           # Use only the existing standard runner and bounded swap above.
           python scripts/verify_conditional_runtime_refinement.py --build --memory-mb 32000 --heavy-timeout 3600 --build-output "$RUNNER_TEMP/conditional-complete-build.json" --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --negative-controls --output "$RUNNER_TEMP/conditional-refinement.json"
