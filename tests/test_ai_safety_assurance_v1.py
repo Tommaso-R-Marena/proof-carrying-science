@@ -83,7 +83,7 @@ def test_exact_model_kernel_support_is_separate_from_base_open_and_deployment(pa
     assert next(x for x in r["obligations"]["nodes"] if x["id"] == "model_invariant")["status"] == "FORMALLY_SUPPORTED"
 
 
-@pytest.mark.parametrize("mutation", ["false-report", "proof-injection", "missing-source", "changed-premise", "weakened-claim"])
+@pytest.mark.parametrize("mutation", ["false-report", "bool-number-report", "receiving-source", "proof-injection", "missing-source", "changed-premise", "weakened-claim"])
 def test_authentically_resigned_false_or_misbinding_packages_reject(package, mutation):
     from pcs.attest_v06 import build_attestation_directory_v06
     from pcs.bundle_v06 import create_verified_bundle_v06
@@ -92,11 +92,16 @@ def test_authentically_resigned_false_or_misbinding_packages_reject(package, mut
     shutil.copytree(path / "work/project", stage)
     manifest_file = stage / "manifest.confirmed.json"
     manifest = json.loads(manifest_file.read_bytes())
-    if mutation == "false-report":
+    if mutation in {"false-report", "bool-number-report"}:
         report_file = stage / assurance.FILES["replay"]
         report = json.loads(report_file.read_bytes())
-        report["guard"]["complete_state_action_domain_checked"] = 0
+        if mutation == "false-report":
+            report["guard"]["complete_state_action_domain_checked"] = 0
+        else:
+            report["scientific_acceptance"] = 0
         report_file.write_bytes(encode(report))
+    elif mutation == "receiving-source":
+        (stage / assurance.PREFIX / "sources/pcs/experimental/conditional.py.txt").write_text("raise RuntimeError('never execute producer sources')\n")
     elif mutation == "proof-injection":
         (stage / assurance.PREFIX / "proof.lean.txt").write_text("axiom forged : False\n")
     elif mutation == "missing-source":
@@ -122,6 +127,11 @@ def test_missing_or_failed_kernel_cannot_be_replaced_by_a_signed_proof(package, 
     monkeypatch.setattr(shield, "kernel_replay", lambda *args: {"kernel_checked": False, "status": "UNAVAILABLE_OR_EXHAUSTED"})
     r = assurance.verify_bundle(package["path"] / "positive.zip", package["public"], expected_fingerprint=package["fingerprint"])
     assert r["pcs_package_valid"] and r["independent_replay_consistent"] and not r["bounded_assurance_satisfied"]
+
+
+def test_missing_bundle_is_structured_failure_without_authority(tmp_path):
+    result = assurance.verify_bundle(tmp_path / "absent.zip", tmp_path / "absent.pem", expected_fingerprint="0" * 64)
+    assert not result["formal_model_supported"] and result["errors"]
 
 
 def test_separate_receiving_process_and_immutable_output(package):

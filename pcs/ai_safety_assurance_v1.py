@@ -147,7 +147,7 @@ def _claims(model_raw, shield_raw, guard_raw):
 
 def build_bundle(model_path, shield_path, guard_path, work_directory, output_bundle,
                  private_key_path, public_key_path, *, expected_fingerprint, lean_authority_path=None):
-    work, bundle = Path(work_directory), Path(output_bundle)
+    work, bundle = Path(work_directory).resolve(), Path(output_bundle).resolve()
     if work.exists() or bundle.exists() or bundle.is_relative_to(work):
         raise ShieldAssuranceError("new work and separate output paths required")
     model_raw, shield_raw, guard_raw = (Path(p).read_bytes() for p in (model_path, shield_path, guard_path))
@@ -235,7 +235,7 @@ def verify_bundle(bundle, public_key_path, *, expected_fingerprint, lean_authori
             "formal_model_supported": supported, "bounded_assurance_satisfied": supported and report["guard"]["outcome"] == "PASS",
             "domain_replay": report, "kernel_replay": kernel,
             "obligations": obligations(model_raw, report, kernel_checked=supported), "bundle_sha256": sha(Path(bundle).read_bytes())}
-    except (ValueError, KeyError, TypeError, UnicodeError) as exc:
+    except (ValueError, KeyError, TypeError, UnicodeError, OSError, RecursionError) as exc:
         return {**base, "errors": [f"receiving assurance rejected: {type(exc).__name__}: {exc}"]}
 
 
