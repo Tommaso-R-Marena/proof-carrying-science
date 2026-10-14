@@ -41,7 +41,10 @@ def sha(raw):
 def _json(raw):
     if not isinstance(raw, bytes) or len(raw) > shield.MAX_BYTES:
         raise ShieldAssuranceError("bounded byte artifact required")
-    value = strict_json_loads(raw.decode("utf-8"))
+    try:
+        value = strict_json_loads(raw.decode("utf-8"))
+    except (UnicodeError, ValueError, RecursionError) as exc:
+        raise ShieldAssuranceError("invalid bounded strict UTF-8 JSON") from exc
     if not isinstance(value, dict):
         raise ShieldAssuranceError("object artifact required")
     return value
@@ -110,8 +113,27 @@ def obligations(model_raw, report, *, kernel_checked=False):
 
 def implementation():
     root = Path(__file__).resolve().parents[1]
-    paths = ["pcs/action_shield_v1.py", "pcs/ai_safety_assurance_v1.py", "pcs/experimental/conditional.py", "formal/PCSActionShield.lean"]
+    paths = ["pcs/action_shield_v1.py", "pcs/ai_safety_assurance_v1.py", "pcs/experimental/conditional.py",
+             "pcs/canonical_json.py", "pcs/jsonio.py", "formal/PCSActionShield.lean", "formal/PCSConditionalShieldBridge.lean"]
     return {f"{PREFIX}/sources/{path}.txt": (root / path).read_bytes() for path in paths}
+
+
+def admit_guarded_action(model_raw, shield_raw, guard_raw, state, action):
+    """Executable proposal filter. Mathematical support requires receiving replay.
+
+    All fields are receiver-parsed; unknown state/actions and failed, inconsistent
+    or exhausted guard checks grant no admission. Deployment enforcement is OPEN.
+    """
+    if type(state) is not int or type(action) is not int:
+        raise ShieldAssuranceError("exact integer state/action required")
+    report = replay(model_raw, shield_raw, guard_raw)
+    if report["model"]["outcome"] != "PASS" or report["guard"]["outcome"] != "PASS":
+        return False
+    if not shield.admit_action(model_raw, shield_raw, state, action):
+        return False
+    task = conditional.validate(_json(guard_raw))
+    assignment = {name: pair == [state, action] for name, pair in report["guard"]["mapping"].items()}
+    return conditional.evaluate(task["candidate"], assignment)
 
 
 def _claims(model_raw, shield_raw, guard_raw):

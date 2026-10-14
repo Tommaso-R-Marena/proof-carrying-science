@@ -47,6 +47,20 @@ def test_nonvacuous_reference_and_empty_premises_are_binding():
             assurance.replay(model, cert, encode(bad))
 
 
+def test_actual_guarded_proposals_reject_unlisted_and_unsafe_actions():
+    model, cert, guard = inputs()
+    assert assurance.admit_guarded_action(model, cert, guard, 0, 0) is True
+    assert assurance.admit_guarded_action(model, cert, guard, 1, 0) is True
+    assert assurance.admit_guarded_action(model, cert, guard, 0, 1) is False
+    assert assurance.admit_guarded_action(model, cert, guard, 99, 0) is False
+    assert assurance.admit_guarded_action(model, cert, guard, 0, 99) is False
+    bad = json.loads(guard)
+    bad["candidate"] = {"op": "true"}
+    assert assurance.admit_guarded_action(model, cert, encode(bad), 0, 0) is False
+    with pytest.raises(assurance.ShieldAssuranceError, match="exact integer"):
+        assurance.admit_guarded_action(model, cert, guard, True, 0)
+
+
 @pytest.fixture(scope="module")
 def package(tmp_path_factory):
     path = tmp_path_factory.mktemp("shield-package")
