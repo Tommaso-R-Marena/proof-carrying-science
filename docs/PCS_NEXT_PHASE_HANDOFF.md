@@ -545,6 +545,8 @@ Local-only records retained outside Git:
 
 These files may survive a cloud snapshot but are **not guaranteed available in a new chat/clone**. Do not base a portable assurance claim on a missing local log. The durable handoff copies the final release summary/ledger and current public repository-state snapshot only; it does not silently publish raw provider data/credentials or turn summaries into signed attestations. Committed research matrices/proofs/manifests remain the portable scientific evidence.
 
+The handoff itself is tracked on branch `codex/pcs-next-phase-handoff` in [PR #108](https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/108). Its normal protected CI is pending at this documentation snapshot. GitHub explicitly returned “Auto merge is not allowed for this repository”; no repository setting, bypass or protection was changed. The next session should inspect PR108’s exact current head and all ten protected contexts, then perform the normal Owner merge only when qualified. Resolve `git log -1 --format=%H -- docs/PCS_NEXT_PHASE_HANDOFF.md` or the PR head for the document commit rather than assuming it is on main. This is the only newly opened operation from the final handoff.
+
 No unfinished model implementation or uncommitted code patch was present at baseline. There may be old ephemeral local processes/caches; process IDs from old turns are not valid restoration evidence. Restart only owned documented services. No new Aristotle package or separate AI-safety project is integrated by this document. The handoff's own PR/CI state must be checked on next entry; its documentation commit is separate from #107 functional qualification.
 
 ## 12. Rejected approaches, real failures and what to preserve
