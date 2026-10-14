@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -100,7 +101,32 @@ def check_sources(site: Path) -> dict:
          'proof_sources': manifest['files'], 'theorem_targets': [r['name'] for r in declared]}
 
 
+def fresh_lean_environment(overlay: Path) -> tuple[dict, dict]:
+ """Resolve Lake once, then use its exact Lean directly with fresh imports first."""
+ env = dict(os.environ)
+ for variable in ['PATH', 'LEAN_PATH']:
+  resolved = execute(['lake', 'env', 'printenv', variable])
+  if resolved['returncode']:
+   raise RuntimeError('could not resolve pinned Lake environment: ' + variable)
+  env[variable] = resolved['stdout'].strip()
+ executable = shutil.which('lean', path=env['PATH'])
+ if executable is None: raise RuntimeError('pinned Lean executable unavailable')
+ env['_PCS_FRESH_LEAN'] = str(Path(executable).resolve())
+ env['LEAN_PATH'] = str(overlay) + os.pathsep + env['LEAN_PATH']
+ version = execute([env['_PCS_FRESH_LEAN'], '--version'], env)
+ expected = 'Lean (version 4.28.0,'
+ commit = 'commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b,'
+ if version['returncode'] or not version['stdout'].startswith(expected) or commit not in version['stdout']:
+  raise RuntimeError('conditional replay requires the exact pinned Lean 4.28.0 release')
+ return env, version
+
+
 def execute(command: list[str], env: dict | None = None, timeout: int = 600) -> dict:
+ if env and env.get('_PCS_FRESH_LEAN') and command[:3] == ['lake', 'env', 'lean']:
+  # Lake would prepend cached build directories ahead of the fresh overlay.
+  # Its environment was resolved above; invoking the pinned executable directly
+  # is necessary for fresh lowering/principal/audit imports to use this replay.
+  command = [env['_PCS_FRESH_LEAN'], *command[3:]]
  start = time.monotonic()
  proc = subprocess.run(command, cwd=ROOT / 'formal', env=env, text=True,
                        capture_output=True, timeout=timeout)
@@ -130,8 +156,8 @@ def verify(site: Path, *, output: Path | None = None, negative_controls: bool = 
  with tempfile.TemporaryDirectory(prefix='pcs-conditional-replay-') as folder:
   temp = Path(folder)
   (temp / 'PCSConditionalRuntime').mkdir()
-  env = dict(os.environ)
-  env['LEAN_PATH'] = str(temp) + (os.pathsep + env['LEAN_PATH'] if env.get('LEAN_PATH') else '')
+  env, toolchain = fresh_lean_environment(temp)
+  records.append(toolchain)
   # Fresh source-read certificates and lowering are required; cached extraction
   # oleans cannot stand in for current snapshot bytes. Remaining proof modules
   # are source-pinned and must already have passed the complete library build.

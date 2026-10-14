@@ -73,3 +73,30 @@ def test_inline_attributes_do_not_remove_declarations_from_audit(tmp_path, monke
  assert names == ['PCSCR.Py.inline_one', 'PCSCR.Py.inline_two', 'PCSCR.Py.plain']
  module.write_text(module.read_text().replace('@[simp] ', '').replace('@[grind] ', ''))
  assert [row['name'] for row in gate.declared_inventory()] == names
+
+
+def test_fresh_replay_imports_override_conflicting_cached_module(tmp_path, monkeypatch):
+ import os
+ import shutil
+ if not shutil.which('lake'):
+  if os.environ.get('PCS_REQUIRE_PROVER') == '1':
+   pytest.fail('required pinned Lean toolchain unavailable')
+  pytest.skip('Lean toolchain unavailable')
+ cached, fresh = tmp_path / 'cached', tmp_path / 'fresh'
+ cached.mkdir(); fresh.mkdir()
+ monkeypatch.setenv('LEAN_PATH', str(cached))
+ env, _version = gate.fresh_lean_environment(fresh)
+ for folder, value in [(cached, 'False'), (fresh, 'True')]:
+  source = folder / 'PCSReplayPrecedenceRegression.lean'
+  source.write_text('namespace PCSReplayPrecedenceRegression\ndef fresh : Prop := ' + value + '\nend PCSReplayPrecedenceRegression\n')
+  compiled = gate.execute(['lake', 'env', 'lean', '--root=' + str(folder), '-o', str(source.with_suffix('.olean')), str(source)], env)
+  assert compiled['returncode'] == 0, compiled
+ probe = tmp_path / 'FreshReplayProbe.lean'
+ probe.write_text('import PCSReplayPrecedenceRegression\nexample : PCSReplayPrecedenceRegression.fresh := True.intro\n')
+ checked = gate.execute(['lake', 'env', 'lean', str(probe)], env)
+ assert checked['returncode'] == 0, checked
+ # A conflicting cached import would turn this proof into a false proposition.
+ stale_env = dict(env)
+ stale_env['LEAN_PATH'] = str(cached) + os.pathsep + env['LEAN_PATH']
+ stale = gate.execute(['lake', 'env', 'lean', str(probe)], stale_env)
+ assert stale['returncode'] != 0 and 'type mismatch' in stale['stdout'].lower(), stale
