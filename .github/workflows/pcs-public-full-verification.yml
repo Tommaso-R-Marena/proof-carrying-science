@@ -240,6 +240,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
+          python scripts/audit_lean_source.py formal/PCSActionShield.lean formal/PCSActionShieldControls.lean formal/PCSConditionalShieldBridge.lean formal/PCSConditionalShieldRuntime.lean formal/PCSActionShieldIntegrationAudit.lean
           (cd formal && lake build +PCSRuntimeRefinement.SourceText:leanArts PCSOmega PCSDecisionDiagram)
           # Sequential ordinary-kernel builds preserve every source obligation.
           # Use only the existing standard runner and bounded swap above.

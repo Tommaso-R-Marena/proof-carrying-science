@@ -96,26 +96,26 @@ theorem optimized_guard_histories_safe {m : Model} {guard : Nat → Nat → Bool
     exact finite model. Its assumptions are explicit and independently open. -/
 structure Correspondence (m : Model) (State Action : Type)
     (initial : State → Prop) (step : State → Action → State → Prop)
-    (admit : State → Action → Prop) where
+    (admission : State → Action → Prop) where
   state : State → Nat
   action : Action → Nat
   initial_models : ∀ x, initial x → state x ∈ m.initial
   step_models : ∀ x a y, step x a y → ⟨state x, action a, state y⟩ ∈ m.edges
-  admission_models : ∀ x a, admit x a → (state x, action a) ∈ m.allowed
+  admission_models : ∀ x a, admission x a → (state x, action a) ∈ m.allowed
 
 inductive DeployedHistory {State Action : Type} (initial : State → Prop)
-    (step : State → Action → State → Prop) (admit : State → Action → Prop) : State → Prop where
-  | initial (x : State) (hi : initial x) : DeployedHistory initial step admit x
-  | step {x y : State} (h : DeployedHistory initial step admit x) (a : Action)
-      (hs : step x a y) (ha : admit x a) : DeployedHistory initial step admit y
+    (step : State → Action → State → Prop) (admission : State → Action → Prop) : State → Prop where
+  | initial (x : State) (hi : initial x) : DeployedHistory initial step admission x
+  | step {x y : State} (h : DeployedHistory initial step admission x) (a : Action)
+      (hs : step x a y) (ha : admission x a) : DeployedHistory initial step admission y
 
 /-- Concrete deployment safety only under the stated abstraction/transition and
     admission correspondence. No log, producer signature or neural policy can
     discharge these premises on its own. -/
 theorem deployed_histories_safe {m : Model} (hc : check m = true)
     {State Action : Type} {initial : State → Prop} {step : State → Action → State → Prop}
-    {admit : State → Action → Prop} (corr : Correspondence m State Action initial step admit)
-    {x : State} (h : DeployedHistory initial step admit x) : corr.state x ∈ m.safe := by
+    {admission : State → Action → Prop} (corr : Correspondence m State Action initial step admission)
+    {x : State} (h : DeployedHistory initial step admission x) : corr.state x ∈ m.safe := by
   have cert := (check_iff_certified m).mp hc
   induction h with
   | initial x hi => exact cert.1 _ (corr.initial_models x hi)
