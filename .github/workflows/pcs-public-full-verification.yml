@@ -459,6 +459,27 @@ jobs:
           assert result['status'] == 'verified' and result['pcs_authority'] is False
           assert len(result['result']['receipt']['actions']) >= 3
           PYMATHLIB
+      - name: Universal transport proofs and fresh signed receiving controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          lake -d formal build pcs-lean-authority
+          python scripts/verify_transport_formal.py --output "$RUNNER_TEMP/transport-static-axioms.json"
+          PCS_REQUIRE_TRANSPORT_KERNEL=1 python -m pytest -q tests/test_transport_kernel_v1.py
+          python scripts/run_transport_kernel_v1.py --output "$RUNNER_TEMP/transport-kernel-campaign"
+      - name: Retain universal transport receiving evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: pcs-transport-kernel-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/transport-static-axioms.json
+            ${{ runner.temp }}/transport-kernel-campaign/
+          if-no-files-found: warn
+          retention-days: 14
 
   certiforge-integration:
     name: certiforge-integration
