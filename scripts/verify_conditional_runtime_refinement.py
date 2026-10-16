@@ -45,6 +45,8 @@ ASSUMPTIONS = {
 }
 PRINCIPALS = ['PCSCR.Py.python_conditional_refines_reference',
               'PCSCR.Js.javascript_conditional_refines_reference']
+FRESH_MODULES = ['PyConditional', 'JsConditional', 'PyConditionalLowered',
+                 'JsConditionalLowered', 'PyMain', 'JsMain']
 
 
 def sha(path: Path) -> str:
@@ -121,6 +123,40 @@ def fresh_lean_environment(overlay: Path) -> tuple[dict, dict]:
  return env, version
 
 
+def seed_replay_imports(overlay: Path) -> list[dict]:
+ """Copy the built namespace; remove all facets of every fresh replay target.
+
+ Lean resolves an entire top-level namespace at its first matching directory.
+ A sparse overlay therefore hides unchanged siblings instead of falling back to
+ Lake's build directory. These supporting imports require the complete preceding
+ source build; only the six targets below count as freshly re-elaborated here.
+ """
+ cache = ROOT / 'formal/.lake/build/lib/lean'
+ names = ['PCSConditionalRuntime'] + [
+  'PCSConditionalRuntime.' + path.stem for path in sorted(MODULES.glob('*.lean'))]
+ records = []
+ for name in names:
+  relative = Path(name.replace('.', '/'))
+  source = cache / relative.with_suffix('.olean')
+  if not source.is_file():
+   raise ValueError('complete conditional library build required: ' + name)
+  for artifact in sorted(source.parent.glob(source.name + '*')):
+   if not artifact.is_file():
+    raise ValueError('invalid compiled module artifact: ' + str(artifact))
+   target = overlay / artifact.relative_to(cache)
+   target.parent.mkdir(parents=True, exist_ok=True)
+   shutil.copyfile(artifact, target)
+   if sha(artifact) != sha(target):
+    raise ValueError('compiled import changed during copying: ' + name)
+   records.append({'module': name, 'artifact': str(artifact.relative_to(cache)),
+                   'sha256': sha(target)})
+ for stem in FRESH_MODULES:
+  for artifact in (overlay / 'PCSConditionalRuntime').glob(stem + '.olean*'):
+   artifact.unlink()
+ fresh_names = {'PCSConditionalRuntime.' + stem for stem in FRESH_MODULES}
+ return [row for row in records if row['module'] not in fresh_names]
+
+
 def execute(command: list[str], env: dict | None = None, timeout: int = 600) -> dict:
  if env and env.get('_PCS_FRESH_LEAN') and command[:3] == ['lake', 'env', 'lean']:
   # Lake would prepend cached build directories ahead of the fresh overlay.
@@ -156,19 +192,19 @@ def verify(site: Path, *, output: Path | None = None, negative_controls: bool = 
  with tempfile.TemporaryDirectory(prefix='pcs-conditional-replay-') as folder:
   temp = Path(folder)
   (temp / 'PCSConditionalRuntime').mkdir()
+  supporting_imports = seed_replay_imports(temp)
   env, toolchain = fresh_lean_environment(temp)
   records.append(toolchain)
   # Fresh source-read certificates and lowering are required; cached extraction
   # oleans cannot stand in for current snapshot bytes. Remaining proof modules
   # are source-pinned and must already have passed the complete library build.
-  for stem in ['PyConditional', 'JsConditional', 'PyConditionalLowered', 'JsConditionalLowered',
-               'PyMain', 'JsMain']:
+  for stem in FRESH_MODULES:
    records.append(compile_module(MODULES / (stem + '.lean'),
                                  temp / 'PCSConditionalRuntime' / (stem + '.olean'), env, memory_mb, heavy_timeout))
   driver = temp / 'CompleteAudit.lean'
   driver.write_text('import PCSConditionalRuntime\n' +
                     '\n'.join('#print axioms ' + n for n in source['theorem_targets']) + '\n')
-  result = execute(['lake', 'env', 'lean', '-j1', str(driver)], env)
+  result = execute(['lake', 'env', 'lean', '-j1', '-M' + str(memory_mb), str(driver)], env)
   if result['returncode']: raise RuntimeError(result['stdout'] + result['stderr'])
   inventory = check_inventory(result['stdout'], source['theorem_targets'])
   records.append(result)
@@ -180,7 +216,7 @@ def verify(site: Path, *, output: Path | None = None, negative_controls: bool = 
                       ('javascript', 'PCSCR.Js.checkJSegs PCSCR.Js.conditionalJsSrc []')]:
     probe = temp / ('FalseSource_' + lang + '.lean')
     probe.write_text('import PCSConditionalRuntime\nexample : ' + expr + ' = true := by decide +kernel\n')
-    failed = execute(['lake', 'env', 'lean', '-j1', str(probe)], env)
+    failed = execute(['lake', 'env', 'lean', '-j1', '-M' + str(memory_mb), str(probe)], env)
     log = failed['stdout'] + failed['stderr']
     if failed['returncode'] == 0 or 'is false' not in log:
      raise ValueError('false extraction contract was not rejected semantically')
@@ -192,6 +228,7 @@ def verify(site: Path, *, output: Path | None = None, negative_controls: bool = 
            'assumptions': ASSUMPTIONS, 'assurance': 'source-bound declared heap-subset refinement',
            'native_execution_correspondence_proved': False, 'scientific_acceptance': False}
  report = {'format': 'pcs-conditional-runtime-refinement-v1', 'stable_contract': stable,
+           'supporting_compiled_imports': supporting_imports,
            'fresh_elaboration': records, 'negative_controls': negatives}
  if output:
   output.parent.mkdir(parents=True, exist_ok=True)
