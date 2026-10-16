@@ -79,7 +79,8 @@ verification. Mathlib and the Lean compiler are separately trusted dependencies.
 
 All 21 static declarations and all generated declarations have their exact axiom
 inventories checked against `propext`, `Classical.choice` and `Quot.sound`.
-Ordinary `decide +kernel` reduction checks the rational literals. No native
+Ordinary `decide +kernel` reduction checks the rational literals in four
+separate obligations, with sequential elaboration to bound interpreter memory. No native
 reduction oracle is admitted by this audit. Dependency mismatch, changed tracked
 Mathlib sources, compilation failure, source substitution, exhausted resources
 and incomplete inventories grant no model support.

@@ -110,7 +110,9 @@ def matrix (i j : Fin {n}) : ℚ := (({rows} : List (List ℚ)).getD i.val []).g
 def initial (i : Fin {n}) : ℚ := ({vector(model['initial'])} : List ℚ).getD i.val 0
 def lower : ℚ := {_literal(rational_text(lower))}
 def upper : ℚ := {_literal(rational_text(upper))}
-theorem matrix_checked : check volume matrix = true := by decide +kernel
+theorem matrix_checked : check volume matrix = true := by
+  simp only [check, decide_eq_true_eq]
+  exact ⟨by decide +kernel, by decide +kernel, by decide +kernel, by decide +kernel⟩
 theorem initial_bounds : ∀ i, lower ≤ initial i ∧ initial i ≤ upper := by decide +kernel
 theorem declared_all_times (n : Nat) :
     amount volume (evolve matrix initial n) = amount volume initial ∧
@@ -230,7 +232,7 @@ def kernel_replay(model: dict, *, timeout: float = 120) -> dict:
             env['LEAN_PATH'] = str(private) + os.pathsep + env['LEAN_PATH']
             for path, output, names in [(module, module.with_suffix('.olean'), GENERAL_THEOREMS),
                                         (driver, None, REPLAY_THEOREMS)]:
-                command = [lean, '-j1', '-M2048', '--root='+str(private)]
+                command = [lean, '-j1', '-M2048', '-D', 'Elab.async=false', '--root='+str(private)]
                 if output is not None:
                     command += ['-o', str(output)]
                 command.append(str(path))

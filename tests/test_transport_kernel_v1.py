@@ -254,3 +254,16 @@ def test_current_input_model_handoff_cannot_mix_two_supported_models(component,m
     result=receiver.replay(CONTRACT,TRAJECTORY)
     assert not result['accepted'] and not result['all_time_model_supported'] and not result['model_handoff_checked']
     assert 'model handoff' in result['errors'][0]
+
+
+def test_actual_kernel_supports_sixteen_cell_resource_boundary():
+    require_kernel()
+    c=json.loads(CONTRACT)
+    c['cells']=[{'id':f'Cell{i}','volume':str(Fraction(i+1,2)),
+                 'initial_concentration':str(Fraction(i,15))} for i in range(16)]
+    c['edges']=[{'left':f'Cell{i}','right':f'Cell{i+1}','conductance':'1/4'} for i in range(15)]
+    c['time_step']='1/1024'
+    result=receiver.replay(encode(c))
+    assert result['accepted'] and result['all_time_model_supported'],result.get('kernel',result)
+    assert result['model_handoff_checked'] and result['acceptance_scope']=='MODEL_ONLY'
+    assert set(result['kernel']['kernel_theorems'])==set(receiver.GENERAL_THEOREMS+receiver.REPLAY_THEOREMS)
