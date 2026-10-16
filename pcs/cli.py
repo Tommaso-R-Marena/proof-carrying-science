@@ -2413,6 +2413,9 @@ def build_parser():
     from pcs.experimental.intervention_cli import register as register_intervention
     register_intervention(sub)
 
+    from pcs.transport_kernel_v1 import register as register_transport_kernel
+    register_transport_kernel(sub)
+
     return p
 
 

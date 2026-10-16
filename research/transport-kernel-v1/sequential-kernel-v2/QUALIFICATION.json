@@ -1,0 +1,33 @@
+{
+  "format": "pcs-transport-sequential-qualification-v2",
+  "source_commit": "32c993b152e99858601d5309b201c8213aa9b0be",
+  "focused_tests": {
+    "passed": 82,
+    "skipped": 0,
+    "seconds": 49.13
+  },
+  "static_theorems": 21,
+  "receiving_processes": 15,
+  "accepted": 4,
+  "expected_rejections": 11,
+  "signed_packages_integrity_valid": 5,
+  "actual_false_matrix_kernel_proof": true,
+  "sixteen_cell_kernel_checked": true,
+  "campaign_wall_seconds": 82.756009,
+  "failed_ci": {
+    "run_id": 38939625989,
+    "head": "9e2fbaec7f044c4842e75c3788b565449339e4ea",
+    "job": "real-analysis-bridge",
+    "cause": "Lean interpreter exceeded unchanged 2048 MiB memory cap for one compound sixteen-cell literal check",
+    "artifact_id": 12062497305,
+    "artifact_sha256": "2cf42470468cdf7e0c4ca8f9e069b0cc5d395682c63763410649f6e128caf404",
+    "failure_granted_no_model_support": true
+  },
+  "fix": "Split matrix certificate into four separately kernel-reduced obligations and use sequential elaboration. Statements, allowed axioms, memory cap and total deadline unchanged.",
+  "protected_qualification": "Required checks must qualify the subsequent final candidate source tree before merge.",
+  "scientific_acceptance": false,
+  "implementation_correspondence": "OPEN",
+  "continuum_accuracy": "OPEN",
+  "empirical_validity": "OPEN",
+  "external_validation": false
+}

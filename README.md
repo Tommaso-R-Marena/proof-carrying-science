@@ -59,6 +59,15 @@ The executable reference kernel can:
 The repository also contains the integrated Lean 4.28 v0.6/v2 assurance layer. The production v0.6 path is **Lean-authoritative**: Python performs archive I/O plus the explicitly external replay/capture/workflow stages, but authoritative `valid: true` requires the compiled Lean authority to accept the exact decoded package bytes and certificate-bound observation transcript. v0.5 remains the legacy browser-parity fixture. See `docs/LEAN_KERNEL_STATUS.md`.
 
 
+## Proof-carrying discrete transport
+
+The [transport kernel](docs/PCS_TRANSPORT_KERNEL_V1.md) freshly proves amount
+conservation, concentration bounds and quadratic contraction for every discrete
+time step of a declared finite transport matrix, including arbitrary real initial
+states. Run `python -m pcs.cli transport-kernel-v1 --help`. It composes with the
+existing signed scientific workflow; implementation correspondence, continuum
+accuracy and empirical validity remain separate OPEN obligations.
+
 ## Guided v0.6 project onboarding
 
 Scientists no longer need to hand-author a PCS manifest from scratch.
