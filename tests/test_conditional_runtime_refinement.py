@@ -100,3 +100,64 @@ def test_fresh_replay_imports_override_conflicting_cached_module(tmp_path, monke
  stale_env['LEAN_PATH'] = str(cached) + os.pathsep + env['LEAN_PATH']
  stale = gate.execute(['lake', 'env', 'lean', str(probe)], stale_env)
  assert stale['returncode'] != 0 and 'type mismatch' in stale['stdout'].lower(), stale
+
+
+def test_fresh_namespace_keeps_qualified_siblings_and_rebuilds_selected_target(tmp_path, monkeypatch):
+ """Lean selects a namespace root, so a partial overlay cannot fall back per file."""
+ import os
+ import shutil
+ if not shutil.which('lake'):
+  if os.environ.get('PCS_REQUIRE_PROVER') == '1':
+   pytest.fail('required pinned Lean toolchain unavailable')
+  pytest.skip('Lean toolchain unavailable')
+ fake_root = tmp_path / 'receiver'
+ cached = fake_root / 'formal/.lake/build/lib/lean'
+ fresh = tmp_path / 'fresh'
+ namespace = 'PCSConditionalRuntime'
+ (cached / namespace).mkdir(parents=True)
+ (fresh / namespace).mkdir(parents=True)
+ source_modules = fake_root / 'formal' / namespace
+ source_modules.mkdir()
+ for stem in ['PyConditional', 'ReplaySibling']:
+  (source_modules / (stem + '.lean')).touch()
+ monkeypatch.setenv('LEAN_PATH', str(cached))
+ env, _version = gate.fresh_lean_environment(fresh)
+ monkeypatch.setattr(gate, 'ROOT', fake_root)
+ monkeypatch.setattr(gate, 'MODULES', source_modules)
+ monkeypatch.setattr(gate, 'FRESH_MODULES', ['PyConditional'])
+ cached_env = dict(env)
+ cached_env['LEAN_PATH'] = str(cached) + os.pathsep + env['LEAN_PATH']
+ sources = {
+  namespace + '/PyConditional': 'namespace ' + namespace + '\ndef fresh : Prop := False\nend ' + namespace + '\n',
+  namespace + '/ReplaySibling': 'namespace ' + namespace + '\ntheorem sibling : True := True.intro\nend ' + namespace + '\n',
+  namespace: 'import ' + namespace + '.PyConditional\nimport ' + namespace + '.ReplaySibling\n',
+ }
+ for stem, text in sources.items():
+  source = cached / (stem + '.lean')
+  source.write_text(text)
+  built = gate.execute(['lake', 'env', 'lean', '--root=' + str(cached), '-o', str(source.with_suffix('.olean')), str(source)], cached_env)
+  assert built['returncode'] == 0, built
+ selected = fresh / namespace / 'PyConditional.lean'
+ selected.write_text('namespace ' + namespace + '\ndef fresh : Prop := True\nend ' + namespace + '\n')
+ def compile_fresh():
+  result = gate.execute(['lake', 'env', 'lean', '--root=' + str(fresh), '-o', str(selected.with_suffix('.olean')), str(selected)], env)
+  assert result['returncode'] == 0, result
+ compile_fresh()
+ probe = tmp_path / 'NamespaceProbe.lean'
+ probe.write_text('import ' + namespace + '.PyConditional\nimport ' + namespace + '.ReplaySibling\nexample : ' + namespace + '.fresh := True.intro\nexample : True := ' + namespace + '.sibling\n')
+ shallow = gate.execute(['lake', 'env', 'lean', str(probe)], env)
+ assert shallow['returncode'] != 0 and 'ReplaySibling.olean' in shallow['stdout'] and 'does not exist' in shallow['stdout'], shallow
+ # The production helper must remove every selected artifact facet while
+ # retaining the complete qualified namespace and its umbrella.
+ (cached / namespace / 'PyConditional.olean.replay-test').write_bytes(b'stale selected facet')
+ (cached / namespace / 'ReplaySibling.olean.replay-test').write_bytes(b'qualified sibling facet')
+ records = gate.seed_replay_imports(fresh)
+ assert len(records) == 3
+ assert all(row['module'] != namespace + '.PyConditional' for row in records)
+ assert not list((fresh / namespace).glob('PyConditional.olean*'))
+ assert (fresh / namespace / 'ReplaySibling.olean.replay-test').read_bytes() == b'qualified sibling facet'
+ assert (fresh / (namespace + '.olean')).is_file()
+ compile_fresh()
+ probe.write_text('import ' + namespace + '\nexample : ' + namespace + '.fresh := True.intro\nexample : True := ' + namespace + '.sibling\n')
+ complete = gate.execute(['lake', 'env', 'lean', str(probe)], env)
+ assert complete['returncode'] == 0, complete
