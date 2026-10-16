@@ -172,6 +172,8 @@ def kernel_replay(data, *, timeout=120):
 
 def replay(contract_raw, trajectory_raw, *, timeout=120):
     rejected={'format':FORMAT,'accepted':False,'bounded_trajectory_kernel_supported':False,
+        'contract_sha256':model_kernel.sha(contract_raw) if isinstance(contract_raw,bytes) and len(contract_raw)<=workflow.MAX_BYTES else None,
+        'trajectory_sha256':model_kernel.sha(trajectory_raw) if isinstance(trajectory_raw,bytes) and len(trajectory_raw)<=workflow.MAX_BYTES else None,
         'bounded_trajectory_supported':False,'all_time_model_supported':False,
         'scientific_acceptance':False,'pcs_authority':False,
         'implementation_correspondence':'OPEN','continuum_accuracy':'OPEN','empirical_validity':'OPEN'}

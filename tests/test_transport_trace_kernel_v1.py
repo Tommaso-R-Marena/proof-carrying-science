@@ -169,3 +169,11 @@ def test_evidence_export_rejects_substituted_bytes_or_certificate(positive,tmp_p
     if which=='proof':r['kernel']['proof_sha256']='0'*64
     with pytest.raises(ValueError):trace.export(tmp_path/'must-not-exist',r,contract,csv)
     assert not (tmp_path/'must-not-exist').exists()
+
+
+def test_rejected_input_exports_its_exact_source_bytes(tmp_path):
+    raw=b'time_s,wrong\n0,0\n';r=trace.replay(CONTRACT,raw)
+    assert r['accepted'] is False
+    trace.export(tmp_path/'rejected',r,CONTRACT,raw)
+    assert (tmp_path/'rejected/trajectory.csv').read_bytes()==raw
+    assert r['trajectory_sha256']==hashlib.sha256(raw).hexdigest()
