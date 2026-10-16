@@ -111,3 +111,16 @@ name = "PCSRuntimeRefinement"
 moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
 roots = ["PCSRuntimeRefinement"]
 defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSConditionalRuntime"
+roots = ["PCSConditionalRuntime"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-M32000", "-D", "Elab.async=false", "-D", "maxHeartbeats=0", "-D", "maxRecDepth=100000"]
+
+# Independently replayed finite-model safety and conditional guard composition.
+[[lean_lib]]
+name = "PCSActionShield"
+roots = ["PCSActionShield", "PCSActionShieldControls", "PCSActionShieldAudit", "PCSConditionalShieldBridge", "PCSConditionalShieldRuntime"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]

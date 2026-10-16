@@ -1,0 +1,751 @@
+﻿2026-10-14T20:55:30.3629051Z Current runner version: '2.337.0'
+2026-10-14T20:55:30.3652476Z ##[group]Runner Image Provisioner
+2026-10-14T20:55:30.3653354Z Hosted Compute Agent
+2026-10-14T20:55:30.3654205Z Version: 20261012.601
+2026-10-14T20:55:30.3654854Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-14T20:55:30.3655569Z Build Date: 2026-10-12T17:48:21Z
+2026-10-14T20:55:30.3656257Z Worker ID: {1b34253c-c752-4391-a3ba-abd4f45feeea}
+2026-10-14T20:55:30.3656981Z Region: westus3
+2026-10-14T20:55:30.3657506Z Cloud: Azure
+2026-10-14T20:55:30.3658069Z ##[endgroup]
+2026-10-14T20:55:30.3659357Z ##[group]Operating System
+2026-10-14T20:55:30.3659990Z Ubuntu
+2026-10-14T20:55:30.3660519Z 24.04.5
+2026-10-14T20:55:30.3661021Z LTS
+2026-10-14T20:55:30.3661584Z ##[endgroup]
+2026-10-14T20:55:30.3662128Z ##[group]Runner Image
+2026-10-14T20:55:30.3662728Z Image: ubuntu-24.04
+2026-10-14T20:55:30.3663331Z Version: 20261012.334.1
+2026-10-14T20:55:30.3664795Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T20:55:30.3666297Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-14T20:55:30.3667245Z ##[endgroup]
+2026-10-14T20:55:30.3668402Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T20:55:30.3670587Z Contents: read
+2026-10-14T20:55:30.3671289Z Metadata: read
+2026-10-14T20:55:30.3671933Z ##[endgroup]
+2026-10-14T20:55:30.3674532Z Secret source: Actions
+2026-10-14T20:55:30.3675430Z Cache mode: write
+2026-10-14T20:55:30.3676295Z Prepare workflow directory
+2026-10-14T20:55:30.4081780Z Prepare all required actions
+2026-10-14T20:55:30.4146997Z Getting action download info
+2026-10-14T20:55:30.7411089Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-14T20:55:30.8802003Z Download action repository 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+2026-10-14T20:55:30.9958487Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-14T20:55:31.1003070Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-14T20:55:31.3495493Z Complete job name: core-full-gate
+2026-10-14T20:55:31.4314908Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-14T20:55:31.4316070Z with:
+2026-10-14T20:55:31.4316642Z   ref: 7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:31.4317341Z   fetch-depth: 0
+2026-10-14T20:55:31.4317910Z   persist-credentials: false
+2026-10-14T20:55:31.4318506Z   path: proof-carrying-science
+2026-10-14T20:55:31.4319150Z   repository: Tommaso-R-Marena/proof-carrying-science
+2026-10-14T20:55:31.4323381Z   token: ***
+2026-10-14T20:55:31.4324278Z   ssh-strict: true
+2026-10-14T20:55:31.4325229Z   ssh-user: git
+2026-10-14T20:55:31.4325743Z   clean: true
+2026-10-14T20:55:31.4326297Z   sparse-checkout-cone-mode: true
+2026-10-14T20:55:31.4326917Z   fetch-tags: false
+2026-10-14T20:55:31.4327476Z   show-progress: true
+2026-10-14T20:55:31.4328055Z   lfs: false
+2026-10-14T20:55:31.4328533Z   submodules: false
+2026-10-14T20:55:31.4329035Z   set-safe-directory: true
+2026-10-14T20:55:31.4329637Z   allow-unsafe-pr-checkout: false
+2026-10-14T20:55:31.4330724Z ##[endgroup]
+2026-10-14T20:55:31.5323199Z Syncing repository: Tommaso-R-Marena/proof-carrying-science
+2026-10-14T20:55:31.5325908Z ##[group]Getting Git version info
+2026-10-14T20:55:31.5327011Z Working directory is '/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science'
+2026-10-14T20:55:31.5328717Z [command]/usr/bin/git version
+2026-10-14T20:55:31.5401582Z git version 2.55.0
+2026-10-14T20:55:31.5419644Z ##[endgroup]
+2026-10-14T20:55:31.5429030Z Temporarily overriding HOME='/home/runner/work/_temp/a5827a4c-9d9e-403e-985a-ad19932f9235' before making global git config changes
+2026-10-14T20:55:31.5431337Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T20:55:31.5434870Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science
+2026-10-14T20:55:31.5490151Z ##[group]Determining repository object format
+2026-10-14T20:55:31.5491736Z ##[endgroup]
+2026-10-14T20:55:31.5497310Z ##[group]Initializing the repository
+2026-10-14T20:55:31.5498951Z [command]/usr/bin/git init /home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science
+2026-10-14T20:55:31.5609072Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T20:55:31.5611211Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T20:55:31.5625263Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T20:55:31.5626241Z hint: call:
+2026-10-14T20:55:31.5627030Z hint:
+2026-10-14T20:55:31.5627977Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T20:55:31.5628953Z hint:
+2026-10-14T20:55:31.5629975Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T20:55:31.5631307Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T20:55:31.5632333Z hint:
+2026-10-14T20:55:31.5633079Z hint: 	git branch -m <name>
+2026-10-14T20:55:31.5634057Z hint:
+2026-10-14T20:55:31.5635092Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T20:55:31.5637255Z Initialized empty Git repository in /home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git/
+2026-10-14T20:55:31.5639565Z [command]/usr/bin/git remote add origin https://github.com/Tommaso-R-Marena/proof-carrying-science
+2026-10-14T20:55:31.5698316Z ##[endgroup]
+2026-10-14T20:55:31.5699514Z ##[group]Disabling automatic garbage collection
+2026-10-14T20:55:31.5701009Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T20:55:31.5830770Z ##[endgroup]
+2026-10-14T20:55:31.5832275Z ##[group]Setting up auth
+2026-10-14T20:55:31.5833706Z Removing SSH command configuration
+2026-10-14T20:55:31.5836971Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T20:55:31.5869506Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T20:55:31.6208489Z Removing HTTP extra header
+2026-10-14T20:55:31.6212018Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T20:55:31.6243459Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T20:55:31.6431182Z Removing includeIf entries pointing to credentials config files
+2026-10-14T20:55:31.6435675Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T20:55:31.6470419Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T20:55:31.6655342Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T20:55:31.6688077Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git.path /home/runner/work/_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:31.6716847Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:31.6748635Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/proof-carrying-science/.git.path /github/runner_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:31.6778210Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/proof-carrying-science/.git/worktrees/*.path /github/runner_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:31.6805367Z ##[endgroup]
+2026-10-14T20:55:31.6806766Z ##[group]Fetching the repository
+2026-10-14T20:55:31.6812508Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-14T20:55:37.0287966Z From https://github.com/Tommaso-R-Marena/proof-carrying-science
+2026-10-14T20:55:37.0290195Z  * [new branch]      aristotle-handoff-2026-09-28 -> origin/aristotle-handoff-2026-09-28
+2026-10-14T20:55:37.0291326Z  * [new branch]      aristotle-handoff-final-2026-09-29 -> origin/aristotle-handoff-final-2026-09-29
+2026-10-14T20:55:37.0292520Z  * [new branch]      aristotle/frontier-tcb-final -> origin/aristotle/frontier-tcb-final
+2026-10-14T20:55:37.0294087Z  * [new branch]      checkpoint/pre-failclosed-v2-import-20261007 -> origin/checkpoint/pre-failclosed-v2-import-20261007
+2026-10-14T20:55:37.0295584Z  * [new branch]      chore/repository-integrity-policy-2026-10-04 -> origin/chore/repository-integrity-policy-2026-10-04
+2026-10-14T20:55:37.0296797Z  * [new branch]      ci/host-os-probe       -> origin/ci/host-os-probe
+2026-10-14T20:55:37.0297995Z  * [new branch]      ci/offline-trusted-runner-readiness-20261006 -> origin/ci/offline-trusted-runner-readiness-20261006
+2026-10-14T20:55:37.0299415Z  * [new branch]      ci/optional-zero-hosted-minutes-runner -> origin/ci/optional-zero-hosted-minutes-runner
+2026-10-14T20:55:37.0300696Z  * [new branch]      ci/prepare-public-actions-gate-20261006 -> origin/ci/prepare-public-actions-gate-20261006
+2026-10-14T20:55:37.0302018Z  * [new branch]      ci/public-standard-runner-gate-20261008 -> origin/ci/public-standard-runner-gate-20261008
+2026-10-14T20:55:37.0303269Z  * [new branch]      ci/runtime-boundary-probe -> origin/ci/runtime-boundary-probe
+2026-10-14T20:55:37.0304458Z  * [new branch]      circleci-project-setup -> origin/circleci-project-setup
+2026-10-14T20:55:37.0306246Z  * [new branch]      codex/aristotle-runtime-refinement-v1 -> origin/codex/aristotle-runtime-refinement-v1
+2026-10-14T20:55:37.0307476Z  * [new branch]      codex/bounded-proof-log-transport -> origin/codex/bounded-proof-log-transport
+2026-10-14T20:55:37.0308405Z  * [new branch]      codex/game-witness-integration -> origin/codex/game-witness-integration
+2026-10-14T20:55:37.0309176Z  * [new branch]      codex/hosted-contribution-ci -> origin/codex/hosted-contribution-ci
+2026-10-14T20:55:37.0309950Z  * [new branch]      codex/induction-abstraction-bridge -> origin/codex/induction-abstraction-bridge
+2026-10-14T20:55:37.0310681Z  * [new branch]      codex/lean-learning-loop-v1 -> origin/codex/lean-learning-loop-v1
+2026-10-14T20:55:37.0311493Z  * [new branch]      codex/pcs-59-continuation-v2 -> origin/codex/pcs-59-continuation-v2
+2026-10-14T20:55:37.0312280Z  * [new branch]      codex/pcs-formal-integration-phase-v4 -> origin/codex/pcs-formal-integration-phase-v4
+2026-10-14T20:55:37.0313322Z  * [new branch]      codex/pcs-mathlib-v4   -> origin/codex/pcs-mathlib-v4
+2026-10-14T20:55:37.0314396Z  * [new branch]      codex/pcs-next-phase-handoff -> origin/codex/pcs-next-phase-handoff
+2026-10-14T20:55:37.0315379Z  * [new branch]      codex/pcs-omega-reasoning-loop -> origin/codex/pcs-omega-reasoning-loop
+2026-10-14T20:55:37.0316208Z  * [new branch]      codex/required-gate-negative-v1 -> origin/codex/required-gate-negative-v1
+2026-10-14T20:55:37.0316985Z  * [new branch]      codex/research-platform-p0 -> origin/codex/research-platform-p0
+2026-10-14T20:55:37.0317769Z  * [new branch]      codex/tommaso-game-trajectory-replay -> origin/codex/tommaso-game-trajectory-replay
+2026-10-14T20:55:37.0318602Z  * [new branch]      codex/tommaso-hosted-contribution-ci -> origin/codex/tommaso-hosted-contribution-ci
+2026-10-14T20:55:37.0319533Z  * [new branch]      codex/verified-memory-utility -> origin/codex/verified-memory-utility
+2026-10-14T20:55:37.0320424Z  * [new branch]      commons/claim-invalidation-v1 -> origin/commons/claim-invalidation-v1
+2026-10-14T20:55:37.0321617Z  * [new branch]      core/bounded-artifact-inspection-v1 -> origin/core/bounded-artifact-inspection-v1
+2026-10-14T20:55:37.0322470Z  * [new branch]      core/decompose-claim-search-action-v1 -> origin/core/decompose-claim-search-action-v1
+2026-10-14T20:55:37.0323631Z  * [new branch]      core/decomposition-proposer-protocol-v1 -> origin/core/decomposition-proposer-protocol-v1
+2026-10-14T20:55:37.0324807Z  * [new branch]      core/formal-coverage-receipt -> origin/core/formal-coverage-receipt
+2026-10-14T20:55:37.0325991Z  * [new branch]      core/pkpd-peak-threshold-checker-v1 -> origin/core/pkpd-peak-threshold-checker-v1
+2026-10-14T20:55:37.0327142Z  * [new branch]      core/proof-obligation-graph-v1 -> origin/core/proof-obligation-graph-v1
+2026-10-14T20:55:37.0328223Z  * [new branch]      core/proof-repair-contract-v1 -> origin/core/proof-repair-contract-v1
+2026-10-14T20:55:37.0329206Z  * [new branch]      core/proof-search-coordinator-v1 -> origin/core/proof-search-coordinator-v1
+2026-10-14T20:55:37.0330319Z  * [new branch]      core/proof-search-corpus-v1 -> origin/core/proof-search-corpus-v1
+2026-10-14T20:55:37.0331450Z  * [new branch]      core/proof-search-corpus-v2 -> origin/core/proof-search-corpus-v2
+2026-10-14T20:55:37.0332499Z  * [new branch]      core/proof-translation-engine -> origin/core/proof-translation-engine
+2026-10-14T20:55:37.0333760Z  * [new branch]      core/receipt-attestation-auditor -> origin/core/receipt-attestation-auditor
+2026-10-14T20:55:37.0334886Z  * [new branch]      core/recursive-claim-ir-v1 -> origin/core/recursive-claim-ir-v1
+2026-10-14T20:55:37.0336300Z  * [new branch]      core/sbom-build-provenance-v1 -> origin/core/sbom-build-provenance-v1
+2026-10-14T20:55:37.0337837Z  * [new branch]      core/signed-external-validator-receipts-v1 -> origin/core/signed-external-validator-receipts-v1
+2026-10-14T20:55:37.0339130Z  * [new branch]      diag/formal-wire-lean-2026-10-04 -> origin/diag/formal-wire-lean-2026-10-04
+2026-10-14T20:55:37.0340749Z  * [new branch]      docs/reconciliation-baseline-clarification -> origin/docs/reconciliation-baseline-clarification
+2026-10-14T20:55:37.0342139Z  * [new branch]      docs/record-main-ruleset-enforcement -> origin/docs/record-main-ruleset-enforcement
+2026-10-14T20:55:37.0343934Z  * [new branch]      feat/prooflab-source-benchmark-20261006 -> origin/feat/prooflab-source-benchmark-20261006
+2026-10-14T20:55:37.0345053Z  * [new branch]      feat/prooflab-v1-real-source-benchmark-20261007 -> origin/feat/prooflab-v1-real-source-benchmark-20261007
+2026-10-14T20:55:37.0346057Z  * [new branch]      feature/contribution-verification-20261006 -> origin/feature/contribution-verification-20261006
+2026-10-14T20:55:37.0347065Z  * [new branch]      feature/pcs-parallel-integration-v1-20261008 -> origin/feature/pcs-parallel-integration-v1-20261008
+2026-10-14T20:55:37.0348082Z  * [new branch]      feature/production-promotion-gate-20261006 -> origin/feature/production-promotion-gate-20261006
+2026-10-14T20:55:37.0349675Z  * [new branch]      feature/provisional-cross-project-adapter-v1-20261006 -> origin/feature/provisional-cross-project-adapter-v1-20261006
+2026-10-14T20:55:37.0351402Z  * [new branch]      feature/semantic-translation-runtime-v1-20261008 -> origin/feature/semantic-translation-runtime-v1-20261008
+2026-10-14T20:55:37.0352374Z  * [new branch]      fix/formal-wire-executable-mode -> origin/fix/formal-wire-executable-mode
+2026-10-14T20:55:37.0353250Z  * [new branch]      fix/post-merge-high-assurance-20261007 -> origin/fix/post-merge-high-assurance-20261007
+2026-10-14T20:55:37.0354378Z  * [new branch]      fix/restoration-lean-authority -> origin/fix/restoration-lean-authority
+2026-10-14T20:55:37.0355356Z  * [new branch]      fix/restoration-shared-lean -> origin/fix/restoration-shared-lean
+2026-10-14T20:55:37.0356251Z  * [new branch]      formal/aristotle-proof-promotion-2026-09-29 -> origin/formal/aristotle-proof-promotion-2026-09-29
+2026-10-14T20:55:37.0357099Z  * [new branch]      formal/checked-raw-wire-v1 -> origin/formal/checked-raw-wire-v1
+2026-10-14T20:55:37.0357854Z  * [new branch]      formal/csv-numeric-bound-v1 -> origin/formal/csv-numeric-bound-v1
+2026-10-14T20:55:37.0358671Z  * [new branch]      formal/end-to-end-refinement-push -> origin/formal/end-to-end-refinement-push
+2026-10-14T20:55:37.0359618Z  * [new branch]      formal/integrate-wire-v1-main -> origin/formal/integrate-wire-v1-main
+2026-10-14T20:55:37.0360458Z  * [new branch]      formal/lean-authoritative-production -> origin/formal/lean-authoritative-production
+2026-10-14T20:55:37.0361400Z  * [new branch]      formal/serialized-refinement-v1 -> origin/formal/serialized-refinement-v1
+2026-10-14T20:55:37.0362228Z  * [new branch]      formal/v06-e2e-refinement -> origin/formal/v06-e2e-refinement
+2026-10-14T20:55:37.0362936Z  * [new branch]      formal/v06-wire-e2e    -> origin/formal/v06-wire-e2e
+2026-10-14T20:55:37.0363903Z  * [new branch]      improve/certified-intervention-planning -> origin/improve/certified-intervention-planning
+2026-10-14T20:55:37.0364885Z  * [new branch]      improve/conditional-symbolic-reasoning -> origin/improve/conditional-symbolic-reasoning
+2026-10-14T20:55:37.0365720Z  * [new branch]      improve/omega-adaptive-search -> origin/improve/omega-adaptive-search
+2026-10-14T20:55:37.0366547Z  * [new branch]      integrate/aristotle-countermodel-kernel -> origin/integrate/aristotle-countermodel-kernel
+2026-10-14T20:55:37.0367493Z  * [new branch]      integrate/aristotle-frontier-tcb -> origin/integrate/aristotle-frontier-tcb
+2026-10-14T20:55:37.0368336Z  * [new branch]      integrate/aristotle-omega-dd-20261010 -> origin/integrate/aristotle-omega-dd-20261010
+2026-10-14T20:55:37.0369218Z  * [new branch]      integration/all-open-prs-20261007 -> origin/integration/all-open-prs-20261007
+2026-10-14T20:55:37.0370191Z  * [new branch]      integration/failclosed-authority-v2-20261007 -> origin/integration/failclosed-authority-v2-20261007
+2026-10-14T20:55:37.0370926Z  * [new branch]      main                   -> origin/main
+2026-10-14T20:55:37.0371718Z  * [new branch]      ops/pilot-key-closeout-v1 -> origin/ops/pilot-key-closeout-v1
+2026-10-14T20:55:37.0372472Z  * [new branch]      product/p0-p1-demo-hardening -> origin/product/p0-p1-demo-hardening
+2026-10-14T20:55:37.0373455Z  * [new branch]      product/pkpd-realistic-translation-benchmark-v1 -> origin/product/pkpd-realistic-translation-benchmark-v1
+2026-10-14T20:55:37.0374744Z  * [new branch]      product/verifier-artifact-validation -> origin/product/verifier-artifact-validation
+2026-10-14T20:55:37.0375522Z  * [new branch]      release/main-wiring    -> origin/release/main-wiring
+2026-10-14T20:55:37.0376398Z  * [new branch]      release/pcs-public-core-integrated-20261008 -> origin/release/pcs-public-core-integrated-20261008
+2026-10-14T20:55:37.0377312Z  * [new branch]      release/public-readiness-20261008 -> origin/release/public-readiness-20261008
+2026-10-14T20:55:37.0378169Z  * [new branch]      release/verified-integrated-campaign -> origin/release/verified-integrated-campaign
+2026-10-14T20:55:37.0379120Z  * [new branch]      research/checked-lemma-reuse-20261011 -> origin/research/checked-lemma-reuse-20261011
+2026-10-14T20:55:37.0380114Z  * [new branch]      security/p0-unregistered-checkers-fail-closed -> origin/security/p0-unregistered-checkers-fail-closed
+2026-10-14T20:55:37.0381114Z  * [new branch]      security/pre-public-secret-hygiene-20261008 -> origin/security/pre-public-secret-hygiene-20261008
+2026-10-14T20:55:37.0382052Z  * [new branch]      test/ruleset-repository-integrity-block -> origin/test/ruleset-repository-integrity-block
+2026-10-14T20:55:37.0382821Z  * [new branch]      v06/canonical-json     -> origin/v06/canonical-json
+2026-10-14T20:55:37.0383748Z  * [new branch]      v06/frozen-byte-contract -> origin/v06/frozen-byte-contract
+2026-10-14T20:55:37.0384522Z  * [new branch]      v06/replay-normalized-wire-v2 -> origin/v06/replay-normalized-wire-v2
+2026-10-14T20:55:37.0385322Z  * [new branch]      v06/typed-certificate-internals -> origin/v06/typed-certificate-internals
+2026-10-14T20:55:37.0386249Z  * [new tag]         checkpoint-before-failclosed-v2-import-20261007 -> checkpoint-before-failclosed-v2-import-20261007
+2026-10-14T20:55:37.0388203Z [command]/usr/bin/git rev-parse --verify --quiet 7d9cd8bbbd08358a014b281e488b12d49b71a9f7^{object}
+2026-10-14T20:55:37.0389731Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin 7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:37.4562185Z From https://github.com/Tommaso-R-Marena/proof-carrying-science
+2026-10-14T20:55:37.4562859Z  * branch            7d9cd8bbbd08358a014b281e488b12d49b71a9f7 -> FETCH_HEAD
+2026-10-14T20:55:37.4569642Z [command]/usr/bin/git rev-parse --verify --quiet 7d9cd8bbbd08358a014b281e488b12d49b71a9f7^{object}
+2026-10-14T20:55:37.4597367Z 7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:37.4600525Z ##[endgroup]
+2026-10-14T20:55:37.4601459Z ##[group]Determining the checkout info
+2026-10-14T20:55:37.4602350Z ##[endgroup]
+2026-10-14T20:55:37.4609249Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T20:55:37.4664880Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T20:55:37.4695681Z ##[group]Checking out the ref
+2026-10-14T20:55:37.4697980Z [command]/usr/bin/git checkout --progress --force 7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:38.5116213Z Updating files:  88% (2692/3033)
+2026-10-14T20:55:38.6687654Z Updating files:  89% (2700/3033)
+2026-10-14T20:55:38.6923711Z Updating files:  90% (2730/3033)
+2026-10-14T20:55:38.6932307Z Updating files:  91% (2761/3033)
+2026-10-14T20:55:38.6947083Z Updating files:  92% (2791/3033)
+2026-10-14T20:55:38.6962355Z Updating files:  93% (2821/3033)
+2026-10-14T20:55:38.6976590Z Updating files:  94% (2852/3033)
+2026-10-14T20:55:38.6993794Z Updating files:  95% (2882/3033)
+2026-10-14T20:55:38.7013284Z Updating files:  96% (2912/3033)
+2026-10-14T20:55:38.7033414Z Updating files:  97% (2943/3033)
+2026-10-14T20:55:38.7055309Z Updating files:  98% (2973/3033)
+2026-10-14T20:55:38.7077015Z Updating files:  99% (3003/3033)
+2026-10-14T20:55:38.7077801Z Updating files: 100% (3033/3033)
+2026-10-14T20:55:38.7078543Z Updating files: 100% (3033/3033), done.
+2026-10-14T20:55:38.7135960Z Note: switching to '7d9cd8bbbd08358a014b281e488b12d49b71a9f7'.
+2026-10-14T20:55:38.7136474Z 
+2026-10-14T20:55:38.7136713Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T20:55:38.7137268Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T20:55:38.7137874Z state without impacting any branches by switching back to a branch.
+2026-10-14T20:55:38.7138188Z 
+2026-10-14T20:55:38.7138431Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T20:55:38.7138971Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T20:55:38.7139320Z 
+2026-10-14T20:55:38.7139500Z   git switch -c <new-branch-name>
+2026-10-14T20:55:38.7139695Z 
+2026-10-14T20:55:38.7139901Z Or undo this operation with:
+2026-10-14T20:55:38.7140162Z 
+2026-10-14T20:55:38.7140307Z   git switch -
+2026-10-14T20:55:38.7140491Z 
+2026-10-14T20:55:38.7140731Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T20:55:38.7141135Z 
+2026-10-14T20:55:38.7141538Z HEAD is now at 7d9cd8b Merge 8b9001fcc155fb7ff3e84f92d3c13208bde44bdf into c627995627e19411746c5b368b22649b03e224e9
+2026-10-14T20:55:38.7187059Z ##[endgroup]
+2026-10-14T20:55:38.7234078Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T20:55:38.7264611Z 7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:38.7270138Z ##[group]Removing auth
+2026-10-14T20:55:38.7270642Z Removing SSH command configuration
+2026-10-14T20:55:38.7275210Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T20:55:38.7305314Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T20:55:38.7512918Z Removing HTTP extra header
+2026-10-14T20:55:38.7517742Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T20:55:38.7546694Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T20:55:38.7740031Z Removing includeIf entries pointing to credentials config files
+2026-10-14T20:55:38.7742818Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T20:55:38.7793223Z includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git.path
+2026-10-14T20:55:38.7794400Z includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path
+2026-10-14T20:55:38.7795323Z includeif.gitdir:/github/workspace/proof-carrying-science/.git.path
+2026-10-14T20:55:38.7795894Z includeif.gitdir:/github/workspace/proof-carrying-science/.git/worktrees/*.path
+2026-10-14T20:55:38.7800553Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git.path
+2026-10-14T20:55:38.7820974Z /home/runner/work/_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:38.7831398Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-c3f0e08e\-fe2f\-4d01\-8214\-815467e610e3\.config
+2026-10-14T20:55:38.7864079Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path
+2026-10-14T20:55:38.7885707Z /home/runner/work/_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:38.7902024Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-c3f0e08e\-fe2f\-4d01\-8214\-815467e610e3\.config
+2026-10-14T20:55:38.7936694Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/proof-carrying-science/.git.path
+2026-10-14T20:55:38.7956399Z /github/runner_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:38.7962622Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/proof-carrying-science/.git.path \/github\/runner_temp\/git\-credentials\-c3f0e08e\-fe2f\-4d01\-8214\-815467e610e3\.config
+2026-10-14T20:55:38.7992427Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/proof-carrying-science/.git/worktrees/*.path
+2026-10-14T20:55:38.8012098Z /github/runner_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config
+2026-10-14T20:55:38.8017362Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/proof-carrying-science/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-c3f0e08e\-fe2f\-4d01\-8214\-815467e610e3\.config
+2026-10-14T20:55:38.8049221Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T20:55:38.8238343Z Removing credentials config '/home/runner/work/_temp/git-credentials-c3f0e08e-fe2f-4d01-8214-815467e610e3.config'
+2026-10-14T20:55:38.8247460Z ##[endgroup]
+2026-10-14T20:55:38.8488380Z ##[group]Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+2026-10-14T20:55:38.8489015Z with:
+2026-10-14T20:55:38.8489382Z   python-version: 3.12.14
+2026-10-14T20:55:38.8489762Z   check-latest: false
+2026-10-14T20:55:38.8492609Z   token: ***
+2026-10-14T20:55:38.8492951Z   update-environment: true
+2026-10-14T20:55:38.8493287Z   allow-prereleases: false
+2026-10-14T20:55:38.8493831Z   freethreaded: false
+2026-10-14T20:55:38.8494152Z ##[endgroup]
+2026-10-14T20:55:38.9617709Z ##[group]Installed versions
+2026-10-14T20:55:38.9632124Z Version 3.12.14 was not found in the local cache
+2026-10-14T20:55:40.0996711Z Version 3.12.14 is available for downloading
+2026-10-14T20:55:40.0997666Z Download from "https://github.com/actions/python-versions/releases/download/3.12.14-31661455385/python-3.12.14-linux-24.04-x64.tar.gz"
+2026-10-14T20:55:40.6874453Z Extract downloaded archive
+2026-10-14T20:55:40.6970530Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/20e94d39-800f-4b59-9260-98cb4745ac0d -f /home/runner/work/_temp/0c467549-de05-48fa-b5e1-1abace028d8e
+2026-10-14T20:55:42.8468946Z Execute installation script
+2026-10-14T20:55:42.8547564Z Check if Python hostedtoolcache folder exist...
+2026-10-14T20:55:42.8548545Z Create Python 3.12.14 folder
+2026-10-14T20:55:42.8558384Z Copy Python binaries to hostedtoolcache folder
+2026-10-14T20:55:43.1229759Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+2026-10-14T20:55:43.1265418Z Upgrading pip...
+2026-10-14T20:55:44.7696785Z Collecting pip
+2026-10-14T20:55:44.8247790Z Downloading pip-26.2.1-py3-none-any.whl.metadata (4.6 kB)
+2026-10-14T20:55:44.8396237Z Downloading pip-26.2.1-py3-none-any.whl (1.8 MB)
+2026-10-14T20:55:44.9164365Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 33.0 MB/s eta 0:00:00
+2026-10-14T20:55:44.9164919Z 
+2026-10-14T20:55:44.9357784Z Installing collected packages: pip
+2026-10-14T20:55:44.9358449Z Attempting uninstall: pip
+2026-10-14T20:55:44.9376384Z Found existing installation: pip 25.0.1
+2026-10-14T20:55:44.9609842Z Uninstalling pip-25.0.1:
+2026-10-14T20:55:44.9654043Z Successfully uninstalled pip-25.0.1
+2026-10-14T20:55:45.7562639Z Successfully installed pip-26.2.1
+2026-10-14T20:55:45.8155596Z Create complete file
+2026-10-14T20:55:45.8186348Z Successfully set up CPython (3.12.14)
+2026-10-14T20:55:45.8187729Z ##[endgroup]
+2026-10-14T20:55:45.8359089Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-14T20:55:45.8359604Z with:
+2026-10-14T20:55:45.8359904Z   node-version: 22.23.3
+2026-10-14T20:55:45.8360221Z   check-latest: false
+2026-10-14T20:55:45.8362836Z   token: ***
+2026-10-14T20:55:45.8363186Z   package-manager-cache: true
+2026-10-14T20:55:45.8363665Z env:
+2026-10-14T20:55:45.8364056Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:45.8364559Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T20:55:45.8365046Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:45.8365511Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:45.8365981Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:45.8366420Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T20:55:45.8366791Z ##[endgroup]
+2026-10-14T20:55:45.9528847Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-14T20:55:45.9531497Z ##[group]Environment details
+2026-10-14T20:55:46.3633899Z node: v22.23.3
+2026-10-14T20:55:46.3634528Z npm: 10.9.9
+2026-10-14T20:55:46.3635134Z yarn: 1.22.22
+2026-10-14T20:55:46.3635921Z ##[endgroup]
+2026-10-14T20:55:46.3759051Z ##[group]Run set -euo pipefail
+2026-10-14T20:55:46.3759610Z [36;1mset -euo pipefail[0m
+2026-10-14T20:55:46.3760023Z [36;1mtest "$(git rev-parse HEAD)" = "$EXPECTED_SHA"[0m
+2026-10-14T20:55:46.3760493Z [36;1mecho "PCS_PUBLIC_TESTED_MERGE_SHA=$(git rev-parse HEAD)"[0m
+2026-10-14T20:55:46.3761003Z [36;1mecho "PCS_PUBLIC_SOURCE_HEAD_SHA=$PR_HEAD_SHA"[0m
+2026-10-14T20:55:46.3761442Z [36;1mtest -f scripts/core_ci_cloudflare.sh[0m
+2026-10-14T20:55:46.3966766Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T20:55:46.3967316Z env:
+2026-10-14T20:55:46.3967710Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.3968219Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T20:55:46.3968736Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.3969222Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.3969835Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.3970304Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T20:55:46.3970807Z   EXPECTED_SHA: 7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:46.3971282Z   PR_HEAD_SHA: 8b9001fcc155fb7ff3e84f92d3c13208bde44bdf
+2026-10-14T20:55:46.3971668Z ##[endgroup]
+2026-10-14T20:55:46.4103327Z PCS_PUBLIC_TESTED_MERGE_SHA=7d9cd8bbbd08358a014b281e488b12d49b71a9f7
+2026-10-14T20:55:46.4104425Z PCS_PUBLIC_SOURCE_HEAD_SHA=8b9001fcc155fb7ff3e84f92d3c13208bde44bdf
+2026-10-14T20:55:46.4141838Z ##[group]Run set -euo pipefail
+2026-10-14T20:55:46.4142239Z [36;1mset -euo pipefail[0m
+2026-10-14T20:55:46.4142680Z [36;1mpython scripts/check_aristotle_semantic_source_v1.py[0m
+2026-10-14T20:55:46.4185202Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T20:55:46.4185626Z env:
+2026-10-14T20:55:46.4186021Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4186568Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T20:55:46.4187070Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4187567Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4188032Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4188565Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T20:55:46.4189001Z ##[endgroup]
+2026-10-14T20:55:46.4478531Z {"state": "SOURCE_PRESENT_NOT_YET_KERNEL_VERIFIED", "fixtures": 36}
+2026-10-14T20:55:46.4551479Z ##[group]Run set -euo pipefail
+2026-10-14T20:55:46.4551878Z [36;1mset -euo pipefail[0m
+2026-10-14T20:55:46.4552438Z [36;1m# Keep the existing free standard runner; never request a paid large runner.[0m
+2026-10-14T20:55:46.4553084Z [36;1m# These are preinstalled SDKs unused by this Python/Node/Rust/Lean job.[0m
+2026-10-14T20:55:46.4553894Z [36;1m# Only runner image directories are removed; no repository/user files.[0m
+2026-10-14T20:55:46.4554483Z [36;1msudo -n rm -rf -- /usr/share/dotnet /usr/local/lib/android /opt/ghc[0m
+2026-10-14T20:55:46.4554935Z [36;1mpython - <<'PYSPACE'[0m
+2026-10-14T20:55:46.4555315Z [36;1mimport os[0m
+2026-10-14T20:55:46.4555691Z [36;1mst = os.statvfs(os.environ['RUNNER_TEMP'])[0m
+2026-10-14T20:55:46.4556306Z [36;1massert st.f_bavail * st.f_frsize >= 34 * 1024**3, 'Insufficient disk for bounded kernel swap'[0m
+2026-10-14T20:55:46.4556822Z [36;1mPYSPACE[0m
+2026-10-14T20:55:46.4557348Z [36;1mSWAP_FILE="$RUNNER_TEMP/pcs-kernel-controls.swap"[0m
+2026-10-14T20:55:46.4557807Z [36;1mtest ! -e "$SWAP_FILE"[0m
+2026-10-14T20:55:46.4558163Z [36;1msudo -n fallocate -l 32G "$SWAP_FILE"[0m
+2026-10-14T20:55:46.4558582Z [36;1msudo -n chmod 600 "$SWAP_FILE"[0m
+2026-10-14T20:55:46.4558958Z [36;1msudo -n mkswap "$SWAP_FILE"[0m
+2026-10-14T20:55:46.4559316Z [36;1msudo -n swapon "$SWAP_FILE"[0m
+2026-10-14T20:55:46.4559698Z [36;1mfree -m[0m
+2026-10-14T20:55:46.4607879Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T20:55:46.4608536Z env:
+2026-10-14T20:55:46.4609077Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4609706Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T20:55:46.4610260Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4610852Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4611337Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:55:46.4612012Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T20:55:46.4612497Z ##[endgroup]
+2026-10-14T20:57:28.4817671Z Setting up swapspace version 1, size = 32 GiB (34359734272 bytes)
+2026-10-14T20:57:28.4818716Z no label, UUID=8e9e8ebd-2fdf-430d-880a-1479965a4b3c
+2026-10-14T20:57:28.4945539Z                total        used        free      shared  buff/cache   available
+2026-10-14T20:57:28.4946491Z Mem:           15988        1071       11081          47        4230       14917
+2026-10-14T20:57:28.4947280Z Swap:          35839           0       35839
+2026-10-14T20:57:28.5036769Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-14T20:57:28.5037274Z with:
+2026-10-14T20:57:28.5037651Z   repository: Tommaso-R-Marena/proof-carrying-science-site
+2026-10-14T20:57:28.5038203Z   ref: a6a9a54bb8f2e8fb45f783a9df56929aca11a54b
+2026-10-14T20:57:28.5038597Z   path: .ci-components/pcs-site
+2026-10-14T20:57:28.5038945Z   persist-credentials: false
+2026-10-14T20:57:28.5041742Z   token: ***
+2026-10-14T20:57:28.5042051Z   ssh-strict: true
+2026-10-14T20:57:28.5042426Z   ssh-user: git
+2026-10-14T20:57:28.5042730Z   clean: true
+2026-10-14T20:57:28.5043030Z   sparse-checkout-cone-mode: true
+2026-10-14T20:57:28.5043414Z   fetch-depth: 1
+2026-10-14T20:57:28.5043879Z   fetch-tags: false
+2026-10-14T20:57:28.5044202Z   show-progress: true
+2026-10-14T20:57:28.5044549Z   lfs: false
+2026-10-14T20:57:28.5044838Z   submodules: false
+2026-10-14T20:57:28.5045164Z   set-safe-directory: true
+2026-10-14T20:57:28.5045506Z   allow-unsafe-pr-checkout: false
+2026-10-14T20:57:28.5045994Z env:
+2026-10-14T20:57:28.5046359Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:28.5046910Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T20:57:28.5047428Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:28.5047890Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:28.5048405Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:28.5048885Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T20:57:28.5049300Z ##[endgroup]
+2026-10-14T20:57:28.5845441Z Syncing repository: Tommaso-R-Marena/proof-carrying-science-site
+2026-10-14T20:57:28.5851582Z ##[group]Getting Git version info
+2026-10-14T20:57:28.5852824Z Working directory is '/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site'
+2026-10-14T20:57:28.5903204Z [command]/usr/bin/git version
+2026-10-14T20:57:28.5945576Z git version 2.55.0
+2026-10-14T20:57:28.5967097Z ##[endgroup]
+2026-10-14T20:57:28.5977266Z Temporarily overriding HOME='/home/runner/work/_temp/2af2806f-aeb8-4786-a50d-c661c60e019c' before making global git config changes
+2026-10-14T20:57:28.5978298Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T20:57:28.5983105Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site
+2026-10-14T20:57:28.6011012Z ##[group]Determining repository object format
+2026-10-14T20:57:28.6012780Z ##[endgroup]
+2026-10-14T20:57:28.6013312Z ##[group]Initializing the repository
+2026-10-14T20:57:28.6018714Z [command]/usr/bin/git init /home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site
+2026-10-14T20:57:28.6054324Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T20:57:28.6055646Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T20:57:28.6057546Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T20:57:28.6058058Z hint: call:
+2026-10-14T20:57:28.6058504Z hint:
+2026-10-14T20:57:28.6059066Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T20:57:28.6059562Z hint:
+2026-10-14T20:57:28.6060131Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T20:57:28.6060927Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T20:57:28.6061422Z hint:
+2026-10-14T20:57:28.6061722Z hint: 	git branch -m <name>
+2026-10-14T20:57:28.6062026Z hint:
+2026-10-14T20:57:28.6062563Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T20:57:28.6064007Z Initialized empty Git repository in /home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git/
+2026-10-14T20:57:28.6066311Z [command]/usr/bin/git remote add origin https://github.com/Tommaso-R-Marena/proof-carrying-science-site
+2026-10-14T20:57:28.6100592Z ##[endgroup]
+2026-10-14T20:57:28.6101373Z ##[group]Disabling automatic garbage collection
+2026-10-14T20:57:28.6105924Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T20:57:28.6134622Z ##[endgroup]
+2026-10-14T20:57:28.6135274Z ##[group]Setting up auth
+2026-10-14T20:57:28.6135900Z Removing SSH command configuration
+2026-10-14T20:57:28.6141683Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T20:57:28.6170753Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T20:57:28.6376965Z Removing HTTP extra header
+2026-10-14T20:57:28.6383847Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T20:57:28.6425507Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T20:57:28.6657908Z Removing includeIf entries pointing to credentials config files
+2026-10-14T20:57:28.6659411Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T20:57:28.6686869Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T20:57:28.6910667Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T20:57:28.6947514Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git.path /home/runner/work/_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:28.6975333Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:28.7007254Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.ci-components/pcs-site/.git.path /github/runner_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:28.7058114Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.ci-components/pcs-site/.git/worktrees/*.path /github/runner_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:28.7092303Z ##[endgroup]
+2026-10-14T20:57:28.7092862Z ##[group]Fetching the repository
+2026-10-14T20:57:28.7101252Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin a6a9a54bb8f2e8fb45f783a9df56929aca11a54b
+2026-10-14T20:57:30.2577296Z From https://github.com/Tommaso-R-Marena/proof-carrying-science-site
+2026-10-14T20:57:30.2578100Z  * branch            a6a9a54bb8f2e8fb45f783a9df56929aca11a54b -> FETCH_HEAD
+2026-10-14T20:57:30.2586193Z [command]/usr/bin/git rev-parse --verify --quiet a6a9a54bb8f2e8fb45f783a9df56929aca11a54b^{object}
+2026-10-14T20:57:30.2611484Z a6a9a54bb8f2e8fb45f783a9df56929aca11a54b
+2026-10-14T20:57:30.2614413Z ##[endgroup]
+2026-10-14T20:57:30.2615123Z ##[group]Determining the checkout info
+2026-10-14T20:57:30.2616478Z ##[endgroup]
+2026-10-14T20:57:30.2622016Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T20:57:30.2661719Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T20:57:30.2690477Z ##[group]Checking out the ref
+2026-10-14T20:57:30.2694020Z [command]/usr/bin/git checkout --progress --force a6a9a54bb8f2e8fb45f783a9df56929aca11a54b
+2026-10-14T20:57:30.3359823Z Note: switching to 'a6a9a54bb8f2e8fb45f783a9df56929aca11a54b'.
+2026-10-14T20:57:30.3360227Z 
+2026-10-14T20:57:30.3360819Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T20:57:30.3361600Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T20:57:30.3362261Z state without impacting any branches by switching back to a branch.
+2026-10-14T20:57:30.3362577Z 
+2026-10-14T20:57:30.3362881Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T20:57:30.3363735Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T20:57:30.3364140Z 
+2026-10-14T20:57:30.3364432Z   git switch -c <new-branch-name>
+2026-10-14T20:57:30.3364744Z 
+2026-10-14T20:57:30.3365046Z Or undo this operation with:
+2026-10-14T20:57:30.3365404Z 
+2026-10-14T20:57:30.3365581Z   git switch -
+2026-10-14T20:57:30.3365813Z 
+2026-10-14T20:57:30.3366358Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T20:57:30.3366829Z 
+2026-10-14T20:57:30.3367375Z HEAD is now at a6a9a54 Integrate verified transport lab and pin protected Mathlib core release (#118)
+2026-10-14T20:57:30.3369020Z ##[endgroup]
+2026-10-14T20:57:30.3405619Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T20:57:30.3428643Z a6a9a54bb8f2e8fb45f783a9df56929aca11a54b
+2026-10-14T20:57:30.3441180Z ##[group]Removing auth
+2026-10-14T20:57:30.3441766Z Removing SSH command configuration
+2026-10-14T20:57:30.3442343Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T20:57:30.3470528Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T20:57:30.3655825Z Removing HTTP extra header
+2026-10-14T20:57:30.3659676Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T20:57:30.3692932Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T20:57:30.3873684Z Removing includeIf entries pointing to credentials config files
+2026-10-14T20:57:30.3878035Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T20:57:30.3900953Z includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git.path
+2026-10-14T20:57:30.3902528Z includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git/worktrees/*.path
+2026-10-14T20:57:30.3903398Z includeif.gitdir:/github/workspace/.ci-components/pcs-site/.git.path
+2026-10-14T20:57:30.3904345Z includeif.gitdir:/github/workspace/.ci-components/pcs-site/.git/worktrees/*.path
+2026-10-14T20:57:30.3908378Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git.path
+2026-10-14T20:57:30.3942980Z /home/runner/work/_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:30.3951845Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-89958cf0\-f747\-475a\-8940\-3b7c291972e1\.config
+2026-10-14T20:57:30.3981677Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git/worktrees/*.path
+2026-10-14T20:57:30.4001599Z /home/runner/work/_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:30.4009130Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-89958cf0\-f747\-475a\-8940\-3b7c291972e1\.config
+2026-10-14T20:57:30.4046267Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.ci-components/pcs-site/.git.path
+2026-10-14T20:57:30.4066189Z /github/runner_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:30.4072365Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.ci-components/pcs-site/.git.path \/github\/runner_temp\/git\-credentials\-89958cf0\-f747\-475a\-8940\-3b7c291972e1\.config
+2026-10-14T20:57:30.4165176Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.ci-components/pcs-site/.git/worktrees/*.path
+2026-10-14T20:57:30.4186690Z /github/runner_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config
+2026-10-14T20:57:30.4193693Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.ci-components/pcs-site/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-89958cf0\-f747\-475a\-8940\-3b7c291972e1\.config
+2026-10-14T20:57:30.4222774Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T20:57:30.4401487Z Removing credentials config '/home/runner/work/_temp/git-credentials-89958cf0-f747-475a-8940-3b7c291972e1.config'
+2026-10-14T20:57:30.4411620Z ##[endgroup]
+2026-10-14T20:57:30.4510790Z ##[group]Run set -euo pipefail
+2026-10-14T20:57:30.4511244Z [36;1mset -euo pipefail[0m
+2026-10-14T20:57:30.4511628Z [36;1msource scripts/activate_lean_428.sh[0m
+2026-10-14T20:57:30.4512226Z [36;1m(cd formal && lake build +PCSRuntimeRefinement.SourceText:leanArts PCSOmega PCSDecisionDiagram)[0m
+2026-10-14T20:57:30.4512949Z [36;1m# Sequential ordinary-kernel builds preserve every source obligation.[0m
+2026-10-14T20:57:30.4513630Z [36;1m# Use only the existing standard runner and bounded swap above.[0m
+2026-10-14T20:57:30.4515092Z [36;1mpython scripts/verify_conditional_runtime_refinement.py --build --memory-mb 32000 --heavy-timeout 3600 --build-output "$RUNNER_TEMP/conditional-complete-build.json" --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --negative-controls --output "$RUNNER_TEMP/conditional-refinement.json"[0m
+2026-10-14T20:57:30.4516739Z [36;1mpython scripts/verify_conditional_runtime_parity.py --site "$GITHUB_WORKSPACE/.ci-components/pcs-site" --cases 90 --output "$RUNNER_TEMP/conditional-extracted-parity"[0m
+2026-10-14T20:57:30.4517516Z [36;1mcd formal[0m
+2026-10-14T20:57:30.4518097Z [36;1mfor module in PCSActionShield PCSActionShieldControls PCSConditionalShieldBridge PCSConditionalShieldRuntime; do[0m
+2026-10-14T20:57:30.4518906Z [36;1m  lake env lean -j1 -M1024 -o ".lake/build/lib/lean/$module.olean" "$module.lean"[0m
+2026-10-14T20:57:30.4519461Z [36;1mdone[0m
+2026-10-14T20:57:30.4519788Z [36;1mlake env lean PCSActionShieldAudit.lean[0m
+2026-10-14T20:57:30.4560239Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T20:57:30.4560726Z env:
+2026-10-14T20:57:30.4561128Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:30.4561694Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T20:57:30.4562203Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:30.4562660Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:30.4563143Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T20:57:30.4563812Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T20:57:30.4564215Z ##[endgroup]
+2026-10-14T20:57:30.4732085Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-10-14T20:57:30.4733060Z                                  Dload  Upload   Total   Spent    Left  Speed
+2026-10-14T20:57:30.4733438Z 
+2026-10-14T20:57:30.7003960Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-14T20:57:30.7004816Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-14T20:57:31.2160938Z 
+2026-10-14T20:57:31.8260165Z  37  496M   37  185M    0     0   250M      0  0:00:01 --:--:--  0:00:01  250M
+2026-10-14T20:57:31.8260893Z 100  496M  100  496M    0     0   367M      0  0:00:01  0:00:01 --:--:--  510M
+2026-10-14T20:57:38.7764963Z Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)
+2026-10-14T20:57:39.7284918Z ✔ [2/21] Built PCSRuntimeRefinement.SourceText (821ms)
+2026-10-14T20:57:40.2315979Z ✔ [3/21] Built PCSOmega.Formula (1.4s)
+2026-10-14T20:57:41.0326444Z ✔ [4/21] Built PCSOmega.Check (753ms)
+2026-10-14T20:57:42.9357934Z ✔ [5/21] Built PCSDecisionDiagram.Diagram (2.6s)
+2026-10-14T20:57:43.6369407Z ✔ [6/21] Built PCSOmega.Named (3.4s)
+2026-10-14T20:57:44.3377327Z ✔ [7/21] Built PCSOmega.Repair (3.3s)
+2026-10-14T20:57:44.6380671Z ✔ [8/21] Built PCSOmega (299ms)
+2026-10-14T20:57:46.3399288Z ✔ [10/21] Built PCSDecisionDiagram.Apply (3.4s)
+2026-10-14T20:57:49.1410074Z ✔ [11/21] Built PCSDecisionDiagram.Witness (2.8s)
+2026-10-14T20:57:51.8438237Z ✔ [12/21] Built PCSDecisionDiagram.Conditional (2.7s)
+2026-10-14T20:57:52.8448519Z ✔ [13/21] Built PCSDecisionDiagram.Summary (1.0s)
+2026-10-14T20:57:54.0460196Z ✔ [14/21] Built PCSDecisionDiagram.Bellman (1.2s)
+2026-10-14T20:57:55.1472221Z ✔ [15/21] Built PCSDecisionDiagram.Optimal (1.1s)
+2026-10-14T20:57:56.9492501Z ✔ [16/21] Built PCSDecisionDiagram.Recon (1.8s)
+2026-10-14T20:57:58.8502321Z ✔ [17/21] Built PCSDecisionDiagram.Pass (1.9s)
+2026-10-14T20:57:59.3507658Z ✔ [18/21] Built PCSDecisionDiagram.Validate (559ms)
+2026-10-14T20:58:01.5530933Z ✔ [19/21] Built PCSDecisionDiagram.Intervention (2.8s)
+2026-10-14T20:58:01.8536620Z ✔ [20/21] Built PCSDecisionDiagram (284ms)
+2026-10-14T20:58:01.8538353Z Build completed successfully (21 jobs).
+2026-10-14T20:58:05.4126903Z {"module": "PCSConditionalRuntime.Semantics", "returncode": 0, "wall_seconds": 3.503255}
+2026-10-14T20:58:07.9835369Z {"module": "PCSConditionalRuntime.Mono", "returncode": 0, "wall_seconds": 2.569345}
+2026-10-14T20:58:11.5864339Z {"module": "PCSConditionalRuntime.PyFront", "returncode": 0, "wall_seconds": 3.60307}
+2026-10-14T20:59:28.8970978Z {"module": "PCSConditionalRuntime.PyConditional", "returncode": 0, "wall_seconds": 77.309957}
+2026-10-14T20:59:30.6571617Z {"module": "PCSConditionalRuntime.PyConditionalLowered", "returncode": 0, "wall_seconds": 1.759295}
+2026-10-14T20:59:31.6656117Z {"module": "PCSConditionalRuntime.PyRun", "returncode": 0, "wall_seconds": 1.007703}
+2026-10-14T20:59:49.6271914Z {"module": "PCSConditionalRuntime.PyProofBase", "returncode": 0, "wall_seconds": 17.960773}
+2026-10-14T21:00:00.2081401Z {"module": "PCSConditionalRuntime.PyNode", "returncode": 0, "wall_seconds": 10.5802}
+2026-10-14T21:00:34.8746440Z {"module": "PCSConditionalRuntime.PyApply", "returncode": 0, "wall_seconds": 34.665699}
+2026-10-14T21:04:41.6925048Z {"module": "PCSConditionalRuntime.PyCompile", "returncode": 0, "wall_seconds": 246.817023}
+2026-10-14T21:04:44.0158583Z {"module": "PCSConditionalRuntime.PyConj", "returncode": 0, "wall_seconds": 2.322515}
+2026-10-14T21:04:46.0576799Z {"module": "PCSConditionalRuntime.PyWalk", "returncode": 0, "wall_seconds": 2.04099}
+2026-10-14T21:05:03.7981714Z {"module": "PCSConditionalRuntime.PyWorld", "returncode": 0, "wall_seconds": 17.739466}
+2026-10-14T21:05:11.9382052Z {"module": "PCSConditionalRuntime.PyEval", "returncode": 0, "wall_seconds": 8.139211}
+2026-10-14T21:05:13.1772407Z {"module": "PCSConditionalRuntime.PyJson", "returncode": 0, "wall_seconds": 1.238143}
+2026-10-14T21:05:14.0425140Z {"module": "PCSConditionalRuntime.PyCheckSpec", "returncode": 0, "wall_seconds": 0.864436}
+2026-10-14T21:05:15.2973319Z {"module": "PCSConditionalRuntime.PyCheckBase", "returncode": 0, "wall_seconds": 1.253963}
+2026-10-14T21:05:18.1660141Z {"module": "PCSConditionalRuntime.PyAlloc", "returncode": 0, "wall_seconds": 2.867834}
+2026-10-14T21:05:29.1639811Z {"module": "PCSConditionalRuntime.PyCheckPrefix", "returncode": 0, "wall_seconds": 10.997082}
+2026-10-14T21:05:33.7471732Z {"module": "PCSConditionalRuntime.PyPrem", "returncode": 0, "wall_seconds": 4.566434}
+2026-10-14T21:05:35.3851961Z {"module": "PCSConditionalRuntime.PyComp", "returncode": 0, "wall_seconds": 1.652962}
+2026-10-14T21:05:37.7054373Z {"module": "PCSConditionalRuntime.PyShrink", "returncode": 0, "wall_seconds": 2.319373}
+2026-10-14T21:05:39.4514801Z {"module": "PCSConditionalRuntime.PyRead", "returncode": 0, "wall_seconds": 1.745055}
+2026-10-14T21:05:42.8395734Z {"module": "PCSConditionalRuntime.PyWits", "returncode": 0, "wall_seconds": 3.387023}
+2026-10-14T21:05:46.7242479Z {"module": "PCSConditionalRuntime.PyDecided", "returncode": 0, "wall_seconds": 3.883765}
+2026-10-14T21:05:50.9710832Z {"module": "PCSConditionalRuntime.PyCex", "returncode": 0, "wall_seconds": 4.245816}
+2026-10-14T21:05:52.2186328Z {"module": "PCSConditionalRuntime.PyFields", "returncode": 0, "wall_seconds": 1.246496}
+2026-10-14T21:05:55.5026838Z {"module": "PCSConditionalRuntime.PyReport", "returncode": 0, "wall_seconds": 3.283032}
+2026-10-14T21:05:57.1552869Z {"module": "PCSConditionalRuntime.EnvKeep", "returncode": 0, "wall_seconds": 1.651629}
+2026-10-14T21:06:02.5771087Z {"module": "PCSConditionalRuntime.PyIncons", "returncode": 0, "wall_seconds": 5.42082}
+2026-10-14T21:06:07.5118817Z {"module": "PCSConditionalRuntime.PyTry", "returncode": 0, "wall_seconds": 4.933628}
+2026-10-14T21:06:10.4847887Z {"module": "PCSConditionalRuntime.PyHandler", "returncode": 0, "wall_seconds": 2.971852}
+2026-10-14T21:06:14.4416428Z {"module": "PCSConditionalRuntime.PyTail", "returncode": 0, "wall_seconds": 3.955803}
+2026-10-14T21:06:15.5666987Z {"module": "PCSConditionalRuntime.PyReceipt", "returncode": 0, "wall_seconds": 1.123981}
+2026-10-14T21:06:16.7572021Z {"module": "PCSConditionalRuntime.PyInput", "returncode": 0, "wall_seconds": 1.189507}
+2026-10-14T21:06:18.9101891Z {"module": "PCSConditionalRuntime.PyMain", "returncode": 0, "wall_seconds": 2.151833}
+2026-10-14T21:06:20.6496544Z {"module": "PCSConditionalRuntime.PyAudit", "returncode": 0, "wall_seconds": 1.738357}
+2026-10-14T21:06:25.0996380Z {"module": "PCSConditionalRuntime.JsFront", "returncode": 0, "wall_seconds": 4.448842}
+2026-10-14T21:09:59.6194914Z {"module": "PCSConditionalRuntime.JsConditional", "returncode": 0, "wall_seconds": 214.514632}
+2026-10-14T21:10:07.5818120Z {"module": "PCSConditionalRuntime.JsLower", "returncode": 0, "wall_seconds": 7.96024}
+2026-10-14T21:10:15.1355473Z {"module": "PCSConditionalRuntime.CoreBEq", "returncode": 0, "wall_seconds": 7.549956}
+2026-10-14T21:10:19.4309598Z {"module": "PCSConditionalRuntime.JsConditionalLowered", "returncode": 0, "wall_seconds": 4.296092}
+2026-10-14T21:10:20.4743799Z {"module": "PCSConditionalRuntime.JsRun", "returncode": 0, "wall_seconds": 1.041846}
+2026-10-14T21:10:22.0100036Z {"module": "PCSConditionalRuntime.JsKeys", "returncode": 0, "wall_seconds": 1.534204}
+2026-10-14T21:10:38.8116221Z {"module": "PCSConditionalRuntime.JsProofBase", "returncode": 0, "wall_seconds": 16.798095}
+2026-10-14T21:10:57.0429559Z {"module": "PCSConditionalRuntime.JsNode", "returncode": 0, "wall_seconds": 18.229811}
+2026-10-14T21:11:51.7949255Z {"module": "PCSConditionalRuntime.JsApply", "returncode": 0, "wall_seconds": 54.749814}
+2026-10-14T21:16:27.1242851Z {"module": "PCSConditionalRuntime.JsCompile", "returncode": 0, "wall_seconds": 275.327703}
+2026-10-14T21:16:30.2177493Z {"module": "PCSConditionalRuntime.JsConj", "returncode": 0, "wall_seconds": 3.091799}
+2026-10-14T21:16:32.2833796Z {"module": "PCSConditionalRuntime.JsWalk", "returncode": 0, "wall_seconds": 2.064084}
+2026-10-14T21:16:41.9472886Z {"module": "PCSConditionalRuntime.JsWorld", "returncode": 0, "wall_seconds": 9.662356}
+2026-10-14T21:16:50.8587793Z {"module": "PCSConditionalRuntime.JsEval", "returncode": 0, "wall_seconds": 8.909936}
+2026-10-14T21:16:52.0560768Z {"module": "PCSConditionalRuntime.JsCheckBase", "returncode": 0, "wall_seconds": 1.190858}
+2026-10-14T21:16:59.6208573Z {"module": "PCSConditionalRuntime.JsPrem", "returncode": 0, "wall_seconds": 7.560973}
+2026-10-14T21:17:01.3461588Z {"module": "PCSConditionalRuntime.JsComp", "returncode": 0, "wall_seconds": 1.723641}
+2026-10-14T21:17:06.7381211Z {"module": "PCSConditionalRuntime.JsShrink", "returncode": 0, "wall_seconds": 5.390292}
+2026-10-14T21:17:12.2164471Z {"module": "PCSConditionalRuntime.JsWits", "returncode": 0, "wall_seconds": 5.476661}
+2026-10-14T21:17:18.1445519Z {"module": "PCSConditionalRuntime.JsCex", "returncode": 0, "wall_seconds": 5.924414}
+2026-10-14T21:17:23.0246004Z {"module": "PCSConditionalRuntime.JsReport", "returncode": 0, "wall_seconds": 4.876695}
+2026-10-14T21:17:28.8864709Z {"module": "PCSConditionalRuntime.JsIncons", "returncode": 0, "wall_seconds": 5.861547}
+2026-10-14T21:17:33.7718803Z {"module": "PCSConditionalRuntime.JsDecided", "returncode": 0, "wall_seconds": 4.881784}
+2026-10-14T21:17:39.5993373Z {"module": "PCSConditionalRuntime.JsTry", "returncode": 0, "wall_seconds": 5.825487}
+2026-10-14T21:17:42.6239855Z {"module": "PCSConditionalRuntime.JsTail", "returncode": 0, "wall_seconds": 3.022962}
+2026-10-14T21:17:44.4019745Z {"module": "PCSConditionalRuntime.JsInput", "returncode": 0, "wall_seconds": 1.776221}
+2026-10-14T21:18:11.5755556Z {"module": "PCSConditionalRuntime.JsCheckPrefix", "returncode": 0, "wall_seconds": 27.170289}
+2026-10-14T21:18:14.2450032Z {"module": "PCSConditionalRuntime.JsMain", "returncode": 0, "wall_seconds": 2.668284}
+2026-10-14T21:18:16.6623790Z {"module": "PCSConditionalRuntime.JsAudit", "returncode": 0, "wall_seconds": 2.41565}
+2026-10-14T21:18:17.3847964Z {"module": "PCSConditionalRuntime", "returncode": 0, "wall_seconds": 0.72064}
+2026-10-14T21:24:37.9605917Z {"fresh_public_theorems": 478, "principals": ["PCSCR.Py.python_conditional_refines_reference", "PCSCR.Js.javascript_conditional_refines_reference"], "scientific_acceptance": false}
+2026-10-14T21:24:41.3547984Z {"format": "pcs-conditional-runtime-parity-v1", "cases": 90, "seed": 614, "mismatches": [], "decisions": {"equivalent_under_assumptions": 11, "resource_limit": 46, "counterexample": 23, "inconsistent_assumptions": 10}, "source_identity": [{"language": "python", "source": "pcs/experimental/conditional.py", "sha256": "4045bf1d08ec540e5113f1f15212be2901dfeadb4e3898937596abc411022bf1"}, {"language": "javascript", "source": "public/conditional-core.mjs", "sha256": "f25a31d5955c7be1b06e1c788ca7be3badb3ea3e006f56f0e467364a382c8f0d"}], "cost": {"node_wall_seconds": 0.266739, "python_lean_wall_seconds": 1.154191, "javascript_lean_wall_seconds": 1.14202}, "digest_fields_abstracted": true, "universal_native_correspondence_proved": false, "scientific_acceptance": false, "evidence_sha256": {"python.json": "e018bde8afdf5a1b9ec9f7282458753c9b056970db616afcec050853adf555b7", "tasks.json": "d7550ce273ae2759712da1c9497ed2211764a5eae8704bacf7a75f1c68ce378a", "python-lean.json": "e018bde8afdf5a1b9ec9f7282458753c9b056970db616afcec050853adf555b7", "encoded-tasks.json": "9889731a162937af6f25e7c6ef1b34e3f7ea48f3274a0951ba72a92f3f70f006", "javascript-lean.json": "e018bde8afdf5a1b9ec9f7282458753c9b056970db616afcec050853adf555b7", "javascript.json": "e018bde8afdf5a1b9ec9f7282458753c9b056970db616afcec050853adf555b7"}}
+2026-10-14T21:24:43.0554196Z 'PCSConditionalShield.equivalent_guard_matches' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-14T21:24:43.0558647Z 'PCSConditionalShield.conditional_guard_histories_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-14T21:24:43.6749204Z libc++abi: terminating due to uncaught exception of type lean::memory_exception: excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)
+2026-10-14T21:24:45.5618854Z ##[error]Process completed with exit code 134.
+2026-10-14T21:24:45.8068459Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-14T21:24:45.8070816Z with:
+2026-10-14T21:24:45.8073237Z   name: pcs-public-full-evidence-38636060406-1
+2026-10-14T21:24:45.8081448Z   path: /home/runner/work/_temp/public-ci-evidence/
+/home/runner/work/_temp/v06-contract-runs/
+/home/runner/work/_temp/semantic-cross-language-evidence.json
+/home/runner/work/_temp/omega-ci/
+/home/runner/work/_temp/omega-adaptive-ci/
+/home/runner/work/_temp/conditional-ci/
+/home/runner/work/_temp/intervention-ci/
+/home/runner/work/_temp/runtime-refinement.json
+/home/runner/work/_temp/math-language-parity.json
+/home/runner/work/_temp/runtime-value-type.json
+/home/runner/work/_temp/runtime-canonical-boundary.json
+/home/runner/work/_temp/runtime-conditional-smoke.json
+/home/runner/work/_temp/conditional-complete-build.json
+/home/runner/work/_temp/conditional-refinement.json
+/home/runner/work/_temp/conditional-extracted-parity/
+/home/runner/work/_temp/action-shield-campaign/
+/home/runner/work/_temp/signed-action-shield-case/
+
+2026-10-14T21:24:45.8086507Z   if-no-files-found: warn
+2026-10-14T21:24:45.8088714Z   retention-days: 14
+2026-10-14T21:24:45.8089031Z   compression-level: 6
+2026-10-14T21:24:45.8091249Z   overwrite: false
+2026-10-14T21:24:45.8093454Z   include-hidden-files: false
+2026-10-14T21:24:45.8096292Z   archive: true
+2026-10-14T21:24:45.8096584Z env:
+2026-10-14T21:24:45.8098926Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:45.8101324Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T21:24:45.8104219Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:45.8106753Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:45.8107262Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:45.8109647Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T21:24:45.8112097Z ##[endgroup]
+2026-10-14T21:24:46.1492716Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-14T21:24:46.1517506Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-10-14T21:24:46.1522677Z With the provided path, there will be 9 files uploaded
+2026-10-14T21:24:46.1540152Z Artifact name is valid!
+2026-10-14T21:24:46.1540615Z Root directory input is valid!
+2026-10-14T21:24:46.5225845Z Uploading artifact: pcs-public-full-evidence-38636060406-1.zip
+2026-10-14T21:24:46.5264531Z Beginning upload of artifact content to blob storage
+2026-10-14T21:24:46.9380390Z Uploaded bytes 43982
+2026-10-14T21:24:47.0008310Z Finished uploading artifact content to blob storage!
+2026-10-14T21:24:47.0012599Z SHA256 digest of uploaded artifact is 9156fe51ee866fe5007d79a7ea5d5cd87c3511559ac86b905c9682434e86eb7c
+2026-10-14T21:24:47.0013774Z Finalizing artifact upload
+2026-10-14T21:24:47.3928320Z Artifact pcs-public-full-evidence-38636060406-1 successfully finalized. Artifact ID 11929688673
+2026-10-14T21:24:47.3932043Z Artifact pcs-public-full-evidence-38636060406-1 has been successfully uploaded! Final size is 43982 bytes. Artifact ID is 11929688673
+2026-10-14T21:24:47.3934092Z Artifact download URL: https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/38636060406/artifacts/11929688673
+2026-10-14T21:24:47.4151226Z ##[group]Run set -euo pipefail
+2026-10-14T21:24:47.4151630Z [36;1mset -euo pipefail[0m
+2026-10-14T21:24:47.4153879Z [36;1mSWAP_FILE="$RUNNER_TEMP/pcs-kernel-controls.swap"[0m
+2026-10-14T21:24:47.4156055Z [36;1mif test -f "$SWAP_FILE"; then[0m
+2026-10-14T21:24:47.4158816Z [36;1m  if sudo -n swapon --noheadings --show=NAME | grep -Fxq "$SWAP_FILE"; then[0m
+2026-10-14T21:24:47.4161045Z [36;1m    sudo -n swapoff "$SWAP_FILE"[0m
+2026-10-14T21:24:47.4161407Z [36;1m  fi[0m
+2026-10-14T21:24:47.4163926Z [36;1m  sudo -n rm -- "$SWAP_FILE"[0m
+2026-10-14T21:24:47.4166745Z [36;1mfi[0m
+2026-10-14T21:24:47.5213216Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-14T21:24:47.5215905Z env:
+2026-10-14T21:24:47.5218136Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:47.5220736Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-14T21:24:47.5221262Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:47.5226185Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:47.5226656Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-14T21:24:47.5229273Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-14T21:24:47.5231664Z ##[endgroup]
+2026-10-14T21:24:48.8005217Z Post job cleanup.
+2026-10-14T21:24:48.8901561Z [command]/usr/bin/git version
+2026-10-14T21:24:48.9000069Z git version 2.55.0
+2026-10-14T21:24:48.9031775Z Temporarily overriding HOME='/home/runner/work/_temp/3218428e-beb6-4ad0-ac7a-1c4d983896ea' before making global git config changes
+2026-10-14T21:24:48.9035441Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T21:24:48.9040129Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/proof-carrying-science/proof-carrying-science/.ci-components/pcs-site
+2026-10-14T21:24:48.9078019Z Removing SSH command configuration
+2026-10-14T21:24:48.9092589Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T21:24:48.9128941Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T21:24:48.9471599Z Removing HTTP extra header
+2026-10-14T21:24:48.9474641Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T21:24:48.9505821Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T21:24:48.9708648Z Removing includeIf entries pointing to credentials config files
+2026-10-14T21:24:48.9711712Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T21:24:48.9768929Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T21:24:49.0404074Z Post job cleanup.
+2026-10-14T21:24:49.1307443Z [command]/usr/bin/git version
+2026-10-14T21:24:49.1344894Z git version 2.55.0
+2026-10-14T21:24:49.1377734Z Temporarily overriding HOME='/home/runner/work/_temp/fa5ec357-9d65-48ba-9240-8524b3d83d95' before making global git config changes
+2026-10-14T21:24:49.1382136Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T21:24:49.1385873Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science
+2026-10-14T21:24:49.1420952Z Removing SSH command configuration
+2026-10-14T21:24:49.1425779Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T21:24:49.1460682Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T21:24:49.1737416Z Removing HTTP extra header
+2026-10-14T21:24:49.1750203Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T21:24:49.1791718Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T21:24:49.2017311Z Removing includeIf entries pointing to credentials config files
+2026-10-14T21:24:49.2022395Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T21:24:49.2075826Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T21:24:49.2488208Z Cleaning up orphan processes

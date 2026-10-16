@@ -1,0 +1,16 @@
+{
+  "format": "pcs-protected-run-observation-v1",
+  "head_sha": "9ce1fac6af8e27fac4bedfe1b4022f9ad32f4add",
+  "run_id": 38591704320,
+  "job_id": 115948223449,
+  "conclusion": "failure",
+  "failed_stage": "Fresh source-extracted conditional libraries and full axiom audit",
+  "diagnostic": "PCSConditionalRuntime.PyFront: unknown module prefix PCSRuntimeRefinement; SourceText prerequisite was not built in clean CI",
+  "new_modules_compiled_before_failure": [
+    "PCSConditionalRuntime.Semantics",
+    "PCSConditionalRuntime.Mono"
+  ],
+  "full_library_or_principal_audit_complete": false,
+  "fix": "Explicitly build +PCSRuntimeRefinement.SourceText:leanArts before fresh new-library compilation",
+  "scope": "Observed GitHub logs; no new formal acceptance inferred"
+}

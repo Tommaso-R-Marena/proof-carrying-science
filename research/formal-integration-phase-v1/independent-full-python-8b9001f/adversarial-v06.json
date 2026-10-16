@@ -1,0 +1,70 @@
+{
+  "attacks": 12,
+  "false_accepts": 0,
+  "format": "pcs-v06-adversarial-hardening-v1",
+  "rejected": 12,
+  "results": [
+    {
+      "attack": "signed_certificate_byte_tamper",
+      "detail": "canonical_inputs",
+      "rejected": true
+    },
+    {
+      "attack": "zip_path_traversal",
+      "detail": "unsafe or non-canonical ZIP member: '../escape.txt'",
+      "rejected": true
+    },
+    {
+      "attack": "zip_duplicate_control_member",
+      "detail": "duplicate or file/directory-colliding ZIP member: 'certificate.json'",
+      "rejected": true
+    },
+    {
+      "attack": "zip_casefold_collision",
+      "detail": "cross-platform ZIP name collision: 'certificate.json' vs 'Certificate.json'",
+      "rejected": true
+    },
+    {
+      "attack": "zip_windows_reserved_name",
+      "detail": "ZIP member uses Windows-reserved filename: 'CON.txt'",
+      "rejected": true
+    },
+    {
+      "attack": "zip_backslash_alias",
+      "detail": "ZIP member uses backslash: 'artifacts\\\\alias.txt'",
+      "rejected": true
+    },
+    {
+      "attack": "zip_non_nfc_name",
+      "detail": "non-NFC ZIP member segment is not portable: 'e\u0301.txt'",
+      "rejected": true
+    },
+    {
+      "attack": "zip_trailing_dot_segment",
+      "detail": "ZIP member has non-portable trailing space/dot: 'result.'",
+      "rejected": true
+    },
+    {
+      "attack": "normalized_index_byte_tamper",
+      "detail": "package_binding",
+      "rejected": true
+    },
+    {
+      "attack": "unsigned_extra_member",
+      "detail": "package_binding",
+      "rejected": true
+    },
+    {
+      "attack": "environment_source_drift_after_signing",
+      "detail": "package_binding",
+      "rejected": true
+    },
+    {
+      "attack": "fully_rehashed_style_false_environment_claim_at_replay_boundary",
+      "detail": [
+        "signed environment contract differs from fresh capture over delivered bytes"
+      ],
+      "rejected": true
+    }
+  ]
+}
