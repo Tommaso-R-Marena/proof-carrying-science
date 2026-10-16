@@ -182,3 +182,60 @@ def test_truthy_nonboolean_report_cannot_grant_kernel_support(monkeypatch):
     monkeypatch.setattr(receiver,'kernel_replay',lambda *a,**k:{'kernel_checked':1})
     r=receiver.replay(CONTRACT)
     assert not r['all_time_model_supported'] and not r['accepted']
+
+
+@pytest.fixture(scope='module')
+def signed_case(tmp_path_factory):
+    require_kernel()
+    from pcs.signing import generate_keypair
+    directory=tmp_path_factory.mktemp('transport-signed')
+    project=directory/'project';shutil.copytree(EXAMPLE,project)
+    private,public=directory/'private.pem',directory/'public.pem'
+    fingerprint=generate_keypair(private,public)['fingerprint']
+    bundle=directory/'positive.pcs.zip'
+    workflow.build_bundle(project,directory/'work',bundle,private,public,
+        expected_fingerprint=fingerprint,confirm_reviewed_draft=True)
+    private.unlink()
+    return bundle,public,fingerprint
+
+
+def test_signed_receiving_stages_use_one_snapshot_when_original_zip_changes(signed_case,genuine,tmp_path,monkeypatch):
+    bundle,public,fingerprint=signed_case
+    original=tmp_path/'original.pcs.zip';original.write_bytes(bundle.read_bytes())
+    digest=hashlib.sha256(original.read_bytes()).hexdigest()
+    verify=workflow.verify_bundle
+    def changing_input(snapshot,*a,**kw):
+        assert Path(snapshot)!=original
+        result=verify(snapshot,*a,**kw)
+        original.write_bytes(b'changed after package verification; not a ZIP')
+        return result
+    monkeypatch.setattr(workflow,'verify_bundle',changing_input)
+    monkeypatch.setattr(receiver,'kernel_replay',lambda *a,**k:genuine['kernel'])
+    result=receiver.replay_bundle(original,public,expected_fingerprint=fingerprint)
+    assert result['accepted'],result
+    assert result['bundle_sha256']==digest==result['existing_workflow']['bundle_sha256']
+    assert result['model']['contract_sha256']==genuine['contract_sha256']
+    assert original.read_bytes().startswith(b'changed')
+    assert result['base_numerical_claim']==result['base_continuum_claim']==result['base_empirical_claim']=='OPEN'
+
+
+def test_verified_contract_handoff_mismatch_rejects_before_kernel(signed_case,monkeypatch):
+    bundle,public,fingerprint=signed_case
+    verify=workflow.verify_bundle
+    def wrong_handoff(*a,**kw):
+        result=verify(*a,**kw);result['domain_replay']['contract_sha256']='0'*64
+        return result
+    monkeypatch.setattr(workflow,'verify_bundle',wrong_handoff)
+    monkeypatch.setattr(receiver,'kernel_replay',lambda *a,**k:pytest.fail('mismatched signed source reached kernel'))
+    result=receiver.replay_bundle(bundle,public,expected_fingerprint=fingerprint)
+    assert result['pcs_package_valid'] and not result['accepted'] and not result['all_time_model_supported']
+    assert 'different bytes' in result['errors'][0]
+
+
+def test_oversized_signed_input_is_rejected_before_authority(tmp_path,monkeypatch):
+    bundle=tmp_path/'oversized.zip';bundle.write_bytes(b'1234')
+    monkeypatch.setattr(receiver,'MAX_BUNDLE_BYTES',3)
+    monkeypatch.setattr(workflow,'verify_bundle',lambda *a,**k:pytest.fail('oversized ZIP reached authority'))
+    result=receiver.replay_bundle(bundle,None,expected_fingerprint='0'*64)
+    assert not result['pcs_package_valid'] and not result['accepted']
+    assert 'receiving bound' in result['errors'][0]

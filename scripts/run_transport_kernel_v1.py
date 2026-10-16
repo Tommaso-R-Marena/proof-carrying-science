@@ -52,6 +52,13 @@ def run(output):
                 or report['all_time_model_supported'] is not model_expected
                 or report['scientific_acceptance'] is not False):
             raise RuntimeError('unexpected independent receiving outcome: '+name)
+        if name.startswith('signed-') and report.get('pcs_package_valid') is not True:
+            raise RuntimeError('signed attack failed package integrity instead of semantic replay: '+name)
+        if name == 'raw-conservative-wrong-trajectory':
+            checks={c['id']:c['outcome'] for c in report['bounded_replay']['checks']}
+            if not (checks['amount_conservation'] == checks['maximum_principle'] == 'PASS'
+                    and checks['step_replay'] == 'FAIL'):
+                raise RuntimeError('wrong-trajectory control failed its intended independent predicates')
         receivers.append({'id':name,'expected':expected,'accepted':report['accepted'],
             'all_time_model_supported':report['all_time_model_supported'],'returncode':p.returncode,
             'report_sha256':kernel.sha((destination/'report.json').read_bytes()),

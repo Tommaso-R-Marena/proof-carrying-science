@@ -24,6 +24,7 @@ from .scientific_contracts_v1 import rational, rational_text, _bounded
 
 FORMAT = 'pcs-transport-kernel-replay-v1'
 MODEL_FORMAT = 'pcs-transport-matrix-certificate-v1'
+MAX_BUNDLE_BYTES = 32 * 1024 * 1024
 MATHLIB_REVISION = '8f9d9cff6bd728b17a24e163c9402775d9e6a365'
 ROOT = Path(__file__).resolve().parents[1]
 FORMAL = ROOT / 'formal/real/PCSReal/Transport.lean'
@@ -301,23 +302,48 @@ def replay(contract_raw: bytes, trajectory_raw: bytes | None = None, *,
 
 def replay_bundle(bundle, public_key_path, *, expected_fingerprint,
                   lean_authority_path=None, timeout: float = 120) -> dict:
-    """Compose existing signed v3 replay with a new, scoped matrix theorem."""
-    existing = workflow.verify_bundle(bundle, public_key_path,
-        expected_fingerprint=expected_fingerprint, lean_authority_path=lean_authority_path)
-    if not existing['bounded_contract_satisfied']:
-        return {'format': FORMAT, 'accepted': False, 'pcs_package_valid': existing['pcs_package_valid'],
-            'all_time_model_supported': False, 'existing_workflow': existing,
-            'scientific_acceptance': False, 'errors': ['existing signed workflow replay rejected']}
-    loaded = workflow.load_package_zip_v06(bundle)
-    certificate = workflow._json(loaded['certificate_bytes'])
-    sources = {a['source_path']: loaded['package_files'][a['path']] for a in certificate['artifacts']}
-    contract_raw = sources['contract.json']
-    contract = workflow.load_contract(contract_raw)
-    result = replay(contract_raw, sources[contract['data_path']], timeout=timeout)
-    return {**result, 'acceptance_scope': 'SIGNED_PACKAGE_MODEL_AND_BOUNDED_TRAJECTORY',
-        'pcs_package_valid': True, 'existing_workflow': existing,
-        'bundle_sha256': sha(Path(bundle).read_bytes()),
-        'base_numerical_claim': 'OPEN', 'base_continuum_claim': 'OPEN', 'base_empirical_claim': 'OPEN'}
+    """Compose verification over one private snapshot of the exact ZIP bytes."""
+    existing = None
+    rejected = {'format': FORMAT, 'accepted': False, 'pcs_package_valid': False,
+        'all_time_model_supported': False, 'bounded_trajectory_supported': False,
+        'implementation_correspondence': 'OPEN', 'continuum_accuracy': 'OPEN',
+        'empirical_validity': 'OPEN', 'scientific_acceptance': False, 'pcs_authority': False,
+        'producer_proof_executed': False, 'acceptance_scope': 'SIGNED_PACKAGE_MODEL_AND_BOUNDED_TRAJECTORY'}
+    try:
+        with Path(bundle).open('rb') as source:
+            raw = source.read(MAX_BUNDLE_BYTES + 1)
+        if len(raw) > MAX_BUNDLE_BYTES:
+            raise ValueError('signed transport ZIP exceeds the 32 MiB receiving bound')
+        identity = sha(raw)
+        with tempfile.TemporaryDirectory(prefix='pcs-transport-signed-') as folder:
+            snapshot = Path(folder)/'input.pcs.zip'
+            snapshot.write_bytes(raw)
+            existing = workflow.verify_bundle(snapshot, public_key_path,
+                expected_fingerprint=expected_fingerprint, lean_authority_path=lean_authority_path)
+            if (existing.get('pcs_package_valid') is not True
+                    or existing.get('independent_replay_consistent') is not True
+                    or existing.get('bounded_contract_satisfied') is not True):
+                return {**rejected, 'pcs_package_valid': existing.get('pcs_package_valid') is True,
+                    'existing_workflow': existing, 'bundle_sha256': identity,
+                    'errors': ['existing signed workflow replay rejected']}
+            loaded = workflow.load_package_zip_v06(snapshot)
+            certificate = workflow._json(loaded['certificate_bytes'])
+            sources = {a['source_path']: loaded['package_files'][a['path']] for a in certificate['artifacts']}
+            contract_raw = sources['contract.json']
+            contract = workflow.load_contract(contract_raw)
+            trajectory_raw = sources[contract['data_path']]
+            domain = existing.get('domain_replay', {})
+            if (sha(contract_raw) != domain.get('contract_sha256')
+                    or sha(trajectory_raw) != domain.get('data_sha256')
+                    or existing.get('bundle_sha256') != identity):
+                raise ValueError('verified package and model handoff refer to different bytes')
+            result = replay(contract_raw, trajectory_raw, timeout=timeout)
+        return {**result, 'acceptance_scope': 'SIGNED_PACKAGE_MODEL_AND_BOUNDED_TRAJECTORY',
+            'pcs_package_valid': True, 'existing_workflow': existing, 'bundle_sha256': identity,
+            'base_numerical_claim': 'OPEN', 'base_continuum_claim': 'OPEN', 'base_empirical_claim': 'OPEN'}
+    except (ValueError, KeyError, TypeError, UnicodeError, OSError) as exc:
+        return {**rejected, 'pcs_package_valid': bool(existing and existing.get('pcs_package_valid') is True),
+            'existing_workflow': existing, 'errors': [f'{type(exc).__name__}: {exc}']}
 
 
 def export_evidence(output: Path, result: dict, contract_raw: bytes | None = None,

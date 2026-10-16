@@ -90,7 +90,7 @@ The receiving process uses pinned Lean 4.28.0 and Mathlib revision
 `8f9d9cff6bd728b17a24e163c9402775d9e6a365`. Each Lean process has a 2,048 MiB
 memory limit, and the replay has a total wall budget of at most 180 seconds.
 The supported intake retains v3's 2–16 cells, 64 edges, 64 recorded time steps,
-2 MiB artifact and 4,096-bit rational bounds. The theorem's iteration count is
+2 MiB artifact and 4,096-bit rational bounds. Signed input ZIPs are bounded to 32 MiB. The theorem's iteration count is
 unbounded; the submitted CSV is still checked within the existing finite limits.
 
 ## Use from a repository checkout
@@ -130,9 +130,13 @@ python -m pcs.cli transport-kernel-v1 \
   --output /tmp/pcs-signed-transport-kernel-new
 ```
 
-The signed path first executes the existing v0.6 authority and v3 independent
+The signed path takes one private snapshot of the exact bounded ZIP bytes, then
+executes the existing v0.6 authority and v3 independent
 replay, including exact source, claim and premise binding. It then adds the fresh
-matrix proof. Existing historical signed evidence remains unchanged.
+matrix proof over the same immutable snapshot. Contract, trajectory and ZIP
+hashes must match across the two receiving stages. Changes to the original file
+during verification cannot substitute the input to the second stage. Existing
+historical signed evidence remains unchanged.
 
 The output retains `report.json`, regenerated `Replay.lean`, matrix data,
 receiving source snapshots and a byte inventory. `acceptance_scope` distinguishes
