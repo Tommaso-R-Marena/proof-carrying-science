@@ -239,3 +239,18 @@ def test_oversized_signed_input_is_rejected_before_authority(tmp_path,monkeypatc
     result=receiver.replay_bundle(bundle,None,expected_fingerprint='0'*64)
     assert not result['pcs_package_valid'] and not result['accepted']
     assert 'receiving bound' in result['errors'][0]
+
+
+@pytest.mark.parametrize('component',['matrix','volume','initial','contract-digest'])
+def test_current_input_model_handoff_cannot_mix_two_supported_models(component,monkeypatch):
+    model=receiver.prepare(CONTRACT)
+    if component=='matrix':
+        n=len(model['volumes']);model['matrix']=[[str(int(i==j)) for j in range(n)] for i in range(n)]
+    if component=='volume':model['volumes']=[str(2*Fraction(v)) for v in model['volumes']]
+    if component=='initial':model['initial']=['0']*len(model['initial'])
+    if component=='contract-digest':model['contract_sha256']='0'*64
+    monkeypatch.setattr(receiver,'prepare',lambda *a:model)
+    monkeypatch.setattr(receiver,'kernel_replay',lambda *a,**k:pytest.fail('mismatched model handoff reached kernel'))
+    result=receiver.replay(CONTRACT,TRAJECTORY)
+    assert not result['accepted'] and not result['all_time_model_supported'] and not result['model_handoff_checked']
+    assert 'model handoff' in result['errors'][0]

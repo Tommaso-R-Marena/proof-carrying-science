@@ -58,7 +58,10 @@ using a different construction from v3's incremental matrix update. An optional
 producer matrix certificate must match this reconstruction and the exact source
 contract bytes. Boolean/numeric confusion, extra fields, changed volumes,
 initial states, hashes and proof-text injection cannot authorize a different
-model.
+model. Both current-input reconstructions must agree exactly on matrix
+coefficients, cell volumes and the initial vector before any model proof is
+accepted. This executed handoff check is distinct from universal Python source
+refinement.
 
 The receiver generates only bounded rational literals and fixed proof text.
 It copies its own general theorem source to a private directory, compiles that

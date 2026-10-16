@@ -269,11 +269,19 @@ def kernel_replay(model: dict, *, timeout: float = 120) -> dict:
 def replay(contract_raw: bytes, trajectory_raw: bytes | None = None, *,
            proposal_raw: bytes | None = None, timeout: float = 120) -> dict:
     base = {'format': FORMAT, 'accepted': False, 'all_time_model_supported': False,
-        'bounded_trajectory_supported': False, 'implementation_correspondence': 'OPEN',
+        'bounded_trajectory_supported': False, 'model_handoff_checked': False, 'implementation_correspondence': 'OPEN',
         'continuum_accuracy': 'OPEN', 'empirical_validity': 'OPEN', 'scientific_acceptance': False,
         'pcs_authority': False, 'producer_proof_executed': False, 'errors': []}
     try:
         model = prepare(contract_raw)
+        _validate_model(model)
+        typed = workflow.load_contract(contract_raw)
+        reference_matrix = workflow.transition_matrix(typed)
+        if (model['contract_sha256'] != sha(contract_raw)
+                or [[Fraction(x) for x in row] for row in model['matrix']] != reference_matrix
+                or [Fraction(x) for x in model['volumes']] != [rational(c['volume'], 'volume') for c in typed['cells']]
+                or [Fraction(x) for x in model['initial']] != [rational(c['initial_concentration'], 'initial') for c in typed['cells']]):
+            raise ValueError('typed model handoff differs between current-input reconstructions')
         if proposal_raw is not None:
             if not isinstance(proposal_raw, bytes) or len(proposal_raw) > workflow.MAX_BYTES:
                 raise ValueError('proposal byte limit exceeded')
@@ -285,11 +293,13 @@ def replay(contract_raw: bytes, trajectory_raw: bytes | None = None, *,
         supported = kernel['kernel_checked'] is True
         bounded = domain is not None and domain['outcome'] == 'PASS'
         return {**base, 'accepted': supported and (bounded if domain is not None else True),
-            'all_time_model_supported': supported, 'bounded_trajectory_supported': bounded,
+            'all_time_model_supported': supported, 'bounded_trajectory_supported': bounded, 'model_handoff_checked': True,
             'acceptance_scope': 'MODEL_AND_BOUNDED_TRAJECTORY' if domain is not None else 'MODEL_ONLY',
             'contract_sha256': sha(contract_raw), 'model': model, 'kernel': kernel,
             'bounded_replay': domain, 'time_horizon': 'all natural discrete times in the declared matrix model',
             'obligations': [
+                {'id': 'typed_model_handoff', 'status': 'COMPUTATIONALLY_SUPPORTED',
+                 'authority': 'EXACT_CURRENT_INPUT_RECONSTRUCTION_COMPARISON'},
                 {'id': 'discrete_matrix_invariants_all_times', 'status': 'KERNEL_SUPPORTED' if supported else 'OPEN',
                  'authority': 'FRESH_LEAN_KERNEL_DECLARED_MATRIX_ONLY'},
                 {'id': 'submitted_finite_trajectory', 'status': 'COMPUTATIONALLY_SUPPORTED' if bounded else 'OPEN',
