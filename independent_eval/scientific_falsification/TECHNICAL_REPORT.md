@@ -58,7 +58,7 @@ results.
 
 Per-case reports are written under `results/metamorphic_<case_id>.json`
 (gitignored); campaign rollup is `results/metamorphic_campaign.json`.
-`RESULTS/SUMMARY.json` remains the full-campaign summary artifact.
+`RESULTS/SUMMARY.json` remains the full-campaign summary artifact and is content-address sealed (`artifact_integrity`, `json-sort-keys-compact-utf8-v1`). `run_all --only <surface>` records omitted surfaces as `SKIPPED` (not PASS). `RESULTS/falsification_scorecard.json` maps campaign surfaces onto the shared inspection_class lattice without issuing ACCEPT/PASS. Aristotle candidates include proposed obligation families (still `discharged: false`).
 
 ### Task 10 — Discovery benchmark
 

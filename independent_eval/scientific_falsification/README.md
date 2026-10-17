@@ -31,6 +31,10 @@ PYTHONPATH=independent_eval/scientific_falsification \
 
 PYTHONPATH=independent_eval/scientific_falsification \
   python3 -m python_harness.run_all --skip-build
+
+# Selective surfaces (SKIPPED ≠ PASS); SUMMARY + scorecard are sealed
+PYTHONPATH=independent_eval/scientific_falsification \
+  python3 -m python_harness.run_all --skip-build --only aristotle --only inadequacy
 ```
 
 ## Non-claims
