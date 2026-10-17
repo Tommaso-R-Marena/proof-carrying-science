@@ -1,0 +1,38 @@
+name: PCS Proof-Gated Self-Improvement Research
+on:
+  pull_request:
+    paths:
+      - 'formal/PCS/V2/ProofGatedSelfImprovement.lean'
+      - 'research/proof-gated-self-improvement-v1/**'
+      - '.github/workflows/pcs-proof-gated-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Python reference and adversarial tests
+        run: |
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -v
+      - name: Kernel-check frozen Lean policy and theorems
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          lake exe cache get
+          lake build PCS.V2.ProofGatedSelfImprovement
+          lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 0 0 relu 1 1 | grep -x ACCEPT
+          if lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 1 1 relu 1 2; then
+            echo 'FAIL: regressive candidate unexpectedly accepted' >&2
+            exit 1
+          fi
