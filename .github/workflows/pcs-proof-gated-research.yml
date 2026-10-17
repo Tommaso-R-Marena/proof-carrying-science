@@ -27,6 +27,21 @@ jobs:
           cd research/proof-gated-self-improvement-v1
           python -m unittest discover -s tests -v
           python global_falsification.py
+          # Real independent replay, no Lean verdict fabricated by Python.
+          python - <<'PY'
+          from universal_relu import Net, Term
+          from relu_certificate_export import build_certificate
+          from relu_certificate_replay import replay
+          target = Net((Term(1, 2, 1),))
+          bad = replay(build_certificate(
+              Net((Term(1, 3, -3),)),
+              Net((Term(1, 3, -1),)), target))
+          assert not bad.no_forgetting and bad.counterexample == 4
+          good = replay(build_certificate(
+              Net((Term(1, 0, 0),)), target, target))
+          assert good.no_forgetting and good.no_worse_in_window
+          print("PASS: independent all-integer ReLU certificate replay")
+          PY
       - name: Kernel-check frozen Lean policy and theorems
         shell: bash
         run: |
