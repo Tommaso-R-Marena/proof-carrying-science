@@ -16,7 +16,11 @@ from receive import Kernel, RESEARCH, ROOT, audit, canonical, digest
 def run(output):
     old = RESEARCH / "kernel/results/supported-family-v1/FamilyTail.lean"
     new = HERE / "BlockFamily.lean"
-    sources = {str(p.relative_to(ROOT)): digest(p) for p in (old, new, Path(__file__))}
+    preserved = HERE / "PreservedGuard.lean"
+    sources = {
+        str(p.relative_to(ROOT)): digest(p)
+        for p in (old, new, preserved, Path(__file__))
+    }
     k = Kernel(output)
     before = digest(old)
     p = subprocess.run(
@@ -48,9 +52,17 @@ def run(output):
             "PCS.Research.PointwiseFamilyBlock.no_guard_authorization",
         },
     )
+    preserved_audit = audit(
+        k.run(preserved),
+        {
+            "PCS.Research.PreservedPointwiseGuard.accepts_sound",
+            "PCS.Research.PreservedPointwiseGuard.first_update",
+            "PCS.Research.PreservedPointwiseGuard.second_update",
+        },
+    )
     if sources != {name: digest(ROOT / name) for name in sources}:
         raise RuntimeError("Post-hoc experiment source drift")
-    for path in (old, new):
+    for path in (old, new, preserved):
         (k.output / path.name).write_bytes(path.read_bytes())
     result = {
         "format": "pgsi-pointwise-family-block-v1",
@@ -60,6 +72,7 @@ def run(output):
         "lean_version": k.base.version,
         "retained_family_axioms": old_audit,
         "new_theorem_axioms": fresh_audit,
+        "preserved_guard_theorem_axioms": preserved_audit,
         "claim": "For every integer k >= 18 and every purported cell certificate, the worsening-tail family cannot pass the pointwise checker or its finite-gate composition.",
         "valid_bounded_PGSI1_family": [18, 31],
         "production_authority": False,

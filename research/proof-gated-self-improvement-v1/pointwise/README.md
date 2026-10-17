@@ -20,6 +20,9 @@ specification. This mathematical composition does not change runtime authority.
 It is a separate policy predicate: it does not replace the earlier offline
 nonvacuity requirement. A policy retaining that requirement must additionally
 retain its original previously-correct witness check.
+`experiments/PreservedGuard.lean` supplies this conjunction and proves that all
+the prior `GuardMeaning` guarantees survive, with two successful concrete update
+controls. It is replayed by the family experiment below.
 
 ## Replay
 
@@ -109,3 +112,17 @@ python pointwise/experiments/quadratic_oracle.py \
   --output /absolute/fresh/quadratic-directory \
   --decisions /absolute/campaign-directory/DECISIONS.json
 ```
+
+`experiments/preserved_campaign.py` checks every surviving nonvacuous prior-guard
+composition in the kernel, retaining the original finite gate, universal
+preservation, incumbent witness and bounded-window conditions:
+
+```sh
+python pointwise/experiments/preserved_campaign.py \
+  --output /absolute/fresh/preserved-directory \
+  --decisions /absolute/campaign-directory/DECISIONS.json
+```
+
+The post-hoc scripts record their own source hashes separately from the frozen
+41-file core campaign profile. Retained proof archives are data for explicit
+review and replay; evidence inspection never automatically executes them.
