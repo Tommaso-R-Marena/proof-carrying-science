@@ -25,8 +25,19 @@ def main(argv: list[str] | None = None) -> int:
     p_audit.add_argument("--report", type=Path, default=None)
     p_audit.add_argument("--output", type=Path, default=None)
 
+    p_matrix = sub.add_parser(
+        "interpreter-matrix",
+        help="Probe archive SHA-256 under each available Python; record absences",
+    )
+    p_matrix.add_argument("--output", type=Path, default=None)
+
     p_all = sub.add_parser("run-all", help="Materialize fixtures, reconstruct, atlas, audit")
     p_all.add_argument("--output-dir", type=Path, default=None)
+    p_all.add_argument(
+        "--with-interpreter-matrix",
+        action="store_true",
+        help="Also run cross-Python archive hash matrix (records ABSENT interpreters)",
+    )
 
     args = parser.parse_args(argv)
 
@@ -67,6 +78,12 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(audit_report(args.report, output=args.output), indent=2, sort_keys=True))
         return 0
 
+    if args.cmd == "interpreter-matrix":
+        from .interpreter_matrix import run_interpreter_matrix
+
+        print(json.dumps(run_interpreter_matrix(output=args.output), indent=2, sort_keys=True))
+        return 0
+
     if args.cmd == "run-all":
         from .reconstruction import materialize_fixtures, run_full_campaign
         from .tcb_atlas import write_atlas
@@ -85,23 +102,29 @@ def main(argv: list[str] | None = None) -> int:
             files["claims/sample_claims_report.md"] = sha256_file(claims)
         manifest = {"format": "pcs-independent-eval-fixture-hashes-v1", "files": files}
         HASH_MANIFEST.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        summary = {
+        summary: dict = {
             "reconstruction": run_full_campaign(out),
             "tcb_atlas": write_atlas(out / "tcb_atlas.json"),
             "traceability": audit_report(output=out / "traceability_audit.json"),
             "fixture_hashes": manifest,
         }
-        (out / "workstream_c_summary.json").write_text(
-            json.dumps(
-                {
-                    "reconstruction_pass": summary["reconstruction"]["pass"],
-                    "atlas_nodes": len(summary["tcb_atlas"]["graph"]["nodes"]),
-                    "traceability_counts": summary["traceability"]["counts"],
-                },
-                indent=2,
-                sort_keys=True,
+        if args.with_interpreter_matrix:
+            from .interpreter_matrix import run_interpreter_matrix
+
+            summary["interpreter_matrix"] = run_interpreter_matrix(
+                output=out / "interpreter_matrix.json"
             )
-            + "\n",
+        rollup = {
+            "reconstruction_pass": summary["reconstruction"]["pass"],
+            "atlas_nodes": len(summary["tcb_atlas"]["graph"]["nodes"]),
+            "traceability_counts": summary["traceability"]["counts"],
+        }
+        if "interpreter_matrix" in summary:
+            rollup["interpreter_matrix_pass"] = summary["interpreter_matrix"]["pass"]
+            rollup["interpreter_matrix_ok"] = summary["interpreter_matrix"]["interpreters_ok"]
+            rollup["interpreter_matrix_absences"] = len(summary["interpreter_matrix"]["absences"])
+        (out / "workstream_c_summary.json").write_text(
+            json.dumps(rollup, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
         print(json.dumps(summary["reconstruction"], indent=2, sort_keys=True))
