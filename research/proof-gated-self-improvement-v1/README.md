@@ -109,3 +109,64 @@ objective can remain incomplete even when verification is mathematically correct
 **CI workflow:** `.github/workflows/pcs-proof-gated-research.yml`. Keep this PR draft and
 this module research-only until trusted deployment boundaries and independent verification
 are addressed.
+
+## Research prototype v2: content-addressed CAS promotion
+
+The **new** `promotion_v2.py` is a POSIX-only transactional wrapper around the unchanged
+Lean artifact authority. It is deliberately separate from the production PCS gate.
+
+- `ResearchPromotionStore.initialize(...)` exclusively creates a new controlled root,
+  with a canonical genesis record, a content-addressed initial blob, and a HEAD pointer.
+- `promote(candidate_bytes, expected_head)` locks the root, checks the *entire* receipt
+  chain and active blob, and enforces a generation-and-hash compare-and-swap.
+- Candidate **bytes** are snapshotted into a SHA-256-addressed `.pgsi` blob; the Lean
+  authority reads the actual immutable-by-convention files. It must return exactly
+  `ACCEPT\n` on stdout, exit 0, and print nothing to stderr.
+- The store rereads exact blob content after checking to reject detected substitutions.
+  A sequential, hash-chained receipt is fsynced before HEAD is atomically replaced.
+  The committed HEAD is reread, and `audit()` verifies the receipt chain and blob hashes.
+- The gate rejects missing Lean, regressive updates, stale versions, policy mismatch,
+  simple rollbacks, malformed files, symlink/hardlink inputs and corrupted receipts.
+  A partial failure leaves an **orphan receipt**, which is *detected and fails closed*
+  until an administrator investigates; no recovery is implicitly claimed.
+- Tests use a clearly labeled **fake oracle** for fault injection and filesystem
+  transaction behavior, plus a **real Lean-backed CI demonstration** of two
+  content-addressed commits and stale/regressive rejection.
+
+```bash
+cd research/proof-gated-self-improvement-v1
+python -m unittest discover -s tests -v
+# The workflow separately invokes the real Lean authority and exercises live CAS.
+```
+
+### Pure CAS proof
+
+`formal/PCS/V2/ProofGatedPromotion.lean` defines a mathematical state containing
+the **exact artifact text** and generation, with a proposal carrying an expected
+generation and incumbent. Lean proves that `tryCommit` can succeed **only if** the
+expected generation and active artifact agree, generation advances by one,
+the new text is the submitted proposal, and `acceptWire` certifies a genuine
+model improvement. It proves stale/substituted proposals cannot commit and a
+gated attempt cannot decrease generation. This **does not prove** that the
+Python filesystem implementation refines the pure Lean state transition.
+The hash-to-text correspondence relies on collision resistance, byte fidelity,
+and an honest trusted execution environment.
+
+### Threat-model boundaries and remaining work
+
+The wrapper is **not** an immutable trusted execution root, a signed verifier, or
+a system-level sandbox. A user able to modify the verification source, verifier
+binary, policy, filesystem, HEAD, receipts, or promoted inference runtime could
+still produce a fake success or forge a full history. Advisory locks govern
+**cooperating** writers only. The two-file read/verify/commit path has no general
+proof of freedom from malicious TOCTOU races. Digest checks detect corruption but
+do not prevent same-privilege tampering, malicious kernel/OS behavior, or rollback
+with a fully rewritten receipt chain.
+
+A deployable authority therefore requires separate OS credentials/containers with
+unforgeable file access controls; pinned signed authority binaries; immutable
+policy/configuration outside the model's write authority; a loader that verifies
+and then executes the *same sealed bytes*; external monotonic checkpoint anchoring
+and append-only audit (ideally independent infrastructure); cross-process crash
+recovery protocols; and independent adversarial audits. These are **not** present
+in this research PR. No production auto-update integration is enabled.
