@@ -127,7 +127,13 @@ class UniversalExactReLUTests(unittest.TestCase):
         self.assertTrue(check(old, new).accepted)
         a = single_neuron(old.relu, old.weight, old.bias)
         b = single_neuron(new.relu, new.weight, new.bias)
-        self.assertTrue(universal_correctness_preserved(a, b, TARGET).passes)
+        # New stronger result: the same accepted update actually destroys
+        # a previously correct prediction at x=4 outside the 7-point corpus.
+        result = universal_correctness_preserved(a, b, TARGET)
+        self.assertFalse(result.passes)
+        self.assertEqual(result.counterexample, 4)
+        self.assertEqual(a.predict(4), target(4))
+        self.assertNotEqual(b.predict(4), target(4))
         self.assertGreater(abs(b.predict(20)-target(20)),
                            abs(a.predict(20)-target(20)))
 
