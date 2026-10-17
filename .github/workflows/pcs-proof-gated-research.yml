@@ -4,6 +4,7 @@ on:
     paths:
       - 'formal/PCS/V2/ProofGatedSelfImprovement.lean'
       - 'formal/PCS/V2/ProofGatedSymbolic.lean'
+      - 'formal/PCS/V2/ProofGatedInference.lean'
       - 'research/proof-gated-self-improvement-v1/**'
       - '.github/workflows/pcs-proof-gated-research.yml'
   workflow_dispatch:
@@ -30,7 +31,7 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           cd formal
-          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference
           tmp="$(mktemp -d)"
           trap 'rm -rf "$tmp"' EXIT
           lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt"
@@ -117,5 +118,16 @@ jobs:
               assert head == second
               assert active == wire_bytes(Model(True, 2, 1))
               assert blob_hash(active) == second.active_sha256
-              print("PASS: two Lean-authorized content-addressed CAS promotions")
+              from sealed_inference import load_sealed
+              loaded = load_sealed(store, expected=second)
+              assert loaded.artifact == active
+              assert loaded.model == Model(True, 2, 1)
+              for x in range(-20, 21):
+                  assert loaded.predict(x) == max(0, 2*x + 1)
+              try:
+                  load_sealed(store, expected=first)
+                  raise AssertionError("old generation was served")
+              except StaleHead:
+                  pass
+              print("PASS: two Lean-authorized CAS promotions + exact-byte sealed inference")
           PY
