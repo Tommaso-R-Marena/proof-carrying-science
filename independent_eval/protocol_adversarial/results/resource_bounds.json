@@ -1,0 +1,81 @@
+{
+  "format": "pcs-independent-resource-bounds-v1",
+  "limits": {
+    "max_nesting_depth": 100,
+    "max_object_keys": 5000,
+    "max_zip_members": 200,
+    "note": "Bounded synthetic inputs only; no external DoS."
+  },
+  "measurement_count": 8,
+  "measurements": [
+    {
+      "error": null,
+      "id": "jcs_object_100",
+      "ok": true,
+      "output_bytes": 1191,
+      "rss_kb_delta": 0,
+      "seconds": 0.00027484699967317283
+    },
+    {
+      "error": null,
+      "id": "jcs_object_1000",
+      "ok": true,
+      "output_bytes": 12891,
+      "rss_kb_delta": 0,
+      "seconds": 0.002503761999832932
+    },
+    {
+      "error": null,
+      "id": "jcs_object_5000",
+      "ok": true,
+      "output_bytes": 68891,
+      "rss_kb_delta": 0,
+      "seconds": 0.012820041999475507
+    },
+    {
+      "error": null,
+      "id": "jcs_nested_array_depth_10",
+      "ok": true,
+      "output_bytes": 22,
+      "rss_kb_delta": 0,
+      "seconds": 9.81900029728422e-06
+    },
+    {
+      "error": null,
+      "id": "jcs_nested_array_depth_50",
+      "ok": true,
+      "output_bytes": 102,
+      "rss_kb_delta": 0,
+      "seconds": 2.5568999262759462e-05
+    },
+    {
+      "error": null,
+      "id": "jcs_nested_array_depth_100",
+      "ok": true,
+      "output_bytes": 202,
+      "rss_kb_delta": 0,
+      "seconds": 4.973399973096093e-05
+    },
+    {
+      "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+      "id": "zip_many_members_50",
+      "ok": false,
+      "output_bytes": 5622,
+      "rss_kb_delta": 0,
+      "seconds": 0.001451884999369213
+    },
+    {
+      "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+      "id": "zip_many_members_200",
+      "ok": false,
+      "output_bytes": 22422,
+      "rss_kb_delta": 0,
+      "seconds": 0.004897712000456522
+    }
+  ],
+  "risks": [
+    "Large object key sorts are O(n log n) in key count.",
+    "Deep nesting increases recursion/stack pressure in some parsers.",
+    "Many ZIP members increase inventory work before authority checks."
+  ]
+}
