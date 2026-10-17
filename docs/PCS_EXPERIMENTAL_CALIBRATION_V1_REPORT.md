@@ -55,6 +55,17 @@ Immutable source-qualified evidence: [`local-qualification-42f53a6`](../research
 
 ## Adoption boundary
 
+The first protected candidate `32a752c` passed all 1,909 local Python tests with
+no skips, but its monolithic numerical capsule exceeded the hosted runner's
+2,048 MiB Lean interpreter cap. The static 31-name audit passed; the new CI
+real-data campaign had not yet run. The [portability repair](../research/experimental-calibration-v1/numeric-portability-v1/README.md)
+retains the identical numeric definitions and nine primary theorem types,
+checks 44 supporting row lemmas in separate fresh processes, and preserves both
+the 2,048 MiB per-process cap and 180-second total budget. Eight source/data/
+metadata substitution controls reject before launching Lean. The failed job,
+original capsule and earlier source-qualified results remain unchanged. Later
+final-head qualification is recorded separately on the integration PR.
+
 This is an experimental exact-rational regression and optimal-recovery fragment. CSV/source translation, native arithmetic execution correspondence, unknown predictor errors, actual measurement precision, physical model adequacy, generalization and external domain review remain OPEN. The receipts grant mathematical support for the declared finite arrays. `scientific_acceptance` and `pcs_authority` remain false. No learned model was promoted and no external proof-development trace was used for training.
 
 Data: Gerritsma, J., Onnink, R., & Versluis, A. (1981), [Yacht Hydrodynamics](https://doi.org/10.24432/C5XG7R), UCI Machine Learning Repository, [CC BY 4.0](https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics). Original bytes, full license, citation, retained upstream metadata and exact source hashes accompany the evidence. No new physical measurements, independent outside review, causal finding or population confidence statement is claimed.

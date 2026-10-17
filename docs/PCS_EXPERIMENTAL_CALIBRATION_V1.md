@@ -115,7 +115,17 @@ axiom audit before the receiver reports `CERTIFICATE_FALSIFIED`. Ordinary compil
 errors alone retain an unsupported status. This refutes the submitted numerical
 certificate, not the physical experiment or the whole polynomial model class.
 
-Each request has a total kernel budget of at most 300 seconds (default 180),
+The aggregate numerical comparisons use a separate portable proof package:
+22 row modules supply 44 supporting calculation lemmas, and a final module
+assembles the same nine primary theorem types. Data definitions and primary
+statements are compared byte-for-byte with the retained original capsule.
+Fresh compilation audits all 53 primary/supporting identities within a 180-second
+total kernel budget and the same 2,048 MiB cap per process. Supporting lemmas
+are proof-engineering certificates rather than additional experimental findings.
+The original capsule and its first hosted-run memory failure are retained in
+the [portability record](../research/experimental-calibration-v1/numeric-portability-v1/README.md).
+
+Each receiving request has a total kernel budget of at most 300 seconds (default 180),
 sequential elaboration and a 2,048 MiB memory limit per Lean process. Input limits
 are 2 MiB per raw artifact, 2–64 rows, 1–6 declared models, polynomial degrees
 1–3, and at most eight queries per model. Not every maximum-size request is
