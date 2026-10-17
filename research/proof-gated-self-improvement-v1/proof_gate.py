@@ -104,6 +104,38 @@ def check_with_lean(old: Model, candidate: Model, formal_dir: Path) -> bool:
         return False
     return result.returncode == 0 and result.stdout.strip() == "ACCEPT"
 
+
+def automatic_search(start: Model | None = None, *, max_steps: int = 8,
+                     formal_dir: Path | None = None) -> dict:
+    """Enumerate proposed weight and activation mutations.
+
+    Python is only a search prefilter. When formal_dir is provided, the Lean
+    process authorizes each individual proposed transition; failure stops
+    the simulated update chain. This never deploys model artifacts.
+    """
+    incumbent = start or Model(True, 0, 0)
+    trace = []
+    for generation in range(max_steps):
+        candidates = [Model(k, w, b) for k in (True, False)
+                      for w in range(-3, 4) for b in range(-3, 4)]
+        candidates.sort(key=lambda m: (
+            abs(m.weight - incumbent.weight) + abs(m.bias - incumbent.bias)
+            + (m.relu != incumbent.relu),
+            m.relu != incumbent.relu,
+            abs(m.weight) + abs(m.bias), m.weight, m.bias))
+        selected = next(((candidate, d) for candidate in candidates
+                         if (d := check(incumbent, candidate)).accepted), None)
+        if selected is None:
+            break
+        candidate, decision = selected
+        if formal_dir is not None and not check_with_lean(incumbent, candidate, formal_dir):
+            raise RuntimeError("FAIL CLOSED: Lean rejected or was unavailable")
+        trace.append({"generation": generation + 1, "old": asdict(incumbent),
+                      "candidate": asdict(candidate), "verdict": asdict(decision)})
+        incumbent = candidate
+    return {"reference_only": formal_dir is None, "generation_count": len(trace),
+            "final": asdict(incumbent), "trace": trace}
+
 def demonstration() -> dict:
     incumbent = Model(True, 0, 0)
     start = incumbent
