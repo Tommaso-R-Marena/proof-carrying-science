@@ -147,13 +147,21 @@ class ProofGatedTests(unittest.TestCase):
             b.write_bytes(wire_bytes(self.b))
             self.assertFalse(artifact_gate(a, b, Path("/missing-pgsi-lean")))
 
-    def test_frozen_benchmark_can_hide_generalization_regression(self):
-        # Accepted benchmark steps do NOT imply out-of-domain improvement.
-        hidden = (-20, -10, 10, 20)
-        def hidden_loss(m):
-            return sum(abs(m.predict(x)) for x in hidden)
-        self.assertTrue(check(self.a, self.b).accepted)
-        self.assertGreater(hidden_loss(self.b), hidden_loss(self.a))
+    def test_same_target_ood_regression_witness(self):
+        from ood_falsification import holdout_loss
+        old = Model(True, 3, -3)
+        candidate = Model(True, 3, -1)
+        self.assertTrue(check(old, candidate).accepted)
+        self.assertEqual((loss(old), loss(candidate)), (7, 3))
+        self.assertEqual((holdout_loss(old), holdout_loss(candidate)), (136, 170))
+
+    def test_full_same_target_ood_falsification_counts(self):
+        from ood_falsification import run
+        report = run()
+        self.assertEqual(report["model_count"], 128)
+        self.assertEqual(report["transitions"], 16384)
+        self.assertEqual(report["accepted"], 4081)
+        self.assertEqual(report["accepted_with_heldout_regression"], 283)
 
 
 if __name__ == "__main__":
