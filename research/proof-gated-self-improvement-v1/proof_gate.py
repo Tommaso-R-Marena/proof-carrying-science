@@ -111,7 +111,7 @@ def artifact_gate(old_path: Path, candidate_path: Path, formal_dir: Path) -> boo
             cwd=formal_dir, capture_output=True, text=True, timeout=120, check=False)
     except (OSError, subprocess.TimeoutExpired, ValueError):
         return False
-    return (result.returncode == 0 and result.stdout == "ACCEPT\\n"
+    return (result.returncode == 0 and result.stdout == "ACCEPT\n"
             and result.stderr == "")
 
 def check_with_lean(old: Model, candidate: Model, formal_dir: Path) -> bool:
