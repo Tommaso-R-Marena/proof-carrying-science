@@ -1,8 +1,9 @@
 import PCS.V2.ProofGatedStrongArtifacts
 
 /-!
-Research-only executable Lean oracle for actual PGSI2-WIDE predictions
-and V5 strong-gate decisions. Not a new proof or trusted OS runtime.
+Research-only executable Lean oracle for the V5 PGSI2-WIDE decoder,
+exact interpreter, and strong gate. This does not add proofs or
+model operating-system security.
 -/
 
 open PCS.V2.ProofGatedWide (Arch predict)
@@ -17,19 +18,19 @@ def parseInts (s : String) : Option (List Int) :=
 
 def reject (reason : String) : IO UInt32 := do
   IO.println s!"REJECT:{reason}"
-  return 1
+  return (1 : UInt32)
 
 def inferenceImpl (artifactPath : String) (width maxMagnitude : Nat)
     (inputs : List Int) : IO UInt32 := do
-  try
-    let raw ← IO.FS.readFile ⟨artifactPath⟩
-    match decode ⟨width, maxMagnitude⟩ raw with
-    | none => reject "invalid_artifact"
-    | some net =>
+  let raw ← IO.FS.readFile ⟨artifactPath⟩
+  match decode ⟨width, maxMagnitude⟩ raw with
+  | none =>
+      IO.println "REJECT:invalid_artifact"
+      return (1 : UInt32)
+  | some net =>
       let outputs := inputs.map fun x => toString (predict net x)
       IO.println ("PREDICT:" ++ String.intercalate "," outputs)
-      return 0
-  catch _ => reject "read_failure"
+      return (0 : UInt32)
 
 def inference (artifactPath maxWidth bound xs : String) : IO UInt32 :=
   match maxWidth.toNat?, bound.toNat?, parseInts xs with
@@ -38,21 +39,22 @@ def inference (artifactPath maxWidth bound xs : String) : IO UInt32 :=
 
 def strongImpl (oldPath candidatePath targetPath : String)
     (width maxMagnitude : Nat) (lo hi : Int) (corpus : List Int) : IO UInt32 := do
-  try
-    let oldRaw ← IO.FS.readFile ⟨oldPath⟩
-    let newRaw ← IO.FS.readFile ⟨candidatePath⟩
-    let targetRaw ← IO.FS.readFile ⟨targetPath⟩
-    let arch : Arch := ⟨width, maxMagnitude⟩
-    match decode arch targetRaw with
-    | none => reject "invalid_target"
-    | some target =>
+  let oldRaw ← IO.FS.readFile ⟨oldPath⟩
+  let newRaw ← IO.FS.readFile ⟨candidatePath⟩
+  let targetRaw ← IO.FS.readFile ⟨targetPath⟩
+  let arch : Arch := ⟨width, maxMagnitude⟩
+  match decode arch targetRaw with
+  | none =>
+      IO.println "REJECT:invalid_target"
+      return (1 : UInt32)
+  | some target =>
       let spec : StrongSpec := ⟨arch, target, corpus, lo, hi⟩
       if acceptStrongWire spec oldRaw newRaw then
         IO.println "ACCEPT_STRONG"
-        return 0
+        return (0 : UInt32)
       else
-        reject "strong_gate_negative"
-  catch _ => reject "read_failure"
+        IO.println "REJECT:strong_gate_negative"
+        return (1 : UInt32)
 
 def strongGate (oldPath candidatePath targetPath maxWidth bound lo hi corpus : String) :
     IO UInt32 :=
