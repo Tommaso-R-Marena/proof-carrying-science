@@ -733,25 +733,27 @@ def run_independent_pilot_v1(
             expected_fingerprint=fingerprint,
             overwrite=True,
             generated_at=GENERATED_AT,
+            intake_lock=lock_path,
             lean_authority_path=lean_authority_path or authority.get("path"),
         )
     except (V06AttestationError, V06LeanAuthorityError) as exc:
         raise IndependentPilotError(f"attestation failed: {exc}") from exc
 
-    # Bind intake lock to the produced certificate bytes.
+    if attestation.get("pilot_intake_lock_bound") is not True:
+        raise IndependentPilotError(
+            "attestation succeeded without binding the frozen pilot intake lock"
+        )
+
     package_tmp = producer / "delivery" / "unpacked-check"
     if package_tmp.exists():
         shutil.rmtree(package_tmp)
     with zipfile.ZipFile(bundle, "r") as zf:
         zf.extractall(package_tmp)
-    certificate = strict_json_load(package_tmp / "certificate.json")
-    try:
-        assert_lock_matches_certificate(intake_lock, certificate)
-    except PilotIntakeError as exc:
+    if not (package_tmp / "pilot-intake-lock.json").is_file():
         raise IndependentPilotError(
-            f"frozen intake does not match attested certificate: {exc}"
-        ) from exc
-    shutil.copyfile(lock_path, package_tmp / "pilot-intake-lock.json")
+            "signed package is missing bound pilot-intake-lock.json"
+        )
+    certificate = strict_json_load(package_tmp / "certificate.json")
     limitations_path = write_limitations(certificate, producer / "delivery" / "LIMITATIONS.md")
 
     # B. Second-environment verification (fresh directory, no producer workspace).

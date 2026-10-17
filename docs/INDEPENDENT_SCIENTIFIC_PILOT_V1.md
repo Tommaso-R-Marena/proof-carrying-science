@@ -12,7 +12,7 @@ Under pinned signer fingerprint and Lean-authoritative v0.6 verification, the pi
 1. Pre-result intake freeze (`pcs-pilot-intake-v1` → intake lock).
 2. Local artifact discovery and explicit confirmation (draft cannot be attested).
 3. Alignment of confirmed claim/assumption IDs to the frozen intake.
-4. Signed evidence packaging with computational replay of restricted one-compartment IV-bolus PK + direct-Emax PD.
+4. Signed evidence packaging via `pcs attest-v06 --intake-lock …` (lock bound into the ZIP as `pilot-intake-lock.json`) with computational replay of restricted one-compartment IV-bolus PK + direct-Emax PD.
 5. Second-environment verification of the exact delivery ZIP (canonical archive + Lean authority ACCEPT).
 6. Reviewer receipt + human-readable report separating computational results from scientific validity.
 7. Fail-closed adversarial mutations (artifact change, false certificate, signature substitution, path traversal, absolute members, stale receipt binding, post-hoc claim mutation, source modification detection).

@@ -438,6 +438,7 @@ def cmd_attest_v06(args):
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             overwrite=args.force,
+            intake_lock=args.intake_lock,
             lean_authority_path=args.lean_authority,
             sbom_path=args.sbom,
             build_provenance_path=args.build_provenance,
@@ -1495,6 +1496,81 @@ def cmd_cleanroom_independent_pilot_v1(args):
     return 0 if summary.get("pass") else 1
 
 
+def cmd_closeout_plan(args):
+    from .pilot_closeout import (
+        PilotCloseoutError,
+        build_closeout_plan,
+        write_closeout_plan,
+    )
+
+    try:
+        plan = build_closeout_plan(
+            args.workspace,
+            pilot_id=args.pilot_id,
+            retain_paths=args.retain or [],
+            delete_paths=args.delete or [],
+        )
+        written = write_closeout_plan(args.output, plan, overwrite=args.force)
+    except (OSError, PilotCloseoutError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {
+                "plan": str(written),
+                "pilot_id": plan["pilot_id"],
+                "plan_sha256": plan["plan_sha256"],
+                "retain_count": sum(
+                    entry["action"] == "RETAIN" for entry in plan["entries"]
+                ),
+                "delete_count": sum(
+                    entry["action"] == "DELETE" for entry in plan["entries"]
+                ),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def cmd_closeout_apply(args):
+    from .pilot_closeout import (
+        PilotCloseoutError,
+        apply_closeout_plan,
+        load_closeout_plan,
+        write_closeout_receipt,
+    )
+
+    try:
+        plan = load_closeout_plan(args.plan)
+        receipt = apply_closeout_plan(
+            args.workspace,
+            plan,
+            confirm_plan_sha256=args.confirm_plan_sha256,
+            applied_at=args.applied_at,
+        )
+        written = write_closeout_receipt(
+            args.receipt, receipt, overwrite=args.force
+        )
+    except (OSError, PilotCloseoutError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {
+                "receipt": str(written),
+                "pilot_id": receipt["pilot_id"],
+                "receipt_sha256": receipt["receipt_sha256"],
+                "plan_sha256": receipt["plan_sha256"],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def cmd_snapshot_env(args):
     try:
         result = write_environment(args.output)
@@ -2285,6 +2361,14 @@ def build_parser():
         ),
     )
     a6.add_argument(
+        "--intake-lock",
+        help=(
+            "frozen pcs-pilot-intake-lock-v1; claim/assumption IDs and statements "
+            "must exactly match the attested certificate, and the lock is bound "
+            "into the signed package as pilot-intake-lock.json"
+        ),
+    )
+    a6.add_argument(
         "--force",
         action="store_true",
         help="explicitly replace an existing output ZIP after the replacement self-verifies",
@@ -2430,6 +2514,30 @@ def build_parser():
     crp.add_argument("--python", default=None, help="Python executable used to create the venv")
     crp.add_argument("--overwrite", action="store_true")
     crp.set_defaults(func=cmd_cleanroom_independent_pilot_v1)
+
+    cp = sub.add_parser(
+        "closeout-plan",
+        help="build a hash-bound pilot retention/deletion closeout plan",
+    )
+    cp.add_argument("--workspace", required=True, help="pilot workspace directory")
+    cp.add_argument("--pilot-id", required=True)
+    cp.add_argument("--retain", action="append", default=[], help="relative path to RETAIN")
+    cp.add_argument("--delete", action="append", default=[], help="relative path to DELETE")
+    cp.add_argument("-o", "--output", required=True, help="closeout plan JSON")
+    cp.add_argument("--force", action="store_true", help="replace an existing plan")
+    cp.set_defaults(func=cmd_closeout_plan)
+
+    ca = sub.add_parser(
+        "closeout-apply",
+        help="apply a previously confirmed hash-bound pilot closeout plan",
+    )
+    ca.add_argument("--workspace", required=True)
+    ca.add_argument("--plan", required=True)
+    ca.add_argument("--confirm-plan-sha256", required=True)
+    ca.add_argument("-o", "--receipt", required=True, help="closeout receipt JSON")
+    ca.add_argument("--applied-at", help="optional ISO-8601 timestamp override")
+    ca.add_argument("--force", action="store_true", help="replace an existing receipt")
+    ca.set_defaults(func=cmd_closeout_apply)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
     se.add_argument("-o", "--output", required=True)

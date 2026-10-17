@@ -78,6 +78,17 @@ See `TRUST_BOUNDARY_ASSESSMENT.json` and `docs/TRUST_BOUNDARY_ASSESSMENT_INDEPEN
 3. `build_closeout_plan(..., notes=...)` rejected — API has no `notes` parameter; removed.
 4. Stale `__pycache__` briefly masked the closeout fix until cache cleared.
 
+## Follow-up from gap audit
+
+After the initial pilot PR, an architecture gap review identified remaining joins between legacy intake and v0.6. This branch now also includes:
+
+- native `pcs attest-v06 --intake-lock` binding (`pilot-intake-lock.json` inside the signed package);
+- `tests/test_attest_v06_intake_lock.py` and `tests/test_python_lean_archive_boundary_v06.py` (Lean-decoded canonical ZIP + DEFLATE reject);
+- `pcs closeout-plan` / `pcs closeout-apply` CLI wrappers;
+- dated v0.6 TCB section in `docs/SECURITY_AND_TRUST.md`.
+
+Focused suite: `11 passed` (`test_independent_pilot_v1` + intake-lock + archive-boundary).
+
 ## Explicit non-closure
 
 - Issue **#13** remains open: this is a synthetic stand-in, not a genuine external partner workflow.
