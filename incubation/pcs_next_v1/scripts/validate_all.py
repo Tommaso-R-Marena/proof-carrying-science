@@ -46,21 +46,14 @@ def main() -> int:
     env = {**os.environ, "PYTHONPATH": str(ROOT) + os.pathsep + str(REPO), "PATH": os.environ.get("PATH", "") + os.pathsep + str(Path.home() / ".local/bin")}
 
     steps = [
-        (["python3", "scripts/check_noninterference.py", "--repo", str(REPO)], REPO),
-        (["python3", "scripts/check_repository_integrity.py"], REPO),
-        (["python3", "-m", "pytest", "-q", "incubation/pcs_next_v1/tests"], REPO),
-        (["python3", "scripts/run_synthetic_pilot.py"], ROOT),
-        (["python3", "scripts/run_benchmarks.py"], ROOT),
+        (["python3", str(ROOT / "scripts/check_noninterference.py"), "--repo", str(REPO)], REPO),
+        (["python3", str(REPO / "scripts/check_repository_integrity.py")], REPO),
+        (["python3", "-m", "pytest", "-q", str(ROOT / "tests")], ROOT),
+        (["python3", str(ROOT / "scripts/run_synthetic_pilot.py")], ROOT),
+        (["python3", str(ROOT / "scripts/run_benchmarks.py")], ROOT),
     ]
     overall = 0
     for cmd, cwd in steps:
-        # integrity script path
-        if cmd[-1].endswith("check_repository_integrity.py"):
-            cmd = ["python3", str(REPO / "scripts/check_repository_integrity.py")]
-            cwd = REPO
-        if cmd[:3] == ["python3", "-m", "pytest"]:
-            cmd = ["python3", "-m", "pytest", "-q", str(ROOT / "tests")]
-            cwd = ROOT
         r = run(cmd, cwd=cwd, env=env)
         report["steps"].append(r)
         if r["returncode"] != 0:

@@ -1,0 +1,79 @@
+{
+  "commit": "9f02be6ff17ea2d1e4a46ee193a261bbcb887c9b",
+  "format": "pcs-next-validate-all-v1",
+  "owned": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+  "repo": "/home/ubuntu/worktrees/pcs-next-integrated-assurance",
+  "steps": [
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/check_noninterference.py",
+        "--repo",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance",
+      "returncode": 0,
+      "seconds": 0.04633450199997924,
+      "stderr_tail": "",
+      "stdout_tail": "s_next_v1/pcs_next_v1/trust/__init__.py\n  [OWNED] incubation/pcs_next_v1/pcs_next_v1/trust/crypto.py\n  [OWNED] incubation/pcs_next_v1/pcs_next_v1/trust/evidence_store.py\n  [OWNED] incubation/pcs_next_v1/pcs_next_v1/trust/modes.py\n  [OWNED] incubation/pcs_next_v1/pcs_next_v1/trust/policy.py\n  [OWNED] incubation/pcs_next_v1/pcs_next_v1/trust/tcb.py\n  [OWNED] incubation/pcs_next_v1/proposals/ci_integration.patch.md\n  [OWNED] incubation/pcs_next_v1/proposals/website_integration.md\n  [OWNED] incubation/pcs_next_v1/pyproject.toml\n  [OWNED] incubation/pcs_next_v1/reports/LEAN_BUILD.txt\n  [OWNED] incubation/pcs_next_v1/results/benchmark_report.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/assurance_report.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/card/assurance_card.html\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/card/assurance_card.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_bundle.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/evt-00000000-4046f0f16e9766ed.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/evt-00000001-d56e3f9e1ac742b6.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/evt-00000002-39e866c688c06f15.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/evt-00000003-222d19b2fae655fb.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/evt-00000004-7f8f0bc3664ef299.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/evt-00000005-89e83a881bd5a51e.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/meta.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/independent_receipt.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/intake.lock.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/acceptance_policy.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/evidence_bundle.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/intake.lock.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/reviewer_receipt.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/pilot_state.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/summary.json\n  [OWNED] incubation/pcs_next_v1/results/validate_all.json\n  [OWNED] incubation/pcs_next_v1/scripts/check_noninterference.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_benchmarks.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_synthetic_pilot.py\n  [OWNED] incubation/pcs_next_v1/scripts/validate_all.py\n  [OWNED] incubation/pcs_next_v1/tests/adversarial/test_adversarial_packages.py\n  [OWNED] incubation/pcs_next_v1/tests/conftest.py\n  [OWNED] incubation/pcs_next_v1/tests/integration/test_synthetic_pilot.py\n  [OWNED] incubation/pcs_next_v1/tests/property/test_canonical_property.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_calibration.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_canonical.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_chemistry.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_claim_ir.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_crypto.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_evidence_store.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_falsification.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_intake_freeze.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pkpd.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pog.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_policy.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_python_static.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_research_models.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_state_machine.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_statuses.py\nPASS: all changed paths within incubation/pcs_next_v1/\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/scripts/check_repository_integrity.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance",
+      "returncode": 0,
+      "seconds": 0.03025021499996683,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"errors\": [],\n  \"format\": \"pcs-repository-integrity-v1\",\n  \"pass\": true,\n  \"required_direct_executables\": [\n    \"scripts/verify_lean.sh\",\n    \"scripts/verify_lean_real.sh\"\n  ],\n  \"tracked_paths\": 4457,\n  \"tracked_shell_files\": [\n    \"formal/tools/check_semantic_v3_audit.sh\",\n    \"formal/tools/run_fixture_tests.sh\",\n    \"formal/tools/run_semantic_fixture_tests.sh\",\n    \"formal/tools/run_semantic_v2_end_to_end.sh\",\n    \"formal/tools/run_semantic_v2_fixture_tests.sh\",\n    \"formal/tools/run_semantic_v3_fixture_tests.sh\",\n    \"scripts/activate_lean_428.sh\",\n    \"scripts/ci_selfhosted_zero_hosted_minutes.sh\",\n    \"scripts/core_ci_cloudflare.sh\",\n    \"scripts/scan_before_public.sh\",\n    \"scripts/verify_lean.sh\",\n    \"scripts/verify_lean_real.sh\"\n  ],\n  \"warnings\": []\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/tests"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.5770723679999605,
+      "stderr_tail": "",
+      "stdout_tail": "..............................                                           [100%]\n30 passed in 0.43s\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_synthetic_pilot.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.20588267499999802,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"report_status_independent\": \"INDEPENDENTLY_REPRODUCED\",\n  \"receipt_status\": \"INDEPENDENTLY_REPRODUCED\",\n  \"external_lab\": \"OPEN\",\n  \"card\": \"/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/results/synthetic_pilot_run/card/assurance_card.html\"\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_benchmarks.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.07324197299999469,
+      "stderr_tail": "",
+      "stdout_tail": "{'n': 6, 'correct': 6, 'false_acceptances': 0, 'false_rejections': 0, 'latency_s': 0.0003867399999535337}\n"
+    },
+    {
+      "cmd": [
+        "lake",
+        "build"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/formal",
+      "returncode": 0,
+      "seconds": 0.1413903960000198,
+      "stderr_tail": "",
+      "stdout_tail": "Build completed successfully (6 jobs).\n"
+    }
+  ]
+}
