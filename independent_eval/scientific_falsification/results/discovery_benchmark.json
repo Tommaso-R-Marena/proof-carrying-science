@@ -1,0 +1,133 @@
+{
+  "abstention_accuracy": 1.0,
+  "cli_success_count": 4,
+  "detector": "pcs discover-v06",
+  "format": "pcs-independent-eval-discovery-benchmark-v1",
+  "macro_precision": 1.0,
+  "macro_recall": 1.0,
+  "project_count": 4,
+  "projects": [
+    {
+      "abstain_expected": true,
+      "abstention_correct": true,
+      "argv": [
+        "/home/ubuntu/.local/bin/pcs",
+        "discover-v06",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/discovery_benchmark/projects/ambiguous_notes",
+        "-o",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/ambiguous_notes/pcs-manifest.draft.json",
+        "--report",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/ambiguous_notes/pcs-discovery.json",
+        "--minimum-confidence",
+        "0.95",
+        "--force"
+      ],
+      "cli_ok": true,
+      "did_abstain": true,
+      "expected_check_types": [],
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "predicted_check_types": [],
+      "project": "ambiguous_notes",
+      "recall": 1.0,
+      "stderr_tail": "",
+      "stdout_tail": " [\n    {\n      \"message\": \"PCS did not detect any currently supported v0.6 scientific checks. Add claims/checks manually or install a future domain pack.\",\n      \"type\": \"no-supported-checks-detected\"\n    },\n    {\n      \"message\": \"Some discovered files are not referenced by an auto-selected PCS check.\",\n      \"paths\": [\n        \"notes.json\",\n        \"pcs-discovery-review.md\",\n        \"pcs-environment-plan.json\"\n      ],\n      \"truncated\": false,\n      \"type\": \"unselected-artifacts\"\n    }\n  ]\n}\n",
+      "tp": 0
+    },
+    {
+      "abstain_expected": true,
+      "abstention_correct": true,
+      "argv": [
+        "/home/ubuntu/.local/bin/pcs",
+        "discover-v06",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/discovery_benchmark/projects/pk_without_pd",
+        "-o",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/pk_without_pd/pcs-manifest.draft.json",
+        "--report",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/pk_without_pd/pcs-discovery.json",
+        "--minimum-confidence",
+        "0.95",
+        "--force"
+      ],
+      "cli_ok": true,
+      "did_abstain": true,
+      "expected_check_types": [],
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "predicted_check_types": [],
+      "project": "pk_without_pd",
+      "recall": 1.0,
+      "stderr_tail": "",
+      "stdout_tail": " [\n    {\n      \"message\": \"PCS did not detect any currently supported v0.6 scientific checks. Add claims/checks manually or install a future domain pack.\",\n      \"type\": \"no-supported-checks-detected\"\n    },\n    {\n      \"message\": \"Some discovered files are not referenced by an auto-selected PCS check.\",\n      \"paths\": [\n        \"model.json\",\n        \"pcs-discovery-review.md\",\n        \"pcs-environment-plan.json\"\n      ],\n      \"truncated\": false,\n      \"type\": \"unselected-artifacts\"\n    }\n  ]\n}\n",
+      "tp": 0
+    },
+    {
+      "abstain_expected": false,
+      "abstention_correct": true,
+      "argv": [
+        "/home/ubuntu/.local/bin/pcs",
+        "discover-v06",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/discovery_benchmark/projects/pkpd_detectable",
+        "-o",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/pkpd_detectable/pcs-manifest.draft.json",
+        "--report",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/pkpd_detectable/pcs-discovery.json",
+        "--minimum-confidence",
+        "0.95",
+        "--force"
+      ],
+      "cli_ok": true,
+      "did_abstain": false,
+      "expected_check_types": [
+        "pkpd_contract",
+        "pkpd_reference_match"
+      ],
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "predicted_check_types": [
+        "pkpd_contract",
+        "pkpd_reference_match"
+      ],
+      "project": "pkpd_detectable",
+      "recall": 1.0,
+      "stderr_tail": "",
+      "stdout_tail": "ed\": 0,\n    \"recommendations\": 2,\n    \"selected_recommendations\": 2,\n    \"workflow_edges_inferred\": 0,\n    \"workflow_nodes_drafted\": 1,\n    \"workflow_sources_analyzed\": 0,\n    \"workflow_unresolved_items\": 0\n  },\n  \"unresolved\": [\n    {\n      \"message\": \"Some discovered files are not referenced by an auto-selected PCS check.\",\n      \"paths\": [\n        \"pcs-discovery-review.md\",\n        \"pcs-environment-plan.json\"\n      ],\n      \"truncated\": false,\n      \"type\": \"unselected-artifacts\"\n    }\n  ]\n}\n",
+      "tp": 2
+    },
+    {
+      "abstain_expected": false,
+      "abstention_correct": true,
+      "argv": [
+        "/home/ubuntu/.local/bin/pcs",
+        "discover-v06",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/discovery_benchmark/projects/reaction_detectable",
+        "-o",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/reaction_detectable/pcs-manifest.draft.json",
+        "--report",
+        "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/discovery/reaction_detectable/pcs-discovery.json",
+        "--minimum-confidence",
+        "0.95",
+        "--force"
+      ],
+      "cli_ok": true,
+      "did_abstain": false,
+      "expected_check_types": [
+        "reaction_balance"
+      ],
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "predicted_check_types": [
+        "reaction_balance"
+      ],
+      "project": "reaction_detectable",
+      "recall": 1.0,
+      "stderr_tail": "",
+      "stdout_tail": "ed\": 0,\n    \"recommendations\": 1,\n    \"selected_recommendations\": 1,\n    \"workflow_edges_inferred\": 0,\n    \"workflow_nodes_drafted\": 0,\n    \"workflow_sources_analyzed\": 0,\n    \"workflow_unresolved_items\": 0\n  },\n  \"unresolved\": [\n    {\n      \"message\": \"Some discovered files are not referenced by an auto-selected PCS check.\",\n      \"paths\": [\n        \"pcs-discovery-review.md\",\n        \"pcs-environment-plan.json\"\n      ],\n      \"truncated\": false,\n      \"type\": \"unselected-artifacts\"\n    }\n  ]\n}\n",
+      "tp": 1
+    }
+  ]
+}

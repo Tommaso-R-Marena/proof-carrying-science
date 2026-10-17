@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "certify_ok": true,
+      "detail": "{\n  \"certificate\": \"/tmp/pytest-of-ubuntu/pytest-16/test_metamorphic_suite_on_pkpd0/meta/baseline_run/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"COMPUTATIONALLY_SUPPORTED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"213795e410bbc2cd20dc51ed9d9076ba3988682ea2d852583341173b3eab3bed\",\n  \"semantic_hash\": \"37768905eeb8b0a4bd656fc1a0f6b94558e39306e6fcf5adfe6373934e45f85f\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": true,
+      "kind": "valid",
+      "name": "baseline",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "{\n  \"certificate\": \"/tmp/pytest-of-ubuntu/pytest-16/test_metamorphic_suite_on_pkpd0/meta/run_valid_rename_subject/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"COMPUTATIONALLY_SUPPORTED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"6060e624e9a0e6c604f8e8afdb84ac3c9261e9df6c0975d791f500ed460b8640\",\n  \"semantic_hash\": \"22432feae3561e16f3c0144a992b52902a296f9f71f51a51c1c4e08246d55297\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": true,
+      "kind": "valid",
+      "name": "rename_subject",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "{\n  \"certificate\": \"/tmp/pytest-of-ubuntu/pytest-16/test_metamorphic_suite_on_pkpd0/meta/run_valid_reorder_claims/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"COMPUTATIONALLY_SUPPORTED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"a18664e312849d623a9ed4368017072a5639dc3020a614e3e538ab7062a575ed\",\n  \"semantic_hash\": \"d965cfc6c431dfb0bebb4cb1500fc18c9f3c4ad2a27e5e6dba01627a25813088\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": true,
+      "kind": "valid",
+      "name": "reorder_claims",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "{\n  \"certificate\": \"/tmp/pytest-of-ubuntu/pytest-16/test_metamorphic_suite_on_pkpd0/meta/run_invalid_break_model_or_reaction/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"FALSIFIED_OR_CHECK_FAILED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"d81b53e86eb6be7c420955da4d80f1e0b06ddfd76ae4947611163f59b913b192\",\n  \"semantic_hash\": \"3e9f44fd25935b4b28d9aa20093b1d01ded487eedef19652f738247e3e485e82\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": false,
+      "kind": "invalid",
+      "name": "break_model_or_reaction",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "verify should reject tampered evidence package",
+      "expected_verify_ok": false,
+      "kind": "invalid",
+      "name": "post_certify_artifact_tamper",
+      "passed_oracle": true,
+      "verify_ok": false
+    }
+  ],
+  "format": "pcs-independent-eval-metamorphic-report-v1",
+  "invalid_pass": 2,
+  "invalid_total": 2,
+  "source_project": "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment",
+  "valid_pass": 3,
+  "valid_total": 3
+}

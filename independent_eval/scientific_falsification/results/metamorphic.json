@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "certify_ok": true,
+      "detail": "{\n  \"certificate\": \"/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/metamorphic/baseline_run/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"COMPUTATIONALLY_SUPPORTED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"9130d35a8302d82d9acce5f445647d55dee41284a7506b37b6bbc5cd6c611a1c\",\n  \"semantic_hash\": \"37768905eeb8b0a4bd656fc1a0f6b94558e39306e6fcf5adfe6373934e45f85f\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": true,
+      "kind": "valid",
+      "name": "baseline",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "ificate\": \"/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/metamorphic/run_valid_rename_subject/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"COMPUTATIONALLY_SUPPORTED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"4a15829c05e701af712cabf3921aa282b5f0336199cd69ea505ec78ce10f2ca5\",\n  \"semantic_hash\": \"22432feae3561e16f3c0144a992b52902a296f9f71f51a51c1c4e08246d55297\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": true,
+      "kind": "valid",
+      "name": "rename_subject",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "ificate\": \"/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/metamorphic/run_valid_reorder_claims/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"COMPUTATIONALLY_SUPPORTED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"47aab6b4ddbe947ce7e199c4d351c21629f878b7fe165fe36391f9e3233f50e2\",\n  \"semantic_hash\": \"d965cfc6c431dfb0bebb4cb1500fc18c9f3c4ad2a27e5e6dba01627a25813088\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": true,
+      "kind": "valid",
+      "name": "reorder_claims",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/results/work/metamorphic/run_invalid_break_model_or_reaction/evidence/certificate.json\",\n  \"claim_statuses\": {\n    \"C_PK_CONTRACT\": \"COMPUTATIONALLY_SUPPORTED\",\n    \"C_PK_REPLAY\": \"FALSIFIED_OR_CHECK_FAILED\"\n  },\n  \"errors\": [],\n  \"integrity_hash\": \"1285932033e8e428119894518f666ccd52ca68ae620d660e9ab15f8672b8a94d\",\n  \"semantic_hash\": \"3e9f44fd25935b4b28d9aa20093b1d01ded487eedef19652f738247e3e485e82\",\n  \"valid\": true\n}\n",
+      "expected_verify_ok": false,
+      "kind": "invalid",
+      "name": "break_model_or_reaction",
+      "passed_oracle": true,
+      "verify_ok": true
+    },
+    {
+      "certify_ok": true,
+      "detail": "verify should reject tampered evidence package",
+      "expected_verify_ok": false,
+      "kind": "invalid",
+      "name": "post_certify_artifact_tamper",
+      "passed_oracle": true,
+      "verify_ok": false
+    }
+  ],
+  "format": "pcs-independent-eval-metamorphic-report-v1",
+  "invalid_pass": 2,
+  "invalid_total": 2,
+  "source_project": "/agent/repos/proof-carrying-science/independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment",
+  "valid_pass": 3,
+  "valid_total": 3
+}
