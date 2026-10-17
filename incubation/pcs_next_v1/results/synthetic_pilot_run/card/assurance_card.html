@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PCS Next Assurance Card — synth-pkpd-001</title>
+<style>
+:root {
+  --bg0:#0f1c17; --bg1:#1a2e24; --ink:#e8f0ea; --muted:#9db5a8;
+  --tech:#3d7a5c; --warn:#a67c2a; --open:#3a5f8a; --danger:#8a3a3a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,serif;
+  --sans:"Avenir Next","Segoe UI",sans-serif;
+}
+body{margin:0;font-family:var(--sans);color:var(--ink);
+background:radial-gradient(1200px 600px at 10% -10%,#243d32,transparent),
+linear-gradient(160deg,var(--bg0),var(--bg1));min-height:100vh;}
+main{max-width:920px;margin:0 auto;padding:2.5rem 1.25rem 4rem;}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.8rem,4vw,2.6rem);margin:0 0 .5rem;}
+.lead{color:var(--muted);max-width:40rem;line-height:1.5;}
+.disclaimer{border-left:3px solid var(--warn);padding:.75rem 1rem;margin:1.5rem 0;color:var(--muted);}
+.block{margin:1.25rem 0;padding:1rem 1.1rem;background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);}
+.block h2{font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;margin:0 0 .75rem;color:var(--muted);}
+.tone-tech{border-color:rgba(61,122,92,.55);}
+.tone-open{border-color:rgba(58,95,138,.55);}
+pre{white-space:pre-wrap;word-break:break-word;margin:0;font-size:.85rem;line-height:1.45;}
+.ids{font-family:ui-monospace,monospace;font-size:.8rem;color:var(--muted);}
+</style>
+</head>
+<body>
+<main>
+  <h1>Proof-Carrying Science</h1>
+  <p class="lead">Assurance Card for project <strong>synth-pkpd-001</strong>.
+  Technical verification and scientific validation are shown separately.</p>
+  <p class="disclaimer">Technical verification statuses must not be read as clinical, biological, or external-lab scientific approval.</p>
+  <section class="block tone-tech"><h2>Technical verification</h2><pre>{
+  &quot;assumptions&quot;: [],
+  &quot;claim_class&quot;: &quot;TECHNICAL_VERIFICATION&quot;,
+  &quot;evidence_ids&quot;: [],
+  &quot;limitations&quot;: [
+    &quot;Does not establish biological validity of the PK model.&quot;
+  ],
+  &quot;reason&quot;: &quot;predictions exhibit increasing time and nonincreasing concentration&quot;,
+  &quot;status&quot;: &quot;COMPUTATIONALLY_TESTED&quot;
+}</pre></section>
+  <section class="block tone-neutral"><h2>Formal status</h2><pre>{
+  &quot;assumptions&quot;: [
+    &quot;Lean 4.28.0 toolchain available&quot;
+  ],
+  &quot;claim_class&quot;: &quot;FORMAL_THEOREM&quot;,
+  &quot;evidence_ids&quot;: [],
+  &quot;limitations&quot;: [],
+  &quot;reason&quot;: &quot;Lean workspace present; kernel check deferred to formal validate step&quot;,
+  &quot;status&quot;: &quot;CONDITIONAL&quot;
+}</pre></section>
+  <section class="block tone-neutral"><h2>Independent reconstruction</h2><pre>{
+  &quot;limitations&quot;: [
+    &quot;Independent of producer PASS only within this receiver implementation.&quot;,
+    &quot;Not evidence that an outside laboratory performed the review.&quot;
+  ],
+  &quot;status&quot;: &quot;INDEPENDENTLY_REPRODUCED&quot;
+}</pre></section>
+  <section class="block tone-open"><h2>Scientific validation (external)</h2><pre>{
+  &quot;assumptions&quot;: [],
+  &quot;claim_class&quot;: &quot;SCIENTIFIC_CLAIM&quot;,
+  &quot;evidence_ids&quot;: [],
+  &quot;limitations&quot;: [],
+  &quot;reason&quot;: &quot;No outside laboratory has completed this pilot.&quot;,
+  &quot;status&quot;: &quot;OPEN&quot;
+}</pre></section>
+  <section class="block tone-neutral"><h2>Unresolved questions</h2><pre>[
+  &quot;Would an independent laboratory accept this workflow on real PK data?&quot;,
+  &quot;What institutional approvals are required for non-synthetic pilots?&quot;
+]</pre></section>
+  <p class="ids">policy=c26b508dc8bb87f37adc623f7a767dd7dcb68e414df0ca0ddc44206d4c05a1f4<br/>
+  lock=c14c35f1537c9867012ce4a8f954f2b26c6644695ce7c7db29acca4af7d5af35<br/>
+  bundle=3cf5a34b3082e13a66b29ba83d62278e874f1831e148e07184dde3006dfe4a04</p>
+</main>
+</body>
+</html>
