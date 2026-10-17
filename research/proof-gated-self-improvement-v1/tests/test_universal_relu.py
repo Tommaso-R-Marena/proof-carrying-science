@@ -149,6 +149,38 @@ class UniversalExactReLUTests(unittest.TestCase):
             self.assertEqual(score, max(abs(a.predict(x)-b.predict(x))
                                         for x in range(low, high+1)))
 
+
+    def test_trillion_scale_exact_interval_without_enumeration(self):
+        bound = 10**12
+        zero = Net(())
+        score, witness = exact_interval_max_error(zero, TARGET, -bound, bound)
+        self.assertEqual((score, witness), (2*bound+1, bound))
+
+    def test_hundreds_of_hidden_units_permute_without_changing_all_integer_semantics(self):
+        rng = random.Random(2910)
+        net = random_net(rng, 220)
+        permuted = Net(tuple(reversed(net.terms)), net.bias)
+        result = all_integer_equal(net, permuted)
+        self.assertTrue(result.passes)
+        self.assertLessEqual(result.cells_checked, 221)
+
+    def test_first_positive_and_last_positive_sign_boundaries(self):
+        for weight in range(-32, 33):
+            if weight == 0:
+                continue
+            for bias in (-32, -5, -1, 0, 1, 5, 32):
+                term = Term(1, weight, bias)
+                cut = term.cut()
+                self.assertIsNotNone(cut)
+                for x in (cut-1000000, cut-1, cut, cut+1, cut+2,
+                          cut+1000000):
+                    if x <= cut:
+                        self.assertEqual(weight*x+bias > 0,
+                                         weight*cut+bias > 0)
+                    else:
+                        self.assertEqual(weight*x+bias > 0,
+                                         weight*(cut+1)+bias > 0)
+
     def test_invalid_interval_and_input_type(self):
         with self.assertRaises(ValueError):
             exact_interval_max_error(TARGET, TARGET, 2, 1)
