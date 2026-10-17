@@ -27,6 +27,7 @@ jobs:
           cd research/proof-gated-self-improvement-v1
           python -m unittest discover -s tests -v
           python global_falsification.py
+          python relu_replay_campaign.py
           # Real independent replay, no Lean verdict fabricated by Python.
           python - <<'PY'
           from universal_relu import Net, Term
