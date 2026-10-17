@@ -178,5 +178,31 @@ class PromotionStorageTests(unittest.TestCase):
                     self.store.promote(candidate, old, self.approve_mock)
         self.assertEqual(self.calls, 0)
 
+
+    def test_tampered_receipt_blocks_future_promotions(self):
+        original = self.store.snapshot()
+        first = self.store.promote(wire_bytes(STEP1), original, self.approve_mock)
+        receipt = self.root / "receipts" / "00000001.json"
+        receipt.write_bytes(b'{"forged":true}')
+        with self.assertRaises(IntegrityFailure):
+            self.store.promote(wire_bytes(STEP2), first, self.approve_mock)
+        self.assertEqual(self.store.snapshot(), first)
+        self.assertEqual(self.calls, 1)
+
+    def test_concurrent_compare_and_swap_only_one_wins(self):
+        from concurrent.futures import ThreadPoolExecutor
+        initial = self.store.snapshot()
+        def attempt(m):
+            try:
+                return self.store.promote(wire_bytes(m), initial, self.approve_mock)
+            except StaleHead:
+                return None
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures = [pool.submit(attempt, m) for m in (STEP1, STEP2)]
+            outcomes = [f.result() for f in futures]
+        self.assertEqual(sum(x is not None for x in outcomes), 1)
+        self.assertEqual(self.store.audit().generation, 1)
+        self.assertEqual(self.calls, 1)
+
 if __name__ == "__main__":
     unittest.main()
