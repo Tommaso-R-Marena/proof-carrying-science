@@ -239,14 +239,21 @@ class ResearchPromotionStore:
             head = self._head()
             return head, self._blob(head.active_sha256)
 
-    def promote(self, candidate_bytes: bytes, expected: Head,
-                verifier: Callable[[Path, Path, Path], bool] = artifact_gate) -> Head:
-        """Compare-and-swap. A *research* wrapper, not tamperproof storage.
+    def promote(self, candidate_bytes: bytes, expected: Head) -> Head:
+        """Public experimental entrypoint: the Lean oracle is NOT caller-selectable.
 
-        No accepted modification may be committed unless the file-based Lean
-        oracle returns positive on the store's content-addressed old/new blobs.
-        Re-reads after verification protect against accidental mutations before
-        the pointer swap, NOT arbitrary privileged races or host compromise.
+        This reduces accidental verifier-substitution risk. It is not process
+        isolation: an attacker with the same Python privileges can still patch
+        module code, call the private test seam, or mutate the filesystem.
+        """
+        return self._promote_with_oracle(candidate_bytes, expected, artifact_gate)
+
+    def _promote_with_oracle(self, candidate_bytes: bytes, expected: Head,
+                             verifier: Callable[[Path, Path, Path], bool]) -> Head:
+        """TEST-ONLY fault-injection seam, never exposed as a trusted endpoint.
+
+        Compare-and-swap under a cooperative lock with exact-file Lean checks.
+        A positive callback injected here proves nothing about model semantics.
         """
         with self._locked():
             old = self._audit_locked()
