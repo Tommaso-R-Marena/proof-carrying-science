@@ -272,3 +272,46 @@ def replay(raw: bytes) -> ReplayVerdict:
     return ReplayVerdict(actual_forgotten is None,
                          None if supplied is None else _decimal(supplied),
                          old_max,new_max,new_max<=old_max,len(cells),len(points),digest)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Standalone offline research replay. Exit 0 means *consistency* only.
+
+    It does NOT mean that a model was authorized, promoted, or globally safe.
+    For checking endorsement, consumers must inspect the explicit Boolean
+    findings in the JSON output and separately obtain a Lean authority verdict.
+    """
+    from pathlib import Path
+    import sys
+    if argv is None:
+        argv = sys.argv[1:]
+    if len(argv) != 1:
+        print("REJECT:expected_one_certificate_file", file=sys.stderr)
+        return 2
+    try:
+        path = Path(argv[0])
+        with path.open("rb") as handle:
+            raw = handle.read(MAX_BYTES+1)
+        verdict = replay(raw)
+    except (OSError, ReplayError) as exc:
+        print(f"REJECT:invalid_reference_certificate:{exc}", file=sys.stderr)
+        return 2
+    print(canonical({
+        "replay_consistent": True,
+        "lean_kernel_verdict": False,
+        "production_authorized": False,
+        "no_forgetting": verdict.no_forgetting,
+        "no_worse_in_window": verdict.no_worse_in_window,
+        "counterexample": None if verdict.counterexample is None
+                         else str(verdict.counterexample),
+        "old_max_error": str(verdict.old_max_error),
+        "new_max_error": str(verdict.new_max_error),
+        "cell_count": str(verdict.cell_count),
+        "sample_count": str(verdict.sample_count),
+        "sha256": verdict.digest,
+    }).decode("ascii"))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
