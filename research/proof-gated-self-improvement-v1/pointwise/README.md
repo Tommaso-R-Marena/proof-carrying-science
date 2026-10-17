@@ -17,6 +17,9 @@ previously correct integer prediction, every existing error bound on any modeled
 domain, finite-list aggregate absolute error, and transitivity across updates.
 `guard_sound` composes dominance with the unchanged finite PGSI1 admissibility
 specification. This mathematical composition does not change runtime authority.
+It is a separate policy predicate: it does not replace the earlier offline
+nonvacuity requirement. A policy retaining that requirement must additionally
+retain its original previously-correct witness check.
 
 ## Replay
 
@@ -47,6 +50,8 @@ the real Lean kernel. Positive claims require a complete ordered covering of all
 integers. Negative claims require a concrete integer where candidate error is
 strictly larger. A successful negative replay proves rejection, not dominance.
 Read the request and theorem, not merely a receipt's successful-execution flag.
+Receipts explicitly distinguish `HOLDS` from `REFUTED` and retain the latter's
+counterexample integer.
 
 The checker recomputes each model's affine form from its terms. The producer
 splits at activation thresholds and both error zero crossings. Lean independently
@@ -76,3 +81,31 @@ accelerating recursive self-improvement or assurance about unmodeled tasks.
 
 Keep all earlier source-bound evidence and formal modules unchanged. New source
 and retained results live entirely here; CI is an additional research job.
+
+## Parametric counterexample closure
+
+`experiments/BlockFamily.lean` reuses the previously retained `FamilyTail.lean`
+proof without editing it. Two additional theorems prove that for **every integer
+parameter k >= 18 and every proposed certificate**, neither the new pointwise
+checker nor its finite-gate composition can accept the worsening-tail family.
+Only k in [18,31] describes valid bounded PGSI1 artifacts; the unbounded theorem
+does not relax codec bounds. This is a post-hoc mathematical closure, separately
+source-bound from the prespecified exhaustive campaign. Replay it with:
+
+```sh
+python pointwise/experiments/block_family.py --output /absolute/fresh/family-directory
+```
+
+`experiments/quadratic_oracle.py` is a second exact Python decision procedure,
+using rational activation cuts and quadratic squared-error minima rather than
+absolute-value sign partitions. Its post-hoc experiment exhausts 22,638 bounded
+quadratic minima, all 16,384 lattice transitions, and 1,024 additional seeded
+multiunit comparisons, including large integers. It is an independent
+algorithmic cross-check, not an additional Lean authority or empirical task
+benchmark. To bind it to a completed kernel campaign:
+
+```sh
+python pointwise/experiments/quadratic_oracle.py \
+  --output /absolute/fresh/quadratic-directory \
+  --decisions /absolute/campaign-directory/DECISIONS.json
+```

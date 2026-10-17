@@ -32,6 +32,16 @@ jobs:
           python -m unittest discover -s pointwise/tests -v 2>&1 | tee "$evidence/tests.log"
           python check_hardening_evidence.py | tee "$evidence/parent-evidence.json"
           python kernel/verify_results.py --folder kernel/results/v1 | tee "$evidence/kernel-historical-evidence.json"
+      - name: Prove the infinite worsening-tail family cannot pass
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          cd research/proof-gated-self-improvement-v1
+          python pointwise/experiments/block_family.py --output "$RUNNER_TEMP/pgsi-pointwise-block-family" | tee "$evidence/block-family.json"
+          mkdir "$evidence/block-family"
+          cp "$RUNNER_TEMP/pgsi-pointwise-block-family/"*.json "$RUNNER_TEMP/pgsi-pointwise-block-family/"*.lean "$RUNNER_TEMP/pgsi-pointwise-block-family/"*.log "$evidence/block-family/"
       - name: Exhaustive whole-domain decisions, counterexamples and search graph
         shell: bash
         run: |
@@ -44,6 +54,23 @@ jobs:
           python pointwise/verify_results.py --folder "$campaign" --expected pointwise/results/v1/RESULTS.json | tee "$evidence/qualification.json"
           mkdir "$evidence/campaign"
           cp "$campaign/"*.json "$campaign/"*.gz "$campaign/"*.log "$evidence/campaign/"
+      - name: Independent quadratic oracle and wider falsification
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          cd research/proof-gated-self-improvement-v1
+          python pointwise/experiments/quadratic_oracle.py --output "$RUNNER_TEMP/pgsi-pointwise-quadratic" --decisions "$RUNNER_TEMP/pgsi-pointwise-campaign/DECISIONS.json" > "$evidence/quadratic-oracle.json"
+          python - "$evidence/quadratic-oracle.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          new=json.loads(Path(sys.argv[1]).read_text())
+          old=json.loads(Path('pointwise/results/quadratic-v1/RESULT.json').read_text())
+          for name in ('outcomes','random_decisions_sha256','oracle_source_sha256','kernel_decisions_sha256','source_sha256'):
+              assert new[name]==old[name], name
+          assert new['outcomes']['mismatches']==0
+          PY
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
