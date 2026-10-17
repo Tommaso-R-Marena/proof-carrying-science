@@ -10,10 +10,18 @@ cross-PR overlap); imports use the namespace package from the repo root.
 ## Task 15 — Offline reviewer workbench
 
 `workbench/inspect_evidence.py` extracts claims, assumptions, artifact
-identities, and **reported** outcomes from certificates/receipts.
-`workbench/generate_report.py` emits accessibility-minded static HTML plus
-`.inspection.json`. Payload always includes `workbench_issues_accept: false`.
-Workbench never issues ACCEPT/PASS.
+identities, and **reported** outcomes from certificates/receipts. Each claim
+also receives an `inspection_class` from a claim-strength lattice
+(`cryptographic_validity`, `computationally_supported`,
+`empirically_unsupported`, `scientific_adequacy_open`, `rejected_or_failed`,
+`unknown_or_ambiguous`). These labels are workbench heuristics over
+`reported_*` fields only — never PCS authority. Payload includes
+`claim_strength_summary` counts and always `workbench_issues_accept: false`.
+
+`workbench/generate_report.py` accepts `--format html|json|both` (default
+`both`). HTML shows strength class per claim (captioned table + definition-list
+summary) with skip-link and focus-visible styles; JSON export is the inspection
+dict plus `generated_at`. Workbench never issues ACCEPT/PASS.
 
 ## Task 16 — Blind challenge
 
