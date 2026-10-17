@@ -41,6 +41,8 @@ class Model:
                 raise ValueError(f"{field} out of bounds or invalid")
 
     def predict(self, x: int) -> int:
+        if type(x) is not int:
+            raise TypeError("input must be an exact integer")
         z = self.weight*x + self.bias
         return max(0, z) if self.relu else z
 

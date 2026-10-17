@@ -45,6 +45,17 @@ class SealedInference:
     artifact: bytes
     model: Model
 
+    def __post_init__(self) -> None:
+        # Consistency is not authorization. A self-constructed object is never
+        # evidence of a protected promotion or a trusted receipt chain.
+        if type(self.head) is not Head or type(self.artifact) is not bytes or type(self.model) is not Model:
+            raise IntegrityFailure("invalid inference snapshot types")
+        Head.parse(self.head.__dict__)
+        if self.head.policy_sha256 != POLICY_HASH or blob_hash(self.artifact) != self.head.active_sha256:
+            raise IntegrityFailure("snapshot head/artifact mismatch")
+        if decode_sealed_model(self.artifact) != self.model:
+            raise IntegrityFailure("snapshot executes a different decoded model")
+
     def predict(self, x: int) -> int:
         if type(x) is not int:
             raise TypeError("input must be an exact integer")

@@ -36,7 +36,7 @@ class Net:
 
     def __post_init__(self):
         if type(self.terms) is not tuple or type(self.bias) is not int or not all(
-            isinstance(t, Term) for t in self.terms
+            type(t) is Term for t in self.terms
         ):
             raise TypeError("expected exact integer ReLU term tuple")
 
@@ -98,6 +98,39 @@ def integer_cells(*nets: Net) -> tuple[tuple[int, ...], tuple[Cell, ...]]:
     cells.append(Cell(low, None))
     return cuts, tuple(cells)
 
+def piecewise_cells(*nets: Net):
+    """Exact activation sweep: O(W log W + N*W) for W total units/N nets.
+
+    The original branch scan is retained as Net.affine for differential tests.
+    Returned coefficients describe every integer in each contiguous cell.
+    """
+    if any(type(n) is not Net for n in nets):
+        raise TypeError("expected exact Net objects")
+    affine = [[0, n.bias] for n in nets]
+    events = {}
+    for i, net in enumerate(nets):
+        for t in net.terms:
+            if t.weight == 0:
+                affine[i][1] += t.coefficient * max(0, t.bias)
+                continue
+            if t.weight < 0:
+                affine[i][0] += t.coefficient * t.weight
+                affine[i][1] += t.coefficient * t.bias
+            direction = 1 if t.weight > 0 else -1
+            events.setdefault(t.cut(), []).append(
+                (i, direction*t.coefficient*t.weight, direction*t.coefficient*t.bias))
+    cuts = tuple(sorted(events))
+    rows = []
+    low = None
+    for cut in cuts:
+        rows.append((Cell(low, cut), tuple(tuple(pair) for pair in affine)))
+        for i, slope, bias in events[cut]:
+            affine[i][0] += slope
+            affine[i][1] += bias
+        low = cut + 1
+    rows.append((Cell(low, None), tuple(tuple(pair) for pair in affine)))
+    return cuts, tuple(rows)
+
 def _delta(a: Net, b: Net, x: int) -> tuple[int, int]:
     aa, ab = a.affine(x)
     ba, bb = b.affine(x)
@@ -120,53 +153,57 @@ def _counterexample(a: int, b: int, cell: Cell) -> int:
     raise AssertionError("claimed unequal affines coincide at two distinct points")
 
 def all_integer_equal(a: Net, b: Net) -> Decision:
-    """Exact (no bounded enumeration): forall integer x, a(x)==b(x)."""
-    cuts, cells = integer_cells(a, b)
-    for cell in cells:
-        slope, offset = _delta(a, b, cell.point())
+    """Exact (no bounded enumeration): forall integer x, a(x)==b(x).
+
+    cells_checked retains the legacy meaning: total partition size.
+    """
+    cuts, rows = piecewise_cells(a, b)
+    for cell, ((aa, ab), (ba, bb)) in rows:
+        slope, offset = aa-ba, ab-bb
         if not _zero(slope, offset, cell):
             x = _counterexample(slope, offset, cell)
             if a.predict(x) == b.predict(x):
                 raise AssertionError('invalid equivalence witness')
-            return Decision(False, "all_integer_equal", len(cells), cuts, x)
-    return Decision(True, "all_integer_equal", len(cells), cuts, None)
+            return Decision(False, "all_integer_equal", len(rows), cuts, x)
+    return Decision(True, "all_integer_equal", len(rows), cuts, None)
+
 
 def universal_correctness_preserved(old: Net, new: Net, target: Net) -> Decision:
     """Exact forall integer x: old(x)==target(x) -> new(x)==target(x)."""
-    cuts, cells = integer_cells(old, new, target)
-    for cell in cells:
-        a, b = _delta(old, target, cell.point())
-        na, nb = _delta(new, target, cell.point())
+    cuts, rows = piecewise_cells(old, new, target)
+    for cell, ((oa, ob), (na, nb), (ta, tb)) in rows:
+        a, b = oa-ta, ob-tb
+        na, nb = na-ta, nb-tb
         if a == 0 and b == 0:
             if _zero(na, nb, cell):
                 continue
             x = _counterexample(na, nb, cell)
         elif a == 0 or (-b) % a != 0:
-            continue  # old is never correct on this cell
+            continue
         else:
-            x = (-b) // a  # sole old-correct point if within cell
+            x = (-b) // a
             if not cell.contains(x) or na*x+nb == 0:
                 continue
         if old.predict(x) != target.predict(x) or new.predict(x) == target.predict(x):
             raise AssertionError('invalid lost-correctness witness')
-        return Decision(False, "universal_correctness_preserved",
-                        len(cells), cuts, x)
-    return Decision(True, "universal_correctness_preserved",
-                    len(cells), cuts, None)
+        return Decision(False, "universal_correctness_preserved", len(rows), cuts, x)
+    return Decision(True, "universal_correctness_preserved", len(rows), cuts, None)
+
 
 def exact_interval_max_error(net: Net, target: Net,
                              low: int, high: int) -> tuple[int, int]:
-    """Max |net-target| for ALL integer x in interval, using cell endpoints."""
+    """Exact maximum absolute error using affine cell endpoints, no scan of Z."""
     if type(low) is not int or type(high) is not int or low > high:
         raise ValueError("bad integer interval")
-    _, cells = integer_cells(net, target)
-    points = {low, high}
-    for cell in cells:
+    _, rows = piecewise_cells(net, target)
+    best = (0, low)
+    for cell, ((a, b), (c, d)) in rows:
         lo = low if cell.low is None else max(low, cell.low)
         hi = high if cell.high is None else min(high, cell.high)
         if lo <= hi:
-            points.update((lo, hi))
-    return max((abs(net.predict(x)-target.predict(x)), x) for x in points)
+            best = max(best, (abs((a-c)*lo+b-d), lo),
+                       (abs((a-c)*hi+b-d), hi))
+    return best
 
 def single_neuron(relu: bool, weight: int, bias: int) -> Net:
     """Embed the existing (relu or linear) model exactly into the ReLU basis."""
