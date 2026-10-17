@@ -6,7 +6,7 @@ establish empirical scientific validity, clinical adequacy, or regulatory accept
 
 ## Bundle identity
 
-- Bundle SHA-256: `ec42d5e49c11878164d03bb6998735fdc26dad0b74689b55b5519cd2bec6c947`
+- Bundle SHA-256: `acafa67973b77b7421a2c2f3dbe186bd15d39f953470b3828819b6878d8f7fe5`
 - Pinned signer fingerprint: `ff935ffffcf117c49bb0d5ef393b866ccb6da527b35f2abb38031aeceb89bb6a`
 - Authoritative (Lean): `True`
 - Valid: `True`
@@ -16,7 +16,7 @@ establish empirical scientific validity, clinical adequacy, or regulatory accept
 
 - Pilot ID: `PCS-INDEPENDENT-PILOT-SYNTHETIC-001`
 - Intake semantic hash: `ab9fec8d50a28c2d432f68ecc8d5fa01e7e3f4867bc061ba289b37947b3a14cd`
-- Frozen at: `2026-10-17T19:03:48.995856+00:00`
+- Frozen at: `2026-10-17T19:05:15.801093+00:00`
 
 ## Claim decisions (computational/formal layer)
 

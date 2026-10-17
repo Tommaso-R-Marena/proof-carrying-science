@@ -732,6 +732,7 @@ def run_independent_pilot_v1(
             public_key,
             expected_fingerprint=fingerprint,
             overwrite=True,
+            generated_at=GENERATED_AT,
             lean_authority_path=lean_authority_path or authority.get("path"),
         )
     except (V06AttestationError, V06LeanAuthorityError) as exc:
@@ -1027,7 +1028,13 @@ def run_cleanroom_independent_pilot_v1(
     venv_dir = out / "venv"
     pilot_out = out / "pilot"
 
-    subprocess.run([py, "-m", "venv", str(venv_dir)], check=True, cwd=root)
+    try:
+        subprocess.run([py, "-m", "venv", str(venv_dir)], check=True, cwd=root)
+    except subprocess.CalledProcessError as exc:
+        raise IndependentPilotError(
+            "failed to create a clean-room virtualenv. On Debian/Ubuntu install "
+            f"`python3-venv` (or the matching pythonX.Y-venv package). Detail: {exc}"
+        ) from exc
     if os.name == "nt":
         venv_python = venv_dir / "Scripts" / "python.exe"
         venv_pip = venv_dir / "Scripts" / "pip.exe"

@@ -25,6 +25,7 @@ Pinned toolchain:
 - Python: `.python-version` → `3.12.14` (runtime may be 3.12.x compatible)
 - Lean: `lean-toolchain` → `leanprover/lean4:v4.28.0`
 - Lockfile: `requirements-dev.lock` (hash-pinned)
+- Host packages observed necessary on Ubuntu: `zstd`, `python3-venv`
 
 ```bash
 git rev-parse HEAD

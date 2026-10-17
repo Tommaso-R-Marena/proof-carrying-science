@@ -19,8 +19,10 @@ See `BASELINE_ENVIRONMENT.json`.
 ### Environmental friction observed
 
 1. Host lacked `zstd`; `scripts/activate_lean_428.sh` failed until `apt-get install zstd`.
-2. Lean authority binary must be built locally (`lake build pcs-lean-authority`); not committed.
-3. `formal/lake-manifest.json` has empty packages — Mathlib is **not** required for the production authority target used here.
+2. Host lacked `python3-venv`; clean-room runner failed until `apt-get install python3.12-venv`.
+3. Lean authority binary must be built locally (`lake build pcs-lean-authority`); not committed.
+4. `formal/lake-manifest.json` has empty packages — Mathlib is **not** required for the production authority target used here.
+5. Without a pinned `generated_at`, bundle SHA-256 differs across runs while `certificate_semantic_hash` remains stable; the pilot now pins `GENERATED_AT` for byte-stable packaging.
 
 ## Delivered workflow evidence (local run)
 
@@ -29,7 +31,7 @@ From `/tmp/pcs-independent-pilot-run4` (copied machine-readable extracts into th
 | Field | Value |
 | --- | --- |
 | Pilot ID | `PCS-INDEPENDENT-PILOT-SYNTHETIC-001` |
-| Bundle SHA-256 | `ec42d5e49c11878164d03bb6998735fdc26dad0b74689b55b5519cd2bec6c947` |
+| Bundle SHA-256 | `acafa67973b77b7421a2c2f3dbe186bd15d39f953470b3828819b6878d8f7fe5` |
 | Intake semantic hash | `ab9fec8d50a28c2d432f68ecc8d5fa01e7e3f4867bc061ba289b37947b3a14cd` |
 | Signer fingerprint (demo) | `ff935ffffcf117c49bb0d5ef393b866ccb6da527b35f2abb38031aeceb89bb6a` |
 | Claims | `C_PK_CONTRACT` / `C_PK_REPLAY` → `COMPUTATIONALLY_SUPPORTED` |
@@ -39,11 +41,11 @@ From `/tmp/pcs-independent-pilot-run4` (copied machine-readable extracts into th
 ## Tests
 
 ```bash
-python -m pytest -q tests/test_independent_pilot_v1.py -k 'not cleanroom'
-# 6 passed
+python -m pytest -q tests/test_independent_pilot_v1.py
+# 7 passed (includes clean-room reconstruction)
 ```
 
-Clean-room test (`test_cleanroom_independent_pilot`) exercises a fresh venv + `--require-hashes` install; run explicitly when validating full reconstructibility.
+Clean-room reconstruction also succeeded at `/tmp/pcs-cleanroom-pilot` with `pass: true` after installing `python3-venv` (see `CLEANROOM_SUMMARY.json`). Clean-room bundle SHA-256 matched the local pilot exactly after pinning `generated_at`.
 
 ## Commands for independent reproduction
 
