@@ -27,10 +27,17 @@
 | B — scientific falsification | `independent_eval/scientific_falsification/` |
 | C — reproducibility & TCB | `independent_eval/repro_tcb/` |
 | D — reviewer & adoption (this) | `independent_eval/reviewer_adoption/` |
+| E — program assurance | `independent_eval/program_assurance/` |
+| F — assurance card | `independent_eval/assurance_card/` |
+
+Do not create or edit sibling trees. The optional `workbench/export_assurance_card.py`
+bridge discovers F when PRESENT and subprocesses it; ABSENT is recorded as ABSENT
+(exit 3), never as PASS, and F code is never vendored into D.
 
 ## Tasks owned here
 
 - **15** Offline reviewer workbench (`workbench/`) — inspect-only; never ACCEPT/PASS
+- **15b** Optional Assurance Card export bridge (discover + subprocess F; ABSENT ≠ PASS)
 - **16** Blind challenge (`blind_challenge/`) — synthetic cases + scorer; no invented human results
 - **17** Tabletop (`tabletop/`) — offline only; no live credentials/infra
 - **18** External lab kit (`external_lab/`) — package + burden tracker; no completed-validation claim

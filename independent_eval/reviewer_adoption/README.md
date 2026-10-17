@@ -27,6 +27,13 @@ python -m independent_eval.reviewer_adoption.workbench.generate_report \
   --evidence independent_eval/reviewer_adoption/workbench/fixtures/sample_bundle \
   --out /tmp/pcs-reviewer-workbench-report.html
 
+# Optional — export Workstream F Assurance Card when sibling tree is PRESENT
+# (exit 3 = ABSENT, not PASS; never vendors F code)
+python -m independent_eval.reviewer_adoption.workbench.export_assurance_card \
+  --evidence independent_eval/reviewer_adoption/workbench/fixtures/sample_bundle \
+  --out /tmp/pcs-assurance-card --skip-verify \
+  --bridge-record /tmp/pcs-assurance-card-bridge.json
+
 # Task 16 — blind a case packet and score a synthetic response sheet
 python -m independent_eval.reviewer_adoption.blind_challenge.blind \
   --cases-dir independent_eval/reviewer_adoption/blind_challenge/cases \

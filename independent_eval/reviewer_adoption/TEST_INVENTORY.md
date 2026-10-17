@@ -3,6 +3,7 @@
 | Suite | Scope |
 | --- | --- |
 | `tests/test_workbench.py` | Evidence inspection + claim-strength lattice + HTML/JSON export + CLI cross-check (agree/disagree/skip/fixture-inconclusive); asserts non-authority |
+| `tests/test_export_assurance_card.py` | Discover/subprocess bridge to Workstream F; ABSENT exit 3 ≠ PASS; PRESENT monkeypatched export |
 | `tests/test_blind_challenge.py` | Blind packet strips labels; scorer on synthetic fixture; refuses unattested human study |
 | `tests/test_tabletop.py` | Scenario catalog; compromised-key fixture passes offline; live-cred flag rejected |
 | `tests/test_external_lab.py` | Checklist forbids EXTERNAL_VALIDATION_COMPLETE; burden log never claims validation |
@@ -11,7 +12,7 @@
 python3 -m pytest -q independent_eval/reviewer_adoption/tests
 ```
 
-Latest local run: **19 passed** (CLI cross-check agree/disagree/skip/fixture-inconclusive + embed).
+Latest local run: **22 passed** (workbench + F export bridge ABSENT/PRESENT + blind/tabletop/lab).
 
 ## Smoke commands
 
