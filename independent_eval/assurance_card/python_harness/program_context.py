@@ -14,9 +14,11 @@ from .hashing import sha256_file
 # Preferred filenames under an --attach-results directory (first match wins).
 PREFERRED_SUMMARY_NAMES: tuple[str, ...] = (
     "SUMMARY.json",
+    "falsification_scorecard.json",
     "workstream_c_summary.json",
     "residual_trust.json",
     "interpreter_matrix.json",
+    "aristotle_candidates.json",
 )
 
 PROGRAM_CONTEXT_DISCLAIMER = (
