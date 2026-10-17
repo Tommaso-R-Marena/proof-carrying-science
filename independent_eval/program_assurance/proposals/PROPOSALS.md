@@ -3,7 +3,7 @@
 **PROPOSALS ONLY — entries describe candidate future Codex/Aristotle work. None of these items are claimed as completed evaluation results.**
 
 Format: `pcs-independent-program-proposals-v1`
-Proposal count: 8
+Proposal count: 9
 
 | ID | Priority | Title | Affinity | Status |
 | --- | --- | --- | --- | --- |
@@ -11,6 +11,7 @@ Proposal count: 8
 | `E-P02` | 1 | Automated sibling-branch nonoverlap report in draft PR CI | program_assurance | `proposal` |
 | `E-P03` | 2 | Cross-workstream inventory dashboard from PRESENT reports only | program_assurance | `proposal` |
 | `E-P04` | 2 | Unified residual-trust rollup across OPEN_TRUST_ASSUMPTIONS | repro_tcb, program_assurance | `proposal` |
+| `E-P09` | 2 | Offline assurance card for external reviewers | assurance_card, reviewer_adoption, program_assurance | `proposal` |
 | `E-P05` | 3 | Adversarial protocol corpus expansion beyond JCS/ZIP fixtures | protocol_adversarial | `proposal` |
 | `E-P06` | 3 | External-lab burden measurement with human participants | reviewer_adoption | `proposal` |
 | `E-P07` | 3 | Aristotle-facing formalization candidates from inadequacy examples | scientific_falsification, program_assurance | `proposal` |
@@ -49,6 +50,14 @@ Proposal count: 8
 - **Affinity:** repro_tcb, program_assurance
 - **Summary:** When sibling OPEN_TRUST_ASSUMPTIONS.md files exist, extract structured assumption IDs into a program-level residual-trust index.
 - **Rationale:** Trust boundaries are currently per-workstream; synthesis is needed for Codex/Aristotle follow-on formalization proposals.
+
+### E-P09 — Offline assurance card for external reviewers
+
+- **Priority:** 2
+- **Status:** `proposal` (proposal — not claimed done)
+- **Affinity:** assurance_card, reviewer_adoption, program_assurance
+- **Summary:** Ship a one-command JSON/HTML assurance card that separates authority-lane `pcs verify` from non-authority inspection classes for any evidence bundle.
+- **Rationale:** Reviewers need a single offline artifact that is usable without learning the full PCS toolchain, without conflating inspection with acceptance.
 
 ### E-P05 — Adversarial protocol corpus expansion beyond JCS/ZIP fixtures
 

@@ -1,7 +1,7 @@
 # TEST_INVENTORY — program_assurance
 
-**Collected tests:** 16
-**Last pytest run:** 16 passed
+**Collected tests:** 20  
+**Last pytest run:** 20 passed
 
 ## Exact commands
 
@@ -9,32 +9,24 @@
 PYTHONPATH=independent_eval/program_assurance \
   python3 -m pytest -q independent_eval/program_assurance/tests
 
+# Soft campaign summary
 PYTHONPATH=independent_eval/program_assurance \
-  python3 -m python_harness.run_all
+  python3 -m python_harness run-all
+
+# Hard local gates (exit 1 on collisions/overlaps)
+PYTHONPATH=independent_eval/program_assurance \
+  python3 -m python_harness preflight
 ```
 
-## Collected test node ids
+## Suites
 
-- `independent_eval/program_assurance/tests/test_collision_scanner.py::test_no_collision_on_distinct_names`
-- `independent_eval/program_assurance/tests/test_collision_scanner.py::test_detects_checklist_case_collision`
-- `independent_eval/program_assurance/tests/test_collision_scanner.py::test_detects_directory_component_case_collision`
-- `independent_eval/program_assurance/tests/test_collision_scanner.py::test_write_collision_report_roundtrip`
-- `independent_eval/program_assurance/tests/test_collision_scanner.py::test_skips_pycache`
-- `independent_eval/program_assurance/tests/test_inventory_aggregator.py::test_missing_prefixes_recorded_as_missing`
-- `independent_eval/program_assurance/tests/test_inventory_aggregator.py::test_present_inventory_extracts_collected_tests`
-- `independent_eval/program_assurance/tests/test_inventory_aggregator.py::test_markdown_render_marks_missing`
-- `independent_eval/program_assurance/tests/test_nonoverlap_auditor.py::test_pairwise_overlap_detected`
-- `independent_eval/program_assurance/tests/test_nonoverlap_auditor.py::test_no_overlap_when_disjoint`
-- `independent_eval/program_assurance/tests/test_nonoverlap_auditor.py::test_missing_branch_recorded`
-- `independent_eval/program_assurance/tests/test_nonoverlap_auditor.py::test_diff_error_recorded`
-- `independent_eval/program_assurance/tests/test_nonoverlap_auditor.py::test_write_nonoverlap_report`
-- `independent_eval/program_assurance/tests/test_proposals_catalog.py::test_default_catalog_all_proposals`
-- `independent_eval/program_assurance/tests/test_proposals_catalog.py::test_rejects_completion_claim`
-- `independent_eval/program_assurance/tests/test_proposals_catalog.py::test_write_catalog_files`
+| Module | Coverage |
+| --- | --- |
+| `test_collision_scanner.py` | Case-insensitive path collisions |
+| `test_nonoverlap_auditor.py` | Sibling-branch changed-file overlaps |
+| `test_inventory_aggregator.py` | PRESENT/MISSING report aggregation |
+| `test_proposals_catalog.py` | Proposal catalog invariants |
+| `test_preflight.py` | Hard-fail preflight gates |
+| `test_residual_trust.py` | Residual-trust rollup (`tcb_closed=false`) |
 
-## Counts by file
-
-- `test_collision_scanner.py`: 5
-- `test_nonoverlap_auditor.py`: 5
-- `test_inventory_aggregator.py`: 3
-- `test_proposals_catalog.py`: 3
+Live preflight on this tip: collisions=0, pairwise overlaps=0, residual-trust sources_present=4, `tcb_closed=false`.

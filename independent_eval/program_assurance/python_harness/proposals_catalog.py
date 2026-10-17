@@ -133,6 +133,8 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
             "Scientific falsification surfaces gaps between computational support and "
             "empirical adequacy that formal methods might later address."
         ),
+        "harness_local": "partially_addressed_on_workstream_B_aristotle_candidates",
+        "ci_wiring": "n/a",
         "not_claimed_done": True,
     },
     {
@@ -147,6 +149,26 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
             "them as passes."
         ),
         "rationale": "TCB residual trust shrinks only with measured environments.",
+        "harness_local": "partially_addressed_on_workstream_C_interpreter_matrix",
+        "ci_wiring": "n/a",
+        "not_claimed_done": True,
+    },
+    {
+        "id": "E-P09",
+        "priority": 2,
+        "title": "Offline assurance card for external reviewers",
+        "status": "proposal",
+        "workstream_affinity": ["assurance_card", "reviewer_adoption", "program_assurance"],
+        "summary": (
+            "Ship a one-command JSON/HTML assurance card that separates authority-lane "
+            "`pcs verify` from non-authority inspection classes for any evidence bundle."
+        ),
+        "rationale": (
+            "Reviewers need a single offline artifact that is usable without learning "
+            "the full PCS toolchain, without conflating inspection with acceptance."
+        ),
+        "harness_local": "implemented_as_workstream_F_assurance_card",
+        "ci_wiring": "proposal",
         "not_claimed_done": True,
     },
 ]
