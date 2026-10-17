@@ -1,0 +1,62 @@
+{
+  "format": "pcs-assurance-card-fixture-certificate-v1",
+  "subject": "synthetic-assurance-card-demo",
+  "semantic_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "assumptions": [
+    {
+      "id": "A_MODEL",
+      "statement": "The declared equation is the computational model under test; biological adequacy is not claimed.",
+      "rationale": "Separates computational replay from scientific validity.",
+      "scope": ["C_REPLAY", "C_INTEGRITY"]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_REPLAY",
+      "statement": "Predictions match the declared analytic model within tolerance.",
+      "kind": "computational",
+      "required_evidence": ["E_REPLAY"],
+      "assumptions": ["A_MODEL"],
+      "assessment": {
+        "status": "COMPUTATIONALLY_SUPPORTED",
+        "note": "Fixture status reported by synthetic certificate only."
+      }
+    },
+    {
+      "id": "C_INTEGRITY",
+      "statement": "Artifact digests match the committed package hashes.",
+      "kind": "integrity",
+      "required_evidence": ["E_HASH"],
+      "assumptions": ["A_MODEL"],
+      "assessment": {
+        "status": "SIGNATURE_OK",
+        "note": "Fixture cryptographic/integrity label only."
+      }
+    },
+    {
+      "id": "C_BIOLOGY",
+      "statement": "The model is biologically adequate for clinical use.",
+      "kind": "scientific",
+      "required_evidence": [],
+      "assumptions": ["A_MODEL"],
+      "assessment": {
+        "status": "OPEN",
+        "note": "Intentionally unsupported scientific claim in fixture."
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "model",
+      "path": "artifacts/model.json",
+      "role": "model",
+      "media_type": "application/json"
+    },
+    {
+      "id": "predictions",
+      "path": "artifacts/predictions.csv",
+      "role": "predictions",
+      "media_type": "text/csv"
+    }
+  ]
+}
