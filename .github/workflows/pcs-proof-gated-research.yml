@@ -33,7 +33,7 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           cd formal
-          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer PCS.V2.ProofGatedAudit
           tmp="$(mktemp -d)"
           trap 'rm -rf "$tmp"' EXIT
           if ! lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt" 2>&1; then
