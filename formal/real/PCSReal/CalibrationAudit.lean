@@ -1,0 +1,29 @@
+import PCSReal.CalibrationControls
+set_option format.width 1000000
+
+#print axioms PCSReal.Calibration.normal_orthogonal
+#print axioms PCSReal.Calibration.loss_decomposition
+#print axioms PCSReal.Calibration.global_minimum
+#print axioms PCSReal.Calibration.model_exclusion
+#print axioms PCSReal.Calibration.reproduction_prediction
+#print axioms PCSReal.Calibration.dual_prediction
+#print axioms PCSReal.Calibration.response_perturbation_bound
+#print axioms PCSReal.Calibration.sharp_perturbation_attained
+#print axioms PCSReal.Calibration.sharp_radius_iff
+#print axioms PCSReal.Calibration.physical_enclosure
+#print axioms PCSReal.Calibration.fit_check_sound
+#print axioms PCSReal.Calibration.cast_loss
+#print axioms PCSReal.Calibration.dual_check_sound
+#print axioms PCSReal.Calibration.dual_gain_lower_bound
+#print axioms PCSReal.Calibration.minimax_weights_optimal
+#print axioms PCSReal.Calibration.minimax_radius_lower_bound
+#print axioms PCSReal.Calibration.minimax_check_sound
+#print axioms PCSReal.CalibrationControls.good_normal
+#print axioms PCSReal.CalibrationControls.wrong_coefficient_rejected
+#print axioms PCSReal.CalibrationControls.exact_nonzero_residual
+#print axioms PCSReal.CalibrationControls.good_dual
+#print axioms PCSReal.CalibrationControls.wrong_dual_rejected
+#print axioms PCSReal.CalibrationControls.sharp_gain
+#print axioms PCSReal.CalibrationControls.good_minimax
+#print axioms PCSReal.CalibrationControls.false_minimax_rejected
+#print axioms PCSReal.CalibrationControls.smaller_uniform_radius_impossible

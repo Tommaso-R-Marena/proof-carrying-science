@@ -491,6 +491,34 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+      - name: Real experimental calibration, minimax proofs and held-out comparisons
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          # Reuse the already hash-pinned CPU numerical baseline; no training.
+          python - <<'PYCALLOCK'
+          import os
+          from pathlib import Path
+          lines = [line for line in Path('requirements-prover.lock').read_text().splitlines() if line.startswith('numpy==')]
+          assert len(lines) == 1
+          (Path(os.environ['RUNNER_TEMP']) / 'calibration-baseline.lock').write_text(lines[0] + '\n')
+          PYCALLOCK
+          python -m pip install --require-hashes --no-deps -r "$RUNNER_TEMP/calibration-baseline.lock"
+          python scripts/verify_calibration_formal.py --output "$RUNNER_TEMP/calibration-static-axioms.json"
+          PCS_REQUIRE_CALIBRATION_KERNEL=1 python -m pytest -q tests/test_calibration_kernel_v1.py
+          python scripts/run_experimental_calibration_v1.py --output "$RUNNER_TEMP/experimental-calibration"
+      - name: Retain real experimental calibration evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: pcs-experimental-calibration-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/calibration-static-axioms.json
+            ${{ runner.temp }}/experimental-calibration/
+          if-no-files-found: warn
+          retention-days: 14
+
   certiforge-integration:
     name: certiforge-integration
     needs: source-policy
