@@ -23,6 +23,7 @@
   - `independent_eval/scientific_falsification/**`
   - `independent_eval/repro_tcb/**`
   - `independent_eval/reviewer_adoption/**`
+  - `independent_eval/assurance_card/**`
 
 ## Sibling workstreams (no file overlap)
 
@@ -33,6 +34,7 @@
 | C — reproducibility & TCB | `independent_eval/repro_tcb/` | `feature/independent-eval-repro-tcb-c8bb` |
 | D — reviewer & adoption | `independent_eval/reviewer_adoption/` | `feature/independent-eval-reviewer-adoption-c8bb` |
 | E — program assurance (this) | `independent_eval/program_assurance/` | `feature/independent-eval-program-assurance-c8bb` |
+| F — assurance card | `independent_eval/assurance_card/` | `feature/independent-eval-assurance-card-c8bb` |
 | Pilot (PR #120) | (pilot paths; not this tree) | `feature/independent-scientific-pilot-c8bb` |
 
 ## Tasks owned here

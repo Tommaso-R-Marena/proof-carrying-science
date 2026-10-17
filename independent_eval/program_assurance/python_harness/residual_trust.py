@@ -44,6 +44,12 @@ TRUST_SOURCES: tuple[dict[str, str], ...] = (
         "branch": "feature/independent-eval-reviewer-adoption-c8bb",
         "workstream": "reviewer_adoption",
     },
+    {
+        "path": "independent_eval/assurance_card/TECHNICAL_REPORT.md",
+        "branch": "feature/independent-eval-assurance-card-c8bb",
+        "workstream": "assurance_card",
+        "section_hint": "Non-claims",
+    },
 )
 
 
