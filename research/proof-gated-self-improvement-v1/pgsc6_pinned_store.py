@@ -194,6 +194,28 @@ class PinnedPGSC6Store:
     def _oracle_digest() -> str:
         return hashlib.sha256(_read_regular(ORACLE, MAX_ORACLE_BYTES)).hexdigest()
 
+    @staticmethod
+    def _formal_source_digest() -> str:
+        """Detect accidental V6 source/config drift since store initialization.
+
+        This is NOT a binary/oleans attestation, signature, or protection
+        against an adversary able to rewrite the store and its genesis.
+        """
+        project = FORMAL_DIR
+        sources = sorted((project / "PCS" / "V2").glob("ProofGated*.lean"))
+        essentials = [project / "lean-toolchain", project / "lakefile.toml",
+                      project / "lake-manifest.json"]
+        if len(sources) < 14:
+            raise IntegrityFailure("missing formal certificate source closure")
+        h = hashlib.sha256(b"PGSC6-FORMAL-SOURCES-v1\x00")
+        for path in sorted([*sources, *essentials]):
+            if not path.is_relative_to(project):
+                raise IntegrityFailure("formal source escaped project")
+            raw = _read_regular(path, 1024 * 1024)
+            h.update(str(path.relative_to(project)).encode("utf-8") + b"\x00")
+            h.update(hashlib.sha256(raw).digest())
+        return h.hexdigest()
+
     @classmethod
     def initialize(cls, root: Path) -> "PinnedPGSC6Store":
         """Create new unowned directory; never reinitialize existing state."""
@@ -209,7 +231,8 @@ class PinnedPGSC6Store:
             oracle_hash = store._oracle_digest()
             _write_once(root / "GENESIS.json", canonical({
                 "version": VERSION, "policy_sha256": POLICY_DIGEST,
-                "oracle_sha256": oracle_hash, "initial_model_sha256": base,
+                "oracle_sha256": oracle_hash, "formal_sources_sha256": store._formal_source_digest(),
+                "initial_model_sha256": base,
             }))
             _write_once(root / "HEAD.json", canonical(Head(
                 0, base, POLICY_DIGEST, ZERO_HASH
@@ -225,6 +248,8 @@ class PinnedPGSC6Store:
             raise IntegrityFailure("genesis does not match fixed policy")
         if genesis["oracle_sha256"] != self._oracle_digest():
             raise IntegrityFailure("Lean oracle source changed since genesis")
+        if genesis["formal_sources_sha256"] != self._formal_source_digest():
+            raise IntegrityFailure("Lean formal source/configuration changed since genesis")
         previous = genesis["initial_model_sha256"]
         require_hash(previous)
         self._model(previous)
