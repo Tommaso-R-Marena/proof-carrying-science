@@ -168,7 +168,7 @@ private def readNeuron (a w b : String) : Option PCS.V2.ProofGatedSelfImprovemen
   else
     some ⟨activation, weight, bias⟩
 
-def main (args : List String) : IO UInt32 := do
+def legacyParameterMain (args : List String) : IO UInt32 := do
   match args with
   | [oldA, oldW, oldB, newA, newW, newB] =>
     match readNeuron oldA oldW oldB, readNeuron newA newW newB with
