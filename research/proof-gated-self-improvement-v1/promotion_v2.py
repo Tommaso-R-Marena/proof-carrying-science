@@ -169,11 +169,13 @@ class ResearchPromotionStore:
     def _locked(self) -> Iterator[None]:
         self._dirs()
         lockpath = self.root / ".lock"
-        _regular(lockpath)
+        prior = _regular(lockpath)
         fd = os.open(lockpath, os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC)
         try:
             info = os.fstat(fd)
-            if info.st_nlink != 1 or not stat.S_ISREG(info.st_mode):
+            if info.st_nlink != 1 or not stat.S_ISREG(info.st_mode) or (
+                info.st_ino, info.st_dev
+            ) != (prior.st_ino, prior.st_dev):
                 raise IntegrityFailure("lock swapped")
             fcntl.flock(fd, fcntl.LOCK_EX)
             yield
@@ -247,7 +249,7 @@ class ResearchPromotionStore:
         the pointer swap, NOT arbitrary privileged races or host compromise.
         """
         with self._locked():
-            old = self._head()
+            old = self._audit_locked()
             if old != expected:
                 raise StaleHead("incumbent head no longer matches")
             original = self._blob(old.active_sha256)
@@ -260,7 +262,7 @@ class ResearchPromotionStore:
                 self._blob(candidate_digest) != candidate_bytes
             ):
                 raise IntegrityFailure("verified artifacts changed before commit")
-            if self._head() != old:
+            if self._audit_locked() != old:
                 raise StaleHead("incumbent changed during verification")
             receipt = {
                 "version": VERSION,
@@ -281,39 +283,42 @@ class ResearchPromotionStore:
 
     def audit(self) -> Head:
         with self._locked():
-            head = self._head()
-            genesis = strict_json(_read_regular(self.root / "GENESIS.json", 2048))
-            if not isinstance(genesis, dict) or set(genesis) != {
-                "version", "genesis_sha256", "policy_sha256"
-            } or genesis["version"] != VERSION or genesis["policy_sha256"] != POLICY_HASH:
-                raise IntegrityFailure("invalid genesis")
-            digest = genesis["genesis_sha256"]
+            return self._audit_locked()
+
+    def _audit_locked(self) -> Head:
+        head = self._head()
+        genesis = strict_json(_read_regular(self.root / "GENESIS.json", 2048))
+        if not isinstance(genesis, dict) or set(genesis) != {
+            "version", "genesis_sha256", "policy_sha256"
+        } or genesis["version"] != VERSION or genesis["policy_sha256"] != POLICY_HASH:
+            raise IntegrityFailure("invalid genesis")
+        digest = genesis["genesis_sha256"]
+        require_hash(digest)
+        self._blob(digest)
+        expected_files = {f"{gen:08d}.json" for gen in range(1, head.generation + 1)}
+        observed_files = {p.name for p in (self.root / "receipts").iterdir()}
+        if observed_files != expected_files:
+            raise IntegrityFailure("missing or orphaned receipt: possible rollback or crash")
+        prev = ZERO_HASH
+        for gen in range(1, head.generation + 1):
+            receipt_path = self.root / "receipts" / f"{gen:08d}.json"
+            raw = _read_regular(receipt_path, 2048)
+            event = strict_json(raw)
+            if not isinstance(event, dict) or set(event) != {
+                "version", "generation", "old_sha256", "new_sha256",
+                "previous_receipt_sha256", "policy_sha256", "verification",
+            } or event != {
+                "version": VERSION, "generation": gen,
+                "old_sha256": digest,
+                "new_sha256": event.get("new_sha256"),
+                "previous_receipt_sha256": prev, "policy_sha256": POLICY_HASH,
+                "verification": "Lean file-authority accepted; unsigned research receipt",
+            }:
+                raise IntegrityFailure("invalid or broken receipt chain")
+            digest = event["new_sha256"]
             require_hash(digest)
             self._blob(digest)
-            expected_files = {f"{gen:08d}.json" for gen in range(1, head.generation + 1)}
-            observed_files = {p.name for p in (self.root / "receipts").iterdir()}
-            if observed_files != expected_files:
-                raise IntegrityFailure("missing or orphaned receipt: possible rollback or crash")
-            prev = ZERO_HASH
-            for gen in range(1, head.generation + 1):
-                receipt_path = self.root / "receipts" / f"{gen:08d}.json"
-                raw = _read_regular(receipt_path, 2048)
-                event = strict_json(raw)
-                if not isinstance(event, dict) or set(event) != {
-                    "version", "generation", "old_sha256", "new_sha256",
-                    "previous_receipt_sha256", "policy_sha256", "verification",
-                } or event != {
-                    "version": VERSION, "generation": gen,
-                    "old_sha256": digest,
-                    "new_sha256": event.get("new_sha256"),
-                    "previous_receipt_sha256": prev, "policy_sha256": POLICY_HASH,
-                    "verification": "Lean file-authority accepted; unsigned research receipt",
-                }:
-                    raise IntegrityFailure("invalid or broken receipt chain")
-                digest = event["new_sha256"]
-                require_hash(digest)
-                self._blob(digest)
-                prev = receipt_hash(raw)
-            if head.active_sha256 != digest or head.last_receipt_sha256 != prev:
-                raise IntegrityFailure("head does not match receipt chain")
-            return head
+            prev = receipt_hash(raw)
+        if head.active_sha256 != digest or head.last_receipt_sha256 != prev:
+            raise IntegrityFailure("head does not match receipt chain")
+        return head
