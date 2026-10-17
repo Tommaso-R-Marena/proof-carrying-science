@@ -36,6 +36,7 @@ new formal proof obligation set.
 | ID | Meaning |
 | --- | --- |
 | Environment reconstruction fidelity | Lean marks `reconstructionFidelity` as not applicable; cross-host hermetic rebuild is an engineering obligation (Task 12 measures what this checkout can show) |
+| Lean authority binary identity | Task 12 records `pcs-lean-authority` path + SHA-256 when present; absence is explicit. Byte identity across hosts is never assumed without comparing digests |
 | Container / R runtimes | Named hypotheses only when used; containers N/A for v0.6 replay |
 | Freshness / anti-rollback | Not claimed via stored freshness authority |
 

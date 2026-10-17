@@ -107,6 +107,32 @@ def discover_python_interpreters(extra: list[str] | None = None) -> list[dict[st
     return out
 
 
+def probe_lean_authority(repo: Path | None = None) -> dict[str, Any]:
+    """Locate pcs-lean-authority if present and record path + SHA-256.
+
+    Absence is recorded as ``present=false`` — never assumed identical across hosts.
+    """
+    root = repo or REPO_ROOT
+    candidates = [
+        root / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority",
+        Path(shutil.which("pcs-lean-authority") or ""),
+    ]
+    for path in candidates:
+        if path.is_file() and os.access(path, os.X_OK):
+            return {
+                "present": True,
+                "path": str(path),
+                "sha256": sha256_file(path),
+                "size_bytes": path.stat().st_size,
+            }
+    return {
+        "present": False,
+        "path": None,
+        "sha256": None,
+        "note": "pcs-lean-authority not found; reconstruction harness does not invent a binary hash",
+    }
+
+
 def capture_host_environment(repo: Path | None = None) -> dict[str, Any]:
     root = repo or REPO_ROOT
     lean_toolchain = None
@@ -122,6 +148,8 @@ def capture_host_environment(repo: Path | None = None) -> dict[str, Any]:
     except ImportError:
         crypto_version = None
 
+    lean_authority = probe_lean_authority(root)
+
     return {
         "git_commit": git_commit(root),
         "git_describe": git_describe(root),
@@ -136,6 +164,7 @@ def capture_host_environment(repo: Path | None = None) -> dict[str, Any]:
         },
         "toolchains": {
             "lean_toolchain_file": lean_toolchain,
+            "pcs_lean_authority": lean_authority,
             "cryptography": crypto_version,
             "zipfile_module": "stdlib",
             "hashlib_sha256": "stdlib/openssl-backed",

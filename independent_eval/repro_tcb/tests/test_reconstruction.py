@@ -45,6 +45,12 @@ def test_identical_archive_replay_passes(tmp_path: Path) -> None:
     assert report["environment"]["git_commit"]
     assert report["environment"]["platform"]["platform"]
     assert report["environment"]["toolchains"]["lean_toolchain_file"]
+    authority = report["environment"]["toolchains"]["pcs_lean_authority"]
+    assert "present" in authority
+    if authority["present"]:
+        assert authority["sha256"] and len(authority["sha256"]) == 64
+    else:
+        assert authority.get("sha256") is None
     assert len(report["clean_directory_verifications"]) == 3
     assert report["cross_python_verifications"]
 
