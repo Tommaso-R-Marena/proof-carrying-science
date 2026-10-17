@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'research/proof-gated-self-improvement-v1/pgsc6_external_anchor*.py'
+      - 'research/proof-gated-self-improvement-v1/pgsc6_two_uid_probe.py'
       - 'research/proof-gated-self-improvement-v1/tests/test_pgsc6_external_anchor.py'
       - '.github/workflows/pcs-pgsc6-external-checkpoint.yml'
   workflow_dispatch:
@@ -38,6 +39,12 @@ jobs:
           source scripts/activate_lean_428.sh
           cd research/proof-gated-self-improvement-v1
           python pgsc6_external_anchor_live.py
+      - name: Independent Linux account cannot rewrite authority checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python pgsc6_two_uid_probe.py
       - name: Re-run all research Python regressions
         run: |
           set -euo pipefail
