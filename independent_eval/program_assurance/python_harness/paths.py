@@ -16,6 +16,7 @@ SIBLING_PREFIXES: tuple[str, ...] = (
     "independent_eval/scientific_falsification",
     "independent_eval/repro_tcb",
     "independent_eval/reviewer_adoption",
+    "independent_eval/program_assurance",
 )
 
 SIBLING_BRANCHES: tuple[str, ...] = (
