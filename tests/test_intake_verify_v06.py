@@ -12,18 +12,17 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from pcs.attest_v06 import INTAKE_LOCK_PACKAGE_MEMBER_V06, attest_v06
-from pcs.bundle_v06 import load_package_zip_v06
+from pcs.attest_v06 import attest_v06
 from pcs.canonical_json import canonicalize_jcs_bytes
 from pcs.canonical_zip_v06 import canonical_zip_bytes_v06
 from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06, write_discovery_outputs_v06
 from pcs.independent_pilot_v1 import _align_draft_to_intake, stage_external_lab_project
-from pcs.intake import freeze_intake, freeze_intake_file
+from pcs.intake import INTAKE_LOCK_PACKAGE_MEMBER_V06, freeze_intake, freeze_intake_file
 from pcs.intake_verify_v06 import verify_package_intake_lock_v06
 from pcs.lean_authority_v06 import V06LeanAuthorityError, resolve_lean_authority_v06
 from pcs.package_v06 import build_package_manifest_v06, sign_package_manifest_v06
 from pcs.signing import public_key_fingerprint
-from pcs.verifier_zip_v06 import verify_package_zip_end_to_end_v06
+from pcs.verifier_zip_v06 import load_package_zip_v06, verify_package_zip_end_to_end_v06
 
 
 ROOT = Path(__file__).resolve().parents[1]

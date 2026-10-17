@@ -15,9 +15,13 @@ import hashlib
 from collections.abc import Mapping
 from typing import Any
 
-from .attest_v06 import INTAKE_LOCK_PACKAGE_MEMBER_V06
 from .canonical_json import CanonicalJSONError, parse_jcs_json
-from .intake import PilotIntakeError, assert_lock_matches_certificate, validate_lock
+from .intake import (
+    INTAKE_LOCK_PACKAGE_MEMBER_V06,
+    PilotIntakeError,
+    assert_lock_matches_certificate,
+    validate_lock,
+)
 from .jsonio import StrictJSONError
 
 

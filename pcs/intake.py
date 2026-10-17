@@ -16,6 +16,8 @@ from .schema_validation import (
 
 INTAKE_FORMAT = "pcs-pilot-intake-v1"
 LOCK_FORMAT = "pcs-pilot-intake-lock-v1"
+# Signed package member name for a frozen pilot intake lock (v0.6 ZIP / directory).
+INTAKE_LOCK_PACKAGE_MEMBER_V06 = "pilot-intake-lock.json"
 
 
 class PilotIntakeError(ValueError):

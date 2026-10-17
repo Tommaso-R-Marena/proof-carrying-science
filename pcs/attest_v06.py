@@ -69,16 +69,18 @@ from .external_validator_v06 import (
     external_validator_evidence_kind_v06,
     normalize_external_validator_check_spec_v06,
 )
-from .intake import PilotIntakeError, assert_lock_matches_certificate, load_lock
+from .intake import (
+    INTAKE_LOCK_PACKAGE_MEMBER_V06,
+    PilotIntakeError,
+    assert_lock_matches_certificate,
+    load_lock,
+)
 from .lean_authority_v06 import V06LeanAuthorityError
 from .numeric_contract_v06 import (
     V06NumericContractError,
     canonical_nonnegative_number_text_v06,
     normalize_certificate_metadata_scalar_v06,
 )
-
-INTAKE_LOCK_PACKAGE_MEMBER_V06 = "pilot-intake-lock.json"
-
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 _SUPPORTED_CHECK_TYPES = set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
