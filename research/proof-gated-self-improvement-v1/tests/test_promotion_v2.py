@@ -45,8 +45,8 @@ class PromotionStorageTests(unittest.TestCase):
 
     def test_double_promotion_and_audit_chain_with_mock_oracle(self):
         a = self.store.snapshot()
-        b = self.store.promote(wire_bytes(STEP1), a, self.approve_mock)
-        c = self.store.promote(wire_bytes(STEP2), b, self.approve_mock)
+        b = self.store._promote_with_oracle(wire_bytes(STEP1), a, self.approve_mock)
+        c = self.store._promote_with_oracle(wire_bytes(STEP2), b, self.approve_mock)
         self.assertEqual(c.generation, 2)
         self.assertEqual(self.store.read_active()[1], wire_bytes(STEP2))
         self.assertNotEqual(b.last_receipt_sha256, c.last_receipt_sha256)
@@ -55,21 +55,27 @@ class PromotionStorageTests(unittest.TestCase):
 
     def test_stale_generation_rejected_before_gate(self):
         a = self.store.snapshot()
-        self.store.promote(wire_bytes(STEP1), a, self.approve_mock)
+        self.store._promote_with_oracle(wire_bytes(STEP1), a, self.approve_mock)
         with self.assertRaises(StaleHead):
-            self.store.promote(wire_bytes(STEP2), a, self.approve_mock)
+            self.store._promote_with_oracle(wire_bytes(STEP2), a, self.approve_mock)
         self.assertEqual(self.calls, 1)
 
     def test_forged_expected_policy_rejected(self):
         a = self.store.snapshot()
         forged = Head(a.generation, a.active_sha256, "e"*64, a.last_receipt_sha256)
         with self.assertRaises(StaleHead):
-            self.store.promote(wire_bytes(STEP1), forged, self.approve_mock)
+            self.store._promote_with_oracle(wire_bytes(STEP1), forged, self.approve_mock)
+
+    def test_public_api_refuses_caller_selectable_verifier(self):
+        before = self.store.snapshot()
+        with self.assertRaises(TypeError):
+            self.store.promote(wire_bytes(STEP1), before, lambda *_: True)
+        self.assertEqual(self.store.snapshot(), before)
 
     def test_negative_gate_does_not_commit(self):
         initial = self.store.snapshot()
         with self.assertRaises(ProposalRejected):
-            self.store.promote(wire_bytes(STEP1), initial, lambda *_: False)
+            self.store._promote_with_oracle(wire_bytes(STEP1), initial, lambda *_: False)
         self.assertEqual(self.store.snapshot(), initial)
         self.assertEqual(self.store.audit(), initial)
 
@@ -87,7 +93,7 @@ class PromotionStorageTests(unittest.TestCase):
             candidate.write_bytes(b"PGSI1|R|30|30")
             return True
         with self.assertRaises(IntegrityFailure):
-            self.store.promote(wire_bytes(STEP1), initial, fake_race)
+            self.store._promote_with_oracle(wire_bytes(STEP1), initial, fake_race)
         self.assertEqual(self.store.snapshot(), initial)
         with self.assertRaises(IntegrityFailure):
             self.store.audit() if False else self.store._blob(
@@ -138,7 +144,7 @@ class PromotionStorageTests(unittest.TestCase):
 
     def test_stale_and_missing_receipts_rejected(self):
         h = self.store.snapshot()
-        newer = self.store.promote(wire_bytes(STEP1), h, self.approve_mock)
+        newer = self.store._promote_with_oracle(wire_bytes(STEP1), h, self.approve_mock)
         self.assertEqual(self.store.audit(), newer)
         (self.root / "receipts" / "00000001.json").unlink()
         with self.assertRaises(IntegrityFailure):
@@ -146,7 +152,7 @@ class PromotionStorageTests(unittest.TestCase):
 
     def test_simple_head_rollback_detected_by_future_receipt(self):
         original = (self.root / "HEAD.json").read_bytes()
-        self.store.promote(wire_bytes(STEP1), self.store.snapshot(), self.approve_mock)
+        self.store._promote_with_oracle(wire_bytes(STEP1), self.store.snapshot(), self.approve_mock)
         (self.root / "HEAD.json").write_bytes(original)
         with self.assertRaises(IntegrityFailure):
             self.store.audit()
@@ -155,14 +161,14 @@ class PromotionStorageTests(unittest.TestCase):
         old = self.store.snapshot()
         with patch("promotion_v2._replace_head", side_effect=RuntimeError("simulated crash")):
             with self.assertRaisesRegex(RuntimeError, "simulated crash"):
-                self.store.promote(wire_bytes(STEP1), old, self.approve_mock)
+                self.store._promote_with_oracle(wire_bytes(STEP1), old, self.approve_mock)
         self.assertEqual(self.store.snapshot(), old)
         with self.assertRaises(IntegrityFailure):
             self.store.audit()
 
     def test_receipt_modification_detected(self):
         old = self.store.snapshot()
-        self.store.promote(wire_bytes(STEP1), old, self.approve_mock)
+        self.store._promote_with_oracle(wire_bytes(STEP1), old, self.approve_mock)
         receipt = self.root / "receipts" / "00000001.json"
         obj = json.loads(receipt.read_text())
         obj["verification"] = "untrusted_override"
@@ -175,17 +181,17 @@ class PromotionStorageTests(unittest.TestCase):
         for candidate in (b"", b"x" * 999, "PGSI1|R|1|1"):
             with self.subTest(candidate=str(candidate)[:20]):
                 with self.assertRaises(IntegrityFailure):
-                    self.store.promote(candidate, old, self.approve_mock)
+                    self.store._promote_with_oracle(candidate, old, self.approve_mock)
         self.assertEqual(self.calls, 0)
 
 
     def test_tampered_receipt_blocks_future_promotions(self):
         original = self.store.snapshot()
-        first = self.store.promote(wire_bytes(STEP1), original, self.approve_mock)
+        first = self.store._promote_with_oracle(wire_bytes(STEP1), original, self.approve_mock)
         receipt = self.root / "receipts" / "00000001.json"
         receipt.write_bytes(b'{"forged":true}')
         with self.assertRaises(IntegrityFailure):
-            self.store.promote(wire_bytes(STEP2), first, self.approve_mock)
+            self.store._promote_with_oracle(wire_bytes(STEP2), first, self.approve_mock)
         self.assertEqual(self.store.snapshot(), first)
         self.assertEqual(self.calls, 1)
 
@@ -194,7 +200,7 @@ class PromotionStorageTests(unittest.TestCase):
         initial = self.store.snapshot()
         def attempt(m):
             try:
-                return self.store.promote(wire_bytes(m), initial, self.approve_mock)
+                return self.store._promote_with_oracle(wire_bytes(m), initial, self.approve_mock)
             except StaleHead:
                 return None
         with ThreadPoolExecutor(max_workers=2) as pool:
