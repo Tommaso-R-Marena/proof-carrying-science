@@ -125,5 +125,36 @@ class ProofGatedTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "FAIL CLOSED"):
             automatic_search(formal_dir=Path("/absent-pgsi-gate"))
 
+
+    def test_canonical_wire_uniqueness_and_roundtrip(self):
+        from proof_gate import wire_bytes
+        models = [Model(a, w, b) for a in (False, True)
+                  for w in range(-32, 33) for b in range(-32, 33)]
+        serialized = [wire_bytes(m) for m in models]
+        self.assertEqual(len(models), 8450)
+        self.assertEqual(len(set(serialized)), len(models))
+        self.assertEqual(wire_bytes(self.a), b"PGSI1|R|0|0")
+        self.assertEqual(wire_bytes(self.b), b"PGSI1|R|1|1")
+        self.assertEqual(wire_bytes(Model(False, -32, 32)), b"PGSI1|L|-32|32")
+        self.assertTrue(all(b"\\n" not in s and b"\\r" not in s for s in serialized))
+
+    def test_unavailable_artifact_authority_fails_closed(self):
+        from proof_gate import artifact_gate, wire_bytes
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as d:
+            a, b = Path(d) / "active", Path(d) / "candidate"
+            a.write_bytes(wire_bytes(self.a))
+            b.write_bytes(wire_bytes(self.b))
+            self.assertFalse(artifact_gate(a, b, Path("/missing-pgsi-lean")))
+
+    def test_frozen_benchmark_can_hide_generalization_regression(self):
+        # Accepted benchmark steps do NOT imply out-of-domain improvement.
+        hidden = (-20, -10, 10, 20)
+        def hidden_loss(m):
+            return sum(abs(m.predict(x)) for x in hidden)
+        self.assertTrue(check(self.a, self.b).accepted)
+        self.assertGreater(hidden_loss(self.b), hidden_loss(self.a))
+
+
 if __name__ == "__main__":
     unittest.main()
