@@ -67,7 +67,7 @@ jobs:
               cmd = ["lake", "env", "lean", "--run",
                      "PCS/V2/ProofGatedArtifacts.lean", str(a.resolve()), str(b.resolve())]
               p = subprocess.run(cmd, capture_output=True, text=True, cwd=Path("../../formal").resolve())
-              print("diagnostic: rc", p.returncode, "out", repr(p.stdout), "err", repr(p.stderr))
+              assert p.returncode == 0 and p.stdout == "ACCEPT\\n" and p.stderr == ""
               assert artifact_gate(a, b, Path("../../formal").resolve())
           r = automatic_search(formal_dir=Path("../../formal").resolve())
           assert r["generation_count"] == 2
