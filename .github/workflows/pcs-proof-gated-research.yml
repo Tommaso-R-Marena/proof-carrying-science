@@ -132,7 +132,9 @@ jobs:
           PY
 
   native-hardening:
-    runs-on: ubuntu-24.04
+    # Ubuntu 24.04 runner denied Bubblewrap loopback setup; qualify the same
+    # mandatory namespace/readonly/seal/peer tests on a supported Linux image.
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -145,6 +147,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          evidence="$RUNNER_TEMP/pgsi-hardening"
+          mkdir "$evidence"
+          uname -sr > "$evidence/host-kernel.txt"
           if ! command -v bwrap >/dev/null; then
             sudo apt-get update -qq
             sudo apt-get install -y --no-install-recommends bubblewrap
@@ -152,14 +157,15 @@ jobs:
           test -x /usr/bin/cc
           test -x /usr/bin/strip
           # Failure is a failed isolation qualification, never an unisolated fallback.
-          bwrap --unshare-all --die-with-parent --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 -- /usr/bin/true
+          bwrap --version | tee "$evidence/bubblewrap-version.txt"
+          bwrap --unshare-all --die-with-parent --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 -- /usr/bin/true 2>&1 | tee "$evidence/sandbox-preflight.log"
       - name: Compile pinned authority, audit frozen proofs, run every real boundary test
         shell: bash
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
           evidence="$RUNNER_TEMP/pgsi-hardening"
-          mkdir "$evidence"
+          test -d "$evidence"
           cd formal
           lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
           lake env lean PCS/V2/ProofGatedAudit.lean > "$evidence/axioms.log"
