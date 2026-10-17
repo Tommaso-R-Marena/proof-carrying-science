@@ -19,3 +19,8 @@ Synthetic PK/PD pilot and falsification suite executed via
 ## Datasets
 
 All fixtures are synthetic; license: Apache-2.0 with the repository.
+
+
+## Journal-backed demos
+
+See `JOURNAL_DEMOS_REPORT.md`. Theophylline oral fits computationally supported; IV misspecification refuted; Indometh monoexponential negative control refuted; external validation OPEN.

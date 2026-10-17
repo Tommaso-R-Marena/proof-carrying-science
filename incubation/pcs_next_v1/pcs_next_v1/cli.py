@@ -16,6 +16,8 @@ from .reviewer.independent import review_package
 from .trust.policy import load_policy, pin_policy
 from .translation.formalize import formalize_text
 from .falsification.challenges import run_pk_suite, negative_result_report
+from .demos.theophylline_demo import run_demo as run_theoph_demo
+from .demos.provenance import verify_manifest
 
 
 def _print(obj) -> None:
@@ -55,6 +57,10 @@ def main(argv: list[str] | None = None) -> int:
     p_chal.add_argument("--predictions", required=True)
     p_chal.add_argument("--claim", required=True)
 
+    p_jd = sub.add_parser("journal-demos", help="Verify manifests / run theophylline journal demo")
+    p_jd.add_argument("--out", required=True)
+    p_jd.add_argument("--verify-only", action="store_true")
+
     args = parser.parse_args(argv)
     try:
         if args.cmd == "freeze-intake":
@@ -83,6 +89,12 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.cmd == "formalize":
             _print(formalize_text(args.id, args.text))
+            return 0
+        if args.cmd == "journal-demos":
+            if args.verify_only:
+                _print(verify_manifest())
+                return 0
+            _print(run_theoph_demo(args.out))
             return 0
         if args.cmd == "challenge-pk":
             model = loads_strict(Path(args.model).read_bytes())

@@ -10,6 +10,8 @@ from ..adapters.pkpd import predict_concentration, verify_predictions
 from ..core.canonical import canonicalize
 from ..falsification.challenges import challenge_data_leakage, challenge_unit_error
 from ..translation.formalize import formalize_text
+from ..demos.theophylline_demo import load_theoph, by_subject, falsify_iv_bolus_on_oral
+from ..demos.nca import trapezoidal_auc
 
 
 def run_benchmarks() -> dict[str, Any]:
@@ -53,6 +55,14 @@ def run_benchmarks() -> dict[str, Any]:
     # Baseline: conventional unit test equivalent — recompute one point
     baseline = abs(predict_concentration(100, 10, 1, 1.0) - 10.0 * __import__("math").exp(-0.1)) < 1e-9
     results.append({"case": "baseline_numeric_recompute", "pass": baseline, "baseline": "independent_numeric_recompute"})
+
+    # Journal Theoph: IV misspecification must be structurally refuted
+    subj = by_subject(load_theoph())[1]
+    iv = falsify_iv_bolus_on_oral(subj)
+    results.append({"case": "theoph_iv_misspecification", "result": iv["structural"], "expect_status": "REFUTED"})
+    # NCA AUC oracle
+    auc = trapezoidal_auc([r["time"] for r in subj], [r["conc"] for r in subj])
+    results.append({"case": "theoph_auc_positive", "pass": auc > 0, "baseline": "nca_trapezoid"})
 
     scored = []
     for item in results:

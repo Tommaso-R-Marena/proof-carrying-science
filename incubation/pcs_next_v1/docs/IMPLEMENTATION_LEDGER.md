@@ -22,3 +22,4 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | Lean workspace | `formal/` | PARTIAL | lake if avail | ClaimIR, ScalarGuard, Approx | Needs elan/lake |
 | External lab completion | kit docs | OPEN | n/a | n/a | Needs real participant |
 | Production integration | proposals | OPEN | n/a | n/a | Human authorization |
+| Journal demos (Theoph/Indometh/e-Drug3D/OSP) | `demos/`, `fixtures/journal_demos/` | COMPLETE | scientific+adv | NCA.lean | External lab OPEN; public data only |

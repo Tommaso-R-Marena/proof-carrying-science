@@ -6,3 +6,4 @@ No sorry, admit, axioms, unsafe, or implemented_by.
 import PcsNext.ClaimIR
 import PcsNext.ScalarGuard
 import PcsNext.Approx
+import PcsNext.NCA
