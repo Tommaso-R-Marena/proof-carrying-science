@@ -26,6 +26,23 @@ jobs:
         run: |
           set -euo pipefail
           python research/proof-gated-self-improvement-v1/v5_fixture_differential.py
+      - name: Exhaustive Python-to-Aristotle PGSI1 byte correspondence (all 8,450 signed models)
+        run: |
+          set -euo pipefail
+          PYTHONPATH=research/proof-gated-self-improvement-v1 python - <<'PYCODEC'
+          from pathlib import Path
+          from proof_gate import Model, wire_bytes
+          rows=Path('formal/fixtures/proof_gated/pgsi1_canonical.tsv').read_bytes().splitlines()
+          assert len(rows) == 8450, 'missing PGSI1 canonical vectors'
+          for n, raw in enumerate(rows):
+              fields=raw.split(b'\t')
+              assert len(fields)==4, (n, raw)
+              act,w,b,expected=fields
+              assert act in (b'R',b'L'), (n, act)
+              got=wire_bytes(Model(act==b'R', int(w), int(b)))
+              assert got==expected, (n, got, expected)
+          print('PASS: 8,450 byte-for-byte Python to Aristotle PGSI1 canonical vectors')
+          PYCODEC
       - name: Lean full V5 build, theorem axiom audit, and artifact authority tests
         shell: bash
         run: |
