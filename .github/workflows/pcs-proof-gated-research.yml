@@ -36,7 +36,11 @@ jobs:
           lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
           tmp="$(mktemp -d)"
           trap 'rm -rf "$tmp"' EXIT
-          lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt"
+          if ! lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt" 2>&1; then
+            cat "$tmp/axiom-audit.txt"
+            echo "FAIL: legacy axiom audit failed after the V5 codec migration" >&2
+            exit 1
+          fi
           cat "$tmp/axiom-audit.txt"
           if grep -E 'sorryAx|error:' "$tmp/axiom-audit.txt"; then
             echo 'FAIL: untrusted theorem dependency in axiom audit' >&2
