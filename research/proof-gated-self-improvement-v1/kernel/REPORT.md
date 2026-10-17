@@ -143,11 +143,59 @@ cancellation, large integer intervals, false verdicts and witnesses, cell gaps/
 overlaps, wrong coefficients/maxima/peaks, vacuous preservation, real optional
 native authorization, compiled checker substitution and actual request replacement.
 
-Full exhaustive kernel-campaign qualification is recorded separately below after
-completion. Machine evidence preserves the frozen protocol, all generated concrete
-proof modules, exact source inventory, theorem audits and positive/negative
-classification. Partial qualification runs remain in the local provenance record;
-they are not substituted for a completed campaign or counted as new experiments.
+The full frozen campaign passed **19,169 concrete mathematical claims in 155
+standalone proof modules**. Each module's batch soundness theorem passed the
+kernel and its own axiom audit. The complete proof-source archive is 258,190
+bytes compressed; every generated module is retained, not only successful-looking
+examples. Both full and curated inventories passed bounded hash/source checks
+against all **35 executed critical source files**.
+
+| Frozen experiment | Kernel-checked result |
+| --- | ---: |
+| Ordered transitions of the original 128-model lattice | 16,384 |
+| Universal preservation positive decisions | 8,227 |
+| Universal preservation negative decisions, with real witnesses | 8,157 |
+| Starting models with a genuine correct-input witness | 77 |
+| Starting models with no correct integer anywhere | 51 |
+| Original finite-benchmark acceptances | 4,081 |
+| Finite acceptances losing a previously correct integer | 76 |
+| Finite acceptances worsening window maximum | 441 |
+| Both kinds of regression | 12 |
+| Passed the two earlier supplemental filters | 3,576 |
+| Of those, preservation was vacuous | 2,835 |
+| Composed nonvacuous stronger-guard acceptances | 741 |
+| Ordered exhaustive two-unit parameter configurations | 729 |
+| Seeded wider-network cases | 64 |
+
+Every model has either a concrete correct witness or a kernel proof of the
+absence of one; absence is not inferred solely from a finite search. The two-unit
+cases include both equivalence under permutation and exact interval maxima.
+Independent bounded enumeration agrees with the analytical decisions. That
+bounded oracle is a compatibility check; the kernel soundness theorems establish
+the universal mathematical statements.
+
+Kernel replay of paired equivalence/maximum claims at widths 4, 8, 16, 32 and 64
+used approximately **0.586, 0.737, 1.548, 3.702 and 11.578 seconds** on this local
+host. These are observed replay costs, not universal performance bounds or
+measurements of an AI's improvement rate.
+
+The frozen semantic digest is
+`f0936ed94a4e8bba66ba8fcd2b5b25a30b4fa73530a65299514795be88a23575`.
+[results/v1](results/v1) retains the protocol, decisions, model classification,
+complete compressed concrete proof sources, audits, local test record and hashes.
+The Git bundle intentionally omits repetitive per-batch logs and compiled object
+files; raw local and CI records retain their own full inventories. No earlier
+record is overwritten. Partial qualification runs were stopped for source-gate
+review and the repaired request-hash race; their passed artifacts and stop reasons
+remain in the local provenance record. They are not counted as completed campaigns.
+
+CI runs the unchanged parent research gates and a new isolated job requiring real
+native authorization, all 29 receiving tests, both supported-tail proof checks,
+the 14-case family and the complete exhaustive campaign. The semantic result must
+match the retained result. No mock or unisolated fallback is allowed. The job has a
+30-minute ceiling because it performs ordinary kernel reduction for all concrete
+claims; an individual Lean invocation is still bounded to 120 seconds and 4 GiB.
+Exact CI commit/run identities are recorded in the stacked PR after execution.
 
 ## Trust and scientific scope
 
