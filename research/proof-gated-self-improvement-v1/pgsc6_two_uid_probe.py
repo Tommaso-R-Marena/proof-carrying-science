@@ -58,8 +58,10 @@ def world_writable(root: Path) -> None:
 def main():
     if sys.platform != "linux" or not shutil.which("sudo"):
         raise RuntimeError("requires Linux runner and sudo permission")
-    with tempfile.TemporaryDirectory(prefix="pgsc6-private-trust-") as secure, (
-         tempfile.TemporaryDirectory(prefix="pgsc6-attacker-store-") as exposed):
+    with (
+        tempfile.TemporaryDirectory(prefix="pgsc6-private-trust-") as secure,
+        tempfile.TemporaryDirectory(prefix="pgsc6-attacker-store-") as exposed,
+    ):
         secure_root, exposed_root = Path(secure), Path(exposed)
         os.chmod(exposed_root, 0o777)
         store_path = exposed_root / "store"
