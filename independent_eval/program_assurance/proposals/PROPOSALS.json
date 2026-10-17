@@ -1,0 +1,106 @@
+{
+  "disclaimer": "PROPOSALS ONLY \u2014 entries describe candidate future Codex/Aristotle work. None of these items are claimed as completed evaluation results.",
+  "format": "pcs-independent-program-proposals-v1",
+  "proposal_count": 8,
+  "proposals": [
+    {
+      "id": "E-P01",
+      "not_claimed_done": true,
+      "priority": 1,
+      "rationale": "Workstream D hit a repository-integrity failure from dual checklist filenames that collide on case-insensitive filesystems.",
+      "status": "proposal",
+      "summary": "Wire the collision scanner as a required check on independent_eval/** so CHECKLIST.json vs checklist.json class failures are caught before merge.",
+      "title": "Case-insensitive path collision gate in CI",
+      "workstream_affinity": [
+        "program_assurance",
+        "reviewer_adoption"
+      ]
+    },
+    {
+      "id": "E-P02",
+      "not_claimed_done": true,
+      "priority": 1,
+      "rationale": "Parallel workstreams A\u2013D plus the scientific pilot must remain path-disjoint; manual NONOVERLAP.md alone does not detect drift.",
+      "status": "proposal",
+      "summary": "Run the nonoverlap auditor against the known independent-eval branches (and PR #120 pilot) and fail soft with a posted artifact when overlaps appear.",
+      "title": "Automated sibling-branch nonoverlap report in draft PR CI",
+      "workstream_affinity": [
+        "program_assurance"
+      ]
+    },
+    {
+      "id": "E-P03",
+      "not_claimed_done": true,
+      "priority": 2,
+      "rationale": "Program-level assurance needs a single view without duplicating A\u2013D harness code.",
+      "status": "proposal",
+      "summary": "Publish a rolling program inventory that aggregates TEST_INVENTORY / BUGS / OPEN_TRUST_ASSUMPTIONS / TECHNICAL_REPORT when present, marking MISSING otherwise \u2014 never inventing counts.",
+      "title": "Cross-workstream inventory dashboard from PRESENT reports only",
+      "workstream_affinity": [
+        "program_assurance"
+      ]
+    },
+    {
+      "id": "E-P04",
+      "not_claimed_done": true,
+      "priority": 2,
+      "rationale": "Trust boundaries are currently per-workstream; synthesis is needed for Codex/Aristotle follow-on formalization proposals.",
+      "status": "proposal",
+      "summary": "When sibling OPEN_TRUST_ASSUMPTIONS.md files exist, extract structured assumption IDs into a program-level residual-trust index.",
+      "title": "Unified residual-trust rollup across OPEN_TRUST_ASSUMPTIONS",
+      "workstream_affinity": [
+        "repro_tcb",
+        "program_assurance"
+      ]
+    },
+    {
+      "id": "E-P05",
+      "not_claimed_done": true,
+      "priority": 3,
+      "rationale": "Protocol surface area grows with new claim kinds and archive encodings.",
+      "status": "proposal",
+      "summary": "Propose additional malformed-intake and policy-bypass fixtures once Workstream A baselines are merged; treat as future work, not completed coverage.",
+      "title": "Adversarial protocol corpus expansion beyond JCS/ZIP fixtures",
+      "workstream_affinity": [
+        "protocol_adversarial"
+      ]
+    },
+    {
+      "id": "E-P06",
+      "not_claimed_done": true,
+      "priority": 3,
+      "rationale": "Workstream D intentionally forbids claiming completed external validation from synthetic fixtures alone.",
+      "status": "proposal",
+      "summary": "Use the external_lab kit to run a real participant study; do not treat checklist completion as EXTERNAL_VALIDATION_COMPLETE.",
+      "title": "External-lab burden measurement with human participants",
+      "workstream_affinity": [
+        "reviewer_adoption"
+      ]
+    },
+    {
+      "id": "E-P07",
+      "not_claimed_done": true,
+      "priority": 3,
+      "rationale": "Scientific falsification surfaces gaps between computational support and empirical adequacy that formal methods might later address.",
+      "status": "proposal",
+      "summary": "Catalog computationally-supported-but-inadequate cases as candidate proof obligations for future formal work \u2014 labeled proposals only.",
+      "title": "Aristotle-facing formalization candidates from inadequacy examples",
+      "workstream_affinity": [
+        "scientific_falsification",
+        "program_assurance"
+      ]
+    },
+    {
+      "id": "E-P08",
+      "not_claimed_done": true,
+      "priority": 4,
+      "rationale": "TCB residual trust shrinks only with measured environments.",
+      "status": "proposal",
+      "summary": "Extend cross-environment reconstruction sampling when alternate interpreters/hosts are available; record absences rather than treating them as passes.",
+      "title": "Reconstruction campaign across additional Python/OS matrices",
+      "workstream_affinity": [
+        "repro_tcb"
+      ]
+    }
+  ]
+}
