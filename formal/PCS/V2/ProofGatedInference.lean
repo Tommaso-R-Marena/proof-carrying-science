@@ -26,7 +26,7 @@ theorem infer_sound {raw : String} {x y : Int}
   | some m =>
       have hp : predict m x = y := by
         simpa [hd] using h
-      exact ⟨m, hd, hp⟩
+      exact ⟨m, by simp, hp⟩
 
 theorem infer_canonical {raw : String} {x y : Int}
     (h : infer raw x = some y) :
@@ -46,7 +46,7 @@ theorem committed_inference_preserves_correct_cases
   have hpred : predict old x = y := by
     simpa [infer, hdOld] using hold
   have hcorrectOld : correct old x := by
-    simpa [correct, hpred, hcorrect]
+    simp [correct, hpred, hcorrect]
   have hnew : correct candidate x := hadm.1 x hx hcorrectOld
   have hnewPred : predict candidate x = y := by
     simpa [correct, hcorrect] using hnew
