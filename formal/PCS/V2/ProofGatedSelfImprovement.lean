@@ -149,6 +149,18 @@ example : loss optimum = 0 := by decide
 theorem optimum_perfect (x : Int) (_hx : x ∈ corpus) : correct optimum x := by
   rfl
 
+/-! Certified improvement on the frozen finite corpus can still worsen
+    the SAME target outside the corpus. This is a checked counterexample,
+    not merely an empirical observation. -/
+def oodOld : Neuron := ⟨true, 3, -3⟩
+def oodCandidate : Neuron := ⟨true, 3, -1⟩
+
+theorem same_target_ood_regression :
+    accept oodOld oodCandidate = true ∧
+    (predict oodOld 20 - target 20).natAbs <
+    (predict oodCandidate 20 - target 20).natAbs := by
+  decide
+
 theorem optimum_terminal (candidate : Neuron) : accept optimum candidate = false :=
   perfect_cannot_advance optimum optimum_perfect candidate
 
