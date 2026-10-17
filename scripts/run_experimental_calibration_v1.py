@@ -93,6 +93,10 @@ def metrics(rows,certificate):
             'attained_minimax_extrapolation_shift_at_epsilon_0.01':str(mmshift),
             'measured_numpy_refit_extrapolation_shift':refit_shift,
             'perturbation_experiments':perturbations,
+            'uniform_error_exclusions_derived_from_certified_loss':[
+                {'epsilon':str(e),'training_excluded':Q(models[2*index]['sse'])>7*e*e,
+                 'full_data_excluded':Q(models[2*index+1]['sse'])>14*e*e}
+                for e in [Q(0),Q(1,1000),Q(1,100)]],
             'numpy_max_coefficient_abs_error':error})
     return result
 
@@ -106,6 +110,7 @@ def run(output,*,pilot=False,workers=2):
     write(output/'EXECUTION_PROTOCOL.json',{'source_head':head,'source_tree_dirty':dirty,'pilot':pilot,
         'protocol_sha256':receiver.sha(PROTOCOL.read_bytes()),
         'minimax_addendum_sha256':receiver.sha((PROTOCOL.parent/'MINIMAX_ADDENDUM.json').read_bytes()),'source_sha256':frozen,
+        'all_estimators_addendum_sha256':receiver.sha((PROTOCOL.parent/'ALL_ESTIMATORS_ADDENDUM.json').read_bytes()),
         'proposer_sha256':receiver.sha((ROOT/'pcs/experimental/calibration_proposer_v1.py').read_bytes()),
         'runner_sha256':receiver.sha(Path(__file__).read_bytes()),'frozen_before_execution':True,
         'isolated_receiving_workers':workers})

@@ -72,6 +72,22 @@ theorem model_exclusion (x : ι → κ → ℝ) (y : ι → ℝ) (b : κ → ℝ
   intro c
   exact ht.trans_le (global_minimum x y b h c)
 
+theorem uniform_error_exclusion (x : ι → κ → ℝ) (y : ι → ℝ) (floor ε : ℝ)
+    (hl : ∀ c, floor ≤ loss x y c) (he : 0 ≤ ε)
+    (hg : (Fintype.card ι : ℝ) * ε ^ 2 < floor) :
+    ¬ (∃ c, ∀ i, |y i - prediction x c i| ≤ ε) := by
+  rintro ⟨c, hc⟩
+  have hs : loss x y c ≤ (Fintype.card ι : ℝ) * ε ^ 2 := by
+    calc
+      _ ≤ ∑ _i : ι, ε ^ 2 := by
+        apply sum_le_sum
+        intro i _
+        have hh := (sq_le_sq₀ (abs_nonneg (y i - prediction x c i)) he).2 (hc i)
+        simpa only [sq_abs] using hh
+      _ = _ := by simp
+  have hm := hl c
+  linarith
+
 theorem reproduction_prediction (x : ι → κ → ℝ) (w : ι → ℝ) (q b : κ → ℝ)
     (h : Reproduces x w q) : dot w (prediction x b) = dot q b := by
   simp only [dot, prediction, mul_sum]
@@ -238,5 +254,54 @@ theorem minimax_check_sound {n p : Nat} {x : Fin n → Fin p → ℚ} {w : Fin n
   · have heq : dot q a = ∑ i, |w i| := hq.2.2.1.trans hq.2.2.2.symm
     have hc := congrArg (fun q : ℚ => (q : ℝ)) heq
     simpa only [dot, Rat.cast_sum, Rat.cast_mul, Rat.cast_abs] using hc
+
+omit [Fintype ι] in
+theorem any_estimator_radius_lower_bound (x : ι → κ → ℝ) (q a : κ → ℝ)
+    (ha : ∀ i, |prediction x a i| ≤ 1) (ε radius : ℝ) (he : 0 ≤ ε)
+    (estimator : (ι → ℝ) → ℝ)
+    (hg : ∀ truth observed, (∀ i, |observed i - prediction x truth i| ≤ ε) →
+      |estimator observed - dot q truth| ≤ radius) : ε * dot q a ≤ radius := by
+  have hs (s : ℝ) (i : ι) : prediction x (fun j => s * a j) i =
+      s * prediction x a i := by
+    simp only [prediction, mul_sum]
+    apply sum_congr rfl
+    intro j _
+    ring
+  have hq (s : ℝ) : dot q (fun j => s * a j) = s * dot q a := by
+    simp only [dot, mul_sum]
+    apply sum_congr rfl
+    intro j _
+    ring
+  have hm (s : ℝ) (hh : |s| ≤ ε) :
+      ∀ i, |(0 : ℝ) - prediction x (fun j => s * a j) i| ≤ ε := by
+    intro i
+    rw [hs, zero_sub, abs_neg, abs_mul]
+    calc
+      _ ≤ |s| * 1 := mul_le_mul_of_nonneg_left (ha i) (abs_nonneg s)
+      _ ≤ ε := by simpa using hh
+  have hp := hg (fun j => ε * a j) (fun _ => 0)
+    (hm ε (by simp [abs_of_nonneg he]))
+  have hn := hg (fun j => -ε * a j) (fun _ => 0)
+    (hm (-ε) (by simp [abs_of_nonneg he]))
+  rw [hq] at hp hn
+  have hp' := (abs_le.mp hp).1
+  have hn' := (abs_le.mp hn).2
+  linarith
+
+theorem minimax_over_all_estimators_iff (x : ι → κ → ℝ) (w : ι → ℝ) (q a : κ → ℝ)
+    (hw : Reproduces x w q) (ha : ∀ i, |prediction x a i| ≤ 1)
+    (heq : dot q a = ∑ i, |w i|) (ε radius : ℝ) (he : 0 ≤ ε) :
+    (∃ estimator : (ι → ℝ) → ℝ,
+      ∀ truth observed, (∀ i, |observed i - prediction x truth i| ≤ ε) →
+        |estimator observed - dot q truth| ≤ radius) ↔
+      ε * ∑ i, |w i| ≤ radius := by
+  constructor
+  · rintro ⟨estimator, hg⟩
+    rw [← heq]
+    exact any_estimator_radius_lower_bound x q a ha ε radius he estimator hg
+  · intro hr
+    refine ⟨fun observed => dot w observed, ?_⟩
+    intro truth observed hm
+    exact (physical_enclosure x observed w q truth ε hw hm).trans hr
 
 end PCSReal.Calibration

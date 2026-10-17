@@ -20,6 +20,7 @@ Theorems have namespace `PCSReal.Calibration`:
 | `loss_decomposition` | Every alternative coefficient vector has loss equal to the certified loss plus a sum of squared prediction differences. |
 | `global_minimum` | The normal-equation solution minimizes finite squared loss over **all real coefficients**. |
 | `model_exclusion` | Any threshold below that loss is unattainable by the entire declared model class. |
+| `uniform_error_exclusion` | If the certified loss floor exceeds the sum-of-squares budget implied by a uniform error tolerance, no coefficient vector can fit every recorded response within that tolerance. |
 | `reproduction_prediction` | Feature-reproducing weights evaluate any model in the declared linear span exactly. |
 | `dual_prediction` | A row-span dual witness equates the weighted response with the fitted query. |
 | `response_perturbation_bound` | Coordinatewise response changes bounded by ε change a weighted query by at most ε times the sum of absolute weights. |
@@ -29,15 +30,18 @@ Theorems have namespace `PCSReal.Calibration`:
 | `dual_gain_lower_bound` | A polynomial bounded by one on the training design lower-bounds the absolute-weight sum of **every** feature-reproducing linear estimator. |
 | `minimax_weights_optimal` | A matching primal/dual witness proves global minimum sensitivity among that entire estimator class. |
 | `minimax_radius_lower_bound` | Every reproducing estimator's valid uniform error radius is at least the certified minimax radius. |
+| `any_estimator_radius_lower_bound` | Two indistinguishable admissible signals force a uniform lower bound for every prediction function, without assuming linearity. |
+| `minimax_over_all_estimators_iff` | A prediction function with a uniform recovery radius exists exactly when that radius is at least the certified minimax value. |
 | `fit_check_sound` | A finite exact-rational normal-equation check implies the real normal equations. |
 | `cast_loss` | Exact rational squared loss embeds into the real squared loss. |
 | `dual_check_sound` | A rational query-reproduction/row-span witness implies its real counterpart. |
 | `minimax_check_sound` | Rational reproduction, bounded dual polynomial and matching objective witnesses imply the real minimax premises. |
 
-Nine static controls in `PCSReal.CalibrationControls` are `good_normal`,
+Eleven static controls in `PCSReal.CalibrationControls` are `good_normal`,
 `wrong_coefficient_rejected`, `exact_nonzero_residual`, `good_dual`,
 `wrong_dual_rejected`, `sharp_gain`, `good_minimax`, `false_minimax_rejected`,
-and `smaller_uniform_radius_impossible`. The complete static inventory has 26
+`smaller_uniform_radius_impossible`, `nonlinear_radius_two_impossible`, and
+`uniform_noise_floor_impossible`. The complete static inventory has 31
 names. Axiom audits permit only `propext`, `Classical.choice`, and `Quot.sound`,
 or fewer. Every supported literal proposal has its own exact audited identities.
 
@@ -47,6 +51,9 @@ The original protocol and the separately dated minimax addendum are preserved in
 `research/experimental-calibration-v1/`. The addendum was frozen during engineering
 development, before a successful pilot and before a complete 22-hull analysis.
 This is not blind evaluation or an external preregistration.
+The additional all-estimator theorem was recorded in a separate addendum after
+that engineering pilot and before the complete campaign. The original protocols
+were not rewritten.
 
 All original rows are retained. Hull identity is the exact first five source
 columns. Each hull has 14 distinct Froude values. Sorting those values determines
@@ -72,6 +79,15 @@ perturbation runs and independent NumPy refits accompany the algebraic bounds.
 Finite held-out errors do not imply population coverage, causal effects, or
 accuracy at the extrapolated point, which has no observed target.
 
+The all-estimator lower bound is **uniform** over unrestricted real polynomial
+coefficients and all allowed response errors at the fixed design. It covers
+nonlinear and learned prediction functions under that same guarantee. It does
+not assert pointwise optimality at each observed response vector, average-case
+optimality, or impossibility for methods with additional truthful prior
+constraints or measurements. The matching upper bound is attained by the
+certified reproducing linear estimator. The synthetic indistinguishable-signal
+argument is a mathematical limitation, not another physical experiment.
+
 ## Receiver and replay
 
 `pcs/calibration_kernel_v1.py` is the experimental receiver. It accepts bounded
@@ -90,6 +106,11 @@ dual relation and minimax inequality, and audits the entire generated inventory.
 False coefficients, residuals, dual weights or sensitivity gains grant no support.
 Compiler failure, timeout and missing dependencies never count as a refutation
 or a positive proof.
+For a mathematically invalid finite witness, a separate generated theorem
+`PCSCalibrationRejected.certificate_rejected` must compile and pass its own
+axiom audit before the receiver reports `CERTIFICATE_FALSIFIED`. Ordinary compiler
+errors alone retain an unsupported status. This refutes the submitted numerical
+certificate, not the physical experiment or the whole polynomial model class.
 
 Each request has a total kernel budget of at most 300 seconds (default 180),
 sequential elaboration and a 2,048 MiB memory limit per Lean process. Input limits

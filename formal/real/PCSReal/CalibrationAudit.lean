@@ -18,6 +18,9 @@ set_option format.width 1000000
 #print axioms PCSReal.Calibration.minimax_weights_optimal
 #print axioms PCSReal.Calibration.minimax_radius_lower_bound
 #print axioms PCSReal.Calibration.minimax_check_sound
+#print axioms PCSReal.Calibration.any_estimator_radius_lower_bound
+#print axioms PCSReal.Calibration.minimax_over_all_estimators_iff
+#print axioms PCSReal.Calibration.uniform_error_exclusion
 #print axioms PCSReal.CalibrationControls.good_normal
 #print axioms PCSReal.CalibrationControls.wrong_coefficient_rejected
 #print axioms PCSReal.CalibrationControls.exact_nonzero_residual
@@ -27,3 +30,5 @@ set_option format.width 1000000
 #print axioms PCSReal.CalibrationControls.good_minimax
 #print axioms PCSReal.CalibrationControls.false_minimax_rejected
 #print axioms PCSReal.CalibrationControls.smaller_uniform_radius_impossible
+#print axioms PCSReal.CalibrationControls.nonlinear_radius_two_impossible
+#print axioms PCSReal.CalibrationControls.uniform_noise_floor_impossible

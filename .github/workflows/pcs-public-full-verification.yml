@@ -508,6 +508,7 @@ jobs:
           python scripts/verify_calibration_formal.py --output "$RUNNER_TEMP/calibration-static-axioms.json"
           PCS_REQUIRE_CALIBRATION_KERNEL=1 python -m pytest -q tests/test_calibration_kernel_v1.py
           python scripts/run_experimental_calibration_v1.py --output "$RUNNER_TEMP/experimental-calibration"
+          python scripts/run_calibration_attacks_v1.py --output "$RUNNER_TEMP/calibration-attacks"
       - name: Retain real experimental calibration evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -516,6 +517,7 @@ jobs:
           path: |
             ${{ runner.temp }}/calibration-static-axioms.json
             ${{ runner.temp }}/experimental-calibration/
+            ${{ runner.temp }}/calibration-attacks/
           if-no-files-found: warn
           retention-days: 14
 

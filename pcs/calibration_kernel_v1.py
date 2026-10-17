@@ -27,8 +27,10 @@ GENERAL = ['PCSReal.Calibration.'+s for s in (
     'reproduction_prediction','dual_prediction','response_perturbation_bound',
     'sharp_perturbation_attained','sharp_radius_iff','physical_enclosure',
     'fit_check_sound','cast_loss','dual_check_sound','dual_gain_lower_bound',
-    'minimax_weights_optimal','minimax_radius_lower_bound','minimax_check_sound')]
+    'minimax_weights_optimal','minimax_radius_lower_bound','minimax_check_sound',
+    'any_estimator_radius_lower_bound','minimax_over_all_estimators_iff','uniform_error_exclusion')]
 MAX_BYTES = 2*1024*1024
+NEGATIVE = 'PCSCalibrationRejected.certificate_rejected'
 
 
 def sha(raw):
@@ -164,8 +166,14 @@ theorem excludes_every_better_model (threshold : ℝ)
     ∀ c : Fin {p} → ℝ, threshold < loss xr yr c := by
   intro c
   exact h.trans_le (global_optimum c)
+theorem uniform_error_exclusion (ε : ℝ) (he : 0 ≤ ε)
+    (hgap : ({n} : ℝ) * ε ^ 2 < ({infrastructure._literal(m['sse'])} : ℝ)) :
+    ¬ (∃ c : Fin {p} → ℝ, ∀ i, |yr i - prediction xr c i| ≤ ε) :=
+  PCSReal.Calibration.uniform_error_exclusion xr yr ({infrastructure._literal(m['sse'])} : ℝ) ε
+    global_optimum he (by simpa using hgap)
 '''
-        names.extend(ns+'.'+s for s in ['normal_checked','residual_checked','global_optimum','excludes_every_better_model'])
+        names.extend(ns+'.'+s for s in ['normal_checked','residual_checked','global_optimum',
+            'excludes_every_better_model','uniform_error_exclusion'])
         for j,(query,w) in enumerate(zip(m['query_x'],m['queries'])):
             text+=f'''namespace Q{j}
 def q (j : Fin {p}) : ℚ := ({infrastructure._literal(query)} : ℚ) ^ j.val
@@ -228,13 +236,53 @@ theorem conditional_physical_enclosure (truth : Fin {p} → ℝ) (ε : ℝ)
     |dot wr yr - dot Q{j}.qr truth| ≤ ε * ({infrastructure._literal(mm['gain'])} : ℝ) := by
   simpa only [real_gain] using physical_enclosure xr yr wr Q{j}.qr truth ε
     (minimax_check_sound optimality_checked).1 hm
+theorem uniform_minimax_over_all_prediction_functions (ε radius : ℝ) (he : 0 ≤ ε) :
+    (∃ estimator : (Fin {n} → ℝ) → ℝ,
+      ∀ truth observed, (∀ i, |observed i - prediction xr truth i| ≤ ε) →
+        |estimator observed - dot Q{j}.qr truth| ≤ radius) ↔
+      ε * ({infrastructure._literal(mm['gain'])} : ℝ) ≤ radius := by
+  have h := minimax_check_sound optimality_checked
+  simpa only [real_gain] using
+    minimax_over_all_estimators_iff xr wr Q{j}.qr ar h.1 h.2.1 h.2.2 ε radius he
 end Q{j}.Minimax
 '''
             names.extend(ns+f'.Q{j}.Minimax.'+s for s in ['optimality_checked','gain_checked','real_gain',
-                'globally_minimal_gain','sharp_radius','no_reproducing_estimator_has_smaller_radius','conditional_physical_enclosure'])
+                'globally_minimal_gain','sharp_radius','no_reproducing_estimator_has_smaller_radius',
+                'conditional_physical_enclosure','uniform_minimax_over_all_prediction_functions'])
         text+=f'end {ns}\n'
     text+='\n'+'\n'.join('#print axioms '+n for n in names)+'\n'
     return text.encode(),names
+
+
+def render_rejection(prepared):
+    """A separate ordinary-kernel proof of falsity of the finite witness checks."""
+    text='import PCSReal.Calibration\nset_option autoImplicit false\nopen Finset PCSReal.Calibration\nnamespace PCSCalibrationRejected\n'
+    checks=[]
+    vec=lambda xs:'['+', '.join(infrastructure._literal(v) for v in xs)+']'
+    for k,m in enumerate(prepared['models']):
+        n=len(m['data']);p=m['degree']+1
+        text+=f'''def u{k} (i : Fin {n}) : ℚ := ({vec([r[0] for r in m['data']])} : List ℚ).getD i.val 0
+def x{k} (i : Fin {n}) (j : Fin {p}) : ℚ := u{k} i ^ j.val
+def y{k} (i : Fin {n}) : ℚ := ({vec([r[1] for r in m['data']])} : List ℚ).getD i.val 0
+def b{k} (j : Fin {p}) : ℚ := ({vec(m['coefficients'])} : List ℚ).getD j.val 0
+'''
+        checks.extend([f'(fitCheck x{k} y{k} b{k} = true)',
+                       f'(loss x{k} y{k} b{k} = {infrastructure._literal(m["sse"])})'])
+        for j,(qx,w) in enumerate(zip(m['query_x'],m['queries'])):
+            mm=w['minimax'];tag=f'{k}_{j}'
+            text+=f'''def q{tag} (j : Fin {p}) : ℚ := ({infrastructure._literal(qx)} : ℚ) ^ j.val
+def w{tag} (i : Fin {n}) : ℚ := ({vec(w['weights'])} : List ℚ).getD i.val 0
+def d{tag} (j : Fin {p}) : ℚ := ({vec(w['dual'])} : List ℚ).getD j.val 0
+def m{tag} (i : Fin {n}) : ℚ := ({vec(mm['weights'])} : List ℚ).getD i.val 0
+def a{tag} (j : Fin {p}) : ℚ := ({vec(mm['dual'])} : List ℚ).getD j.val 0
+'''
+            checks.extend([f'(dualCheck x{k} w{tag} q{tag} d{tag} = true)',
+                f'((∑ i, |w{tag} i|) = {infrastructure._literal(w["gain"])})',
+                f'(minimaxCheck x{k} m{tag} q{tag} a{tag} {infrastructure._literal(mm["gain"])} = true)'])
+    text+='def allChecks : Bool := decide ('+' ∧ '.join(checks)+')\n'
+    text+='theorem certificate_rejected : allChecks = false := by decide +kernel\n'
+    text+='end PCSCalibrationRejected\n#print axioms '+NEGATIVE+'\n'
+    return text.encode()
 
 
 def kernel_replay(prepared,*,timeout=180):
@@ -242,7 +290,7 @@ def kernel_replay(prepared,*,timeout=180):
         raise ValueError('kernel budget must lie in (0,300] seconds')
     frozen=sources();hashes={n:sha(b) for n,b in frozen.items()};proof,names=render(prepared)
     started=time.monotonic();deadline=started+timeout
-    result={'status':'UNAVAILABLE_OR_EXHAUSTED','kernel_checked':False,'source_sha256':hashes,
+    result={'status':'UNAVAILABLE_OR_EXHAUSTED','kernel_checked':False,'negative_kernel_checked':False,'source_sha256':hashes,
             'proof_sha256':sha(proof),'prepared_sha256':sha(encode(prepared)),
             'kernel_theorems':{},'executions':[]}
     def remaining():
@@ -263,14 +311,27 @@ def kernel_replay(prepared,*,timeout=180):
                 command+=[str(path)]
                 p=subprocess.run(command,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
                 result['executions'].append({'command':command,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
-                if p.returncode:return {**result,'status':'CERTIFICATE_OR_SOURCE_REJECTED'}
+                if p.returncode:
+                    result['status']='CERTIFICATE_OR_SOURCE_REJECTED'
+                    if path==source:return result
+                    negative=private/'Rejected.lean';negative.write_bytes(render_rejection(prepared))
+                    command=[lean,'-j1','-M2048','-D','Elab.async=false','--root='+str(private),str(negative)]
+                    neg=subprocess.run(command,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
+                    result['executions'].append({'command':command,'returncode':neg.returncode,'stdout':neg.stdout,'stderr':neg.stderr})
+                    if neg.returncode==0:
+                        result.update(status='CERTIFICATE_FALSIFIED',negative_kernel_checked=True,
+                            negative_kernel_theorems=inventory(neg.stdout,[NEGATIVE]),
+                            negative_proof_sha256=sha(render_rejection(prepared)))
+                    break
                 result['kernel_theorems'].update(inventory(p.stdout,theorem_names))
+            else:
+                result.update(status='KERNEL_CHECKED',kernel_checked=True)
         if hashes!={n:sha(b) for n,b in sources().items()}:
             raise ValueError('receiving sources changed during calibration replay')
-        return {**result,'status':'KERNEL_CHECKED','kernel_checked':True,
-                'lean_version':version,'elapsed_seconds':round(time.monotonic()-started,6)}
+        return {**result,'lean_version':version,'elapsed_seconds':round(time.monotonic()-started,6)}
     except (OSError,subprocess.SubprocessError,ValueError) as e:
-        return {**result,'kernel_checked':False,'status':'UNAVAILABLE_OR_EXHAUSTED','error':str(e)}
+        return {**result,'kernel_checked':False,'negative_kernel_checked':False,
+                'status':'UNAVAILABLE_OR_EXHAUSTED','error':str(e)}
 
 
 def replay(data_raw,contract_raw,certificate_raw,*,timeout=180):
@@ -290,6 +351,8 @@ def replay(data_raw,contract_raw,certificate_raw,*,timeout=180):
                        'status':'KERNEL_SUPPORTED' if supported else 'OPEN'},
                       {'kind':'sharp_response_perturbation_radius','queries':queries,'status':query_status},
                       {'kind':'globally_minimax_polynomial_reproducing_linear_estimator',
+                       'queries':queries,'status':query_status},
+                      {'kind':'uniform_minimax_over_all_prediction_functions',
                        'queries':queries,'status':query_status}]+
                 [{'kind':kind,'status':'OPEN'} for kind in
                  ['implementation_correspondence','physical_model_validity','empirical_coverage']]}
@@ -307,11 +370,15 @@ def export(output,result,data_raw,contract_raw,certificate_raw):
         if (k['source_sha256']!={n:sha(b) for n,b in frozen.items()}
                 or k['prepared_sha256']!=sha(encode(prepared)) or k['proof_sha256']!=sha(proof)):
             raise ValueError('source/certificate/proof export substitution')
+        if k['negative_kernel_checked'] and k['negative_proof_sha256']!=sha(render_rejection(prepared)):
+            raise ValueError('negative proof export substitution')
     output.mkdir(parents=True,exist_ok=False)
     for name,raw in [('report.json',encode(result)),('data.csv',data_raw),('contract.json',contract_raw),('certificate.json',certificate_raw)]:
         (output/name).write_bytes(raw)
     if proof:
         (output/'Replay.lean').write_bytes(proof)
+        if result['kernel']['negative_kernel_checked']:
+            (output/'Rejected.lean').write_bytes(render_rejection(prepared))
         for name,raw in frozen.items():
             p=output/'receiving-source'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
     (output/'SHA256.json').write_bytes(encode({str(p.relative_to(output)):sha(p.read_bytes())

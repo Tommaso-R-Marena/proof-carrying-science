@@ -31,7 +31,7 @@ def positive():
 
 def test_actual_certificate_proves_real_global_optimum_and_sharp_radius(positive):
     _,literal=calibration.render(positive['prepared'])
-    assert len(literal)==17
+    assert len(literal)==19
     assert set(positive['kernel']['kernel_theorems'])==set(calibration.GENERAL+literal)
     assert positive['kernel']['status']=='KERNEL_CHECKED'
     assert all(set(a)<=calibration.infrastructure.APPROVED_AXIOMS for a in positive['kernel']['kernel_theorems'].values())
@@ -52,7 +52,9 @@ def test_actual_kernel_rejects_forged_numerics_and_too_small_uncertainty(kind):
     if kind=='minimax-gain':m['queries'][0]['minimax']['gain']='0'
     r=calibration.replay(DATA,CONTRACT,encode(cert))
     assert not r['accepted'] and not r['kernel']['kernel_checked']
-    assert r['kernel']['status']=='CERTIFICATE_OR_SOURCE_REJECTED',r
+    assert r['kernel']['status']=='CERTIFICATE_FALSIFIED',r
+    assert r['kernel']['negative_kernel_checked'] is True
+    assert set(r['kernel']['negative_kernel_theorems'])=={calibration.NEGATIVE}
 
 
 @pytest.mark.parametrize('kind',['degree','bool-degree','duplicate-row','unordered-row','outside-row',
@@ -157,4 +159,4 @@ def test_ols_only_request_cannot_claim_unrequested_minimax_support():
     contract=encode(c);r=calibration.replay(DATA,contract,propose(DATA,contract))
     assert r['accepted'],r
     assert r['claims'][0]['status']=='KERNEL_SUPPORTED'
-    assert all(c['status']=='NOT_REQUESTED' for c in r['claims'][1:3])
+    assert all(c['status']=='NOT_REQUESTED' for c in r['claims'][1:4])

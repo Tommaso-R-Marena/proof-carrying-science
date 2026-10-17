@@ -15,7 +15,8 @@ from pcs.transport_kernel_v1 import _environment,_inventory,sha
 
 CONTROLS=['PCSReal.CalibrationControls.'+n for n in ['good_normal','wrong_coefficient_rejected',
     'exact_nonzero_residual','good_dual','wrong_dual_rejected','sharp_gain','good_minimax',
-    'false_minimax_rejected','smaller_uniform_radius_impossible']]
+    'false_minimax_rejected','smaller_uniform_radius_impossible','nonlinear_radius_two_impossible',
+    'uniform_noise_floor_impossible']]
 
 
 def main():
@@ -27,7 +28,7 @@ def main():
     names=GENERAL+CONTROLS;declared=[]
     for source,ns in zip(paths[:2],['PCSReal.Calibration','PCSReal.CalibrationControls']):
         declared.extend(ns+'.'+m[1] for m in re.finditer(r'(?m)^theorem (\S+)',active_code(source.read_text())))
-    if len(names)!=26 or len(set(declared))!=26 or set(declared)!=set(names):raise ValueError('complete 26-name static inventory required')
+    if len(names)!=31 or len(set(declared))!=31 or set(declared)!=set(names):raise ValueError('complete 31-name static inventory required')
     driver='import PCSReal.CalibrationControls\nset_option format.width 1000000\n\n'+''.join('#print axioms '+n+'\n' for n in names)
     if paths[-1].read_text()!=driver:raise ValueError('exact audit driver required')
     hashes={str(p.relative_to(ROOT)):sha(p.read_bytes()) for p in paths}
