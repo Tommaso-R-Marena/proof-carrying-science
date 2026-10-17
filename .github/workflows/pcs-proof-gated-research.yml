@@ -2,10 +2,7 @@ name: PCS Proof-Gated Self-Improvement Research
 on:
   pull_request:
     paths:
-      - 'formal/PCS/V2/ProofGatedSelfImprovement.lean'
-      - 'formal/PCS/V2/ProofGatedSymbolic.lean'
-      - 'formal/PCS/V2/ProofGatedInference.lean'
-      - 'formal/PCS/V2/ProofGatedMultilayer.lean'
+      - 'formal/PCS/V2/ProofGated*.lean'
       - 'research/proof-gated-self-improvement-v1/**'
       - '.github/workflows/pcs-proof-gated-research.yml'
   workflow_dispatch:
@@ -133,3 +130,60 @@ jobs:
                   pass
               print("PASS: two Lean-authorized CAS promotions + exact-byte sealed inference")
           PY
+
+  native-hardening:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Require real Linux namespaces and native build tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v bwrap >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends bubblewrap
+          fi
+          test -x /usr/bin/cc
+          test -x /usr/bin/strip
+          # Failure is a failed isolation qualification, never an unisolated fallback.
+          bwrap --unshare-all --die-with-parent --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 -- /usr/bin/true
+      - name: Compile pinned authority, audit frozen proofs, run every real boundary test
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-hardening"
+          mkdir "$evidence"
+          cd formal
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
+          lake env lean PCS/V2/ProofGatedAudit.lean > "$evidence/axioms.log"
+          cd ../research/proof-gated-self-improvement-v1
+          python validate_formal_boundary.py --audit "$evidence/axioms.log" --output "$evidence/formal-boundary.json"
+          python build_authority.py --output "$RUNNER_TEMP/pgsi-native"
+          export PCS_PGSI_AUTHORITY_BUNDLE="$RUNNER_TEMP/pgsi-native"
+          export PCS_PGSI_REQUIRE_NATIVE=1
+          python -m unittest discover -s tests -v 2>&1 | tee "$evidence/tests.log"
+          python scientific_campaign.py --bundle "$PCS_PGSI_AUTHORITY_BUNDLE" --output "$evidence/experiment"
+          # Second independent execution must reproduce semantic decisions;
+          # timing, source/protocol inventory and host binary identities are separate.
+          python scientific_campaign.py --bundle "$PCS_PGSI_AUTHORITY_BUNDLE" --output "$RUNNER_TEMP/pgsi-repeat"
+          python - "$evidence/experiment/RESULTS.json" "$RUNNER_TEMP/pgsi-repeat/RESULTS.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(p)) for p in sys.argv[1:]]
+          assert a['semantic_results_sha256']==b['semantic_results_sha256']
+          assert a['native_python_gate_mismatches']==b['native_python_gate_mismatches']==0
+          print('REPRODUCED_SEMANTIC_RESULTS',a['semantic_results_sha256'])
+          PY
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: pcs-pgsi-hardening-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pgsi-hardening
+          if-no-files-found: error
+          retention-days: 14
