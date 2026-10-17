@@ -107,8 +107,29 @@ def package_theoph_as_pilot(out: Path) -> dict:
         (pkg / name).write_bytes((work / name).read_bytes())
     (pkg / "acceptance_policy.json").write_bytes(canonicalize(policy.raw) + b"\n")
     receipt = review_package(pkg, receiver_policy=policy)
-    card = export_card(assurance, work / "card")
+    # Overlay journal-demo technical status onto the pilot assurance card.
+    demo_status = report["aggregate_status"]
+    assurance = dict(assurance)
+    statuses = dict(assurance.get("statuses") or {})
+    statuses["computational_replay"] = demo_status
+    statuses["journal_demo"] = {
+        "demo_id": report["demo_id"],
+        "subjects_oral_pass": report.get("subjects_oral_pass"),
+        "subjects_total": report.get("subjects_total"),
+        "citations": report.get("citations"),
+    }
+    assurance["statuses"] = statuses
+    card = export_card(
+        assurance,
+        work / "card",
+        claims=intake["claimed_conclusions"],
+    )
+    # Ensure technical_verification is the journal aggregate, not null CSV check
+    card["technical_verification"] = demo_status
+    card["citations"] = report.get("citations")
+    (work / "card" / "assurance_card.json").write_bytes(canonicalize(card) + b"\n")
     (work / "card" / "assurance_card.html").write_text(render_html(card), encoding="utf-8")
+    (work / "assurance_report.json").write_bytes(canonicalize(assurance) + b"\n")
     return {"assurance": assurance, "receipt": receipt, "card": card}
 
 
