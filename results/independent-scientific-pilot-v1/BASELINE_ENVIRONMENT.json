@@ -1,21 +1,10 @@
 {
-  "format": "pcs-independent-pilot-baseline-v1",
-  "lean_toolchain": "leanprover/lean4:v4.28.0",
-  "lean_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
-  "missing_or_friction": [
-    "Host lacked zstd until apt install; activate_lean_428.sh otherwise fails at extract.",
-    "Host lacked python3-venv until apt install; clean-room runner requires ensurepip/venv.",
-    "Lean authority binary is not committed; reviewers must build or supply PCS_LEAN_AUTHORITY_BIN.",
-    "Mathlib is not required for pcs-lean-authority default target in formal/lake-manifest (empty packages).",
-    "Certificate semantic_hash is stable across runs with pinned generated_at; without a pinned timestamp the integrity/bundle SHA-256 varies while semantic content stays equivalent."
-  ],
-  "notes": [
-    "Runtime Python 3.12.3 satisfies requires-python>=3.11; .python-version pins 3.12.14 for stricter reproducibility.",
-    "Lean 4.28.0 installed via scripts/activate_lean_428.sh with release digest verification; required zstd package on host.",
-    "pcs-lean-authority built with: cd formal && lake build pcs-lean-authority",
-    "No production credentials used. Demo Ed25519 keys are public/deterministic."
-  ],
-  "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
-  "python_version_file": "3.12.14",
-  "runtime_python": "3.12.3"
+  "format": "pcs-independent-pilot-baseline-environment-v1",
+  "lean_authority_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49",
+  "lean_toolchain_pin": "leanprover/lean4:v4.28.0",
+  "machine": "x86_64",
+  "note": "Synthetic pilot environment snapshot; not a production security claim.",
+  "platform": "linux",
+  "python": "3.12.3",
+  "requirements_dev_lock_sha256": "b1f321c05fdfad0631f4eaae93b32fb9044d77d2b1d3a081b66477b1e784d644"
 }

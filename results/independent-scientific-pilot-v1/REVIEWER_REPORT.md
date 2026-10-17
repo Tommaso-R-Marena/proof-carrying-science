@@ -6,7 +6,7 @@ establish empirical scientific validity, clinical adequacy, or regulatory accept
 
 ## Bundle identity
 
-- Bundle SHA-256: `acafa67973b77b7421a2c2f3dbe186bd15d39f953470b3828819b6878d8f7fe5`
+- Bundle SHA-256: `3d77b0563c944f1ff70fdea96591cebea0b6a94d2601d3d21a0609e8f81c3b94`
 - Pinned signer fingerprint: `ff935ffffcf117c49bb0d5ef393b866ccb6da527b35f2abb38031aeceb89bb6a`
 - Authoritative (Lean): `True`
 - Valid: `True`
@@ -16,7 +16,7 @@ establish empirical scientific validity, clinical adequacy, or regulatory accept
 
 - Pilot ID: `PCS-INDEPENDENT-PILOT-SYNTHETIC-001`
 - Intake semantic hash: `ab9fec8d50a28c2d432f68ecc8d5fa01e7e3f4867bc061ba289b37947b3a14cd`
-- Frozen at: `2026-10-17T19:05:15.801093+00:00`
+- Frozen at: `2026-10-17T19:28:19.262765+00:00`
 
 ## Claim decisions (computational/formal layer)
 
@@ -35,9 +35,13 @@ establish empirical scientific validity, clinical adequacy, or regulatory accept
 ### Independently tested
 
 - Intake semantic-hash freeze rejects post-hoc claim/assumption mutation.
+- Reviewer-side ZIP verification fail-closes on mismatched or substituted signed pilot-intake-lock.json using only received package bytes.
+- Reviewer-owned expected_intake_semantic_hash (out of band) is distinct from producer-supplied frozen_at metadata; frozen_at is never preregistration proof.
 - Discovery draft cannot be attested until human confirmation.
-- Second-environment verification reproduces ACCEPT on exact bundle bytes.
+- Independent verification of one delivered bundle reproduces cryptographic identity (bundle SHA-256) and accepted semantics.
+- Independent regeneration matches scientific semantic hashes while allowing legitimate metadata/timestamp differences; byte-identical regeneration is only claimed under explicitly labeled deterministic fixture mode.
 - Adversarial mutations of artifacts, signatures, receipts, and archives are rejected (finite regression suite, not a security proof).
+- Clean-room reconstruction rebuilds pcs-lean-authority from source without inheriting PCS_LEAN_AUTHORITY_BIN.
 - Closeout plan requires every workspace file to be classified RETAIN or DELETE.
 
 ### Unproved environmental assumptions
@@ -48,6 +52,7 @@ establish empirical scientific validity, clinical adequacy, or regulatory accept
 - Biological/clinical/regulatory adequacy of the PK/PD model is not established.
 - No claim of an actual external partner engagement or legal clearance.
 - Python precheck observations must match Lean authority transcripts; arbitrary external validators remain outside Lean authority.
+- Production bundles are not expected to be byte-identical across separate executions when frozen_at, generated_at, or cryptographic inputs differ.
 
 ## Scientific interpretation rule
 

@@ -2,8 +2,8 @@
 
 - Format: `pcs-independent-pilot-evidence-ledger-v1`
 - Pilot ID: `PCS-INDEPENDENT-PILOT-SYNTHETIC-001`
-- Commit: `ee75cbbac6c1b9753807686955afc1472942df7f`
-- Bundle SHA-256: `acafa67973b77b7421a2c2f3dbe186bd15d39f953470b3828819b6878d8f7fe5`
+- Commit: `b512b96952ff53701cf5c43c6b0355c44cc5cd34`
+- Bundle SHA-256: `3d77b0563c944f1ff70fdea96591cebea0b6a94d2601d3d21a0609e8f81c3b94`
 - Intake semantic hash: `ab9fec8d50a28c2d432f68ecc8d5fa01e7e3f4867bc061ba289b37947b3a14cd`
 - Signer fingerprint: `ff935ffffcf117c49bb0d5ef393b866ccb6da527b35f2abb38031aeceb89bb6a`
 

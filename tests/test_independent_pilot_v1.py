@@ -32,10 +32,15 @@ def _authority_available() -> bool:
     if AUTHORITY.is_file() and os.access(AUTHORITY, os.X_OK):
         return True
     try:
-        resolve_lean_authority_v06(None)
-        return True
+        resolved = resolve_lean_authority_v06(None)
     except V06LeanAuthorityError:
         return False
+    path = resolved.get("path")
+    # repository-build without a compiled binary is not sufficient for high-assurance tests.
+    if path is None:
+        return False
+    candidate = Path(path)
+    return candidate.is_file() and os.access(candidate, os.X_OK)
 
 
 def _require_authority() -> None:

@@ -1,96 +1,53 @@
-# Independent scientific pilot v1 — implementation report
+# Independent scientific pilot — implementation report (review hardening)
 
-## Verdict
+## Scope
 
-A new reviewer can reproduce a **bounded, Lean-authoritative, synthetic PK/PD** PCS assurance path from a clean checkout: intake freeze → discovery/confirm → attestation → second-environment verify → adversarial fail-closed checks → archival/closeout planning. Empirical scientific validity, external partnership, legal clearance, and production key custody remain explicitly unclaimed.
+Synthetic independent-assurance pilot on branch `feature/independent-scientific-pilot-c8bb` (PR #120).
+Does **not** claim external adoption, biological adequacy, clinical validity, or production security.
 
-## Baseline environment
+## Source-level findings
 
-See `BASELINE_ENVIRONMENT.json`.
+1. **Producer-only intake checks were insufficient.** `attest_v06(..., intake_lock=...)` binds and checks the lock before signing, but a malicious producer can substitute `pilot-intake-lock.json` and resign the package manifest. Reviewer-side enforcement is now in `pcs/intake_verify_v06.py`, wired into ZIP/directory verifiers.
+2. **Identical bundle SHA across regenerations was not a general property.** With intake locks bound into the ZIP, dynamic `frozen_at` changes package bytes. Observed: regeneration bundle SHAs differ when `frozen_at` differs; certificate/intake semantic hashes match. Byte-identical regeneration is only claimed under `--deterministic-fixture`.
+3. **Clean-room previously could inherit `PCS_LEAN_AUTHORITY_BIN`.** It now rebuilds Lean from a fresh formal checkout by default and records provenance.
 
-| Component | Value |
+## Measured hashes (this environment)
+
+| Item | Value |
 | --- | --- |
-| Git base (pre-change `main`) | `68d8351a326565496908bf76c8a8daf082b94ff9` |
-| Feature branch HEAD | `936adcb` (see `git rev-parse HEAD` on the PR branch) |
-| Pull request | https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/120 |
-| Python (runtime) | 3.12.3 (pin file 3.12.14) |
-| Lean | 4.28.0 (`7e01a1bf5c70`) |
-| Authority | `formal/.lake/build/bin/pcs-lean-authority` |
-| Lockfile | `requirements-dev.lock` (hash-pinned) |
-
-### Environmental friction observed
-
-1. Host lacked `zstd`; `scripts/activate_lean_428.sh` failed until `apt-get install zstd`.
-2. Host lacked `python3-venv`; clean-room runner failed until `apt-get install python3.12-venv`.
-3. Lean authority binary must be built locally (`lake build pcs-lean-authority`); not committed.
-4. `formal/lake-manifest.json` has empty packages — Mathlib is **not** required for the production authority target used here.
-5. Without a pinned `generated_at`, bundle SHA-256 differs across runs while `certificate_semantic_hash` remains stable; the pilot now pins `GENERATED_AT` for byte-stable packaging.
-
-## Delivered workflow evidence (local run)
-
-From `/tmp/pcs-independent-pilot-run4` (copied machine-readable extracts into this directory):
-
-| Field | Value |
-| --- | --- |
-| Pilot ID | `PCS-INDEPENDENT-PILOT-SYNTHETIC-001` |
-| Bundle SHA-256 | `acafa67973b77b7421a2c2f3dbe186bd15d39f953470b3828819b6878d8f7fe5` |
+| Commit | `b512b96952ff53701cf5c43c6b0355c44cc5cd34` |
+| Authority SHA-256 | `3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49` |
 | Intake semantic hash | `ab9fec8d50a28c2d432f68ecc8d5fa01e7e3f4867bc061ba289b37947b3a14cd` |
-| Signer fingerprint (demo) | `ff935ffffcf117c49bb0d5ef393b866ccb6da527b35f2abb38031aeceb89bb6a` |
-| Claims | `C_PK_CONTRACT` / `C_PK_REPLAY` → `COMPUTATIONALLY_SUPPORTED` |
-| Authoritative | `true` (Lean ACCEPT) |
-| Adversarial | all listed attacks rejected |
+| Certificate semantic hash | `dc6c4d4204eb7829cc1ea4aa2ff9fc451ff6b25e0db0669e88765812fced5483` |
+| Regen bundle A | `ad3a9f1822686020ed9d23a8ef204ca9cef80f0301a9747c73a6502d55908a6b` |
+| Regen bundle B | `d06460c9a961495b6f0ccec8b6a7b390bec57af68e757e8087890e253350472e` |
+| Fixture bundle SHA | `ee126671a27f677b2dd9e317ff9c0e58851f7a8810f135fdbd72f4804edab358` |
+| Clean-room authority SHA | `3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49` |
+| requirements-dev.lock SHA | `b1f321c05fdfad0631f4eaae93b32fb9044d77d2b1d3a081b66477b1e784d644` |
+| Lean toolchain pin | `leanprover/lean4:v4.28.0` |
 
-## Tests
+## Regression results
+
+- Focused: `tests/test_intake_verify_v06.py`, `test_attest_v06_intake_lock.py`, `test_python_lean_archive_boundary_v06.py`, `test_independent_pilot_v1.py` → **20 passed**
+- Broader related: + `test_pilot_intake.py`, `test_pilot_closeout.py`, `test_lean_authority_v06.py` → **40 passed**
+- `PCS_REQUIRE_LEAN_AUTHORITY=1` without compiled authority → **fails** (does not skip)
+
+## Commands
 
 ```bash
-python -m pytest -q tests/test_independent_pilot_v1.py
-# 7 passed (includes clean-room reconstruction)
-```
-
-Clean-room reconstruction also succeeded at `/tmp/pcs-cleanroom-pilot` with `pass: true` after installing `python3-venv` (see `CLEANROOM_SUMMARY.json`). Clean-room bundle SHA-256 matched the local pilot exactly after pinning `generated_at`.
-
-## Commands for independent reproduction
-
-```bash
-python3 -m pip install -e '.[dev]'
-python3 scripts/check_repository_integrity.py
-# ensure zstd is installed on Linux before Lean extract
 source scripts/activate_lean_428.sh
 cd formal && lake build pcs-lean-authority && cd ..
-export PCS_LEAN_AUTHORITY_BIN="$PWD/formal/.lake/build/bin/pcs-lean-authority"
-python scripts/run_independent_scientific_pilot_v1.py \
-  --output /tmp/pcs-independent-pilot --overwrite --apply-closeout \
-  --lean-authority "$PCS_LEAN_AUTHORITY_BIN"
-python scripts/run_cleanroom_independent_pilot_v1.py \
-  --output /tmp/pcs-cleanroom-pilot --overwrite \
-  --lean-authority "$PCS_LEAN_AUTHORITY_BIN"
-python -m pytest -q tests/test_independent_pilot_v1.py
+PCS_REQUIRE_LEAN_AUTHORITY=1 python3 -m pytest -q \
+  tests/test_intake_verify_v06.py \
+  tests/test_attest_v06_intake_lock.py \
+  tests/test_python_lean_archive_boundary_v06.py \
+  tests/test_independent_pilot_v1.py
+python3 scripts/run_cleanroom_independent_pilot_v1.py -o /tmp/pcs-cleanroom --overwrite
 ```
 
-## Trust boundary
+## Limitations
 
-See `TRUST_BOUNDARY_ASSESSMENT.json` and `docs/TRUST_BOUNDARY_ASSESSMENT_INDEPENDENT_PILOT_V1.md`.
-
-## Failed experiments during development
-
-1. First adversarial campaign incorrectly mutated non-existent `predictions.csv` ZIP members; v0.6 packages store content-addressed `artifacts/<id>/payload`. Fixed by mutating payload members.
-2. Absolute-path attack initially renamed missing `.csv` members (no-op). Fixed by injecting `/tmp/evil.bin`.
-3. `build_closeout_plan(..., notes=...)` rejected — API has no `notes` parameter; removed.
-4. Stale `__pycache__` briefly masked the closeout fix until cache cleared.
-
-## Follow-up from gap audit
-
-After the initial pilot PR, an architecture gap review identified remaining joins between legacy intake and v0.6. This branch now also includes:
-
-- native `pcs attest-v06 --intake-lock` binding (`pilot-intake-lock.json` inside the signed package);
-- `tests/test_attest_v06_intake_lock.py` and `tests/test_python_lean_archive_boundary_v06.py` (Lean-decoded canonical ZIP + DEFLATE reject);
-- `pcs closeout-plan` / `pcs closeout-apply` CLI wrappers;
-- dated v0.6 TCB section in `docs/SECURITY_AND_TRUST.md`.
-
-Focused suite: `11 passed` (`test_independent_pilot_v1` + intake-lock + archive-boundary).
-
-## Explicit non-closure
-
-- Issue **#13** remains open: this is a synthetic stand-in, not a genuine external partner workflow.
-- Issues **#9** / **#14** remain open for legal/counsel/payment/custody prerequisites beyond engineering demo keys.
-- PR **#117** research branch untouched; PR **#119** CI dependency bumps not duplicated.
+- Demo keys only; not production trust roots.
+- Finite adversarial suite is not a security proof.
+- Public CI `independent-pilot-cleanroom` must still pass on GitHub for merge readiness.
+- PR remains draft until required checks and independent review of security/reproducibility claims.
