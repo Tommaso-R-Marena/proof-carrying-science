@@ -86,7 +86,7 @@ class PGSI2WideRuntimeTests(unittest.TestCase):
     def test_host_limits_are_explicit_not_mislabeled_lean_results(self):
         with self.assertRaises(TypeError):
             Wide((Unit(True, 0, 0),), 0)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             Arch(True, 32)
         with self.assertRaises(TypeError):
             decode("PGSI2-WIDE|0", ARCH)
