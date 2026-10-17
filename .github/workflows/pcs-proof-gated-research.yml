@@ -30,10 +30,27 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           cd formal
-          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic
-          lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 0 0 relu 1 1 | grep -x ACCEPT
-          if lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 1 1 relu 1 2; then
-            echo 'FAIL: regressive candidate unexpectedly accepted' >&2
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          printf 'PGSI1|R|0|0' > "$tmp/old.pgsi"
+          printf 'PGSI1|R|1|1' > "$tmp/candidate.pgsi"
+          lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/candidate.pgsi" | grep -x ACCEPT
+          printf 'PGSI1|R|1|2' > "$tmp/bad.pgsi"
+          if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/candidate.pgsi" "$tmp/bad.pgsi"; then
+            echo 'FAIL: regressive artifact accepted' >&2
+            exit 1
+          fi
+          for malformed in 'PGSI1|R|01|1' 'PGSI1|R|-0|1' 'PGSI1|R|33|1' 'PGSI1|R|1|1|override' 'PGSI1|R|1|1 ' 'PGSI1|Q|1|1' 'PGSI2|R|1|1'; do
+            printf '%s' "$malformed" > "$tmp/bad.pgsi"
+            if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/bad.pgsi"; then
+              echo 'FAIL: invalid artifact accepted' >&2
+              exit 1
+            fi
+          done
+          printf 'PGSI1|R|1|1\\n' > "$tmp/bad.pgsi"
+          if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/bad.pgsi"; then
+            echo 'FAIL: trailing newline accepted' >&2
             exit 1
           fi
           cd ../research/proof-gated-self-improvement-v1
