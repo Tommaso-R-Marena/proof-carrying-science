@@ -1,13 +1,6 @@
 import Lean
 
-/-!
-# PCS Proof-Gated Self-Improvement (finite-domain prototype)
-
-A bounded neuron, frozen examples and exact loss. The acceptance theorem
-concerns only this formal policy; it does not prove out-of-domain improvement
-or the reliability of any external deployment wrapper.
--/
-
+/-! Exact finite-domain reference policy. The trusted deployment root is external. -/
 namespace PCS.V2.ProofGatedSelfImprovement
 
 structure Neuron where
@@ -22,41 +15,84 @@ def predict (m : Neuron) (x : Int) : Int :=
   let z := m.weight * x + m.bias
   if m.useReLU then relu z else z
 
-def point (i : Fin 7) : Int := (Int.ofNat i.val) - 3
-
-def target (i : Fin 7) : Int := relu (2 * point i + 1)
-
-def correct (m : Neuron) (i : Fin 7) : Prop := predict m (point i) = target i
+def corpus : List Int := [-3, -2, -1, 0, 1, 2, 3]
+def target (x : Int) : Int := relu (2*x + 1)
+def correct (m : Neuron) (x : Int) : Prop := predict m x = target x
 
 def loss (m : Neuron) : Nat :=
-  ((List.range 7).map fun j =>
-    (predict m ((Int.ofNat j) - 3) - relu (2 * ((Int.ofNat j) - 3) + 1)).natAbs).sum
+  (corpus.map (fun x => (predict m x - target x).natAbs)).sum
 
-def admissible (old candidate : Neuron) : Prop :=
-  (∀ i : Fin 7, correct old i → correct candidate i) ∧
-  (∃ i : Fin 7, ¬ correct old i ∧ correct candidate i) ∧
-  loss candidate < loss old
+def preservesB : List Int → Neuron → Neuron → Bool
+  | [], _, _ => true
+  | x :: xs, a, b => decide (correct a x → correct b x) && preservesB xs a b
 
--- Quantifiers are finite (Fin 7), so the whole policy is executable.
-def accept (old candidate : Neuron) : Bool := decide (admissible old candidate)
+def expandsB : List Int → Neuron → Neuron → Bool
+  | [], _, _ => false
+  | x :: xs, a, b => decide (¬ correct a x ∧ correct b x) || expandsB xs a b
 
-theorem accept_sound {old candidate : Neuron} (h : accept old candidate = true) :
-    admissible old candidate := by
-  exact of_decide_true h
+def admissible (a b : Neuron) : Prop :=
+  (∀ x ∈ corpus, correct a x → correct b x) ∧
+  (∃ x ∈ corpus, ¬ correct a x ∧ correct b x) ∧
+  loss b < loss a
 
-theorem accepted_preserves {old candidate : Neuron}
-    (h : accept old candidate = true) (i : Fin 7)
-    (hi : correct old i) : correct candidate i :=
-  (accept_sound h).1 i hi
+def accept (a b : Neuron) : Bool :=
+  (preservesB corpus a b && expandsB corpus a b) && decide (loss b < loss a)
 
-theorem accepted_expands {old candidate : Neuron}
-    (h : accept old candidate = true) :
-    ∃ i : Fin 7, ¬ correct old i ∧ correct candidate i :=
+private theorem preservesB_sound (xs : List Int) (a b : Neuron)
+    (h : preservesB xs a b = true) :
+    ∀ x ∈ xs, correct a x → correct b x := by
+  induction xs with
+  | nil =>
+      intro x hx
+      cases hx
+  | cons y ys ih =>
+      have hparts : (correct a y → correct b y) ∧ preservesB ys a b = true := by
+        simpa only [preservesB, Bool.and_eq_true, decide_eq_true_eq] using h
+      intro x hx
+      have hm : x = y ∨ x ∈ ys := by simpa only [List.mem_cons] using hx
+      cases hm with
+      | inl eq =>
+          cases eq
+          exact hparts.1
+      | inr mem =>
+          exact ih hparts.2 x mem
+
+private theorem expandsB_sound (xs : List Int) (a b : Neuron)
+    (h : expandsB xs a b = true) :
+    ∃ x ∈ xs, ¬ correct a x ∧ correct b x := by
+  induction xs with
+  | nil =>
+      simp [expandsB] at h
+  | cons y ys ih =>
+      have hparts : (¬ correct a y ∧ correct b y) ∨ expandsB ys a b = true := by
+        simpa only [expandsB, Bool.or_eq_true, decide_eq_true_eq] using h
+      cases hparts with
+      | inl hy =>
+          exact ⟨y, by simp, hy⟩
+      | inr htail =>
+          obtain ⟨x, hx, hc⟩ := ih htail
+          exact ⟨x, by simp [hx], hc⟩
+
+theorem accept_sound {a b : Neuron} (h : accept a b = true) :
+    admissible a b := by
+  have hp : (preservesB corpus a b && expandsB corpus a b) = true ∧
+      decide (loss b < loss a) = true := by
+    exact Bool.and_eq_true.mp (by simpa only [accept] using h)
+  have ht : preservesB corpus a b = true ∧ expandsB corpus a b = true :=
+    Bool.and_eq_true.mp hp.1
+  exact ⟨preservesB_sound corpus a b ht.1,
+    expandsB_sound corpus a b ht.2, (decide_eq_true_eq).mp hp.2⟩
+
+theorem accepted_preserves {a b : Neuron} (h : accept a b = true)
+    (x : Int) (hx : x ∈ corpus) (ha : correct a x) : correct b x :=
+  (accept_sound h).1 x hx ha
+
+theorem accepted_expands {a b : Neuron} (h : accept a b = true) :
+    ∃ x ∈ corpus, ¬ correct a x ∧ correct b x :=
   (accept_sound h).2.1
 
-theorem accepted_strict_loss {old candidate : Neuron}
-    (h : accept old candidate = true) : loss candidate < loss old :=
-  (accept_sound h).2.2
+theorem accepted_strict_loss {a b : Neuron} (h : accept a b = true) :
+    loss b < loss a := (accept_sound h).2.2
 
 theorem two_accepted_steps {a b c : Neuron}
     (hab : accept a b = true) (hbc : accept b c = true) :
@@ -64,13 +100,13 @@ theorem two_accepted_steps {a b c : Neuron}
   Nat.lt_trans (accepted_strict_loss hbc) (accepted_strict_loss hab)
 
 theorem perfect_cannot_advance (m : Neuron)
-    (hperfect : ∀ i : Fin 7, correct m i) (candidate : Neuron) :
+    (hperfect : ∀ x ∈ corpus, correct m x) (candidate : Neuron) :
     accept m candidate = false := by
   cases hc : accept m candidate with
   | false => rfl
   | true =>
-    obtain ⟨i, hi, _⟩ := accepted_expands hc
-    exact False.elim (hi (hperfect i))
+      obtain ⟨x, hx, hwrong, _⟩ := accepted_expands hc
+      exact False.elim (hwrong (hperfect x hx))
 
 def zero : Neuron := ⟨true, 0, 0⟩
 def intermediate : Neuron := ⟨true, 1, 1⟩
@@ -83,7 +119,7 @@ example : accept zero regressive = false := by decide
 example : accept optimum zero = false := by decide
 example : loss optimum = 0 := by decide
 
-theorem optimum_perfect (i : Fin 7) : correct optimum i := by
+theorem optimum_perfect (x : Int) (hx : x ∈ corpus) : correct optimum x := by
   rfl
 
 theorem optimum_terminal (candidate : Neuron) : accept optimum candidate = false :=
@@ -91,8 +127,6 @@ theorem optimum_terminal (candidate : Neuron) : accept optimum candidate = false
 
 end PCS.V2.ProofGatedSelfImprovement
 
-/-! Experimental Lean authority CLI. DO NOT expose as privileged production service.
-    Only constant, vetted source is evaluated; input is parsed as integers. -/
 private def parseActivation : String → Option Bool
   | "relu" => some true
   | "linear" => some false
@@ -107,9 +141,8 @@ private def readNeuron (a w b : String) : Option PCS.V2.ProofGatedSelfImprovemen
   else
     some ⟨activation, weight, bias⟩
 
-def main : IO UInt32 := do
-  let args ← IO.getArgs
-  match args.toList with
+def main (args : List String) : IO UInt32 := do
+  match args with
   | [oldA, oldW, oldB, newA, newW, newB] =>
     match readNeuron oldA oldW oldB, readNeuron newA newW newB with
     | some old, some candidate =>
