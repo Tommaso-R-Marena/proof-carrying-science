@@ -146,7 +146,7 @@ example : accept zero regressive = false := by decide
 example : accept optimum zero = false := by decide
 example : loss optimum = 0 := by decide
 
-theorem optimum_perfect (x : Int) (hx : x ∈ corpus) : correct optimum x := by
+theorem optimum_perfect (x : Int) (_hx : x ∈ corpus) : correct optimum x := by
   rfl
 
 theorem optimum_terminal (candidate : Neuron) : accept optimum candidate = false :=
