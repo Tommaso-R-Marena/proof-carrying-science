@@ -54,4 +54,23 @@ jobs:
             exit 1
           fi
           cd ../research/proof-gated-self-improvement-v1
-          python -c "from pathlib import Path; from proof_gate import automatic_search; r=automatic_search(formal_dir=Path('../../formal').resolve()); assert r['generation_count']==2 and r['final']=={'relu':True,'weight':2,'bias':1}; print('PASS: two steps authorized by Lean')"
+          python - <<'PY'
+          import subprocess
+          import tempfile
+          from pathlib import Path
+          from proof_gate import Model, automatic_search, wire_bytes, artifact_gate
+          with tempfile.TemporaryDirectory() as d:
+              a = Path(d) / "a.pgsi"
+              b = Path(d) / "b.pgsi"
+              a.write_bytes(wire_bytes(Model(True, 0, 0)))
+              b.write_bytes(wire_bytes(Model(True, 1, 1)))
+              cmd = ["lake", "env", "lean", "--run",
+                     "PCS/V2/ProofGatedArtifacts.lean", str(a.resolve()), str(b.resolve())]
+              p = subprocess.run(cmd, capture_output=True, text=True, cwd=Path("../../formal").resolve())
+              print("diagnostic: rc", p.returncode, "out", repr(p.stdout), "err", repr(p.stderr))
+              assert artifact_gate(a, b, Path("../../formal").resolve())
+          r = automatic_search(formal_dir=Path("../../formal").resolve())
+          assert r["generation_count"] == 2
+          assert r["final"] == {"relu": True, "weight": 2, "bias": 1}
+          print("PASS: two steps authorized by Lean artifact authority")
+          PY
