@@ -23,6 +23,7 @@ from .verifier_io_v06 import (
 )
 from .verifier_v06 import verify_end_to_end_v06
 from .policy_v06 import apply_reviewer_policy_v06
+from .intake_verify_v06 import enforce_package_intake_lock_v06
 from .lean_authority_v06 import enforce_lean_authority_v06
 from .canonical_zip_v06 import is_canonical_zip_v06
 
@@ -330,6 +331,8 @@ def verify_package_zip_end_to_end_v06(
     telemetry_sink: dict[str, Any] | None = None,
     lean_authority_path: str | Path | None = None,
     require_canonical_archive: bool = False,
+    require_intake_lock: bool = False,
+    expected_intake_semantic_hash: str | None = None,
     expected_build_provenance_fingerprint: str | None = None,
     expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
@@ -339,6 +342,11 @@ def verify_package_zip_end_to_end_v06(
     PCS STORED encoding, i.e. unless the Lean authority itself decodes the raw archive
     bytes (``archive_assurance == "lean-decoded-canonical-zip"``; Lean theorem
     ``PCS.V2.CanonicalArchive.pcs_authority_archive_binary_sound``).
+
+    When a signed ``pilot-intake-lock.json`` member is present, or when the reviewer
+    sets ``require_intake_lock`` / ``expected_intake_semantic_hash``, intake consistency
+    is enforced from received bytes alone. ``frozen_at`` is never treated as
+    preregistration evidence.
     """
     loaded = load_package_zip_v06(bundle)
     public_key = load_public_key_v06(public_key_path)
@@ -403,6 +411,26 @@ def verify_package_zip_end_to_end_v06(
         expected_fingerprint=expected_fingerprint,
         authority_path=lean_authority_path,
         archive_bytes=raw_archive if canonical_archive else None,
+    )
+    certificate = authority_context.get("certificate")
+    if not isinstance(certificate, dict):
+        # Even when the Python precheck failed, try to parse certificate bytes so
+        # a present-but-mismatched intake lock still fails closed.
+        try:
+            from .byte_contract_v06 import (
+                V06ByteContractError,
+                parse_certificate_bytes_v06,
+            )
+
+            certificate = parse_certificate_bytes_v06(loaded["certificate_bytes"])
+        except V06ByteContractError:
+            certificate = None
+    result = enforce_package_intake_lock_v06(
+        result,
+        certificate=certificate if isinstance(certificate, dict) else None,
+        package_files=loaded["package_files"],
+        require_intake_lock=require_intake_lock,
+        expected_intake_semantic_hash=expected_intake_semantic_hash,
     )
     receipt = dict(result)
     receipt["archive_assurance"] = (

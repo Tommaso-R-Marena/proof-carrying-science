@@ -19,6 +19,9 @@ bash tools/run_fixture_tests.sh
 lake env lean --run tools/CheckGoldenFileLiterals.lean
 lake env lean PCS/V2/FailClosedAudit.lean
 cd "$ROOT"
+# High-assurance path: Lean authority is mandatory. Critical pilot/intake tests
+# must fail (not skip) when pcs-lean-authority is absent.
+export PCS_REQUIRE_LEAN_AUTHORITY=1
 python3 -m pytest -q
 python3 scripts/adversarial_campaign.py
 python3 scripts/adversarial_v06_hardening.py
