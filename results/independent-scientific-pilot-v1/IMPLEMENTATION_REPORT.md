@@ -51,3 +51,10 @@ python3 scripts/run_cleanroom_independent_pilot_v1.py -o /tmp/pcs-cleanroom --ov
 - Finite adversarial suite is not a security proof.
 - Public CI `independent-pilot-cleanroom` must still pass on GitHub for merge readiness.
 - PR remains draft until required checks and independent review of security/reproducibility claims.
+
+
+## Phase 0 CI repair (bb74806)
+
+Public Full Verification job `independent-pilot-cleanroom` failed on `a93c116` because the autouse authority fixture required a pre-existing compiled binary after the job unset `PCS_LEAN_AUTHORITY_BIN`. The clean-room test is now exempted from that pre-existing-binary gate only; it still rebuilds Lean, verifies provenance, and fails closed if rebuild/verify fails. Other focused tests still fail under `PCS_REQUIRE_LEAN_AUTHORITY=1` without a compiled authority.
+
+Required ruleset check: `verified-public-integration` (Protect PCS main). PR #117 overlap: zero shared files.
