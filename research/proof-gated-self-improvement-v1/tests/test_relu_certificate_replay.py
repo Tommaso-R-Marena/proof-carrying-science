@@ -140,5 +140,50 @@ class IndependentReplayTests(unittest.TestCase):
         self.assertTrue(result.no_forgetting)
         self.assertEqual(result.new_max_error,0)
 
+
+    def test_offline_cli_accepts_consistent_negative_claim_without_authorizing(self):
+        import subprocess
+        import tempfile
+        import sys
+        from pathlib import Path
+        _,_,raw = self.fixture()
+        script = Path(__file__).resolve().parents[1] / "relu_certificate_replay.py"
+        with tempfile.TemporaryDirectory(prefix="pcs-replay-") as temp:
+            file = Path(temp) / "claim.json"
+            file.write_bytes(raw)
+            proc = subprocess.run([sys.executable,str(script),str(file)],
+                                  capture_output=True,text=True,timeout=15)
+            self.assertEqual(proc.returncode,0,proc.stderr)
+            data = json.loads(proc.stdout)
+            self.assertTrue(data["replay_consistent"])
+            self.assertFalse(data["no_forgetting"])
+            self.assertFalse(data["lean_kernel_verdict"])
+            self.assertFalse(data["production_authorized"])
+            self.assertEqual(data["counterexample"],"4")
+            file.write_bytes(raw.replace(b'"body":',b'"body":{}, "body":',1))
+            bad = subprocess.run([sys.executable,str(script),str(file)],
+                                 capture_output=True,text=True,timeout=15)
+            self.assertNotEqual(bad.returncode,0)
+            self.assertIn("REJECT:",bad.stderr)
+
+    def test_large_certificate_file_fails_closed(self):
+        from relu_certificate_replay import MAX_BYTES
+        _,_,raw = self.fixture()
+        with self.assertRaises(ReplayError):
+            replay(raw + b" "*(MAX_BYTES+1))
+
+    def test_rehashed_adversarial_cell_mutations(self):
+        rng = random.Random(6009)
+        _,_,raw = self.fixture()
+        for _ in range(350):
+            env = json.loads(raw)
+            row = env["body"]["cells"][rng.randrange(len(env["body"]["cells"]))]
+            component = rng.randrange(2)
+            coordinate = rng.randrange(2)
+            row[2+component][coordinate] = str(int(row[2+component][coordinate]) + rng.choice((-7,7)))
+            env["sha256"] = hashlib.sha256(PREFIX+canonical(env["body"])).hexdigest()
+            with self.assertRaises(ReplayError):
+                replay(canonical(env))
+
 if __name__=="__main__":
     unittest.main()
