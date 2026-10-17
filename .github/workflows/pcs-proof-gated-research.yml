@@ -80,3 +80,42 @@ jobs:
           assert r["final"] == {"relu": True, "weight": 2, "bias": 1}
           print("PASS: two steps authorized by Lean artifact authority")
           PY
+      - name: Live content-addressed promotion and readback through Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/proof-gated-self-improvement-v1
+          python - <<'PY'
+          from pathlib import Path
+          import tempfile
+          from promotion_v2 import (
+              ResearchPromotionStore, StaleHead, ProposalRejected, blob_hash
+          )
+          from proof_gate import Model, wire_bytes
+          with tempfile.TemporaryDirectory(prefix="pcs-promotion-ci-") as td:
+              store = ResearchPromotionStore.initialize(
+                  Path(td) / "store", Path("../../formal").resolve(), Model(True, 0, 0))
+              original = store.snapshot()
+              first = store.promote(wire_bytes(Model(True, 1, 1)), original)
+              assert first.generation == 1
+              assert store.audit() == first
+              try:
+                  store.promote(wire_bytes(Model(True, 2, 1)), original)
+                  raise AssertionError("stale update was admitted")
+              except StaleHead:
+                  pass
+              try:
+                  store.promote(wire_bytes(Model(True, 0, 0)), first)
+                  raise AssertionError("regression was admitted")
+              except ProposalRejected:
+                  pass
+              second = store.promote(wire_bytes(Model(True, 2, 1)), first)
+              assert second.generation == 2
+              assert store.audit() == second
+              head, active = store.read_active()
+              assert head == second
+              assert active == wire_bytes(Model(True, 2, 1))
+              assert blob_hash(active) == second.active_sha256
+              print("PASS: two Lean-authorized content-addressed CAS promotions")
+          PY
