@@ -126,6 +126,51 @@ theorem trace_steps_bounded {n : Nat} {a b : Neuron}
   have hb := trace_length_bound h
   omega
 
+/-! Arbitrarily varying untrusted proposal generators do not change
+    the gate's integrity: rejected candidates leave the state unchanged.
+    This is monotonic *non-regression*, not guaranteed strict progress. -/
+def gatedStep (m proposed : Neuron) : Neuron :=
+  if accept m proposed then proposed else m
+
+theorem gatedStep_preserves (m proposed : Neuron) (x : Int)
+    (hx : x ∈ corpus) (ha : correct m x) :
+    correct (gatedStep m proposed) x := by
+  cases h : accept m proposed with
+  | false => simpa [gatedStep, h] using ha
+  | true =>
+      simpa [gatedStep, h] using (accepted_preserves h x hx ha)
+
+theorem gatedStep_loss (m proposed : Neuron) :
+    loss (gatedStep m proposed) ≤ loss m := by
+  cases h : accept m proposed with
+  | false => simp [gatedStep, h]
+  | true =>
+      simpa [gatedStep, h] using (Nat.le_of_lt (accepted_strict_loss h))
+
+def runStrategies : Neuron → List (Neuron → Neuron) → Neuron
+  | m, [] => m
+  | m, strategy :: rest =>
+      runStrategies (gatedStep m (strategy m)) rest
+
+theorem arbitrary_strategies_preserve (strategies : List (Neuron → Neuron))
+    (m : Neuron) (x : Int) (hx : x ∈ corpus) (ha : correct m x) :
+    correct (runStrategies m strategies) x := by
+  induction strategies generalizing m with
+  | nil => simpa [runStrategies] using ha
+  | cons strategy rest ih =>
+      change correct (runStrategies (gatedStep m (strategy m)) rest) x
+      exact ih (gatedStep m (strategy m))
+        (gatedStep_preserves m (strategy m) x hx ha)
+
+theorem arbitrary_strategies_nonincrease (strategies : List (Neuron → Neuron))
+    (m : Neuron) : loss (runStrategies m strategies) ≤ loss m := by
+  induction strategies generalizing m with
+  | nil => simp [runStrategies]
+  | cons strategy rest ih =>
+      change loss (runStrategies (gatedStep m (strategy m)) rest) ≤ loss m
+      exact Nat.le_trans (ih (gatedStep m (strategy m)))
+        (gatedStep_loss m (strategy m))
+
 theorem perfect_cannot_advance (m : Neuron)
     (hperfect : ∀ x ∈ corpus, correct m x) (candidate : Neuron) :
     accept m candidate = false := by
