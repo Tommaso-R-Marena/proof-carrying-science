@@ -66,6 +66,18 @@ metadata substitution controls reject before launching Lean. The failed job,
 original capsule and earlier source-qualified results remain unchanged. Later
 final-head qualification is recorded separately on the integration PR.
 
+Candidate `aec859b` subsequently passed 1,917 local Python tests without skips
+and a clean 53-name numerical replay. Its hosted run also passed that replay
+and all 48 calibration tests, then certified hulls 0–13 before the combined
+receiving proof reached the same interpreter cap on later hulls. No false
+certificate proof was obtained for those resource failures. The receiver now
+compiles the identical model namespaces in separate fresh processes, checks
+their complete combined inventory and exports their exact source hashes.
+The request deadline, memory cap, theorem types, source data, held-out split
+and scientific conclusions remain unchanged. The second failed artifact is
+retained under `research/experimental-calibration-v1/receiving-portability-v1/`;
+qualification of the repaired candidate is separate from these historical runs.
+
 This is an experimental exact-rational regression and optimal-recovery fragment. CSV/source translation, native arithmetic execution correspondence, unknown predictor errors, actual measurement precision, physical model adequacy, generalization and external domain review remain OPEN. The receipts grant mathematical support for the declared finite arrays. `scientific_acceptance` and `pcs_authority` remain false. No learned model was promoted and no external proof-development trace was used for training.
 
 Data: Gerritsma, J., Onnink, R., & Versluis, A. (1981), [Yacht Hydrodynamics](https://doi.org/10.24432/C5XG7R), UCI Machine Learning Repository, [CC BY 4.0](https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics). Original bytes, full license, citation, retained upstream metadata and exact source hashes accompany the evidence. No new physical measurements, independent outside review, causal finding or population confidence statement is claimed.

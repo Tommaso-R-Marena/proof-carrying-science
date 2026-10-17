@@ -254,6 +254,26 @@ end Q{j}.Minimax
     return text.encode(),names
 
 
+def render_units(prepared):
+    """Partition the fixed generated proof at complete model namespaces.
+
+    No theorem body or numeric definition changes. Each model gets a fresh
+    interpreter and its own exact inventory, within one request deadline.
+    """
+    proof,names=render(prepared)
+    header=proof[:proof.index(b'namespace PCSCalibrationReplay.M0\n')]
+    units=[]
+    for k in range(len(prepared['models'])):
+        namespace=f'PCSCalibrationReplay.M{k}'
+        start=proof.index(('namespace '+namespace+'\n').encode())
+        end_marker=('end '+namespace+'\n').encode()
+        end=proof.index(end_marker,start)+len(end_marker)
+        targets=[n for n in names if n.startswith(namespace+'.')]
+        unit=header+proof[start:end]+b'\n'+''.join('#print axioms '+n+'\n' for n in targets).encode()
+        units.append((f'ReplayModel{k}.lean',unit,targets))
+    return units
+
+
 def render_rejection(prepared):
     """A separate ordinary-kernel proof of falsity of the finite witness checks."""
     text='import PCSReal.Calibration\nset_option autoImplicit false\nopen Finset PCSReal.Calibration\nnamespace PCSCalibrationRejected\n'
@@ -289,9 +309,12 @@ def kernel_replay(prepared,*,timeout=180):
     if type(timeout) not in {int,float} or not 0<timeout<=300:
         raise ValueError('kernel budget must lie in (0,300] seconds')
     frozen=sources();hashes={n:sha(b) for n,b in frozen.items()};proof,names=render(prepared)
+    units=render_units(prepared)
     started=time.monotonic();deadline=started+timeout
     result={'status':'UNAVAILABLE_OR_EXHAUSTED','kernel_checked':False,'negative_kernel_checked':False,'source_sha256':hashes,
             'proof_sha256':sha(proof),'prepared_sha256':sha(encode(prepared)),
+            'proof_units_sha256':{name:sha(raw) for name,raw,_ in units},
+            'execution_model':'FRESH_PROCESS_PER_DECLARED_MODEL',
             'kernel_theorems':{},'executions':[]}
     def remaining():
         left=deadline-time.monotonic()
@@ -304,8 +327,10 @@ def kernel_replay(prepared,*,timeout=180):
             env['LEAN_PATH']=str(private)+os.pathsep+env['LEAN_PATH']
             source=private/'PCSReal/Calibration.lean'
             source.write_bytes(frozen['PCSReal/Calibration.lean']+('\n'+'\n'.join('#print axioms '+n for n in GENERAL)+'\n').encode())
-            driver=private/'Replay.lean';driver.write_bytes(proof)
-            for path,theorem_names in [(source,GENERAL),(driver,names)]:
+            drivers=[]
+            for filename,raw,targets in units:
+                path=private/filename;path.write_bytes(raw);drivers.append((path,targets))
+            for path,theorem_names in [(source,GENERAL),*drivers]:
                 command=[lean,'-j1','-M2048','-D','Elab.async=false','--root='+str(private)]
                 if path==source:command+=['-o',str(path.with_suffix('.olean'))]
                 command+=[str(path)]
@@ -325,6 +350,8 @@ def kernel_replay(prepared,*,timeout=180):
                     break
                 result['kernel_theorems'].update(inventory(p.stdout,theorem_names))
             else:
+                if set(result['kernel_theorems'])!=set(GENERAL+names):
+                    raise ValueError('complete cross-model theorem inventory required')
                 result.update(status='KERNEL_CHECKED',kernel_checked=True)
         if hashes!={n:sha(b) for n,b in sources().items()}:
             raise ValueError('receiving sources changed during calibration replay')
@@ -370,6 +397,8 @@ def export(output,result,data_raw,contract_raw,certificate_raw):
         if (k['source_sha256']!={n:sha(b) for n,b in frozen.items()}
                 or k['prepared_sha256']!=sha(encode(prepared)) or k['proof_sha256']!=sha(proof)):
             raise ValueError('source/certificate/proof export substitution')
+        if k['proof_units_sha256']!={name:sha(raw) for name,raw,_ in render_units(prepared)}:
+            raise ValueError('compiled proof-unit export substitution')
         if k['negative_kernel_checked'] and k['negative_proof_sha256']!=sha(render_rejection(prepared)):
             raise ValueError('negative proof export substitution')
     output.mkdir(parents=True,exist_ok=False)
@@ -377,6 +406,9 @@ def export(output,result,data_raw,contract_raw,certificate_raw):
         (output/name).write_bytes(raw)
     if proof:
         (output/'Replay.lean').write_bytes(proof)
+        (output/'proof-units').mkdir()
+        for name,raw,_ in render_units(prepared):
+            (output/'proof-units'/name).write_bytes(raw)
         if result['kernel']['negative_kernel_checked']:
             (output/'Rejected.lean').write_bytes(render_rejection(prepared))
         for name,raw in frozen.items():

@@ -111,6 +111,7 @@ def run(output,*,pilot=False,workers=2):
         'protocol_sha256':receiver.sha(PROTOCOL.read_bytes()),
         'minimax_addendum_sha256':receiver.sha((PROTOCOL.parent/'MINIMAX_ADDENDUM.json').read_bytes()),'source_sha256':frozen,
         'all_estimators_addendum_sha256':receiver.sha((PROTOCOL.parent/'ALL_ESTIMATORS_ADDENDUM.json').read_bytes()),
+        'process_replay_addendum_sha256':receiver.sha((PROTOCOL.parent/'PROCESS_REPLAY_ADDENDUM.json').read_bytes()),
         'proposer_sha256':receiver.sha((ROOT/'pcs/experimental/calibration_proposer_v1.py').read_bytes()),
         'runner_sha256':receiver.sha(Path(__file__).read_bytes()),'frozen_before_execution':True,
         'isolated_receiving_workers':workers})

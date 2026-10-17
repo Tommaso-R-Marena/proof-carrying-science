@@ -103,16 +103,55 @@ def test_evidence_is_bound_to_exact_sources_and_regenerated_proofs(positive,tmp_
     with pytest.raises(FileExistsError):calibration.export(destination,positive,DATA,CONTRACT,CERTIFICATE)
 
 
-@pytest.mark.parametrize('field',['prepared','proof','source'])
+@pytest.mark.parametrize('field',['prepared','proof','source','unit'])
 def test_export_refuses_proof_data_or_receiving_source_substitution(positive,tmp_path,monkeypatch,field):
     r=deepcopy(positive)
     if field=='prepared':r['prepared']['models'][0]['coefficients'][0]='0'
     if field=='proof':r['kernel']['proof_sha256']='0'*64
+    if field=='unit':r['kernel']['proof_units_sha256']['ReplayModel0.lean']='0'*64
     if field=='source':
         actual=calibration.sources
         monkeypatch.setattr(calibration,'sources',lambda:{**actual(),'PCSReal/Calibration.lean':b'substituted'})
     with pytest.raises(ValueError):calibration.export(tmp_path/'must-not-exist',r,DATA,CONTRACT,CERTIFICATE)
     assert not (tmp_path/'must-not-exist').exists()
+
+
+@pytest.fixture(scope='module')
+def six_models():
+    required_kernel()
+    contract=json.loads(CONTRACT);contract['models']*=6;raw=encode(contract)
+    cert=propose(DATA,raw)
+    return raw,cert,calibration.replay(DATA,raw,cert)
+
+
+def test_all_six_models_require_fresh_proofs_and_complete_inventory(six_models):
+    _,_,result=six_models
+    assert result['accepted'],result
+    _,names=calibration.render(result['prepared'])
+    assert len(names)==114 and set(result['kernel']['kernel_theorems'])==set(calibration.GENERAL+names)
+    assert len(result['kernel']['executions'])==7
+    assert len(result['kernel']['proof_units_sha256'])==6
+
+
+def test_forged_last_model_cannot_inherit_support_from_previous_models(six_models):
+    contract,cert,_=six_models;bad=json.loads(cert);bad['models'][-1]['sse']='0'
+    result=calibration.replay(DATA,contract,encode(bad))
+    assert not result['accepted'] and not result['kernel']['kernel_checked']
+    assert not result['mathematical_support']
+
+
+def test_model_units_preserve_every_original_definition_and_theorem(six_models):
+    _,_,result=six_models;prepared=result['prepared'];whole,names=calibration.render(prepared)
+    units=calibration.render_units(prepared);reassembled=[];targets=[]
+    for k,(filename,raw,unit_names) in enumerate(units):
+        marker=f'namespace PCSCalibrationReplay.M{k}\n'.encode()
+        start=raw.index(marker);end=raw.index(f'end PCSCalibrationReplay.M{k}\n'.encode(),start)
+        end+=len(f'end PCSCalibrationReplay.M{k}\n'.encode())
+        reassembled.append(raw[start:end]);targets.extend(unit_names)
+        assert result['kernel']['proof_units_sha256'][filename]==calibration.sha(raw)
+    original=whole[whole.index(b'namespace PCSCalibrationReplay.M0\n'):whole.index(b'\n#print axioms')]
+    assert b''.join(reassembled).replace(b'\n\n',b'\n')==original.replace(b'\n\n',b'\n').rstrip(b'\n')+b'\n'
+    assert targets==names
 
 
 def test_frozen_real_experiment_uses_all_rows_and_no_heldout_training():

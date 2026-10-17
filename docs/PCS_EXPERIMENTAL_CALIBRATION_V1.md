@@ -106,6 +106,13 @@ Gaussian elimination and finite interpolation-support enumeration. Its algorithm
 and search completeness are not trusted for support. The receiver freshly
 compiles its own general library, checks each literal normal equation, exact SSE,
 dual relation and minimax inequality, and audits the entire generated inventory.
+Each declared model runs in a separate fresh Lean process. The exported
+`proof-units/ReplayModel*.lean` files contain the exact original model namespace
+from `Replay.lean`, with its complete axiom-audit targets. The receiver binds
+each unit's bytes and requires the union of all audited identities before
+granting support. All processes share one request deadline and the existing
+2,048 MiB per-process cap. `Replay.lean` remains the complete readable proof;
+the smaller exported units are the sources actually compiled under that cap.
 False coefficients, residuals, dual weights or sensitivity gains grant no support.
 Compiler failure, timeout and missing dependencies never count as a refutation
 or a positive proof.
