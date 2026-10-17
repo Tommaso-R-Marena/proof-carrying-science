@@ -146,14 +146,11 @@ def reconstruct(
     clean_dir_count: int = 2,
 ) -> dict[str, Any]:
     """Run a reconstruction campaign and return a machine-readable report."""
-    evidence = load_fixture_members(fixture_dir) if (fixture_dir or EVIDENCE_FIXTURES).exists() else build_synthetic_members()
-    if fixture_dir is None and not EVIDENCE_FIXTURES.exists():
+    try:
+        target = fixture_dir or EVIDENCE_FIXTURES
+        evidence = load_fixture_members(target) if target.exists() else build_synthetic_members()
+    except FileNotFoundError:
         evidence = build_synthetic_members()
-    else:
-        try:
-            evidence = load_fixture_members(fixture_dir)
-        except FileNotFoundError:
-            evidence = build_synthetic_members()
 
     host = capture_host_environment()
     canonical = evidence.canonical_archive

@@ -1,0 +1,107 @@
+{
+  "clean_directory_verifications": [
+    {
+      "archive_path": "/tmp/pcs-repro-tcb-vw5lgnc2/env-0/evidence.zip",
+      "archive_sha256": "187d749a8b6d229c46b81ef4faabc86dbb172a67a337bc7cbb2a830b938addff",
+      "canonical_roundtrip_sha256": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+      "matches_canonical_encoding": false,
+      "member_count": 4,
+      "member_digests": {
+        "README.txt": "e9752875015cdcd746deacbca66b0ad9245ccffb10e8de6e656ef1aa4e9c914d",
+        "certificate.json": "02608dd0e654657855052ad96ef0f6afcee383ddd53e6905afb87a07b24bd36a",
+        "policy.json": "9bfbb51b2dd618eb30726600f09790eab9e7b2a5ac65bec0163f30327c542ba8",
+        "transcript.json": "ff577dc38c14b2e4352a6c309e1e221185c0dcd1702d6037ceb2c91ae8efbee1"
+      }
+    },
+    {
+      "archive_path": "/tmp/pcs-repro-tcb-vw5lgnc2/env-1/evidence.zip",
+      "archive_sha256": "187d749a8b6d229c46b81ef4faabc86dbb172a67a337bc7cbb2a830b938addff",
+      "canonical_roundtrip_sha256": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+      "matches_canonical_encoding": false,
+      "member_count": 4,
+      "member_digests": {
+        "README.txt": "e9752875015cdcd746deacbca66b0ad9245ccffb10e8de6e656ef1aa4e9c914d",
+        "certificate.json": "02608dd0e654657855052ad96ef0f6afcee383ddd53e6905afb87a07b24bd36a",
+        "policy.json": "9bfbb51b2dd618eb30726600f09790eab9e7b2a5ac65bec0163f30327c542ba8",
+        "transcript.json": "ff577dc38c14b2e4352a6c309e1e221185c0dcd1702d6037ceb2c91ae8efbee1"
+      }
+    }
+  ],
+  "cross_python_verifications": [
+    {
+      "archive_sha256": "187d749a8b6d229c46b81ef4faabc86dbb172a67a337bc7cbb2a830b938addff",
+      "interpreter": "/usr/bin/python3",
+      "ok": true,
+      "version": "3.12.3"
+    },
+    {
+      "archive_sha256": "187d749a8b6d229c46b81ef4faabc86dbb172a67a337bc7cbb2a830b938addff",
+      "interpreter": "/usr/bin/python3.12",
+      "ok": true,
+      "version": "3.12.3"
+    }
+  ],
+  "distinction": {
+    "expected_byte_identity_with_canonical": false,
+    "identical_archive_replay": false,
+    "observed_byte_identity_with_canonical": false,
+    "regenerated_archive": true,
+    "semantic_member_digests_stable": true
+  },
+  "environment": {
+    "git_commit": "02d1e4c0a931e6916adced40991da90c50ecf0ed",
+    "git_describe": "checkpoint-before-failclosed-v2-import-20261007-26-g02d1e4c-dirty",
+    "interpreters": [
+      {
+        "executable": "/usr/bin/python3",
+        "implementation": "CPython",
+        "path": "/usr/bin/python3",
+        "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+        "version": "3.12.3"
+      },
+      {
+        "executable": "/usr/bin/python3.12",
+        "implementation": "CPython",
+        "path": "/usr/bin/python3.12",
+        "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+        "version": "3.12.3"
+      }
+    ],
+    "platform": {
+      "machine": "x86_64",
+      "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+      "python_executable": "/usr/bin/python3",
+      "python_executable_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+      "python_runtime": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "release": "6.12.94+",
+      "system": "Linux"
+    },
+    "toolchains": {
+      "cryptography": "50.0.2",
+      "hashlib_sha256": "stdlib/openssl-backed",
+      "lean_toolchain_file": "leanprover/lean4:v4.28.0",
+      "zipfile_module": "stdlib"
+    }
+  },
+  "evidence": {
+    "canonical_archive_sha256": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+    "delivered_archive_sha256": "187d749a8b6d229c46b81ef4faabc86dbb172a67a337bc7cbb2a830b938addff",
+    "label": "evidence_bundle",
+    "member_digests": {
+      "README.txt": "e9752875015cdcd746deacbca66b0ad9245ccffb10e8de6e656ef1aa4e9c914d",
+      "certificate.json": "02608dd0e654657855052ad96ef0f6afcee383ddd53e6905afb87a07b24bd36a",
+      "policy.json": "9bfbb51b2dd618eb30726600f09790eab9e7b2a5ac65bec0163f30327c542ba8",
+      "transcript.json": "ff577dc38c14b2e4352a6c309e1e221185c0dcd1702d6037ceb2c91ae8efbee1"
+    }
+  },
+  "format": "pcs-independent-eval-reconstruction-v1",
+  "mode": "regenerated_noncanonical",
+  "report_sha256": "62f06c0a7c352a3f62bcb5d794162253a8dfd8f02bbf3ba497137c7a7cabe6aa",
+  "task": 12,
+  "verdict": {
+    "clean_dirs_agree": true,
+    "cross_python_agree": true,
+    "mode_expectation_met": true,
+    "pass": true
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "audit_sha256": "86a28939e7dbafff8afedc59669f11cbdf781688c5a9d322e6d8bdb37f7332b1",
+  "catalog_commit": "02d1e4c0a931e6916adced40991da90c50ecf0ed",
+  "claims": [
+    {
+      "claim_id": "C12.identity",
+      "meta": {
+        "note": "supported by reconstruction harness fixtures"
+      },
+      "reasons": [
+        "some links resolved and some did not"
+      ],
+      "resolved_links": [
+        {
+          "detail": "02d1e4c0a931e6916adced40991da90c50ecf0ed",
+          "found": true,
+          "kind": "commit",
+          "ref": "HEAD"
+        },
+        {
+          "detail": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+          "found": true,
+          "kind": "hash",
+          "ref": "evidence_canonical.zip"
+        },
+        {
+          "detail": "",
+          "found": false,
+          "kind": "test",
+          "ref": "test_reconstruction.py"
+        }
+      ],
+      "status": "ambiguous",
+      "text": "Identical-archive replay preserves ZIP SHA-256 across clean directories."
+    },
+    {
+      "claim_id": "C13.sha256",
+      "meta": {
+        "note": "implementation is executable-tested; collisions remain assumed"
+      },
+      "reasons": [
+        "all links resolved"
+      ],
+      "resolved_links": [
+        {
+          "detail": "formal/PCS/V2/TCB.lean",
+          "found": true,
+          "kind": "theorem",
+          "ref": "Sha256ProductionAgrees"
+        },
+        {
+          "detail": "cryptographic collision resistance (named hypothesis)",
+          "found": true,
+          "kind": "assumption",
+          "ref": "Sha256Collision"
+        },
+        {
+          "detail": "02d1e4c0a931e6916adced40991da90c50ecf0ed",
+          "found": true,
+          "kind": "commit",
+          "ref": "HEAD"
+        }
+      ],
+      "status": "supported",
+      "text": "Lean SHA-256 specification is transcription-faithful to FIPS 180-4."
+    },
+    {
+      "claim_id": "C13.os",
+      "meta": {
+        "note": "intentionally ambiguous \u2014 assumption only"
+      },
+      "reasons": [
+        "only assumption links; no commit/theorem/test/hash anchor",
+        "strong universal language without theorem link"
+      ],
+      "resolved_links": [
+        {
+          "detail": "OS/filesystem delivers exact bytes",
+          "found": true,
+          "kind": "assumption",
+          "ref": "OS_FILESYSTEM"
+        }
+      ],
+      "status": "ambiguous",
+      "text": "The operating system always delivers exact bytes with no TOCTOU."
+    },
+    {
+      "claim_id": "C14.unsupported",
+      "meta": {
+        "note": "no evidence links"
+      },
+      "reasons": [
+        "no evidence links provided"
+      ],
+      "resolved_links": [],
+      "status": "unsupported",
+      "text": "Every possible PCS package is proven secure against all adversaries."
+    },
+    {
+      "claim_id": "C14.stale",
+      "meta": {
+        "expected_commit": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+      },
+      "reasons": [
+        "expected_commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef != current 02d1e4c0a931e6916adced40991da90c50ecf0ed"
+      ],
+      "resolved_links": [
+        {
+          "detail": "catalog commit=02d1e4c0a931e6916adced40991da90c50ecf0ed",
+          "found": false,
+          "kind": "commit",
+          "ref": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+        },
+        {
+          "detail": "tests/test_formal_v2_differential.py",
+          "found": true,
+          "kind": "test",
+          "ref": "test_formal_v2_differential.py"
+        }
+      ],
+      "status": "stale",
+      "text": "Prior campaign accepted the golden package on commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef."
+    },
+    {
+      "claim_id": "C14.ambiguous",
+      "meta": {
+        "note": "mixed resolved/unresolved links"
+      },
+      "reasons": [
+        "some links resolved and some did not",
+        "strong universal language without theorem link"
+      ],
+      "resolved_links": [
+        {
+          "detail": "production verifier accepts only Lean-accepted archives",
+          "found": true,
+          "kind": "assumption",
+          "ref": "ProductionRefinesLean"
+        },
+        {
+          "detail": "",
+          "found": false,
+          "kind": "theorem",
+          "ref": "missing_theorem_that_does_not_exist"
+        }
+      ],
+      "status": "ambiguous",
+      "text": "Production acceptance always implies Lean acceptance."
+    }
+  ],
+  "counts": {
+    "ambiguous": 3,
+    "stale": 1,
+    "supported": 1,
+    "unsupported": 1
+  },
+  "format": "pcs-independent-eval-traceability-v1",
+  "report_path": "/home/ubuntu/worktrees/ws-c/independent_eval/repro_tcb/fixtures/claims/sample_claims_report.md",
+  "report_sha256": "e7df9c4d975717ec85ebc92e2be652a805b8b9a62deba610e6b76f10e3514fba",
+  "task": 14,
+  "verdict": {
+    "all_supported": false,
+    "has_flags": true
+  }
+}

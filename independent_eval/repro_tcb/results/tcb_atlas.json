@@ -1,0 +1,543 @@
+{
+  "atlas_sha256": "2729ceed20cb566ad0e9f22f832e54b86746f1cef4c03df6bc34b627cd7584a7",
+  "audit_mode": "read-only",
+  "chain": [
+    "source_bytes",
+    "os_io",
+    "zip_archive",
+    "crypto_sha256",
+    "crypto_ed25519",
+    "python_runtime",
+    "transcripts",
+    "lean_authority",
+    "reviewer_policy",
+    "verification_output"
+  ],
+  "classification_index": {
+    "cryptographically-assumed": [
+      "zip_archive",
+      "crypto_sha256_collision",
+      "crypto_ed25519_unforgeability",
+      "production_refines_lean"
+    ],
+    "executable-tested": [
+      "crypto_sha256",
+      "crypto_ed25519",
+      "transcripts",
+      "verification_output"
+    ],
+    "externally-trusted": [
+      "source_bytes",
+      "os_io",
+      "python_runtime",
+      "lean_kernel_foundation",
+      "reviewer_policy",
+      "scientific_predicate"
+    ],
+    "kernel-proved": [
+      "python_canonical_json",
+      "lean_authority"
+    ],
+    "unresolved": [
+      "environment_reconstruction"
+    ]
+  },
+  "environment": {
+    "platform": {
+      "machine": "x86_64",
+      "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+      "python_executable": "/usr/bin/python3",
+      "python_executable_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+      "python_runtime": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "release": "6.12.94+",
+      "system": "Linux"
+    },
+    "toolchains": {
+      "cryptography": "50.0.2",
+      "hashlib_sha256": "stdlib/openssl-backed",
+      "lean_toolchain_file": "leanprover/lean4:v4.28.0",
+      "zipfile_module": "stdlib"
+    }
+  },
+  "format": "pcs-independent-eval-tcb-atlas-v1",
+  "git_commit": "02d1e4c0a931e6916adced40991da90c50ecf0ed",
+  "graph": {
+    "edges": [
+      {
+        "from": "source_bytes",
+        "relation": "delivered_via",
+        "to": "os_io"
+      },
+      {
+        "from": "os_io",
+        "relation": "reads_as",
+        "to": "zip_archive"
+      },
+      {
+        "from": "zip_archive",
+        "relation": "binds_members_with",
+        "to": "crypto_sha256"
+      },
+      {
+        "from": "zip_archive",
+        "relation": "may_authenticate_with",
+        "to": "crypto_ed25519"
+      },
+      {
+        "from": "crypto_sha256",
+        "relation": "relies_on",
+        "to": "crypto_sha256_collision"
+      },
+      {
+        "from": "crypto_ed25519",
+        "relation": "relies_on",
+        "to": "crypto_ed25519_unforgeability"
+      },
+      {
+        "from": "zip_archive",
+        "relation": "checked_by_production",
+        "to": "python_runtime"
+      },
+      {
+        "from": "python_runtime",
+        "relation": "executes",
+        "to": "python_canonical_json"
+      },
+      {
+        "from": "python_runtime",
+        "relation": "invokes_authority_producing",
+        "to": "transcripts"
+      },
+      {
+        "from": "transcripts",
+        "relation": "records",
+        "to": "lean_authority"
+      },
+      {
+        "from": "lean_authority",
+        "relation": "depends_on",
+        "to": "lean_kernel_foundation"
+      },
+      {
+        "from": "lean_authority",
+        "relation": "corresponds_via",
+        "to": "production_refines_lean"
+      },
+      {
+        "from": "lean_authority",
+        "relation": "feeds",
+        "to": "reviewer_policy"
+      },
+      {
+        "from": "reviewer_policy",
+        "relation": "decides",
+        "to": "verification_output"
+      },
+      {
+        "from": "lean_authority",
+        "relation": "interprets_under",
+        "to": "scientific_predicate"
+      },
+      {
+        "from": "environment_reconstruction",
+        "relation": "unresolved_gap_affects",
+        "to": "python_runtime"
+      }
+    ],
+    "nodes": [
+      {
+        "description": "Exact delivered project/artifact bytes presented to the verifier.",
+        "evidence": [
+          "package member SHA-256 digests",
+          "intake freeze hashes"
+        ],
+        "id": "source_bytes",
+        "layer": "source",
+        "lean_tcb_item": null,
+        "missing_sources": [],
+        "sources": [
+          "pcs/intake.py",
+          "pcs/package_v06.py"
+        ],
+        "trust_class": "externally-trusted"
+      },
+      {
+        "description": "Operating-system filesystem and process I/O delivering bytes into user space.",
+        "evidence": [
+          "docs/SECURITY_AND_TRUST.md current TCB list"
+        ],
+        "id": "os_io",
+        "layer": "os",
+        "lean_mapped_trust_class": "unresolved",
+        "lean_tcb_item": "filesystemOS",
+        "lean_tcb_status": "notApplicable",
+        "missing_sources": [],
+        "sources": [
+          "docs/SECURITY_AND_TRUST.md"
+        ],
+        "trust_class": "externally-trusted"
+      },
+      {
+        "description": "ZIP decode / canonical ZIP_STORED archive subset used for handoff (ZipDecoderFaithful hypothesis).",
+        "evidence": [
+          "formal/PCS/V2/Zip.lean (when present)",
+          "pcs/canonical_zip_v06.py executable tests"
+        ],
+        "id": "zip_archive",
+        "layer": "archive",
+        "lean_mapped_trust_class": "cryptographically-assumed",
+        "lean_tcb_item": "archiveExtractor",
+        "lean_tcb_status": "namedHypothesis",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/Zip.lean",
+          "pcs/canonical_zip_v06.py",
+          "pcs/verifier_zip_v06.py"
+        ],
+        "trust_class": "cryptographically-assumed"
+      },
+      {
+        "description": "SHA-256 digests binding artifacts; Lean FIPS transcription + KATs; production hashlib correspondence hypothesized.",
+        "evidence": [
+          "formal/PCS/V2/SHA256.lean",
+          "hashlib KATs / differential tests"
+        ],
+        "id": "crypto_sha256",
+        "layer": "crypto",
+        "lean_mapped_trust_class": "executable-tested",
+        "lean_tcb_item": "sha256Impl",
+        "lean_tcb_status": "leanSpecification",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/SHA256.lean",
+          "pcs/hashing.py"
+        ],
+        "trust_class": "executable-tested"
+      },
+      {
+        "description": "Collision / second-preimage resistance appears only as an explicit named hypothesis.",
+        "evidence": [
+          "Sha256Collision disjuncts in formal/PCS/V2/TCB.lean"
+        ],
+        "id": "crypto_sha256_collision",
+        "layer": "crypto",
+        "lean_mapped_trust_class": "cryptographically-assumed",
+        "lean_tcb_item": "sha256Collision",
+        "lean_tcb_status": "namedHypothesis",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/TCB.lean"
+        ],
+        "trust_class": "cryptographically-assumed"
+      },
+      {
+        "description": "Ed25519 verify transcription (RFC 8032) with KATs; unforgeability remains a named hypothesis.",
+        "evidence": [
+          "formal/PCS/V2/Ed25519.lean",
+          "pcs/signing_v06.py"
+        ],
+        "id": "crypto_ed25519",
+        "layer": "crypto",
+        "lean_mapped_trust_class": "executable-tested",
+        "lean_tcb_item": "ed25519Impl",
+        "lean_tcb_status": "leanSpecification",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/Ed25519.lean",
+          "pcs/signing_v06.py"
+        ],
+        "trust_class": "executable-tested"
+      },
+      {
+        "description": "NoForgery hypothesis for the trust-anchor public key.",
+        "evidence": [
+          "NoForgery in formal/PCS/V2/TCB.lean"
+        ],
+        "id": "crypto_ed25519_unforgeability",
+        "layer": "crypto",
+        "lean_mapped_trust_class": "cryptographically-assumed",
+        "lean_tcb_item": "ed25519Unforgeability",
+        "lean_tcb_status": "namedHypothesis",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/TCB.lean"
+        ],
+        "trust_class": "cryptographically-assumed"
+      },
+      {
+        "description": "CPython (or alternate) runtime executing the production verifier and replay helpers.",
+        "evidence": [
+          "docs/SECURITY_AND_TRUST.md",
+          "pyproject.toml requires-python"
+        ],
+        "id": "python_runtime",
+        "layer": "python",
+        "lean_mapped_trust_class": "cryptographically-assumed",
+        "lean_tcb_item": "pythonRuntime",
+        "lean_tcb_status": "namedHypothesis",
+        "missing_sources": [],
+        "sources": [
+          "pcs",
+          "pyproject.toml"
+        ],
+        "trust_class": "externally-trusted"
+      },
+      {
+        "description": "JCS parser/codec proved in Lean; production path differentially tested.",
+        "evidence": [
+          "parserCodec => provedInLean",
+          "pcs/canonical_json.py tests"
+        ],
+        "id": "python_canonical_json",
+        "layer": "python",
+        "lean_mapped_trust_class": "kernel-proved",
+        "lean_tcb_item": "parserCodec",
+        "lean_tcb_status": "provedInLean",
+        "missing_sources": [],
+        "sources": [
+          "pcs/canonical_json.py",
+          "formal/PCS/V2/Canonical.lean"
+        ],
+        "trust_class": "kernel-proved"
+      },
+      {
+        "description": "Lean authority observation/result transcripts binding checker outcomes to archive bytes.",
+        "evidence": [
+          "pcs/lean_authority_v06.py transcript formats"
+        ],
+        "id": "transcripts",
+        "layer": "transcript",
+        "lean_tcb_item": null,
+        "missing_sources": [],
+        "sources": [
+          "pcs/lean_authority_v06.py"
+        ],
+        "trust_class": "executable-tested"
+      },
+      {
+        "description": "Lean acceptance kernel / authority path; theorems under formal/PCS/V2 gate production acceptance.",
+        "evidence": [
+          "formal/PCS/V2/Authority.lean",
+          "formal/PCS/V2/TCB.lean tcbStatus"
+        ],
+        "id": "lean_authority",
+        "layer": "lean",
+        "lean_mapped_trust_class": "externally-trusted",
+        "lean_tcb_item": "leanKernel",
+        "lean_tcb_status": "foundation",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/Authority.lean",
+          "formal/PCS/V2/TCB.lean",
+          "pcs/lean_authority_v06.py"
+        ],
+        "trust_class": "kernel-proved"
+      },
+      {
+        "description": "Lean logical foundation (propext, Classical.choice, Quot.sound) is not proved inside PCS.",
+        "evidence": [
+          "#print axioms audits in formal reports"
+        ],
+        "id": "lean_kernel_foundation",
+        "layer": "lean",
+        "lean_mapped_trust_class": "externally-trusted",
+        "lean_tcb_item": "leanKernel",
+        "lean_tcb_status": "foundation",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/TCB.lean"
+        ],
+        "trust_class": "externally-trusted"
+      },
+      {
+        "description": "External reviewer acceptance policy supplied out of band; producer-valid bundles may still be rejected.",
+        "evidence": [
+          "pcs/policy_v06.py",
+          "schemas/acceptance_policy.schema.json"
+        ],
+        "id": "reviewer_policy",
+        "layer": "policy",
+        "lean_tcb_item": null,
+        "missing_sources": [],
+        "sources": [
+          "pcs/policy_v06.py",
+          "docs/SECURITY_AND_TRUST.md"
+        ],
+        "trust_class": "externally-trusted"
+      },
+      {
+        "description": "Verification receipts / ACCEPT-REJECT outcomes recorded for audit.",
+        "evidence": [
+          "verification receipt schema",
+          "pcs verify-bundle receipts"
+        ],
+        "id": "verification_output",
+        "layer": "output",
+        "lean_tcb_item": null,
+        "missing_sources": [],
+        "sources": [
+          "pcs/bundle_verify.py",
+          "schemas/verification_receipt.schema.json"
+        ],
+        "trust_class": "executable-tested"
+      },
+      {
+        "description": "Hypothesis that production acceptance implies Lean acceptArchive; differentially tested on finite suites, not proved for arbitrary Python.",
+        "evidence": [
+          "ProductionRefinesLean"
+        ],
+        "id": "production_refines_lean",
+        "layer": "correspondence",
+        "lean_mapped_trust_class": "cryptographically-assumed",
+        "lean_tcb_item": "productionCorrespondence",
+        "lean_tcb_status": "namedHypothesis",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/TCB.lean"
+        ],
+        "trust_class": "cryptographically-assumed"
+      },
+      {
+        "description": "User-supplied Holds/Describes scientific meaning is outside the kernel.",
+        "evidence": [
+          "named hypothesis scientificPredicate"
+        ],
+        "id": "scientific_predicate",
+        "layer": "science",
+        "lean_mapped_trust_class": "cryptographically-assumed",
+        "lean_tcb_item": "scientificPredicate",
+        "lean_tcb_status": "namedHypothesis",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/TCB.lean"
+        ],
+        "trust_class": "externally-trusted"
+      },
+      {
+        "description": "v0.6 Lean model does not claim environment reconstruction fidelity; hermetic rebuild across hosts remains an engineering obligation.",
+        "evidence": [
+          "reconstructionFidelity => notApplicable in TCB.lean"
+        ],
+        "id": "environment_reconstruction",
+        "layer": "environment",
+        "lean_mapped_trust_class": "unresolved",
+        "lean_tcb_item": "reconstructionFidelity",
+        "lean_tcb_status": "notApplicable",
+        "missing_sources": [],
+        "sources": [
+          "formal/PCS/V2/TCB.lean",
+          "docs/REPRODUCIBILITY_ENVIRONMENT_V06.md"
+        ],
+        "trust_class": "unresolved"
+      }
+    ]
+  },
+  "lean_tcb_status_extracted": {
+    "archiveExtractor": "namedHypothesis",
+    "canonicalizer": "provedInLean",
+    "captureFidelity": "namedHypothesis",
+    "containerRuntime": "notApplicable",
+    "ed25519Impl": "leanSpecification",
+    "ed25519Unforgeability": "namedHypothesis",
+    "filesystemOS": "notApplicable",
+    "freshnessAuthority": "notApplicable",
+    "leanKernel": "foundation",
+    "parserCodec": "provedInLean",
+    "productionCorrespondence": "namedHypothesis",
+    "pythonRuntime": "namedHypothesis",
+    "rRuntime": "namedHypothesis",
+    "reconstructionFidelity": "notApplicable",
+    "replayExecutor": "namedHypothesis",
+    "scientificPredicate": "namedHypothesis",
+    "sha256Collision": "namedHypothesis",
+    "sha256Impl": "leanSpecification",
+    "unicodeTables": "namedHypothesis"
+  },
+  "open_gaps": [
+    "environment_reconstruction",
+    "crypto_sha256_collision",
+    "crypto_ed25519_unforgeability",
+    "production_refines_lean",
+    "os_io",
+    "lean_kernel_foundation",
+    "scientific_predicate"
+  ],
+  "probes": {
+    "docs/SECURITY_AND_TRUST.md": {
+      "bytes": 3614,
+      "exists": true,
+      "sha256": "d69a0da1c4bf600ad385d094303e20bc12cc63edcd8891a7c2f4cf1f7f93ce12"
+    },
+    "formal/PCS/V2/Authority.lean": {
+      "bytes": 12382,
+      "exists": true,
+      "sha256": "2885c47db95ccf0d3f161257cee9f64d178f0fa06fb10634b9283835e8efe279"
+    },
+    "formal/PCS/V2/CanonicalArchive.lean": {
+      "bytes": 7030,
+      "exists": true,
+      "sha256": "e473681f40b0d2a09910ac5c3b10be1e19154d8524263fd87e40b625f289bb28"
+    },
+    "formal/PCS/V2/Ed25519.lean": {
+      "bytes": 5505,
+      "exists": true,
+      "sha256": "6e3c327201238960b8a1f2959829f1839f90be85b3d80bc309119a949cf5e4e6"
+    },
+    "formal/PCS/V2/SHA256.lean": {
+      "bytes": 9171,
+      "exists": true,
+      "sha256": "222bd599c0bb710bdf8ee1a5204d6cc8637e71226d13bc4b2dc4377e9d8c906a"
+    },
+    "formal/PCS/V2/TCB.lean": {
+      "bytes": 6223,
+      "exists": true,
+      "sha256": "9d63cc4e81063853979a5fbc6ce9719b3a916b1560757a8add104cd640c48c05"
+    },
+    "formal/PCS/V2/Zip.lean": {
+      "bytes": 9094,
+      "exists": true,
+      "sha256": "abdd808ab00670bca2e30e0ed46322159023c748d2c6c83fd03851ebeecbe69d"
+    },
+    "lean-toolchain": {
+      "bytes": 25,
+      "exists": true,
+      "sha256": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028"
+    },
+    "pcs/canonical_json.py": {
+      "bytes": 7749,
+      "exists": true,
+      "sha256": "24d914bb38e01ccae06fa315b550f01b91beb66e69bace2b9e9f313084ac0ea8"
+    },
+    "pcs/canonical_zip_v06.py": {
+      "bytes": 1690,
+      "exists": true,
+      "sha256": "3951972ddbd773981a8c985488ad2f28c3ec8629371218fc59b091794d2dc172"
+    },
+    "pcs/hashing.py": {
+      "bytes": 605,
+      "exists": true,
+      "sha256": "3a59f9747236f3131f25ad11f8b87ce72e03d5230bd7e89f33fb55ab54658409"
+    },
+    "pcs/lean_authority_v06.py": {
+      "bytes": 15084,
+      "exists": true,
+      "sha256": "0dd61ed84225b823d835699c183d7f8d2c4b9d80098f601a5173d78f2718329f"
+    },
+    "pcs/policy_v06.py": {
+      "bytes": 4264,
+      "exists": true,
+      "sha256": "aec6078889a6908536dcda1586dbca0f37718cc0d8e85d73fc7c748e3e9f4078"
+    },
+    "pcs/signing_v06.py": {
+      "bytes": 7244,
+      "exists": true,
+      "sha256": "4f68b95176bf44cf57b71d2153cc953bfaac54cd2b1206720a662b2543f664ca"
+    },
+    "pcs/verifier_zip_v06.py": {
+      "bytes": 15733,
+      "exists": true,
+      "sha256": "cf2ce06a6c44e97a712d75091ed09231e334635e1e2f9c83cf0fe7f6dd5194c2"
+    }
+  },
+  "task": 13
+}
