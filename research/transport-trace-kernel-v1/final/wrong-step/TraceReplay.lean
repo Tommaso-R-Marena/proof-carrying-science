@@ -1,0 +1,72 @@
+import PCSReal.TransportTrace
+set_option autoImplicit false
+set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000
+namespace PCSTransportReplay
+open PCSReal.Transport
+-- Exact source contract: 03d39878aedb0b1cbc24d6e56f8ce509d1cc66960f41294219c9e79dd3e57c37
+def volume (i : Fin 5) : ℚ := ([((1 : ℚ) / (1 : ℚ)), ((2 : ℚ) / (1 : ℚ)), ((3 : ℚ) / (2 : ℚ)), ((1 : ℚ) / (2 : ℚ)), ((3 : ℚ) / (1 : ℚ))] : List ℚ).getD i.val 0
+def matrix (i j : Fin 5) : ℚ := (([[((33 : ℚ) / (40 : ℚ)), ((1 : ℚ) / (8 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (20 : ℚ))], [((1 : ℚ) / (16 : ℚ)), ((7 : ℚ) / (8 : ℚ)), ((1 : ℚ) / (24 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (48 : ℚ))], [((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (18 : ℚ)), ((79 : ℚ) / (90 : ℚ)), ((1 : ℚ) / (15 : ℚ)), ((0 : ℚ) / (1 : ℚ))], [((0 : ℚ) / (1 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (5 : ℚ)), ((27 : ℚ) / (40 : ℚ)), ((1 : ℚ) / (8 : ℚ))], [((1 : ℚ) / (60 : ℚ)), ((1 : ℚ) / (72 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (48 : ℚ)), ((683 : ℚ) / (720 : ℚ))]] : List (List ℚ)).getD i.val []).getD j.val 0
+def initial (i : Fin 5) : ℚ := ([((1 : ℚ) / (1 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (4 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (8 : ℚ))] : List ℚ).getD i.val 0
+def lower : ℚ := ((0 : ℚ) / (1 : ℚ))
+def upper : ℚ := ((1 : ℚ) / (1 : ℚ))
+theorem matrix_checked : check volume matrix = true := by
+  simp only [check, decide_eq_true_eq]
+  exact ⟨by decide +kernel, by decide +kernel, by decide +kernel, by decide +kernel⟩
+theorem initial_bounds : ∀ i, lower ≤ initial i ∧ initial i ≤ upper := by decide +kernel
+theorem declared_all_times (n : Nat) :
+    amount volume (evolve matrix initial n) = amount volume initial ∧
+    (∀ i, lower ≤ evolve matrix initial n i ∧ evolve matrix initial n i ≤ upper) ∧
+    quadratic volume (evolve matrix initial (n + 1)) ≤ quadratic volume (evolve matrix initial n) ∧
+    quadratic volume (evolve matrix initial n) ≤ quadratic volume initial :=
+  all_times_contract (check_sound matrix_checked) initial lower upper initial_bounds n
+theorem all_real_initial_states (x : Fin 5 → ℝ) (lo hi : ℝ)
+    (hx : ∀ i, lo ≤ x i ∧ x i ≤ hi) (n : Nat) :
+    amount (fun i => (volume i : ℝ)) (evolve (fun i j => (matrix i j : ℝ)) x n) =
+      amount (fun i => (volume i : ℝ)) x ∧
+    (∀ i, lo ≤ evolve (fun i j => (matrix i j : ℝ)) x n i ∧
+      evolve (fun i j => (matrix i j : ℝ)) x n i ≤ hi) ∧
+    quadratic (fun i => (volume i : ℝ)) (evolve (fun i j => (matrix i j : ℝ)) x (n + 1)) ≤
+      quadratic (fun i => (volume i : ℝ)) (evolve (fun i j => (matrix i j : ℝ)) x n) ∧
+    quadratic (fun i => (volume i : ℝ)) (evolve (fun i j => (matrix i j : ℝ)) x n) ≤
+      quadratic (fun i => (volume i : ℝ)) x :=
+  all_times_contract (rational_certificate_real matrix_checked) x lo hi hx n
+end PCSTransportReplay
+#print axioms PCSTransportReplay.matrix_checked
+#print axioms PCSTransportReplay.initial_bounds
+#print axioms PCSTransportReplay.declared_all_times
+#print axioms PCSTransportReplay.all_real_initial_states
+
+namespace PCSTransportTraceReplay
+open PCSReal.Transport PCSTransportReplay
+-- Exact trajectory bytes: 2cfc2a237be6661624b22465d16f031a9fabde039573087b524814079f5ce513
+def states (k : Nat) (i : Fin 5) : ℚ := (([[((1 : ℚ) / (1 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (4 : ℚ)), ((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (8 : ℚ))], [((133 : ℚ) / (160 : ℚ)), ((29 : ℚ) / (384 : ℚ)), ((79 : ℚ) / (360 : ℚ)), ((21 : ℚ) / (320 : ℚ)), ((779 : ℚ) / (5760 : ℚ))], [((161737 : ℚ) / (230400 : ℚ)), ((35941 : ℚ) / (276480 : ℚ)), ((104299 : ℚ) / (518400 : ℚ)), ((8071 : ℚ) / (76800 : ℚ)), ((599533 : ℚ) / (4147200 : ℚ))], [((99966419 : ℚ) / (165888000 : ℚ)), ((6728989 : ℚ) / (39813120 : ℚ)), ((71227547 : ℚ) / (373248000 : ℚ)), ((7146773 : ℚ) / (55296000 : ℚ)), ((456344891 : ℚ) / (2985984000 : ℚ))], [((62816113543 : ℚ) / (119439360000 : ℚ)), ((28190487619 : ℚ) / (143327232000 : ℚ)), ((49854735031 : ℚ) / (268738560000 : ℚ)), ((5753427499 : ℚ) / (39813120000 : ℚ)), ((344111934937 : ℚ) / (2149908480000 : ℚ))], [((40115281885841 : ℚ) / (85996339200000 : ℚ)), ((891754601069 : ℚ) / (4127824281600 : ℚ)), ((35486589620693 : ℚ) / (193491763200000 : ℚ)), ((4433253336737 : ℚ) / (28665446400000 : ℚ)), ((257485581504299 : ℚ) / (1547934105600000 : ℚ))], [((26015488480202527 : ℚ) / (61917364224000000 : ℚ)), ((17036631204107551 : ℚ) / (74300837068800000 : ℚ)), ((25535938598385139 : ℚ) / (139314069504000000 : ℚ)), ((3340751002736131 : ℚ) / (20639121408000000 : ℚ)), ((191462568011543593 : ℚ) / (1114512556032000000 : ℚ))], [((17113872633571454549 : ℚ) / (44580502241280000000 : ℚ)), ((2547590324420879881 : ℚ) / (10699320537907200000 : ℚ)), ((18498863859373980617 : ℚ) / (100306130042880000000 : ℚ)), ((2487475957447881953 : ℚ) / (14860167413760000000 : ℚ)), ((141649782456440418611 : ℚ) / (802449040343040000000 : ℚ))], [((11404286280912154794703 : ℚ) / (32097961613721600000000 : ℚ)), ((9386690248345054279279 : ℚ) / (38517553936465920000000 : ℚ)), ((13452570540995299458091 : ℚ) / (72220413630873600000000 : ℚ)), ((1839638715080382913339 : ℚ) / (10699320537907200000000 : ℚ)), ((104368946175448684386577 : ℚ) / (577763309046988800000000 : ℚ))], [((7686885711838596387772661 : ℚ) / (23110532361879552000000000 : ℚ)), ((1369811278091602806115153 : ℚ) / (5546527766851092480000000 : ℚ)), ((9802069294220952392381273 : ℚ) / (51998697814228992000000000 : ℚ)), ((1355000830696046958299657 : ℚ) / (7703510787293184000000000 : ℚ)), ((76645426970975345173384379 : ℚ) / (415989582513831936000000000 : ℚ))], [((5232980196058427996976911767 : ℚ) / (16639583300553277440000000000 : ℚ)), ((4963475890106343627653940391 : ℚ) / (19967499960663932928000000000 : ℚ)), ((7147607292377512178767235779 : ℚ) / (37439062426244874240000000000 : ℚ)), ((995383593613284714726741091 : ℚ) / (5546527766851092480000000000 : ℚ)), ((56134103066365797713989512553 : ℚ) / (299512499409958993920000000000 : ℚ))], [((3592919134349413597706310144029 : ℚ) / (11980499976398359756800000000000 : ℚ)), ((716013312219711517966600193353 : ℚ) / (2875319994335606341632000000000 : ℚ)), ((5212052784871267716626402655137 : ℚ) / (26956124946896309452800000000000 : ℚ)), ((729795553844052960694213054433 : ℚ) / (3993499992132786585600000000000 : ℚ)), ((41020698211019172449078601357731 : ℚ) / (215648999575170475622400000000000 : ℚ))], [((2484740354307981841173180500776063 : ℚ) / (8625959983006819024896000000000000 : ℚ)), ((2573873109515919071786032400679439 : ℚ) / (10351151979608182829875200000000000 : ℚ)), ((3798976111566506175410286580190251 : ℚ) / (19408409961765342806016000000000000 : ℚ)), ((534238928930495404267215136693579 : ℚ) / (2875319994335606341632000000000000 : ℚ)), ((29921351793924034656462510437546017 : ℚ) / (155267279694122742448128000000000000 : ℚ))], [((1728818957260483213353746668387031381 : ℚ) / (6210691187764909697925120000000000000 : ℚ)), ((369284201541329633622315851038108801 : ℚ) / (1490565885063578327502028800000000000 : ℚ)), ((2767086798697206344225831253019916153 : ℚ) / (13974055172471046820331520000000000000 : ℚ)), ((390553862830179622643390187539714777 : ℚ) / (2070230395921636565975040000000000000 : ℚ)), ((21791801690641728886281650737835274059 : ℚ) / (111792441379768374562652160000000000000 : ℚ))], [((1208983639572009099113057266636857988807 : ℚ) / (4471697655190734982506086400000000000000 : ℚ)), ((1322666649017051469825292201649096350231 : ℚ) / (5366037186228881979007303680000000000000 : ℚ)), ((2013819883911611219895552216810745396819 : ℚ) / (10061319724179153710638694400000000000000 : ℚ)), ((285160031858743913425308115771785049651 : ℚ) / (1490565885063578327502028800000000000000 : ℚ)), ((15850537229525007922972659674498841530713 : ℚ) / (80490557793433229685109555200000000000000 : ℚ))], [((849037355041102280955998250854973554680109 : ℚ) / (3219622311737329187404382208000000000000000 : ℚ)), ((37865470431589668191333626983231671996837 : ℚ) / (154541870963391800995410345984000000000000 : ℚ)), ((1464326015630650179160685745658131673143857 : ℚ) / (7244150201408990671659859968000000000000000 : ℚ)), ((207966828389338927820759291014548171813713 : ℚ) / (1073207437245776395801460736000000000000000 : ℚ)), ((11516437017071274667147040331298780433811251 : ℚ) / (57953201611271925373278879744000000000000000 : ℚ))], [((7 : ℚ) / (32 : ℚ)), ((7 : ℚ) / (32 : ℚ)), ((7 : ℚ) / (32 : ℚ)), ((7 : ℚ) / (32 : ℚ)), ((7 : ℚ) / (32 : ℚ))]] : List (List ℚ)).getD k []).getD i.val 0
+def times (k : Nat) : ℚ := ([((0 : ℚ) / (1 : ℚ)), ((1 : ℚ) / (4 : ℚ)), ((1 : ℚ) / (2 : ℚ)), ((3 : ℚ) / (4 : ℚ)), ((1 : ℚ) / (1 : ℚ)), ((5 : ℚ) / (4 : ℚ)), ((3 : ℚ) / (2 : ℚ)), ((7 : ℚ) / (4 : ℚ)), ((2 : ℚ) / (1 : ℚ)), ((9 : ℚ) / (4 : ℚ)), ((5 : ℚ) / (2 : ℚ)), ((11 : ℚ) / (4 : ℚ)), ((3 : ℚ) / (1 : ℚ)), ((13 : ℚ) / (4 : ℚ)), ((7 : ℚ) / (2 : ℚ)), ((15 : ℚ) / (4 : ℚ)), ((4 : ℚ) / (1 : ℚ))] : List ℚ).getD k 0
+def dt : ℚ := ((1 : ℚ) / (4 : ℚ))
+theorem trace_checked : PCSReal.TransportTrace.check matrix initial states times dt 16 = true := by
+  simp only [PCSReal.TransportTrace.check, decide_eq_true_eq]
+  exact ⟨by decide +kernel, by decide +kernel, by decide +kernel⟩
+theorem recorded_states_and_times :
+    (∀ k, k ≤ 16 → ∀ i, states k i = evolve matrix initial k i) ∧
+    (∀ k, k ≤ 16 → times k = (k : ℚ) * dt) :=
+  PCSReal.TransportTrace.check_sound trace_checked
+theorem recorded_invariants (k : Nat) (hk : k ≤ 16) :
+    amount volume (states k) = amount volume initial ∧
+    (∀ i, lower ≤ states k i ∧ states k i ≤ upper) ∧
+    quadratic volume (states k) ≤ quadratic volume initial :=
+  PCSReal.TransportTrace.recorded_invariants (PCSReal.Transport.check_sound matrix_checked)
+    initial lower upper initial_bounds states 16 recorded_states_and_times.1 k hk
+theorem adjacent_quadratic (k : Nat) (hk : k < 16) :
+    quadratic volume (states (k + 1)) ≤ quadratic volume (states k) :=
+  PCSReal.TransportTrace.adjacent_quadratic (PCSReal.Transport.check_sound matrix_checked)
+    initial states 16 recorded_states_and_times.1 k hk
+theorem recorded_real_states (k : Nat) (hk : k ≤ 16) :
+    ∀ i, ((states k i : ℚ) : ℝ) =
+      evolve (fun i j => (matrix i j : ℝ)) (fun j => (initial j : ℝ)) k i :=
+  PCSReal.TransportTrace.real_trace_sound trace_checked k hk
+end PCSTransportTraceReplay
+#print axioms PCSTransportTraceReplay.trace_checked
+#print axioms PCSTransportTraceReplay.recorded_states_and_times
+#print axioms PCSTransportTraceReplay.recorded_invariants
+#print axioms PCSTransportTraceReplay.adjacent_quadratic
+#print axioms PCSTransportTraceReplay.recorded_real_states

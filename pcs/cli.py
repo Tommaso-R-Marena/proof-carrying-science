@@ -2416,6 +2416,9 @@ def build_parser():
     from pcs.transport_kernel_v1 import register as register_transport_kernel
     register_transport_kernel(sub)
 
+    from pcs.transport_trace_kernel_v1 import register as register_transport_trace
+    register_transport_trace(sub)
+
     return p
 
 

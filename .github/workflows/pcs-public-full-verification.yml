@@ -470,6 +470,14 @@ jobs:
           python scripts/verify_transport_formal.py --output "$RUNNER_TEMP/transport-static-axioms.json"
           PCS_REQUIRE_TRANSPORT_KERNEL=1 python -m pytest -q tests/test_transport_kernel_v1.py
           python scripts/run_transport_kernel_v1.py --output "$RUNNER_TEMP/transport-kernel-campaign"
+      - name: Kernel-prove recorded transport traces and receiving attacks
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python scripts/verify_transport_trace_formal.py --output "$RUNNER_TEMP/transport-trace-static-axioms.json"
+          PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 python -m pytest -q tests/test_transport_trace_kernel_v1.py
+          python scripts/run_transport_trace_kernel_v1.py --output "$RUNNER_TEMP/transport-trace-campaign" --signed-base "$RUNNER_TEMP/transport-kernel-campaign/signed-v3-base"
       - name: Retain universal transport receiving evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -477,6 +485,8 @@ jobs:
           name: pcs-transport-kernel-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/transport-static-axioms.json
+            ${{ runner.temp }}/transport-trace-static-axioms.json
+            ${{ runner.temp }}/transport-trace-campaign/
             ${{ runner.temp }}/transport-kernel-campaign/
           if-no-files-found: warn
           retention-days: 14

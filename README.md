@@ -797,3 +797,5 @@ or scientific replay.
 
 Normative boundary and supported formats:
 `docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
+
+Recorded scientific transport data can now carry [fresh Lean trace proofs](docs/PCS_TRANSPORT_TRACE_KERNEL_V1.md), including exact timestamps, recurrence, recorded invariants and a rational-to-real embedding.
