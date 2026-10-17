@@ -216,3 +216,43 @@ trusted-host correspondence contracts and an OOD falsification benchmark.
 trust anchor, remote attestation, collision-resistance theorem, OS refinement
 proof, concurrent hostile-memory model, GPU/real neural inference semantics,
 or universally improving model.
+
+
+## Independent exact all-integer ReLU reference analysis (v4)
+
+**New Python research modules:** \`universal_relu.py\`, \`layered_guard.py\`,
+\`global_falsification.py\`, and \`EXACT_INTEGER_DOMAIN_REPORT.md\`.
+
+For any scalar-input integer network expressible as a finite sum
+\(\sum_j a_j\operatorname{ReLU}(w_jx+b_j)+c\), partition the entire integer
+line at the exact activation thresholds. The network is affine on each cell,
+so three problems reduce to finitely many exact checks:
+
+- **Equivalence on every integer input:** each affine difference must vanish
+  identically on nonsingleton cells, or at the sole singleton input.
+- **All-integer no-forgetting:** every integer input where the old model
+  *exactly* matched the target must remain correct after modification.
+  When old-vs-target error is nonzero affine, there can be at most one
+  previously correct integer in the cell; it is checked explicitly.
+- **Exact worst absolute error** on any specified bounded integer interval,
+  by evaluating only cell endpoints.
+
+Tests include random differential checking against integer enumeration,
+signed/negative weights, distant correctness roots (1,000,000), hidden-neuron
+permutation, 220-unit models, and worst-case error on a trillion-scale
+interval without exhaustive enumeration.
+
+An existing seven-point Lean-accepted transition
+\(\operatorname{ReLU}(3x-3)\to\operatorname{ReLU}(3x-1)\)
+**loses a previously correct output at x=4**. The analytic guard catches
+this and still admits the original two valid finite-gate generations in
+the reference experiment. The exhaustive lattice comparison reports how
+often such failures appear among all 4,081 originally accepted transitions
+from 16,384 candidate pairs (see \`global_falsification.py\`).
+
+**Caution:** The new unbounded-domain checker currently has a mathematical
+proof sketch and adversarial Python tests but **not** a Lean kernel proof.
+Its reference decisions must not be presented as Lean-certified universal
+facts, or as production-safe authority. The original immutable-judge and
+byte-to-inference execution trust gaps remain. Aristotle's ongoing separate
+formal work is not modified by these Python research additions.
