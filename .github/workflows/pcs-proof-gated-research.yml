@@ -1,0 +1,82 @@
+name: PCS Proof-Gated Self-Improvement Research
+on:
+  pull_request:
+    paths:
+      - 'formal/PCS/V2/ProofGatedSelfImprovement.lean'
+      - 'formal/PCS/V2/ProofGatedSymbolic.lean'
+      - 'research/proof-gated-self-improvement-v1/**'
+      - '.github/workflows/pcs-proof-gated-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Python reference and adversarial tests
+        run: |
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -v
+      - name: Kernel-check frozen Lean policy and theorems
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt"
+          cat "$tmp/axiom-audit.txt"
+          if grep -E 'sorryAx|error:' "$tmp/axiom-audit.txt"; then
+            echo 'FAIL: untrusted theorem dependency in axiom audit' >&2
+            exit 1
+          fi
+          printf 'PGSI1|R|0|0' > "$tmp/old.pgsi"
+          printf 'PGSI1|R|1|1' > "$tmp/candidate.pgsi"
+          lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/candidate.pgsi" | grep -x ACCEPT
+          printf 'PGSI1|R|1|2' > "$tmp/bad.pgsi"
+          if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/candidate.pgsi" "$tmp/bad.pgsi"; then
+            echo 'FAIL: regressive artifact accepted' >&2
+            exit 1
+          fi
+          for malformed in 'PGSI1|R|01|1' 'PGSI1|R|-0|1' 'PGSI1|R|33|1' 'PGSI1|R|1|1|override' 'PGSI1|R|1|1 ' 'PGSI1|Q|1|1' 'PGSI2|R|1|1'; do
+            printf '%s' "$malformed" > "$tmp/bad.pgsi"
+            if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/bad.pgsi"; then
+              echo 'FAIL: invalid artifact accepted' >&2
+              exit 1
+            fi
+          done
+          printf 'PGSI1|R|1|1\\n' > "$tmp/bad.pgsi"
+          if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/bad.pgsi"; then
+            echo 'FAIL: trailing newline accepted' >&2
+            exit 1
+          fi
+          cd ../research/proof-gated-self-improvement-v1
+          python - <<'PY'
+          import subprocess
+          import tempfile
+          from pathlib import Path
+          from proof_gate import Model, automatic_search, wire_bytes, artifact_gate
+          with tempfile.TemporaryDirectory() as d:
+              a = Path(d) / "a.pgsi"
+              b = Path(d) / "b.pgsi"
+              a.write_bytes(wire_bytes(Model(True, 0, 0)))
+              b.write_bytes(wire_bytes(Model(True, 1, 1)))
+              cmd = ["lake", "env", "lean", "--run",
+                     "PCS/V2/ProofGatedArtifacts.lean", str(a.resolve()), str(b.resolve())]
+              p = subprocess.run(cmd, capture_output=True, text=True, cwd=Path("../../formal").resolve())
+              assert p.returncode == 0 and p.stdout == "ACCEPT\n" and p.stderr == ""
+              assert artifact_gate(a, b, Path("../../formal").resolve())
+          r = automatic_search(formal_dir=Path("../../formal").resolve())
+          assert r["generation_count"] == 2
+          assert r["final"] == {"relu": True, "weight": 2, "bias": 1}
+          print("PASS: two steps authorized by Lean artifact authority")
+          PY
