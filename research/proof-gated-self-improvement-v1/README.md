@@ -51,7 +51,7 @@ size, and compose. The cost metric is AST nodes, not measured runtime or reasoni
 
 ## Test and falsification results
 
-- **21 Python tests** (CI): 5,184 exact finite-lattice transitions, 3,000 randomized transitions,
+- **Original 21 reference tests** (now incorporated into the expanded suite): 5,184 exact finite-lattice transitions, 3,000 randomized transitions,
   8,450 unique canonical encodings, malformed inputs, stale incumbent, policy tampering,
   rollout rejection and fail-closed behavior.
 - **Two Lean-authorized generations** on actual model files:
@@ -170,3 +170,49 @@ and then executes the *same sealed bytes*; external monotonic checkpoint anchori
 and append-only audit (ideally independent infrastructure); cross-process crash
 recovery protocols; and independent adversarial audits. These are **not** present
 in this research PR. No production auto-update integration is enabled.
+
+## Sealed inference and proof-connected promotion (v3, October 17)
+
+`sealed_inference.py` adds an inference loader that locks the cooperative store,
+audits the entire hash-chain, reads the exact active content-addressed artifact,
+parses strict canonical model bytes, and returns an immutable `SealedInference`
+snapshot of that very byte string. All subsequent predictions use only frozen
+`bytes` and frozen model parameters; they do not reopen a writable model file.
+Snapshot generation is pinned: serving a stale expected generation fails.
+
+`formal/PCS/V2/ProofGatedInference.lean` defines `infer` from the model's
+canonical text and proves:
+- `infer_sound`: each successful wire inference corresponds to the decoded
+  model's exact integer predictor;
+- `infer_canonical`: that prediction comes from the canonical original text;
+- `committed_inference_preserves_correct_cases`: a successfully certified
+  compare-and-swap update preserves every previously correct prediction on the
+  trusted corpus, at the very same integer input;
+- `committed_inference_exact_artifact`: every successfully committed target
+  text decodes into the model whose exact semantics is used by `infer`.
+
+The Python suite compares **8,450** bounded neuron encodings over **41**
+integer inputs each (**346,450** calculations) with an independently written
+integer formula, checks exact encoding and 10+ tampering cases, stale heads,
+post-load file replacement, removed/corrupted receipts and simple rollback.
+
+The **public** `ResearchPromotionStore.promote(candidate, expected_head)`
+method does **not** allow a caller to select its acceptance verifier.
+The `_promote_with_oracle` method exists **solely for local fault-injection
+tests** and demonstrably is *not* a protected security boundary. Python and
+the POSIX filesystem remain within the unverified trusted computing base.
+Do not grant a self-modifying agent write/exec access to this controller or
+interpret in-memory freezing as a cryptographic proof of runtime integrity.
+
+### Formal research next steps
+
+The full independent Aristotle assignment is in
+`ARISTOTLE_CHALLENGE_V3.md`; it prioritizes bounded model
+`decode (encode m) = some m` roundtrip/injectivity proofs, a quantized
+two-hidden-neuron extension, generic accepted-chain theorems, explicit
+trusted-host correspondence contracts and an OOD falsification benchmark.
+
+**Current limitations:** no protected process boundary, independent signed
+trust anchor, remote attestation, collision-resistance theorem, OS refinement
+proof, concurrent hostile-memory model, GPU/real neural inference semantics,
+or universally improving model.
