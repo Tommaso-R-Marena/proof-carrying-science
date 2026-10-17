@@ -205,8 +205,8 @@ theorem two_generations_certified : CertifiedTrace 2 zero complete := by
     (CertifiedTrace.extend (CertifiedTrace.zero zero) two_neuron_improvement_first)
     two_neuron_improvement_second
 
-theorem complete_perfect (x : Int) (hx : x ∈ corpus) : correct complete x := by
-  rfl
+theorem complete_perfect (x : Int) (_hx : x ∈ corpus) : correct complete x := by
+  simp [correct, predict, complete, target]
 
 theorem perfect_cannot_advance (m : TinyNet)
     (h : ∀ x ∈ corpus, correct m x) (candidate : TinyNet) :
