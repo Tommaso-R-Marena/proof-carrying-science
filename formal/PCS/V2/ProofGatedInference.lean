@@ -63,4 +63,20 @@ theorem committed_inference_exact_artifact
   refine ⟨candidate, decode_canonical hdNew, ?_⟩
   simp [infer, hdNew]
 
+/-- Exact inference on every canonical artifact, for **all** inputs `x`. -/
+theorem infer_encode (m : Neuron) (h : valid m = true) (x : Int) :
+    infer (encode m) x = some (predict m x) := by
+  simp [infer, decode_encode_of_bounded m h]
+
+/-- An artifact text serves predictions iff it is the canonical encoding of a valid
+neuron, and then it serves exactly that neuron's predictions. -/
+theorem infer_eq_some_iff (raw : String) (x y : Int) :
+    infer raw x = some y ↔ ∃ m, valid m = true ∧ encode m = raw ∧ predict m x = y := by
+  constructor
+  · intro h
+    obtain ⟨m, hd, hp⟩ := infer_sound h
+    exact ⟨m, ((decode_eq_some_iff raw m).mp hd).1, decode_canonical hd, hp⟩
+  · rintro ⟨m, hv, rfl, rfl⟩
+    exact infer_encode m hv x
+
 end PCS.V2.ProofGatedInference
