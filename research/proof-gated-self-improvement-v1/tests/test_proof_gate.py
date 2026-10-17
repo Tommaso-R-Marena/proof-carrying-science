@@ -107,5 +107,23 @@ class ProofGatedTests(unittest.TestCase):
     def test_missing_lean_fails_closed(self):
         self.assertFalse(check_with_lean(self.a, self.b, Path("/absent-pgsi-gate")))
 
+    def test_deterministic_automatic_search(self):
+        from proof_gate import automatic_search
+        out = automatic_search()
+        self.assertEqual(out["generation_count"], 2)
+        self.assertEqual(out["final"], dataclasses.asdict(self.c))
+        self.assertEqual([e["verdict"]["new_loss"] for e in out["trace"]], [6, 0])
+
+    def test_single_coordinate_dead_end(self):
+        near = [Model(True, -1, 0), Model(True, 1, 0),
+                Model(True, 0, -1), Model(True, 0, 1), Model(False, 0, 0)]
+        self.assertTrue(all(not check(self.a, m).accepted for m in near))
+        self.assertTrue(check(self.a, self.b).accepted)
+
+    def test_automatic_search_fails_closed_without_lean(self):
+        from proof_gate import automatic_search
+        with self.assertRaisesRegex(RuntimeError, "FAIL CLOSED"):
+            automatic_search(formal_dir=Path("/absent-pgsi-gate"))
+
 if __name__ == "__main__":
     unittest.main()
