@@ -80,3 +80,16 @@ def test_full_campaign(tmp_path: Path) -> None:
     assert (tmp_path / "out" / "reconstruction_campaign.json").is_file()
     payload = json.loads((tmp_path / "out" / "reconstruction_campaign.json").read_text())
     assert payload["pass"] is True
+
+
+def test_lean_authority_discovery_can_find_common_worktree_binary():
+    from python_harness.environment import probe_lean_authority, resolve_lean_authority_path
+
+    path = resolve_lean_authority_path()
+    probe = probe_lean_authority()
+    assert "present" in probe
+    # In this cloud workspace the main checkout usually has a built binary.
+    if path is not None:
+        assert probe["present"] is True
+        assert probe["sha256"] and len(probe["sha256"]) == 64
+        assert Path(probe["path"]).is_file()

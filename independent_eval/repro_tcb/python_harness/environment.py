@@ -107,24 +107,64 @@ def discover_python_interpreters(extra: list[str] | None = None) -> list[dict[st
     return out
 
 
+def resolve_lean_authority_path(repo: Path | None = None) -> Path | None:
+    """Locate ``pcs-lean-authority`` without inventing a binary.
+
+    Order:
+    1. ``PCS_LEAN_AUTHORITY`` env (explicit override)
+    2. ``<repo>/formal/.lake/build/bin/pcs-lean-authority``
+    3. ``PATH`` lookup for ``pcs-lean-authority``
+    4. Main git worktree sharing this object's store (cloud worktrees)
+    """
+    root = repo or REPO_ROOT
+    env = os.environ.get("PCS_LEAN_AUTHORITY")
+    if env:
+        candidate = Path(env).expanduser()
+        if candidate.is_file() and os.access(candidate, os.X_OK):
+            return candidate
+
+    local = root / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+    if local.is_file() and os.access(local, os.X_OK):
+        return local
+
+    which = shutil.which("pcs-lean-authority")
+    if which:
+        path = Path(which)
+        if path.is_file() and os.access(path, os.X_OK):
+            return path
+
+    try:
+        common = subprocess.check_output(
+            ["git", "rev-parse", "--git-common-dir"],
+            cwd=root,
+            text=True,
+        ).strip()
+        git_common = Path(common)
+        if not git_common.is_absolute():
+            git_common = (root / git_common).resolve()
+        main_root = git_common.parent if git_common.name == ".git" else git_common
+        sibling = main_root / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+        if sibling.is_file() and os.access(sibling, os.X_OK):
+            return sibling
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    return None
+
+
 def probe_lean_authority(repo: Path | None = None) -> dict[str, Any]:
     """Locate pcs-lean-authority if present and record path + SHA-256.
 
     Absence is recorded as ``present=false`` — never assumed identical across hosts.
     """
-    root = repo or REPO_ROOT
-    candidates = [
-        root / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority",
-        Path(shutil.which("pcs-lean-authority") or ""),
-    ]
-    for path in candidates:
-        if path.is_file() and os.access(path, os.X_OK):
-            return {
-                "present": True,
-                "path": str(path),
-                "sha256": sha256_file(path),
-                "size_bytes": path.stat().st_size,
-            }
+    path = resolve_lean_authority_path(repo)
+    if path is not None:
+        return {
+            "present": True,
+            "path": str(path),
+            "sha256": sha256_file(path),
+            "size_bytes": path.stat().st_size,
+            "discovery": "env_or_repo_or_path_or_common_worktree",
+        }
     return {
         "present": False,
         "path": None,
