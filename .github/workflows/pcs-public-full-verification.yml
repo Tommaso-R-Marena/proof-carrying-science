@@ -392,7 +392,7 @@ jobs:
           } | tee "$RUNNER_TEMP/public-ci-evidence/build-identity.txt"
       - name: Upload cross-language and toolchain evidence
         if: ${{ always() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: pcs-public-full-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
@@ -480,7 +480,7 @@ jobs:
           python scripts/run_transport_trace_kernel_v1.py --output "$RUNNER_TEMP/transport-trace-campaign" --signed-base "$RUNNER_TEMP/transport-kernel-campaign/signed-v3-base"
       - name: Retain universal transport receiving evidence
         if: ${{ always() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: pcs-transport-kernel-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
@@ -515,7 +515,7 @@ jobs:
           python scripts/run_calibration_attacks_v1.py --output "$RUNNER_TEMP/calibration-attacks"
       - name: Retain real experimental calibration evidence
         if: ${{ always() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: pcs-experimental-calibration-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
@@ -581,7 +581,7 @@ jobs:
           assert r['malicious_rebound_optimization']['state'] == 'REJECTED'
           assert r['formal_promotion'] is False
           PY
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: ${{ always() }}
         with:
           name: pcs-certiforge-integration-${{ github.run_id }}-${{ github.run_attempt }}
