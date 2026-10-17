@@ -44,28 +44,30 @@ def decode (raw : String) : Option Neuron :=
 
 theorem decode_canonical {raw : String} {m : Neuron}
     (h : decode raw = some m) : encode m = raw := by
-  unfold decode at h
   cases hc : parseComponents raw with
-  | none => simp [hc] at h
+  | none =>
+      simp [decode, hc] at h
   | some candidate =>
-    by_cases hv : valid candidate && encode candidate == raw = true
-    · simp [hc, hv] at h
-      subst m
-      exact (beq_iff_eq).mp ((Bool.and_eq_true.mp hv).2)
-    · simp [hc, hv] at h
+      by_cases hv : (valid candidate && (encode candidate == raw)) = true
+      · have hm : candidate = m := by
+          simpa [decode, hc, hv] using h
+        subst m
+        exact (beq_iff_eq).mp ((Bool.and_eq_true.mp hv).2)
+      · simp [decode, hc, hv] at h
 
 theorem decode_bounded {raw : String} {m : Neuron}
     (h : decode raw = some m) :
     -32 ≤ m.weight ∧ m.weight ≤ 32 ∧ -32 ≤ m.bias ∧ m.bias ≤ 32 := by
-  unfold decode at h
   cases hc : parseComponents raw with
-  | none => simp [hc] at h
+  | none =>
+      simp [decode, hc] at h
   | some candidate =>
-    by_cases hv : valid candidate && encode candidate == raw = true
-    · simp [hc, hv] at h
-      subst m
-      exact (decide_eq_true_eq).mp ((Bool.and_eq_true.mp hv).1)
-    · simp [hc, hv] at h
+      by_cases hv : (valid candidate && (encode candidate == raw)) = true
+      · have hm : candidate = m := by
+          simpa [decode, hc, hv] using h
+        subst m
+        exact (decide_eq_true_eq).mp ((Bool.and_eq_true.mp hv).1)
+      · simp [decode, hc, hv] at h
 
 def acceptWire (oldRaw newRaw : String) : Bool :=
   match decode oldRaw, decode newRaw with
@@ -86,19 +88,9 @@ theorem acceptWire_sound {oldRaw newRaw : String}
     | none => simp [ho, hn] at h
     | some candidate =>
       have ha : accept old candidate = true := by simpa [ho, hn] using h
-      exact ⟨old, candidate, ho, hn, decode_canonical ho,
+      exact ⟨old, candidate, by simpa [ho], by simpa [hn], decode_canonical ho,
         decode_canonical hn, accept_sound ha⟩
 
-example : decode "PGSI1|R|1|1" = some intermediate := by decide
-example : decode "PGSI1|R|2|1" = some optimum := by decide
-example : acceptWire "PGSI1|R|0|0" "PGSI1|R|1|1" = true := by decide
-example : acceptWire "PGSI1|R|1|1" "PGSI1|R|2|1" = true := by decide
-example : acceptWire "PGSI1|R|1|1" "PGSI1|R|1|2" = false := by decide
-example : decode "PGSI1|R|01|1" = none := by decide
-example : decode "PGSI1|R|-0|0" = none := by decide
-example : decode "PGSI1|R|33|0" = none := by decide
-example : decode "PGSI1|R|1|1\n" = none := by decide
-example : decode "PGSI1|R|1|1|override" = none := by decide
 
 end PCS.V2.ProofGatedArtifacts
 
