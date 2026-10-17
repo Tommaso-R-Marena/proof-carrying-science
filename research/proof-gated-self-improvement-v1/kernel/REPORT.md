@@ -74,6 +74,50 @@ or after checking. A real subprocess test replaces each request file after parsi
 but before proof completion. Each returned receipt still names the original bytes.
 No fake affirmative verifier is used.
 
+## Supported PGSI1 counterexample, independently verified
+
+A separately constructed **posthoc mathematical counterexample** uses valid
+PGSI1 parameters within the existing `[-32,32]` bounds:
+
+- Incumbent: `PGSI1|R|31|4`, or `ReLU(31x+4)`.
+- Candidate: `PGSI1|R|32|-29`, or `ReLU(32x-29)`.
+- The existing real pinned native Lean authority returned `ACCEPT`.
+- The new concrete kernel guard proves finite benchmark loss `186 -> 91`,
+  universal preservation of every previously correct integer prediction,
+  a genuine old-correct witness, and exact window maximum `583 -> 570` on
+  `[-20,20]`. This is dry-run authorization; no model is promoted.
+- At 34, absolute error increases **989 -> 990**. More strongly,
+  `SupportedTailCounterexample.every_tail_input_worsens` proves deterioration
+  at **every integer input `x >= 34`**, not just a sampled tail point.
+
+For this tail the two errors are `29x+3` and `30x-30`, so the deterioration
+increases by `x-33`. `concrete_errors` is axiom-free; the universal tail theorem
+uses only `propext` and `Quot.sound`. These two separately audited declarations
+bring the authored library/control/counterexample inventory to **39**. Concrete
+batch instance theorems are additional and are counted separately as claims.
+
+The exact request, source, kernel guard theorem, real native receipt, axiom audit
+and hashes are in [results/supported-tail-v1](results/supported-tail-v1). The case
+is outside the prespecified 128-model lattice and is **not** counted in its
+frequencies. It establishes a logical counterexample, not a deployment-risk rate.
+
+The example extends to a proved family. For each integer `k >= 18`, define
+`old_k(x)=ReLU(kx+4)` and `new_k(x)=ReLU((k+1)x+2-k)`.
+`SupportedCounterexampleFamily.every_tail_input_worsens` proves deterioration
+for **every integer `x >= k+3`**. The mathematical theorem is unbounded in `k`;
+only the 14 cases `18 <= k <= 31` are claimed to meet the existing PGSI1 bounds.
+All 14 were individually accepted by the real native finite authority and jointly
+kernel-checked against the stronger guard. Their old/new finite losses are
+`6k` and `3k-2`; their window maxima are `20k-37` and `19(k-1)`. The maximum ties
+at `k=18` and strictly decreases in the other 13 cases. Each nevertheless
+worsens on an infinite tail. No model was promoted.
+
+The family theorem adds one separately audited declaration: **40 authored
+library/control/counterexample declarations in total**, plus generated concrete
+instance proofs. Its exact sources, native receipts and guard proof are retained
+in [results/supported-family-v1](results/supported-family-v1). These are posthoc
+logical counterexamples, not extra samples in the frozen transition experiment.
+
 ## Negative result proved in the kernel
 
 Let `target(x) = ReLU(2x+1)`, `old(x)=0`, and
