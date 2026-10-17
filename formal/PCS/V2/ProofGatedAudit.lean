@@ -3,6 +3,7 @@ import PCS.V2.ProofGatedSymbolic
 import PCS.V2.ProofGatedArtifacts
 import PCS.V2.ProofGatedPromotion
 import PCS.V2.ProofGatedInference
+import PCS.V2.ProofGatedMultilayer
 
 /-!
 # Replayed trusted-kernel dependency inventory (research only)
@@ -36,3 +37,13 @@ artifact fidelity or immutable deployment.
 #print axioms PCS.V2.ProofGatedInference.infer_canonical
 #print axioms PCS.V2.ProofGatedInference.committed_inference_preserves_correct_cases
 #print axioms PCS.V2.ProofGatedInference.committed_inference_exact_artifact
+
+#print axioms PCS.V2.ProofGatedMultilayer.accept_sound
+#print axioms PCS.V2.ProofGatedMultilayer.accepted_preserves
+#print axioms PCS.V2.ProofGatedMultilayer.accepted_expands
+#print axioms PCS.V2.ProofGatedMultilayer.trace_length_bound
+#print axioms PCS.V2.ProofGatedMultilayer.arbitrary_proposers_preserve
+#print axioms PCS.V2.ProofGatedMultilayer.arbitrary_proposers_nonincrease
+#print axioms PCS.V2.ProofGatedMultilayer.swapHidden_semantics
+#print axioms PCS.V2.ProofGatedMultilayer.two_generations_certified
+#print axioms PCS.V2.ProofGatedMultilayer.complete_terminal
