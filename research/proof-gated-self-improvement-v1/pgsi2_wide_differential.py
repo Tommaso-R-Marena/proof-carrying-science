@@ -31,12 +31,12 @@ XS = [-10**12, -10001, -100, -33, -32, -4, -3, -2, -1, 0,
       1, 2, 3, 4, 32, 33, 100, 10001, 10**12]
 
 
-def invoke(*args: str) -> subprocess.CompletedProcess[str]:
+def invoke(*args: str, allow_runtime_error: bool = False) -> subprocess.CompletedProcess[str]:
     proc = subprocess.run(
         ["lake", "env", "lean", "--run", str(LEAN_SOURCE), *args],
         cwd=FORMAL, text=True, capture_output=True, timeout=120, check=False,
     )
-    if proc.stderr.strip():
+    if proc.stderr.strip() and not allow_runtime_error:
         raise RuntimeError("Lean produced stderr: " + proc.stderr[:2000])
     return proc
 
@@ -135,7 +135,8 @@ def main() -> dict:
                 raise AssertionError("architecture bound was not enforced")
             strong_checks += 1
         # Absent/altered artifact refuses to execute.
-        done = invoke("infer", str(directory / "missing.pgsi2"), "8", "32", "0")
+        done = invoke("infer", str(directory / "missing.pgsi2"), "8", "32", "0",
+                      allow_runtime_error=True)
         if done.returncode == 0:
             raise AssertionError("missing file was accepted")
         rejection_checks += 1
