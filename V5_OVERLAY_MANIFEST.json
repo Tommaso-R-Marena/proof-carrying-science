@@ -1,0 +1,455 @@
+{
+  "purpose": "Research-only overlay onto PCS draft PR #117; never overwrite production authority",
+  "basis": "V5 inner dist/pcs_proof_gated_v5.tar.gz; exact SHA-256 b5ec1c476666feb3b13d72f78227a87f688f5868e75cc87f8269e75e33015d79",
+  "unchanged_original_formal_modules_excluded": [
+    "ProofGatedMultilayer.lean",
+    "ProofGatedPromotion.lean",
+    "ProofGatedSelfImprovement.lean",
+    "ProofGatedSymbolic.lean"
+  ],
+  "changed_original_formal_modules": [
+    "ProofGatedArtifacts.lean",
+    "ProofGatedAudit.lean",
+    "ProofGatedInference.lean"
+  ],
+  "new_formal_modules": [
+    "ProofGatedCodec.lean",
+    "ProofGatedDeep.lean",
+    "ProofGatedDeepCert.lean",
+    "ProofGatedFullAudit.lean",
+    "ProofGatedGeneric.lean",
+    "ProofGatedLimits.lean",
+    "ProofGatedNetArtifacts.lean",
+    "ProofGatedNoForget.lean",
+    "ProofGatedNoForgetAudit.lean",
+    "ProofGatedRobust.lean",
+    "ProofGatedStrongArtifacts.lean",
+    "ProofGatedStrongAudit.lean",
+    "ProofGatedStrongGate.lean",
+    "ProofGatedV1Analysis.lean",
+    "ProofGatedWide.lean"
+  ],
+  "base_branch": "research/proof-gated-self-improvement-v1-20261016",
+  "files": [
+    {
+      "path": ".github/workflows/pcs-proof-gated-v5-integration.yml",
+      "sha256": "90c7ab7721c981c9aad44720bef62b1516a2b5f7aa7dc8cfd660384d40096618",
+      "bytes": 3110
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedArtifacts.lean",
+      "sha256": "f709b56dc5e113fcf3596c6f068cfe629ce4b33380f26f740762e6b8dbdbe4a5",
+      "bytes": 9685
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedAudit.lean",
+      "sha256": "149c68634634009235165ab6e3c8a5b717b5628f0074c16b4c58211203f881ea",
+      "bytes": 8689
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedCodec.lean",
+      "sha256": "f2d1079b587085bf5b8c9267ff1b7e4eba79c457bbdec6210719f3ec407b4653",
+      "bytes": 16378
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedDeep.lean",
+      "sha256": "8283df488e295f8f4f68b5f8d9e3c034e53f62f5dfff8651b044f5a1013f696c",
+      "bytes": 9269
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedDeepCert.lean",
+      "sha256": "8b3c6d7d8a79654baf0b76ebd19b9632589ee5d41b8543db633bd9567670cead",
+      "bytes": 22617
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedFullAudit.lean",
+      "sha256": "52995ed269f23d67da06eecafdb3fd4360470ee8dba682bea5c4438396bb8c14",
+      "bytes": 25153
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedGeneric.lean",
+      "sha256": "342ee90dcbf6c00fdb2335be6f5c18cdab22cdff0c2bb5d246cbe0ff0877bc03",
+      "bytes": 15176
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedInference.lean",
+      "sha256": "487d88d2780a9570cba5ffd2d697ea7cbea2ac132e9f3a7dffaabddf793d1d39",
+      "bytes": 3063
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedLimits.lean",
+      "sha256": "e04d53ac8034660b430c7a4f0a51d3c37cc25f24e0195cb183fcadf13e7b6130",
+      "bytes": 11337
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedNetArtifacts.lean",
+      "sha256": "d61c9822ac6fe18d1d5207046500ae595bd70b97fed5acb1dae4221471d69ea7",
+      "bytes": 16409
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedNoForget.lean",
+      "sha256": "a3acdf6eaf9e1a3e69959a116af24e9372490944083e80d75f7319762b1144ae",
+      "bytes": 24626
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedNoForgetAudit.lean",
+      "sha256": "8ffd1afbafb77190215e64ffa5a7d477cca7934ed906cf6fe2b87937d59556dd",
+      "bytes": 1363
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedRobust.lean",
+      "sha256": "90e7b23d4dc08148d2931edbfd808a476ef70b754505b7c7b3538167bbaaf978",
+      "bytes": 16797
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedStrongArtifacts.lean",
+      "sha256": "52bdb99aa24653ffa451848d9f31b47191fa9a348ab3f74ce328e05bca62a4e2",
+      "bytes": 12635
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedStrongAudit.lean",
+      "sha256": "7e9f22526ef7a359782172a71f63b87557dd1dda1a615bf0a1434acdb3e56194",
+      "bytes": 6709
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedStrongGate.lean",
+      "sha256": "2d2f5c8d77508956a089fbb32dc08e12c0ae0e646f9d767bd3e27690657cb309",
+      "bytes": 17923
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedV1Analysis.lean",
+      "sha256": "420fba9e60c8afc5424722d0946ebaa79a918ff3a2df0d791c4aa112aedf9c82",
+      "bytes": 21615
+    },
+    {
+      "path": "formal/PCS/V2/ProofGatedWide.lean",
+      "sha256": "443c999862919d67526f56449d8e6ce4f1fe16951ecb1c0bb11d79c1442905fe",
+      "bytes": 17512
+    },
+    {
+      "path": "formal/PCS_PROOF_GATED_V4_INTEGRATION.md",
+      "sha256": "6e12a36ae4d5e2deab28fa6932b8b1d080bb3b52c543169d81f3e229ff15800a",
+      "bytes": 13135
+    },
+    {
+      "path": "formal/PCS_PROOF_GATED_V4_REPORT.md",
+      "sha256": "6c0e65cbc2baff519fd4180af27b99c0fadd5a32948c0bb05c9979f981a10d7e",
+      "bytes": 27838
+    },
+    {
+      "path": "formal/PCS_PROOF_GATED_V5_REPORT.md",
+      "sha256": "ee465c2b83db99dcf22067c5ffc341b1a9fc5d79f558fb0f47a05d49d5079ca6",
+      "bytes": 27359
+    },
+    {
+      "path": "formal/fixtures/proof_gated/deep_cert_vectors.tsv",
+      "sha256": "144f3e232d4f2bbc931f1967b1b80d90fab4499c085a49c0b5ddaf6b49a1742f",
+      "bytes": 1105
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_canonical.tsv",
+      "sha256": "15feaa47b513af0ee24b6e9074868c1bd13c740c755b480a420b2cdb0239a79a",
+      "bytes": 192660
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_0.txt",
+      "sha256": "da5ddd49bfdd4906b42490aa318fc93b89e5dbf2de45da4335f3b8b636ed8f27",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_1.txt",
+      "sha256": "7ff1c1a21512cfa41942cc3d02a0351e61f15811cff374c4ec1b63029032b9fe",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_10.txt",
+      "sha256": "8f4b0bea94ae966c8f5474f4637ff2cadf754680de4a16b6a13c2dfcf4cac605",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_11.txt",
+      "sha256": "6eae356004b30892d4ffaac0bad069f03e98fe61c65e8051cd1428dc50875fc4",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_12.txt",
+      "sha256": "a859bed3b0d13406e6fcca4cefa196410094e9e90d664341af9f1393cf1ec1c3",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_13.txt",
+      "sha256": "53ea8729662f3afa2fa0bda847cc76f10d660476a10efd76e93061dd303063f0",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_14.txt",
+      "sha256": "983e9e928ebf0a6d0ac001dbf2374de57745dcddbbaa3ccf4d782dd19551496f",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_15.txt",
+      "sha256": "4325e5cddb8aa47dbb953ac9cfe238e6ae0dd26af9e0b97ce46001bc55308409",
+      "bytes": 9
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_16.txt",
+      "sha256": "4192b8e624f106898fff972b52d6f3df173b6216d3bf4b2a92454c0c12ee8e10",
+      "bytes": 10
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_17.txt",
+      "sha256": "1f5b0d9b23b7cf1d4bca24e7db660eb6dc2af4f591a1da8b8406cbec6bfdafae",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_18.txt",
+      "sha256": "52011b36799f3fb0243a6abbc3b4eaf242334da97a5ec473ff588b60ec3ed00f",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_19.txt",
+      "sha256": "0d52337d87db839f59f535a2d051dd301318c6d4bd8124c70778f8399e9f1660",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_2.txt",
+      "sha256": "dbdeea590409cb13baabfc795f82c6f2ef8bd15ad8205a0d28b85f231f85148b",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_20.txt",
+      "sha256": "d00d3be12b9bf4fb69b1caeb3950e88695ed718ab821e884032d1ca896677e03",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_21.txt",
+      "sha256": "823c2706b33b3f74de74f61f5fc0f33602564b5b6e2309a73ec8b721f5c02724",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_22.txt",
+      "sha256": "7b37b00f3fee28d9bce8b85c02a7a5e21ff654065d3ebf05c69e584e6ffdc692",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_23.txt",
+      "sha256": "a1ffa40c5ebcae742f41a68662be8f15081b56e5944587b3ae8c2feb9f458b0d",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_24.txt",
+      "sha256": "49e20eaee925b489e17aa0914caa86ede54b2868fdf955436c8dd537c7209ac6",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_25.txt",
+      "sha256": "a8e38db08b947aea4940f6263daf0eb04a012c1c2c73779b001e9262fc3a37d5",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_26.txt",
+      "sha256": "9da59b9739b1e0d636bb2d156e4eb0feb8ed0bebd671393a87a8436f3725391a",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_27.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_3.txt",
+      "sha256": "71d5b9df2448f1312c4b5c7992ed94b043bfe1c2fb8a011353f84a7553f07e6a",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_4.txt",
+      "sha256": "8846431201b0e7e00459d9a98bca5e1ce289a46c371f1e5f7b5e2895f7a3f290",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_5.txt",
+      "sha256": "ed50eb1ff242c13b05ed04e9fb00e8c983cbfa6d92ffad4cc9264f851b2db082",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_6.txt",
+      "sha256": "cf9be9188c789f15b9fdfa3e36ea65ec181381d06f0a09cb14ed9761d7764322",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_7.txt",
+      "sha256": "d1094b61a233066c9746a723b191d8cd486417d801158023c5ca1c322bf241ee",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_8.txt",
+      "sha256": "abcf9bf793b63353919714e32cbe103ff8fc3e24e153fa2e94842b1732e84132",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_negative/neg_9.txt",
+      "sha256": "3eedc499734ab77c7cf6fcd178d7967342146319530bd8ada7cd7c35d0b0d98a",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/accept_0_new.txt",
+      "sha256": "03ef5ec719dcb0c337aaa235bfa5875cd653a9ba5bb5d523d60349537cd66539",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/accept_0_old.txt",
+      "sha256": "9acae620de9f14d34a791ca94394c48d918501bb4cd92e60a1bdbdd04aa8449d",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/accept_1_new.txt",
+      "sha256": "d73cd24681b8b92221ded3620993e613ce61bcb18b7e31a37c0ba2ab6e2ee7a6",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/accept_1_old.txt",
+      "sha256": "9acae620de9f14d34a791ca94394c48d918501bb4cd92e60a1bdbdd04aa8449d",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/accept_2_new.txt",
+      "sha256": "d73cd24681b8b92221ded3620993e613ce61bcb18b7e31a37c0ba2ab6e2ee7a6",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/accept_2_old.txt",
+      "sha256": "c4d1bde03a8908232694427b1c64fe6c69e4af157cdb74060ad2f951928c89bc",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/reject_0_new.txt",
+      "sha256": "9acae620de9f14d34a791ca94394c48d918501bb4cd92e60a1bdbdd04aa8449d",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/reject_0_old.txt",
+      "sha256": "d73cd24681b8b92221ded3620993e613ce61bcb18b7e31a37c0ba2ab6e2ee7a6",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/reject_1_new.txt",
+      "sha256": "9acae620de9f14d34a791ca94394c48d918501bb4cd92e60a1bdbdd04aa8449d",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/reject_1_old.txt",
+      "sha256": "9acae620de9f14d34a791ca94394c48d918501bb4cd92e60a1bdbdd04aa8449d",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/reject_2_new.txt",
+      "sha256": "1784b207000c9eb014e7a97ee44e4b9787183d2f98063d4b36d39d7eea6ebf15",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi1_pairs/reject_2_old.txt",
+      "sha256": "9acae620de9f14d34a791ca94394c48d918501bb4cd92e60a1bdbdd04aa8449d",
+      "bytes": 11
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_canonical.txt",
+      "sha256": "3b06a2f42ab3d18c53b2cdf17048ca1935721eda1869e73e918ccadc5cf44f7b",
+      "bytes": 199
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_0.txt",
+      "sha256": "179969d741fe1dae4316fe4fc674ec89ecf765db976e58ff03d544658fc7329a",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_1.txt",
+      "sha256": "447471c6991d3cd5c4e54f7122c106aa56e554cbf4765efbb30ff695ed42ded0",
+      "bytes": 20
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_2.txt",
+      "sha256": "87faa394864a9f8b70ec88f41ad3410b1d5dd765d4dcc86c488613cd754571d1",
+      "bytes": 14
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_3.txt",
+      "sha256": "51f58527793d36afab162883b376256caed7ba8123b9a9e6e22debf947ab6ccd",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_4.txt",
+      "sha256": "6f19b19871fdc31cb475d97fdf0cd42c7662f6fd402700136ca05924a8607aa9",
+      "bytes": 16
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_5.txt",
+      "sha256": "11947a300b3df783e1a33158871d7ce814004cc597aeb4bf2cbeadfb3e659f27",
+      "bytes": 12
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_6.txt",
+      "sha256": "443bcc048c6a3191bae2834ca3e6351eec90ab386cdd0eb27766455931295cbc",
+      "bytes": 13
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_7.txt",
+      "sha256": "cd42f367a5f4e26759bd9032ea330adaa475af717b06c8d61326c80813b87b02",
+      "bytes": 10
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_8.txt",
+      "sha256": "6efda1f1d2d762c62caa9344b619ab438298722f61e922c2b867293876185d98",
+      "bytes": 64
+    },
+    {
+      "path": "formal/fixtures/proof_gated/pgsi2_wide_negative/neg_9.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "formal/fixtures/proof_gated/robust_vectors.tsv",
+      "sha256": "689a5aab8d8c88caa1a8e8db7964cfeb14d160be8e56af5d1b0cea308e5d9aaf",
+      "bytes": 25875
+    },
+    {
+      "path": "formal/fixtures/proof_gated/strong_gate_cases.tsv",
+      "sha256": "5639d91fa0271c80a1608b7e9ea6fb9c1648538d4a0f6bf6f071310fbca0acc5",
+      "bytes": 1249
+    },
+    {
+      "path": "formal/scripts/gen_full_audit.sh",
+      "sha256": "57646fa2e7a2b8796237f977cdd42eb382692fa72b8837dd397eed7e8679dc82",
+      "bytes": 1139
+    },
+    {
+      "path": "formal/scripts/proof_gated_checker_vectors.lean",
+      "sha256": "e773a510a1f3928790c5b688bd032045d5a9adc650328c6f950aa50ca49a3015",
+      "bytes": 11575
+    },
+    {
+      "path": "formal/scripts/proof_gated_ci.sh",
+      "sha256": "6ae5a9eca46b50de9ee5c4c61b6a705fb3de58ae6e6b15466880d4eced364995",
+      "bytes": 6038
+    },
+    {
+      "path": "formal/scripts/proof_gated_package.sh",
+      "sha256": "a797004269f1601f978dc41b75e63404be03cc8937ecfabc0cf5baa578c2c2ad",
+      "bytes": 3241
+    },
+    {
+      "path": "formal/scripts/proof_gated_vectors.lean",
+      "sha256": "b05582464f2ee3fe56f4b7663f29a4e133b90ad7d70c278c10da36ff252ab390",
+      "bytes": 8459
+    },
+    {
+      "path": "formal/scripts/proof_gated_verify_archive.sh",
+      "sha256": "16e5efaf0e8c42f5b3347313f79ac126bbb77084fdddb0cba4ef2a5b9c632018",
+      "bytes": 3752
+    },
+    {
+      "path": "research/proof-gated-self-improvement-v1/v5_fixture_differential.py",
+      "sha256": "936a23866d138ac5bf8aae9e16d1370493ddf6d3ea42984484175f087dfeee46",
+      "bytes": 5936
+    }
+  ]
+}
