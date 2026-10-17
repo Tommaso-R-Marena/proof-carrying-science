@@ -31,6 +31,20 @@ For the integrated release candidate with all source and binary audits, use `bas
 
 See `LIMITATIONS.md` when present in evidence bundles, `docs/LEAN_KERNEL_STATUS.md`, `docs/PUBLIC_RELEASE_GATE.md`, and `SECURITY.md`.
 
+## Independent scientific pilot (synthetic)
+
+For a complete producer→reviewer→adversarial→closeout path on public synthetic PK/PD inputs, see `docs/INDEPENDENT_SCIENTIFIC_PILOT_V1.md` and run:
+
+```bash
+source scripts/activate_lean_428.sh
+cd formal && lake build pcs-lean-authority && cd ..
+pcs independent-pilot-v1 -o /tmp/pcs-independent-pilot --overwrite --apply-closeout
+```
+
+Clean-room reconstruction (fresh venv, hash-pinned lockfile): `pcs cleanroom-independent-pilot-v1 -o /tmp/pcs-cleanroom-pilot --overwrite`.
+
+This demonstrates independent computational assurance packaging. It does **not** close the genuine external-partner gate in issue #13 and does not establish empirical scientific validity.
+
 ## Scientific users and contributors
 
 Start with synthetic/public-domain examples. Do not commit private datasets, unpublished constituent projects, actual patient identifiers or signing keys. File separate issues for bugs, missing adapters and evaluation gaps; follow `SECURITY.md` for vulnerability reports. Contributor level or game leaderboard position confers no Lean authority.

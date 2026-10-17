@@ -1458,6 +1458,43 @@ def cmd_freeze_intake(args):
     return 0
 
 
+def cmd_independent_pilot_v1(args):
+    from .independent_pilot_v1 import IndependentPilotError, run_independent_pilot_v1
+
+    try:
+        evidence = run_independent_pilot_v1(
+            args.output,
+            lean_authority_path=args.lean_authority,
+            overwrite=args.overwrite,
+            apply_closeout=args.apply_closeout,
+        )
+    except IndependentPilotError as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(evidence, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_cleanroom_independent_pilot_v1(args):
+    from .independent_pilot_v1 import (
+        IndependentPilotError,
+        run_cleanroom_independent_pilot_v1,
+    )
+
+    try:
+        summary = run_cleanroom_independent_pilot_v1(
+            args.output,
+            python_executable=args.python,
+            lean_authority_path=args.lean_authority,
+            overwrite=args.overwrite,
+        )
+    except IndependentPilotError as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0 if summary.get("pass") else 1
+
+
 def cmd_snapshot_env(args):
     try:
         result = write_environment(args.output)
@@ -2366,6 +2403,33 @@ def build_parser():
     fi.add_argument("-o", "--output", required=True, help="write the timestamped intake lock JSON")
     fi.add_argument("--force", action="store_true", help="explicitly replace an existing intake lock")
     fi.set_defaults(func=cmd_freeze_intake)
+
+    isp = sub.add_parser(
+        "independent-pilot-v1",
+        help=(
+            "run the bounded independent scientific pilot (synthetic PK/PD): "
+            "intake→discover→confirm→attest→second-env verify→adversarial→closeout"
+        ),
+    )
+    isp.add_argument("-o", "--output", required=True, help="new output directory for pilot evidence")
+    isp.add_argument("--lean-authority", default=None, help="receiver-owned pcs-lean-authority path")
+    isp.add_argument("--overwrite", action="store_true", help="replace an existing output directory")
+    isp.add_argument(
+        "--apply-closeout",
+        action="store_true",
+        help="apply demo producer-key closeout after archival packaging",
+    )
+    isp.set_defaults(func=cmd_independent_pilot_v1)
+
+    crp = sub.add_parser(
+        "cleanroom-independent-pilot-v1",
+        help="reconstruct the independent pilot inside a fresh hash-pinned virtualenv",
+    )
+    crp.add_argument("-o", "--output", required=True, help="new clean-room output directory")
+    crp.add_argument("--lean-authority", default=None, help="receiver-owned pcs-lean-authority path")
+    crp.add_argument("--python", default=None, help="Python executable used to create the venv")
+    crp.add_argument("--overwrite", action="store_true")
+    crp.set_defaults(func=cmd_cleanroom_independent_pilot_v1)
 
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
     se.add_argument("-o", "--output", required=True)

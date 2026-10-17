@@ -53,7 +53,7 @@ def render_limitations(certificate: dict[str, Any]) -> str:
         "satisfied the declared PCS check or proof obligation under its stated assumptions. "
         "Formal/computational assurance and empirical scientific validation remain distinct.",
         "",
-        f"Certificate semantic hash: \`{certificate.get('semantic_hash', '')}\`",
+        f"Certificate semantic hash: `{certificate.get('semantic_hash', '')}`",
         "",
     ]
     return "\n".join(lines)
