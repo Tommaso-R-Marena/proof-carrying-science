@@ -1,0 +1,42 @@
+{
+  "artifacts": [],
+  "assumptions": [
+    {
+      "id": "A_UNITS",
+      "statement": "Unit compatibility is a dimensional claim only; quantity identity and clinical meaning are not claimed."
+    }
+  ],
+  "checks": [
+    {
+      "claim_ids": [
+        "C_UNITS"
+      ],
+      "id": "E_UNITS",
+      "left_unit": "mg/L",
+      "right_unit": "ug/mL",
+      "type": "unit_compatible"
+    }
+  ],
+  "claims": [
+    {
+      "assumptions": [
+        "A_UNITS"
+      ],
+      "id": "C_UNITS",
+      "kind": "computational",
+      "predicate": {
+        "left_unit": "mg/L",
+        "right_unit": "ug/mL",
+        "type": "unit_compatible"
+      },
+      "required_evidence": [
+        "E_UNITS"
+      ],
+      "statement": "mg/L and ug/mL are dimensionally compatible concentration units."
+    }
+  ],
+  "subject": "independent-eval-unit-compatible",
+  "workflow": {
+    "nodes": []
+  }
+}
