@@ -21,13 +21,12 @@ def test_checklist_forbids_external_validation_complete():
     text = list_steps(PACKAGE)
     assert "checklist" in text.lower() or "configuration" in text.lower()
 
-    for name in ("checklist.json", "CHECKLIST.json"):
-        path = PACKAGE / name
-        if not path.is_file():
-            continue
-        data = json.loads(path.read_text(encoding="utf-8"))
-        assert data.get("external_validation_complete_allowed") is False
-        assert "EXTERNAL_VALIDATION_COMPLETE" in set(data.get("forbidden_states") or [])
+    path = PACKAGE / "CHECKLIST.json"
+    assert path.is_file(), "canonical checklist must be CHECKLIST.json only"
+    assert not (PACKAGE / "checklist.json").exists(), "lowercase checklist.json collides on case-insensitive FS"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data.get("external_validation_complete_allowed") is False
+    assert "EXTERNAL_VALIDATION_COMPLETE" in set(data.get("forbidden_states") or [])
 
     docs = "\n".join(
         (PACKAGE / name).read_text(encoding="utf-8")

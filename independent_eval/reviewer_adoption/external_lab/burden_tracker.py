@@ -72,11 +72,13 @@ def _normalize_step(raw: dict[str, Any]) -> dict[str, str]:
 
 
 def load_steps(package_dir: Path) -> list[dict[str, str]]:
-    """Load checklist from CHECKLIST.json / checklist.json if present, else defaults."""
-    for name in ("CHECKLIST.json", "checklist.json"):
-        checklist = package_dir / name
-        if not checklist.is_file():
-            continue
+    """Load checklist from CHECKLIST.json if present, else defaults.
+
+    Only the uppercase ``CHECKLIST.json`` name is supported so the tree stays
+    free of case-insensitive path collisions (repository integrity policy).
+    """
+    checklist = package_dir / "CHECKLIST.json"
+    if checklist.is_file():
         data = json.loads(checklist.read_text(encoding="utf-8"))
         if data.get("external_validation_complete_allowed") is not False:
             raise ValueError("checklist must set external_validation_complete_allowed=false")

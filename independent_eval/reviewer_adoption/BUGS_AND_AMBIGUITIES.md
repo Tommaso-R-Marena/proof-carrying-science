@@ -9,8 +9,9 @@
    `accept_as_valid` / `reject_as_invalid` / `accept_computational_only` /
    `abstain`. Finer distinction dimensions are encoded via ground-truth labels
    and `distinction_tags`, not separate scored axes in v1.
-4. **Checklist dual filenames** — Both `CHECKLIST.json` and `checklist.json` may
-   exist; loader prefers `CHECKLIST.json` and requires
+4. **Checklist filename** — Canonical file is `CHECKLIST.json` only. A previous
+   dual `checklist.json` pair failed repository integrity (case-insensitive
+   path collision) and was removed. Loader still requires
    `external_validation_complete_allowed=false` plus forbidden
    `EXTERNAL_VALIDATION_COMPLETE`.
 5. **Duplicate case files** — Concurrent edits can leave duplicate `case_id`s;
