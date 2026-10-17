@@ -94,7 +94,7 @@ class ExternallyAnchoredPGSC6:
 
     def __init__(self, store_root: Path, anchor_root: Path):
         self.store = PinnedPGSC6Store(store_root)
-        self.anchor_root = Path(anchor_root).absolute()
+        self.anchor_root = Path(os.path.abspath(anchor_root))
         self._assert_separate()
 
     def _assert_separate(self) -> None:
@@ -112,8 +112,8 @@ class ExternallyAnchoredPGSC6:
         If process crashes after creating a store but before writing checkpoint,
         both directories remain and this method refuses to reinitialize.
         """
-        store_root = Path(store_root).absolute()
-        anchor_root = Path(anchor_root).absolute()
+        store_root = Path(os.path.abspath(store_root))
+        anchor_root = Path(os.path.abspath(anchor_root))
         if _path_is_inside(store_root, anchor_root) or _path_is_inside(anchor_root, store_root):
             raise IntegrityFailure("anchor must be outside store")
         # Avoid silently overwriting any existing authority checkpoint.
