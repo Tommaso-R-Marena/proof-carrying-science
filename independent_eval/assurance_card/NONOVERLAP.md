@@ -39,5 +39,7 @@
 - Offline Assurance Card builder (JSON + static HTML)
 - Authority-lane black-box `pcs verify` recorder
 - Non-authority inspection_class lattice + claim parser
+- Content-addressed `card_integrity` seal + `schema/pcs-assurance-card-v1.json`
+- Optional non-authority `--attach-results` program_context digests (ABSENT ≠ PASS)
 - Fresh CC0 synthetic fixtures + optional pkpd certify→verify demo test
 - Docs: README, NONOVERLAP, TEST_INVENTORY, TECHNICAL_REPORT, BUGS_AND_AMBIGUITIES

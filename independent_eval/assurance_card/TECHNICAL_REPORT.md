@@ -40,9 +40,26 @@ authority-lane outcomes; `lane_consistency` is observational only
 
 ### Provenance
 
-UTC timestamp, optional `git rev-parse HEAD`, sha256 of inspected inputs,
-Python / platform / cheap `pcs` version probe, and an efficiency block
-declaring single-process / no-network / verify-only.
+UTC timestamp (overridable via `--generated-at` for deterministic seals),
+optional `git rev-parse HEAD`, sha256 of inspected inputs, Python / platform /
+cheap `pcs` version probe, and an efficiency block declaring single-process /
+no-network / verify-only.
+
+### Program context (optional)
+
+`--attach-results PATH` (repeatable) digests preferred summary files under a
+sibling results directory (`SUMMARY.json`, `workstream_c_summary.json`,
+`residual_trust.json`, `interpreter_matrix.json`). Missing paths are recorded
+as `ABSENT` — never as PASS. The block forces `is_authority: false` and
+`issues_accept: false`.
+
+### Card integrity seal
+
+`python_harness/canonical.py` seals each card with SHA-256 over
+`json-sort-keys-compact-utf8-v1` bytes of the payload excluding
+`card_integrity`. Recomputation detects tampering. The seal does not issue
+ACCEPT/PASS and does not certify science. Schema:
+`schema/pcs-assurance-card-v1.json`.
 
 ### HTML
 

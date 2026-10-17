@@ -8,6 +8,12 @@ network, verify-only (no Mathlib / Lean rebuild).
 PYTHONPATH=independent_eval/assurance_card python3 -m python_harness.card \
   --evidence PATH_OR_CERTIFICATE --out /tmp/pcs-assurance-card --format both
 
+# Optional: pin timestamp + attach sibling SUMMARY digests (non-authority)
+PYTHONPATH=independent_eval/assurance_card python3 -m python_harness.card \
+  --evidence PATH_OR_CERTIFICATE --out /tmp/pcs-assurance-card --format both \
+  --generated-at 2026-10-17T21:00:00Z \
+  --attach-results path/to/sibling/results
+
 PYTHONPATH=independent_eval/assurance_card python3 -m pytest -q \
   independent_eval/assurance_card/tests
 ```
@@ -30,7 +36,12 @@ PYTHONPATH=independent_eval/assurance_card python3 -m pytest -q \
    Explicit: `card_issues_accept: false`, `inspection_is_not_authority: true`.
 3. **Provenance** — git HEAD (if repo), file sha256s of inspected inputs, UTC
    timestamps, cheap tool versions.
-4. **Limitations banner** — always visible: computational PASS ≠ empirical
+4. **Program context (optional, non-authority)** — `--attach-results` digests
+   sibling SUMMARY / result JSON files. ABSENT ≠ PASS; never authority.
+5. **Card integrity seal** — content-addressed SHA-256 over canonical JSON
+   (sorted keys, compact separators) excluding `card_integrity` itself.
+   Machine schema: `schema/pcs-assurance-card-v1.json`.
+6. **Limitations banner** — always visible: computational PASS ≠ empirical
    adequacy; the card never certifies science.
 
 ## Layout

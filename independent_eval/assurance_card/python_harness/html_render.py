@@ -221,6 +221,22 @@ def render_assurance_card_html(card: dict[str, Any]) -> str:
     ) or "<li>None</li>"
 
     lane_consistency = card.get("lane_consistency") or {}
+    integrity = card.get("card_integrity") or {}
+    program_context = card.get("program_context") or {}
+    ctx_entries = program_context.get("entries") or []
+    ctx_rows = []
+    for entry in ctx_entries:
+        files = entry.get("files") or []
+        file_bits = "; ".join(
+            f"{f.get('name')}={f.get('sha256')}" for f in files
+        ) or "(none)"
+        ctx_rows.append(
+            "<tr>"
+            f"<td><code>{_esc(entry.get('requested'))}</code></td>"
+            f"<td><span class='badge'>{_esc(entry.get('status'))}</span></td>"
+            f"<td class='mono'>{_esc(file_bits)}</td>"
+            "</tr>"
+        )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -241,6 +257,10 @@ def render_assurance_card_html(card: dict[str, Any]) -> str:
       · card_issues_accept: <strong>false</strong>
       · inspection_is_not_authority: <strong>true</strong>
     </p>
+    <p class="meta">
+      Card seal · <span class="mono">{_esc(integrity.get('digest_sha256') or 'n/a')}</span>
+      · {_esc(integrity.get('canonicalization') or '')}
+    </p>
     <div class="banner" role="status" aria-live="polite" id="limitations-banner">
       {_esc(banner)}
     </div>
@@ -257,7 +277,9 @@ def render_assurance_card_html(card: dict[str, Any]) -> str:
         <li><a href="#claims">Claims</a></li>
         <li><a href="#assumptions">Assumptions</a></li>
         <li><a href="#artifacts">Artifacts</a></li>
+        <li><a href="#program-context">Program context digests</a></li>
         <li><a href="#provenance">Provenance</a></li>
+        <li><a href="#integrity">Card integrity seal</a></li>
         <li><a href="#limitations">Limitations text</a></li>
         <li><a href="#consistency">Lane consistency</a></li>
       </ol>
@@ -355,6 +377,36 @@ def render_assurance_card_html(card: dict[str, Any]) -> str:
       </table>
     </section>
 
+    <section id="program-context" aria-labelledby="program-context-h">
+      <h2 id="program-context-h">Program context digests (non-authority)</h2>
+      <p class="meta">
+        Optional digests of sibling result summaries. ABSENT ≠ PASS.
+        Program context never issues ACCEPT and is not the authority lane.
+      </p>
+      <div class="disclaimer" role="note">
+        {_esc(program_context.get('disclaimer') or '')}
+      </div>
+      <dl class="strength-dl" aria-label="Program context summary">
+        <dt>requested</dt><dd>{_esc((program_context.get('summary') or {}).get('requested', 0))}</dd>
+        <dt>present</dt><dd>{_esc((program_context.get('summary') or {}).get('present', 0))}</dd>
+        <dt>absent</dt><dd>{_esc((program_context.get('summary') or {}).get('absent', 0))}</dd>
+        <dt>is_authority</dt><dd>false</dd>
+      </dl>
+      <table>
+        <caption>Attached sibling result digests</caption>
+        <thead>
+          <tr>
+            <th scope="col">Requested path</th>
+            <th scope="col">Status</th>
+            <th scope="col">File digests</th>
+          </tr>
+        </thead>
+        <tbody>
+          {''.join(ctx_rows) or '<tr><td colspan="3">No program context attached.</td></tr>'}
+        </tbody>
+      </table>
+    </section>
+
     <section id="provenance" aria-labelledby="provenance-h">
       <h2 id="provenance-h">Provenance</h2>
       <dl class="strength-dl" aria-label="Provenance fields">
@@ -367,6 +419,21 @@ def render_assurance_card_html(card: dict[str, Any]) -> str:
       </dl>
       <h3>Input file hashes</h3>
       <ul>{hash_lis}</ul>
+    </section>
+
+    <section id="integrity" aria-labelledby="integrity-h">
+      <h2 id="integrity-h">Card integrity seal</h2>
+      <p class="meta">
+        Content-addressed digest of the card payload excluding
+        <code>card_integrity</code>. Seal does not certify science.
+      </p>
+      <dl class="strength-dl" aria-label="Card integrity">
+        <dt>algorithm</dt><dd>{_esc(integrity.get('algorithm'))}</dd>
+        <dt>canonicalization</dt>
+        <dd class="mono">{_esc(integrity.get('canonicalization'))}</dd>
+        <dt>digest_sha256</dt>
+        <dd class="mono">{_esc(integrity.get('digest_sha256'))}</dd>
+      </dl>
     </section>
 
     <section id="limitations" aria-labelledby="limitations-h">

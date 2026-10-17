@@ -20,12 +20,22 @@
    strings; both are recorded.
 5. **Git HEAD provenance.** If `.git` is absent (exported tarball), `git_head`
    is `null`. Card generation still succeeds.
+6. **Canonicalization is not RFC 8785 JCS.** The seal uses sorted-keys compact
+   UTF-8 JSON without a JCS dependency. Digests are reproducible for the card's
+   JSON-compatible types under CPython; they are not claimed to match
+   external JCS implementations.
+7. **Program context preferred filenames.** Only a fixed list of summary
+   filenames is auto-discovered under `--attach-results` directories. Other
+   files require pointing at the file path directly.
 
 ## Observed hazards
 
 - Treating `lane_consistency.overall == agreement` as scientific acceptance —
   **incorrect**. Agreement only means inspection classes do not contradict the
   authority-lane verify outcome.
+- Treating `card_integrity.digest_sha256` as scientific or regulatory
+  certification — **incorrect**. The seal only binds card bytes.
+- Treating program_context `PRESENT` as residual-trust closure — **incorrect**.
 - Treating receipt `lean_authority.reported_result: ACCEPT` as card-issued
   ACCEPT — **incorrect**. Inspection copies reported fields only;
   `card_issues_accept` remains false.

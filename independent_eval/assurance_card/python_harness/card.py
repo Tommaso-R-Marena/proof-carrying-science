@@ -16,11 +16,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from .canonical import seal_card, verify_card_integrity
 from .hashing import sha256_paths
 from .html_render import LIMITATIONS_BANNER, render_assurance_card_html
 from .inspect_lane import inspect_evidence
 from .paths import find_certificate, package_root, repo_root, resolve_evidence_root
 from .pcs_cli import run_pcs_verify
+from .program_context import attach_program_context
 
 CARD_VERSION = "0.1.0"
 _init = package_root() / "__init__.py"
@@ -138,10 +140,14 @@ def compare_lanes(
 def collect_provenance(
     *,
     inspected_paths: list[str],
+    generated_at_utc: str | None = None,
 ) -> dict[str, Any]:
     root = repo_root()
+    stamp = generated_at_utc or datetime.now(timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
     return {
-        "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at_utc": stamp,
         "git_head": _git_head(root),
         "repo_root": str(root) if root else None,
         "input_sha256": sha256_paths(inspected_paths),
@@ -163,6 +169,8 @@ def build_assurance_card(
     *,
     runner: Callable[..., subprocess.CompletedProcess[str]] | None = None,
     skip_verify: bool = False,
+    attach_results: list[str | Path] | None = None,
+    generated_at_utc: str | None = None,
 ) -> dict[str, Any]:
     """Build the full Assurance Card dict for an evidence path."""
     root = resolve_evidence_root(evidence)
@@ -188,10 +196,14 @@ def build_assurance_card(
     inspected = list(inspection.get("source_paths") or [])
     if cert is not None and str(cert) not in inspected:
         inspected.append(str(cert))
-    provenance = collect_provenance(inspected_paths=inspected)
+    provenance = collect_provenance(
+        inspected_paths=inspected,
+        generated_at_utc=generated_at_utc,
+    )
     lane_consistency = compare_lanes(authority=authority, inspection=inspection)
+    program_context = attach_program_context(attach_results)
 
-    return {
+    card = {
         "format": "pcs-assurance-card-v1",
         "card_issues_accept": False,
         "inspection_is_not_authority": True,
@@ -199,6 +211,7 @@ def build_assurance_card(
         "limitations_banner": LIMITATIONS_BANNER,
         "authority": authority,
         "inspection": inspection,
+        "program_context": program_context,
         "provenance": provenance,
         "lane_consistency": lane_consistency,
         "non_claims": [
@@ -207,8 +220,11 @@ def build_assurance_card(
             "no security proof",
             "no merge recommendation",
             "computational PASS is not empirical adequacy",
+            "program_context digests are not authority",
+            "card_integrity seal does not certify science",
         ],
     }
+    return seal_card(card)
 
 
 def _output_paths(out: str | Path, fmt: str) -> dict[str, Path]:
@@ -267,8 +283,16 @@ def build_and_write(
     fmt: str = "both",
     runner: Callable[..., subprocess.CompletedProcess[str]] | None = None,
     skip_verify: bool = False,
+    attach_results: list[str | Path] | None = None,
+    generated_at_utc: str | None = None,
 ) -> tuple[dict[str, Any], dict[str, Path]]:
-    card = build_assurance_card(evidence, runner=runner, skip_verify=skip_verify)
+    card = build_assurance_card(
+        evidence,
+        runner=runner,
+        skip_verify=skip_verify,
+        attach_results=attach_results,
+        generated_at_utc=generated_at_utc,
+    )
     written = write_card(card, out, fmt=fmt)
     return card, written
 
@@ -302,6 +326,22 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Skip authority-lane pcs verify (inspection + provenance only)",
     )
+    p.add_argument(
+        "--attach-results",
+        action="append",
+        default=[],
+        metavar="PATH",
+        help=(
+            "Optional sibling results dir or SUMMARY.json to digest into "
+            "program_context (non-authority; repeatable). ABSENT ≠ PASS."
+        ),
+    )
+    p.add_argument(
+        "--generated-at",
+        default=None,
+        metavar="UTC",
+        help="Optional fixed UTC timestamp (ISO-8601) for deterministic seals",
+    )
     return p
 
 
@@ -313,6 +353,8 @@ def main(argv: list[str] | None = None) -> int:
             args.out,
             fmt=args.format,
             skip_verify=bool(args.skip_verify),
+            attach_results=list(args.attach_results or []),
+            generated_at_utc=args.generated_at,
         )
     except FileNotFoundError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
@@ -327,6 +369,12 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"AUTHORITY_OK {auth.get('ok')} RETURNCODE {auth.get('returncode')} "
         f"DURATION_S {auth.get('duration_seconds')}"
+    )
+    integrity = verify_card_integrity(card)
+    digest = (card.get("card_integrity") or {}).get("digest_sha256")
+    print(
+        f"CARD_INTEGRITY ok={integrity.get('ok')} digest={digest} "
+        f"canonicalization=json-sort-keys-compact-utf8-v1"
     )
     print(
         f"LANE_CONSISTENCY {(card.get('lane_consistency') or {}).get('overall')} "

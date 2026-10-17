@@ -15,8 +15,10 @@ REQUIRED_TOP_KEYS = {
     "limitations_banner",
     "authority",
     "inspection",
+    "program_context",
     "provenance",
     "lane_consistency",
+    "card_integrity",
     "non_claims",
 }
 
@@ -64,6 +66,8 @@ def test_card_json_schema_fields(fixture_bundle: Path, tmp_path: Path):
     assert written["json"].is_file()
     loaded = json.loads(written["json"].read_text(encoding="utf-8"))
     assert loaded["card_issues_accept"] is False
+    assert loaded["card_integrity"]["digest_sha256"]
+    assert loaded["program_context"]["is_authority"] is False
 
 
 def test_build_assurance_card_provenance_hashes(fixture_bundle: Path):
