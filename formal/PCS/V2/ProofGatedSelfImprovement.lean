@@ -19,6 +19,9 @@ def corpus : List Int := [-3, -2, -1, 0, 1, 2, 3]
 def target (x : Int) : Int := relu (2*x + 1)
 def correct (m : Neuron) (x : Int) : Prop := predict m x = target x
 
+instance instCorrectDecidable (m : Neuron) (x : Int) : Decidable (correct m x) :=
+  inferInstanceAs (Decidable (predict m x = target x))
+
 def loss (m : Neuron) : Nat :=
   (corpus.map (fun x => (predict m x - target x).natAbs)).sum
 
@@ -75,13 +78,9 @@ private theorem expandsB_sound (xs : List Int) (a b : Neuron)
 
 theorem accept_sound {a b : Neuron} (h : accept a b = true) :
     admissible a b := by
-  have hp : (preservesB corpus a b && expandsB corpus a b) = true ∧
-      decide (loss b < loss a) = true := by
-    exact Bool.and_eq_true.mp (by simpa only [accept] using h)
-  have ht : preservesB corpus a b = true ∧ expandsB corpus a b = true :=
-    Bool.and_eq_true.mp hp.1
-  exact ⟨preservesB_sound corpus a b ht.1,
-    expandsB_sound corpus a b ht.2, (decide_eq_true_eq).mp hp.2⟩
+  simp only [accept, Bool.and_eq_true] at h
+  exact ⟨preservesB_sound corpus a b h.1.1,
+    expandsB_sound corpus a b h.1.2, (decide_eq_true_eq).mp h.2⟩
 
 theorem accepted_preserves {a b : Neuron} (h : accept a b = true)
     (x : Int) (hx : x ∈ corpus) (ha : correct a x) : correct b x :=
