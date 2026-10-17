@@ -98,6 +98,34 @@ theorem two_accepted_steps {a b c : Neuron}
     loss c < loss a :=
   Nat.lt_trans (accepted_strict_loss hbc) (accepted_strict_loss hab)
 
+/-! For arbitrary accepted chains, the exact nonnegative loss is a
+    decreasing natural-number potential, bounding how many accepted
+    self-modifications may occur. -/
+inductive CertifiedTrace : Nat → Neuron → Neuron → Prop where
+  | zero (m : Neuron) : CertifiedTrace 0 m m
+  | extend {n : Nat} {a b c : Neuron} :
+      CertifiedTrace n a b → accept b c = true → CertifiedTrace (n+1) a c
+
+theorem trace_preserves {n : Nat} {a b : Neuron}
+    (h : CertifiedTrace n a b) (x : Int) (hx : x ∈ corpus)
+    (ha : correct a x) : correct b x := by
+  induction h with
+  | zero m => exact ha
+  | extend hp hc ih => exact accepted_preserves hc x hx (ih ha)
+
+theorem trace_length_bound {n : Nat} {a b : Neuron}
+    (h : CertifiedTrace n a b) : n + loss b ≤ loss a := by
+  induction h with
+  | zero m => simp
+  | extend hp hc ih =>
+      have hd := accepted_strict_loss hc
+      omega
+
+theorem trace_steps_bounded {n : Nat} {a b : Neuron}
+    (h : CertifiedTrace n a b) : n ≤ loss a := by
+  have hb := trace_length_bound h
+  omega
+
 theorem perfect_cannot_advance (m : Neuron)
     (hperfect : ∀ x ∈ corpus, correct m x) (candidate : Neuron) :
     accept m candidate = false := by
