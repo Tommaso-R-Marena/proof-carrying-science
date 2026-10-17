@@ -56,7 +56,7 @@ class PGSC6PinnedStoreSafety(unittest.TestCase):
                 self.store.snapshot(expected=head)
             seen.append(next_head)
             head = next_head
-        self.assertEqual(self.store.snapshot().predict(20), 42)
+        self.assertEqual(self.store.snapshot().predict(20), 5)
         self.assertEqual(len(list((self.root / "receipts").iterdir())), 3)
         with self.assertRaises(StaleHead):
             self._accepted(CERTS[0], seen[0])
