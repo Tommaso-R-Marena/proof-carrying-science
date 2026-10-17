@@ -126,7 +126,8 @@ def all_integer_equal(a: Net, b: Net) -> Decision:
         slope, offset = _delta(a, b, cell.point())
         if not _zero(slope, offset, cell):
             x = _counterexample(slope, offset, cell)
-            assert a.predict(x) != b.predict(x)
+            if a.predict(x) == b.predict(x):
+                raise AssertionError('invalid equivalence witness')
             return Decision(False, "all_integer_equal", len(cells), cuts, x)
     return Decision(True, "all_integer_equal", len(cells), cuts, None)
 
@@ -146,8 +147,8 @@ def universal_correctness_preserved(old: Net, new: Net, target: Net) -> Decision
             x = (-b) // a  # sole old-correct point if within cell
             if not cell.contains(x) or na*x+nb == 0:
                 continue
-        assert old.predict(x) == target.predict(x)
-        assert new.predict(x) != target.predict(x)
+        if old.predict(x) != target.predict(x) or new.predict(x) == target.predict(x):
+            raise AssertionError('invalid lost-correctness witness')
         return Decision(False, "universal_correctness_preserved",
                         len(cells), cuts, x)
     return Decision(True, "universal_correctness_preserved",
