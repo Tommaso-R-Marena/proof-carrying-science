@@ -1,0 +1,45 @@
+name: PCS PGSC6 Independent Rollback Checkpoint (Research Only)
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/pgsc6_external_anchor*.py'
+      - 'research/proof-gated-self-improvement-v1/tests/test_pgsc6_external_anchor.py'
+      - '.github/workflows/pcs-pgsc6-external-checkpoint.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  external-checkpoint-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Mocked-Lean host-only fault-injection and full-store rollback tests
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -p 'test_pgsc6_external_anchor.py' -v
+      - name: Rebuild V6 Lean checker and complete V5/V6 axiom audits
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          bash scripts/proof_gated_ci.sh
+      - name: Three real Lean-authorized checkpointed updates and full-store rollback attack
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/proof-gated-self-improvement-v1
+          python pgsc6_external_anchor_live.py
+      - name: Re-run all research Python regressions
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -v
