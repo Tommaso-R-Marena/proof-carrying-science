@@ -1,25 +1,54 @@
-# Bugs and ambiguities — Workstream B
+# Bugs and ambiguities observed (Workstream B)
 
-Observed during independent scientific falsification evaluation. These are **evaluation findings**, not production patches.
+Findings from black-box evaluation. None of these were “fixed” in production
+PCS (out of writable scope).
 
 ## Ambiguities
 
-1. **Classic `pcs certify` vs v0.6 check surface**  
-   Case `02_pkpd_with_peak_threshold_note` documents `pkpd_peak_concentration_threshold` as a v0.6-certified check that the classic certify kernel does not execute. Scientific users may confuse “declared in docs” with “executed by `pcs certify`.”
+1. **Classic kernel vs v0.6 check registry.**  
+   `pkpd_peak_concentration_threshold` is a certified built-in in
+   `pcs/check_registry_v06.py`, but classic `pcs certify` / `pcs.kernel`
+   does not execute it. Case `02_pkpd_with_peak_threshold_note` therefore
+   declares the peak check while verifying contract+match via classic CLI.
 
-2. **Discovery ground truth is synthetic**  
-   Precision/recall in `discovery_benchmark/` measure agreement with evaluator-authored labels on synthetic projects, not with human scientific intent.
+2. **Certify emits certificates for failed claims.**  
+   `pcs certify` returns exit code 0 even when claims are not
+   `COMPUTATIONALLY_SUPPORTED`. Independent evaluators must inspect claim
+   statuses, not only process exit codes. Documented as expected behavior
+   for negative controls.
 
-3. **Inadequacy examples still use PCS-supported checks**  
-   “Scientifically inadequate” models that still satisfy `pkpd_contract` positivity constraints are intentionally extreme but still mathematically well-formed. PCS correctly verifies the declared computational claim; empirical inadequacy is out of band by design.
+3. **Discovery abstention is implicit.**  
+   `pcs discover-v06` does not emit an explicit `abstain: true` field.
+   Abstention is inferred as “no checks selected into the draft at the
+   configured minimum confidence.”
 
-## Observed behaviors (not claimed defects)
+4. **Scientific workflow examples use external predicates.**  
+   `examples/scientific_workflow_v2` and `v3` rely on specialized kernels /
+   external claim namespaces beyond the classic built-in check set. The
+   casebook therefore mirrors their *scientific concerns* with
+   PCS-supported built-ins (`reaction_balance`, `unit_compatible`, PKPD)
+   rather than re-executing the full signed v2/v3 experiment scripts.
 
-1. **Tampered prediction tables** produce certificates where at least one claim is not `COMPUTATIONALLY_SUPPORTED` (expected rejection path).
-2. **Post-certify artifact byte tamper** causes `pcs verify` to fail (expected).
-3. **Blank external-validity templates** score as incomplete on empty population/endpoint fields; `empirical_adequacy_established` is always `false` in the scorer.
+5. **Unit spelling equivalence.**  
+   `mg/L` vs `ug/mL` and `mol/L` vs `mmol/mL` are accepted as compatible by
+   the unit checker; whether a given spelling is the *correct measurand*
+   remains out of scope (Task 8 example 03).
 
-## Non-findings
+## Bugs / sharp edges for evaluators
 
-- No production `pcs/` or `formal/` code was modified to accommodate this harness.
-- No human participant results were invented for external validity.
+1. **Tampered evidence after certify.**  
+   Mutating packaged artifact bytes after `pcs certify` correctly causes
+   `pcs verify` to fail. Mutating only the in-tree source without
+   re-certifying is a different failure mode and must be staged explicitly
+   in metamorphic tests.
+
+2. **PKPD prediction formatting.**  
+   Predictions must use the strict decimal CSV subset. Fixture generation
+   freezes adapter-aligned Decimal tables; hand-edited floats may fail
+   `pkpd_reference_match` at `1e-9` relative tolerance.
+
+3. **Reaction JSON vs check payload.**  
+   Discovery recommends `reaction_balance` from reactants/products JSON, but
+   classic manifests embed reactants/products inside the check object. The
+   on-disk `reaction.json` is evidence/context; the check fields are
+   authoritative for certify.

@@ -1,32 +1,94 @@
-# Technical report — Workstream B (scientific falsification)
+# Technical Report — Workstream B: Scientific Falsification
 
 ## Scope
 
-Independent black-box evaluation under `independent_eval/scientific_falsification/**` only. PCS is exercised via CLI (`pcs certify`, `pcs verify`, `pcs discover-v06`). Production and formal trees are untouched.
+Independent, black-box evaluation of Proof-Carrying Science (PCS) scientific
+assurance surfaces. Writable paths are limited to
+`independent_eval/scientific_falsification/**`. Production `pcs/`, `formal/`,
+`research/`, `site/`, and `.github/` are not modified.
 
-## What was built
+## Tasks delivered
 
-1. **Casebook (Task 7)** — seven frozen workflows covering PK/PD contract+replay, mass-action balance, unit compatibility, CSV disjointness, composite multi-check workflows, and alternate PK parameters. Each case ships `CASE.md`, `license.json`, positive manifests, and negative-control artifacts where applicable.
-2. **Inadequacy (Task 8)** — three synthetic examples where computational verification PASSes while empirical adequacy is explicitly not established.
-3. **Metamorphic testing (Task 9)** — valid transforms (subject rename, claim reorder) and invalid transforms (dose break, post-certify tamper) compared against CLI oracles.
-4. **Discovery benchmark (Task 10)** — synthetic projects with ground-truth labels; read-only `discover-v06` metrics.
-5. **External validity (Task 11)** — blank protocol templates, completeness rubric, and scorer that refuses to invent participants/results and never equates PCS verify with empirical adequacy.
+### Task 7 — Scientific casebook
 
-## Method notes
+Seven self-contained workflows under `casebook/cases/`:
 
-- Fixture generation may import PCS adapters once to freeze Decimal-faithful PK/PD tables; tests assert via CLI.
-- Fixture hashes recorded in `fixtures/FIXTURE_HASHES.json`.
-- Exact rebuild command: `PYTHONPATH=. python3 independent_eval/scientific_falsification/python_harness/build_fixtures.py`
+| ID | PCS checks |
+| --- | --- |
+| `01_pkpd_one_compartment` | `pkpd_contract`, `pkpd_reference_match` |
+| `02_pkpd_with_peak_threshold_note` | classic PKPD + v0.6 peak declaration |
+| `03_mass_action_reaction_balance` | `reaction_balance` (mass-action stoichiometry) |
+| `04_unit_compatible_concentration` | `unit_compatible` |
+| `05_csv_disjoint_cohorts` | `csv_disjoint` |
+| `06_scientific_workflow_composite` | `reaction_balance` + `unit_compatible` |
+| `07_pkpd_alt_parameters` | alternate PKPD parameter set |
 
-## Remaining weaknesses
+Each case includes assumptions, expected results, negative controls,
+reproduction commands, and CC0-1.0 license metadata. Upstream examples
+(`examples/pkpd_one_compartment`, `scientific_mass_action`,
+`scientific_workflow_v2/v3`) are referenced read-only.
 
-- External validity remains a protocol kit only until real laboratories enroll.
-- Discovery metrics depend on synthetic ground truth.
-- Classic certify path does not exercise every v0.6 check type; peak-threshold is documented, not classically executed.
-- Metamorphic suite currently anchors on the PK/PD casebook project; extending to every case is planned follow-up.
+### Task 8 — Correctness vs inadequacy
 
-## Prioritized proposals (for future Codex/Aristotle work — not implemented here)
+Three synthetic examples under `inadequacy/examples/` where PCS computational
+checks PASS while empirical/scientific adequacy remains explicitly
+unestablished:
 
-1. Document per-check which CLI path (`certify` classic vs v0.6) actually executes it.
-2. Add a reviewer-facing “computational PASS ≠ empirical adequacy” banner in evidence packages.
-3. Expand metamorphic coverage to reaction_balance and unit_compatible cases.
+1. Physiologically absurd but analytically consistent PKPD
+2. Element-balanced reaction without biological pathway validation
+3. Dimensionally compatible units without measurand adequacy
+
+### Task 9 — Metamorphic harness
+
+`python_harness/metamorphic.py` applies valid transforms (subject rename, claim
+reorder) and invalid transforms (dose/reaction break, unit incompatibility,
+post-certify artifact tamper). Oracle outcomes are compared to black-box
+`pcs certify` / `pcs verify` subprocess results.
+
+### Task 10 — Discovery benchmark
+
+Synthetic projects under `discovery_benchmark/projects/` with
+`ground_truth.json`. Evaluation calls `pcs discover-v06` read-only and reports
+precision, recall, and abstention accuracy.
+
+### Task 11 — External-validity protocols
+
+Blank protocol templates and a completeness rubric under
+`external_validity/`. Scoring software never invents participants or results;
+`empirical_adequacy_established` is always `false`.
+
+## Exact commands
+
+```bash
+# From repository root
+python3 -m pip install -e '.[dev]'
+export PATH="$HOME/.local/bin:$PATH"
+
+# Rebuild immutable fixtures + SHA-256 manifest
+PYTHONPATH=. python3 independent_eval/scientific_falsification/python_harness/build_fixtures.py
+
+# Run tests
+PYTHONPATH=independent_eval/scientific_falsification \
+  python3 -m pytest -q independent_eval/scientific_falsification/tests
+
+# Full campaign (optional)
+PYTHONPATH=independent_eval/scientific_falsification \
+  python3 -m python_harness.run_all --skip-build
+
+# Single case certify/verify
+pcs certify independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/manifest.json \
+  -o /tmp/pcs-sf-01
+pcs verify /tmp/pcs-sf-01/certificate.json
+```
+
+## Fixture integrity
+
+`fixtures/FIXTURE_HASHES.json` records SHA-256 digests for frozen casebook,
+inadequacy, discovery, and external-validity inputs. Tests assert bit-stability.
+
+## Non-claims
+
+- PCS verify PASS ≠ empirical scientific adequacy
+- No human participants were enrolled; no study results were invented
+- Peak-threshold execution is a v0.6 surface; classic `pcs certify` covers
+  contract + reference match for case 02

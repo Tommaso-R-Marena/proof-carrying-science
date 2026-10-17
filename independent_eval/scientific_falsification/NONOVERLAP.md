@@ -1,23 +1,157 @@
-# Non-overlap — scientific_falsification
+# NONOVERLAP report — scientific_falsification
 
 Branch: `feature/independent-eval-scientific-falsification-c8bb`  
-Writable scope: `independent_eval/scientific_falsification/**` only.
+Base: `origin/main`  
+Remote: `https://github.com/Tommaso-R-Marena/proof-carrying-science.git`
 
-## Forbidden (unchanged)
+## Writable scope (enforced)
 
-- `formal/**`, `research/**`, `pcs/**`, `site/**`, `.github/**`
-- PR #117 / PR #120 production hardening trees
-- Core tests, lockfiles, CI workflows
+- `independent_eval/scientific_falsification/**`
+- `independent_eval/README.md` only if absent (already present; **not edited**)
 
-## Changed paths (this PR)
+## Explicitly not modified
 
-All paths under `independent_eval/scientific_falsification/**` (harness, fixtures, casebook, inadequacy, metamorphic docs, discovery benchmark, external_validity templates, tests, results, reports).
+- `formal/**`
+- `research/**`
+- `pcs/**`
+- `site/**`
+- `.github/**`
+- Existing tests under `tests/**`
+- Lockfiles
+- PR #117 / #120 branches
+- Sibling workstreams: `independent_eval/protocol_adversarial/**`,
+  `independent_eval/repro_tcb/**`, `independent_eval/reviewer_adoption/**`
 
-## Disjoint peers
+## All changed paths (this workstream)
 
-| Workstream | Path prefix |
-| --- | --- |
-| A | `independent_eval/protocol_adversarial/**` |
-| B (this) | `independent_eval/scientific_falsification/**` |
-| C | `independent_eval/repro_tcb/**` |
-| D | `independent_eval/reviewer_adoption/**` |
+Paths are relative to the repository root. Exact list is regenerated at
+commit time via:
+
+```bash
+git diff --name-only origin/main...HEAD -- independent_eval/scientific_falsification
+```
+
+Expected tree (authoritative):
+
+```
+independent_eval/scientific_falsification/
+  README.md
+  TECHNICAL_REPORT.md
+  BUGS_AND_AMBIGUITIES.md
+  TEST_INVENTORY.md
+  NONOVERLAP.md
+  casebook/
+  inadequacy/
+  metamorphic/
+  discovery_benchmark/
+  external_validity/
+  fixtures/
+  python_harness/
+  tests/
+  results/          # may be empty or gitignored campaign outputs
+```
+
+## Non-interference statement
+
+No production PCS package code, formal Lean sources, CI workflows, or
+site content were altered. Evaluation treats PCS as a system under test via
+CLI/`python -m pcs.cli` entrypoints.
+
+## Concrete changed paths (pre-commit snapshot)
+
+```
+independent_eval/scientific_falsification/.gitignore
+independent_eval/scientific_falsification/BUGS_AND_AMBIGUITIES.md
+independent_eval/scientific_falsification/NONOVERLAP.md
+independent_eval/scientific_falsification/README.md
+independent_eval/scientific_falsification/TECHNICAL_REPORT.md
+independent_eval/scientific_falsification/TEST_INVENTORY.md
+independent_eval/scientific_falsification/casebook/CASEBOOK_INDEX.json
+independent_eval/scientific_falsification/casebook/INDEX.json
+independent_eval/scientific_falsification/casebook/README.md
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/CASE.md
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/license.json
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/manifest.json
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/model.json
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/negative_controls/bad_clearance_unit_model.json
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/negative_controls/tampered_predictions.csv
+independent_eval/scientific_falsification/casebook/cases/01_pkpd_one_compartment/predictions.csv
+independent_eval/scientific_falsification/casebook/cases/02_pkpd_with_peak_threshold_note/CASE.md
+independent_eval/scientific_falsification/casebook/cases/02_pkpd_with_peak_threshold_note/license.json
+independent_eval/scientific_falsification/casebook/cases/02_pkpd_with_peak_threshold_note/manifest.json
+independent_eval/scientific_falsification/casebook/cases/02_pkpd_with_peak_threshold_note/model.json
+independent_eval/scientific_falsification/casebook/cases/02_pkpd_with_peak_threshold_note/peak_threshold_declaration.json
+independent_eval/scientific_falsification/casebook/cases/02_pkpd_with_peak_threshold_note/predictions.csv
+independent_eval/scientific_falsification/casebook/cases/03_mass_action_reaction_balance/CASE.md
+independent_eval/scientific_falsification/casebook/cases/03_mass_action_reaction_balance/license.json
+independent_eval/scientific_falsification/casebook/cases/03_mass_action_reaction_balance/manifest.json
+independent_eval/scientific_falsification/casebook/cases/03_mass_action_reaction_balance/negative_controls/unbalanced_reaction.json
+independent_eval/scientific_falsification/casebook/cases/03_mass_action_reaction_balance/reaction.json
+independent_eval/scientific_falsification/casebook/cases/04_unit_compatible_concentration/CASE.md
+independent_eval/scientific_falsification/casebook/cases/04_unit_compatible_concentration/license.json
+independent_eval/scientific_falsification/casebook/cases/04_unit_compatible_concentration/manifest.json
+independent_eval/scientific_falsification/casebook/cases/04_unit_compatible_concentration/negative_controls/incompatible_units_check.json
+independent_eval/scientific_falsification/casebook/cases/05_csv_disjoint_cohorts/CASE.md
+independent_eval/scientific_falsification/casebook/cases/05_csv_disjoint_cohorts/license.json
+independent_eval/scientific_falsification/casebook/cases/05_csv_disjoint_cohorts/manifest.json
+independent_eval/scientific_falsification/casebook/cases/05_csv_disjoint_cohorts/negative_controls/overlapping_test.csv
+independent_eval/scientific_falsification/casebook/cases/05_csv_disjoint_cohorts/test.csv
+independent_eval/scientific_falsification/casebook/cases/05_csv_disjoint_cohorts/train.csv
+independent_eval/scientific_falsification/casebook/cases/06_scientific_workflow_composite/CASE.md
+independent_eval/scientific_falsification/casebook/cases/06_scientific_workflow_composite/license.json
+independent_eval/scientific_falsification/casebook/cases/06_scientific_workflow_composite/manifest.json
+independent_eval/scientific_falsification/casebook/cases/06_scientific_workflow_composite/negative_controls/broken_units.json
+independent_eval/scientific_falsification/casebook/cases/06_scientific_workflow_composite/reaction.json
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/CASE.md
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/license.json
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/manifest.json
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/model.json
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/negative_controls/bad_clearance_unit_model.json
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/negative_controls/tampered_predictions.csv
+independent_eval/scientific_falsification/casebook/cases/07_pkpd_alt_parameters/predictions.csv
+independent_eval/scientific_falsification/discovery_benchmark/README.md
+independent_eval/scientific_falsification/discovery_benchmark/ground_truth.json
+independent_eval/scientific_falsification/discovery_benchmark/projects/ambiguous_notes/notes.json
+independent_eval/scientific_falsification/discovery_benchmark/projects/pk_without_pd/model.json
+independent_eval/scientific_falsification/discovery_benchmark/projects/pkpd_detectable/model.json
+independent_eval/scientific_falsification/discovery_benchmark/projects/pkpd_detectable/predictions.csv
+independent_eval/scientific_falsification/discovery_benchmark/projects/reaction_detectable/rxn.json
+independent_eval/scientific_falsification/external_validity/README.md
+independent_eval/scientific_falsification/external_validity/rubrics/completeness_rubric.json
+independent_eval/scientific_falsification/external_validity/templates/external_validity_protocol_blank.json
+independent_eval/scientific_falsification/external_validity/templates/population_transport_protocol_blank.json
+independent_eval/scientific_falsification/external_validity/templates/reviewer_adequacy_checklist_blank.json
+independent_eval/scientific_falsification/fixtures/FIXTURE_HASHES.json
+independent_eval/scientific_falsification/inadequacy/INDEX.json
+independent_eval/scientific_falsification/inadequacy/README.md
+independent_eval/scientific_falsification/inadequacy/examples/01_correct_but_inadequate_pkpd/README.md
+independent_eval/scientific_falsification/inadequacy/examples/01_correct_but_inadequate_pkpd/license.json
+independent_eval/scientific_falsification/inadequacy/examples/01_correct_but_inadequate_pkpd/manifest.json
+independent_eval/scientific_falsification/inadequacy/examples/01_correct_but_inadequate_pkpd/model.json
+independent_eval/scientific_falsification/inadequacy/examples/01_correct_but_inadequate_pkpd/predictions.csv
+independent_eval/scientific_falsification/inadequacy/examples/02_balanced_but_biologically_inadequate/README.md
+independent_eval/scientific_falsification/inadequacy/examples/02_balanced_but_biologically_inadequate/license.json
+independent_eval/scientific_falsification/inadequacy/examples/02_balanced_but_biologically_inadequate/manifest.json
+independent_eval/scientific_falsification/inadequacy/examples/02_balanced_but_biologically_inadequate/reaction.json
+independent_eval/scientific_falsification/inadequacy/examples/03_units_ok_quantity_inadequate/README.md
+independent_eval/scientific_falsification/inadequacy/examples/03_units_ok_quantity_inadequate/license.json
+independent_eval/scientific_falsification/inadequacy/examples/03_units_ok_quantity_inadequate/manifest.json
+independent_eval/scientific_falsification/metamorphic/README.md
+independent_eval/scientific_falsification/python_harness/__init__.py
+independent_eval/scientific_falsification/python_harness/build_fixtures.py
+independent_eval/scientific_falsification/python_harness/discovery_metrics.py
+independent_eval/scientific_falsification/python_harness/external_validity.py
+independent_eval/scientific_falsification/python_harness/hashing.py
+independent_eval/scientific_falsification/python_harness/inadequacy_eval.py
+independent_eval/scientific_falsification/python_harness/metamorphic.py
+independent_eval/scientific_falsification/python_harness/paths.py
+independent_eval/scientific_falsification/python_harness/pcs_cli.py
+independent_eval/scientific_falsification/python_harness/pkpd_tables.py
+independent_eval/scientific_falsification/python_harness/run_all.py
+independent_eval/scientific_falsification/results/.gitkeep
+independent_eval/scientific_falsification/tests/test_casebook.py
+independent_eval/scientific_falsification/tests/test_discovery_benchmark.py
+independent_eval/scientific_falsification/tests/test_external_validity.py
+independent_eval/scientific_falsification/tests/test_inadequacy.py
+independent_eval/scientific_falsification/tests/test_metamorphic.py
+```
