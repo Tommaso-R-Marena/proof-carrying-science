@@ -103,12 +103,16 @@ inadequacy, discovery, and external-validity inputs. Tests assert bit-stability.
 
 ## Observed results (this deepening)
 
-- Inadequacy index lists **4** examples; all computationally PASS while
-  `empirical_adequacy_established` remains false by construction.
-- Metamorphic campaign covers **4** casebook surfaces (PK/PD, reaction,
-  units, composite); applicable invalid transforms are selected per check
-  surface (units-only cases skip dose/reaction break).
-- Pytest suite collects **24** tests after deepening (was 20).
+From `python_harness.run_all --skip-build` after the deepening commit:
+
+- Inadequacy: `example_count=4`, `computational_pass_count=4`,
+  `empirical_adequacy_established_count=0`.
+- Metamorphic campaign: 4/4 cases with `all_oracles_passed`
+  (`01`, `03`, `04`, `06`); per-case reports under `results/`.
+- Casebook fixtures: 7/7 positives ok.
+- Discovery: macro precision/recall and abstention accuracy all `1.0`
+  on the synthetic benchmark.
+- Pytest: **24 passed** (was 20 before deepening).
 
 ## Remaining weaknesses / non-claims
 
