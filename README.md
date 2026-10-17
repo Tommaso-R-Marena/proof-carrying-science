@@ -799,3 +799,13 @@ Normative boundary and supported formats:
 `docs/REPRODUCIBILITY_ENVIRONMENT_V06.md`.
 
 Recorded scientific transport data can now carry [fresh Lean trace proofs](docs/PCS_TRANSPORT_TRACE_KERNEL_V1.md), including exact timestamps, recurrence, recorded invariants and a rational-to-real embedding.
+
+## Experimental calibration
+
+Fresh Lean certificates for real-valued regression optimality and globally minimax
+response sensitivity, with a frozen real-data Delft yacht experiment:
+[protocol, theorem catalogue and trust boundaries](docs/PCS_EXPERIMENTAL_CALIBRATION_V1.md).
+
+The [executed real-data report](docs/PCS_EXPERIMENTAL_CALIBRATION_V1_REPORT.md)
+includes all 22 hull groups, held-out comparisons, exact minimax limits and
+conditional model-error exclusions.

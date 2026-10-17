@@ -1,0 +1,43 @@
+{
+  "format": "pcs-experimental-calibration-protocol-v1",
+  "frozen_before_analysis": true,
+  "created_utc": "2026-10-17T00:08:06.770806+00:00",
+  "base_main": "c9f89ff8c44a0a7225525f4ab50fa87cb3855fe2",
+  "data_sha256": "00dfecc0fc01ddd4c90b558a3ac11b246df8ebcfea130724223475a9a67f0ea1",
+  "data_selection": "All 308 rows; group by exact first five dimensionless hull columns; require 22 groups of 14 distinct Froude values; sort each group by exact Froude. No exclusions.",
+  "split": "Within each hull, even zero-based sorted positions are training (7); odd positions are held-out (7). Public archival data; retrospective, not blind or independent replication.",
+  "models": "Polynomial degree 1, 2, 3 separately for each hull; x=40*Froude; intercept included. Every model is reported.",
+  "fitting": "Exact rational ordinary least squares; candidate producer uses Gaussian elimination. Receiver trusts no optimizer output and requires fresh Lean normal-equation/real-global-optimality proofs.",
+  "full_data_diagnostic": "Also fit all 14 rows for each degree; certify global residual sum-of-squares lower bounds over all real coefficients. These diagnostics do not enter held-out training.",
+  "queries": "Every held-out Froude, plus Froude=3/5 outside the observed range; compute exact dual weights and sharp L-infinity response-perturbation sensitivity.",
+  "perturbation_scenarios": [
+    "0",
+    "1/1000",
+    "1/100"
+  ],
+  "perturbation_interpretation": "Chosen adversarial response sensitivity scenarios, not measured assay precision, confidence intervals, or established coverage of physical truth. Predictor uncertainty is not modeled.",
+  "metrics": [
+    "per-hull and pooled held-out SSE and maximum absolute error for all degrees",
+    "full-data globally minimal SSE by model class",
+    "exact query L1 gains and sharp adversarial attainment",
+    "optional NumPy lstsq sanity comparison; relative/absolute tolerance 1e-9",
+    "degree-comparison counts across all 22 hulls"
+  ],
+  "adversarial_controls": [
+    "wrong fitted coefficient",
+    "false zero residual bound",
+    "altered data bytes",
+    "forged dual weights",
+    "too-small sensitivity radius",
+    "injected Lean syntax",
+    "model order or held-out split substitution"
+  ],
+  "evidence_policy": "Freeze source hashes before the final campaign; run fresh receiving processes; retain all failures and successes without overwriting historical evidence.",
+  "scientific_acceptance": false,
+  "pcs_authority": false,
+  "physical_model_validity": "OPEN",
+  "measurement_error_bound": "ASSUMED_SCENARIO_ONLY",
+  "external_domain_review": "NOT_OBTAINED",
+  "training_external_traces": false,
+  "spend": 0
+}

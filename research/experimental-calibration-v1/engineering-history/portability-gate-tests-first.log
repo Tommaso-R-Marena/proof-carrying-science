@@ -1,0 +1,364 @@
+FFFFFFFF                                                                 [100%]
+=================================== FAILURES ===================================
+__ test_numeric_gate_refuses_substitution_before_proof_execution[source_hash] __
+
+attack = 'source_hash'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28c087a0>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+__ test_numeric_gate_refuses_substitution_before_proof_execution[data_prefix] __
+
+attack = 'data_prefix'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28c0f5c0>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+_ test_numeric_gate_refuses_substitution_before_proof_execution[primary_statement] _
+
+attack = 'primary_statement'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28c0cd10>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+_ test_numeric_gate_refuses_substitution_before_proof_execution[extra_import] __
+
+attack = 'extra_import'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28c0eb70>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+_ test_numeric_gate_refuses_substitution_before_proof_execution[missing_helper] _
+
+attack = 'missing_helper'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28cc1850>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+_ test_numeric_gate_refuses_substitution_before_proof_execution[project_axiom] _
+
+attack = 'project_axiom'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28cc3380>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+_ test_numeric_gate_refuses_substitution_before_proof_execution[failed_report] _
+
+attack = 'failed_report'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28c0f530>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+___ test_numeric_gate_refuses_substitution_before_proof_execution[case_data] ___
+
+attack = 'case_data'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-21/test_numeric_gate_refuses_subs7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde28c0c230>
+
+    @pytest.mark.parametrize('attack',['source_hash','data_prefix','primary_statement','extra_import',
+        'missing_helper','project_axiom','failed_report','case_data'])
+    def test_numeric_gate_refuses_substitution_before_proof_execution(attack,tmp_path,monkeypatch):
+>       module=verifier();portable=tmp_path/'proof';shutil.copytree(module.PORTABLE,portable)
+               ^^^^^^^^^^
+
+tests/test_calibration_numeric_evidence.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_calibration_numeric_evidence.py:14: in verifier
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Recompile the retained experiment's exact numerical proof capsule.
+    
+    The frozen experiment identity and the current execution identity remain distinct.
+    This gate grants no empirical or physical authority.
+    """
+    from pathlib import Path
+    import argparse
+    import json
+    import re
+    import subprocess
+    import sys
+    import os
+    import tempfile
+    import time
+    
+    ROOT=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(ROOT))
+>   from audit_lean_source import audit,active_code
+E   ModuleNotFoundError: No module named 'audit_lean_source'
+
+scripts/verify_calibration_numeric_evidence.py:18: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[source_hash]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[data_prefix]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[primary_statement]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[extra_import]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[missing_helper]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[project_axiom]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[failed_report]
+FAILED tests/test_calibration_numeric_evidence.py::test_numeric_gate_refuses_substitution_before_proof_execution[case_data]
+8 failed in 0.13s
