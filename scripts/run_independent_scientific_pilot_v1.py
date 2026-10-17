@@ -44,6 +44,14 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="apply the demo producer-key closeout plan after archival packaging",
     )
+    parser.add_argument(
+        "--deterministic-fixture",
+        action="store_true",
+        help=(
+            "fixture-only: pin frozen_at/generated_at for byte-comparable regenerations; "
+            "not a production reproducibility claim"
+        ),
+    )
     args = parser.parse_args(argv)
     try:
         evidence = run_independent_pilot_v1(
@@ -51,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
             lean_authority_path=args.lean_authority,
             overwrite=args.overwrite,
             apply_closeout=args.apply_closeout,
+            deterministic_fixture=args.deterministic_fixture,
         )
     except IndependentPilotError as exc:
         print(f"ERROR: IndependentPilotError: {exc}", file=sys.stderr)

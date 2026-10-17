@@ -33,10 +33,19 @@ def _authority_available() -> bool:
         return False
 
 
-pytestmark = pytest.mark.skipif(
-    not _authority_available(),
-    reason="pcs-lean-authority unavailable",
-)
+def _require_authority() -> None:
+    if _authority_available():
+        return
+    if os.environ.get("PCS_REQUIRE_LEAN_AUTHORITY") == "1":
+        pytest.fail(
+            "pcs-lean-authority unavailable; required by PCS_REQUIRE_LEAN_AUTHORITY=1"
+        )
+    pytest.skip("pcs-lean-authority unavailable")
+
+
+@pytest.fixture(autouse=True)
+def _authority_gate():
+    _require_authority()
 
 
 def _keys(tmp: Path) -> tuple[Path, Path, str]:

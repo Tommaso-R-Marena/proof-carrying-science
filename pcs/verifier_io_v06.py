@@ -21,6 +21,7 @@ from .package_v06 import (
 from .signing import public_key_fingerprint
 from .verifier_v06 import verify_end_to_end_v06
 from .policy_v06 import apply_reviewer_policy_v06
+from .intake_verify_v06 import enforce_package_intake_lock_v06
 from .lean_authority_v06 import enforce_lean_authority_v06
 
 
@@ -156,6 +157,8 @@ def verify_package_directory_end_to_end_v06(
     shadow_bandit: bool = False,
     telemetry_sink: dict[str, Any] | None = None,
     lean_authority_path: str | Path | None = None,
+    require_intake_lock: bool = False,
+    expected_intake_semantic_hash: str | None = None,
     expected_build_provenance_fingerprint: str | None = None,
     expected_build_subject_sha256: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
@@ -191,6 +194,24 @@ def verify_package_directory_end_to_end_v06(
         public_key=public_key,
         expected_fingerprint=expected_fingerprint,
         authority_path=lean_authority_path,
+    )
+    certificate = authority_context.get("certificate")
+    if not isinstance(certificate, dict):
+        try:
+            from .byte_contract_v06 import (
+                V06ByteContractError,
+                parse_certificate_bytes_v06,
+            )
+
+            certificate = parse_certificate_bytes_v06(loaded["certificate_bytes"])
+        except V06ByteContractError:
+            certificate = None
+    result = enforce_package_intake_lock_v06(
+        result,
+        certificate=certificate if isinstance(certificate, dict) else None,
+        package_files=loaded["package_files"],
+        require_intake_lock=require_intake_lock,
+        expected_intake_semantic_hash=expected_intake_semantic_hash,
     )
     receipt = dict(result)
     receipt["public_key_fingerprint"] = result.get(

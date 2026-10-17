@@ -30,10 +30,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--lean-authority",
         default=None,
-        help="receiver-owned pcs-lean-authority binary path",
+        help=(
+            "explicit authority override (recorded as non-independent). "
+            "Default rebuilds pcs-lean-authority from a fresh formal checkout and "
+            "never inherits PCS_LEAN_AUTHORITY_BIN."
+        ),
     )
     parser.add_argument("--python", default=None, help="Python executable for venv creation")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--no-rebuild-lean-authority",
+        action="store_true",
+        help="require --lean-authority; refuse inherited PCS_LEAN_AUTHORITY_BIN",
+    )
     args = parser.parse_args(argv)
     try:
         summary = run_cleanroom_independent_pilot_v1(
@@ -41,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
             python_executable=args.python,
             lean_authority_path=args.lean_authority,
             overwrite=args.overwrite,
+            rebuild_lean_authority=not args.no_rebuild_lean_authority,
         )
     except IndependentPilotError as exc:
         print(f"ERROR: IndependentPilotError: {exc}", file=sys.stderr)

@@ -617,9 +617,75 @@ jobs:
       - name: Run cross-platform parser, canonicalization, and disclosure checks
         run: python -m pytest -q tests/test_strict_json.py tests/test_canonical_json_v06.py tests/test_public_release_history_audit.py tests/test_semantic_translation_v1.py tests/test_conditional_reasoning.py tests/test_intervention.py
 
+  independent-pilot-cleanroom:
+    name: independent-pilot-cleanroom
+    needs: source-policy
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12.14"
+      - name: Independent Lean rebuild and mandatory pilot/intake assurance
+        shell: bash
+        env:
+          PCS_REQUIRE_LEAN_AUTHORITY: "1"
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '${{ github.sha }}'
+          # Do not inherit a producer-owned authority binary.
+          unset PCS_LEAN_AUTHORITY_BIN || true
+          source scripts/activate_lean_428.sh
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          # Fresh authority build in an isolated formal tree (not reused from cache claims).
+          CLEAN_FORMAL="$RUNNER_TEMP/pcs-independent-formal"
+          rm -rf "$CLEAN_FORMAL"
+          mkdir -p "$CLEAN_FORMAL"
+          cp formal/lakefile.toml formal/lean-toolchain formal/lake-manifest.json \
+            formal/PCS.lean formal/PCSAuthority.lean "$CLEAN_FORMAL/"
+          cp -a formal/PCS "$CLEAN_FORMAL/PCS"
+          (cd "$CLEAN_FORMAL" && lake build pcs-lean-authority)
+          AUTHORITY="$CLEAN_FORMAL/.lake/build/bin/pcs-lean-authority"
+          test -x "$AUTHORITY"
+          AUTHORITY_SHA="$(sha256sum "$AUTHORITY" | awk '{print $1}')"
+          {
+            echo "PCS_INDEPENDENT_PILOT_HEAD_SHA=$(git rev-parse HEAD)"
+            echo "PCS_INDEPENDENT_AUTHORITY_SHA256=$AUTHORITY_SHA"
+            lean --version
+            lake --version
+            echo "PCS_LEAN_TOOLCHAIN_PIN=$(cat formal/lean-toolchain)"
+            echo "PCS_REQUIREMENTS_DEV_LOCK_SHA256=$(sha256sum requirements-dev.lock | awk '{print $1}')"
+          } | tee "$RUNNER_TEMP/independent-pilot-provenance.txt"
+          export PCS_LEAN_AUTHORITY_BIN="$AUTHORITY"
+          PCS_REQUIRE_LEAN_AUTHORITY=1 python -m pytest -q \
+            tests/test_intake_verify_v06.py \
+            tests/test_attest_v06_intake_lock.py \
+            tests/test_python_lean_archive_boundary_v06.py \
+            tests/test_independent_pilot_v1.py \
+            -k 'not cleanroom'
+          # Clean-room path rebuilds Lean again inside its own tree and must not
+          # inherit PCS_LEAN_AUTHORITY_BIN from this job environment.
+          unset PCS_LEAN_AUTHORITY_BIN
+          PCS_REQUIRE_LEAN_AUTHORITY=1 python -m pytest -q \
+            tests/test_independent_pilot_v1.py::test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env
+      - name: Retain independent pilot provenance
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: pcs-independent-pilot-provenance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/independent-pilot-provenance.txt
+          if-no-files-found: warn
+          retention-days: 14
+
   verified-public-integration:
     name: verified-public-integration
-    needs: [source-policy, core-full-gate, real-analysis-bridge, certiforge-integration, python-portability, lean-learning-loop]
+    needs: [source-policy, core-full-gate, real-analysis-bridge, certiforge-integration, python-portability, lean-learning-loop, independent-pilot-cleanroom]
     if: ${{ always() && github.event.repository.private == false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -633,6 +699,7 @@ jobs:
           CERTIFORGE: ${{ needs.certiforge-integration.result }}
           PORTABILITY: ${{ needs.python-portability.result }}
           LEAN_LEARNING: ${{ needs.lean-learning-loop.result }}
+          INDEPENDENT_PILOT: ${{ needs.independent-pilot-cleanroom.result }}
         run: |
           set -euo pipefail
           test "$SOURCE_POLICY" = success || { echo "::error::Source policy did not succeed ($SOURCE_POLICY)"; exit 1; }
@@ -641,4 +708,5 @@ jobs:
           test "$CERTIFORGE" = success || { echo "::error::PCS/CertiForge integration did not succeed ($CERTIFORGE)"; exit 1; }
           test "$PORTABILITY" = success || { echo "::error::Python portability suite did not succeed ($PORTABILITY)"; exit 1; }
           test "$LEAN_LEARNING" = success || { echo "::error::Actual Lean learning loop did not succeed ($LEAN_LEARNING)"; exit 1; }
+          test "$INDEPENDENT_PILOT" = success || { echo "::error::Independent pilot clean-room assurance did not succeed ($INDEPENDENT_PILOT)"; exit 1; }
           echo "PCS_PUBLIC_VERIFIED_INTEGRATION_PASS"

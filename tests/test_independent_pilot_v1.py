@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import shutil
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -19,6 +21,7 @@ from pcs.independent_pilot_v1 import (
 )
 from pcs.intake import validate_lock
 from pcs.lean_authority_v06 import V06LeanAuthorityError, resolve_lean_authority_v06
+from pcs.verifier_zip_v06 import verify_package_zip_end_to_end_v06
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,10 +38,26 @@ def _authority_available() -> bool:
         return False
 
 
-pytestmark = pytest.mark.skipif(
-    not _authority_available(),
-    reason="pcs-lean-authority unavailable; build with: cd formal && lake build pcs-lean-authority",
-)
+def _require_authority() -> None:
+    if _authority_available():
+        return
+    if os.environ.get("PCS_REQUIRE_LEAN_AUTHORITY") == "1":
+        pytest.fail(
+            "pcs-lean-authority unavailable; required by PCS_REQUIRE_LEAN_AUTHORITY=1. "
+            "Build with: cd formal && lake build pcs-lean-authority"
+        )
+    pytest.skip(
+        "pcs-lean-authority unavailable; build with: cd formal && lake build pcs-lean-authority"
+    )
+
+
+@pytest.fixture(autouse=True)
+def _authority_gate():
+    _require_authority()
+
+
+def _authority_path() -> Path | None:
+    return AUTHORITY if AUTHORITY.is_file() else None
 
 
 def test_stage_external_lab_is_synthetic_and_inventoried(tmp_path):
@@ -59,12 +78,15 @@ def test_trust_boundary_separates_proved_tested_and_unproved():
     assert TRUST_BOUNDARY["independently_tested_properties"]
     assert TRUST_BOUNDARY["unproved_environmental_assumptions"]
     assert "OPEN" in TRUST_BOUNDARY["scientific_vs_computational"]["empirical_scientific_validity"]
+    joined = " ".join(TRUST_BOUNDARY["independently_tested_properties"])
+    assert "expected_intake_semantic_hash" in joined
+    assert "deterministic fixture" in joined.lower() or "deterministic fixture mode" in joined
 
 
 def test_independent_pilot_end_to_end(tmp_path):
     evidence = run_independent_pilot_v1(
         tmp_path / "pilot",
-        lean_authority_path=AUTHORITY if AUTHORITY.is_file() else None,
+        lean_authority_path=_authority_path(),
         overwrite=True,
         apply_closeout=True,
     )
@@ -85,9 +107,9 @@ def test_independent_pilot_end_to_end(tmp_path):
     assert (out / "INDEPENDENT_PILOT_REPORT.md").is_file()
     assert (out / "reviewer" / "verification-receipt.json").is_file()
     assert (out / "reviewer" / "REVIEWER_REPORT.md").is_file()
+    assert (out / "reviewer" / "expected-intake-semantic-hash.txt").is_file()
     assert (out / "archive" / "TRUST_BOUNDARY_ASSESSMENT.json").is_file()
     assert (out / "adversarial" / "ADVERSARIAL_RESULTS.json").is_file()
-    # Private demo key must not be delivered to the reviewer archive.
     delivery = out / "archive" / "pilot-delivery"
     assert (delivery / "study.pcs.zip").is_file()
     assert (delivery / "trusted-public.pem").is_file()
@@ -98,6 +120,9 @@ def test_independent_pilot_end_to_end(tmp_path):
     assert receipt["valid"] is True
     assert receipt["authoritative"] is True
     assert receipt["bundle_sha256"] == evidence["bundle_sha256"]
+    assert receipt["intake_lock"]["preregistration_evidence"] == (
+        "reviewer_owned_expected_intake_semantic_hash"
+    )
 
     lock = validate_lock(
         json.loads((out / "producer" / "intake" / "pilot-intake.lock.json").read_text())
@@ -110,13 +135,13 @@ def test_independent_pilot_refuses_nonempty_output_without_overwrite(tmp_path):
     target.mkdir()
     (target / "keep.txt").write_text("x", encoding="utf-8")
     with pytest.raises(IndependentPilotError, match="already exists"):
-        run_independent_pilot_v1(target, lean_authority_path=AUTHORITY if AUTHORITY.is_file() else None)
+        run_independent_pilot_v1(target, lean_authority_path=_authority_path())
 
 
 def test_adversarial_suite_fail_closed_on_delivered_bundle(tmp_path):
     evidence = run_independent_pilot_v1(
         tmp_path / "pilot",
-        lean_authority_path=AUTHORITY if AUTHORITY.is_file() else None,
+        lean_authority_path=_authority_path(),
         overwrite=True,
     )
     adv = json.loads(
@@ -137,6 +162,7 @@ def test_adversarial_suite_fail_closed_on_delivered_bundle(tmp_path):
         assert required in names
         case = next(c for c in adv["cases"] if c["attack"] == required)
         assert case["rejected"] is True, case
+    assert evidence["stages"]["adversarial_pass"] is True
 
 
 def test_pilot_bundle_artifact_bytes_match_certificate_digests(tmp_path):
@@ -145,12 +171,9 @@ def test_pilot_bundle_artifact_bytes_match_certificate_digests(tmp_path):
     This is an independently tested property of the delivered ZIP, not a Lean
     refinement proof of the Python runtime.
     """
-    import hashlib
-    import zipfile
-
     evidence = run_independent_pilot_v1(
         tmp_path / "pilot",
-        lean_authority_path=AUTHORITY if AUTHORITY.is_file() else None,
+        lean_authority_path=_authority_path(),
         overwrite=True,
     )
     bundle = Path(evidence["paths"]["bundle"])
@@ -172,14 +195,120 @@ def test_pilot_bundle_artifact_bytes_match_certificate_digests(tmp_path):
     assert evidence["bundle_sha256"] == hashlib.sha256(bundle.read_bytes()).hexdigest()
 
 
-def test_cleanroom_independent_pilot(tmp_path):
-    if shutil.which("python3") is None:
-        pytest.skip("python3 unavailable")
-    summary = run_cleanroom_independent_pilot_v1(
-        tmp_path / "cleanroom",
-        lean_authority_path=AUTHORITY if AUTHORITY.is_file() else None,
+def test_independent_verification_of_identical_delivered_bundle(tmp_path):
+    """Priority 2.1: one delivered bundle verified twice → identical cryptographic identity."""
+    evidence = run_independent_pilot_v1(
+        tmp_path / "pilot",
+        lean_authority_path=_authority_path(),
         overwrite=True,
     )
+    bundle = Path(evidence["paths"]["bundle"])
+    public_key = tmp_path / "pilot" / "reviewer" / "trusted-public.pem"
+    fingerprint = evidence["signer_fingerprint"]
+    expected_intake = evidence["intake_semantic_hash"]
+    first_bytes = bundle.read_bytes()
+    first_sha = hashlib.sha256(first_bytes).hexdigest()
+
+    results = []
+    for idx in range(2):
+        checked = verify_package_zip_end_to_end_v06(
+            bundle,
+            public_key,
+            expected_fingerprint=fingerprint,
+            lean_authority_path=_authority_path(),
+            require_canonical_archive=True,
+            require_intake_lock=True,
+            expected_intake_semantic_hash=expected_intake,
+        )
+        assert checked["valid"] is True
+        assert checked["authoritative"] is True
+        assert checked["bundle_sha256"] == first_sha
+        assert checked["intake_lock"]["intake_semantic_hash"] == expected_intake
+        results.append(checked)
+
+    assert results[0]["bundle_sha256"] == results[1]["bundle_sha256"]
+    assert hashlib.sha256(bundle.read_bytes()).hexdigest() == first_sha
+
+
+def test_independent_regeneration_matches_semantics_not_necessarily_bytes(tmp_path):
+    """Priority 2.2: separate executions share scientific semantics; bundles may differ."""
+    first = run_independent_pilot_v1(
+        tmp_path / "regen-a",
+        lean_authority_path=_authority_path(),
+        overwrite=True,
+        deterministic_fixture=False,
+    )
+    second = run_independent_pilot_v1(
+        tmp_path / "regen-b",
+        lean_authority_path=_authority_path(),
+        overwrite=True,
+        deterministic_fixture=False,
+    )
+    assert first["certificate_semantic_hash"] == second["certificate_semantic_hash"]
+    assert first["intake_semantic_hash"] == second["intake_semantic_hash"]
+    assert first["signer_fingerprint"] == second["signer_fingerprint"]
+
+    lock_a = json.loads(
+        (tmp_path / "regen-a" / "producer" / "intake" / "pilot-intake.lock.json").read_text()
+    )
+    lock_b = json.loads(
+        (tmp_path / "regen-b" / "producer" / "intake" / "pilot-intake.lock.json").read_text()
+    )
+    # Dynamic frozen_at is producer metadata; when it differs, bundle bytes differ.
+    if lock_a["frozen_at"] != lock_b["frozen_at"]:
+        assert first["bundle_sha256"] != second["bundle_sha256"]
+    # Do not claim production regenerations are byte-identical.
+
+
+def test_deterministic_fixture_mode_byte_identical_regeneration(tmp_path):
+    """Explicit fixture mode: controlled timestamps/keys → comparable SHA-256 hashes."""
+    first = run_independent_pilot_v1(
+        tmp_path / "fixture-a",
+        lean_authority_path=_authority_path(),
+        overwrite=True,
+        deterministic_fixture=True,
+    )
+    second = run_independent_pilot_v1(
+        tmp_path / "fixture-b",
+        lean_authority_path=_authority_path(),
+        overwrite=True,
+        deterministic_fixture=True,
+    )
+    assert first["bundle_sha256"] == second["bundle_sha256"]
+    assert first["certificate_semantic_hash"] == second["certificate_semantic_hash"]
+    assert first["intake_semantic_hash"] == second["intake_semantic_hash"]
+    bytes_a = Path(first["paths"]["bundle"]).read_bytes()
+    bytes_b = Path(second["paths"]["bundle"]).read_bytes()
+    assert hashlib.sha256(bytes_a).hexdigest() == hashlib.sha256(bytes_b).hexdigest()
+    assert bytes_a == bytes_b
+
+
+def test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env(tmp_path, monkeypatch):
+    if shutil.which("python3") is None:
+        pytest.skip("python3 unavailable")
+    if shutil.which("lake") is None or shutil.which("lean") is None:
+        pytest.skip("lean/lake unavailable for clean-room rebuild")
+
+    # Poison the ambient env; clean-room must not inherit it.
+    poison = tmp_path / "poison-authority"
+    poison.write_text("not-an-authority", encoding="utf-8")
+    poison.chmod(0o755)
+    monkeypatch.setenv("PCS_LEAN_AUTHORITY_BIN", str(poison))
+
+    summary = run_cleanroom_independent_pilot_v1(
+        tmp_path / "cleanroom",
+        overwrite=True,
+        rebuild_lean_authority=True,
+    )
     assert summary["pass"] is True
+    assert summary["inherited_PCS_LEAN_AUTHORITY_BIN"] is False
     assert summary["evidence"]["stages"]["authoritative"] is True
+    provenance = summary["authority_provenance"]
+    assert provenance["rebuild_mode"] == "fresh-formal-checkout-lake-build"
+    assert provenance["inherited_PCS_LEAN_AUTHORITY_BIN"] is False
+    assert len(provenance["authority_sha256"]) == 64
+    assert Path(provenance["path"]).is_file()
+    assert Path(provenance["path"]).resolve() != poison.resolve()
     assert (tmp_path / "cleanroom" / "CLEANROOM_SUMMARY.json").is_file()
+    assert (tmp_path / "cleanroom" / "CLEANROOM_AUTHORITY_PROVENANCE.json").is_file()
+    assert (tmp_path / "cleanroom" / "formal-rebuild" / ".lake" / "build" / "bin" / "pcs-lean-authority").is_file()

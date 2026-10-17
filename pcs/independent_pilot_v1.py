@@ -79,10 +79,20 @@ TRUST_BOUNDARY: dict[str, Any] = {
     ],
     "independently_tested_properties": [
         "Intake semantic-hash freeze rejects post-hoc claim/assumption mutation.",
+        "Reviewer-side ZIP verification fail-closes on mismatched or substituted "
+        "signed pilot-intake-lock.json using only received package bytes.",
+        "Reviewer-owned expected_intake_semantic_hash (out of band) is distinct from "
+        "producer-supplied frozen_at metadata; frozen_at is never preregistration proof.",
         "Discovery draft cannot be attested until human confirmation.",
-        "Second-environment verification reproduces ACCEPT on exact bundle bytes.",
+        "Independent verification of one delivered bundle reproduces cryptographic "
+        "identity (bundle SHA-256) and accepted semantics.",
+        "Independent regeneration matches scientific semantic hashes while allowing "
+        "legitimate metadata/timestamp differences; byte-identical regeneration is "
+        "only claimed under explicitly labeled deterministic fixture mode.",
         "Adversarial mutations of artifacts, signatures, receipts, and archives "
         "are rejected (finite regression suite, not a security proof).",
+        "Clean-room reconstruction rebuilds pcs-lean-authority from source without "
+        "inheriting PCS_LEAN_AUTHORITY_BIN.",
         "Closeout plan requires every workspace file to be classified RETAIN or DELETE.",
     ],
     "unproved_environmental_assumptions": [
@@ -93,6 +103,8 @@ TRUST_BOUNDARY: dict[str, Any] = {
         "No claim of an actual external partner engagement or legal clearance.",
         "Python precheck observations must match Lean authority transcripts; "
         "arbitrary external validators remain outside Lean authority.",
+        "Production bundles are not expected to be byte-identical across separate "
+        "executions when frozen_at, generated_at, or cryptographic inputs differ.",
     ],
     "scientific_vs_computational": {
         "computational_verification": (
@@ -357,9 +369,19 @@ def _confirm_or_use_manifest(project: Path, intake_lock: Mapping[str, Any]) -> P
     return manifest
 
 
-def _freeze_intake(project: Path, locks_dir: Path) -> dict[str, Any]:
+def _freeze_intake(
+    project: Path,
+    locks_dir: Path,
+    *,
+    frozen_at: str | None = None,
+) -> dict[str, Any]:
     lock_path = locks_dir / "pilot-intake.lock.json"
-    result = freeze_intake_file(project / "pilot_intake.json", lock_path, overwrite=True)
+    result = freeze_intake_file(
+        project / "pilot_intake.json",
+        lock_path,
+        overwrite=True,
+        frozen_at=frozen_at,
+    )
     return result
 
 
@@ -671,12 +693,18 @@ def run_independent_pilot_v1(
     lean_authority_path: str | Path | None = None,
     overwrite: bool = False,
     apply_closeout: bool = False,
+    deterministic_fixture: bool = False,
 ) -> dict[str, Any]:
     """Execute the complete bounded independent-pilot workflow.
 
     Stages: intake freeze → discovery → confirmation → semantic hashing /
     attestation → Lean-authoritative verify → second-environment verify →
     reviewer receipt → adversarial fail-closed suite → archival/closeout plan.
+
+    ``deterministic_fixture=True`` pins ``frozen_at`` and ``generated_at`` plus the
+    demo key seed so regenerations can be byte-compared. That mode is explicitly
+    labeled fixture-only; production pilots must not claim byte-identical
+    regeneration when timestamps legitimately differ.
     """
     out = Path(output_dir).resolve()
     if out.exists():
@@ -709,8 +737,18 @@ def run_independent_pilot_v1(
     private_key, public_key, fingerprint = _demo_keypair(producer / "keys")
 
     # A. Intake freeze before attestation / result packaging.
-    intake_lock = _freeze_intake(lab, producer / "intake")
+    intake_lock = _freeze_intake(
+        lab,
+        producer / "intake",
+        frozen_at=GENERATED_AT if deterministic_fixture else None,
+    )
     lock_path = producer / "intake" / "pilot-intake.lock.json"
+    # Reviewer-owned expected hash (simulated out-of-band channel).
+    expected_intake_hash = intake_lock["intake_semantic_hash"]
+    (reviewer / "expected-intake-semantic-hash.txt").write_text(
+        expected_intake_hash + "\n",
+        encoding="utf-8",
+    )
 
     # Artifact discovery + human confirmation (automated confirmation in this demo
     # records explicit confirmation of the bounded draft; it is not authenticated
@@ -773,6 +811,8 @@ def run_independent_pilot_v1(
             expected_fingerprint=fingerprint,
             lean_authority_path=lean_authority_path or authority.get("path"),
             require_canonical_archive=True,
+            require_intake_lock=True,
+            expected_intake_semantic_hash=expected_intake_hash,
         )
     except (V06BundleVerificationError, V06LeanAuthorityError) as exc:
         raise IndependentPilotError(f"second-environment verification failed: {exc}") from exc
@@ -781,6 +821,17 @@ def run_independent_pilot_v1(
             f"second-environment verification was not authoritative ACCEPT: "
             f"valid={verification.get('valid')} authoritative={verification.get('authoritative')} "
             f"errors={verification.get('errors')} stage={verification.get('failed_stage')}"
+        )
+    intake_check = verification.get("intake_lock") or {}
+    if intake_check.get("valid") is not True:
+        raise IndependentPilotError(
+            f"reviewer-side intake lock verification failed: {intake_check.get('errors')}"
+        )
+    if intake_check.get("preregistration_evidence") != (
+        "reviewer_owned_expected_intake_semantic_hash"
+    ):
+        raise IndependentPilotError(
+            "reviewer-owned expected intake hash was not bound during verification"
         )
 
     # Persist a reviewer receipt binding exact bundle bytes (strip non-JSON bytes).
@@ -1002,21 +1053,128 @@ def _implementation_markdown(
     return "\n".join(lines)
 
 
+def _lean_toolchain_versions(env: Mapping[str, str]) -> dict[str, str]:
+    versions: dict[str, str] = {"lean": "unavailable", "lake": "unavailable"}
+    for tool in ("lean", "lake"):
+        try:
+            proc = subprocess.run(
+                [tool, "--version"],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=60,
+                env=dict(env),
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+        if proc.returncode == 0:
+            versions[tool] = (proc.stdout or proc.stderr or "").strip().splitlines()[0]
+    return versions
+
+
+def _build_cleanroom_lean_authority(
+    formal_dst: Path,
+    *,
+    env: Mapping[str, str],
+) -> dict[str, Any]:
+    """Rebuild pcs-lean-authority from a fresh formal checkout copy.
+
+    Does not read or inherit ``PCS_LEAN_AUTHORITY_BIN``. The producer tree under
+    ``formal/.lake`` is never used as the authority binary source.
+    """
+    root = _repo_root()
+    formal_src = root / "formal"
+    if not formal_src.is_dir():
+        raise IndependentPilotError(f"formal sources missing: {formal_src}")
+
+    if formal_dst.exists():
+        shutil.rmtree(formal_dst)
+    formal_dst.mkdir(parents=True, exist_ok=False)
+
+    for name in ("lakefile.toml", "lean-toolchain", "lake-manifest.json", "PCS.lean", "PCSAuthority.lean"):
+        src = formal_src / name
+        if not src.is_file():
+            raise IndependentPilotError(f"missing formal bootstrap file: {src}")
+        shutil.copyfile(src, formal_dst / name)
+    shutil.copytree(formal_src / "PCS", formal_dst / "PCS")
+
+    build_env = dict(env)
+    build_env.pop("PCS_LEAN_AUTHORITY_BIN", None)
+
+    versions = _lean_toolchain_versions(build_env)
+    if versions["lean"] == "unavailable" or versions["lake"] == "unavailable":
+        raise IndependentPilotError(
+            "clean-room Lean rebuild requires lean and lake on PATH "
+            "(source scripts/activate_lean_428.sh). "
+            f"Observed: {versions}"
+        )
+
+    try:
+        proc = subprocess.run(
+            ["lake", "build", "pcs-lean-authority"],
+            cwd=formal_dst,
+            env=build_env,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=1800,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise IndependentPilotError(f"clean-room lake build failed: {exc}") from exc
+
+    log_path = formal_dst / "cleanroom-lake-build.log"
+    log_path.write_text(
+        (proc.stdout or "") + "\n--- stderr ---\n" + (proc.stderr or ""),
+        encoding="utf-8",
+    )
+    if proc.returncode != 0:
+        raise IndependentPilotError(
+            "clean-room lake build pcs-lean-authority failed: "
+            f"{(proc.stderr or proc.stdout or '')[-4000:]}"
+        )
+
+    binary = formal_dst / ".lake" / "build" / "bin" / "pcs-lean-authority"
+    if not binary.is_file() or not os.access(binary, os.X_OK):
+        raise IndependentPilotError(
+            f"clean-room rebuild did not produce executable authority: {binary}"
+        )
+
+    toolchain_pin = (formal_dst / "lean-toolchain").read_text(encoding="utf-8").strip()
+    return {
+        "path": str(binary.resolve()),
+        "authority_sha256": _sha256_file(binary),
+        "lean_version": versions["lean"],
+        "lake_version": versions["lake"],
+        "lean_toolchain_pin": toolchain_pin,
+        "formal_source_commit": _git_head(),
+        "formal_tree": str(formal_dst.resolve()),
+        "build_log_sha256": _sha256_file(log_path),
+        "inherited_PCS_LEAN_AUTHORITY_BIN": False,
+        "rebuild_mode": "fresh-formal-checkout-lake-build",
+    }
+
+
 def run_cleanroom_independent_pilot_v1(
     output_dir: str | Path,
     *,
     python_executable: str | None = None,
     lean_authority_path: str | Path | None = None,
     overwrite: bool = False,
+    rebuild_lean_authority: bool = True,
 ) -> dict[str, Any]:
     """Run the pilot inside a fresh virtualenv without reusing site-packages caches.
 
     The clean-room runner:
     - creates a new temporary virtual environment;
-    - installs the repository editable package with hash-pinned lock constraints
-      when `uv` is available, otherwise pip + requirements-dev.lock hashes;
-    - invokes the pilot as a subprocess with a cleared credential-like env;
-    - refuses to inherit `PCS_LEAN_AUTHORITY_BIN` unless explicitly passed.
+    - installs the repository editable package with hash-pinned lock constraints;
+    - by default rebuilds ``pcs-lean-authority`` from a fresh formal checkout copy
+      and never inherits ``PCS_LEAN_AUTHORITY_BIN`` from the ambient environment;
+    - records Lean/lake versions, authority SHA-256, source commit, and provenance;
+    - invokes the pilot as a subprocess with a cleared credential-like env.
+
+    Passing ``lean_authority_path`` is an explicit reviewer override for tooling
+    experiments; it is recorded as non-independent. Production clean-room claims
+    require ``rebuild_lean_authority=True`` (the default).
     """
     out = Path(output_dir).resolve()
     if out.exists():
@@ -1045,6 +1203,7 @@ def run_cleanroom_independent_pilot_v1(
         venv_pip = venv_dir / "bin" / "pip"
 
     # Fresh install; disable user site and pip cache for the clean-room claim.
+    # Never propagate PCS_LEAN_AUTHORITY_BIN from the parent environment.
     env = {
         "PATH": os.environ.get("PATH", ""),
         "HOME": str(out / "home"),
@@ -1057,14 +1216,8 @@ def run_cleanroom_independent_pilot_v1(
     (out / "home").mkdir(exist_ok=True)
     (out / "tmp").mkdir(exist_ok=True)
 
-    # Propagate Lean toolchain PATH if present; do not propagate credentials.
-    for key in ("PATH",):
-        if key in os.environ:
-            env[key] = os.environ[key]
-    if lean_authority_path is not None:
-        env["PCS_LEAN_AUTHORITY_BIN"] = str(Path(lean_authority_path).resolve())
-    elif os.environ.get("PCS_LEAN_AUTHORITY_BIN"):
-        env["PCS_LEAN_AUTHORITY_BIN"] = os.environ["PCS_LEAN_AUTHORITY_BIN"]
+    lockfile = root / "requirements-dev.lock"
+    lockfile_sha = _sha256_file(lockfile) if lockfile.is_file() else None
 
     subprocess.run(
         [
@@ -1079,15 +1232,14 @@ def run_cleanroom_independent_pilot_v1(
         cwd=root,
         env=env,
     )
-    lock = root / "requirements-dev.lock"
-    if lock.is_file():
+    if lockfile.is_file():
         subprocess.run(
             [
                 str(venv_pip),
                 "install",
                 "--require-hashes",
                 "-r",
-                str(lock),
+                str(lockfile),
             ],
             check=True,
             cwd=root,
@@ -1100,6 +1252,41 @@ def run_cleanroom_independent_pilot_v1(
         env=env,
     )
 
+    authority_provenance: dict[str, Any]
+    authority_arg: str | None = None
+    if lean_authority_path is not None:
+        explicit = Path(lean_authority_path).resolve()
+        if not explicit.is_file() or not os.access(explicit, os.X_OK):
+            raise IndependentPilotError(
+                f"explicit lean_authority_path is not an executable: {explicit}"
+            )
+        authority_arg = str(explicit)
+        authority_provenance = {
+            "path": authority_arg,
+            "authority_sha256": _sha256_file(explicit),
+            "inherited_PCS_LEAN_AUTHORITY_BIN": False,
+            "rebuild_mode": "explicit-override-not-independent",
+            "formal_source_commit": _git_head(),
+            **_lean_toolchain_versions(env),
+        }
+    elif rebuild_lean_authority:
+        authority_provenance = _build_cleanroom_lean_authority(
+            out / "formal-rebuild",
+            env=env,
+        )
+        authority_arg = authority_provenance["path"]
+    else:
+        raise IndependentPilotError(
+            "clean-room pilot refuses to inherit PCS_LEAN_AUTHORITY_BIN; "
+            "rebuild Lean authority (default) or pass an explicit lean_authority_path"
+        )
+
+    _write_json(
+        out / "CLEANROOM_AUTHORITY_PROVENANCE.json",
+        authority_provenance,
+        overwrite=True,
+    )
+
     cmd = [
         str(venv_python),
         str(root / "scripts" / "run_independent_scientific_pilot_v1.py"),
@@ -1107,16 +1294,18 @@ def run_cleanroom_independent_pilot_v1(
         str(pilot_out),
         "--overwrite",
         "--apply-closeout",
+        "--lean-authority",
+        str(authority_arg),
     ]
-    if lean_authority_path is not None:
-        cmd.extend(["--lean-authority", str(lean_authority_path)])
-    elif env.get("PCS_LEAN_AUTHORITY_BIN"):
-        cmd.extend(["--lean-authority", env["PCS_LEAN_AUTHORITY_BIN"]])
+
+    # Ensure the pilot subprocess cannot fall back to a producer-owned env binary.
+    pilot_env = dict(env)
+    pilot_env.pop("PCS_LEAN_AUTHORITY_BIN", None)
 
     proc = subprocess.run(
         cmd,
         cwd=root,
-        env=env,
+        env=pilot_env,
         capture_output=True,
         text=True,
         check=False,
@@ -1138,6 +1327,9 @@ def run_cleanroom_independent_pilot_v1(
         and evidence.get("stages", {}).get("adversarial_pass") is True,
         "venv": str(venv_dir),
         "evidence": evidence,
+        "authority_provenance": authority_provenance,
+        "python_lockfile_sha256": lockfile_sha,
+        "inherited_PCS_LEAN_AUTHORITY_BIN": False,
         "stdout_sha256": hashlib.sha256(proc.stdout.encode()).hexdigest(),
         "stderr_sha256": hashlib.sha256(proc.stderr.encode()).hexdigest(),
     }

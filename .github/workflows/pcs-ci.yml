@@ -55,6 +55,8 @@ jobs:
       - name: Build mandatory Lean authority before product tests
         run: bash scripts/verify_lean.sh
       - name: Unit, integration, and product tests
+        env:
+          PCS_REQUIRE_LEAN_AUTHORITY: "1"
         run: pytest -q
       - name: Frozen adversarial campaign
         run: python scripts/adversarial_campaign.py

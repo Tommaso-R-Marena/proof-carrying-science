@@ -49,11 +49,21 @@ def intake_semantic_hash(intake: dict[str, Any]) -> str:
     return sha256_json(intake)
 
 
-def freeze_intake(intake: dict[str, Any]) -> dict[str, Any]:
+def freeze_intake(
+    intake: dict[str, Any],
+    *,
+    frozen_at: str | None = None,
+) -> dict[str, Any]:
+    """Freeze an intake inventory.
+
+    ``frozen_at`` defaults to the current UTC time. Callers that need a
+    deterministic fixture may supply an explicit timestamp; that value remains
+    producer-controlled metadata and is never treated as preregistration proof.
+    """
     normalized = deepcopy(validate_intake(intake))
     lock = {
         "lock_format": LOCK_FORMAT,
-        "frozen_at": datetime.now(timezone.utc).isoformat(),
+        "frozen_at": frozen_at or datetime.now(timezone.utc).isoformat(),
         "intake_semantic_hash": sha256_json(normalized),
         "intake": normalized,
     }
@@ -66,12 +76,13 @@ def freeze_intake_file(
     output_path: str | Path,
     *,
     overwrite: bool = False,
+    frozen_at: str | None = None,
 ) -> dict[str, Any]:
     try:
         intake = strict_json_load(input_path)
     except StrictJSONError as exc:
         raise PilotIntakeError(str(exc)) from exc
-    lock = freeze_intake(intake)
+    lock = freeze_intake(intake, frozen_at=frozen_at)
     out = Path(output_path)
     if out.exists() and not overwrite:
         raise PilotIntakeError(f"refusing to overwrite existing pilot intake lock: {out}")

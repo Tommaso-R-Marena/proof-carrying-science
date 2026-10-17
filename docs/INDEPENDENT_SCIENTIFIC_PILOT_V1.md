@@ -45,28 +45,49 @@ python scripts/run_independent_scientific_pilot_v1.py \
 pcs independent-pilot-v1 -o /tmp/pcs-independent-pilot \
   --lean-authority "$PCS_LEAN_AUTHORITY_BIN" --overwrite --apply-closeout
 
-# Clean-room reconstruction (fresh venv, hash-pinned deps, no user site / pip cache)
+# Clean-room reconstruction (fresh venv + fresh Lean rebuild; never inherits PCS_LEAN_AUTHORITY_BIN)
 python scripts/run_cleanroom_independent_pilot_v1.py \
   --output /tmp/pcs-cleanroom-pilot \
-  --lean-authority "$PCS_LEAN_AUTHORITY_BIN" \
   --overwrite
 
-# Tests
-python -m pytest -q tests/test_independent_pilot_v1.py
+# Fixture-only byte-comparable regeneration (not a production claim)
+python scripts/run_independent_scientific_pilot_v1.py \
+  --output /tmp/pcs-independent-pilot-fixture \
+  --lean-authority "$PCS_LEAN_AUTHORITY_BIN" \
+  --overwrite --deterministic-fixture
+
+# Tests (high-assurance CI sets PCS_REQUIRE_LEAN_AUTHORITY=1 so missing authority fails)
+PCS_REQUIRE_LEAN_AUTHORITY=1 python -m pytest -q \
+  tests/test_independent_pilot_v1.py \
+  tests/test_intake_verify_v06.py \
+  tests/test_attest_v06_intake_lock.py \
+  tests/test_python_lean_archive_boundary_v06.py
 ```
 
 ## Reviewer path (delivered package only)
 
-Given `study.pcs.zip`, `trusted-public.pem`, and the pinned fingerprint from `EVIDENCE_LEDGER.json`:
+Given `study.pcs.zip`, `trusted-public.pem`, the pinned fingerprint, and optionally a reviewer-owned expected intake semantic hash (out of band — not from the ZIP alone):
 
 ```bash
 pcs verify-v06-bundle study.pcs.zip \
   --public-key trusted-public.pem \
   --expected-signer-fingerprint <fingerprint> \
+  --require-intake-lock \
+  --expected-intake-semantic-hash <64-hex-from-out-of-band-channel> \
   --receipt verification-receipt.json
 ```
 
-Read `LIMITATIONS.md`, `REVIEWER_REPORT.md`, and `TRUST_BOUNDARY_ASSESSMENT.json` before interpreting claim decisions.
+`frozen_at` inside the signed lock is producer metadata only; it is not preregistration evidence. Read `LIMITATIONS.md`, `REVIEWER_REPORT.md`, and `TRUST_BOUNDARY_ASSESSMENT.json` before interpreting claim decisions.
+
+## Reproducibility
+
+| Scenario | Requirement |
+| --- | --- |
+| Independent verification of one delivered bundle | Identical `bundle_sha256` and accepted semantics |
+| Independent regeneration | Matching certificate/intake semantic hashes; bundle SHA may differ when `frozen_at` differs |
+| Deterministic fixture mode | Explicitly labeled; byte-identical SHA-256 under pinned timestamps/keys only |
+
+Do not claim production bundles are byte-identical across separate executions when timestamps or keys legitimately differ.
 
 ## Scientific vs computational boundary
 

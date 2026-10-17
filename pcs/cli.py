@@ -241,6 +241,8 @@ def cmd_verify_v06(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
             lean_authority_path=args.lean_authority,
+            require_intake_lock=args.require_intake_lock,
+            expected_intake_semantic_hash=args.expected_intake_semantic_hash,
             expected_build_provenance_fingerprint=(
                 args.expected_build_provenance_fingerprint
             ),
@@ -298,6 +300,8 @@ def cmd_verify_v06_bundle(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
             lean_authority_path=args.lean_authority,
+            require_intake_lock=args.require_intake_lock,
+            expected_intake_semantic_hash=args.expected_intake_semantic_hash,
             expected_build_provenance_fingerprint=(
                 args.expected_build_provenance_fingerprint
             ),
@@ -1468,6 +1472,7 @@ def cmd_independent_pilot_v1(args):
             lean_authority_path=args.lean_authority,
             overwrite=args.overwrite,
             apply_closeout=args.apply_closeout,
+            deterministic_fixture=args.deterministic_fixture,
         )
     except IndependentPilotError as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
@@ -1488,6 +1493,7 @@ def cmd_cleanroom_independent_pilot_v1(args):
             python_executable=args.python,
             lean_authority_path=args.lean_authority,
             overwrite=args.overwrite,
+            rebuild_lean_authority=not args.no_rebuild_lean_authority,
         )
     except IndependentPilotError as e:
         print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
@@ -2068,6 +2074,18 @@ def build_parser():
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
     )
     v6.add_argument(
+        "--require-intake-lock",
+        action="store_true",
+        help="require signed pilot-intake-lock.json and fail closed if missing/mismatched",
+    )
+    v6.add_argument(
+        "--expected-intake-semantic-hash",
+        help=(
+            "reviewer-owned expected intake semantic hash (64-hex), supplied out of band; "
+            "frozen_at alone is not preregistration evidence"
+        ),
+    )
+    v6.add_argument(
         "--expected-build-provenance-fingerprint",
         help="require external build provenance signed by this Ed25519 key fingerprint",
     )
@@ -2149,6 +2167,18 @@ def build_parser():
     v6b.add_argument(
         "--policy",
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
+    )
+    v6b.add_argument(
+        "--require-intake-lock",
+        action="store_true",
+        help="require signed pilot-intake-lock.json and fail closed if missing/mismatched",
+    )
+    v6b.add_argument(
+        "--expected-intake-semantic-hash",
+        help=(
+            "reviewer-owned expected intake semantic hash (64-hex), supplied out of band; "
+            "frozen_at alone is not preregistration evidence"
+        ),
     )
     v6b.add_argument(
         "--expected-build-provenance-fingerprint",
@@ -2503,16 +2533,36 @@ def build_parser():
         action="store_true",
         help="apply demo producer-key closeout after archival packaging",
     )
+    isp.add_argument(
+        "--deterministic-fixture",
+        action="store_true",
+        help=(
+            "fixture-only: pin frozen_at/generated_at for byte-comparable regenerations; "
+            "not a production reproducibility claim"
+        ),
+    )
     isp.set_defaults(func=cmd_independent_pilot_v1)
 
     crp = sub.add_parser(
         "cleanroom-independent-pilot-v1",
-        help="reconstruct the independent pilot inside a fresh hash-pinned virtualenv",
+        help=(
+            "reconstruct the independent pilot inside a fresh hash-pinned virtualenv "
+            "and rebuild pcs-lean-authority from a fresh formal checkout"
+        ),
     )
     crp.add_argument("-o", "--output", required=True, help="new clean-room output directory")
-    crp.add_argument("--lean-authority", default=None, help="receiver-owned pcs-lean-authority path")
+    crp.add_argument(
+        "--lean-authority",
+        default=None,
+        help="explicit authority override (recorded as non-independent; default rebuilds Lean)",
+    )
     crp.add_argument("--python", default=None, help="Python executable used to create the venv")
     crp.add_argument("--overwrite", action="store_true")
+    crp.add_argument(
+        "--no-rebuild-lean-authority",
+        action="store_true",
+        help="require --lean-authority; refuse inherited PCS_LEAN_AUTHORITY_BIN",
+    )
     crp.set_defaults(func=cmd_cleanroom_independent_pilot_v1)
 
     cp = sub.add_parser(

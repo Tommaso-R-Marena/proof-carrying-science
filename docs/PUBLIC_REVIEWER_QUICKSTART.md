@@ -41,9 +41,11 @@ cd formal && lake build pcs-lean-authority && cd ..
 pcs independent-pilot-v1 -o /tmp/pcs-independent-pilot --overwrite --apply-closeout
 ```
 
-Clean-room reconstruction (fresh venv, hash-pinned lockfile): `pcs cleanroom-independent-pilot-v1 -o /tmp/pcs-cleanroom-pilot --overwrite`.
+Clean-room reconstruction (fresh venv, hash-pinned lockfile, fresh Lean rebuild; never inherits `PCS_LEAN_AUTHORITY_BIN`): `pcs cleanroom-independent-pilot-v1 -o /tmp/pcs-cleanroom-pilot --overwrite`.
 
-This demonstrates independent computational assurance packaging. It does **not** close the genuine external-partner gate in issue #13 and does not establish empirical scientific validity.
+Reviewer verification of a delivered pilot ZIP should use `--require-intake-lock` and, when available out of band, `--expected-intake-semantic-hash`. Producer `frozen_at` is not preregistration evidence.
+
+This demonstrates independent computational assurance packaging. It does **not** close the genuine external-partner gate in issue #13 and does not establish empirical scientific validity, biological adequacy, clinical validity, or production security.
 
 ## Scientific users and contributors
 
