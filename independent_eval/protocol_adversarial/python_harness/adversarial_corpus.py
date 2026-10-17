@@ -1,11 +1,11 @@
-"""Generate ≥100 deterministic adversarial signed-bundle cases and actually verify them."""
+"""Generate ≥150 deterministic adversarial signed-bundle cases and actually verify them."""
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import shutil
-import struct
 import zipfile
 from pathlib import Path
 from typing import Any, Callable
@@ -13,7 +13,7 @@ from typing import Any, Callable
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from .paths import FIXTURES, REPO_ROOT, RESULTS
+from .paths import FIXTURES, RESULTS, resolve_lean_authority
 
 
 def _sha256(data: bytes) -> str:
@@ -53,6 +53,7 @@ def _build_positive_bundle(work: Path) -> dict[str, Any]:
         discover_project_v06,
         write_discovery_outputs_v06,
     )
+    from .paths import REPO_ROOT
 
     lab = work / "lab"
     lab.mkdir(parents=True, exist_ok=True)
@@ -70,7 +71,7 @@ def _build_positive_bundle(work: Path) -> dict[str, Any]:
     manifest = lab / "manifest.json"
     confirm_manifest_draft_v06(draft, manifest, project_root=lab, overwrite=True)
     priv, pub, fingerprint, _ = _demo_keys(work / "keys")
-    authority = REPO_ROOT / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+    authority = resolve_lean_authority()
     bundle = work / "positive.pcs.zip"
     result = attest_v06(
         manifest,
@@ -79,7 +80,7 @@ def _build_positive_bundle(work: Path) -> dict[str, Any]:
         pub,
         expected_fingerprint=fingerprint,
         overwrite=True,
-        lean_authority_path=authority if authority.is_file() else None,
+        lean_authority_path=authority,
     )
     return {
         "bundle": bundle,
@@ -105,17 +106,90 @@ def _rewrite_zip(src: Path, dst: Path, mutator: Callable[[str, bytes], tuple[str
             zout.writestr(out, data)
 
 
+def _mutate_json_member(
+    src: Path,
+    dst: Path,
+    member: str,
+    mutator: Callable[[dict[str, Any]], dict[str, Any] | bytes],
+) -> None:
+    def _inner(name: str, raw: bytes) -> tuple[str, bytes]:
+        if name != member:
+            return name, raw
+        obj = json.loads(raw.decode("utf-8"))
+        updated = mutator(obj)
+        if isinstance(updated, bytes):
+            return name, updated
+        return name, (json.dumps(updated, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
+
+    _rewrite_zip(src, dst, _inner)
+
+
+def _flip_signature_bit(src: Path, dst: Path, member: str, bit_index: int) -> None:
+    def _mut(obj: dict[str, Any]) -> dict[str, Any]:
+        sig_b64 = obj["signature"]
+        raw = bytearray(base64.b64decode(sig_b64, validate=True))
+        byte_i = (bit_index // 8) % len(raw)
+        bit_i = bit_index % 8
+        raw[byte_i] ^= 1 << bit_i
+        obj = dict(obj)
+        obj["signature"] = base64.b64encode(bytes(raw)).decode("ascii")
+        return obj
+
+    _mutate_json_member(src, dst, member, _mut)
+
+
+def _truncate_signature(src: Path, dst: Path, member: str, keep_chars: int) -> None:
+    def _mut(obj: dict[str, Any]) -> dict[str, Any]:
+        obj = dict(obj)
+        sig = obj.get("signature", "")
+        obj["signature"] = sig[:keep_chars] if isinstance(sig, str) else ""
+        return obj
+
+    _mutate_json_member(src, dst, member, _mut)
+
+
+def _swap_fingerprint_in_signature(src: Path, dst: Path, member: str, fake_fp: str) -> None:
+    def _mut(obj: dict[str, Any]) -> dict[str, Any]:
+        obj = dict(obj)
+        obj["public_key_fingerprint"] = fake_fp
+        return obj
+
+    _mutate_json_member(src, dst, member, _mut)
+
+
+def _rename_member(src: Path, dst: Path, old: str, new: str) -> None:
+    def _mut(name: str, raw: bytes) -> tuple[str, bytes]:
+        return (new if name == old else name), raw
+
+    _rewrite_zip(src, dst, _mut)
+
+
+def _duplicate_critical_conflict(src: Path, dst: Path, member: str, alt: bytes) -> None:
+    with zipfile.ZipFile(src, "r") as zin, zipfile.ZipFile(dst, "w", compression=zipfile.ZIP_STORED) as zout:
+        for info in zin.infolist():
+            out = zipfile.ZipInfo(info.filename, (1980, 1, 1, 0, 0, 0))
+            out.create_system = 3
+            out.external_attr = 0o100644 << 16
+            out.compress_type = zipfile.ZIP_STORED
+            zout.writestr(out, zin.read(info.filename))
+        dup = zipfile.ZipInfo(member, (1980, 1, 1, 0, 0, 0))
+        dup.create_system = 3
+        dup.external_attr = 0o100644 << 16
+        dup.compress_type = zipfile.ZIP_STORED
+        zout.writestr(dup, alt)
+
+
 def _verify(bundle: Path, public_key: Path, fingerprint: str) -> dict[str, Any]:
     from pcs.lean_authority_v06 import V06LeanAuthorityError
     from pcs.verifier_zip_v06 import V06BundleVerificationError, verify_package_zip_end_to_end_v06
 
-    authority = REPO_ROOT / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+    authority = resolve_lean_authority()
     try:
         result = verify_package_zip_end_to_end_v06(
             bundle,
             public_key,
             expected_fingerprint=fingerprint,
-            lean_authority_path=authority if authority.is_file() else None,
+            lean_authority_path=authority,
             require_canonical_archive=True,
         )
         return {
@@ -185,6 +259,14 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
         ),
     )
     add(
+        "certificate_empty_bytes",
+        lambda dst: _rewrite_zip(
+            positive["bundle"],
+            dst,
+            lambda n, r: (n, b"" if n == "certificate.json" else r),
+        ),
+    )
+    add(
         "certificate_truncated",
         lambda dst: _rewrite_zip(
             positive["bundle"],
@@ -198,6 +280,14 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
             positive["bundle"],
             dst,
             lambda n, r: (n, b"{}" if n == "package_manifest.json" else r),
+        ),
+    )
+    add(
+        "package_manifest_empty_bytes",
+        lambda dst: _rewrite_zip(
+            positive["bundle"],
+            dst,
+            lambda n, r: (n, b"" if n == "package_manifest.json" else r),
         ),
     )
     add(
@@ -219,6 +309,40 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
             ),
         ),
     )
+    add(
+        "package_signature_empty_bytes",
+        lambda dst: _rewrite_zip(
+            positive["bundle"],
+            dst,
+            lambda n, r: (n, b"" if n == "package_signature.json" else r),
+        ),
+    )
+    add(
+        "certificate_signature_empty_bytes",
+        lambda dst: _rewrite_zip(
+            positive["bundle"],
+            dst,
+            lambda n, r: (n, b"" if n == "certificate_signature.json" else r),
+        ),
+    )
+    # Empty normalized index (closest in-archive analogue to an empty authority transcript input)
+    add(
+        "normalized_index_empty",
+        lambda dst: _rewrite_zip(
+            positive["bundle"],
+            dst,
+            lambda n, r: (n, b"" if n == "normalized/index.json" else r),
+        ),
+    )
+    add(
+        "normalized_index_empty_object",
+        lambda dst: _rewrite_zip(
+            positive["bundle"],
+            dst,
+            lambda n, r: (n, b"{}" if n == "normalized/index.json" else r),
+        ),
+    )
+
     def drop_member(member: str) -> Callable[[Path], None]:
         def _b(dst: Path) -> None:
             with zipfile.ZipFile(positive["bundle"], "r") as zin, zipfile.ZipFile(
@@ -272,6 +396,73 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
         lambda dst: dst.write_bytes(b"PK\x03\x04not-really"),
     )
 
+    # Truncated / bit-flipped signature fields (inside signature records)
+    add(
+        "signature_truncated_package",
+        lambda dst: _truncate_signature(positive["bundle"], dst, "package_signature.json", 20),
+    )
+    add(
+        "signature_truncated_certificate",
+        lambda dst: _truncate_signature(positive["bundle"], dst, "certificate_signature.json", 20),
+    )
+    for idx in range(8):
+        add(
+            f"signature_bit_flip_package_{idx:02d}",
+            lambda dst, i=idx: _flip_signature_bit(
+                positive["bundle"], dst, "package_signature.json", i * 7 + 3
+            ),
+        )
+    for idx in range(8):
+        add(
+            f"signature_bit_flip_certificate_{idx:02d}",
+            lambda dst, i=idx: _flip_signature_bit(
+                positive["bundle"], dst, "certificate_signature.json", i * 11 + 5
+            ),
+        )
+
+    # Swapped public key fingerprint vs signer (record claims a different key)
+    attacker_fp = hashlib.sha256(b"pcs-independent-eval-attacker-fingerprint-v1").hexdigest()
+    add(
+        "swapped_fingerprint_package_sig",
+        lambda dst: _swap_fingerprint_in_signature(
+            positive["bundle"], dst, "package_signature.json", attacker_fp
+        ),
+    )
+    add(
+        "swapped_fingerprint_certificate_sig",
+        lambda dst: _swap_fingerprint_in_signature(
+            positive["bundle"], dst, "certificate_signature.json", attacker_fp
+        ),
+    )
+
+    # Member rename that breaks lock / inventory
+    for old, new in (
+        ("certificate.json", "certificate.json.bak"),
+        ("package_manifest.json", "package_manifest.json.renamed"),
+        ("package_signature.json", "sigs/package_signature.json"),
+        ("certificate_signature.json", "certificate_signature.txt"),
+        ("normalized/index.json", "normalized/index.json.moved"),
+    ):
+        safe = old.replace("/", "_").replace(".", "_")
+        add(
+            f"rename_breaks_lock_{safe}",
+            lambda dst, o=old, n=new: _rename_member(positive["bundle"], dst, o, n),
+        )
+
+    # Duplicated critical member with conflicting bytes
+    for member, alt in (
+        ("certificate.json", b'{"spec_version":"evil"}\n'),
+        ("package_manifest.json", b'{"package_format":"evil"}\n'),
+        ("package_signature.json", b'{"signature":"AAAA"}\n'),
+        ("certificate_signature.json", b'{"signature":"BBBB"}\n'),
+        ("normalized/index.json", b"[]\n"),
+    ):
+        safe = member.replace("/", "_").replace(".", "_")
+        add(
+            f"duplicate_conflict_{safe}",
+            lambda dst, m=member, a=alt: _duplicate_critical_conflict(positive["bundle"], dst, m, a),
+        )
+
     # Wrong-key verification cases (still attempt verify)
     attacker = Ed25519PrivateKey.generate()
     attacker_pub = work / "attacker.pem"
@@ -282,7 +473,7 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
         )
     )
 
-    # Expand mutations to reach ≥100 by parametric variants
+    # Expand mutations to reach ≥150 by parametric variants
     for idx in range(40):
         add(
             f"payload_byte_flip_{idx:02d}",
@@ -306,6 +497,22 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
                     (
                         r[:j] + bytes([(r[j] ^ 0xA5)]) + r[j + 1 :]
                         if n == "package_manifest.json" and len(r) > j
+                        else r
+                    ),
+                ),
+            ),
+        )
+    for idx in range(10):
+        add(
+            f"certificate_byte_flip_{idx:02d}",
+            lambda dst, i=idx: _rewrite_zip(
+                positive["bundle"],
+                dst,
+                lambda n, r, j=i: (
+                    n,
+                    (
+                        r[:j] + bytes([(r[j] ^ 0x3C)]) + r[j + 1 :]
+                        if n == "certificate.json" and len(r) > j
                         else r
                     ),
                 ),
@@ -382,6 +589,20 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
         }
     )
 
+    # Honest bundle verified under wrong signer key (fingerprint pin matches honest key → mismatch)
+    outcome = _verify(positive["bundle"], attacker_pub, positive["fingerprint"])
+    cases.append(
+        {
+            "id": "wrong_signer_key_honest_fingerprint",
+            "class": "negative",
+            "attack": "signer_key_vs_fingerprint_swap",
+            "expected_reject": True,
+            "bundle_sha256": _sha256(positive["bundle"].read_bytes()),
+            "constructed": True,
+            "verification": outcome,
+        }
+    )
+
     rejected_ok = 0
     positive_ok = 0
     for case in cases:
@@ -409,6 +630,7 @@ def generate_corpus(output_dir: Path | None = None) -> dict[str, Any]:
         "not_attempted": [
             c["id"] for c in cases if c["class"] == "negative" and c.get("result") == "FAIL_NOT_ATTEMPTED"
         ],
+        "mutation_families": sorted({c["attack"].split("_")[0] for c in cases if c["class"] == "negative"}),
         "cases": cases,
     }
     RESULTS.mkdir(parents=True, exist_ok=True)

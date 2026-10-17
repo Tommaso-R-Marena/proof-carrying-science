@@ -16,11 +16,11 @@ REPO = ROOT.parents[1]
 HARNESS = ROOT / "python_harness"
 sys.path.insert(0, str(ROOT))
 
-AUTHORITY = REPO / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+from python_harness.paths import resolve_lean_authority  # noqa: E402
 
 
 def _require_authority_for_corpus() -> None:
-    if AUTHORITY.is_file() and os.access(AUTHORITY, os.X_OK):
+    if resolve_lean_authority() is not None:
         return
     pytest.skip("pcs-lean-authority required for corpus generation/verification attempts")
 
@@ -84,7 +84,7 @@ def test_policy_confusion_same_validity(tmp_path):
     assert report["reviewers"][1]["unsafe_scientific_acceptance_inference"] is True
 
 
-def test_adversarial_corpus_at_least_100_with_attempted_verify(tmp_path):
+def test_adversarial_corpus_at_least_150_with_attempted_verify(tmp_path):
     _require_authority_for_corpus()
     from python_harness.adversarial_corpus import generate_corpus
     from python_harness import paths as p
@@ -92,14 +92,32 @@ def test_adversarial_corpus_at_least_100_with_attempted_verify(tmp_path):
     p.RESULTS = tmp_path / "results"
     p.FIXTURES = tmp_path / "fixtures"
     summary = generate_corpus(tmp_path / "fixtures" / "adversarial" / "corpus")
-    assert summary["case_count"] >= 100
+    assert summary["case_count"] >= 150
     attempted = sum(1 for c in summary["cases"] if c["verification"].get("attempted"))
-    assert attempted >= 100
+    assert attempted >= 150
     assert summary["positive_accepted"] >= 1
     # Negatives must be rejected after attempted verify (not merely unconstructed)
-    assert summary["negatives_rejected_after_attempted_verify"] >= 80
+    assert summary["negatives_rejected_after_attempted_verify"] >= 140
+    assert summary["not_attempted"] == [], summary["not_attempted"]
     # Any false accept is a recorded defect; fail the eval suite.
     assert summary["false_accepts"] == [], summary["false_accepts"]
+    attacks = {c["attack"] for c in summary["cases"] if c["class"] == "negative"}
+    assert any(a.startswith("signature_bit_flip_") for a in attacks)
+    assert any(a.startswith("signature_truncated_") for a in attacks)
+    assert any(a.startswith("swapped_fingerprint_") for a in attacks)
+    assert any(a.startswith("rename_breaks_lock_") for a in attacks)
+    assert any(a.startswith("duplicate_conflict_") for a in attacks)
+    assert "certificate_empty_bytes" in attacks
+    assert "normalized_index_empty" in attacks
+
+
+def test_lean_authority_discoverable():
+    auth = resolve_lean_authority()
+    # Prefer discoverable authority (local or shared worktree); skip only if truly absent.
+    if auth is None:
+        pytest.skip("pcs-lean-authority not discoverable in this environment")
+    assert auth.is_file()
+    assert os.access(auth, os.X_OK)
 
 
 def test_intake_chronology_distinguishes_frozen_at(tmp_path):

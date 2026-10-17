@@ -8,7 +8,7 @@ Tasks 1–6 under `independent_eval/protocol_adversarial/`, evaluating PCS as a 
 
 1. Independent Rust JCS reference (no PCS imports).
 2. Differential vectors vs PCS Python `canonicalize_jcs` / `jcs_sha256`.
-3. Deterministic adversarial corpus (≥100) with **attempted** `verify_package_zip_end_to_end_v06` for each case.
+3. Deterministic adversarial corpus (≥150) with **attempted** `verify_package_zip_end_to_end_v06` for each case.
 4. ZIP loader differential vs stdlib `zipfile`.
 5. Intake chronology distinguishing hash integrity, signatures, and reviewer-owned expected hashes.
 6. Dual-reviewer policy overlays that must not alter PCS validity.

@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from .paths import REPO_ROOT, RESULTS
+from .paths import REPO_ROOT, RESULTS, resolve_lean_authority
 
 
 def run_policy_confusion(work: Path) -> dict[str, Any]:
@@ -55,7 +55,7 @@ def run_policy_confusion(work: Path) -> dict[str, Any]:
         )
     )
     fingerprint = public_key_fingerprint(public)
-    authority = REPO_ROOT / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+    authority = resolve_lean_authority()
     bundle = work / "study.pcs.zip"
     attest_v06(
         manifest,
@@ -64,7 +64,7 @@ def run_policy_confusion(work: Path) -> dict[str, Any]:
         pub,
         expected_fingerprint=fingerprint,
         overwrite=True,
-        lean_authority_path=authority if authority.is_file() else None,
+        lean_authority_path=authority,
     )
 
     # Two reviewer policies: strict vs permissive placeholders
@@ -89,7 +89,7 @@ def run_policy_confusion(work: Path) -> dict[str, Any]:
         bundle,
         pub,
         expected_fingerprint=fingerprint,
-        lean_authority_path=authority if authority.is_file() else None,
+        lean_authority_path=authority,
         require_canonical_archive=True,
     )
 

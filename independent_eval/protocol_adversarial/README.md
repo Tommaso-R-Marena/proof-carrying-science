@@ -7,7 +7,7 @@ Black-box evaluation of PCS protocol surfaces. **Does not modify** production `p
 | Path | Purpose |
 | --- | --- |
 | `rust_jcs_ref/` | Independent Rust JCS/SHA-256 reference (`pcs-independent-jcs`) |
-| `python_harness/` | Differential tests, ≥100 adversarial corpus, ZIP differential, intake chronology, policy confusion, resource bounds |
+| `python_harness/` | Differential tests, ≥150 adversarial corpus, ZIP differential, intake chronology, policy confusion, resource bounds |
 | `fixtures/` | Generated immutable campaign inputs |
 | `results/` | Machine-readable campaign outputs |
 | `tests/` | Pytest suite |
