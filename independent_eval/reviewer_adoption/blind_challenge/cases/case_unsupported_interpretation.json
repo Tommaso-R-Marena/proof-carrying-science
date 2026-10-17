@@ -1,0 +1,24 @@
+{
+  "case_id": "RAW-INTERP-001",
+  "ground_truth_label": "unsupported_interpretation",
+  "title": "Causal interpretation without certificate",
+  "summary": "Narrative asserts treatment causes outcome Y from a scatter plot; no PCS certificate or receipt.",
+  "distinction_tags": [
+    "unsupported_interpretation",
+    "cryptographic_validity"
+  ],
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_CAUSE",
+        "statement": "Treatment causes outcome Y.",
+        "kind": "interpretive",
+        "assessment": {"status": "UNREPORTED"}
+      }
+    ],
+    "checks": [],
+    "integrity_alerts": ["no certificate", "no verification receipt"],
+    "limitations": ["Narrative only; no hash-locked artifacts."]
+  },
+  "reviewer_prompt": "Classify unsupported interpretation / absent cryptographic evidence as reject."
+}

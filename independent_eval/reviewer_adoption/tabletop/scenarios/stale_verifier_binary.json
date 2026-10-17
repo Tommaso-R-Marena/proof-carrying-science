@@ -1,18 +1,27 @@
 {
-  "id": "stale_verifier_binary",
+  "scenario_id": "TT-STALE-001",
   "title": "Stale verifier binary",
-  "prompt": "Reviewers may be using an outdated verifier. Identify risk and containment.",
-  "expected_containment": [
-    "pin_known_good_verifier_hash",
-    "reverify_with_current_authority",
-    "document_version_skew"
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "Reviewers may use an outdated verifier.",
+  "signals": [
+    "synthetic tabletop signal"
   ],
-  "forbidden_actions": [
-    "silently_accept_skew",
-    "disable_authority_checks"
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "What to do",
+      "acceptable_keywords": [
+        "pin hash",
+        "reverify",
+        "document skew",
+        "known good"
+      ]
+    }
   ],
-  "audit_artifacts": [
-    "binary_sha256",
-    "toolchain_record"
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Containment actions recorded",
+    "Incident evidence preservation noted"
   ]
 }

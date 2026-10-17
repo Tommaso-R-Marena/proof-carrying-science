@@ -1,23 +1,13 @@
 {
   "case_id": "BC-05",
-  "title": "Formally justified computational claim plus declared empirical validation",
+  "title": "Synthetic case labeled valid for computational axes only",
+  "ground_truth_label": "valid",
   "blinded": false,
   "evidence_summary": {
-    "certificate_present": true,
-    "receipt_present": true,
-    "artifact_hashes_match": true,
-    "signature_check": "valid",
-    "formal_justification": "present",
-    "empirical_validation": "declared_present",
-    "interpretation_claims": []
+    "certificate_present": true
   },
   "presented_materials": {
-    "claim_computational": "Predictions match declared model on grid G.",
-    "claim_empirical": "On held-out cohort H, absolute error ≤ τ under protocol P (declared in certificate).",
-    "claim_kind": "computational+empirical",
-    "artifacts": ["model.json", "predictions.csv", "empirical_metrics.json"],
-    "receipt_note": "Receipt reports COMPUTATIONALLY_SUPPORTED and EMPIRICALLY_SUPPORTED for the respective claims.",
-    "limitations": "Empirical claim scoped to cohort H and protocol P only; not general clinical efficacy."
+    "claim": "Synthetic case labeled valid for computational axes only"
   },
-  "reviewer_prompt": "Mark cryptographic validity, formal computational support, and empirical validation distinctly."
+  "reviewer_prompt": "Classify validity axes. Do not invent human results."
 }

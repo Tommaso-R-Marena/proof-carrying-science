@@ -1,23 +1,35 @@
 {
   "case_id": "RAW-CVSU-001",
   "ground_truth_label": "computationally_valid_scientifically_unsupported",
+  "distinction_tags": [
+    "formally_justified_computational",
+    "unsupported_interpretation"
+  ],
   "title": "Replay passes; clinical adequacy claimed",
-  "summary": "Computational replay of a synthetic PK equation succeeds, but the certificate also asserts clinical adequacy—an unsupported scientific leap.",
+  "summary": "Computational replay of a synthetic PK equation succeeds, but the certificate also asserts clinical adequacy\u2014an unsupported scientific leap.",
   "evidence_excerpt": {
     "claims": [
       {
         "id": "C_REPLAY",
         "statement": "Synthetic predictions match the declared one-compartment equation within tolerance.",
         "kind": "computational",
-        "assumptions": ["A_EQ"],
-        "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"}
+        "assumptions": [
+          "A_EQ"
+        ],
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
       },
       {
         "id": "C_CLINICAL",
         "statement": "The model is clinically adequate for dosing decisions.",
         "kind": "scientific",
-        "assumptions": ["A_EQ"],
-        "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"}
+        "assumptions": [
+          "A_EQ"
+        ],
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
       }
     ],
     "assumptions": [
@@ -32,7 +44,11 @@
       "No regulatory acceptance is established."
     ],
     "checks": [
-      {"id": "E_REPLAY", "type": "pkpd_reference_match", "result": "pass"}
+      {
+        "id": "E_REPLAY",
+        "type": "pkpd_reference_match",
+        "result": "pass"
+      }
     ]
   },
   "reviewer_prompt": "Separate computational support from scientific support. Choose the judgment that best matches PCS scope rules."

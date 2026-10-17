@@ -1,45 +1,48 @@
 {
-  "schema": "pcs.independent_eval.external_lab.checklist.v1",
-  "note": "Canonical manual configuration steps for burden_tracker --list-steps.",
+  "format": "pcs-external-lab-checklist-v1",
+  "external_validation_complete_allowed": false,
+  "forbidden_states": [
+    "EXTERNAL_VALIDATION_COMPLETE"
+  ],
   "steps": [
     {
       "id": "read_setup",
-      "title": "Read SETUP.md and confirm offline constraints",
+      "title": "Read SETUP.md",
       "doc": "SETUP.md"
     },
     {
       "id": "provision_python",
-      "title": "Provision Python 3.11+ environment (lab-local)",
+      "title": "Provision Python",
       "doc": "SETUP.md"
     },
     {
       "id": "locate_examples",
-      "title": "Locate read-only example pointers (do not copy large trees)",
+      "title": "Locate examples",
       "doc": "WORKFLOW.md"
     },
     {
       "id": "run_verify_docs",
-      "title": "Follow VERIFY.md against a local evidence fixture",
+      "title": "Follow VERIFY.md",
       "doc": "VERIFY.md"
     },
     {
       "id": "attempt_repro",
-      "title": "Attempt REPRO.md steps on lab hardware; record divergences",
+      "title": "Attempt REPRO.md",
       "doc": "REPRO.md"
     },
     {
       "id": "record_limitations",
-      "title": "Document environment limitations per LIMITATIONS.md",
+      "title": "Record limitations",
       "doc": "LIMITATIONS.md"
     },
     {
       "id": "troubleshoot",
-      "title": "Apply TROUBLESHOOTING.md if blocked; log time spent",
+      "title": "Troubleshoot",
       "doc": "TROUBLESHOOTING.md"
     },
     {
       "id": "judge_success_failure",
-      "title": "Classify outcome using SUCCESS_FAILURE.md (no invented authority)",
+      "title": "Judge success/failure",
       "doc": "SUCCESS_FAILURE.md"
     }
   ]

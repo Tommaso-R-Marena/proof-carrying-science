@@ -1,5 +1,10 @@
 # External laboratory challenge package (Task 18)
 
+This kit helps a laboratory evaluate whether PCS is practical.
+
+**Does not claim completed external laboratory validation.** Authors must never
+record `EXTERNAL_VALIDATION_COMPLETE` from this package alone.
+
 | Document | Purpose |
 | --- | --- |
 | `SETUP.md` | Lab environment provisioning |

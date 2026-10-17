@@ -1,14 +1,32 @@
 {
   "format": "pcs-blind-challenge-ground-truth-v1",
-  "note": "Sealed labels for automated scoring. Do not distribute inside reviewer packets.",
+  "note": "Sealed labels for automated scoring only.",
   "labels": {
+    "BC-01": "valid",
+    "BC-02": "invalid",
+    "BC-03": "computationally_valid_scientifically_unsupported",
+    "BC-04": "computationally_valid_scientifically_unsupported",
+    "BC-05": "valid",
+    "BC-06": "invalid",
+    "BC-07": "invalid",
     "RAW-VALID-001": "valid",
     "RAW-INVALID-001": "invalid",
-    "RAW-CVSU-001": "computationally_valid_scientifically_unsupported"
+    "RAW-CVSU-001": "computationally_valid_scientifically_unsupported",
+    "RAW-CRYPTO-001": "computationally_valid_scientifically_unsupported",
+    "RAW-EMP-001": "valid",
+    "RAW-INTERP-001": "invalid",
+    "RAW-REJECT-HASH-001": "invalid"
   },
   "correct_responses": {
-    "valid": ["accept_as_valid"],
-    "invalid": ["reject_as_invalid"],
-    "computationally_valid_scientifically_unsupported": ["accept_computational_only"]
+    "valid": [
+      "accept_as_valid"
+    ],
+    "invalid": [
+      "reject_as_invalid"
+    ],
+    "computationally_valid_scientifically_unsupported": [
+      "accept_computational_only",
+      "abstain"
+    ]
   }
 }

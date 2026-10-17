@@ -1,0 +1,28 @@
+{
+  "case_id": "RAW-CRYPTO-001",
+  "ground_truth_label": "crypto_valid_without_formal_justification",
+  "title": "Hashes and signature verify; no formal computational certificate",
+  "summary": "Package integrity checks pass, but there is no Lean/PCS formal justification attached to the computational claim.",
+  "distinction_tags": [
+    "cryptographic_validity",
+    "formally_justified_computational"
+  ],
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_PRED",
+        "statement": "Model predictions are correct.",
+        "kind": "computational",
+        "assessment": {"status": "UNREPORTED"}
+      }
+    ],
+    "checks": [
+      {"id": "E_SIG", "type": "signature", "result": "pass"},
+      {"id": "E_HASH", "type": "artifact_digest", "result": "pass"}
+    ],
+    "limitations": [
+      "Integrity-only evidence; no formal computational certificate."
+    ]
+  },
+  "reviewer_prompt": "Distinguish cryptographic validity from formally justified computational claims. Prefer abstain if computational support is not evidenced."
+}

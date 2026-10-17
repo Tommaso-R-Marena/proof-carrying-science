@@ -1,30 +1,31 @@
 {
   "scenario_id": "TT-COMMIT-001",
-  "title": "Lost pre-result intake commitment",
+  "title": "Lost pre-registration commitment",
   "offline_only": true,
   "live_credential_changes_allowed": false,
-  "narrative": "A producer asserts that claims were frozen before results, but the intake lock file / out-of-band semantic hash is missing. The final certificate looks internally consistent.",
-  "signals": [
-    "Missing pilot-intake-lock.json",
-    "No reviewer-held expected intake semantic hash",
-    "Certificate claims still present"
-  ],
+  "narrative": "Authors cannot locate the hash commitment that was supposed to freeze analysis choices before peeking at outcomes.",
+  "signals": ["Missing commitment file", "Only post-hoc narrative remains"],
   "exercises": [
     {
       "id": "E1",
-      "prompt": "Does internal certificate consistency prove pre-result claim freezing?",
-      "acceptable_keywords": ["no", "out of band", "intake", "commitment", "not sufficient"]
+      "prompt": "Describe the gap without fabricating a commitment.",
+      "acceptable_keywords": ["missing", "unverifiable", "gap", "no backdat"]
     },
     {
       "id": "E2",
-      "prompt": "What reviewer options remain without the commitment?",
-      "acceptable_keywords": ["OPEN", "limited assurance", "request reissue", "do not claim preregistration"]
+      "prompt": "How should pre-registered claims be treated?",
+      "acceptable_keywords": ["unverified", "downgrade", "disclose", "hold"]
+    },
+    {
+      "id": "E3",
+      "prompt": "What mitigation avoids fabricating history?",
+      "acceptable_keywords": ["prospective", "disclose", "no backdat", "recomm"]
     }
   ],
   "after_action_criteria": [
-    "Pre-result freezing not claimed",
-    "Missing commitment recorded as limitation",
-    "No silent reconstruction of a fake historical lock",
-    "No live credential changes performed by the simulator"
+    "No live credential was rotated by the simulator",
+    "Gap disclosed",
+    "No backdated commitment invented",
+    "Residual degrees-of-freedom risk noted"
   ]
 }

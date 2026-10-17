@@ -1,25 +1,13 @@
 {
   "case_id": "BC-03",
-  "title": "Computationally valid, scientifically unsupported interpretation",
+  "title": "Comp valid sci unsupported",
+  "ground_truth_label": "computationally_valid_scientifically_unsupported",
   "blinded": false,
   "evidence_summary": {
-    "certificate_present": true,
-    "receipt_present": true,
-    "artifact_hashes_match": true,
-    "signature_check": "valid",
-    "formal_justification": "present",
-    "empirical_validation": "not_claimed",
-    "interpretation_claims": [
-      "This proves the drug is safe in humans."
-    ]
+    "certificate_present": true
   },
   "presented_materials": {
-    "claim": "Restricted PK model reproduces declared ODE predictions (computational).",
-    "claim_kind": "computational",
-    "artifacts": ["model.json", "predictions.csv"],
-    "receipt_note": "Receipt reports COMPUTATIONALLY_SUPPORTED for the computational claim only.",
-    "extra_narrative": "Author abstract asserts human safety from the restricted model alone.",
-    "limitations": "LIMITATIONS.md denies biological adequacy; author abstract overclaims."
+    "claim": "Comp valid sci unsupported"
   },
-  "reviewer_prompt": "Separate formally justified computational support from unsupported scientific interpretation."
+  "reviewer_prompt": "Classify validity axes. Do not invent human results."
 }

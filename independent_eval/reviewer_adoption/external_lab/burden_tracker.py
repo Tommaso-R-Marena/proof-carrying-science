@@ -64,13 +64,27 @@ DEFAULT_STEPS: list[dict[str, str]] = [
 ]
 
 
+def _normalize_step(raw: dict[str, Any]) -> dict[str, str]:
+    step_id = str(raw.get("id") or raw.get("step_id") or "")
+    title = str(raw.get("title") or raw.get("description") or step_id)
+    doc = str(raw.get("doc") or raw.get("phase") or "")
+    return {"id": step_id, "title": title, "doc": doc}
+
+
 def load_steps(package_dir: Path) -> list[dict[str, str]]:
-    """Load checklist from package/CHECKLIST.json if present, else defaults."""
-    checklist = package_dir / "CHECKLIST.json"
-    if checklist.is_file():
+    """Load checklist from CHECKLIST.json / checklist.json if present, else defaults."""
+    for name in ("CHECKLIST.json", "checklist.json"):
+        checklist = package_dir / name
+        if not checklist.is_file():
+            continue
         data = json.loads(checklist.read_text(encoding="utf-8"))
+        if data.get("external_validation_complete_allowed") is not False:
+            raise ValueError("checklist must set external_validation_complete_allowed=false")
+        forbidden = set(data.get("forbidden_states") or [])
+        if "EXTERNAL_VALIDATION_COMPLETE" not in forbidden:
+            raise ValueError("checklist must forbid EXTERNAL_VALIDATION_COMPLETE")
         steps = data.get("steps") or []
-        return [dict(s) for s in steps]
+        return [_normalize_step(dict(s)) for s in steps if isinstance(s, dict)]
     return [dict(s) for s in DEFAULT_STEPS]
 
 
@@ -91,7 +105,17 @@ def append_log(
     minutes: float | None,
     notes: str | None,
     package_dir: Path,
+    force_completed_validation: bool = False,
 ) -> dict[str, Any]:
+    if force_completed_validation:
+        raise ValueError(
+            "refusing EXTERNAL_VALIDATION_COMPLETE / completed external validation claim"
+        )
+    note_text = (notes or "").upper()
+    if "EXTERNAL_VALIDATION_COMPLETE" in note_text:
+        raise ValueError(
+            "refusing EXTERNAL_VALIDATION_COMPLETE / completed external validation claim"
+        )
     steps = {s["id"]: s for s in load_steps(package_dir)}
     known = step_id in steps
     record = {

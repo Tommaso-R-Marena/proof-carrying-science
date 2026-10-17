@@ -1,6 +1,10 @@
 {
   "case_id": "RAW-INVALID-001",
   "ground_truth_label": "invalid",
+  "distinction_tags": [
+    "outright_rejected",
+    "cryptographic_validity"
+  ],
   "title": "Signature / artifact mismatch",
   "summary": "The certificate claims PASS, but the artifact digest in the package does not match the digest bound by the signature record.",
   "evidence_excerpt": {
@@ -9,18 +13,29 @@
         "id": "C_REPLAY",
         "statement": "Predictions match the declared model.",
         "kind": "computational",
-        "assumptions": ["A_MODEL"],
-        "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"}
+        "assumptions": [
+          "A_MODEL"
+        ],
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
       }
     ],
     "assumptions": [
-      {"id": "A_MODEL", "statement": "Declared analytic model is the computational object under test."}
+      {
+        "id": "A_MODEL",
+        "statement": "Declared analytic model is the computational object under test."
+      }
     ],
     "limitations": [
       "Integrity failures invalidate assurance regardless of claim text."
     ],
     "checks": [
-      {"id": "E_REPLAY", "type": "reference_match", "result": "pass"},
+      {
+        "id": "E_REPLAY",
+        "type": "reference_match",
+        "result": "pass"
+      },
       {
         "id": "E_INTEGRITY",
         "type": "artifact_digest",

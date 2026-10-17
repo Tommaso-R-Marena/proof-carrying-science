@@ -1,30 +1,31 @@
 {
-  "scenario_id": "TT-06",
+  "scenario_id": "TT-DISCLOSE-001",
   "title": "Premature public disclosure of unpublished pilot results",
   "offline_only": true,
-  "touches_live_credentials": false,
-  "touches_live_infra": false,
-  "incident": {
-    "summary": "A draft certificate and limitations file appeared on a public paste site before embargo lift.",
-    "indicators": ["Public URL", "Matching semantic_hash fragment"],
-    "assets_at_risk": ["embargo", "collaborator_trust", "reputation"]
-  },
-  "constraints": {
-    "must_not": ["Attack the paste site", "Rotate unrelated production credentials as theater"],
-    "allowed": ["Draft disclosure notice", "Coordinate embargo response offline", "Inventory what leaked"]
-  },
-  "expected_response_fields": [
-    "scope_of_leak",
-    "stakeholder_notice",
-    "embargo_decision",
-    "process_fix",
-    "residual_risk"
+  "live_credential_changes_allowed": false,
+  "narrative": "A draft certificate and limitations file appeared on a public paste site before embargo lift.",
+  "signals": ["Public URL", "Matching semantic_hash fragment"],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Scope the leak.",
+      "acceptable_keywords": ["certificate", "limitations", "semantic", "exposed"]
+    },
+    {
+      "id": "E2",
+      "prompt": "Stakeholder notice plan.",
+      "acceptable_keywords": ["notify", "collaborator", "owner", "notice"]
+    },
+    {
+      "id": "E3",
+      "prompt": "Embargo decision rationale.",
+      "acceptable_keywords": ["embargo", "lift", "public", "irreversible"]
+    }
   ],
-  "scoring_rubric": {
-    "scope_of_leak": "Lists what content was exposed",
-    "stakeholder_notice": "Plans timely notification",
-    "embargo_decision": "Decide lift vs continue with justification",
-    "process_fix": "Addresses how draft escaped",
-    "residual_risk": "Notes irreversible public exposure"
-  }
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Scope of leak recorded",
+    "Stakeholders notified in plan",
+    "Process fix identified"
+  ]
 }

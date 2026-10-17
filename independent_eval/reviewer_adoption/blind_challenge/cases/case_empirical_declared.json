@@ -1,0 +1,35 @@
+{
+  "case_id": "RAW-EMP-001",
+  "ground_truth_label": "empirically_and_computationally_supported",
+  "title": "Formal computational support plus declared empirical validation",
+  "summary": "Computational claim is formally justified; a scoped empirical claim is declared with metrics under protocol P.",
+  "distinction_tags": [
+    "cryptographic_validity",
+    "formally_justified_computational",
+    "empirically_validated"
+  ],
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_REPLAY",
+        "statement": "Predictions match declared model on grid G.",
+        "kind": "computational",
+        "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"}
+      },
+      {
+        "id": "C_EMP",
+        "statement": "On held-out cohort H, absolute error ≤ τ under protocol P.",
+        "kind": "empirical",
+        "assessment": {"status": "EMPIRICALLY_SUPPORTED"}
+      }
+    ],
+    "checks": [
+      {"id": "E_REPLAY", "type": "reference_match", "result": "pass"},
+      {"id": "E_EMP", "type": "held_out_metrics", "result": "pass"}
+    ],
+    "limitations": [
+      "Empirical claim scoped to cohort H and protocol P only."
+    ]
+  },
+  "reviewer_prompt": "If both computational and scoped empirical support are present within limitations, accept as valid."
+}

@@ -1,22 +1,13 @@
 {
   "case_id": "BC-02",
-  "title": "Outright rejected evidence — signature failure",
+  "title": "Rejected invalid evidence",
+  "ground_truth_label": "invalid",
   "blinded": false,
   "evidence_summary": {
-    "certificate_present": true,
-    "receipt_present": true,
-    "artifact_hashes_match": false,
-    "signature_check": "invalid",
-    "formal_justification": "absent",
-    "empirical_validation": "absent",
-    "interpretation_claims": []
+    "certificate_present": true
   },
   "presented_materials": {
-    "claim": "Predictions match declared model.",
-    "claim_kind": "computational",
-    "artifacts": ["model.json", "predictions.csv"],
-    "receipt_note": "Receipt reports REJECTED; signature verification failed; artifact digests mismatch manifest.",
-    "limitations": "Bundle presented as invalid by verifier output."
+    "claim": "Rejected invalid evidence"
   },
-  "reviewer_prompt": "Classify this as accepted evidence or outright rejected. Note cryptographic validity separately from scientific claims."
+  "reviewer_prompt": "Classify validity axes. Do not invent human results."
 }
