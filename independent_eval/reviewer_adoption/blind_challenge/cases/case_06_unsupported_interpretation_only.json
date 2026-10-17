@@ -1,0 +1,24 @@
+{
+  "case_id": "BC-06",
+  "title": "Unsupported causal interpretation without computational certificate",
+  "blinded": false,
+  "evidence_summary": {
+    "certificate_present": false,
+    "receipt_present": false,
+    "artifact_hashes_match": null,
+    "signature_check": "absent",
+    "formal_justification": "absent",
+    "empirical_validation": "absent",
+    "interpretation_claims": [
+      "Observational correlation implies treatment causes outcome Y."
+    ]
+  },
+  "presented_materials": {
+    "claim": "Treatment causes outcome Y (causal).",
+    "claim_kind": "interpretive",
+    "artifacts": ["scatter_plot.png"],
+    "receipt_note": "No PCS certificate or verification receipt provided.",
+    "limitations": "Narrative PDF only; no hash-locked artifacts."
+  },
+  "reviewer_prompt": "Classify as unsupported interpretation and note absence of cryptographic/formal evidence."
+}

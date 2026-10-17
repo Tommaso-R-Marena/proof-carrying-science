@@ -1,0 +1,30 @@
+{
+  "scenario_id": "TT-ARCHIVE-001",
+  "title": "Corrupted or mutated evidence archive",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "A delivered study.pcs.zip fails canonical archive checks: a member hash mismatches, and one path looks suspicious. The accompanying PDF report still looks polished.",
+  "signals": [
+    "Member digest mismatch",
+    "Suspicious archive member path",
+    "Human-readable report not bound as sole authority"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Should the polished PDF/report override archive integrity failure?",
+      "acceptable_keywords": ["no", "fail closed", "archive", "integrity"]
+    },
+    {
+      "id": "E2",
+      "prompt": "What artifacts should be preserved for incident analysis?",
+      "acceptable_keywords": ["bytes", "logs", "original zip", "hashes", "receipt"]
+    }
+  ],
+  "after_action_criteria": [
+    "Package rejected or held pending reissue",
+    "Original bytes preserved",
+    "Human report not treated as authority",
+    "No live credential changes performed by the simulator"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "scenario_id": "TT-05",
+  "title": "Dependency substitution in rebuild environment",
+  "offline_only": true,
+  "touches_live_credentials": false,
+  "touches_live_infra": false,
+  "incident": {
+    "summary": "A transitive dependency resolved to a different wheel hash than the lockfile during an offline rebuild attempt.",
+    "indicators": ["Lockfile hash mismatch", "Unexpected package version in site-packages"],
+    "assets_at_risk": ["reconstruction_claim", "TCB_boundary"]
+  },
+  "constraints": {
+    "must_not": ["Publish substituted environment as canonical", "Disable hash pins"],
+    "allowed": ["Record divergence", "Use vendored wheels from documented offline cache"]
+  },
+  "expected_response_fields": [
+    "divergence_record",
+    "tcb_impact",
+    "containment",
+    "rebuild_plan",
+    "residual_risk"
+  ],
+  "scoring_rubric": {
+    "divergence_record": "Documents which package/hash diverged",
+    "tcb_impact": "Marks reconstruction as non-identical",
+    "containment": "Prevents treating substituted build as authoritative",
+    "rebuild_plan": "Plans pinned offline rebuild",
+    "residual_risk": "Notes supply-chain uncertainty"
+  }
+}

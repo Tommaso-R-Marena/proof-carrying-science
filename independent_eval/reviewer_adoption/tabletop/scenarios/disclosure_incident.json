@@ -1,0 +1,30 @@
+{
+  "scenario_id": "TT-06",
+  "title": "Premature public disclosure of unpublished pilot results",
+  "offline_only": true,
+  "touches_live_credentials": false,
+  "touches_live_infra": false,
+  "incident": {
+    "summary": "A draft certificate and limitations file appeared on a public paste site before embargo lift.",
+    "indicators": ["Public URL", "Matching semantic_hash fragment"],
+    "assets_at_risk": ["embargo", "collaborator_trust", "reputation"]
+  },
+  "constraints": {
+    "must_not": ["Attack the paste site", "Rotate unrelated production credentials as theater"],
+    "allowed": ["Draft disclosure notice", "Coordinate embargo response offline", "Inventory what leaked"]
+  },
+  "expected_response_fields": [
+    "scope_of_leak",
+    "stakeholder_notice",
+    "embargo_decision",
+    "process_fix",
+    "residual_risk"
+  ],
+  "scoring_rubric": {
+    "scope_of_leak": "Lists what content was exposed",
+    "stakeholder_notice": "Plans timely notification",
+    "embargo_decision": "Decide lift vs continue with justification",
+    "process_fix": "Addresses how draft escaped",
+    "residual_risk": "Notes irreversible public exposure"
+  }
+}

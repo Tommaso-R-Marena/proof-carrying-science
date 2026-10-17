@@ -1,0 +1,18 @@
+{
+  "id": "stale_verifier_binary",
+  "title": "Stale verifier binary",
+  "prompt": "Reviewers may be using an outdated verifier. Identify risk and containment.",
+  "expected_containment": [
+    "pin_known_good_verifier_hash",
+    "reverify_with_current_authority",
+    "document_version_skew"
+  ],
+  "forbidden_actions": [
+    "silently_accept_skew",
+    "disable_authority_checks"
+  ],
+  "audit_artifacts": [
+    "binary_sha256",
+    "toolchain_record"
+  ]
+}

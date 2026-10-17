@@ -1,0 +1,87 @@
+{
+  "format": "pcs-external-lab-challenge-checklist-v1",
+  "external_validation_complete_allowed": false,
+  "steps": [
+    {
+      "step_id": "setup.checkout_sha",
+      "phase": "setup",
+      "description": "Record pinned PCS checkout SHA",
+      "manual": true,
+      "success_state": "SETUP_OK",
+      "failure_states": ["SETUP_BLOCKED"]
+    },
+    {
+      "step_id": "setup.venv_lockfile",
+      "phase": "setup",
+      "description": "Create isolated venv and install from agreed lockfile",
+      "manual": true,
+      "success_state": "SETUP_OK",
+      "failure_states": ["SETUP_BLOCKED"]
+    },
+    {
+      "step_id": "setup.host_packages",
+      "phase": "setup",
+      "description": "Install and record host packages (e.g. zstd)",
+      "manual": true,
+      "success_state": "SETUP_OK",
+      "failure_states": ["SETUP_BLOCKED"]
+    },
+    {
+      "step_id": "setup.authority_hash",
+      "phase": "setup",
+      "description": "Build/obtain pinned verifier or Lean authority; record SHA-256",
+      "manual": true,
+      "success_state": "SETUP_OK",
+      "failure_states": ["SETUP_BLOCKED", "SETUP_UNTRUSTED"]
+    },
+    {
+      "step_id": "setup.fingerprint",
+      "phase": "setup",
+      "description": "Establish out-of-band expected signer fingerprint",
+      "manual": true,
+      "success_state": "SETUP_OK",
+      "failure_states": ["SETUP_BLOCKED", "SETUP_UNTRUSTED"]
+    },
+    {
+      "step_id": "setup.trust_profile",
+      "phase": "setup",
+      "description": "Write receiver-owned trust profile JSON",
+      "manual": true,
+      "success_state": "SETUP_OK",
+      "failure_states": ["SETUP_BLOCKED"]
+    },
+    {
+      "step_id": "workflow.receive_package",
+      "phase": "workflow",
+      "description": "Receive synthetic study.pcs.zip via approved channel",
+      "manual": true,
+      "success_state": "CHALLENGE_PASS_DRY_RUN",
+      "failure_states": ["CHALLENGE_FAIL"]
+    },
+    {
+      "step_id": "verify.run",
+      "phase": "verification",
+      "description": "Run guided verification with pinned trust material",
+      "manual": true,
+      "success_state": "VERIFY_ACCEPT",
+      "failure_states": ["VERIFY_REJECT", "VERIFY_INCOMPLETE"]
+    },
+    {
+      "step_id": "verify.read_limitations",
+      "phase": "verification",
+      "description": "Read LIMITATIONS.md; separate computational vs scientific claims",
+      "manual": true,
+      "success_state": "CHALLENGE_PASS_DRY_RUN",
+      "failure_states": ["CHALLENGE_FAIL"]
+    },
+    {
+      "step_id": "repro.second_environment",
+      "phase": "reproducibility",
+      "description": "Re-verify in a second clean environment and compare hashes/decisions",
+      "manual": true,
+      "success_state": "CHALLENGE_PASS_DRY_RUN",
+      "failure_states": ["CHALLENGE_FAIL", "VERIFY_INCOMPLETE"]
+    }
+  ],
+  "forbidden_states": ["EXTERNAL_VALIDATION_COMPLETE"]
+}

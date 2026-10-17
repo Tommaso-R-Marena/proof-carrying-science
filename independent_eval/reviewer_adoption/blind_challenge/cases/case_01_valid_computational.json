@@ -1,0 +1,22 @@
+{
+  "case_id": "BC-01",
+  "title": "Valid computational claim with matching artifact hashes",
+  "blinded": false,
+  "evidence_summary": {
+    "certificate_present": true,
+    "receipt_present": true,
+    "artifact_hashes_match": true,
+    "signature_check": "valid",
+    "formal_justification": "present",
+    "empirical_validation": "not_claimed",
+    "interpretation_claims": []
+  },
+  "presented_materials": {
+    "claim": "Under declared model M, predictions equal the closed-form solution on the evaluation grid.",
+    "claim_kind": "computational",
+    "artifacts": ["model.json", "predictions.csv"],
+    "receipt_note": "Receipt reports COMPUTATIONALLY_SUPPORTED for claim C1.",
+    "limitations": "No biological adequacy claim is made."
+  },
+  "reviewer_prompt": "Classify cryptographic validity, formal/computational justification, empirical status, and whether any unsupported interpretation appears. Do not invent laboratory results."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "conflicting_review_receipts",
+  "title": "Conflicting review receipts",
+  "prompt": "Two signed receipts disagree on the same package semantic hash.",
+  "expected_containment": [
+    "preserve_both_receipts",
+    "escalate_to_quorum_policy",
+    "do_not_silently_prefer_newer"
+  ],
+  "forbidden_actions": [
+    "delete_dissenting_receipt"
+  ],
+  "audit_artifacts": [
+    "receipt_pair",
+    "policy_identity"
+  ]
+}

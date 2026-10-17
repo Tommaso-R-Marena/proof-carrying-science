@@ -1,0 +1,30 @@
+{
+  "scenario_id": "TT-COMMIT-001",
+  "title": "Lost pre-result intake commitment",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "A producer asserts that claims were frozen before results, but the intake lock file / out-of-band semantic hash is missing. The final certificate looks internally consistent.",
+  "signals": [
+    "Missing pilot-intake-lock.json",
+    "No reviewer-held expected intake semantic hash",
+    "Certificate claims still present"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Does internal certificate consistency prove pre-result claim freezing?",
+      "acceptable_keywords": ["no", "out of band", "intake", "commitment", "not sufficient"]
+    },
+    {
+      "id": "E2",
+      "prompt": "What reviewer options remain without the commitment?",
+      "acceptable_keywords": ["OPEN", "limited assurance", "request reissue", "do not claim preregistration"]
+    }
+  ],
+  "after_action_criteria": [
+    "Pre-result freezing not claimed",
+    "Missing commitment recorded as limitation",
+    "No silent reconstruction of a fake historical lock",
+    "No live credential changes performed by the simulator"
+  ]
+}

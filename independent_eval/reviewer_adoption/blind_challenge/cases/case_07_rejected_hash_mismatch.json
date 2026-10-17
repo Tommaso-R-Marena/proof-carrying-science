@@ -1,0 +1,22 @@
+{
+  "case_id": "BC-07",
+  "title": "Signature valid but artifact digests disagree with manifest (rejected)",
+  "blinded": false,
+  "evidence_summary": {
+    "certificate_present": true,
+    "receipt_present": true,
+    "artifact_hashes_match": false,
+    "signature_check": "valid",
+    "formal_justification": "present",
+    "empirical_validation": "absent",
+    "interpretation_claims": []
+  },
+  "presented_materials": {
+    "claim": "Predictions match declared model.",
+    "claim_kind": "computational",
+    "artifacts": ["model.json", "predictions.csv"],
+    "receipt_note": "Outer signature verifies; content digests fail; receipt reports REJECTED.",
+    "limitations": "Integrity failure at artifact layer; formal claim not applicable until re-sealed."
+  },
+  "reviewer_prompt": "Treat as outright rejected evidence despite outer signature validity."
+}

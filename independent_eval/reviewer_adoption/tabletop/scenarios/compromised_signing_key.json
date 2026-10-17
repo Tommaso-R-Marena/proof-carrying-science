@@ -1,0 +1,36 @@
+{
+  "scenario_id": "TT-KEY-001",
+  "title": "Suspected compromised signing key",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "A laptop that held a pilot signing private key may have been exposed. Several packages were signed in the uncertain window. Reviewers still hold the old public fingerprint.",
+  "signals": [
+    "Device loss/exposure report",
+    "No public revocation service exists yet",
+    "Old fingerprint still pinned by some reviewers"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "List immediate containment actions that do not require live production credential mutation in this tabletop.",
+      "acceptable_keywords": ["stop signing", "preserve evidence", "notify reviewers", "record compromise time"]
+    },
+    {
+      "id": "E2",
+      "prompt": "How should previously signed packages after the earliest plausible compromise time be handled?",
+      "acceptable_keywords": ["re-review", "re-sign", "identify packages", "do not silently trust"]
+    },
+    {
+      "id": "E3",
+      "prompt": "What must be true before distributing a replacement fingerprint?",
+      "acceptable_keywords": ["trusted channel", "independent channel", "pin fingerprint", "replacement key"]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Containment actions recorded",
+    "Affected package window identified",
+    "Replacement fingerprint distribution plan uses an independent trusted channel",
+    "Incident evidence preservation noted"
+  ]
+}

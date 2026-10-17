@@ -1,0 +1,30 @@
+{
+  "scenario_id": "TT-VERIFIER-001",
+  "title": "Stale verifier binary in use",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "A partner laboratory is verifying packages with a months-old standalone verifier artifact. A newer release fixed a fail-closed integrity check. The lab's trust profile still points at the old binary.",
+  "signals": [
+    "Verifier manifest SHA does not match current release notes",
+    "Receipt protocol version differs from package certificate expectations",
+    "CI/release gate claims are being cited for an unpinned local binary"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "What should the lab verify before trusting a local verifier binary?",
+      "acceptable_keywords": ["sha-256", "manifest", "pin", "release identity", "provenance"]
+    },
+    {
+      "id": "E2",
+      "prompt": "If the stale verifier accepted a package the current verifier rejects, what is the correct interpretation?",
+      "acceptable_keywords": ["fail closed", "do not promote", "integrity", "re-verify", "stale"]
+    }
+  ],
+  "after_action_criteria": [
+    "Verifier identity (hash/manifest) recorded",
+    "Re-verification with pinned current artifact planned",
+    "No claim that a stale accept is authoritative",
+    "No live credential changes performed by the simulator"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "case_id": "RAW-VALID-001",
+  "ground_truth_label": "valid",
+  "title": "Balanced reaction under declared grammar",
+  "summary": "A reaction-balance check succeeds for a declared atom-balance claim that stays within computational scope.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_BALANCE",
+        "statement": "The water-formation reaction is atom-balanced under the v0.1 formula grammar.",
+        "kind": "computational",
+        "assumptions": ["A_GRAMMAR"],
+        "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"}
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "A_GRAMMAR",
+        "statement": "Formula strings use the limited v0.1 grammar."
+      }
+    ],
+    "limitations": [
+      "Does not establish biological meaning of the reaction.",
+      "Does not establish laboratory experimental confirmation."
+    ],
+    "checks": [
+      {"id": "E_BALANCE", "type": "reaction_balance", "result": "pass"}
+    ]
+  },
+  "reviewer_prompt": "Judge whether the package supports accepting the computational claim as stated, within limitations."
+}

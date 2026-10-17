@@ -1,0 +1,17 @@
+{
+  "scenario_id": "TT-KEY-001",
+  "synthetic": true,
+  "live_credential_changes_performed": false,
+  "answers": {
+    "E1": "Stop signing with the exposed key, preserve evidence and logs, notify affected reviewers, and record the earliest plausible compromise time.",
+    "E2": "Identify packages signed after that time for re-review and re-sign; do not silently trust them.",
+    "E3": "Distribute and pin the replacement fingerprint through an independent trusted channel before resuming."
+  },
+  "after_action_notes": [
+    "Containment actions recorded in facilitator notes",
+    "Affected package window listed as TBD pending inventory",
+    "Replacement fingerprint will be sent on a separate channel",
+    "Incident disk image preserved offline",
+    "Simulator performed no live credential rotation"
+  ]
+}

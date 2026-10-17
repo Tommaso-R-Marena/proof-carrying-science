@@ -1,0 +1,22 @@
+{
+  "case_id": "BC-04",
+  "title": "Cryptographically valid bundle without formal computational justification",
+  "blinded": false,
+  "evidence_summary": {
+    "certificate_present": true,
+    "receipt_present": true,
+    "artifact_hashes_match": true,
+    "signature_check": "valid",
+    "formal_justification": "absent",
+    "empirical_validation": "absent",
+    "interpretation_claims": []
+  },
+  "presented_materials": {
+    "claim": "Model predictions are correct.",
+    "claim_kind": "computational",
+    "artifacts": ["model.json", "predictions.csv"],
+    "receipt_note": "Bundle signature and hashes verify; no Lean/PCS formal proof artifact attached; claim status UNREPORTED.",
+    "limitations": "Integrity-only evidence; no formal computational certificate."
+  },
+  "reviewer_prompt": "Distinguish cryptographic validity from formally justified computational claims."
+}

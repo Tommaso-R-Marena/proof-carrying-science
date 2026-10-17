@@ -1,0 +1,16 @@
+{
+  "id": "lost_reviewer_commitment",
+  "title": "Lost reviewer intake commitment",
+  "prompt": "Expected intake semantic hash is missing from reviewer records.",
+  "expected_containment": [
+    "mark_preregistration_unproven",
+    "do_not_infer_chronology_from_producer_timestamp",
+    "request_out_of_band_commitment_recovery"
+  ],
+  "forbidden_actions": [
+    "treat_producer_frozen_at_as_preregistration"
+  ],
+  "audit_artifacts": [
+    "intake_hash_status"
+  ]
+}

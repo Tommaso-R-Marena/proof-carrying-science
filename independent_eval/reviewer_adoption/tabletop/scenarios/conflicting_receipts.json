@@ -1,0 +1,30 @@
+{
+  "scenario_id": "TT-07",
+  "title": "Conflicting verification receipts for the same bundle",
+  "offline_only": true,
+  "touches_live_credentials": false,
+  "touches_live_infra": false,
+  "incident": {
+    "summary": "Two receipts for the same semantic_hash disagree: one reports COMPUTATIONALLY_SUPPORTED, another REJECTED.",
+    "indicators": ["Divergent decision fields", "Different verifier digests in receipt metadata"],
+    "assets_at_risk": ["reviewer_trust", "authority_clarity"]
+  },
+  "constraints": {
+    "must_not": ["Pick the favorable receipt without investigation", "Alter live authority services"],
+    "allowed": ["Diff receipts offline", "Compare verifier pins", "Hold claim status"]
+  },
+  "expected_response_fields": [
+    "conflict_summary",
+    "investigation_steps",
+    "provisional_status",
+    "authority_note",
+    "residual_risk"
+  ],
+  "scoring_rubric": {
+    "conflict_summary": "States the disagreement clearly",
+    "investigation_steps": "Compares verifier versions/pins and inputs",
+    "provisional_status": "Holds ACCEPT; does not issue PASS",
+    "authority_note": "Reminds that local tools do not replace PCS authority",
+    "residual_risk": "Notes possible verifier divergence or tampering"
+  }
+}

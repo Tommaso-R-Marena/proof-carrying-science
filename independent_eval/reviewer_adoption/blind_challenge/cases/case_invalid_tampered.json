@@ -1,0 +1,37 @@
+{
+  "case_id": "RAW-INVALID-001",
+  "ground_truth_label": "invalid",
+  "title": "Signature / artifact mismatch",
+  "summary": "The certificate claims PASS, but the artifact digest in the package does not match the digest bound by the signature record.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_REPLAY",
+        "statement": "Predictions match the declared model.",
+        "kind": "computational",
+        "assumptions": ["A_MODEL"],
+        "assessment": {"status": "COMPUTATIONALLY_SUPPORTED"}
+      }
+    ],
+    "assumptions": [
+      {"id": "A_MODEL", "statement": "Declared analytic model is the computational object under test."}
+    ],
+    "limitations": [
+      "Integrity failures invalidate assurance regardless of claim text."
+    ],
+    "checks": [
+      {"id": "E_REPLAY", "type": "reference_match", "result": "pass"},
+      {
+        "id": "E_INTEGRITY",
+        "type": "artifact_digest",
+        "result": "fail",
+        "detail": "predictions.csv sha256 does not match signed manifest entry"
+      }
+    ],
+    "integrity_alerts": [
+      "artifact digest mismatch",
+      "do not accept package"
+    ]
+  },
+  "reviewer_prompt": "Judge whether this package should be accepted. Integrity alerts are part of the evidence."
+}
