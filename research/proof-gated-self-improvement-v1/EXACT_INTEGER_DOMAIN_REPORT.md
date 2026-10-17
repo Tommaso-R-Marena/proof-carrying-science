@@ -113,6 +113,35 @@ The original two-generation sequence
 for the default \([-20,20]\) window and attains universal target equality
 in the last generation.
 
+## Quantitative exhaustive comparison
+
+On a deterministic lattice of **128 bounded one-neuron models**, we examined all
+**16,384** ordered incumbent/candidate transitions and reproduced **4,081**
+acceptances by the existing seven-example PCS gate.
+
+Among those 4,081 formally admissible benchmark updates, the new Python
+mathematical reference algorithms found:
+
+| Condition | Accepted updates affected |
+| --- | ---: |
+| Lost a previously correct prediction at some integer input | **76** |
+| Increased the exact worst absolute error on [-20,20] | **441** |
+| Violated both stronger conditions | **12** |
+| Passed both stronger reference conditions | **3,576** |
+
+Thus the two additional reference checks reject **505** benchmark-admissible
+updates in this deliberately small model lattice. The conditions detect
+different problems: 64 transitions lose previously correct integer inputs
+without increasing the window maximum, and 429 increase the window maximum
+without losing a previously correct input.
+
+This is an **exhaustive synthetic model-lattice statistic**, not an estimate
+of how often autonomous agents would fail, a claim about general AI safety,
+or a Lean proof of the Python analyzer.
+
+Reproduce with `python global_falsification.py`. The GitHub CI job prints
+the complete JSON and validates these exact counts.
+
 ## Research implications
 
 This is evidence that the distinction between *provably improving a finite
