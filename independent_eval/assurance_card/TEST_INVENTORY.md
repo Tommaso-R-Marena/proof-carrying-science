@@ -18,5 +18,8 @@ PYTHONPATH=independent_eval/assurance_card python3 -m pytest -q \
 | `tests/test_authority_lane.py` | `test_authority_agree_when_cli_ok`, `test_authority_disagree_when_cli_fails_and_classes_supported`, `test_authority_inconclusive_when_cli_unavailable`, `test_authority_agree_when_cli_fails_and_rejected_class` |
 | `tests/test_pkpd_real_path.py` | `test_pkpd_certify_verify_assurance_card` (skipped if pcs / example missing) |
 
-**Minimum target:** ≥10 tests. This suite exceeds that with lattice, hashing,
-schema, HTML/a11y, and CLI agree / disagree / inconclusive coverage.
+**Collected:** 20 tests. **Last local run:** 20 passed.
+
+Coverage includes lattice, hashing, JSON schema fields, HTML disclaimer +
+skip-link/a11y, CLI authority agree / disagree / inconclusive (monkeypatch),
+and optional real-path pkpd certify→verify→card.
