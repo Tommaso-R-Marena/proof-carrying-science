@@ -1,4 +1,4 @@
-import Mathlib
+import Lean
 
 /-!
 # PCS Proof-Gated Self-Improvement (finite-domain prototype)
