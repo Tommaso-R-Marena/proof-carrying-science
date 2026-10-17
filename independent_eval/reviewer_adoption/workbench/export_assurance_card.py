@@ -106,14 +106,20 @@ def run_assurance_card_export(
         return record
 
     root = Path(discovery["root"])
+    # F's CLI cwd is the assurance_card root — pass absolute paths so caller
+    # evidence (often under reviewer_adoption/) resolves correctly.
+    evidence_abs = str(Path(evidence).resolve())
+    out_abs = str(Path(out).resolve())
+    record["evidence"] = evidence_abs
+    record["out"] = out_abs
     argv = [
         sys.executable,
         "-m",
         "python_harness.card",
         "--evidence",
-        str(evidence),
+        evidence_abs,
         "--out",
-        str(out),
+        out_abs,
         "--format",
         fmt,
     ]
@@ -122,7 +128,7 @@ def run_assurance_card_export(
     if generated_at:
         argv.extend(["--generated-at", generated_at])
     for path in attach_results or []:
-        argv.extend(["--attach-results", path])
+        argv.extend(["--attach-results", str(Path(path).resolve())])
 
     env = os.environ.copy()
     # Prefer F's package on PYTHONPATH without mutating caller site-packages.

@@ -76,6 +76,11 @@ def test_export_present_subprocesses_f(tmp_path: Path, monkeypatch):
     assert record["returncode"] == 0
     assert "python_harness.card" in record["argv"]
     assert record["workbench_issues_accept"] is False
+    # Evidence/out forwarded to F must be absolute (F cwd is assurance_card root).
+    assert Path(record["evidence"]).is_absolute()
+    assert Path(record["out"]).is_absolute()
+    ev_idx = record["argv"].index("--evidence")
+    assert Path(record["argv"][ev_idx + 1]).is_absolute()
 
     monkeypatch.setattr(
         "independent_eval.reviewer_adoption.workbench.export_assurance_card.subprocess.run",
