@@ -10,7 +10,8 @@ See `BASELINE_ENVIRONMENT.json`.
 
 | Component | Value |
 | --- | --- |
-| Git base (pre-change `main`) | `68d8351a326565496908bf76c8a8daf082b94ff9` |
+| Git base (pre-change `main`) | `68d8351a326565496908bf76c8a8daf082b94ff9`
+| Feature branch HEAD | `de3f110874a7ae0171871d666e738212854ccb3e` |
 | Python (runtime) | 3.12.3 (pin file 3.12.14) |
 | Lean | 4.28.0 (`7e01a1bf5c70`) |
 | Authority | `formal/.lake/build/bin/pcs-lean-authority` |
