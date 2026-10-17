@@ -12,7 +12,7 @@ from pathlib import Path
 from .discovery_metrics import run_discovery_benchmark, write_report as write_discovery
 from .external_validity import score_protocol_file
 from .inadequacy_eval import run_inadequacy_suite
-from .metamorphic import run_metamorphic_suite
+from .metamorphic import DEFAULT_CAMPAIGN_CASE_IDS, run_metamorphic_campaign
 from .paths import (
     CASEBOOK,
     DISCOVERY,
@@ -80,17 +80,29 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(inadequacy, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
 
-    source = CASEBOOK / "cases" / "01_pkpd_one_compartment"
-    metamorphic = run_metamorphic_suite(source, RESULTS / "work" / "metamorphic")
-    reports["metamorphic"] = {
-        "valid_pass": metamorphic["valid_pass"],
-        "valid_total": metamorphic["valid_total"],
-        "invalid_pass": metamorphic["invalid_pass"],
-        "invalid_total": metamorphic["invalid_total"],
-    }
-    (RESULTS / "metamorphic.json").write_text(
-        json.dumps(metamorphic, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    metamorphic = run_metamorphic_campaign(
+        CASEBOOK / "cases",
+        RESULTS / "work" / "metamorphic",
+        RESULTS,
+        case_ids=DEFAULT_CAMPAIGN_CASE_IDS,
     )
+    reports["metamorphic"] = {
+        "case_count": metamorphic["case_count"],
+        "cases_ok": metamorphic["cases_ok"],
+        "oracles_all_passed_count": metamorphic["oracles_all_passed_count"],
+        "case_ids": metamorphic["case_ids"],
+        "per_case": [
+            {
+                "case_id": c["case_id"],
+                "all_oracles_passed": c.get("all_oracles_passed"),
+                "valid_pass": c.get("valid_pass"),
+                "valid_total": c.get("valid_total"),
+                "invalid_pass": c.get("invalid_pass"),
+                "invalid_total": c.get("invalid_total"),
+            }
+            for c in metamorphic["per_case"]
+        ],
+    }
 
     discovery = run_discovery_benchmark(
         DISCOVERY / "projects",

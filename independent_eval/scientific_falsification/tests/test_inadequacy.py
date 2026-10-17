@@ -12,9 +12,11 @@ from python_harness.paths import INADEQUACY  # noqa: E402
 from python_harness.pcs_cli import certify, load_json, verify_certificate  # noqa: E402
 
 
-def test_inadequacy_index_lists_three_examples():
+def test_inadequacy_index_lists_four_examples():
     index = load_json(INADEQUACY / "INDEX.json")
-    assert len(index["examples"]) >= 3
+    assert len(index["examples"]) >= 4
+    ids = {e["id"] for e in index["examples"]}
+    assert "04_disjoint_but_biased_cohorts" in ids
 
 
 def test_correct_but_inadequate_pkpd_still_verifies(tmp_path):
@@ -51,3 +53,21 @@ def test_units_ok_quantity_inadequate_verifies(tmp_path):
     assert c.ok, c.combined()
     v = verify_certificate(out / "certificate.json")
     assert v.ok, v.combined()
+
+
+def test_disjoint_but_biased_cohorts_verifies_without_adequacy(tmp_path):
+    ex = INADEQUACY / "examples" / "04_disjoint_but_biased_cohorts"
+    out = tmp_path / "evidence"
+    c = certify(ex / "manifest.json", out)
+    assert c.ok, c.combined()
+    cert = load_json(out / "certificate.json")
+    for claim in cert["claims"]:
+        assert claim["assessment"]["status"] == "COMPUTATIONALLY_SUPPORTED"
+    v = verify_certificate(out / "certificate.json")
+    assert v.ok, v.combined()
+    readme = (ex / "README.md").read_text(encoding="utf-8").lower()
+    assert "adequacy" in readme
+    assert "represent" in readme or "sampling" in readme or "biased" in readme
+    # Synthetic scaffolding only — no invented human-study results.
+    assert "synthetic" in readme
+    assert "no human participants" in readme or "no participants" in readme

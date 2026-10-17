@@ -8,11 +8,11 @@ from __future__ import annotations
 
 import json
 import shutil
-from copy import deepcopy
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from .hashing import write_json
 from .pcs_cli import certify, verify_certificate
 
 
@@ -29,6 +29,14 @@ class TransformResult:
 
 TransformFn = Callable[[Path], None]
 
+# Default casebook cases for the metamorphic campaign (beyond PK/PD-only).
+DEFAULT_CAMPAIGN_CASE_IDS: tuple[str, ...] = (
+    "01_pkpd_one_compartment",
+    "03_mass_action_reaction_balance",
+    "04_unit_compatible_concentration",
+    "06_scientific_workflow_composite",
+)
+
 
 def _load_manifest(project: Path) -> dict[str, Any]:
     return json.loads((project / "manifest.json").read_text(encoding="utf-8"))
@@ -38,6 +46,10 @@ def _write_manifest(project: Path, manifest: dict[str, Any]) -> None:
     (project / "manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+
+
+def _check_types(project: Path) -> set[str]:
+    return {c.get("type") for c in _load_manifest(project).get("checks", []) if c.get("type")}
 
 
 def transform_rename_subject(project: Path) -> None:
@@ -110,6 +122,40 @@ def transform_incompatible_units(project: Path) -> None:
     _write_manifest(project, m)
 
 
+def transform_overlap_csv_keys(project: Path) -> None:
+    """Invalid: force train/test key overlap for csv_disjoint checks."""
+    m = _load_manifest(project)
+    found = False
+    for check in m.get("checks", []):
+        if check.get("type") != "csv_disjoint":
+            continue
+        found = True
+        key = check.get("key", "subject_id")
+        right_id = check.get("right_artifact")
+        left_id = check.get("left_artifact")
+        arts = {a["id"]: a for a in m.get("artifacts", []) if "id" in a}
+        left_path = project / arts[left_id]["path"]
+        right_path = project / arts[right_id]["path"]
+        left_lines = left_path.read_text(encoding="utf-8").splitlines()
+        if len(left_lines) < 2:
+            raise ValueError("left csv too short to leak a key")
+        # Copy first data row's key into the right table.
+        header = left_lines[0].split(",")
+        key_idx = header.index(key)
+        leaked = left_lines[1].split(",")[key_idx]
+        right_lines = right_path.read_text(encoding="utf-8").splitlines()
+        if len(right_lines) < 2:
+            raise ValueError("right csv too short")
+        rheader = right_lines[0].split(",")
+        r_idx = rheader.index(key)
+        parts = right_lines[1].split(",")
+        parts[r_idx] = leaked
+        right_lines[1] = ",".join(parts)
+        right_path.write_text("\n".join(right_lines) + "\n", encoding="utf-8")
+    if not found:
+        raise ValueError("no csv_disjoint check in project")
+
+
 VALID_TRANSFORMS: list[tuple[str, TransformFn]] = [
     ("rename_subject", transform_rename_subject),
     ("reorder_claims", transform_reorder_claims),
@@ -130,6 +176,18 @@ def _certify_and_verify(project: Path, work: Path) -> tuple[bool, bool, str]:
     cert = out / "certificate.json"
     v = verify_certificate(cert)
     return True, v.ok, v.combined()[-500:]
+
+
+def _oracle_invalid_after_certify(
+    work_root: Path, run_name: str, c_ok: bool, v_ok: bool
+) -> bool:
+    if not c_ok:
+        return True
+    cert = json.loads(
+        (work_root / run_name / "evidence" / "certificate.json").read_text(encoding="utf-8")
+    )
+    statuses = [c.get("assessment", {}).get("status") for c in cert.get("claims", [])]
+    return any(s != "COMPUTATIONALLY_SUPPORTED" for s in statuses) or not v_ok
 
 
 def post_certify_tamper(project: Path, work: Path) -> TransformResult:
@@ -172,6 +230,19 @@ def post_certify_tamper(project: Path, work: Path) -> TransformResult:
         passed_oracle=passed,
         detail="verify should reject tampered evidence package",
     )
+
+
+def _applicable_invalid_transforms(source_project: Path) -> list[tuple[str, TransformFn]]:
+    """Select invalid transforms that the project surface can express."""
+    types = _check_types(source_project)
+    selected: list[tuple[str, TransformFn]] = []
+    if (source_project / "model.json").is_file() or (source_project / "reaction.json").is_file():
+        selected.append(("break_model_or_reaction", transform_break_model_dose))
+    if "unit_compatible" in types:
+        selected.append(("incompatible_units", transform_incompatible_units))
+    if "csv_disjoint" in types:
+        selected.append(("overlap_csv_keys", transform_overlap_csv_keys))
+    return selected
 
 
 def run_metamorphic_suite(
@@ -219,7 +290,7 @@ def run_metamorphic_suite(
             )
         )
 
-    for name, fn in INVALID_TRANSFORMS:
+    for name, fn in _applicable_invalid_transforms(source_project):
         proj = work_root / f"invalid_{name}"
         if proj.exists():
             shutil.rmtree(proj)
@@ -240,58 +311,10 @@ def run_metamorphic_suite(
             )
             continue
         c_ok, v_ok, det = _certify_and_verify(proj, work_root / f"run_invalid_{name}")
-        # For invalid transforms, either certify fails a claim (still may produce cert)
-        # or verify fails. We inspect claim statuses when certify succeeds.
-        oracle = False
-        if not c_ok:
-            oracle = True
-        elif c_ok:
-            cert = json.loads(
-                (work_root / f"run_invalid_{name}" / "evidence" / "certificate.json").read_text(
-                    encoding="utf-8"
-                )
-            )
-            statuses = [
-                c.get("assessment", {}).get("status")
-                for c in cert.get("claims", [])
-            ]
-            # PASS only if at least one claim is not COMPUTATIONALLY_SUPPORTED
-            # OR verify fails.
-            if any(s != "COMPUTATIONALLY_SUPPORTED" for s in statuses) or not v_ok:
-                oracle = True
+        oracle = _oracle_invalid_after_certify(work_root, f"run_invalid_{name}", c_ok, v_ok)
         results.append(
             TransformResult(
                 name=name,
-                kind="invalid",
-                expected_verify_ok=False,
-                certify_ok=c_ok,
-                verify_ok=v_ok,
-                passed_oracle=oracle,
-                detail=det,
-            )
-        )
-
-    # Unit-incompatible transform when applicable
-    if any(
-        c.get("type") == "unit_compatible"
-        for c in _load_manifest(source_project).get("checks", [])
-    ):
-        proj = work_root / "invalid_incompatible_units"
-        if proj.exists():
-            shutil.rmtree(proj)
-        shutil.copytree(source_project, proj)
-        transform_incompatible_units(proj)
-        c_ok, v_ok, det = _certify_and_verify(proj, work_root / "run_invalid_units")
-        cert = json.loads(
-            (work_root / "run_invalid_units" / "evidence" / "certificate.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        statuses = [c.get("assessment", {}).get("status") for c in cert.get("claims", [])]
-        oracle = any(s != "COMPUTATIONALLY_SUPPORTED" for s in statuses) or not v_ok or not c_ok
-        results.append(
-            TransformResult(
-                name="incompatible_units",
                 kind="invalid",
                 expected_verify_ok=False,
                 certify_ok=c_ok,
@@ -306,10 +329,72 @@ def run_metamorphic_suite(
     report = {
         "format": "pcs-independent-eval-metamorphic-report-v1",
         "source_project": str(source_project),
+        "case_id": source_project.name,
+        "check_types": sorted(_check_types(source_project)),
         "cases": [asdict(r) for r in results],
         "valid_pass": sum(1 for r in results if r.kind == "valid" and r.passed_oracle),
         "valid_total": sum(1 for r in results if r.kind == "valid"),
         "invalid_pass": sum(1 for r in results if r.kind == "invalid" and r.passed_oracle),
         "invalid_total": sum(1 for r in results if r.kind == "invalid"),
+        "all_oracles_passed": all(r.passed_oracle for r in results),
     }
     return report
+
+
+def run_metamorphic_campaign(
+    casebook_cases_root: Path,
+    work_root: Path,
+    report_dir: Path,
+    *,
+    case_ids: tuple[str, ...] | list[str] | None = None,
+) -> dict[str, Any]:
+    """Run metamorphic suites across multiple cases; write per-case reports.
+
+    Per-case JSON lands under ``report_dir`` as ``metamorphic_<case_id>.json``.
+    A campaign rollup is written as ``metamorphic_campaign.json``.
+    """
+    selected = list(case_ids) if case_ids is not None else list(DEFAULT_CAMPAIGN_CASE_IDS)
+    report_dir.mkdir(parents=True, exist_ok=True)
+    work_root.mkdir(parents=True, exist_ok=True)
+
+    per_case: list[dict[str, Any]] = []
+    for case_id in selected:
+        source = casebook_cases_root / case_id
+        if not (source / "manifest.json").is_file():
+            per_case.append(
+                {
+                    "case_id": case_id,
+                    "status": "missing",
+                    "all_oracles_passed": False,
+                }
+            )
+            continue
+        report = run_metamorphic_suite(source, work_root / case_id)
+        out_path = report_dir / f"metamorphic_{case_id}.json"
+        write_json(out_path, report)
+        per_case.append(
+            {
+                "case_id": case_id,
+                "status": "ok",
+                "report_path": str(out_path),
+                "check_types": report.get("check_types", []),
+                "valid_pass": report["valid_pass"],
+                "valid_total": report["valid_total"],
+                "invalid_pass": report["invalid_pass"],
+                "invalid_total": report["invalid_total"],
+                "all_oracles_passed": report["all_oracles_passed"],
+            }
+        )
+
+    campaign = {
+        "format": "pcs-independent-eval-metamorphic-campaign-v1",
+        "case_ids": selected,
+        "case_count": len(selected),
+        "cases_ok": sum(1 for c in per_case if c.get("status") == "ok"),
+        "oracles_all_passed_count": sum(
+            1 for c in per_case if c.get("all_oracles_passed")
+        ),
+        "per_case": per_case,
+    }
+    write_json(report_dir / "metamorphic_campaign.json", campaign)
+    return campaign

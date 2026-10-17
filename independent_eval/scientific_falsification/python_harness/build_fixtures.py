@@ -721,6 +721,94 @@ def build_inadequacy_examples() -> None:
         encoding="utf-8",
     )
 
+    # Example D: train/test keys are disjoint (csv_disjoint PASS) but the authored
+    # synthetic cohorts are intentionally biased / non-representative. No human
+    # participants or study results are claimed — labels are synthetic scaffolding.
+    d = base / "04_disjoint_but_biased_cohorts"
+    d.mkdir(parents=True)
+    train = d / "train.csv"
+    test = d / "test.csv"
+    with train.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        w.writerow(["subject_id", "site", "age_band", "sex"])
+        # All train IDs from a single synthetic site and narrow age band.
+        w.writerow(["SYN_T01", "site_A_only", "18-25", "F"])
+        w.writerow(["SYN_T02", "site_A_only", "18-25", "F"])
+        w.writerow(["SYN_T03", "site_A_only", "18-25", "F"])
+    with test.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        w.writerow(["subject_id", "site", "age_band", "sex"])
+        # Disjoint keys, but still the same non-representative synthetic stratum.
+        w.writerow(["SYN_X01", "site_A_only", "18-25", "F"])
+        w.writerow(["SYN_X02", "site_A_only", "18-25", "F"])
+    write_json(
+        d / "manifest.json",
+        {
+            "subject": "independent-eval-disjoint-but-biased-cohorts",
+            "assumptions": [
+                {
+                    "id": "A_SPLIT",
+                    "statement": (
+                        "csv_disjoint only claims opaque subject_id set disjointness. "
+                        "It does not claim sampling validity, population coverage, "
+                        "or representativeness. Rows are synthetic labels only."
+                    ),
+                }
+            ],
+            "claims": [
+                {
+                    "id": "C_DISJOINT",
+                    "statement": "Train and test subject_id sets are disjoint.",
+                    "kind": "computational",
+                    "required_evidence": ["E_DISJOINT"],
+                    "assumptions": ["A_SPLIT"],
+                    "predicate": {
+                        "type": "csv_disjoint",
+                        "left_artifact": "train",
+                        "right_artifact": "test",
+                        "key": "subject_id",
+                    },
+                }
+            ],
+            "artifacts": [
+                {
+                    "id": "train",
+                    "path": "train.csv",
+                    "role": "split-table",
+                    "media_type": "text/csv",
+                },
+                {
+                    "id": "test",
+                    "path": "test.csv",
+                    "role": "split-table",
+                    "media_type": "text/csv",
+                },
+            ],
+            "checks": [
+                {
+                    "id": "E_DISJOINT",
+                    "type": "csv_disjoint",
+                    "claim_ids": ["C_DISJOINT"],
+                    "left_artifact": "train",
+                    "right_artifact": "test",
+                    "key": "subject_id",
+                }
+            ],
+            "workflow": {"nodes": []},
+        },
+    )
+    write_json(d / "license.json", LICENSE)
+    (d / "README.md").write_text(
+        "# Disjoint keys, scientifically biased cohorts\n\n"
+        "PCS `csv_disjoint` is expected to PASS (train/test `subject_id` sets do not "
+        "overlap). The authored synthetic tables are intentionally single-site, "
+        "narrow age-band, and single-sex — documenting that computational disjointness "
+        "does not establish sampling validity or population representativeness.\n\n"
+        "No human participants were enrolled; demographic labels are synthetic "
+        "scaffolding for the inadequacy thesis only. Empirical adequacy remains OPEN.\n",
+        encoding="utf-8",
+    )
+
     write_json(
         INADEQUACY / "INDEX.json",
         {
@@ -737,6 +825,10 @@ def build_inadequacy_examples() -> None:
                 {
                     "id": "03_units_ok_quantity_inadequate",
                     "thesis": "Unit compatibility does not imply measurand adequacy.",
+                },
+                {
+                    "id": "04_disjoint_but_biased_cohorts",
+                    "thesis": "csv_disjoint PASS does not imply sampling validity or representativeness.",
                 },
             ],
             "license": LICENSE,
@@ -931,7 +1023,14 @@ def main() -> int:
     (METAMORPHIC / "README.md").write_text(
         "# Metamorphic scientific testing (Task 9)\n\n"
         "Harness: `python_harness/metamorphic.py`\n\n"
-        "Black-box oracle: `pcs certify` / `pcs verify` via subprocess.\n",
+        "Black-box oracle: `pcs certify` / `pcs verify` via subprocess.\n\n"
+        "Campaign coverage (via `run_metamorphic_campaign` / `run_all.py`):\n\n"
+        "- `01_pkpd_one_compartment`\n"
+        "- `03_mass_action_reaction_balance`\n"
+        "- `04_unit_compatible_concentration`\n"
+        "- `06_scientific_workflow_composite`\n\n"
+        "Per-case reports are written under `results/metamorphic_<case_id>.json` "
+        "(gitignored); campaign rollup is `results/metamorphic_campaign.json`.\n",
         encoding="utf-8",
     )
     (DISCOVERY / "README.md").write_text(
@@ -943,7 +1042,9 @@ def main() -> int:
     (INADEQUACY / "README.md").write_text(
         "# Formal correctness vs scientific inadequacy (Task 8)\n\n"
         "Synthetic examples where PCS computational checks PASS while empirical "
-        "adequacy remains unestablished.\n",
+        "adequacy remains unestablished.\n\n"
+        "Examples include PKPD, reaction balance, unit compatibility, and "
+        "`csv_disjoint` (disjoint but intentionally biased synthetic cohorts).\n",
         encoding="utf-8",
     )
 

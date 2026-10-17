@@ -34,6 +34,12 @@ PCS (out of writable scope).
    the unit checker; whether a given spelling is the *correct measurand*
    remains out of scope (Task 8 example 03).
 
+6. **`csv_disjoint` vs sampling validity.**  
+   Disjoint opaque keys computationally PASS even when authored synthetic
+   cohorts are single-site / narrow age-band / single-sex (Task 8 example
+   04). PCS does not claim representativeness; evaluators must not read
+   verify PASS as population adequacy.
+
 ## Bugs / sharp edges for evaluators
 
 1. **Tampered evidence after certify.**  
@@ -51,4 +57,11 @@ PCS (out of writable scope).
    Discovery recommends `reaction_balance` from reactants/products JSON, but
    classic manifests embed reactants/products inside the check object. The
    on-disk `reaction.json` is evidence/context; the check fields are
-   authoritative for certify.
+   authoritative for certify. Metamorphic reaction breaks sync both the
+   artifact and the check/predicate fields.
+
+4. **Surface-specific invalid transforms.**  
+   Applying dose/reaction break to a units-only project is not meaningful.
+   The campaign runner selects invalid transforms from declared check types
+   and present artifacts so oracle failures are not confounded with
+   inapplicable mutations.
