@@ -55,6 +55,19 @@ def test_units_ok_quantity_inadequate_verifies(tmp_path):
     assert v.ok, v.combined()
 
 
+def test_aristotle_candidates_are_proposals_only():
+    from python_harness.aristotle_candidates import build_candidates
+
+    catalog = build_candidates()
+    assert catalog["candidate_count"] >= 4
+    assert catalog["disclaimer"].startswith("PROPOSALS ONLY")
+    for c in catalog["candidates"]:
+        assert c["status"] == "proposal_candidate"
+        assert c["not_claimed_done"] is True
+        assert c["empirical_adequacy_established"] is False
+        assert c["computational_support_expected"] is True
+
+
 def test_disjoint_but_biased_cohorts_verifies_without_adequacy(tmp_path):
     ex = INADEQUACY / "examples" / "04_disjoint_but_biased_cohorts"
     out = tmp_path / "evidence"

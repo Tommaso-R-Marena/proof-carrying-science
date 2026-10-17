@@ -9,6 +9,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from .aristotle_candidates import write_candidates
 from .discovery_metrics import run_discovery_benchmark, write_report as write_discovery
 from .external_validity import score_protocol_file
 from .inadequacy_eval import run_inadequacy_suite
@@ -129,6 +130,13 @@ def main(argv: list[str] | None = None) -> int:
     (RESULTS / "external_validity_score.json").write_text(
         json.dumps(score, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+
+    aristotle = write_candidates()
+    reports["aristotle_candidates"] = {
+        "candidate_count": aristotle["candidate_count"],
+        "status": "proposal_candidates_only",
+        "empirical_adequacy_established_any": False,
+    }
 
     (RESULTS / "SUMMARY.json").write_text(
         json.dumps(reports, indent=2, sort_keys=True) + "\n", encoding="utf-8"
