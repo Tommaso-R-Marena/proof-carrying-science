@@ -55,7 +55,7 @@ Proposal count: 8
 - **Priority:** 3
 - **Status:** `proposal` (proposal — not claimed done)
 - **Affinity:** protocol_adversarial
-- **Summary:** Propose additional malformed-intake and policy-bypass fixtures once Workstream A baselines are merged; treat as future work, not completed coverage.
+- **Summary:** Continue expanding malformed-intake / signature / lock mutation families on Workstream A; treat further growth as ongoing evaluation, not a security proof.
 - **Rationale:** Protocol surface area grows with new claim kinds and archive encodings.
 
 ### E-P06 — External-lab burden measurement with human participants

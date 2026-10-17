@@ -1,11 +1,11 @@
 {
   "branch_nonoverlap": {
-    "branches_audited": 5,
+    "branches_audited": 15,
     "has_overlaps": false,
     "missing_branches": [],
-    "pair_count": 10
+    "pair_count": 15
   },
-  "disclaimer": "Program assurance synthesizes presence/overlap/collision signals and proposal catalogs. It does not re-run A\u2013D evaluation harnesses or claim their findings as completed here.",
+  "disclaimer": "Program assurance synthesizes presence/overlap/collision/trust signals and proposal catalogs. It does not re-run A\u2013D evaluation harnesses or claim their findings as completed here. Use python_harness.preflight for hard gates.",
   "format": "pcs-independent-program-assurance-summary-v1",
   "inventory": {
     "prefixes_missing": 4,
@@ -13,13 +13,20 @@
   },
   "path_collision": {
     "collision_group_count": 0,
-    "file_count": 28,
+    "file_count": 34,
     "has_collisions": false
   },
+  "preflight_soft_pass": true,
   "proposals": {
     "proposal_count": 8,
     "status": "proposal_catalog_only"
   },
-  "repo_head": "877e0e77b28a8ad98808607721c7f005e01bb617",
+  "repo_head": "dc88bae4184bfbf5459d67f7d09fd8950a72db1d",
+  "residual_trust": {
+    "assumption_id_count": 75,
+    "sources_missing": 0,
+    "sources_present": 4,
+    "tcb_closed": false
+  },
   "root": "independent_eval/program_assurance"
 }

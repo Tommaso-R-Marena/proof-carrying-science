@@ -30,6 +30,8 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
             "Workstream D hit a repository-integrity failure from dual checklist "
             "filenames that collide on case-insensitive filesystems."
         ),
+        "harness_local": "implemented_as_preflight_gate",
+        "ci_wiring": "proposal",
         "not_claimed_done": True,
     },
     {
@@ -46,6 +48,8 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
             "Parallel workstreams A–D plus the scientific pilot must remain path-disjoint; "
             "manual NONOVERLAP.md alone does not detect drift."
         ),
+        "harness_local": "implemented_as_preflight_gate",
+        "ci_wiring": "proposal",
         "not_claimed_done": True,
     },
     {
@@ -62,6 +66,8 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
         "rationale": (
             "Program-level assurance needs a single view without duplicating A–D harness code."
         ),
+        "harness_local": "implemented_as_inventory_aggregator",
+        "ci_wiring": "proposal",
         "not_claimed_done": True,
     },
     {
@@ -78,6 +84,8 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
             "Trust boundaries are currently per-workstream; synthesis is needed for "
             "Codex/Aristotle follow-on formalization proposals."
         ),
+        "harness_local": "implemented_as_residual_trust_rollup",
+        "ci_wiring": "proposal",
         "not_claimed_done": True,
     },
     {
@@ -87,10 +95,12 @@ DEFAULT_PROPOSALS: list[dict[str, Any]] = [
         "status": "proposal",
         "workstream_affinity": ["protocol_adversarial"],
         "summary": (
-            "Propose additional malformed-intake and policy-bypass fixtures once "
-            "Workstream A baselines are merged; treat as future work, not completed coverage."
+            "Continue expanding malformed-intake / signature / lock mutation families "
+            "on Workstream A; treat further growth as ongoing evaluation, not a security proof."
         ),
         "rationale": "Protocol surface area grows with new claim kinds and archive encodings.",
+        "harness_local": "partially_addressed_on_workstream_A",
+        "ci_wiring": "n/a",
         "not_claimed_done": True,
     },
     {

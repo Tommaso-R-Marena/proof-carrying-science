@@ -7,23 +7,20 @@ import subprocess
 import sys
 from pathlib import Path
 
-from .collision_scanner import scan_path_collisions, write_collision_report
 from .inventory_aggregator import (
     aggregate_inventory,
     render_inventory_markdown,
     write_inventory_report,
 )
-from .nonoverlap_auditor import audit_branch_nonoverlap, write_nonoverlap_report
 from .paths import (
-    INDEPENDENT_EVAL,
     INVENTORY_REPORT_NAMES,
     PROPOSALS_DIR,
     REPO_ROOT,
     RESULTS,
     ROOT,
-    SIBLING_BRANCHES,
     SIBLING_PREFIXES,
 )
+from .preflight import run_preflight
 from .proposals_catalog import write_catalog
 
 
@@ -40,11 +37,12 @@ def main(argv: list[str] | None = None) -> int:
     del argv  # smoke entry takes no flags for now
     RESULTS.mkdir(parents=True, exist_ok=True)
 
-    collision = scan_path_collisions(INDEPENDENT_EVAL if INDEPENDENT_EVAL.exists() else ROOT)
-    write_collision_report(collision, RESULTS / "path_collision_report.json")
-
-    nonoverlap = audit_branch_nonoverlap(SIBLING_BRANCHES, repo=REPO_ROOT)
-    write_nonoverlap_report(nonoverlap, RESULTS / "branch_nonoverlap_report.json")
+    # Soft mode for smoke summary so missing remote refs don't fail the campaign;
+    # use ``python -m python_harness.preflight`` for hard gates.
+    preflight = run_preflight(
+        fail_on_overlap=False,
+        fail_on_collision=False,
+    )
 
     inventory = aggregate_inventory(
         repo=REPO_ROOT,
@@ -64,20 +62,30 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(catalog, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
 
+    collision_gate = preflight["gates"].get("path_collision", {})
+    nonoverlap_gate = preflight["gates"].get("branch_nonoverlap", {})
+    trust_gate = preflight["gates"].get("residual_trust", {})
+
     summary = {
         "format": "pcs-independent-program-assurance-summary-v1",
         "repo_head": _git_head(),
         "root": str(ROOT.relative_to(REPO_ROOT)),
         "path_collision": {
-            "file_count": collision.file_count,
-            "collision_group_count": len(collision.collision_groups),
-            "has_collisions": collision.has_collisions,
+            "file_count": collision_gate.get("file_count"),
+            "collision_group_count": collision_gate.get("collision_group_count"),
+            "has_collisions": not collision_gate.get("pass", True),
         },
         "branch_nonoverlap": {
-            "branches_audited": len(nonoverlap.changed_files),
-            "missing_branches": list(nonoverlap.missing_branches),
-            "has_overlaps": nonoverlap.has_overlaps,
-            "pair_count": len(nonoverlap.pair_overlaps),
+            "branches_audited": nonoverlap_gate.get("pair_count"),
+            "missing_branches": nonoverlap_gate.get("missing_branches", []),
+            "has_overlaps": nonoverlap_gate.get("has_overlaps"),
+            "pair_count": nonoverlap_gate.get("pair_count"),
+        },
+        "residual_trust": {
+            "sources_present": trust_gate.get("sources_present"),
+            "sources_missing": trust_gate.get("sources_missing"),
+            "assumption_id_count": trust_gate.get("assumption_id_count"),
+            "tcb_closed": False,
         },
         "inventory": {
             "prefixes_present": inventory.to_dict()["prefixes_present"],
@@ -87,10 +95,11 @@ def main(argv: list[str] | None = None) -> int:
             "proposal_count": catalog["proposal_count"],
             "status": "proposal_catalog_only",
         },
+        "preflight_soft_pass": preflight["pass"],
         "disclaimer": (
-            "Program assurance synthesizes presence/overlap/collision signals and "
+            "Program assurance synthesizes presence/overlap/collision/trust signals and "
             "proposal catalogs. It does not re-run A–D evaluation harnesses or "
-            "claim their findings as completed here."
+            "claim their findings as completed here. Use python_harness.preflight for hard gates."
         ),
     }
     (RESULTS / "SUMMARY.json").write_text(

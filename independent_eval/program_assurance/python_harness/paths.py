@@ -23,6 +23,7 @@ SIBLING_BRANCHES: tuple[str, ...] = (
     "feature/independent-eval-scientific-falsification-c8bb",
     "feature/independent-eval-repro-tcb-c8bb",
     "feature/independent-eval-reviewer-adoption-c8bb",
+    "feature/independent-eval-program-assurance-c8bb",
     "feature/independent-scientific-pilot-c8bb",
 )
 
