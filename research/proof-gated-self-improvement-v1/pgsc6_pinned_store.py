@@ -243,7 +243,8 @@ class PinnedPGSC6Store:
         self._dirs()
         genesis = strict_json(_read_regular(self.root / "GENESIS.json", MAX_RECEIPT_BYTES))
         if type(genesis) is not dict or set(genesis) != {
-            "version", "policy_sha256", "oracle_sha256", "initial_model_sha256"
+            "version", "policy_sha256", "oracle_sha256", "formal_sources_sha256",
+            "initial_model_sha256"
         } or genesis["version"] != VERSION or genesis["policy_sha256"] != POLICY_DIGEST:
             raise IntegrityFailure("genesis does not match fixed policy")
         if genesis["oracle_sha256"] != self._oracle_digest():
