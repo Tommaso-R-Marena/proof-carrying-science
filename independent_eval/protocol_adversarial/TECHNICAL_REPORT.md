@@ -14,6 +14,12 @@ Tasks 1–6 under `independent_eval/protocol_adversarial/`, evaluating PCS as a 
 6. Dual-reviewer policy overlays that must not alter PCS validity.
 7. Bounded CPU/RSS measurements on large/nested inputs.
 
+## Campaign results (observed)
+
+- Adversarial corpus: **151** verify-attempted cases; **10** positive accepted; **141** negatives rejected after attempted verify; **0** false accepts; **0** not_attempted.
+- Added mutation families beyond byte-flip/extra-member baselines: truncated and bit-flipped Ed25519 signature fields; swapped `public_key_fingerprint` vs signer; member rename that breaks inventory lock; duplicated critical members with conflicting bytes; empty certificate / signature / normalized-index bytes (in-archive empty-transcript analogue).
+- UTF-8 overlong encodings and weird ZIP timestamps were **not** added: they are not present as existing adversarial harness patterns (ZIP timestamp weirdness remains out of scope for this deepening).
+
 ## Most consequential remaining weaknesses (ranked)
 
 1. Cross-language JCS number canonicalization edge cases can desynchronize independent verifiers.

@@ -1,10 +1,31 @@
 {
   "adversarial_corpus": {
-    "case_count": 104,
+    "case_count": 151,
     "false_accepts": [],
     "format": "pcs-independent-adversarial-corpus-v1",
-    "negative_controls": 94,
-    "negatives_rejected_after_attempted_verify": 94,
+    "mutation_families": [
+      "absolute",
+      "appended",
+      "certificate",
+      "duplicate",
+      "empty",
+      "extra",
+      "fingerprint",
+      "manifest",
+      "missing",
+      "normalized",
+      "not",
+      "package",
+      "path",
+      "payload",
+      "rename",
+      "signature",
+      "signer",
+      "swapped",
+      "truncated"
+    ],
+    "negative_controls": 141,
+    "negatives_rejected_after_attempted_verify": 141,
     "not_attempted": [],
     "positive_accepted": 10,
     "positive_controls": 10
@@ -172,7 +193,7 @@
     "vector_count": 16
   },
   "policy_confusion": {
-    "bundle_sha256": "53c2078f714b1059b052313545ffa44a27e90aaa460ed72a46a150ca46320c13",
+    "bundle_sha256": "bb41a317fac50b8f746f1d3ccbd2a9255d163afe2b1ad9cc65a05c549ca3bddd",
     "findings": [
       "Same signed evidence yields identical PCS validity for both reviewers.",
       "Permissive policy can dangerously confuse computational PASS with scientific acceptance if consumers misuse policy flags.",
@@ -198,7 +219,7 @@
       }
     ]
   },
-  "repo_head": "fabc704efdbda4c8822881366e4db3d3e31f066a",
+  "repo_head": "4a5de4211419f50b42c8ee9f9c60122d87e1dee2",
   "resource_bounds": {
     "format": "pcs-independent-resource-bounds-v1",
     "limits": {
@@ -215,7 +236,7 @@
         "ok": true,
         "output_bytes": 1191,
         "rss_kb_delta": 0,
-        "seconds": 0.00028449799992813496
+        "seconds": 0.00027484699967317283
       },
       {
         "error": null,
@@ -223,7 +244,7 @@
         "ok": true,
         "output_bytes": 12891,
         "rss_kb_delta": 0,
-        "seconds": 0.0024164480000763433
+        "seconds": 0.002503761999832932
       },
       {
         "error": null,
@@ -231,7 +252,7 @@
         "ok": true,
         "output_bytes": 68891,
         "rss_kb_delta": 0,
-        "seconds": 0.012214751000101387
+        "seconds": 0.012820041999475507
       },
       {
         "error": null,
@@ -239,7 +260,7 @@
         "ok": true,
         "output_bytes": 22,
         "rss_kb_delta": 0,
-        "seconds": 8.881000212568324e-06
+        "seconds": 9.81900029728422e-06
       },
       {
         "error": null,
@@ -247,7 +268,7 @@
         "ok": true,
         "output_bytes": 102,
         "rss_kb_delta": 0,
-        "seconds": 2.322899945284007e-05
+        "seconds": 2.5568999262759462e-05
       },
       {
         "error": null,
@@ -255,7 +276,7 @@
         "ok": true,
         "output_bytes": 202,
         "rss_kb_delta": 0,
-        "seconds": 4.056900070281699e-05
+        "seconds": 4.973399973096093e-05
       },
       {
         "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
@@ -263,7 +284,7 @@
         "ok": false,
         "output_bytes": 5622,
         "rss_kb_delta": 0,
-        "seconds": 0.0014329829991766019
+        "seconds": 0.001451884999369213
       },
       {
         "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
@@ -271,7 +292,7 @@
         "ok": false,
         "output_bytes": 22422,
         "rss_kb_delta": 0,
-        "seconds": 0.004852994000430044
+        "seconds": 0.004897712000456522
       }
     ],
     "risks": [
@@ -292,7 +313,7 @@
           "member_names": [],
           "ok": false
         },
-        "sha256": "e46e4bddd5c3fdf19d731b249ed28628386f8923475b851f685903f02094866e",
+        "sha256": "438bfc4c2896b14932777ba1aec8eeeaf3061c16d03273370a856aa1ff836058",
         "size": 121,
         "stdlib": {
           "error": null,
@@ -321,7 +342,7 @@
           "member_names": [],
           "ok": false
         },
-        "sha256": "a6d0cd5f9729ec1c9ccb31f53de4cab83b6e8586a9b0b65920fdbe7096624dc4",
+        "sha256": "59882f46289c6b07d34b0fc7b0649842162613ca4bae501dd1f071033fbb9488",
         "size": 125,
         "stdlib": {
           "error": null,
@@ -350,7 +371,7 @@
           "member_names": [],
           "ok": false
         },
-        "sha256": "260575e6b010ceb8942377add5cdfec3bad17b713e9276e68ebea2cbd164951e",
+        "sha256": "3dcc45318b9596250b229ca43a712c52eda4c3bee47ac104978838319f16acef",
         "size": 123,
         "stdlib": {
           "error": null,
@@ -379,7 +400,7 @@
           "member_names": [],
           "ok": false
         },
-        "sha256": "98c0d09bcdc677301c32cfa336b3f784e16618cc6341dcd735df33e0edd918f1",
+        "sha256": "58a40e6a166c485c10ab45b83304c56d4c2a7a5e31827dc8bca4d1bf5a2229f8",
         "size": 208,
         "stdlib": {
           "error": null,
@@ -417,7 +438,7 @@
           "member_names": [],
           "ok": false
         },
-        "sha256": "1c7c98d0827cd23191aeb196f5cb9427fd6f6f75d8034e5ec0ba5741875b9a31",
+        "sha256": "58e3fad7637cbdaa98da8707e3e92459e505545559f27124d1a8f93ee9fd8331",
         "size": 138,
         "stdlib": {
           "error": null,
@@ -446,7 +467,7 @@
           "member_names": [],
           "ok": false
         },
-        "sha256": "8ce612a2b6f6d1e7887074a1eb10aa4069a159ebc1234882c8d7885f72119d9c",
+        "sha256": "8244356a5791a14c9de115f5f7e37c1bfbb79cbf255d33ee0f5269628d719b12",
         "size": 20,
         "stdlib": {
           "error": "BadZipFile: File is not a zip file",

@@ -1,4 +1,32 @@
-cargo test: 3 passed
-pytest independent_eval/protocol_adversarial/tests: 7 passed
-adversarial corpus cases: 104
-false_accepts: []
+........                                                                 [100%]
+=============================== warnings summary ===============================
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_zip_differential_runs
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'dup.txt'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_adversarial_corpus_at_least_150_with_attempted_verify
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'artifacts/07003bc2166f1cc92aa6c957/payload'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_adversarial_corpus_at_least_150_with_attempted_verify
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'certificate.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_adversarial_corpus_at_least_150_with_attempted_verify
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'package_manifest.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_adversarial_corpus_at_least_150_with_attempted_verify
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'package_signature.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_adversarial_corpus_at_least_150_with_attempted_verify
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'certificate_signature.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_adversarial_corpus_at_least_150_with_attempted_verify
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'normalized/index.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+8 passed, 7 warnings in 9.43s

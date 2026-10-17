@@ -1,9 +1,9 @@
 {
-  "case_count": 104,
+  "case_count": 151,
   "cases": [
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_000",
@@ -19,7 +19,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_001",
@@ -35,7 +35,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_002",
@@ -51,7 +51,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_003",
@@ -67,7 +67,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_004",
@@ -83,7 +83,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_005",
@@ -99,7 +99,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_006",
@@ -115,7 +115,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_007",
@@ -131,7 +131,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_008",
@@ -147,7 +147,7 @@
     },
     {
       "attack": "none",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "positive",
       "expected_reject": false,
       "id": "positive_009",
@@ -163,7 +163,7 @@
     },
     {
       "attack": "signature_substitution_wrong_key",
-      "bundle_sha256": "d096d0b655de8a7807b6e8909f631a992b839dfeec9f2646e3be292c9768dbdf",
+      "bundle_sha256": "96cb69a520c7133f0d7cd27d49d6fe1900b6be9711fa6873b963c8afa7c2bc4d",
       "class": "negative",
       "constructed": true,
       "expected_reject": true,
@@ -184,7 +184,7 @@
     },
     {
       "attack": "payload_tamper",
-      "bundle_sha256": "d096d0b655de8a7807b6e8909f631a992b839dfeec9f2646e3be292c9768dbdf",
+      "bundle_sha256": "96cb69a520c7133f0d7cd27d49d6fe1900b6be9711fa6873b963c8afa7c2bc4d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -207,7 +207,7 @@
     },
     {
       "attack": "certificate_empty",
-      "bundle_sha256": "b19dad88ac41bbc3d9a444c3742ed790e1c5c0ba8e2a4dd320dbe5c6d0f856ff",
+      "bundle_sha256": "e862ef9c5c9b0d9cb3d6c220511478794fc262b9907f787c4aa3660b495d1ac4",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -226,8 +226,28 @@
       }
     },
     {
+      "attack": "certificate_empty_bytes",
+      "bundle_sha256": "b6ff9887ed48668e458aad76667b9425733ae0560aead76c772cb6549596325b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_empty_bytes",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate is not valid strict JCS JSON: invalid JCS JSON: Expecting value: line 1 column 1 (char 0)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
       "attack": "certificate_truncated",
-      "bundle_sha256": "c892b914cf32187aea303e59e7979691156a249da448488ac02b211a6b5849ba",
+      "bundle_sha256": "b134c0c6c31fec40f9eac710271bb02c0a27d0be9b53800fd0e33dabbb6a4db8",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -247,7 +267,7 @@
     },
     {
       "attack": "package_manifest_zero",
-      "bundle_sha256": "8c44bdef61844dce8711659c3e1246b1d6049f2798ef3cac98fa64178c8a3df7",
+      "bundle_sha256": "7d7972788f300c77f88d4228e115f1791df86389e3ba6e9114552013f88e00c5",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -266,8 +286,28 @@
       }
     },
     {
+      "attack": "package_manifest_empty_bytes",
+      "bundle_sha256": "72715afd5b151a8e913e6e0ddcdb7aecf0657957384e9a1fee639064f09a35b9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "package_manifest_empty_bytes",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid strict JCS JSON: invalid JCS JSON: Expecting value: line 1 column 1 (char 0)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
       "attack": "package_signature_flip",
-      "bundle_sha256": "13160a96759b68d4031d600f9f87f245f6ca7c4e523a166a965104efb961a49b",
+      "bundle_sha256": "e771f38fc35191e7ace81616380ef8350545d86eecb08637179ff271849f4c90",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -287,7 +327,7 @@
     },
     {
       "attack": "certificate_signature_flip",
-      "bundle_sha256": "673cbf0127e88284fd495b22bf96cdf8068a1466590cad4ff4a855ad6498a37c",
+      "bundle_sha256": "70cb74ade206171c2735fdbb207639569f6e97bf9724cec446472ae29d4b4f6b",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -306,8 +346,90 @@
       }
     },
     {
+      "attack": "package_signature_empty_bytes",
+      "bundle_sha256": "831eac503f502e3f9262dc482b6e19aa1a3abd518da8f030ea038a5c051b8081",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "package_signature_empty_bytes",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is not valid strict JCS JSON: invalid JCS JSON: Expecting value: line 1 column 1 (char 0)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_signature_empty_bytes",
+      "bundle_sha256": "d964703701a486c8851cb82ecbff91210867a4d8c5a2872a7fbd9fa14ae3056b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_signature_empty_bytes",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is not valid strict JCS JSON: invalid JCS JSON: Expecting value: line 1 column 1 (char 0)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "normalized_index_empty",
+      "bundle_sha256": "69b32647553b7ae7bceccd22dfe4865cc005e9d46e8886f4a7379a532a5e73dd",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "normalized_index_empty",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package size mismatch: normalized/index.json",
+          "v0.6 package hash mismatch: normalized/index.json"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "normalized_index_empty_object",
+      "bundle_sha256": "c94453412d9210e65d6c0338fc1ab2ded1bff46087d7f3723702b11cb79cf744",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "normalized_index_empty_object",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package size mismatch: normalized/index.json",
+          "v0.6 package hash mismatch: normalized/index.json"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
       "attack": "missing_certificate_json",
-      "bundle_sha256": "a2921028820c8f3dba956e3baedd910fc3376388216484c9890e96a4226584bb",
+      "bundle_sha256": "fe5fe4e1fcbe2c240a1ee5524bd7635df31097625bdad1c4dd78c58618c759c0",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -327,7 +449,7 @@
     },
     {
       "attack": "missing_certificate_signature_json",
-      "bundle_sha256": "97fb52b1889102dad2ed9f44f3ece63d990e4a6ca3c511961a36a1ea18c6ffc5",
+      "bundle_sha256": "0c3d3480c1897337e295f9dcb042f7762dca78003e872a4c37c0ff129c00b588",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -347,7 +469,7 @@
     },
     {
       "attack": "missing_package_manifest_json",
-      "bundle_sha256": "4e5bd5a8786ae7feb303464e6cdd32d3d99e3799c9c322491814d31ec64b470c",
+      "bundle_sha256": "ed1408c85389b1560882478de1e326723a2f8767301fb632310445945a4d9eab",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -367,7 +489,7 @@
     },
     {
       "attack": "missing_package_signature_json",
-      "bundle_sha256": "25449d3ee43011dbe69231b8653bf67f09b6acc4efe9ceea835e599fe6ca65d0",
+      "bundle_sha256": "39171d001f611c1655be2bdb0410e14036a3f3b721e36422ed971ae88f095bac",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -387,7 +509,7 @@
     },
     {
       "attack": "path_traversal_member",
-      "bundle_sha256": "cce73694181f720270d4fdde0798adf07e6b5eba1647e68bff026c556c8de86a",
+      "bundle_sha256": "674511f0a7beb3cc01ef169b62abefb1153ca89903e32f692772b9eaecc4de96",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -407,7 +529,7 @@
     },
     {
       "attack": "absolute_member",
-      "bundle_sha256": "831cd00a342b58a2e8c7787b531dcd306ccb02b39b75adfcabec1acb0f12e49e",
+      "bundle_sha256": "e3c52b441fed426d635d4c2c08eaa51e12a36cb227757df4d4207ec5abd3cd58",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -427,7 +549,7 @@
     },
     {
       "attack": "duplicate_payload_name",
-      "bundle_sha256": "d614a487bb67d86683f33d97ac571ef4cd72bcd14d57e1ada4426d5e288d3b68",
+      "bundle_sha256": "50b2246d62da6849aee4bfea03cd1472b8cf3d7e19bf296c4ff6f80a4e6ce9c0",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -447,7 +569,7 @@
     },
     {
       "attack": "appended_garbage",
-      "bundle_sha256": "43572af254ee3c38510c5d0a0d8dddcda3ad8759db654da690a150b2ed4660d9",
+      "bundle_sha256": "6c814d36816016dd74d3727253d4cf48ec0a85ff53e27bf8bff8ba313693efd7",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -526,8 +648,609 @@
       }
     },
     {
+      "attack": "signature_truncated_package",
+      "bundle_sha256": "7850ce6bcab77dd477f70b5b170efad6066e552036d022c41b6c91d8cf098ae3",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_truncated_package",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_truncated_certificate",
+      "bundle_sha256": "6fdec7e0fc6e6b7268d370fe93b6412c82252a63e3c161699b1962bfb2a0fe1c",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_truncated_certificate",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_00",
+      "bundle_sha256": "d4d0e1abd44394b3eb75871225254ad46e116403630885cbb49eadec6e3e7d68",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_00",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_01",
+      "bundle_sha256": "977d3c8cfe14c0c52f77bf3c637b505d63234e1ea6e534bef0e81f66331d4a2f",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_01",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_02",
+      "bundle_sha256": "5846c6dc2588735e4d2bfa3cb9e75d9278454b2695f6baf79488495bda776b09",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_02",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_03",
+      "bundle_sha256": "82de81379b794915a073c0dd52c86a949ae83c4ee55a3d4c759c65fe10a00ccd",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_03",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_04",
+      "bundle_sha256": "f65bda057b78388e017185a02c887a1db70a95bf2155bb35b52c610dfaadbde2",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_04",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_05",
+      "bundle_sha256": "f41e99eeecdb2aa4a0037646e66679ceba9e837a4c55b87e3166a480c301b5ea",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_05",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_06",
+      "bundle_sha256": "1f97aef4bce5bcf4fed605c31b28e30b0b1a123882a6124a46d385f7b38318ad",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_06",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_package_07",
+      "bundle_sha256": "d382acd958af7a9fdc36e0ddcf07258a558fb49745927173d04fb865b22aa749",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_package_07",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_00",
+      "bundle_sha256": "39e58afd9930e5c81c8f8986999ac18bcb08ff7eb17eac45bd2c5efa365c6513",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_00",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_01",
+      "bundle_sha256": "33fca42c4e31c996d64a66fb2bb80c8eb7b67012010b7ed49b3614514299a8f5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_01",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_02",
+      "bundle_sha256": "cfc861d71a86826445e5c7ba8fd9904e6c36959e3b218595484e33a6bdf8959e",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_02",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_03",
+      "bundle_sha256": "d64196931f8b40486c275927bed91942d8e3c34a4bd4a22cad1d8f51dc35a41f",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_03",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_04",
+      "bundle_sha256": "57601dd670d8e89201814740036bd08e0147109d4e07240555039055cecc9c68",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_04",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_05",
+      "bundle_sha256": "77490bb8e9507d6e4cf0e51fbc9d88183e66f78dfd153f0f7f5783ecf144d2f6",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_05",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_06",
+      "bundle_sha256": "24c5efb071d974ba57b12a46d34b3e33cc5f596f513d32f70973460ddae8992d",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_06",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "signature_bit_flip_certificate_07",
+      "bundle_sha256": "a31ef355b53872b0a8adbc3f201a0debe138697e95ca69737d520085b6da4ea5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "signature_bit_flip_certificate_07",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "swapped_fingerprint_package_sig",
+      "bundle_sha256": "56c25a78f06e5190ce8bfdabcf7c40d58e1abed9efd836c42acdd836042cd74e",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "swapped_fingerprint_package_sig",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "swapped_fingerprint_certificate_sig",
+      "bundle_sha256": "67323d3fd42c22fb97b7c5ea2c4e74b4ad572b01cd2e49fc02b690ac251a2af9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "swapped_fingerprint_certificate_sig",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is valid JSON but not the exact canonical JCS byte representation"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "rename_breaks_lock_certificate_json",
+      "bundle_sha256": "144a001a42f2d53f5c2648dae913884a244bd3d61e1a9d1fb14340968a5b1222",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "rename_breaks_lock_certificate_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['certificate.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "rename_breaks_lock_package_manifest_json",
+      "bundle_sha256": "c9015187cafaf9943871d450c1f8ddc0d4a46130b1e5d72795ddedf3a87722ab",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "rename_breaks_lock_package_manifest_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['package_manifest.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "rename_breaks_lock_package_signature_json",
+      "bundle_sha256": "6fc5364f81abd1b4e1c0a2d5d3a75d2084d976b63431ef7f7222824d75968e53",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "rename_breaks_lock_package_signature_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['package_signature.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "rename_breaks_lock_certificate_signature_json",
+      "bundle_sha256": "dbb06ecb7d21fd4c48c49700f3da7f035016bc77acd91ba2eddc4a687d413715",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "rename_breaks_lock_certificate_signature_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['certificate_signature.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "rename_breaks_lock_normalized_index_json",
+      "bundle_sha256": "c3822eb3910e90caba694ee3b1dd05ba4828162278ca85e961c4fcb6cd84d033",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "rename_breaks_lock_normalized_index_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package file map is missing signed members: ['normalized/index.json']",
+          "v0.6 package file map contains unsigned members: ['normalized/index.json.moved']"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "duplicate_conflict_certificate_json",
+      "bundle_sha256": "1845ef8519a23e4a100666b85e80edca0d32ffb5e0c839df8fe5ac195209ef68",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "duplicate_conflict_certificate_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "duplicate or file/directory-colliding ZIP member: 'certificate.json'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "duplicate_conflict_package_manifest_json",
+      "bundle_sha256": "f533590a1e996918e82b25f576bf75b83ef303f39a8b5e8d252f0e4d81cf2bbb",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "duplicate_conflict_package_manifest_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "duplicate or file/directory-colliding ZIP member: 'package_manifest.json'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "duplicate_conflict_package_signature_json",
+      "bundle_sha256": "2e2b7f724b143496a38dcaab0bd2f6d67aca9470c6ed222525f3ae19b71189f4",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "duplicate_conflict_package_signature_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "duplicate or file/directory-colliding ZIP member: 'package_signature.json'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "duplicate_conflict_certificate_signature_json",
+      "bundle_sha256": "884937172d954a7dc4622b96a009f4d56d7938e484f4a7be423c37fc385175c8",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "duplicate_conflict_certificate_signature_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "duplicate or file/directory-colliding ZIP member: 'certificate_signature.json'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "duplicate_conflict_normalized_index_json",
+      "bundle_sha256": "94bc525257ed2af87248c4d1e79366ba15a6cd5ab7f4f77de1380fb760ad3e28",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "duplicate_conflict_normalized_index_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "duplicate or file/directory-colliding ZIP member: 'normalized/index.json'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
       "attack": "payload_byte_flip_00",
-      "bundle_sha256": "6cd69b9aa7be2ca6e3a7d2c472a1f50cb85f116d273c9f002a0b6b5dc427f62f",
+      "bundle_sha256": "7bd712d1d6ab7cd0b915d2acfa4ef286f03be1a67d611275d8f851076253d244",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -548,7 +1271,7 @@
     },
     {
       "attack": "payload_byte_flip_01",
-      "bundle_sha256": "f6b6706db62c328fd2ae6e99574168152a9f42999b0fbcdcf859c98110f34e26",
+      "bundle_sha256": "97e8c7539298482a15ddf9f76041614f3e38fb1f82d4eec3687fb258a746ee59",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -569,7 +1292,7 @@
     },
     {
       "attack": "payload_byte_flip_02",
-      "bundle_sha256": "c060b687cb70b1002d1ca5cad33303750e7af1e52b0a1fa652e6e47521efa61e",
+      "bundle_sha256": "5a0b571a0713e9b2320e621f5ff6d2d3d4084f95b4fdf973d2baeade4df1aea7",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -590,7 +1313,7 @@
     },
     {
       "attack": "payload_byte_flip_03",
-      "bundle_sha256": "0418755e108eb07e8ec2f82a9e928b1eea019d68f29f791183328c22aa7a5082",
+      "bundle_sha256": "024a14d0aec2da60853a0e7ada4238eb1c24dfeba28142c320399e101fc7e3aa",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -611,7 +1334,7 @@
     },
     {
       "attack": "payload_byte_flip_04",
-      "bundle_sha256": "6a6f24a18274925dfb67242ddcbd5502acc2da7fb563913749f0fc61fb1ce7f3",
+      "bundle_sha256": "16e76b10b3a37c93c3821b541fddd95e93077d51a24f355b83eabea57a04ab8e",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -632,7 +1355,7 @@
     },
     {
       "attack": "payload_byte_flip_05",
-      "bundle_sha256": "16c1e75afd08d4306c63ed3aff06fe3e9742a852cc3b4bb45a56f222d93d3f37",
+      "bundle_sha256": "e9fa585a537a54e60ea0320182b045959e5cb3722098c181c7a05cf146bda81d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -653,7 +1376,7 @@
     },
     {
       "attack": "payload_byte_flip_06",
-      "bundle_sha256": "505ee02eebb03c06408e0ef14c90d37b250ff9bf92258e58e7768c22bda2869f",
+      "bundle_sha256": "ab4e6082ea521f533ef3761cc28611a27d9eb8a5c9907f014b1eba2c2f2d8c95",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -674,7 +1397,7 @@
     },
     {
       "attack": "payload_byte_flip_07",
-      "bundle_sha256": "7e724d8c168576574c4e28873c6bc84e8789ef437e8d4785a6290d75dea5608c",
+      "bundle_sha256": "81045e8736f89f93c7677f032ac9facd413ef129de92bf9bd9d54e24175563f6",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -695,7 +1418,7 @@
     },
     {
       "attack": "payload_byte_flip_08",
-      "bundle_sha256": "1cdfb5b0e8e8d61fb3abccd155845e5dc06c93753407345816076b4d797bfdf2",
+      "bundle_sha256": "ba7ff62be84a585afc87143a29d852391bcb62980f1c4518f09d61921563c0b6",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -716,7 +1439,7 @@
     },
     {
       "attack": "payload_byte_flip_09",
-      "bundle_sha256": "89aba0d6bce120ffa0d13087172b58024c9c94e77c0d533c64307c8c28fd35e6",
+      "bundle_sha256": "29fbd293608a45f16307eae86bbdf0690fdfc8d964b5998dfaecba5e5843ff8d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -737,7 +1460,7 @@
     },
     {
       "attack": "payload_byte_flip_10",
-      "bundle_sha256": "3fb663e86972eb585cc2466341d8cf469b295b593f1708d546861ed9e1155f9f",
+      "bundle_sha256": "7b29d4faa29ecc0c2ca09cbe9fc69503ac1eb373c12a18a689fbd8761e83b0c4",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -758,7 +1481,7 @@
     },
     {
       "attack": "payload_byte_flip_11",
-      "bundle_sha256": "aa99b2125547dca6d7618ebe3472d5e4e5184951ce83a12fd04752da4700c161",
+      "bundle_sha256": "f24572d3dd779dfda15be7750ac12a0b4292bfe0590b1be7c554976404ef5203",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -779,7 +1502,7 @@
     },
     {
       "attack": "payload_byte_flip_12",
-      "bundle_sha256": "6b5cf3e35570190c950ec8ed458e8ff22789f21646195a640ba3812ac74282c9",
+      "bundle_sha256": "7f9abfd781dea0921e3adaa371a077010685e437ed8acf59c19517c2eb3b1e25",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -800,7 +1523,7 @@
     },
     {
       "attack": "payload_byte_flip_13",
-      "bundle_sha256": "8109bd3bc0b7c8f5ab60643c49001d994bb1c52304cd2d6e00818014cd8a021b",
+      "bundle_sha256": "be9751a822a3bee79f2931c325f9f2e2ef2583f614c806fb83bb10bb968fdfb0",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -821,7 +1544,7 @@
     },
     {
       "attack": "payload_byte_flip_14",
-      "bundle_sha256": "cf48fd33755bd3e42483802b6bcabf6b48e2ff4987260f54c29c449377c25961",
+      "bundle_sha256": "a93ec557baf1140d50782ac2857ee59e89c0568c6373b83001379960ecb1ba53",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -842,7 +1565,7 @@
     },
     {
       "attack": "payload_byte_flip_15",
-      "bundle_sha256": "46bff1e046b414bd0fe69e79646a94acb0c368b9db9fe67477c1afea5fa4c4be",
+      "bundle_sha256": "a6ce0c646b442dc49bbb1ab26a441705abe31f5d92d1e008725c1ece3358f8e5",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -863,7 +1586,7 @@
     },
     {
       "attack": "payload_byte_flip_16",
-      "bundle_sha256": "ddf734a88e1a69cdf9895bda92fa2f6c86ab657f3875ab91e48367f846795acf",
+      "bundle_sha256": "92b4c7acbd9f22f4fb609229cc1dbb53ee19ab534e3db6688a727c83dd41b953",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -884,7 +1607,7 @@
     },
     {
       "attack": "payload_byte_flip_17",
-      "bundle_sha256": "1aa4484c70275f97404b8f10e7c22fb4c01092121d4cac438a08d51d6dc6ad32",
+      "bundle_sha256": "40cfe30807a9aa633d280d0b17187729aee93fc95a3a88127f5104f05308df7d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -905,7 +1628,7 @@
     },
     {
       "attack": "payload_byte_flip_18",
-      "bundle_sha256": "fdd961ec791a5cc73c96521bf760ddb56ecf9b15e9ece0f13354cda4a9b72115",
+      "bundle_sha256": "6159eaed8a939a4eaf972899905af86a1bfd5c54a913f29254cf0afb2274bbb8",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -926,7 +1649,7 @@
     },
     {
       "attack": "payload_byte_flip_19",
-      "bundle_sha256": "65aa630e4918b170773525740e75989818e0f7077b42bfbaaade4669ce6cb60d",
+      "bundle_sha256": "a33ff32eeaee58af2473554f11fcc97996b4b6e5cdf239a2310844458102064d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -947,7 +1670,7 @@
     },
     {
       "attack": "payload_byte_flip_20",
-      "bundle_sha256": "bcc7033cd568c99c38da028ccdf086f92d4ae70cc31defb000b435257dc97673",
+      "bundle_sha256": "5aae2dbd54274d5506f5aba96b50c4108246f35dc0281e698623c1679217ede5",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -968,7 +1691,7 @@
     },
     {
       "attack": "payload_byte_flip_21",
-      "bundle_sha256": "add77b96cf9b71b4f71ee4abc577b7de40493621019c0daaa3321e1412b33713",
+      "bundle_sha256": "924985b7a2772e121c2c857f98d85232e7f14434950a1d7837a5952b8dc8e90b",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -989,7 +1712,7 @@
     },
     {
       "attack": "payload_byte_flip_22",
-      "bundle_sha256": "ecb8c09c777bbbe8280e7642ab95a70c50e831a0d1e5133446303e743326ca67",
+      "bundle_sha256": "d67e2f9b660ac03f89d48c0af17022b721fd97ad8e445c871610ef5e6f6ad34f",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1010,7 +1733,7 @@
     },
     {
       "attack": "payload_byte_flip_23",
-      "bundle_sha256": "a228974f25e645d34a4d6d62ef955fa94280a0e549c3ab5602759c3af37367ec",
+      "bundle_sha256": "ec228cf4fda9c338f811eae51dcc7e1cc7301b291a5a7efaccb7948e472ef0fc",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1031,7 +1754,7 @@
     },
     {
       "attack": "payload_byte_flip_24",
-      "bundle_sha256": "93249c7461eba2241e6237c05270d62b6584c818349aaacb7542c6e4d7dac341",
+      "bundle_sha256": "4838c3460ab36f61535c347f9583fef97403f0e4cecc7e8a014655b791532912",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1052,7 +1775,7 @@
     },
     {
       "attack": "payload_byte_flip_25",
-      "bundle_sha256": "1ce9214a66ceb617e284e7b4cf6356d6b71df7b463b99b2ce06c7b8881d98c36",
+      "bundle_sha256": "2f893296185ed9a17715af517a7992a8e2990dd001fa521675a3093dd01b400a",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1073,7 +1796,7 @@
     },
     {
       "attack": "payload_byte_flip_26",
-      "bundle_sha256": "bbac1ebdff3b0bddf7e81efa8512e3de6fb5ba7bb3078ecbe3867b425e650488",
+      "bundle_sha256": "effc536ee6d8609d2e1a01082400fe44c46eeddd26aa6cbd975a7152f9a8e978",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1094,7 +1817,7 @@
     },
     {
       "attack": "payload_byte_flip_27",
-      "bundle_sha256": "b9adc1fb653be148993a0da3fc87b6d737405e09448d47e53803347c17b05232",
+      "bundle_sha256": "ae97e0ca8c5c375867d8e6f1652380370f20f91c77f581b48c10351d7df0520a",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1115,7 +1838,7 @@
     },
     {
       "attack": "payload_byte_flip_28",
-      "bundle_sha256": "d69a61ecdb9bc9c0f5bf66930e3935a33fa65163237fe24df1b803037c71f492",
+      "bundle_sha256": "356addd75c82bf080a97a5b0c82b0b9914a48f85e08a0356e574aa8430fcb67a",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1136,7 +1859,7 @@
     },
     {
       "attack": "payload_byte_flip_29",
-      "bundle_sha256": "d0134d8dd5f07ede0c27c4b280fbc4c4180d37ef7c220eda67356e8a3d2b0ce0",
+      "bundle_sha256": "7460e36e148daccaf603f9932f5841763c9628ae7cdddef4ec09bcf3f28aea99",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1157,7 +1880,7 @@
     },
     {
       "attack": "payload_byte_flip_30",
-      "bundle_sha256": "4b0658d5a5874a4b98638f96bbb713e58688280301aafad231758246acd328aa",
+      "bundle_sha256": "a014a4349f1131f2eb282151d6abd17a89cbdb0263ed52ac9c3939841783ff86",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1178,7 +1901,7 @@
     },
     {
       "attack": "payload_byte_flip_31",
-      "bundle_sha256": "c274c4341dc7ad0086f01fec154315bf9728aba77030365e52c514c4abc2bbb5",
+      "bundle_sha256": "b6c0a78d485ea109dff29856b75cb9a127d32ccaa37d7a2cb47184bb1d1c6559",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1199,7 +1922,7 @@
     },
     {
       "attack": "payload_byte_flip_32",
-      "bundle_sha256": "ba43b25e4efcf311fb5d01e4cb31d645cc10d3d7a401eadaadd3c8161e9f2e05",
+      "bundle_sha256": "2e33db383106985908c4e050519c6283f2d9318ed6f65691dfe83a6c1fb30858",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1220,7 +1943,7 @@
     },
     {
       "attack": "payload_byte_flip_33",
-      "bundle_sha256": "e5a649faa815f86602e15f14ff42fbe5ed5eaaadc82dd238bf10e9ac2270c9b1",
+      "bundle_sha256": "6156d7be664f3a22b1d3f723860f0ce61c431af27bd2079da47c2e5ab3aa26d0",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1241,7 +1964,7 @@
     },
     {
       "attack": "payload_byte_flip_34",
-      "bundle_sha256": "048addc45b66129e25050b1057c45c03c50fd45e9415c277e5e310ad5b5cb31e",
+      "bundle_sha256": "f335266a0b1662a364c33dd5f2be6f9817edbf290e9aaf896b3a842787476376",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1262,7 +1985,7 @@
     },
     {
       "attack": "payload_byte_flip_35",
-      "bundle_sha256": "48b53830af9708b9288382feb87bc93275714d780618db6e5df82e07a04e438a",
+      "bundle_sha256": "5e66655e36613708df6cd639bc298d4ded9bc29b72519f0f898c02a8f6de9773",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1283,7 +2006,7 @@
     },
     {
       "attack": "payload_byte_flip_36",
-      "bundle_sha256": "b9ac4c1f546eab824b70e6a06fde54af74335c2a3706d727867c3a273bb5f606",
+      "bundle_sha256": "74c0ca582913ba13072bbea7ebb7f0826f6bf9fbb754923fc09b9f4504a8d25c",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1304,7 +2027,7 @@
     },
     {
       "attack": "payload_byte_flip_37",
-      "bundle_sha256": "89f6080cb705c60ebdf20776c0cd58bf4a49957e82fef224e4d6d8eac5cb3004",
+      "bundle_sha256": "7750d79654d1bd5eb7ecf22212e446ce86a1bd846f308d2b04f755d680185fbd",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1325,7 +2048,7 @@
     },
     {
       "attack": "payload_byte_flip_38",
-      "bundle_sha256": "91d709cbdad8283c64cf00d4b8697af583f3b55e19c9d47ab86c040ed001ab59",
+      "bundle_sha256": "f7cf62696b940ac522577c5fee97278146c4b0235b2ad581c6544145288a717d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1346,7 +2069,7 @@
     },
     {
       "attack": "payload_byte_flip_39",
-      "bundle_sha256": "e7e9d57430629bb6718d630430c6e92ddc91c2af0495faa739ef959cd0e77797",
+      "bundle_sha256": "e488098b2133f0d2d844cb82e3daee18fce50f3ca760b4ba903892b5fa9c8ecd",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1367,7 +2090,7 @@
     },
     {
       "attack": "manifest_byte_flip_00",
-      "bundle_sha256": "3b1ac161d54f117843953ec36a9a749d5e8476050d57225f11fe6dab746409f4",
+      "bundle_sha256": "06bddf30fbfdf03566670d969ff82cfe7e64c329b7a935969506384e0a361cdd",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1387,7 +2110,7 @@
     },
     {
       "attack": "manifest_byte_flip_01",
-      "bundle_sha256": "e0e38b527a8012b40c073ad1877efafe7c9bd03d92813b150a73162f710ab8e5",
+      "bundle_sha256": "7e5f9f567cb668e45fb2b8ce636a5de78cbc82b6ca875143bf7e926ca3f8d374",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1407,7 +2130,7 @@
     },
     {
       "attack": "manifest_byte_flip_02",
-      "bundle_sha256": "4ce96c2fddd035352cce93175a98ebb93dd464cdb3f4bb5cb4214972b9ffe917",
+      "bundle_sha256": "1aa7647b1369be7759a3ab6c356bcc4da54806e29a8faeb04244520f94e4effb",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1427,7 +2150,7 @@
     },
     {
       "attack": "manifest_byte_flip_03",
-      "bundle_sha256": "892e29074b9c357cc3526145ffdc477c89dde6732dc9c1b1d6a5032c167c267b",
+      "bundle_sha256": "26bce2aed4ce567ea0b120118ea4db4db50803fc5db942f05c4579068e8078ce",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1447,7 +2170,7 @@
     },
     {
       "attack": "manifest_byte_flip_04",
-      "bundle_sha256": "92611fcb7f4d974aec9a491c58f194d955b02b270585daeaae05162dea800a37",
+      "bundle_sha256": "51251ace1cf5398d7ae9a7e5bf712ff617d841630e8e0a5ff9cd03ba9edee565",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1467,7 +2190,7 @@
     },
     {
       "attack": "manifest_byte_flip_05",
-      "bundle_sha256": "d13eeaceac857c4e3af7c60a90e856b349ae1fcee72e2dd5abfd664a08a669af",
+      "bundle_sha256": "4aedf6eeb71b2e1e34eae3fbe5d0665d68b40cab5eacd3dfb61f30a611729edf",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1487,7 +2210,7 @@
     },
     {
       "attack": "manifest_byte_flip_06",
-      "bundle_sha256": "e7155a737571e07c8240178c986ef25f9a28bac30364a599b160e05d580f8920",
+      "bundle_sha256": "8a32780cda573cb43e884d3badabf89d3b9627594221f58d417d261738183f5b",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1507,7 +2230,7 @@
     },
     {
       "attack": "manifest_byte_flip_07",
-      "bundle_sha256": "ad3f1b7a0db2a10ae1c289502bd70a875c135a408898f2ead3eb5949bc4ffdf9",
+      "bundle_sha256": "b5f8b90551bb9bdef98f17c5f3a9888c06dea51d3dd3f86aa71e57de43b58b2b",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1527,7 +2250,7 @@
     },
     {
       "attack": "manifest_byte_flip_08",
-      "bundle_sha256": "067f45e00b67d5571bdb8ab1875af9df9413bf66c0b9749cd2c51d69f37fd82c",
+      "bundle_sha256": "d42b624af48e3c836277b3d8f6e9eacddaebbcedd6768367836ebc5964709162",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1547,7 +2270,7 @@
     },
     {
       "attack": "manifest_byte_flip_09",
-      "bundle_sha256": "ce4201a3cc18686f4ad0ffc0ca091880af570464819da6b331d3d72f7c3650f3",
+      "bundle_sha256": "10b811dbbf540f86c44a40c2fbb552a0256b1f3ecc0e0a7e9baaa6105e6126d9",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1567,7 +2290,7 @@
     },
     {
       "attack": "manifest_byte_flip_10",
-      "bundle_sha256": "e40ccfe2338ffee5cc70b47ed373760c74459ab91b9f03dbb65b78a46cbad783",
+      "bundle_sha256": "d5f4ce97c2853ee92de31e4e60960b2b373ffaa1eb23adcda7b7424de7055d77",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1587,7 +2310,7 @@
     },
     {
       "attack": "manifest_byte_flip_11",
-      "bundle_sha256": "9640fa0ab7fba56e5b294b85d996a0f118518a7efbc0ef5a9c3df612b352376d",
+      "bundle_sha256": "816774273dc580b6558ddc6b9a93b9e36f0cbfe501c8a02d2b9507f599b18e23",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1607,7 +2330,7 @@
     },
     {
       "attack": "manifest_byte_flip_12",
-      "bundle_sha256": "e8a42650cf06e006a250950b6a79f8a2f966585e5df0fa9c506807e25566d801",
+      "bundle_sha256": "97d26d9919ba1001ec0142689a09e5f84510e051ff90d973c6492005489b1c9b",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1627,7 +2350,7 @@
     },
     {
       "attack": "manifest_byte_flip_13",
-      "bundle_sha256": "011ba12bc1bb187975af72fdb5e3ae872e8bc1f6c49ad4b91dc7cc4b5cefab4d",
+      "bundle_sha256": "17295d2a87ea9983ffe757fc04d5be3f610b7c8545126c3ac34a9e15fbe60ffd",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1647,7 +2370,7 @@
     },
     {
       "attack": "manifest_byte_flip_14",
-      "bundle_sha256": "9a139e7b9a5c6b19e7c8b87f506e6f1e8a14a2cea0ee8aa0336b5c375f5bfb3c",
+      "bundle_sha256": "4535c7f46a191198e26795719f58239489c419e48a761068f1c955d6f14714d4",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1667,7 +2390,7 @@
     },
     {
       "attack": "manifest_byte_flip_15",
-      "bundle_sha256": "aa2a5ff97b5417b7e7d73aa66cb51909ecc92b8b49aca1dada4e4045e7dfb347",
+      "bundle_sha256": "c32794e5b226732d10a7dd08fd8d1a81c9ef6818853f0851a56d032d4beb1eff",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1687,7 +2410,7 @@
     },
     {
       "attack": "manifest_byte_flip_16",
-      "bundle_sha256": "5c2b425c8d30365d7a3b2e001943f2279a9933c5383ba65ab21b1f663c769210",
+      "bundle_sha256": "ce5693493057d3f0d9f18ebf838f80c0e3b5ebc1ae9d236a5ad5c4f47b210d88",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1707,7 +2430,7 @@
     },
     {
       "attack": "manifest_byte_flip_17",
-      "bundle_sha256": "e6451bdeb16365ca08f01b858a29dd458c6d89b3c99f858e6617a68de41939e8",
+      "bundle_sha256": "a02bd031cfa1bfc320f5bcad6e71f79a5c14e9577c5a93f156ed9ecae6b768a6",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1727,7 +2450,7 @@
     },
     {
       "attack": "manifest_byte_flip_18",
-      "bundle_sha256": "327358a6d6fd6f61c08a4762f98647b643cdd7f2af96a6052daf45e08c720152",
+      "bundle_sha256": "757f130d3506b8e11ca81ed316f254b63ad1c4f5f4216435b815bb0ae8f0cefb",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1747,7 +2470,7 @@
     },
     {
       "attack": "manifest_byte_flip_19",
-      "bundle_sha256": "3eacf5182c3544c22b422b1ebcb653e4035ba1c6253ccabb9340cec784313da9",
+      "bundle_sha256": "91bc003108c028e2f80c5125ed0ff3788b1afe66e249cb49639ef363eaa2d13d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1766,8 +2489,208 @@
       }
     },
     {
+      "attack": "certificate_byte_flip_00",
+      "bundle_sha256": "e2018231f2c13b5c075b82eb50fa1513682fd97aa7cd3db961ed2271149a31cb",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_00",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate is not valid strict JCS JSON: invalid JCS JSON: Expecting value: line 1 column 1 (char 0)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_01",
+      "bundle_sha256": "c5b7cc188ffe15856c03ca7fb5de523889cdab15f5dbffab4636b2ef051c9f58",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_01",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate is not valid strict JCS JSON: invalid JCS JSON: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_02",
+      "bundle_sha256": "36808928d08775c23449d891cda68952815dd350d50f3cbad23f8e071a739085",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_02",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed (']rtifacts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_03",
+      "bundle_sha256": "6fe6b6f70d832bcae83bcba2416690d5ca282f4d0fe58e4c0c536d0ee597f2ef",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_03",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('aNtifacts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_04",
+      "bundle_sha256": "66d3f70c04bde72e135a519adcbe2e38dcd559028f5f67d0df94cd11b09a3964",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_04",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('arHifacts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_05",
+      "bundle_sha256": "634e1922b519db2d534030bc6357b146fae0d32b07202ccf6bbcc41eb2ec6fc5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_05",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('artUfacts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_06",
+      "bundle_sha256": "fa3b54c164e78bc77140c4f5ac9361a77107826b7a8801488f5d32d9c4b54fed",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_06",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('artiZacts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_07",
+      "bundle_sha256": "529f69182c9e8694831d154ad39df17d0d9840ad8a88f6ae60c3872e3f5f9289",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_07",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('artif]cts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_08",
+      "bundle_sha256": "4a97ac40cdc1dd3426b916031cdfe44a2eb7fd15a186f6651b866d3415037b8d",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_08",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('artifa_ts' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_byte_flip_09",
+      "bundle_sha256": "ca345dbd045599f63245aaefe339556e854be5aedcc59340244402ac6868dfb4",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_byte_flip_09",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: Additional properties are not allowed ('artifacHs' was unexpected); $: 'artifacts' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
       "attack": "extra_member_00",
-      "bundle_sha256": "0ddf97ea06111c474d50ae0961eab2fa22342e20f6f402b9db4a65ba3ecda612",
+      "bundle_sha256": "017a82b616c931017704906250d8994cb0b94a6edb3ee024c82a402a0f50f4d3",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1787,7 +2710,7 @@
     },
     {
       "attack": "extra_member_01",
-      "bundle_sha256": "a526cc8b7f096637c09a1438a699eadd76f1f9c8ef8976eb1fd4bc0e858ebdb5",
+      "bundle_sha256": "da1fcc1f68bd872d537ec333bbbd4244a558cc474d69f89f0065fcccc4d62b17",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1807,7 +2730,7 @@
     },
     {
       "attack": "extra_member_02",
-      "bundle_sha256": "5bac4a7269a2053ce542e65f553cd1382db98b5e725048bd98739a0d6fda3aa7",
+      "bundle_sha256": "c63c495c85d394923aa7d24c1449d4c0f68bdf25fad3112a06aea2827ac62881",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1827,7 +2750,7 @@
     },
     {
       "attack": "extra_member_03",
-      "bundle_sha256": "e3a516bb62723c66deb2f55e5d405626879f674bfe4830e01f2c7d140f36f83b",
+      "bundle_sha256": "2ced219af5cfa43a35543d2b895ea68be9c3820d2d34d9161b04d2fc3f00b9d8",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1847,7 +2770,7 @@
     },
     {
       "attack": "extra_member_04",
-      "bundle_sha256": "d9cb63bec66833d55ca308f184ba7ed2881be5d4b49aa7c9b08ce8f906db4978",
+      "bundle_sha256": "73e9c476365ab43bea379963c15eb72472e806fb9a60e4d5293cf4d00e716ef0",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1867,7 +2790,7 @@
     },
     {
       "attack": "extra_member_05",
-      "bundle_sha256": "d766fbf1941f01a247462c833ee9c4439c7531a3de6e727d3daa5650339e12c4",
+      "bundle_sha256": "84d22d013dc0d0f0fac9577e92c152a3891f138a2fc6dc0fd02f78a339844e23",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1887,7 +2810,7 @@
     },
     {
       "attack": "extra_member_06",
-      "bundle_sha256": "16a9436b8eb49e594608ab21e171d26b737248df421682642738c69d69650591",
+      "bundle_sha256": "0bef76090681ae3733a8382c326e5341d7f018d4e63f7e993c991932a36d40aa",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1907,7 +2830,7 @@
     },
     {
       "attack": "extra_member_07",
-      "bundle_sha256": "3a0db80477ff68fd65967bf249f267fbd5b40b197bbe2ffbca48b3907691cc8b",
+      "bundle_sha256": "7363cdac81c13aa9d4c3da7b16a65a6fa1ff2a7e5a4a8b9c4cafe7213abcdd75",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1927,7 +2850,7 @@
     },
     {
       "attack": "extra_member_08",
-      "bundle_sha256": "8428566fab247557fbabf04fe5849cbf51563c69179f77050647c49c18af86cf",
+      "bundle_sha256": "f87225bfa87a94bad51fd389b2572683069a3622241eb983a62d47b9f5128559",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1947,7 +2870,7 @@
     },
     {
       "attack": "extra_member_09",
-      "bundle_sha256": "244c7da98ed0ccfefb6dae948e9eafae25422ac8ddb4f11b1513e096edd4448d",
+      "bundle_sha256": "cef996165546a5e5af9ffe121ffa5c9f15d8e46380296f3c323dd81d7a76c9ad",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1967,7 +2890,7 @@
     },
     {
       "attack": "extra_member_10",
-      "bundle_sha256": "0cccf16c6d739276ec8a9df0d5ef1cf101439b7ca82eb443bd7d77964e6869f2",
+      "bundle_sha256": "54cc2606b441cfc7cf7c7f3f2e0fe9ddf4151f94aeddf08a3caa41c18604c480",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -1987,7 +2910,7 @@
     },
     {
       "attack": "extra_member_11",
-      "bundle_sha256": "f5bc68962f65425e938973040434a60e0aa6a8e647516333fb5c152ba783928e",
+      "bundle_sha256": "70ef8d790c50dcc7d49d32934ad528c4942674a0ec72c15594b42079a6697d5e",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -2007,7 +2930,7 @@
     },
     {
       "attack": "extra_member_12",
-      "bundle_sha256": "87819a51764b7ef9b95b7395fe284f3caa237935c7382c6c3ed4286d1abddf05",
+      "bundle_sha256": "97efd8fc587b4661a53c7418b24e227496ffd08a07a64436c7d16d4fcdfcb3ff",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -2027,7 +2950,7 @@
     },
     {
       "attack": "extra_member_13",
-      "bundle_sha256": "b4340573f2f456145a2ed50767151fd3e6122b7598a980a21e4594a9553468d5",
+      "bundle_sha256": "a5a450f28cadf09885c9586583a58d36807ce3d317dce990e600f1ef178a871d",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -2047,7 +2970,7 @@
     },
     {
       "attack": "extra_member_14",
-      "bundle_sha256": "aa5c946231a0feff2f3005749e1d5754d621cd3243073284b5eadb041add91f9",
+      "bundle_sha256": "3178137478e79a8db124185d50ec77e1cbdf064c23a219d01da275f2568f1bd2",
       "class": "negative",
       "construct_error": null,
       "constructed": true,
@@ -2067,7 +2990,7 @@
     },
     {
       "attack": "fingerprint_mismatch",
-      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
       "class": "negative",
       "constructed": true,
       "expected_reject": true,
@@ -2083,12 +3006,54 @@
         "failed_stage": "certificate_signature",
         "valid": false
       }
+    },
+    {
+      "attack": "signer_key_vs_fingerprint_swap",
+      "bundle_sha256": "12d210bb80738fb05112f1fb2f24afa414fb5411216a906536dde537c24edb16",
+      "class": "negative",
+      "constructed": true,
+      "expected_reject": true,
+      "id": "wrong_signer_key_honest_fingerprint",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "signature public key fingerprint mismatch",
+          "signer fingerprint does not match pinned expected fingerprint",
+          "signature verification failed: InvalidSignature: "
+        ],
+        "exception": null,
+        "failed_stage": "certificate_signature",
+        "valid": false
+      }
     }
   ],
   "false_accepts": [],
   "format": "pcs-independent-adversarial-corpus-v1",
-  "negative_controls": 94,
-  "negatives_rejected_after_attempted_verify": 94,
+  "mutation_families": [
+    "absolute",
+    "appended",
+    "certificate",
+    "duplicate",
+    "empty",
+    "extra",
+    "fingerprint",
+    "manifest",
+    "missing",
+    "normalized",
+    "not",
+    "package",
+    "path",
+    "payload",
+    "rename",
+    "signature",
+    "signer",
+    "swapped",
+    "truncated"
+  ],
+  "negative_controls": 141,
+  "negatives_rejected_after_attempted_verify": 141,
   "not_attempted": [],
   "positive_accepted": 10,
   "positive_controls": 10
