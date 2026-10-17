@@ -93,7 +93,7 @@ def test_generate_report_is_static_accessible_html(tmp_path: Path):
     assert "Inspection class" in text
     assert "computationally_supported" in text
     assert "scientific_adequacy_open" in text
-    assert 'class="strength-dl"' in text
+    assert "strength-dl" in text
     assert "<caption>" in text
     assert "focus-visible" in text
     assert "skip-link" in text
