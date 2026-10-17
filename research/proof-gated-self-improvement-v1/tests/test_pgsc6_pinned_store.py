@@ -160,6 +160,24 @@ class PGSC6PinnedStoreSafety(unittest.TestCase):
         with self.assertRaises(IntegrityFailure):
             self.store.snapshot()
 
+    def test_v6_lean_source_configuration_drift_rejected(self):
+        before = self.store.audit()
+        with patch.object(PinnedPGSC6Store, "_formal_source_digest",
+                          return_value="f"*64):
+            with self.assertRaises(IntegrityFailure):
+                self.store.audit()
+            with self.assertRaises(IntegrityFailure):
+                self.store.snapshot()
+        self.assertEqual(self.store.audit(), before)
+
+    def test_oracle_source_drift_rejected(self):
+        before = self.store.audit()
+        with patch.object(PinnedPGSC6Store, "_oracle_digest",
+                          return_value="e"*64):
+            with self.assertRaises(IntegrityFailure):
+                self.store.audit()
+        self.assertEqual(self.store.audit(), before)
+
     def test_candidate_certificates_are_content_addressed(self):
         first = self._accepted(CERTS[0], self.store.audit())
         record = json.loads((self.root / "receipts" / "00000001.json").read_text())
