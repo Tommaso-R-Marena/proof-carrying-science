@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import tempfile
 
 DOMAIN = tuple(range(-3, 4))
 BOUND = 32
@@ -91,18 +92,36 @@ def check_request(value: object, active: Model) -> Decision:
         raise ValueError("stale or substituted incumbent")
     return check(old, parse_model(value["candidate"]))
 
-def check_with_lean(old: Model, candidate: Model, formal_dir: Path) -> bool:
-    """Fail-closed invocation; host/Lean source integrity must be enforced separately."""
-    def fields(model: Model) -> list[str]:
-        return ["relu" if model.relu else "linear", str(model.weight), str(model.bias)]
+WIRE_MAGIC = "PGSI1"
+
+def wire_bytes(model: Model) -> bytes:
+    """Canonical single-string artifact, with no final newline or other fields."""
+    activation = "R" if model.relu else "L"
+    return f"{WIRE_MAGIC}|{activation}|{model.weight}|{model.bias}".encode("ascii")
+
+def artifact_gate(old_path: Path, candidate_path: Path, formal_dir: Path) -> bool:
+    """Pass original artifact paths directly to Lean. The Lean program reads and
+    canonicalizes files itself. This is a research-only subprocess transport, NOT
+    a secure deployment service or a check on future file contents.
+    """
     try:
         result = subprocess.run(
-            ["lake", "env", "lean", "--run", "PCS/V2/ProofGatedSelfImprovement.lean",
-             *fields(old), *fields(candidate)],
+            ["lake", "env", "lean", "--run", "PCS/V2/ProofGatedArtifacts.lean",
+             str(old_path.resolve()), str(candidate_path.resolve())],
             cwd=formal_dir, capture_output=True, text=True, timeout=120, check=False)
-    except (OSError, subprocess.TimeoutExpired):
+    except (OSError, subprocess.TimeoutExpired, ValueError):
         return False
-    return result.returncode == 0 and result.stdout.strip() == "ACCEPT"
+    return (result.returncode == 0 and result.stdout == "ACCEPT\\n"
+            and result.stderr == "")
+
+def check_with_lean(old: Model, candidate: Model, formal_dir: Path) -> bool:
+    """Create exact candidate artifact bytes for independent Lean file checking."""
+    with tempfile.TemporaryDirectory(prefix="pcs-pgsi-") as temp:
+        original = Path(temp) / "incumbent.pgsi"
+        proposed = Path(temp) / "candidate.pgsi"
+        original.write_bytes(wire_bytes(old))
+        proposed.write_bytes(wire_bytes(candidate))
+        return artifact_gate(original, proposed, formal_dir)
 
 
 def automatic_search(start: Model | None = None, *, max_steps: int = 8,
