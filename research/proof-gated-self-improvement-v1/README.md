@@ -2,6 +2,19 @@
 
 **Status: experimental; NOT a deployed immutable authority or proof of general self-improvement.**
 
+## Current stacked hardening phase
+
+The separate hardening implementation and executed results are in
+[HARDENING_REPORT.md](HARDENING_REPORT.md); exact commands and the future
+Aristotle boundary are in [HARDENING_REPRODUCE.md](HARDENING_REPRODUCE.md).
+They add a pinned native Linux sandbox, kernel-authenticated process client,
+atomic SQLite research promotions, portable independent receiving, a faster
+exact ReLU sweep, independently replayed Python certificates, and frozen
+adaptive-search/falsification experiments. All formal `ProofGated*.lean` files
+remain unchanged. Earlier v1–v4 sections below describe their respective
+historical implementations; the new v3 transactional store is a separate path,
+not an implicit upgrade or a production authority.
+
 ## The narrow objective, precisely stated
 
 Models are exact integer neurons `relu(w*x+b)` or `w*x+b`. The frozen certificate corpus is

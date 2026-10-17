@@ -169,6 +169,7 @@ jobs:
           export PCS_PGSI_AUTHORITY_BUNDLE="$RUNNER_TEMP/pgsi-native"
           export PCS_PGSI_REQUIRE_NATIVE=1
           python -m unittest discover -s tests -v 2>&1 | tee "$evidence/tests.log"
+          python check_hardening_evidence.py
           python scientific_campaign.py --bundle "$PCS_PGSI_AUTHORITY_BUNDLE" --output "$evidence/experiment"
           # Second independent execution must reproduce semantic decisions;
           # timing, source/protocol inventory and host binary identities are separate.

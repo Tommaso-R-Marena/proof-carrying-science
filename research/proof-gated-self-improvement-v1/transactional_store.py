@@ -248,6 +248,38 @@ class TransactionalStore:
                 raise StaleHead("Unexpected inference generation")
             return SealedInference(head, raw, decode_sealed_model(raw))
 
+    def export_history(self, *, expected: Head):
+        """Snapshot exact unsigned history for a fresh receiver-owned verifier.
+
+        The receiver must retain its expected head through a trusted channel;
+        an expected head copied only from this package provides no rollback anchor.
+        """
+        with self._db() as db:
+            db.execute("BEGIN")
+            head, _ = self._audit(db)
+            if head != expected:
+                raise StaleHead("Cannot export unexpected generation")
+            state = dict(db.execute("SELECT name,body FROM state"))
+            return {
+                "format": "pgsi-portable-history-v1",
+                "owner_manifest_hex": canonical(self.authority.manifest).hex(),
+                "genesis_hex": state["GENESIS"].hex(),
+                "head": asdict(head),
+                "blobs": {
+                    digest: raw.hex()
+                    for digest, raw in db.execute(
+                        "SELECT digest,body FROM blobs ORDER BY digest"
+                    )
+                },
+                "receipts": [
+                    {"generation": gen, "request_id": key, "body_hex": raw.hex()}
+                    for gen, key, raw in db.execute(
+                        "SELECT generation,request_id,body FROM receipts ORDER BY generation"
+                    )
+                ],
+                "historical_signature": None,
+            }
+
     def promote(
         self, candidate: bytes, expected: Head, request_id: str, *, checkpoint=None
     ):

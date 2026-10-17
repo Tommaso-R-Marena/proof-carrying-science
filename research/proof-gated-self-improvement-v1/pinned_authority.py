@@ -21,7 +21,7 @@ from promotion_v2 import (
     strict_json,
     _read_regular,
 )
-from build_authority import ROOT, source_inventory
+from build_authority import source_inventory
 
 # Linux UAPI constants; some portable CPython builds omit their names.
 # Runtime F_GET_SEALS is mandatory; no emulated or unsealed fallback.
@@ -94,6 +94,7 @@ class PinnedAuthority:
             raise IntegrityFailure("Native executable pin mismatch")
         if sha(_read_regular(Path("/usr/bin/bwrap"), MAX_NATIVE)) != m["bwrap_sha256"]:
             raise IntegrityFailure("Sandbox executable pin mismatch")
+        self.manifest = m
         self._executable = executable
         self.manifest_sha256 = sha(raw)
         self.binary_sha256 = m["binary_sha256"]

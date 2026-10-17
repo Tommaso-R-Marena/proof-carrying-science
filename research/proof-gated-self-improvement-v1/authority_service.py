@@ -8,7 +8,6 @@ remains possible: a separate process is not a separate immutable trust root.
 from __future__ import annotations
 import argparse
 from dataclasses import asdict
-import json
 import os
 from pathlib import Path
 import socket

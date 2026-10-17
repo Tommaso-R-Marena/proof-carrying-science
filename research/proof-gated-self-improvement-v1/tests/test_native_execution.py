@@ -28,7 +28,6 @@ from promotion_v2 import (
     IntegrityFailure,
     ProposalRejected,
     StaleHead,
-    blob_hash,
     canonical,
     receipt_hash,
 )
@@ -285,7 +284,7 @@ class TransactionTests(unittest.TestCase):
 
     def test_structurally_rehashed_fake_positive_history_fails_real_replay(self):
         a = self.store.audit()
-        b = self.store.promote(wire_bytes(B), a, "1" * 32)
+        self.store.promote(wire_bytes(B), a, "1" * 32)
         with sqlite3.connect(self.path) as db:
             event = json.loads(db.execute("SELECT body FROM receipts").fetchone()[0])
             event["new_sha256"] = a.active_sha256
@@ -303,14 +302,14 @@ class TransactionTests(unittest.TestCase):
 
     def test_receipt_mutation_fails_closed(self):
         a = self.store.audit()
-        b = self.store.promote(wire_bytes(B), a, "1" * 32)
+        self.store.promote(wire_bytes(B), a, "1" * 32)
         with sqlite3.connect(self.path) as db:
             db.execute("UPDATE receipts SET body=?", (b"{}",))
         with self.assertRaises(IntegrityFailure):
             self.store.load()
 
     def test_missing_blob_fails_closed(self):
-        a = self.store.audit()
+        self.store.audit()
         with sqlite3.connect(self.path) as db:
             db.execute("DELETE FROM blobs")
         with self.assertRaises(IntegrityFailure):
@@ -336,6 +335,52 @@ class TransactionTests(unittest.TestCase):
             with self.assertRaises(IntegrityFailure):
                 self.store.promote(raw, head, "a" * 32)
         self.assertEqual(self.store.audit(), head)
+
+    def test_portable_history_fresh_receiver_replay_and_tamper_controls(self):
+        from replay_history import replay_history
+
+        a = self.store.audit()
+        initial = self.store.export_history(expected=a)
+        b = self.store.promote(wire_bytes(B), a, "1" * 32)
+        c = self.store.promote(wire_bytes(C), b, "2" * 32)
+        package = self.store.export_history(expected=c)
+        fresh = PinnedAuthority(Path(BUNDLE))
+        replay = replay_history(package, fresh, expected=c, xs=(-(10**60), 0, 10**60))
+        self.assertEqual(replay["transitions_freshly_rechecked"], 2)
+        self.assertFalse(replay["producer_history_authenticated"])
+        history = Path(self.t.name) / "history.json"
+        checkpoint = Path(self.t.name) / "expected.json"
+        history.write_bytes(canonical(package))
+        checkpoint.write_bytes(canonical(asdict(c)))
+        cli = subprocess.run(
+            [
+                sys.executable,
+                str(HERE / "replay_history.py"),
+                "--bundle",
+                BUNDLE,
+                "--history",
+                str(history),
+                "--expected-head",
+                str(checkpoint),
+            ],
+            cwd=HERE,
+            capture_output=True,
+            timeout=30,
+        )
+        self.assertEqual(cli.returncode, 0, cli.stderr.decode())
+        self.assertEqual(json.loads(cli.stdout)["transitions_freshly_rechecked"], 2)
+
+        self.assertEqual(replay["predictions"], [0, 1, 2 * 10**60 + 1])
+        with self.assertRaises(StaleHead):
+            replay_history(initial, fresh, expected=c)
+        changed = copy.deepcopy(package)
+        changed["blobs"][c.active_sha256] = wire_bytes(A).hex()
+        with self.assertRaises(IntegrityFailure):
+            replay_history(changed, fresh, expected=c)
+        changed = copy.deepcopy(package)
+        changed["receipts"].reverse()
+        with self.assertRaises(IntegrityFailure):
+            replay_history(changed, fresh, expected=c)
 
     def test_process_crash_before_commit_rolls_back_and_after_commit_retries(self):
         code = r"""
@@ -414,6 +459,16 @@ class ProcessServiceTests(unittest.TestCase):
                     with PinnedClient(fake_path, proc.pid) as wrong_peer:
                         with self.assertRaises(IntegrityFailure):
                             wrong_peer.request({"op": "status"})
+                try:
+                    mem = os.open(f"/proc/{proc.pid}/mem", os.O_RDWR)
+                except PermissionError:
+                    memory_denied = True
+                else:
+                    os.close(mem)
+                    memory_denied = False
+                self.assertTrue(
+                    memory_denied, "Same-UID client can inspect verifier memory"
+                )
                 initial = call(sock, {"op": "status"})["result"]["head"]
                 accepted = call(
                     sock,

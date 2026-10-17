@@ -14,7 +14,6 @@ import json
 from pathlib import Path
 import random
 import statistics
-import subprocess
 import tempfile
 import time
 from proof_gate import Model, check, wire_bytes, loss, target
@@ -30,6 +29,7 @@ from universal_relu import (
 from affine_certificates import certificate, verify
 from pinned_authority import PinnedAuthority
 from transactional_store import TransactionalStore
+from replay_history import replay_history
 from promotion_v2 import canonical
 
 HERE = Path(__file__).resolve().parent
@@ -485,6 +485,18 @@ def run(bundle, output):
                 actual.append(record)
                 live.append(record)
             assert store.audit() == head
+            exported = store.export_history(expected=head)
+            independent = replay_history(
+                exported,
+                PinnedAuthority(Path(bundle)),
+                expected=head,
+                xs=(-(10**60), -20, 0, 20, 10**60),
+            )
+            write(
+                output,
+                f"RECEIVER_HISTORY_{seed}.json",
+                {"history": exported, "independent_replay": independent},
+            )
         live_trials.append(
             {"seed": seed, "rollout": rollout, "actual_promotions": actual}
         )
