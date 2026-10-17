@@ -290,6 +290,10 @@ class ResearchPromotionStore:
             digest = genesis["genesis_sha256"]
             require_hash(digest)
             self._blob(digest)
+            expected_files = {f"{gen:08d}.json" for gen in range(1, head.generation + 1)}
+            observed_files = {p.name for p in (self.root / "receipts").iterdir()}
+            if observed_files != expected_files:
+                raise IntegrityFailure("missing or orphaned receipt: possible rollback or crash")
             prev = ZERO_HASH
             for gen in range(1, head.generation + 1):
                 receipt_path = self.root / "receipts" / f"{gen:08d}.json"
