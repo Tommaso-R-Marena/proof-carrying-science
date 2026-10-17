@@ -92,7 +92,7 @@ theorem acceptWire_sound {oldRaw newRaw : String}
     | none => simp [ho, hn] at h
     | some candidate =>
       have ha : accept old candidate = true := by simpa [ho, hn] using h
-      exact ⟨old, candidate, by simp [ho], by simp [hn], decode_canonical ho,
+      exact ⟨old, candidate, by simp, by simp, decode_canonical ho,
         decode_canonical hn, accept_sound ha⟩
 
 
