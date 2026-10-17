@@ -52,7 +52,9 @@ theorem decode_canonical {raw : String} {m : Neuron}
       · have hm : candidate = m := by
           simpa [decode, hc, hv] using h
         subst m
-        exact (beq_iff_eq).mp ((Bool.and_eq_true.mp hv).2)
+        have hvparts : valid candidate = true ∧ (encode candidate == raw) = true := by
+          simpa only [Bool.and_eq_true] using hv
+        exact (beq_iff_eq).mp hvparts.2
       · simp [decode, hc, hv] at h
 
 theorem decode_bounded {raw : String} {m : Neuron}
@@ -66,7 +68,9 @@ theorem decode_bounded {raw : String} {m : Neuron}
       · have hm : candidate = m := by
           simpa [decode, hc, hv] using h
         subst m
-        exact (decide_eq_true_eq).mp ((Bool.and_eq_true.mp hv).1)
+        have hvparts : valid candidate = true ∧ (encode candidate == raw) = true := by
+          simpa only [Bool.and_eq_true] using hv
+        exact (decide_eq_true_eq).mp hvparts.1
       · simp [decode, hc, hv] at h
 
 def acceptWire (oldRaw newRaw : String) : Bool :=
