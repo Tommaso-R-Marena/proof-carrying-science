@@ -1,0 +1,48 @@
+{
+  "scenario_id": "TT-DEP-001",
+  "title": "Dependency substitution",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "Wheel hash differs from lockfile.",
+  "signals": [
+    "Lockfile hash mismatch"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Record divergence.",
+      "acceptable_keywords": [
+        "hash",
+        "package",
+        "lockfile",
+        "diverg"
+      ]
+    },
+    {
+      "id": "E2",
+      "prompt": "TCB impact.",
+      "acceptable_keywords": [
+        "non-identical",
+        "tcb",
+        "not canonical",
+        "reconstruction"
+      ]
+    },
+    {
+      "id": "E3",
+      "prompt": "Containment.",
+      "acceptable_keywords": [
+        "quarantine",
+        "vendored",
+        "pin",
+        "do not publish"
+      ]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Divergence documented",
+    "Substituted build not treated as canonical",
+    "Pinned rebuild plan recorded"
+  ]
+}

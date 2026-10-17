@@ -1,0 +1,48 @@
+{
+  "scenario_id": "TT-COMMIT-001",
+  "title": "Lost pre-registration commitment",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "Hash commitment missing.",
+  "signals": [
+    "Missing commitment file"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Describe gap without fabrication.",
+      "acceptable_keywords": [
+        "missing",
+        "unverifiable",
+        "gap",
+        "no backdat"
+      ]
+    },
+    {
+      "id": "E2",
+      "prompt": "Treat pre-registered claims.",
+      "acceptable_keywords": [
+        "unverified",
+        "downgrade",
+        "disclose",
+        "hold"
+      ]
+    },
+    {
+      "id": "E3",
+      "prompt": "Mitigation without backdating.",
+      "acceptable_keywords": [
+        "prospective",
+        "disclose",
+        "no backdat",
+        "recomm"
+      ]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Gap disclosed",
+    "No backdated commitment invented",
+    "Residual degrees-of-freedom risk noted"
+  ]
+}
