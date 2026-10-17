@@ -2,7 +2,7 @@
 
 | Suite | Scope |
 | --- | --- |
-| `tests/test_workbench.py` | Evidence inspection + claim-strength lattice + HTML/JSON export; asserts non-authority |
+| `tests/test_workbench.py` | Evidence inspection + claim-strength lattice + HTML/JSON export + CLI cross-check (agree/disagree/skip/fixture-inconclusive); asserts non-authority |
 | `tests/test_blind_challenge.py` | Blind packet strips labels; scorer on synthetic fixture; refuses unattested human study |
 | `tests/test_tabletop.py` | Scenario catalog; compromised-key fixture passes offline; live-cred flag rejected |
 | `tests/test_external_lab.py` | Checklist forbids EXTERNAL_VALIDATION_COMPLETE; burden log never claims validation |
@@ -11,7 +11,7 @@
 python3 -m pytest -q independent_eval/reviewer_adoption/tests
 ```
 
-Latest local run: **14 passed** (claim-strength classification + JSON `--format` coverage added).
+Latest local run: **19 passed** (CLI cross-check agree/disagree/skip/fixture-inconclusive + embed).
 
 ## Smoke commands
 
@@ -19,7 +19,7 @@ Latest local run: **14 passed** (claim-strength classification + JSON `--format`
 python3 -m independent_eval.reviewer_adoption.workbench.generate_report \
   --evidence independent_eval/reviewer_adoption/workbench/fixtures/sample_bundle \
   --out /tmp/pcs-reviewer-workbench-report.html \
-  --format both
+  --format both --cli-crosscheck
 
 python3 -m independent_eval.reviewer_adoption.blind_challenge.blind \
   --cases-dir independent_eval/reviewer_adoption/blind_challenge/cases \

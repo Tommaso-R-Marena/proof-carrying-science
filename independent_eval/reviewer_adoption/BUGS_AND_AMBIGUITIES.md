@@ -23,8 +23,17 @@
    label ≠ scientific adequacy). Pure `OPEN` scientific claims map to
    `scientific_adequacy_open`. Ambiguous statuses fall through to
    `unknown_or_ambiguous`. Reviewers must not treat these as ACCEPT/PASS.
+7. **CLI cross-check vs demo fixtures** — `pcs verify` on
+   `workbench/fixtures/sample_bundle` fails schema validation (not a real
+   attest package). Cross-check marks that case `inconclusive` rather than
+   hard disagreement. When CLI fails on a real package while
+   `inspection_class` remains `computationally_supported` /
+   `cryptographic_validity` without a failure warning, classification is
+   `disagreement` (CLI is authority; lattice is not mutated).
 
 ## Open questions
 
 - Whether receipt `valid: true` without Lean authority needs a stronger banner.
 - Human multi-rater response-sheet schema (out of scope for synthetic fixtures).
+- Whether soft agreement (CLI fail + workbench warning only) should be a
+  separate classification from full agreement.

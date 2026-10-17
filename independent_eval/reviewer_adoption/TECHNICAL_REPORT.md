@@ -21,7 +21,14 @@ also receives an `inspection_class` from a claim-strength lattice
 `workbench/generate_report.py` accepts `--format html|json|both` (default
 `both`). HTML shows strength class per claim (captioned table + definition-list
 summary) with skip-link and focus-visible styles; JSON export is the inspection
-dict plus `generated_at`. Workbench never issues ACCEPT/PASS.
+dict plus `generated_at`. Optional `--cli-crosscheck` embeds an observational
+cross-check from `workbench/cli_crosscheck.py`: black-box `pcs verify` (or
+`python -m pcs.cli verify`) vs inspection results, recording
+`cli_verify_attempted` / `cli_verify_ok` / returncode / argv / stdout·stderr
+tails and per-claim agreement|disagreement|inconclusive reasons. Explicit
+`cli_is_authority: true` and `workbench_issues_accept: false`;
+`inspection_class` is never mutated. Non-attest fixtures mark inconclusive.
+Workbench never issues ACCEPT/PASS.
 
 ## Task 16 — Blind challenge
 

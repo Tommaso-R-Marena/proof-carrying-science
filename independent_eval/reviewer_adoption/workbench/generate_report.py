@@ -14,6 +14,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .cli_crosscheck import CROSSCHECK_DISCLAIMER, crosscheck_evidence_dir
 from .inspect_evidence import INSPECTION_CLASSES, WORKBENCH_DISCLAIMER, inspect_evidence_dir
 
 VALID_FORMATS = ("html", "json", "both")
@@ -180,6 +181,79 @@ def _strength_summary_dl(summary: dict) -> str:
     )
 
 
+def _cli_crosscheck_section(crosscheck: dict | None) -> str:
+    """Render observational CLI cross-check section (or empty string)."""
+    if not crosscheck:
+        return ""
+    claim_rows = []
+    for c in crosscheck.get("claim_comparisons") or []:
+        claim_rows.append(
+            "<tr>"
+            f"<td><code>{_esc(c.get('claim_id'))}</code></td>"
+            f"<td><span class='badge strength strength-{_esc(c.get('inspection_class'))}'>"
+            f"{_esc(c.get('inspection_class'))}</span></td>"
+            f"<td>{_esc(c.get('reported_status'))}</td>"
+            f"<td><span class='badge'>{_esc(c.get('consistency'))}</span></td>"
+            f"<td>{_esc('; '.join(c.get('reasons') or []) or '—')}</td>"
+            "</tr>"
+        )
+    reasons = crosscheck.get("overall_reasons") or []
+    reason_lis = "".join(f"<li>{_esc(r)}</li>" for r in reasons) or "<li>None</li>"
+    return f"""
+    <section id="cli-crosscheck" aria-labelledby="cli-crosscheck-h">
+      <h2 id="cli-crosscheck-h">CLI cross-check (observational)</h2>
+      <div class="disclaimer" role="note">
+        {_esc(crosscheck.get('disclaimer') or CROSSCHECK_DISCLAIMER)}
+      </div>
+      <p class="meta">
+        <span class="badge">observational</span>
+        <span class="badge">cli_is_authority = true</span>
+        <span class="badge">workbench_issues_accept = false</span>
+        · inspection_class is never mutated by this section.
+      </p>
+      <dl class="strength-dl" aria-label="CLI cross-check summary">
+        <dt>overall_classification</dt>
+        <dd><span class="badge">{_esc(crosscheck.get('overall_classification'))}</span></dd>
+        <dt>cli_verify_attempted</dt>
+        <dd>{_esc(crosscheck.get('cli_verify_attempted'))}</dd>
+        <dt>cli_verify_ok</dt>
+        <dd>{_esc(crosscheck.get('cli_verify_ok'))}</dd>
+        <dt>cli_returncode</dt>
+        <dd>{_esc(crosscheck.get('cli_returncode'))}</dd>
+        <dt>argv</dt>
+        <dd class="mono">{_esc(json.dumps(crosscheck.get('argv')))}</dd>
+        <dt>certificate_path</dt>
+        <dd class="mono">{_esc(crosscheck.get('certificate_path'))}</dd>
+      </dl>
+      <h3>Overall reasons</h3>
+      <ul>{reason_lis}</ul>
+      <table>
+        <caption>Per-claim consistency of inspection_class vs CLI outcome (observational)</caption>
+        <thead>
+          <tr>
+            <th scope="col">Claim</th>
+            <th scope="col">Inspection class</th>
+            <th scope="col">Reported status</th>
+            <th scope="col">Consistency</th>
+            <th scope="col">Reasons</th>
+          </tr>
+        </thead>
+        <tbody>
+          {''.join(claim_rows) or '<tr><td colspan="5">No claim comparisons.</td></tr>'}
+        </tbody>
+      </table>
+      <details>
+        <summary>CLI stdout tail</summary>
+        <pre class="mono" tabindex="0">{_esc(crosscheck.get('stdout_tail') or '(empty)')}</pre>
+      </details>
+      <details>
+        <summary>CLI stderr tail</summary>
+        <pre class="mono" tabindex="0">{_esc(crosscheck.get('stderr_tail') or '(empty)')}</pre>
+      </details>
+    </section>
+    """
+
+
 def render_html(inspection_dict: dict, *, generated_at: str) -> str:
     claims = inspection_dict.get("claims") or []
     assumptions = inspection_dict.get("assumptions") or []
@@ -189,6 +263,7 @@ def render_html(inspection_dict: dict, *, generated_at: str) -> str:
     authority = inspection_dict.get("reported_authority") or {}
     limitations = inspection_dict.get("limitations_text") or "(No LIMITATIONS.md found in evidence.)"
     strength_summary = inspection_dict.get("claim_strength_summary") or {}
+    cli_crosscheck = inspection_dict.get("cli_crosscheck")
 
     claim_rows = []
     for c in claims:
@@ -265,6 +340,7 @@ def render_html(inspection_dict: dict, *, generated_at: str) -> str:
         <li><a href="#authority">Reported authority fields</a></li>
         <li><a href="#limitations">Limitations</a></li>
         <li><a href="#sources">Source paths</a></li>
+        {"<li><a href='#cli-crosscheck'>CLI cross-check (observational)</a></li>" if cli_crosscheck else ""}
       </ol>
     </nav>
     {warning_html}
@@ -344,6 +420,7 @@ def render_html(inspection_dict: dict, *, generated_at: str) -> str:
         {''.join(f'<li class="mono">{_esc(p)}</li>' for p in (inspection_dict.get('source_paths') or [])) or '<li>None</li>'}
       </ul>
     </section>
+    {_cli_crosscheck_section(cli_crosscheck)}
   </main>
   <footer>
     <p>Offline static report · independent_eval/reviewer_adoption/workbench</p>
@@ -378,11 +455,17 @@ def generate_report(
     out_path: str | Path,
     *,
     fmt: str = "both",
+    cli_crosscheck: bool = False,
 ) -> dict[str, Path]:
     if fmt not in VALID_FORMATS:
         raise ValueError(f"unsupported format {fmt!r}; expected one of {VALID_FORMATS}")
     inspection = inspect_evidence_dir(evidence_dir)
     payload = inspection.to_dict()
+    if cli_crosscheck:
+        # Observational only; does not mutate inspection_class / ACCEPT.
+        payload["cli_crosscheck"] = crosscheck_evidence_dir(
+            evidence_dir, inspection=inspection
+        ).to_dict()
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     html_path, json_path = _resolve_out_paths(Path(out_path), fmt)
     written: dict[str, Path] = {}
@@ -419,8 +502,18 @@ def main(argv: list[str] | None = None) -> int:
         dest="fmt",
         help="Emit html, json, or both (default: both)",
     )
+    parser.add_argument(
+        "--cli-crosscheck",
+        action="store_true",
+        help=(
+            "Embed observational pcs-verify cross-check JSON/HTML section "
+            "(cli_is_authority=true; workbench remains inspect-only)."
+        ),
+    )
     args = parser.parse_args(argv)
-    written = generate_report(args.evidence, args.out, fmt=args.fmt)
+    written = generate_report(
+        args.evidence, args.out, fmt=args.fmt, cli_crosscheck=args.cli_crosscheck
+    )
     for kind, path in written.items():
         print(f"wrote {kind}: {path}")
     print("workbench_issues_accept=false")
