@@ -805,3 +805,7 @@ Recorded scientific transport data can now carry [fresh Lean trace proofs](docs/
 Fresh Lean certificates for real-valued regression optimality and globally minimax
 response sensitivity, with a frozen real-data Delft yacht experiment:
 [protocol, theorem catalogue and trust boundaries](docs/PCS_EXPERIMENTAL_CALIBRATION_V1.md).
+
+The [executed real-data report](docs/PCS_EXPERIMENTAL_CALIBRATION_V1_REPORT.md)
+includes all 22 hull groups, held-out comparisons, exact minimax limits and
+conditional model-error exclusions.

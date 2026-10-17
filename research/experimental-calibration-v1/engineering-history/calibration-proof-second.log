@@ -1,0 +1,105 @@
+formal/real/PCSReal/Calibration.lean:45:16: error: `simp` made no progress
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+formal/real/PCSReal/Calibration.lean:93:62: error: unsolved goals
+ι : Type u_1
+κ : Type u_2
+inst✝¹ : Fintype ι
+inst✝ : Fintype κ
+x : ι → κ → ℝ
+y w : ι → ℝ
+q b d : κ → ℝ
+hn : Normal x y b
+hr : Reproduces x w q
+hs : ∀ (i : ι), w i = prediction x d i
+j : κ
+a✝¹ : j ∈ univ
+i : ι
+a✝ : i ∈ univ
+⊢ x i j * d j * y i - x i j * d j * ∑ x_1, x i x_1 * b x_1 = x i j * d j * y i - x i j * d j * prediction x b i
+formal/real/PCSReal/Calibration.lean:100:18: error: `simp` made no progress
+formal/real/PCSReal/Calibration.lean:157:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Normal x y b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+formal/real/PCSReal/Calibration.lean:162:46: error: Application type mismatch: The argument
+  h
+has type
+  fitCheck x y b = true
+but is expected to have type
+  decide (Normal x y b) = true
+in the application
+  of_decide_eq_true h
+formal/real/PCSReal/Calibration.lean:162:28: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Normal x y b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+formal/real/PCSReal/Calibration.lean:165:26: error(lean.unknownIdentifier): Unknown constant `Rat.cast_sum`
+formal/real/PCSReal/Calibration.lean:165:2: error: Type mismatch: After simplification, term
+  hj
+ has type
+  ↑(∑ x_1, x x_1 j * (y x_1 - ∑ j, x x_1 j * b j)) = 0
+but is expected to have type
+  ∑ x_1, ↑(x x_1 j) * (↑(y x_1) - ∑ x_2, ↑(x x_1 x_2) * ↑(b x_2)) = 0
+formal/real/PCSReal/Calibration.lean:171:31: error(lean.unknownIdentifier): Unknown constant `Rat.cast_sum`
+formal/real/PCSReal/Calibration.lean:170:81: error: unsolved goals
+n p : ℕ
+x : Fin n → Fin p → ℚ
+y : Fin n → ℚ
+b : Fin p → ℚ
+⊢ ↑(∑ x_1, (y x_1 - ∑ j, x x_1 j * b j) ^ 2) = ∑ x_1, (↑(y x_1) - ∑ x_2, ↑(x x_1 x_2) * ↑(b x_2)) ^ 2
+formal/real/PCSReal/Calibration.lean:171:45: warning: This simp argument is unused:
+  Rat.cast_pow
+
+Hint: Omit it from the simp argument list.
+  simp only [loss, prediction, Rat.cast_sum, Rat.cast_p̵o̵w̵,̵ ̵R̵a̵t̵.̵c̵a̵st̵_̵s̵ub, Rat.cast_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+formal/real/PCSReal/Calibration.lean:171:59: warning: This simp argument is unused:
+  Rat.cast_sub
+
+Hint: Omit it from the simp argument list.
+  simp only [loss, prediction, Rat.cast_sum, Rat.cast_pow, Rat.cast_s̵u̵b̵,̵ ̵R̵a̵t̵.̵c̵a̵s̵t̵_̵mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+formal/real/PCSReal/Calibration.lean:171:73: warning: This simp argument is unused:
+  Rat.cast_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [loss, prediction, Rat.cast_sum, Rat.cast_pow, Rat.cast_sub,̵ ̵R̵a̵t̵.̵c̵a̵s̵t̵_̵m̵u̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+formal/real/PCSReal/Calibration.lean:175:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Reproduces x w q ∧ ∀ (i : Fin n), w i = prediction x d i)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+formal/real/PCSReal/Calibration.lean:181:80: error: Application type mismatch: The argument
+  h
+has type
+  dualCheck x w q d = true
+but is expected to have type
+  decide (Reproduces x w q ∧ ∀ (i : Fin n), w i = prediction x d i) = true
+in the application
+  of_decide_eq_true h
+formal/real/PCSReal/Calibration.lean:181:62: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Reproduces x w q ∧ ∀ (i : Fin n), w i = prediction x d i)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+formal/real/PCSReal/Calibration.lean:185:16: error(lean.unknownIdentifier): Unknown constant `Rat.cast_sum`
+formal/real/PCSReal/Calibration.lean:185:4: error: Type mismatch: After simplification, term
+  hj
+ has type
+  ↑(∑ i, w i * x i j) = ↑(q j)
+but is expected to have type
+  ∑ x_1, ↑(w x_1) * ↑(x x_1 j) = ↑(q j)
+formal/real/PCSReal/Calibration.lean:188:28: error(lean.unknownIdentifier): Unknown constant `Rat.cast_sum`
+formal/real/PCSReal/Calibration.lean:188:4: error: Type mismatch: After simplification, term
+  hi
+ has type
+  ↑(w i) = ↑(∑ j, x i j * d j)
+but is expected to have type
+  ↑(w i) = ∑ x_1, ↑(x i x_1) * ↑(d x_1)

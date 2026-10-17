@@ -1,5 +1,8 @@
 # Proof-carrying calibration on real experiments
 
+The complete [executed experiment report](PCS_EXPERIMENTAL_CALIBRATION_V1_REPORT.md)
+records all 22 hull groups, exact comparison proofs and scientific limits.
+
 This extension checks finite regression and pointwise robust prediction proposals
 with fresh Lean proofs. It is separate from PCS scientific acceptance and package
 authority. Its empirical case uses the original 308 resistance observations from
@@ -136,8 +139,10 @@ python -m pcs.cli calibration-kernel-v1 \
   --output /tmp/pcs-calibration-receipt-new
 ```
 
-Outputs use a new directory and retain byte inventories, exact proof text and
-receiving-source snapshots. These are source-bound research receipts, not signed
+Completed mathematical replay receipts use a new directory and retain byte
+inventories, exact proof text and receiving-source snapshots. Malformed-intake
+errors retain diagnostics; the attack campaign also inventories their attempted
+inputs. These are source-bound research receipts, not signed
 PCS package acceptance or independent reviewer attestations.
 
 ## Remaining scientific assumptions
