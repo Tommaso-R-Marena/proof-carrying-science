@@ -43,7 +43,7 @@ class SealedInferenceTests(unittest.TestCase):
 
     def test_promotion_changes_head_but_not_sealed_memory(self):
         previous = load_sealed(self.store)
-        head = self.store.promote(wire_bytes(NEXT), previous.head, self.fake_yes)
+        head = self.store._promote_with_oracle(wire_bytes(NEXT), previous.head, self.fake_yes)
         now = load_sealed(self.store, expected=head)
         self.assertEqual(now.model, NEXT)
         self.assertEqual(previous.model, START)
@@ -63,7 +63,7 @@ class SealedInferenceTests(unittest.TestCase):
 
     def test_ledger_tamper_blocks_sealed_loader(self):
         initial = self.store.snapshot()
-        head = self.store.promote(wire_bytes(NEXT), initial, self.fake_yes)
+        head = self.store._promote_with_oracle(wire_bytes(NEXT), initial, self.fake_yes)
         self.assertEqual(load_sealed(self.store).head, head)
         (self.root / "store" / "receipts" / "00000001.json").write_bytes(b"{}")
         with self.assertRaises(IntegrityFailure):
@@ -71,7 +71,7 @@ class SealedInferenceTests(unittest.TestCase):
 
     def test_rolled_back_head_blocks_sealed_loader(self):
         old_head = (self.root / "store" / "HEAD.json").read_bytes()
-        self.store.promote(wire_bytes(NEXT), self.store.snapshot(), self.fake_yes)
+        self.store._promote_with_oracle(wire_bytes(NEXT), self.store.snapshot(), self.fake_yes)
         (self.root / "store" / "HEAD.json").write_bytes(old_head)
         with self.assertRaises(IntegrityFailure):
             load_sealed(self.store)
