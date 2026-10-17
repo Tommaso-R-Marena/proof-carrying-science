@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Proof-gated V5 replay: build, forbidden-token scan, axiom audits, codec vectors, checker
+# Proof-gated V6 replay (includes the full V5 suite): build, forbidden-token scan, axiom audits, codec vectors, checker
 # vectors and file-based PGSI1 authority tests. Run from the Lean project root.
 # Writes machine-readable results to results/proof_gated_ci_results.json (override with
 # PG_RESULTS=path). Exit code 0 iff every step passed.
@@ -43,6 +43,9 @@ MODULES=(
   PCS.V2.ProofGatedLimits PCS.V2.ProofGatedNoForget PCS.V2.ProofGatedRobust
   PCS.V2.ProofGatedStrongGate PCS.V2.ProofGatedDeepCert PCS.V2.ProofGatedStrongArtifacts
   PCS.V2.ProofGatedAudit PCS.V2.ProofGatedNoForgetAudit PCS.V2.ProofGatedStrongAudit
+  PCS.V2.ProofGatedBytes PCS.V2.ProofGatedCertificate PCS.V2.ProofGatedCertCodec
+  PCS.V2.ProofGatedProtocol PCS.V2.ProofGatedInterpreter PCS.V2.ProofGatedDeepCertGen
+  PCS.V2.ProofGatedV6Limits PCS.V2.ProofGatedV6EndToEnd
   PCS.V2.ProofGatedFullAudit
 )
 
@@ -55,7 +58,7 @@ warnings=$(grep -c '^warning' "$LOGDIR/build.log" || true)
 record build 0 "${#MODULES[@]} modules built; $warnings warning(s)"
 
 echo "== 2. forbidden tokens"
-FILES=(PCS/V2/ProofGated*.lean scripts/proof_gated_vectors.lean scripts/proof_gated_checker_vectors.lean)
+FILES=(PCS/V2/ProofGated*.lean scripts/proof_gated_vectors.lean scripts/proof_gated_checker_vectors.lean scripts/proof_gated_v6_vectors.lean)
 if grep -nE '\b(sorry|admit|native_decide|unsafe|implemented_by|extern)\b|^\s*axiom\b' "${FILES[@]}"; then
   fail forbidden_tokens 1 "forbidden token found"
 fi
@@ -64,7 +67,7 @@ record forbidden_tokens 0 "${#FILES[@]} files scanned: no sorry/admit/native_dec
 echo "== 3. axiom audits"
 # the full audit must list every public top-level theorem of the current sources
 cp PCS/V2/ProofGatedFullAudit.lean "$LOGDIR/full_audit_committed.lean"
-./scripts/gen_full_audit.sh > /dev/null
+bash scripts/gen_full_audit.sh > /dev/null
 cmp -s PCS/V2/ProofGatedFullAudit.lean "$LOGDIR/full_audit_committed.lean" || fail axiom_audit 1 "ProofGatedFullAudit.lean is stale (rerun scripts/gen_full_audit.sh)"
 total=0
 for f in PCS/V2/ProofGatedAudit.lean PCS/V2/ProofGatedNoForgetAudit.lean PCS/V2/ProofGatedStrongAudit.lean PCS/V2/ProofGatedFullAudit.lean; do
@@ -96,7 +99,13 @@ echo "$out" | tail -n 3
 [ $vrc = 0 ] || fail checker_vectors $vrc "checker vectors failed"
 record checker_vectors 0 "$(echo "$out" | tail -n 1)"
 
-echo "== 6. file-based PGSI1 authority"
+echo "== 6. V6 vectors (byte artifacts, PGSC6 certificates, protocol, reference interpreter)"
+out=$(V6_MODE=check lake env lean scripts/proof_gated_v6_vectors.lean 2>&1); vrc=$?
+echo "$out" | tail -n 3
+[ $vrc = 0 ] || fail v6_vectors $vrc "V6 vectors failed"
+record v6_vectors 0 "$(echo "$out" | tail -n 1)"
+
+echo "== 7. file-based PGSI1 authority"
 P=fixtures/proof_gated/pgsi1_pairs
 ncli=0
 run_cli() { out=$(lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$@" 2>&1); rc=$?; }

@@ -7,10 +7,10 @@
 #      authority tests) passes *inside the extraction*, with no build cache.
 # Writes dist/ARCHIVE_VERIFICATION.json. Exit code 0 iff everything passed.
 #
-#   ./scripts/proof_gated_verify_archive.sh [dist/pcs_proof_gated_v5.tar.gz]
+#   ./scripts/proof_gated_verify_archive.sh [dist/pcs_proof_gated_v6.tar.gz]
 set -uo pipefail
 
-ARCHIVE=${1:-dist/pcs_proof_gated_v5.tar.gz}
+ARCHIVE=${1:-dist/pcs_proof_gated_v6.tar.gz}
 OUT=$(dirname "$ARCHIVE")/ARCHIVE_VERIFICATION.json
 ROOT=$(pwd)
 WORK=$(mktemp -d /tmp/pg_verify.XXXXXX)
@@ -61,7 +61,7 @@ rm -f /tmp/pg_extracted.$$ /tmp/pg_expected.$$ /tmp/pg_json.$$
 
 echo "== 4. clean build + full CI inside the extraction"
 start=$(date +%s)
-PG_RESULTS="$WORK/ci_results.json" ./scripts/proof_gated_ci.sh > "$WORK/ci.log" 2>&1
+PG_RESULTS="$WORK/ci_results.json" bash ./scripts/proof_gated_ci.sh > "$WORK/ci.log" 2>&1
 CIRC=$?
 end=$(date +%s)
 tail -n 12 "$WORK/ci.log"
