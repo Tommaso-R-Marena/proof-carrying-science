@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'formal/PCS/V2/ProofGatedSelfImprovement.lean'
+      - 'formal/PCS/V2/ProofGatedSymbolic.lean'
       - 'research/proof-gated-self-improvement-v1/**'
       - '.github/workflows/pcs-proof-gated-research.yml'
   workflow_dispatch:
@@ -29,7 +30,7 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           cd formal
-          lake build PCS.V2.ProofGatedSelfImprovement
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic
           lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 0 0 relu 1 1 | grep -x ACCEPT
           if lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 1 1 relu 1 2; then
             echo 'FAIL: regressive candidate unexpectedly accepted' >&2
