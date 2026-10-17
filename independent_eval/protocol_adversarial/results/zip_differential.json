@@ -1,0 +1,218 @@
+{
+  "case_count": 8,
+  "cases": [
+    {
+      "disagreement": true,
+      "id": "normal_stored",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "e46e4bddd5c3fdf19d731b249ed28628386f8923475b851f685903f02094866e",
+      "size": 121,
+      "stdlib": {
+        "error": null,
+        "infos": [
+          {
+            "CRC": 907060870,
+            "compress_size": 5,
+            "compress_type": 0,
+            "external_attr": 25165824,
+            "file_size": 5,
+            "filename": "hello.txt"
+          }
+        ],
+        "names": [
+          "hello.txt"
+        ],
+        "ok": true
+      }
+    },
+    {
+      "disagreement": true,
+      "id": "path_traversal",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: unsafe or non-canonical ZIP member: '../escape.txt'",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "a6d0cd5f9729ec1c9ccb31f53de4cab83b6e8586a9b0b65920fdbe7096624dc4",
+      "size": 125,
+      "stdlib": {
+        "error": null,
+        "infos": [
+          {
+            "CRC": 2363233923,
+            "compress_size": 1,
+            "compress_type": 0,
+            "external_attr": 25165824,
+            "file_size": 1,
+            "filename": "../escape.txt"
+          }
+        ],
+        "names": [
+          "../escape.txt"
+        ],
+        "ok": true
+      }
+    },
+    {
+      "disagreement": true,
+      "id": "absolute_path",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: unsafe or non-canonical ZIP member: '/tmp/abs.txt'",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "260575e6b010ceb8942377add5cdfec3bad17b713e9276e68ebea2cbd164951e",
+      "size": 123,
+      "stdlib": {
+        "error": null,
+        "infos": [
+          {
+            "CRC": 2363233923,
+            "compress_size": 1,
+            "compress_type": 0,
+            "external_attr": 25165824,
+            "file_size": 1,
+            "filename": "/tmp/abs.txt"
+          }
+        ],
+        "names": [
+          "/tmp/abs.txt"
+        ],
+        "ok": true
+      }
+    },
+    {
+      "disagreement": true,
+      "id": "duplicate_names",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: duplicate or file/directory-colliding ZIP member: 'dup.txt'",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "98c0d09bcdc677301c32cfa336b3f784e16618cc6341dcd735df33e0edd918f1",
+      "size": 208,
+      "stdlib": {
+        "error": null,
+        "infos": [
+          {
+            "CRC": 2053932785,
+            "compress_size": 3,
+            "compress_type": 0,
+            "external_attr": 25165824,
+            "file_size": 3,
+            "filename": "dup.txt"
+          },
+          {
+            "CRC": 298486374,
+            "compress_size": 3,
+            "compress_type": 0,
+            "external_attr": 25165824,
+            "file_size": 3,
+            "filename": "dup.txt"
+          }
+        ],
+        "names": [
+          "dup.txt",
+          "dup.txt"
+        ],
+        "ok": true
+      }
+    },
+    {
+      "disagreement": true,
+      "id": "deflated_member",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "1c7c98d0827cd23191aeb196f5cb9427fd6f6f75d8034e5ec0ba5741875b9a31",
+      "size": 138,
+      "stdlib": {
+        "error": null,
+        "infos": [
+          {
+            "CRC": 393564749,
+            "compress_size": 16,
+            "compress_type": 8,
+            "external_attr": 25165824,
+            "file_size": 220,
+            "filename": "deflated.txt"
+          }
+        ],
+        "names": [
+          "deflated.txt"
+        ],
+        "ok": true
+      }
+    },
+    {
+      "disagreement": false,
+      "id": "truncated",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: invalid v0.6 ZIP archive: File is not a zip file",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "8ce612a2b6f6d1e7887074a1eb10aa4069a159ebc1234882c8d7885f72119d9c",
+      "size": 20,
+      "stdlib": {
+        "error": "BadZipFile: File is not a zip file",
+        "infos": [],
+        "names": [],
+        "ok": false
+      }
+    },
+    {
+      "disagreement": false,
+      "id": "garbage",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: invalid v0.6 ZIP archive: File is not a zip file",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "817a46698230aadfd32a23ec59a1e432d9cb21f2c45bffbfc6345326c892ae40",
+      "size": 14,
+      "stdlib": {
+        "error": "BadZipFile: File is not a zip file",
+        "infos": [],
+        "names": [],
+        "ok": false
+      }
+    },
+    {
+      "disagreement": false,
+      "id": "empty",
+      "pcs_load": {
+        "bundle_sha256": null,
+        "error": "V06BundleVerificationError: invalid v0.6 ZIP archive: File is not a zip file",
+        "member_names": [],
+        "ok": false
+      },
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "stdlib": {
+        "error": "BadZipFile: File is not a zip file",
+        "infos": [],
+        "names": [],
+        "ok": false
+      }
+    }
+  ],
+  "disagreement_count": 5,
+  "format": "pcs-independent-zip-differential-v1",
+  "limits": {
+    "note": "Bounded synthetic inputs only; disposable workspaces; no external hosts."
+  }
+}

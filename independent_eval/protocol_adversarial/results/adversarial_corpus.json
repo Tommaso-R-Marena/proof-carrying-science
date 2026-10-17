@@ -1,0 +1,2095 @@
+{
+  "case_count": 104,
+  "cases": [
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_000",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_001",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_002",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_003",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_004",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_005",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_006",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_007",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_008",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "none",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "positive",
+      "expected_reject": false,
+      "id": "positive_009",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": true,
+        "errors": [],
+        "exception": null,
+        "failed_stage": null,
+        "valid": true
+      }
+    },
+    {
+      "attack": "signature_substitution_wrong_key",
+      "bundle_sha256": "d096d0b655de8a7807b6e8909f631a992b839dfeec9f2646e3be292c9768dbdf",
+      "class": "negative",
+      "constructed": true,
+      "expected_reject": true,
+      "id": "wrong_key_on_tampered",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "signature public key fingerprint mismatch",
+          "signer fingerprint does not match pinned expected fingerprint",
+          "signature verification failed: InvalidSignature: "
+        ],
+        "exception": null,
+        "failed_stage": "certificate_signature",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_tamper",
+      "bundle_sha256": "d096d0b655de8a7807b6e8909f631a992b839dfeec9f2646e3be292c9768dbdf",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_tamper",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package size mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package size mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_empty",
+      "bundle_sha256": "b19dad88ac41bbc3d9a444c3742ed790e1c5c0ba8e2a4dd320dbe5c6d0f856ff",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_empty",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate hash/schema verification failed: v0.6 certificate failed JSON Schema validation: $: 'spec_version' is a required property; $: 'checker_version' is a required property; $: 'canonical_json_profile' is a required property; $: 'semantic_hash_format' is a required property; $: 'integrity_hash_format' is a required property; $: 'generated_at' is a required property; $: 'subject' is a required property; $: 'mission_scope' is a required property; $: 'assumptions' is a required property; $: 'claims' is a required property; $: 'artifacts' is a required property; $: 'evidence' is a required property; $: 'workflow' is a required property; $: 'workflow_summary' is a required property; $: 'semantic_hash' is a required property; $: 'integrity_hash' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_truncated",
+      "bundle_sha256": "c892b914cf32187aea303e59e7979691156a249da448488ac02b211a6b5849ba",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_truncated",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 certificate is not valid strict JCS JSON: invalid JCS JSON: Unterminated string starting at: line 1 column 2170 (char 2169)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "package_manifest_zero",
+      "bundle_sha256": "8c44bdef61844dce8711659c3e1246b1d6049f2798ef3cac98fa64178c8a3df7",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "package_manifest_zero",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest failed JSON Schema validation: $: 'package_format' is a required property; $: 'canonical_json_profile' is a required property; $: 'certificate_spec_version' is a required property; $: 'certificate_semantic_hash_format' is a required property; $: 'certificate_integrity_hash_format' is a required property; $: 'certificate_semantic_hash' is a required property; $: 'certificate_integrity_hash' is a required property; $: 'files' is a required property"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "package_signature_flip",
+      "bundle_sha256": "13160a96759b68d4031d600f9f87f245f6ca7c4e523a166a965104efb961a49b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "package_signature_flip",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is not valid UTF-8: 'utf-8' codec can't decode byte 0x84 in position 0: invalid start byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "certificate_signature_flip",
+      "bundle_sha256": "673cbf0127e88284fd495b22bf96cdf8068a1466590cad4ff4a855ad6498a37c",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "certificate_signature_flip",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 signature record is not valid strict JCS JSON: invalid JCS JSON: Expecting value: line 1 column 1 (char 0)"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "missing_certificate_json",
+      "bundle_sha256": "a2921028820c8f3dba956e3baedd910fc3376388216484c9890e96a4226584bb",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "missing_certificate_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['certificate.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "missing_certificate_signature_json",
+      "bundle_sha256": "97fb52b1889102dad2ed9f44f3ece63d990e4a6ca3c511961a36a1ea18c6ffc5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "missing_certificate_signature_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['certificate_signature.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "missing_package_manifest_json",
+      "bundle_sha256": "4e5bd5a8786ae7feb303464e6cdd32d3d99e3799c9c322491814d31ec64b470c",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "missing_package_manifest_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['package_manifest.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "missing_package_signature_json",
+      "bundle_sha256": "25449d3ee43011dbe69231b8653bf67f09b6acc4efe9ceea835e599fe6ca65d0",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "missing_package_signature_json",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 ZIP is missing required control files: ['package_signature.json']"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "path_traversal_member",
+      "bundle_sha256": "cce73694181f720270d4fdde0798adf07e6b5eba1647e68bff026c556c8de86a",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "path_traversal_member",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "unsafe or non-canonical ZIP member: '../escape.txt'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "absolute_member",
+      "bundle_sha256": "831cd00a342b58a2e8c7787b531dcd306ccb02b39b75adfcabec1acb0f12e49e",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "absolute_member",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "unsafe or non-canonical ZIP member: '/tmp/evil.bin'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "duplicate_payload_name",
+      "bundle_sha256": "d614a487bb67d86683f33d97ac571ef4cd72bcd14d57e1ada4426d5e288d3b68",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "duplicate_payload_name",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "duplicate or file/directory-colliding ZIP member: 'artifacts/07003bc2166f1cc92aa6c957/payload'"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "appended_garbage",
+      "bundle_sha256": "43572af254ee3c38510c5d0a0d8dddcda3ad8759db654da690a150b2ed4660d9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "appended_garbage",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "truncated_zip",
+      "bundle_sha256": "7c13bc140da8dec4b245e36741538a789d0a43822e12ef14201795d2e17759ab",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "truncated_zip",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "invalid v0.6 ZIP archive: File is not a zip file"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "empty_file",
+      "bundle_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "empty_file",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "invalid v0.6 ZIP archive: File is not a zip file"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "not_a_zip",
+      "bundle_sha256": "8d780af47f38c4b17fe8dec0d08627a7d10b066be97aff730faeab52302def25",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "not_a_zip",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "invalid v0.6 ZIP archive: File is not a zip file"
+        ],
+        "exception": "V06BundleVerificationError",
+        "failed_stage": "exception",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_00",
+      "bundle_sha256": "6cd69b9aa7be2ca6e3a7d2c472a1f50cb85f116d273c9f002a0b6b5dc427f62f",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_00",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_01",
+      "bundle_sha256": "f6b6706db62c328fd2ae6e99574168152a9f42999b0fbcdcf859c98110f34e26",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_01",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_02",
+      "bundle_sha256": "c060b687cb70b1002d1ca5cad33303750e7af1e52b0a1fa652e6e47521efa61e",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_02",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_03",
+      "bundle_sha256": "0418755e108eb07e8ec2f82a9e928b1eea019d68f29f791183328c22aa7a5082",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_03",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_04",
+      "bundle_sha256": "6a6f24a18274925dfb67242ddcbd5502acc2da7fb563913749f0fc61fb1ce7f3",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_04",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_05",
+      "bundle_sha256": "16c1e75afd08d4306c63ed3aff06fe3e9742a852cc3b4bb45a56f222d93d3f37",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_05",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_06",
+      "bundle_sha256": "505ee02eebb03c06408e0ef14c90d37b250ff9bf92258e58e7768c22bda2869f",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_06",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_07",
+      "bundle_sha256": "7e724d8c168576574c4e28873c6bc84e8789ef437e8d4785a6290d75dea5608c",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_07",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_08",
+      "bundle_sha256": "1cdfb5b0e8e8d61fb3abccd155845e5dc06c93753407345816076b4d797bfdf2",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_08",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_09",
+      "bundle_sha256": "89aba0d6bce120ffa0d13087172b58024c9c94e77c0d533c64307c8c28fd35e6",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_09",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_10",
+      "bundle_sha256": "3fb663e86972eb585cc2466341d8cf469b295b593f1708d546861ed9e1155f9f",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_10",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_11",
+      "bundle_sha256": "aa99b2125547dca6d7618ebe3472d5e4e5184951ce83a12fd04752da4700c161",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_11",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_12",
+      "bundle_sha256": "6b5cf3e35570190c950ec8ed458e8ff22789f21646195a640ba3812ac74282c9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_12",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_13",
+      "bundle_sha256": "8109bd3bc0b7c8f5ab60643c49001d994bb1c52304cd2d6e00818014cd8a021b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_13",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_14",
+      "bundle_sha256": "cf48fd33755bd3e42483802b6bcabf6b48e2ff4987260f54c29c449377c25961",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_14",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_15",
+      "bundle_sha256": "46bff1e046b414bd0fe69e79646a94acb0c368b9db9fe67477c1afea5fa4c4be",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_15",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_16",
+      "bundle_sha256": "ddf734a88e1a69cdf9895bda92fa2f6c86ab657f3875ab91e48367f846795acf",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_16",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_17",
+      "bundle_sha256": "1aa4484c70275f97404b8f10e7c22fb4c01092121d4cac438a08d51d6dc6ad32",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_17",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_18",
+      "bundle_sha256": "fdd961ec791a5cc73c96521bf760ddb56ecf9b15e9ece0f13354cda4a9b72115",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_18",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_19",
+      "bundle_sha256": "65aa630e4918b170773525740e75989818e0f7077b42bfbaaade4669ce6cb60d",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_19",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_20",
+      "bundle_sha256": "bcc7033cd568c99c38da028ccdf086f92d4ae70cc31defb000b435257dc97673",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_20",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_21",
+      "bundle_sha256": "add77b96cf9b71b4f71ee4abc577b7de40493621019c0daaa3321e1412b33713",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_21",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_22",
+      "bundle_sha256": "ecb8c09c777bbbe8280e7642ab95a70c50e831a0d1e5133446303e743326ca67",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_22",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_23",
+      "bundle_sha256": "a228974f25e645d34a4d6d62ef955fa94280a0e549c3ab5602759c3af37367ec",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_23",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_24",
+      "bundle_sha256": "93249c7461eba2241e6237c05270d62b6584c818349aaacb7542c6e4d7dac341",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_24",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_25",
+      "bundle_sha256": "1ce9214a66ceb617e284e7b4cf6356d6b71df7b463b99b2ce06c7b8881d98c36",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_25",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_26",
+      "bundle_sha256": "bbac1ebdff3b0bddf7e81efa8512e3de6fb5ba7bb3078ecbe3867b425e650488",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_26",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_27",
+      "bundle_sha256": "b9adc1fb653be148993a0da3fc87b6d737405e09448d47e53803347c17b05232",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_27",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_28",
+      "bundle_sha256": "d69a61ecdb9bc9c0f5bf66930e3935a33fa65163237fe24df1b803037c71f492",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_28",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_29",
+      "bundle_sha256": "d0134d8dd5f07ede0c27c4b280fbc4c4180d37ef7c220eda67356e8a3d2b0ce0",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_29",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_30",
+      "bundle_sha256": "4b0658d5a5874a4b98638f96bbb713e58688280301aafad231758246acd328aa",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_30",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_31",
+      "bundle_sha256": "c274c4341dc7ad0086f01fec154315bf9728aba77030365e52c514c4abc2bbb5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_31",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_32",
+      "bundle_sha256": "ba43b25e4efcf311fb5d01e4cb31d645cc10d3d7a401eadaadd3c8161e9f2e05",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_32",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_33",
+      "bundle_sha256": "e5a649faa815f86602e15f14ff42fbe5ed5eaaadc82dd238bf10e9ac2270c9b1",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_33",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_34",
+      "bundle_sha256": "048addc45b66129e25050b1057c45c03c50fd45e9415c277e5e310ad5b5cb31e",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_34",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_35",
+      "bundle_sha256": "48b53830af9708b9288382feb87bc93275714d780618db6e5df82e07a04e438a",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_35",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_36",
+      "bundle_sha256": "b9ac4c1f546eab824b70e6a06fde54af74335c2a3706d727867c3a273bb5f606",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_36",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_37",
+      "bundle_sha256": "89f6080cb705c60ebdf20776c0cd58bf4a49957e82fef224e4d6d8eac5cb3004",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_37",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_38",
+      "bundle_sha256": "91d709cbdad8283c64cf00d4b8697af583f3b55e19c9d47ab86c040ed001ab59",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_38",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "payload_byte_flip_39",
+      "bundle_sha256": "e7e9d57430629bb6718d630430c6e92ddc91c2af0495faa739ef959cd0e77797",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "payload_byte_flip_39",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package hash mismatch: artifacts/07003bc2166f1cc92aa6c957/payload",
+          "v0.6 package hash mismatch: artifacts/f988e424eab9a7ad14f5abf7/payload"
+        ],
+        "exception": null,
+        "failed_stage": "package_binding",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_00",
+      "bundle_sha256": "3b1ac161d54f117843953ec36a9a749d5e8476050d57225f11fe6dab746409f4",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_00",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xde in position 0: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_01",
+      "bundle_sha256": "e0e38b527a8012b40c073ad1877efafe7c9bd03d92813b150a73162f710ab8e5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_01",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0x87 in position 1: invalid start byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_02",
+      "bundle_sha256": "4ce96c2fddd035352cce93175a98ebb93dd464cdb3f4bb5cb4214972b9ffe917",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_02",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xc6 in position 2: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_03",
+      "bundle_sha256": "892e29074b9c357cc3526145ffdc477c89dde6732dc9c1b1d6a5032c167c267b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_03",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xc4 in position 3: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_04",
+      "bundle_sha256": "92611fcb7f4d974aec9a491c58f194d955b02b270585daeaae05162dea800a37",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_04",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xcb in position 4: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_05",
+      "bundle_sha256": "d13eeaceac857c4e3af7c60a90e856b349ae1fcee72e2dd5abfd664a08a669af",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_05",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xca in position 5: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_06",
+      "bundle_sha256": "e7155a737571e07c8240178c986ef25f9a28bac30364a599b160e05d580f8920",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_06",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xcb in position 6: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_07",
+      "bundle_sha256": "ad3f1b7a0db2a10ae1c289502bd70a875c135a408898f2ead3eb5949bc4ffdf9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_07",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xcc in position 7: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_08",
+      "bundle_sha256": "067f45e00b67d5571bdb8ab1875af9df9413bf66c0b9749cd2c51d69f37fd82c",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_08",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xc6 in position 8: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_09",
+      "bundle_sha256": "ce4201a3cc18686f4ad0ffc0ca091880af570464819da6b331d3d72f7c3650f3",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_09",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xc4 in position 9: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_10",
+      "bundle_sha256": "e40ccfe2338ffee5cc70b47ed373760c74459ab91b9f03dbb65b78a46cbad783",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_10",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xc9 in position 10: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_11",
+      "bundle_sha256": "9640fa0ab7fba56e5b294b85d996a0f118518a7efbc0ef5a9c3df612b352376d",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_11",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xfa in position 11: invalid start byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_12",
+      "bundle_sha256": "e8a42650cf06e006a250950b6a79f8a2f966585e5df0fa9c506807e25566d801",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_12",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xcf in position 12: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_13",
+      "bundle_sha256": "011ba12bc1bb187975af72fdb5e3ae872e8bc1f6c49ad4b91dc7cc4b5cefab4d",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_13",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xd6 in position 13: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_14",
+      "bundle_sha256": "9a139e7b9a5c6b19e7c8b87f506e6f1e8a14a2cea0ee8aa0336b5c375f5bfb3c",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_14",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xca in position 14: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_15",
+      "bundle_sha256": "aa2a5ff97b5417b7e7d73aa66cb51909ecc92b8b49aca1dada4e4045e7dfb347",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_15",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xcb in position 15: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_16",
+      "bundle_sha256": "5c2b425c8d30365d7a3b2e001943f2279a9933c5383ba65ab21b1f663c769210",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_16",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xfa in position 16: invalid start byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_17",
+      "bundle_sha256": "e6451bdeb16365ca08f01b858a29dd458c6d89b3c99f858e6617a68de41939e8",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_17",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xd5 in position 17: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_18",
+      "bundle_sha256": "327358a6d6fd6f61c08a4762f98647b643cdd7f2af96a6052daf45e08c720152",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_18",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xd7 in position 18: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "manifest_byte_flip_19",
+      "bundle_sha256": "3eacf5182c3544c22b422b1ebcb653e4035ba1c6253ccabb9340cec784313da9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "manifest_byte_flip_19",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "v0.6 package manifest is not valid UTF-8: 'utf-8' codec can't decode byte 0xca in position 19: invalid continuation byte"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_inputs",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_00",
+      "bundle_sha256": "0ddf97ea06111c474d50ae0961eab2fa22342e20f6f402b9db4a65ba3ecda612",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_00",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_01",
+      "bundle_sha256": "a526cc8b7f096637c09a1438a699eadd76f1f9c8ef8976eb1fd4bc0e858ebdb5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_01",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_02",
+      "bundle_sha256": "5bac4a7269a2053ce542e65f553cd1382db98b5e725048bd98739a0d6fda3aa7",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_02",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_03",
+      "bundle_sha256": "e3a516bb62723c66deb2f55e5d405626879f674bfe4830e01f2c7d140f36f83b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_03",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_04",
+      "bundle_sha256": "d9cb63bec66833d55ca308f184ba7ed2881be5d4b49aa7c9b08ce8f906db4978",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_04",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_05",
+      "bundle_sha256": "d766fbf1941f01a247462c833ee9c4439c7531a3de6e727d3daa5650339e12c4",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_05",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_06",
+      "bundle_sha256": "16a9436b8eb49e594608ab21e171d26b737248df421682642738c69d69650591",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_06",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_07",
+      "bundle_sha256": "3a0db80477ff68fd65967bf249f267fbd5b40b197bbe2ffbca48b3907691cc8b",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_07",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_08",
+      "bundle_sha256": "8428566fab247557fbabf04fe5849cbf51563c69179f77050647c49c18af86cf",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_08",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_09",
+      "bundle_sha256": "244c7da98ed0ccfefb6dae948e9eafae25422ac8ddb4f11b1513e096edd4448d",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_09",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_10",
+      "bundle_sha256": "0cccf16c6d739276ec8a9df0d5ef1cf101439b7ca82eb443bd7d77964e6869f2",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_10",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_11",
+      "bundle_sha256": "f5bc68962f65425e938973040434a60e0aa6a8e647516333fb5c152ba783928e",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_11",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_12",
+      "bundle_sha256": "87819a51764b7ef9b95b7395fe284f3caa237935c7382c6c3ed4286d1abddf05",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_12",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_13",
+      "bundle_sha256": "b4340573f2f456145a2ed50767151fd3e6122b7598a980a21e4594a9553468d5",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_13",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "extra_member_14",
+      "bundle_sha256": "aa5c946231a0feff2f3005749e1d5754d621cd3243073284b5eadb041add91f9",
+      "class": "negative",
+      "construct_error": null,
+      "constructed": true,
+      "expected_reject": true,
+      "id": "extra_member_14",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "archive is not the canonical PCS STORED ZIP encoding required for Lean raw-archive verification"
+        ],
+        "exception": null,
+        "failed_stage": "canonical_archive",
+        "valid": false
+      }
+    },
+    {
+      "attack": "fingerprint_mismatch",
+      "bundle_sha256": "af1a3bed50f73f82f39c5d53edb1ca196dc3a3e540cb669246df22583a262b85",
+      "class": "negative",
+      "constructed": true,
+      "expected_reject": true,
+      "id": "wrong_fingerprint_pin",
+      "result": "pass",
+      "verification": {
+        "attempted": true,
+        "authoritative": false,
+        "errors": [
+          "signer fingerprint does not match pinned expected fingerprint"
+        ],
+        "exception": null,
+        "failed_stage": "certificate_signature",
+        "valid": false
+      }
+    }
+  ],
+  "false_accepts": [],
+  "format": "pcs-independent-adversarial-corpus-v1",
+  "negative_controls": 94,
+  "negatives_rejected_after_attempted_verify": 94,
+  "not_attempted": [],
+  "positive_accepted": 10,
+  "positive_controls": 10
+}
