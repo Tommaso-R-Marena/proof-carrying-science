@@ -56,8 +56,18 @@ def _require_authority() -> None:
     )
 
 
+# Clean-room rebuild must not require a pre-existing authority binary: its job is
+# to build one. Mandatory enforcement still applies — the test fails if rebuild
+# or provenance verification fails.
+_CLEANROOM_REBUILD_TESTS = {
+    "test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env",
+}
+
+
 @pytest.fixture(autouse=True)
-def _authority_gate():
+def _authority_gate(request):
+    if request.node.name in _CLEANROOM_REBUILD_TESTS:
+        return
     _require_authority()
 
 
@@ -289,9 +299,23 @@ def test_deterministic_fixture_mode_byte_identical_regeneration(tmp_path):
 
 
 def test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env(tmp_path, monkeypatch):
+    """Rebuild pcs-lean-authority independently; do not rely on a preinstalled binary.
+
+    Under PCS_REQUIRE_LEAN_AUTHORITY=1 this test is still mandatory: lean/lake must
+    be present, the clean-room rebuild must succeed, and provenance must bind an
+    executable authority distinct from any inherited env path. Skipping for a
+    missing pre-built repository binary is intentionally not allowed here.
+    """
     if shutil.which("python3") is None:
+        if os.environ.get("PCS_REQUIRE_LEAN_AUTHORITY") == "1":
+            pytest.fail("python3 unavailable; required for clean-room rebuild")
         pytest.skip("python3 unavailable")
     if shutil.which("lake") is None or shutil.which("lean") is None:
+        if os.environ.get("PCS_REQUIRE_LEAN_AUTHORITY") == "1":
+            pytest.fail(
+                "lean/lake unavailable; required by PCS_REQUIRE_LEAN_AUTHORITY=1 "
+                "for clean-room authority rebuild"
+            )
         pytest.skip("lean/lake unavailable for clean-room rebuild")
 
     # Poison the ambient env; clean-room must not inherit it.
@@ -300,11 +324,15 @@ def test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env(tmp_pat
     poison.chmod(0o755)
     monkeypatch.setenv("PCS_LEAN_AUTHORITY_BIN", str(poison))
 
-    summary = run_cleanroom_independent_pilot_v1(
-        tmp_path / "cleanroom",
-        overwrite=True,
-        rebuild_lean_authority=True,
-    )
+    try:
+        summary = run_cleanroom_independent_pilot_v1(
+            tmp_path / "cleanroom",
+            overwrite=True,
+            rebuild_lean_authority=True,
+        )
+    except IndependentPilotError as exc:
+        pytest.fail(f"clean-room rebuild/verify failed: {exc}")
+
     assert summary["pass"] is True
     assert summary["inherited_PCS_LEAN_AUTHORITY_BIN"] is False
     assert summary["evidence"]["stages"]["authoritative"] is True
@@ -312,8 +340,18 @@ def test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env(tmp_pat
     assert provenance["rebuild_mode"] == "fresh-formal-checkout-lake-build"
     assert provenance["inherited_PCS_LEAN_AUTHORITY_BIN"] is False
     assert len(provenance["authority_sha256"]) == 64
-    assert Path(provenance["path"]).is_file()
-    assert Path(provenance["path"]).resolve() != poison.resolve()
+    rebuilt = Path(provenance["path"])
+    assert rebuilt.is_file() and os.access(rebuilt, os.X_OK)
+    assert rebuilt.resolve() != poison.resolve()
+    assert hashlib.sha256(rebuilt.read_bytes()).hexdigest() == provenance["authority_sha256"]
     assert (tmp_path / "cleanroom" / "CLEANROOM_SUMMARY.json").is_file()
     assert (tmp_path / "cleanroom" / "CLEANROOM_AUTHORITY_PROVENANCE.json").is_file()
-    assert (tmp_path / "cleanroom" / "formal-rebuild" / ".lake" / "build" / "bin" / "pcs-lean-authority").is_file()
+    assert (
+        tmp_path
+        / "cleanroom"
+        / "formal-rebuild"
+        / ".lake"
+        / "build"
+        / "bin"
+        / "pcs-lean-authority"
+    ).is_file()
