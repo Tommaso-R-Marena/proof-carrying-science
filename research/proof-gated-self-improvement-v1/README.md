@@ -14,7 +14,6 @@ python -m unittest discover -s tests -v
 python proof_gate.py
 cd ../../formal
 source ../scripts/activate_lean_428.sh
-lake exe cache get
 lake build PCS.V2.ProofGatedSelfImprovement
 lake env lean --run PCS/V2/ProofGatedSelfImprovement.lean relu 0 0 relu 1 1
 # ACCEPT (exit 0)
