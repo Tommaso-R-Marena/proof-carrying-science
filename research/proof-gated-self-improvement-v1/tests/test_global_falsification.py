@@ -9,8 +9,10 @@ class UniversalCampaignTests(unittest.TestCase):
         self.assertEqual(result["models"], 128)
         self.assertEqual(result["transitions_checked"], 16384)
         self.assertEqual(result["original_accepted"], 4081)
-        self.assertGreater(result["lost_previously_correct_integer_prediction"], 0)
-        self.assertGreater(result["increased_worst_error_on_minus20_to20"], 0)
+        self.assertEqual(result["lost_previously_correct_integer_prediction"], 76)
+        self.assertEqual(result["increased_worst_error_on_minus20_to20"], 441)
+        self.assertEqual(result["failed_both_stronger_guards"], 12)
+        self.assertEqual(result["passed_both_stronger_guards"], 3576)
         self.assertEqual(
             result["original_accepted"],
             result["passed_both_stronger_guards"]
