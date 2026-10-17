@@ -1,0 +1,79 @@
+name: PCS Affine Certificate Kernel Research
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/**'
+      - 'formal/PCS/V2/ProofGated*.lean'
+      - 'formal/lean-toolchain'
+      - 'scripts/activate_lean_428.sh'
+      - '.github/workflows/pcs-affine-kernel-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  kernel-certificates:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Build real finite authority and require Linux isolation
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$RUNNER_TEMP/pgsi-affine-evidence"
+          mkdir "$evidence"
+          if ! command -v bwrap >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends bubblewrap
+          fi
+          bwrap --unshare-all --die-with-parent --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 -- /usr/bin/true 2>&1 | tee "$evidence/isolation.log"
+          source scripts/activate_lean_428.sh
+          cd research/proof-gated-self-improvement-v1
+          python build_authority.py --output "$RUNNER_TEMP/pgsi-affine-finite-native"
+      - name: Kernel proofs, strict receiving and adversarial controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          export PCS_PGSI_AUTHORITY_BUNDLE="$RUNNER_TEMP/pgsi-affine-finite-native"
+          export PCS_PGSI_REQUIRE_NATIVE=1
+          evidence="$RUNNER_TEMP/pgsi-affine-evidence"
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s kernel/tests -v 2>&1 | tee "$evidence/tests.log"
+          python check_hardening_evidence.py | tee "$evidence/parent-evidence-check.json"
+          python - "$RUNNER_TEMP/pgsi-affine-guard-request.json" <<'PY'
+          import sys
+          from pathlib import Path
+          from promotion_v2 import canonical
+          Path(sys.argv[1]).write_bytes(canonical({
+              'old': {'relu': True, 'weight': 0, 'bias': 0},
+              'candidate': {'relu': True, 'weight': 1, 'bias': 1},
+              'interval': [-20, 20]}))
+          PY
+          python kernel/guard.py --request "$RUNNER_TEMP/pgsi-affine-guard-request.json" --output "$RUNNER_TEMP/pgsi-affine-live-guard" --bundle "$PCS_PGSI_AUTHORITY_BUNDLE" > "$evidence/live-guard-receipt.json"
+          mkdir "$evidence/live-guard"
+          cp "$RUNNER_TEMP/pgsi-affine-live-guard/"*.json "$RUNNER_TEMP/pgsi-affine-live-guard/"*.lean "$RUNNER_TEMP/pgsi-affine-live-guard/"*.log "$evidence/live-guard/"
+      - name: Exhaustively replay universal certificates in the kernel
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-affine-evidence"
+          campaign="$RUNNER_TEMP/pgsi-affine-campaign"
+          cd research/proof-gated-self-improvement-v1
+          python kernel/campaign.py --output "$campaign" | tee "$evidence/campaign.log"
+          python kernel/verify_results.py --folder "$campaign" --expected kernel/results/v1/RESULTS.json | tee "$evidence/qualification.json"
+          mkdir "$evidence/campaign"
+          cp "$campaign/"*.json "$campaign/"*.gz "$campaign/"*.log "$evidence/campaign/"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: pcs-affine-kernel-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pgsi-affine-evidence
+          if-no-files-found: error
+          retention-days: 14
