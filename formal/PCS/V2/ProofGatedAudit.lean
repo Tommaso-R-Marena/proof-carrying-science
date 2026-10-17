@@ -2,6 +2,7 @@ import PCS.V2.ProofGatedSelfImprovement
 import PCS.V2.ProofGatedSymbolic
 import PCS.V2.ProofGatedArtifacts
 import PCS.V2.ProofGatedPromotion
+import PCS.V2.ProofGatedInference
 
 /-!
 # Replayed trusted-kernel dependency inventory (research only)
@@ -30,3 +31,8 @@ artifact fidelity or immutable deployment.
 #print axioms PCS.V2.ProofGatedPromotion.stale_generation_cannot_commit
 #print axioms PCS.V2.ProofGatedPromotion.substituted_active_cannot_commit
 #print axioms PCS.V2.ProofGatedPromotion.gatedCommit_monotone_generation
+
+#print axioms PCS.V2.ProofGatedInference.infer_sound
+#print axioms PCS.V2.ProofGatedInference.infer_canonical
+#print axioms PCS.V2.ProofGatedInference.committed_inference_preserves_correct_cases
+#print axioms PCS.V2.ProofGatedInference.committed_inference_exact_artifact
