@@ -1,28 +1,43 @@
 {
   "scenario_id": "TT-VERIFIER-001",
-  "title": "Stale verifier binary used in field review",
+  "title": "Stale verifier binary",
   "offline_only": true,
   "live_credential_changes_allowed": false,
-  "narrative": "Reviewers used a verifier image pinned to an outdated digest that accepts deprecated receipt formats.",
+  "narrative": "Reviewers used an outdated verifier digest.",
   "signals": [
-    "Local verifier version older than published support window",
-    "Receipt schema field unknown to current docs"
+    "Old version string",
+    "Unknown receipt schema field"
   ],
   "exercises": [
     {
       "id": "E1",
-      "prompt": "How do you detect stale verifier use offline?",
-      "acceptable_keywords": ["digest", "pin", "version", "compare"]
+      "prompt": "Detect stale verifier offline.",
+      "acceptable_keywords": [
+        "digest",
+        "pin",
+        "version",
+        "compare"
+      ]
     },
     {
       "id": "E2",
-      "prompt": "What is the impact on prior reviews?",
-      "acceptable_keywords": ["non-authoritative", "re-verify", "false accept", "impact"]
+      "prompt": "Impact on prior reviews.",
+      "acceptable_keywords": [
+        "non-authoritative",
+        "re-verify",
+        "false accept",
+        "impact"
+      ]
     },
     {
       "id": "E3",
-      "prompt": "Describe remediation that does not alter live CI pins during this exercise.",
-      "acceptable_keywords": ["offline", "refresh", "re-run", "document"]
+      "prompt": "Remediation without live CI pin changes.",
+      "acceptable_keywords": [
+        "offline",
+        "refresh",
+        "re-run",
+        "document"
+      ]
     }
   ],
   "after_action_criteria": [

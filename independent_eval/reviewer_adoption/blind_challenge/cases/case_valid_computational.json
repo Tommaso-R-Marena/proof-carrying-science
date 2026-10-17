@@ -5,39 +5,29 @@
     "cryptographic_validity",
     "formally_justified_computational"
   ],
-  "title": "Balanced reaction under declared grammar",
-  "summary": "A reaction-balance check succeeds for a declared atom-balance claim that stays within computational scope.",
+  "title": "Valid computational claim",
+  "summary": "Computational claim with matching checks within declared assumptions.",
   "evidence_excerpt": {
     "claims": [
       {
-        "id": "C_BALANCE",
-        "statement": "The water-formation reaction is atom-balanced under the v0.1 formula grammar.",
+        "id": "C1",
+        "statement": "Predictions match declared model.",
         "kind": "computational",
-        "assumptions": [
-          "A_GRAMMAR"
-        ],
         "assessment": {
           "status": "COMPUTATIONALLY_SUPPORTED"
         }
       }
     ],
-    "assumptions": [
+    "checks": [
       {
-        "id": "A_GRAMMAR",
-        "statement": "Formula strings use the limited v0.1 grammar."
+        "id": "E1",
+        "type": "reference_match",
+        "result": "pass"
       }
     ],
     "limitations": [
-      "Does not establish biological meaning of the reaction.",
-      "Does not establish laboratory experimental confirmation."
-    ],
-    "checks": [
-      {
-        "id": "E_BALANCE",
-        "type": "reaction_balance",
-        "result": "pass"
-      }
+      "No biological adequacy claimed."
     ]
   },
-  "reviewer_prompt": "Judge whether the package supports accepting the computational claim as stated, within limitations."
+  "reviewer_prompt": "Accept as valid computational claim within limitations."
 }

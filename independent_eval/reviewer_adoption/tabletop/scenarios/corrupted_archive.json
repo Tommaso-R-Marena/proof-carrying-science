@@ -3,23 +3,41 @@
   "title": "Corrupted evidence archive",
   "offline_only": true,
   "live_credential_changes_allowed": false,
-  "narrative": "Downloaded evidence ZIP fails CRC; partial extract yields mismatched artifact hashes.",
-  "signals": ["CRC failure", "SHA-256 mismatch vs published manifest"],
+  "narrative": "ZIP CRC failure and hash mismatches.",
+  "signals": [
+    "CRC failure",
+    "SHA-256 mismatch"
+  ],
   "exercises": [
     {
       "id": "E1",
-      "prompt": "State the integrity finding.",
-      "acceptable_keywords": ["corrupt", "mismatch", "hash", "crc"]
+      "prompt": "Integrity finding.",
+      "acceptable_keywords": [
+        "corrupt",
+        "mismatch",
+        "hash",
+        "crc"
+      ]
     },
     {
       "id": "E2",
-      "prompt": "What is the source of truth for recovery?",
-      "acceptable_keywords": ["manifest", "mirror", "published", "digest"]
+      "prompt": "Source of truth.",
+      "acceptable_keywords": [
+        "manifest",
+        "mirror",
+        "published",
+        "digest"
+      ]
     },
     {
       "id": "E3",
-      "prompt": "Should the package be accepted from the partial extract?",
-      "acceptable_keywords": ["hold", "do not accept", "reject", "re-download"]
+      "prompt": "Accept partial extract?",
+      "acceptable_keywords": [
+        "hold",
+        "do not accept",
+        "reject",
+        "re-download"
+      ]
     }
   ],
   "after_action_criteria": [

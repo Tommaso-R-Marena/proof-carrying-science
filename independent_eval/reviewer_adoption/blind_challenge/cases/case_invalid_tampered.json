@@ -5,48 +5,33 @@
     "outright_rejected",
     "cryptographic_validity"
   ],
-  "title": "Signature / artifact mismatch",
-  "summary": "The certificate claims PASS, but the artifact digest in the package does not match the digest bound by the signature record.",
+  "title": "Tampered / integrity failure",
+  "summary": "Artifact digest mismatch; package must be rejected.",
   "evidence_excerpt": {
     "claims": [
       {
-        "id": "C_REPLAY",
-        "statement": "Predictions match the declared model.",
+        "id": "C1",
+        "statement": "Predictions match declared model.",
         "kind": "computational",
-        "assumptions": [
-          "A_MODEL"
-        ],
         "assessment": {
           "status": "COMPUTATIONALLY_SUPPORTED"
         }
       }
     ],
-    "assumptions": [
-      {
-        "id": "A_MODEL",
-        "statement": "Declared analytic model is the computational object under test."
-      }
-    ],
-    "limitations": [
-      "Integrity failures invalidate assurance regardless of claim text."
-    ],
     "checks": [
       {
-        "id": "E_REPLAY",
-        "type": "reference_match",
-        "result": "pass"
-      },
-      {
-        "id": "E_INTEGRITY",
+        "id": "E_HASH",
         "type": "artifact_digest",
-        "result": "fail",
-        "detail": "predictions.csv sha256 does not match signed manifest entry"
+        "result": "fail"
       }
     ],
     "integrity_alerts": [
-      "artifact digest mismatch",
-      "do not accept package"
+      "digest mismatch",
+      "do not accept"
+    ],
+    "limitations": [
+      "Integrity failures invalidate assurance."
     ]
   },
-  "reviewer_prompt": "Judge whether this package should be accepted. Integrity alerts are part of the evidence."
+  "reviewer_prompt": "Reject as invalid."
 }

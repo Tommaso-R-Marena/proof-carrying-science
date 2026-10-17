@@ -3,9 +3,9 @@
   "synthetic": true,
   "live_credential_changes_performed": false,
   "answers": {
-    "E1": "Stop signing with the exposed key, preserve evidence and logs, notify affected reviewers, and record the earliest plausible compromise time.",
+    "E1": "Stop signing with the exposed key, preserve evidence and logs, notify reviewers, and record compromise time as the earliest plausible window.",
     "E2": "Identify packages signed after that time for re-review and re-sign; do not silently trust them.",
-    "E3": "Generate a replacement key, then distribute and pin fingerprint through an independent channel and trusted channel before resuming."
+    "E3": "Distribute the replacement key fingerprint through an independent channel and a trusted channel; pin fingerprint before resuming."
   },
   "after_action_notes": [
     "Containment actions recorded in facilitator notes",

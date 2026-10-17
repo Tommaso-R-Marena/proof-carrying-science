@@ -41,16 +41,23 @@ def load_cases(cases_dir: str | Path) -> list[dict[str, Any]]:
 
     Only top-level ``*.json`` files that include ``ground_truth_label`` are
     used. Neighboring unlabeled practice materials (if present) are ignored so
-    this scorer does not invent labels.
+    this scorer does not invent labels. Duplicate ``case_id`` values keep the
+    first path in sorted order.
     """
     root = Path(cases_dir)
     cases: list[dict[str, Any]] = []
+    seen: set[str] = set()
     for path in sorted(root.glob("*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(data, dict) or "case_id" not in data:
-            raise ValueError(f"invalid case file: {path}")
+            # Skip non-case JSON rather than inventing structure.
+            continue
         if "ground_truth_label" not in data:
             continue
+        cid = str(data["case_id"])
+        if cid in seen:
+            continue
+        seen.add(cid)
         cases.append(data)
     if not cases:
         raise FileNotFoundError(

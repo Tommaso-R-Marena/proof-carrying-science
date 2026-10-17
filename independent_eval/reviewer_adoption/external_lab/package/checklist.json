@@ -1,113 +1,50 @@
 {
-  "format": "pcs-external-lab-challenge-checklist-v1",
+  "schema": "pcs.independent_eval.external_lab.checklist.v1",
+  "note": "Manual configuration steps. Completing checklist does not claim completed external-lab validation.",
   "external_validation_complete_allowed": false,
-  "steps": [
-    {
-      "step_id": "setup.checkout_sha",
-      "phase": "setup",
-      "description": "Record pinned PCS checkout SHA",
-      "manual": true,
-      "success_state": "SETUP_OK",
-      "failure_states": [
-        "SETUP_BLOCKED"
-      ]
-    },
-    {
-      "step_id": "setup.venv_lockfile",
-      "phase": "setup",
-      "description": "Create isolated venv and install from agreed lockfile",
-      "manual": true,
-      "success_state": "SETUP_OK",
-      "failure_states": [
-        "SETUP_BLOCKED"
-      ]
-    },
-    {
-      "step_id": "setup.host_packages",
-      "phase": "setup",
-      "description": "Install and record host packages (e.g. zstd)",
-      "manual": true,
-      "success_state": "SETUP_OK",
-      "failure_states": [
-        "SETUP_BLOCKED"
-      ]
-    },
-    {
-      "step_id": "setup.authority_hash",
-      "phase": "setup",
-      "description": "Build/obtain pinned verifier or Lean authority; record SHA-256",
-      "manual": true,
-      "success_state": "SETUP_OK",
-      "failure_states": [
-        "SETUP_BLOCKED",
-        "SETUP_UNTRUSTED"
-      ]
-    },
-    {
-      "step_id": "setup.fingerprint",
-      "phase": "setup",
-      "description": "Establish out-of-band expected signer fingerprint",
-      "manual": true,
-      "success_state": "SETUP_OK",
-      "failure_states": [
-        "SETUP_BLOCKED",
-        "SETUP_UNTRUSTED"
-      ]
-    },
-    {
-      "step_id": "setup.trust_profile",
-      "phase": "setup",
-      "description": "Write receiver-owned trust profile JSON",
-      "manual": true,
-      "success_state": "SETUP_OK",
-      "failure_states": [
-        "SETUP_BLOCKED"
-      ]
-    },
-    {
-      "step_id": "workflow.receive_package",
-      "phase": "workflow",
-      "description": "Receive synthetic study.pcs.zip via approved channel",
-      "manual": true,
-      "success_state": "CHALLENGE_PASS_DRY_RUN",
-      "failure_states": [
-        "CHALLENGE_FAIL"
-      ]
-    },
-    {
-      "step_id": "verify.run",
-      "phase": "verification",
-      "description": "Run guided verification with pinned trust material",
-      "manual": true,
-      "success_state": "VERIFY_ACCEPT",
-      "failure_states": [
-        "VERIFY_REJECT",
-        "VERIFY_INCOMPLETE"
-      ]
-    },
-    {
-      "step_id": "verify.read_limitations",
-      "phase": "verification",
-      "description": "Read LIMITATIONS.md; separate computational vs scientific claims",
-      "manual": true,
-      "success_state": "CHALLENGE_PASS_DRY_RUN",
-      "failure_states": [
-        "CHALLENGE_FAIL"
-      ]
-    },
-    {
-      "step_id": "repro.second_environment",
-      "phase": "reproducibility",
-      "description": "Re-verify in a second clean environment and compare hashes/decisions",
-      "manual": true,
-      "success_state": "CHALLENGE_PASS_DRY_RUN",
-      "failure_states": [
-        "CHALLENGE_FAIL",
-        "VERIFY_INCOMPLETE"
-      ]
-    }
-  ],
   "forbidden_states": [
     "EXTERNAL_VALIDATION_COMPLETE"
+  ],
+  "steps": [
+    {
+      "id": "read_setup",
+      "title": "Read SETUP.md and confirm offline constraints",
+      "doc": "SETUP.md"
+    },
+    {
+      "id": "provision_python",
+      "title": "Provision Python 3.11+ environment (lab-local)",
+      "doc": "SETUP.md"
+    },
+    {
+      "id": "locate_examples",
+      "title": "Locate read-only example pointers (do not copy large trees)",
+      "doc": "WORKFLOW.md"
+    },
+    {
+      "id": "run_verify_docs",
+      "title": "Follow VERIFY.md against a local evidence fixture",
+      "doc": "VERIFY.md"
+    },
+    {
+      "id": "attempt_repro",
+      "title": "Attempt REPRO.md steps on lab hardware; record divergences",
+      "doc": "REPRO.md"
+    },
+    {
+      "id": "record_limitations",
+      "title": "Document environment limitations per LIMITATIONS.md",
+      "doc": "LIMITATIONS.md"
+    },
+    {
+      "id": "troubleshoot",
+      "title": "Apply TROUBLESHOOTING.md if blocked; log time spent",
+      "doc": "TROUBLESHOOTING.md"
+    },
+    {
+      "id": "judge_success_failure",
+      "title": "Classify outcome using SUCCESS_FAILURE.md (no invented authority)",
+      "doc": "SUCCESS_FAILURE.md"
+    }
   ]
 }

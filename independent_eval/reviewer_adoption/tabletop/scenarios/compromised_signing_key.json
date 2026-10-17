@@ -3,14 +3,15 @@
   "title": "Suspected compromised signing key",
   "offline_only": true,
   "live_credential_changes_allowed": false,
-  "narrative": "A laptop holding a pilot signing key may have been exposed.",
+  "narrative": "A laptop that held a pilot signing private key may have been exposed.",
   "signals": [
-    "synthetic tabletop signal"
+    "Device loss/exposure report",
+    "Old fingerprint still pinned"
   ],
   "exercises": [
     {
       "id": "E1",
-      "prompt": "Immediate containment",
+      "prompt": "Immediate containment without live credential mutation.",
       "acceptable_keywords": [
         "stop signing",
         "preserve evidence",
@@ -20,7 +21,7 @@
     },
     {
       "id": "E2",
-      "prompt": "Handle packages after compromise",
+      "prompt": "Handle packages signed after compromise time.",
       "acceptable_keywords": [
         "re-review",
         "re-sign",
@@ -30,11 +31,11 @@
     },
     {
       "id": "E3",
-      "prompt": "Replacement fingerprint",
+      "prompt": "Before distributing replacement fingerprint.",
       "acceptable_keywords": [
-        "pin fingerprint",
-        "independent channel",
         "trusted channel",
+        "independent channel",
+        "pin fingerprint",
         "replacement key"
       ]
     }
@@ -42,8 +43,8 @@
   "after_action_criteria": [
     "No live credential was rotated by the simulator",
     "Containment actions recorded",
-    "Incident evidence preservation noted",
     "Affected package window identified",
-    "Replacement fingerprint distribution plan uses an independent trusted channel"
+    "Replacement fingerprint distribution plan uses an independent trusted channel",
+    "Incident evidence preservation noted"
   ]
 }

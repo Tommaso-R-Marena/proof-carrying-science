@@ -25,3 +25,5 @@
 | "Human blind-review accuracy is X%" based only on fixtures | **No** |
 
 Record honest incompleteness; it is a valid evaluation outcome.
+
+Forbidden outcome state: `EXTERNAL_VALIDATION_COMPLETE` — this kit does not claim completed external laboratory validation.

@@ -1,39 +1,22 @@
 # Bugs and ambiguities — Workstream D
 
-Findings from building the reviewer-adoption evaluation kit. None of these
-authorize inventing human results or live credential changes.
+1. **Certificate vs receipt status** — Workbench prefers receipt decisions when
+   present and labels them *reported*. Neither is workbench-decided ACCEPT.
+2. **Keyword tabletop scoring** — Simulator uses substring keywords; answers must
+   include exact phrases from `acceptable_keywords`. Facilitators should treat
+   heuristic pass/fail as a dry-run aid, not incident-grade grading.
+3. **Blind label taxonomy** — Core judgments are
+   `accept_as_valid` / `reject_as_invalid` / `accept_computational_only` /
+   `abstain`. Finer distinction dimensions are encoded via ground-truth labels
+   and `distinction_tags`, not separate scored axes in v1.
+4. **Checklist dual filenames** — Both `CHECKLIST.json` and `checklist.json` may
+   exist; loader prefers `CHECKLIST.json` and requires
+   `external_validation_complete_allowed=false` plus forbidden
+   `EXTERNAL_VALIDATION_COMPLETE`.
+5. **Duplicate case files** — Concurrent edits can leave duplicate `case_id`s;
+   `load_cases` keeps the first sorted path. Prefer a single file per id.
 
-## Ambiguities in upstream evidence shapes
+## Open questions
 
-1. **Certificate vs receipt status precedence** — When both carry claim
-   decisions, the workbench prefers the receipt for `reported_status` and
-   records the source. Reviewers must not treat either as workbench-decided
-   ACCEPT.
-2. **`lean_authority: null` in fixtures** — Synthetic receipts may omit Lean
-   authority. The workbench copies `null` rather than inventing PASS/FAIL.
-3. **Interpretation vs claim objects** — Author narratives (abstracts) are not
-   always structured claims. Blind cases surface unsupported interpretations
-   via `interpretation_claims` / narrative fields; scorers must use the
-   dedicated boolean dimension.
-
-## Tooling constraints (by design)
-
-4. **Workbench non-authority** — Any UI that looks like a “status badge” is
-   *reported* status only. Automation tests assert `workbench_issues_accept` is
-   false.
-5. **Blind keys separation** — `keys/ground_truth.json` must not ship inside
-   blinded packets. `blind.py` rebuilds the output directory and strips label
-   keys; distribution checklists should exclude `keys/`.
-6. **Tabletop forbidden markers** — The simulator uses string markers
-   (`rotate_production_key`, etc.) as a coarse guard. Sophisticated live
-   actions phrased differently could evade detection; labs must still follow
-   policy. The simulator never performs credential operations.
-7. **External-lab success** — Finishing `CHECKLIST.json` is dry-run success,
-   not project-level external validation.
-
-## Open questions for stewards
-
-- Should receipt `valid: true` without Lean authority be displayed with a
-  stronger warning banner? (Currently a general disclaimer + warnings list.)
-- Preferred response-sheet schema for multi-rater human studies (out of scope
-  for this synthetic fixture kit).
+- Whether receipt `valid: true` without Lean authority needs a stronger banner.
+- Human multi-rater response-sheet schema (out of scope for synthetic fixtures).

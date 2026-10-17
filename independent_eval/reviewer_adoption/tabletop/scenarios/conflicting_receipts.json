@@ -1,25 +1,42 @@
 {
   "scenario_id": "TT-RECEIPT-001",
-  "title": "Conflicting verification receipts for the same bundle",
+  "title": "Conflicting verification receipts",
   "offline_only": true,
   "live_credential_changes_allowed": false,
-  "narrative": "Two receipts for the same semantic_hash disagree: one reports COMPUTATIONALLY_SUPPORTED, another REJECTED.",
-  "signals": ["Divergent decision fields", "Different verifier digests in receipt metadata"],
+  "narrative": "Two receipts disagree for the same semantic_hash.",
+  "signals": [
+    "Divergent decisions"
+  ],
   "exercises": [
     {
       "id": "E1",
-      "prompt": "Summarize the conflict without preferring the favorable receipt.",
-      "acceptable_keywords": ["conflict", "disagree", "supported", "rejected"]
+      "prompt": "Summarize conflict.",
+      "acceptable_keywords": [
+        "conflict",
+        "disagree",
+        "supported",
+        "rejected"
+      ]
     },
     {
       "id": "E2",
-      "prompt": "Investigation steps offline.",
-      "acceptable_keywords": ["diff", "verifier", "pin", "input"]
+      "prompt": "Investigate offline.",
+      "acceptable_keywords": [
+        "diff",
+        "verifier",
+        "pin",
+        "input"
+      ]
     },
     {
       "id": "E3",
-      "prompt": "Provisional status and authority note.",
-      "acceptable_keywords": ["hold", "accept", "authority", "pass"]
+      "prompt": "Provisional status.",
+      "acceptable_keywords": [
+        "hold",
+        "accept",
+        "authority",
+        "pass"
+      ]
     }
   ],
   "after_action_criteria": [

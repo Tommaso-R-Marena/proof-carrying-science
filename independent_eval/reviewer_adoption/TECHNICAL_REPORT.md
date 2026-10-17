@@ -4,67 +4,52 @@
 
 Tasks 15–18 under `independent_eval/reviewer_adoption/` only. Additive
 evaluation infrastructure. Does not modify `pcs/`, `formal/`, `research/`,
-`site/`, or `.github/`.
+`site/`, or `.github/`. No top-level `independent_eval/__init__.py` (avoid
+cross-PR overlap); imports use the namespace package from the repo root.
 
 ## Task 15 — Offline reviewer workbench
 
-`workbench/inspect_evidence.py` walks a directory for certificates, receipts,
-intake locks, and `LIMITATIONS.md`. It extracts claims, assumptions, artifact
-identities (including on-disk SHA-256 when missing), and **reported** outcomes.
-
-`workbench/generate_report.py` emits accessibility-minded static HTML (skip
-link, focus outlines, reduced-motion, responsive tables) plus a companion
-`.inspection.json`. The payload always includes `workbench_issues_accept: false`.
-
-**Non-authority:** the workbench never sets ACCEPT/PASS; badges are labeled as
-source-reported.
+`workbench/inspect_evidence.py` extracts claims, assumptions, artifact
+identities, and **reported** outcomes from certificates/receipts.
+`workbench/generate_report.py` emits accessibility-minded static HTML plus
+`.inspection.json`. Payload always includes `workbench_issues_accept: false`.
+Workbench never issues ACCEPT/PASS.
 
 ## Task 16 — Blind challenge
 
-Seven synthetic cases under `blind_challenge/cases/` cover:
+Seven synthetic labeled cases under `blind_challenge/cases/` cover valid
+computational, invalid/rejected, computationally valid but scientifically
+unsupported, crypto-valid without formal justification, empirical+computational,
+unsupported interpretation, and hash-mismatch rejection.
 
-| Case | Category |
-| --- | --- |
-| BC-01 | Valid computational |
-| BC-02 | Invalid / rejected (bad signature) |
-| BC-03 | Computationally valid, scientifically unsupported interpretation |
-| BC-04 | Crypto-valid without formal justification |
-| BC-05 | Formal computational + declared empirical validation |
-| BC-06 | Unsupported interpretation only |
-| BC-07 | Rejected (hash mismatch despite outer signature) |
+`keys/ground_truth.json` holds sealed labels. `blind.py` strips
+`ground_truth_label` / `expected_*` fields and writes a reviewer packet
+(facilitator map kept separate). `score.py` scores supplied response sheets
+only; refuses unattested `human_study=true`. Fixture
+`fixtures/sample_responses.json` is synthetic and intentionally includes one
+incorrect judgment — not human performance.
 
-`keys/ground_truth.json` holds blinded labels separately. `blind.py` strips
-label keys and writes a packet + response template. `score.py` compares a
-response sheet to ground truth and sets
-`human_review_results_invented: false`. The sample response sheet is explicitly
-a **synthetic automated scorer fixture**, not human performance.
-
-Distinction dimensions scored: cryptographic validity, formally justified
-computational claims, empirically validated claims, unsupported interpretation,
-outright rejected evidence, plus overall category.
+Distinction dimensions (via labels / `distinction_tags`): cryptographic
+validity, formally justified computational claims, empirically validated
+claims, unsupported interpretations, outright rejected evidence.
 
 ## Task 17 — Tabletop
 
-Seven offline scenarios: compromised signing key, stale verifier, corrupted
-archive, lost commitment, dependency substitution, disclosure, conflicting
-receipts. `simulator.py` merges a scenario with a response sheet into an
-after-action JSON, refuses live credential/infra flags, and scans for forbidden
-action markers. Fixture response sheets are synthetic and labeled as such.
+Seven offline scenarios (compromised key, stale verifier, corrupted archive,
+lost commitment, dependency substitution, disclosure, conflicting receipts).
+`simulator.py` scores response sheets with keyword heuristics, forbids
+`live_credential_changes_performed=true`, and never mutates credentials.
 
 ## Task 18 — External lab kit
 
-`external_lab/package/` provides SETUP, WORKFLOW, VERIFY, REPRO, LIMITATIONS,
-TROUBLESHOOTING, SUCCESS_FAILURE, plus `CHECKLIST.json`. WORKFLOW points
-read-only at repo `examples/` and local fixtures without copying large trees.
-`burden_tracker.py` prints the checklist (`--list-steps`) and appends JSONL
-entries that explicitly **do not** claim completed external-lab validation.
+`external_lab/package/` documents SETUP/WORKFLOW/VERIFY/REPRO/LIMITATIONS/
+TROUBLESHOOTING/SUCCESS_FAILURE plus checklist JSON forbidding
+`EXTERNAL_VALIDATION_COMPLETE`. `burden_tracker.py` lists steps and appends
+JSONL entries with `completed_external_lab_validation: false`.
 
-## Results policy
+## Non-claims
 
-No human blind-review accuracy numbers are reported. No completed external
-laboratory validation is claimed. Smoke outputs under `/tmp` or
-`results/work/` are ephemeral.
-
-## How to run
-
-See `README.md` and `TEST_INVENTORY.md`.
+- No invented human blind-review results
+- No completed external-lab validation claim
+- No live credential or infrastructure changes
+- No workbench ACCEPT/PASS authority

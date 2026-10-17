@@ -5,51 +5,37 @@
     "formally_justified_computational",
     "unsupported_interpretation"
   ],
-  "title": "Replay passes; clinical adequacy claimed",
-  "summary": "Computational replay of a synthetic PK equation succeeds, but the certificate also asserts clinical adequacy\u2014an unsupported scientific leap.",
+  "title": "Computationally valid, scientifically unsupported",
+  "summary": "Replay passes but clinical adequacy is overclaimed.",
   "evidence_excerpt": {
     "claims": [
       {
         "id": "C_REPLAY",
-        "statement": "Synthetic predictions match the declared one-compartment equation within tolerance.",
+        "statement": "Predictions match model.",
         "kind": "computational",
-        "assumptions": [
-          "A_EQ"
-        ],
         "assessment": {
           "status": "COMPUTATIONALLY_SUPPORTED"
         }
       },
       {
-        "id": "C_CLINICAL",
-        "statement": "The model is clinically adequate for dosing decisions.",
+        "id": "C_CLIN",
+        "statement": "Clinically adequate for dosing.",
         "kind": "scientific",
-        "assumptions": [
-          "A_EQ"
-        ],
         "assessment": {
           "status": "COMPUTATIONALLY_SUPPORTED"
         }
       }
     ],
-    "assumptions": [
-      {
-        "id": "A_EQ",
-        "statement": "The analytic equation is the declared computational model; biological adequacy is not established by this assumption."
-      }
-    ],
-    "limitations": [
-      "No biological or mechanistic adequacy is established.",
-      "No clinical safety, efficacy, or patient-level predictive validity is established.",
-      "No regulatory acceptance is established."
-    ],
     "checks": [
       {
         "id": "E_REPLAY",
-        "type": "pkpd_reference_match",
+        "type": "reference_match",
         "result": "pass"
       }
+    ],
+    "limitations": [
+      "No clinical adequacy established."
     ]
   },
-  "reviewer_prompt": "Separate computational support from scientific support. Choose the judgment that best matches PCS scope rules."
+  "reviewer_prompt": "Accept computational only."
 }

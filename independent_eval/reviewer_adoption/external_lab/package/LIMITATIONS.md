@@ -10,3 +10,5 @@
   validation of PCS.
 - Network policy, export control, and IRB/ethics constraints are lab-specific and
   out of scope for this kit.
+
+Forbidden outcome state: `EXTERNAL_VALIDATION_COMPLETE` — this kit does not claim completed external laboratory validation.
