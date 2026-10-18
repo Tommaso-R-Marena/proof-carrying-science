@@ -70,7 +70,7 @@ def qualify(out: Path, dependency_checkout: Path | None = None) -> dict:
         roots = [own, *(base / s / ".lake/build/lib/lean" for s in scopes[1:]), base / "formal/.lake/build/lib/lean", *libraries]
         env["LEAN_PATH"] = os.pathsep.join(map(str, roots))
         with (out / "build.log").open("w") as log:
-            modules = ["Types", "Semantics", "Codec", "Receiver"]
+            modules = ["Types", "Semantics", "Codec", "CodecBounds", "Receiver"]
             if (PROJECT / "PCSScientificReceiver/History.lean").is_file():
                 modules.append("History")
             for module in modules + ["PCSScientificReceiver", "Main"]:
