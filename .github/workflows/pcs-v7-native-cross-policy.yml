@@ -46,4 +46,5 @@ jobs:
           source scripts/activate_lean_428.sh
           cd formal
           lake build PCS.V2.ProofGatedPolicy
-          lake env lean ../research/proof-gated-self-improvement-v1/v7_independent/v7_cross_policy_native.lean
+          lake env lean --run ../research/proof-gated-self-improvement-v1/v7_independent/v7_cross_policy_native.lean | tee /tmp/pcs-v7-native-authority-replay.log
+          grep -F 'PASS: independent Python 250-byte PGSC6 replayed by real Lean V7' /tmp/pcs-v7-native-authority-replay.log
