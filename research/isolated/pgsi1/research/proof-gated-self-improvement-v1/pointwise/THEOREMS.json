@@ -1,0 +1,34 @@
+{
+  "namespace": "PCS.Research.Pointwise",
+  "source": "Pointwise.lean",
+  "theorems": [
+    "absForm_sound",
+    "dominanceRow_sound",
+    "accept_sound",
+    "preserves_correct",
+    "preserves_bound",
+    "sum_error_le",
+    "transitive",
+    "refutes_sound",
+    "check_sound",
+    "batch_sound",
+    "guard_sound"
+  ],
+  "total": 11,
+  "new_axioms": [],
+  "claims": "mathematical integer semantics only",
+  "post_hoc": {
+    "BlockFamily.lean": [
+      "no_positive_certificate",
+      "no_guard_authorization"
+    ],
+    "PreservedGuard.lean": [
+      "accepts_sound",
+      "first_update",
+      "second_update"
+    ]
+  },
+  "authored_new_total": 16,
+  "general_results": 14,
+  "concrete_controls": 2
+}
