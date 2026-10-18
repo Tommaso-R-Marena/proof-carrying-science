@@ -68,6 +68,14 @@ states. Run `python -m pcs.cli transport-kernel-v1 --help`. It composes with the
 existing signed scientific workflow; implementation correspondence, continuum
 accuracy and empirical validity remain separate OPEN obligations.
 
+## Experimental epistemic obligation lattice
+
+The [epistemic obligation lattice](docs/PCS_EPISTEMIC_OBLIGATION_LATTICE_V1.md)
+is an experimental falsifier-carrying calculus: empirical and computational claims
+must declare what would refute them, evidence classes cannot silently promote, and
+upstream refutation reopens dependents. It grants **no** package or scientific
+authority. Run `pcs epistemic-lattice-v1 --help`.
+
 ## Guided v0.6 project onboarding
 
 Scientists no longer need to hand-author a PCS manifest from scratch.
