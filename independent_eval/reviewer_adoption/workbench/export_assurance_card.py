@@ -40,13 +40,15 @@ def discover_assurance_card_root(
     explicit: str | Path | None = None,
 ) -> dict[str, Any]:
     """Locate Workstream F package root. ABSENT ≠ PASS."""
-    candidates: list[Path] = []
-    if explicit:
-        candidates.append(Path(explicit))
+    # An explicit or environment-pinned component is authoritative for discovery.
+    # A missing pin must remain ABSENT even when another sibling is installed.
     env = os.environ.get("PCS_ASSURANCE_CARD_ROOT")
-    if env:
-        candidates.append(Path(env))
-    candidates.append(_repo_root() / "independent_eval" / "assurance_card")
+    if explicit is not None:
+        candidates = [Path(explicit)]
+    elif env:
+        candidates = [Path(env)]
+    else:
+        candidates = [_repo_root() / "independent_eval" / "assurance_card"]
 
     tried: list[str] = []
     for cand in candidates:

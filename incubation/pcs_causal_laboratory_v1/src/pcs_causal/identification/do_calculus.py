@@ -1,7 +1,8 @@
-"""Causal calculus derivation steps (untrusted search + trusted checking).
+"""Experimental causal calculus proposal fragments.
 
 Each step records rule, premises, graph context, and resulting expression.
-Completeness is not claimed.
+Derivation.check only inspects declared flags; it is not a receiving verifier.
+Completeness and general implementation refinement are not claimed.
 """
 
 from __future__ import annotations
@@ -89,7 +90,10 @@ def try_action_exchange(
     z: Sequence[str],
 ) -> DerivationStep:
     r"""Rule 2 fragment: Y ⊥ X | Z in G_{\underline{X}} ⇒ P(Y|do(X),Z)=P(Y|X,Z)."""
-    gm = graph.mutilate([x])
+    # Rule 2 uses G_underlined_X (remove OUTGOING arrows from X).
+    # Hard intervention mutilate() removes incoming arrows and is not this graph.
+    gm = CausalDAG(nodes=graph.nodes,
+                   edges=frozenset((u, v) for u, v in graph.edges if u != x))
     sep = d_separated(gm, [y], [x], list(z))
     orig = Expr(f"P({y}|do({x}),{','.join(z)})" if z else f"P({y}|do({x}))")
     result = Expr(f"P({y}|{x},{','.join(z)})" if z else f"P({y}|{x})")
@@ -97,7 +101,7 @@ def try_action_exchange(
         rule=DoRule.ACTION_EXCHANGE,
         original=orig,
         result=result,
-        graph_condition=f"d_separated in G_mutilate({x})",
+        graph_condition=f"d_separated in G_remove_outgoing({x})",
         justified=sep,
         detail="ok" if sep else "exchange condition failed",
     )
