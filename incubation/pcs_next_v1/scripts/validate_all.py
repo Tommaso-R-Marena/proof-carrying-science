@@ -54,6 +54,7 @@ def main() -> int:
         (["python3", str(ROOT / "scripts/run_journal_demos.py")], ROOT),
         (["python3", str(ROOT / "scripts/run_cleanroom_replay.py")], ROOT),
         (["python3", str(ROOT / "scripts/run_performance.py")], ROOT),
+        (["python3", str(ROOT / "scripts/run_real_world_campaign.py")], ROOT),
     ]
     overall = 0
     for cmd, cwd in steps:

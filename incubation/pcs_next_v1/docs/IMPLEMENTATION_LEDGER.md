@@ -24,3 +24,4 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | Production integration | proposals | OPEN | n/a | n/a | Human authorization |
 | Journal demos (Theoph/Indometh/e-Drug3D/OSP) | `demos/`, `fixtures/journal_demos/` | COMPLETE | scientific+adv | NCA.lean | External lab OPEN; public data only |
 | Puromycin MM demo + oracles + cleanroom | `demos/puromycin_demo.py`, `oracles/`, `scripts/run_cleanroom_replay.py` | COMPLETE | unit+scientific | Bateman.lean | Cleanroom ≠ external lab |
+| Real-world mutation campaign | `campaigns/real_world_mutation.py` | COMPLETE | integration | n/a | Expanded multi-target suite; catch rate among expected probes; honest MISSED gap probes; external lab OPEN |
