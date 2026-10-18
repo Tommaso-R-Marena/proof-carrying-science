@@ -124,3 +124,10 @@ name = "PCSActionShield"
 roots = ["PCSActionShield", "PCSActionShieldControls", "PCSActionShieldAudit", "PCSConditionalShieldBridge", "PCSConditionalShieldRuntime"]
 defaultFacets = ["leanArts"]
 moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+
+# Experimental typed epistemic composition lattice (no PCS authority).
+[[lean_lib]]
+name = "PCSAssuranceLattice"
+roots = ["PCSAssuranceLattice", "PCSAssuranceLatticeControls"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
