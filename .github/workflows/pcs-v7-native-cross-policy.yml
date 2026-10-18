@@ -1,0 +1,49 @@
+name: PCS V7 Cross-Policy Exact-Wire Native Lean Replay
+
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/v7_independent/**'
+      - '.github/workflows/pcs-v7-native-cross-policy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-produced-lean-checked:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Independently generate PGSC6 cross-policy regression wire
+        shell: bash
+        run: |
+          set -euo pipefail
+          D=research/proof-gated-self-improvement-v1/v7_independent
+          F=formal/fixtures/proof_gated/v7
+          test -f "$F/policies/pinned0.pgpol7"
+          python3 "$D/v7_boundary_falsification.py" --fixtures "$F" --out /tmp/v7-native-cross-policy-python.json
+          test -s "$D/governance_cross_policy_regression.pgsc6"
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p=Path("research/proof-gated-self-improvement-v1/v7_independent/governance_cross_policy_regression.pgsc6")
+          b=p.read_bytes()
+          assert len(b)==250 and b.startswith(b"PGSC6|"), (len(b),b[:20])
+          want="3a37eb421ee93ebd0d2c6f27b7b9ccbed1d1e6d50c34b8d708df3b4c7780095a"
+          assert hashlib.sha256(b).hexdigest()==want, "independent certificate bytes drifted"
+          r=json.loads(Path("/tmp/v7-native-cross-policy-python.json").read_text())
+          assert r["status"]=="PASS" and r["counts"]["cross_policy_regression_controls"]==1
+          print("PASS: 250-byte independent generated PGSC6 certificate matches frozen digest")
+          PY
+      - name: Actual Lean 4.28.0 V7 byte-checker replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          lake build PCS.V2.ProofGatedPolicy
+          lake env lean ../research/proof-gated-self-improvement-v1/v7_independent/v7_cross_policy_native.lean
