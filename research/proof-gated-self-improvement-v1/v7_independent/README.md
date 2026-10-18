@@ -5,7 +5,7 @@
 Source V7 release: `pcs_proof_gated_v7.tar.gz`, SHA-256 `e98448c4d9493c54b88c876ea715c4c66d653565bf60d553c9627b14b7a5f8f8`.
 The authoritative complete standalone release is provided in the research conversation; no claim is made that the original tarball or its 516 files are included in this PR.
 
-This branch is stacked on Aristotle V6 draft PR #134, not main. The proof-gated work from PRs #117, #127, #129, #130, #133, #134, #135 and #142 remains separate.
+This research branch is proposed as a draft PR stacked on Aristotle V7 PR #149, itself based on V6 PR #134, not main. The proof-gated work from PRs #117, #127, #129, #130, #133, #134, #135 and #142 remains separate.
 
 ## Findings
 
@@ -14,19 +14,18 @@ This branch is stacked on Aristotle V6 draft PR #134, not main. The proof-gated 
 - A supported *authorized* policy change may accept an update that regresses on a previously used objective. Historical capabilities need an explicit cross-policy preservation contract.
 - These are stronger audit/governance obligations that V7 did not promise; **none falsifies V7's stated Lean theorem soundness**.
 
-## Import status and reproduction limits
+## Reproduction and requirements
 
-Exact-byte copies of both experiment reports and `v7_boundary_falsification.py` are committed here.
-The latter imports `v7_independent_audit.py` and expects the **original V7 golden fixtures** under `fixtures_v7/`. Those dependencies are not yet committed on this branch; the experiment is **not standalone here**, and CI should not be marked green on this PR based solely on these documents.
-The full standalone packages were produced and tested locally. Do not use a fabricated replacement fixture tree.
+The exact-byte independent `v7_independent_audit.py`, `v7_boundary_falsification.py`, and both source reports are committed here. The complete V7 golden fixtures are committed separately in the formal V7 base (PR #149), at `formal/fixtures/proof_gated/v7/`. This PR should be reviewed **stacked on that V7 branch**; it does not duplicate fixtures.
 
-Once the dependencies are ingested unchanged from their existing artifact packages, run:
+From the PCS repository root after the V7 branch and this PR are combined:
 
 ```sh
-python3 v7_boundary_falsification.py --fixtures fixtures_v7 --out boundary_results.json
+python3 research/proof-gated-self-improvement-v1/v7_independent/v7_independent_audit.py --fixtures formal/fixtures/proof_gated/v7 --mutations 20000
+python3 research/proof-gated-self-improvement-v1/v7_independent/v7_boundary_falsification.py --fixtures formal/fixtures/proof_gated/v7 --out /tmp/v7_boundary_results.json
 ```
 
-Require exact source hashes, test results, and an independent runtime/Lean replay before any merge claim.
+Both scripts use Python standard library only and were independently rerun against the full V7 fixture tree locally. Their results do **not** establish universal Python/Lean implementation equivalence or production history authenticity. A dedicated GitHub CI workflow is requested for this exact combination; keep this PR draft until hosted replay and code review are complete.
 
 ## Scope
 
