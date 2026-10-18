@@ -31,9 +31,10 @@ def main():
         subprocess.check_call(['git','init','-q',str(root)])
         subprocess.check_call(['git','add','.'],cwd=root)
         subprocess.check_call(['git','-c','user.name=PCS independent audit','-c','user.email=pcs-audit@example.invalid','commit','-qm','fixed candidate source snapshot'],cwd=root)
+        snapshot=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
         gate.ROOT=root;gate.REPORTS=root/'docs/integration/2026-10-18'
         for mutation in mutations:
-            subprocess.check_call(['git','reset','--hard','-q','HEAD'],cwd=root)
+            subprocess.check_call(['git','reset','--hard','-q',snapshot],cwd=root)
             manifest=root/gate.SUCCESSOR_PATH;j=json.loads(manifest.read_bytes())
             if mutation in {'gate_and_manifest','contract_and_manifest','test_and_manifest'}:
                 name={'gate_and_manifest':gate.GATE_PATH,'contract_and_manifest':'pcs/receipt_contract_v06.py','test_and_manifest':'tests/test_intake_verify_v06.py'}[mutation]
@@ -53,6 +54,9 @@ def main():
                 target=root/'untracked-copy';target.write_bytes(p.read_bytes());p.unlink();p.symlink_to(target)
             elif mutation=='unchanged_formal_source':
                 p=root/'formal/PCS/V2/ProofGatedPolicy.lean';p.write_bytes(p.read_bytes()+b'\n-- Independent source substitution\n')
+            if mutation in {'contract_and_manifest','test_and_manifest','missing_gate','formal_replacement','parent_path','nested_duplicate'}:
+                subprocess.check_call(['git','add','-A'],cwd=root)
+                subprocess.check_call(['git','-c','user.name=PCS independent audit','-c','user.email=pcs-audit@example.invalid','commit','-qm','Commit invalid identity fixture'],cwd=root)
             result=gate.check_profile();expected_pass=mutation=='positive'
             results.append({'mutation':mutation,'expected_pass':expected_pass,'actual_pass':result['passed'],'matches_expectation':result['passed'] is expected_pass,'failures':result['failures'],'files_checked':result['files_checked'],'additional_files_checked':result.get('additional_files_checked')})
     report={'candidate_commit':expected,'independent_identity_cases':len(results),'matches':sum(x['matches_expectation'] for x in results),'unexpected_accepts':[x['mutation'] for x in results if x['actual_pass'] and not x['expected_pass']],'production_authority':False,'test_scope':'Actual file/Git controls; imported gate executes against isolated snapshot, no verifier authorization is mocked.','results':results}

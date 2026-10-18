@@ -20,7 +20,14 @@ def main():
     changes=set(subprocess.check_output(['git','-C',str(candidate),'diff','--name-only',BASELINE,expected],text=True).splitlines())
     allowed={'pcs/receipt_contract_v06.py','pcs/intake_verify_v06.py','tests/test_intake_verify_v06.py',
              'docs/research/post-integration-2026-10-18/intake-receipt-fix.md'}
+    if expected != '8c1aa88ec82ef9bef5274c993a17461e0192f319':
+        allowed |= {'docs/research/post-integration-2026-10-18/intake-receipt-source-gate-before.json',
+                    'docs/research/post-integration-2026-10-18/receipt-source-profile-successor.json',
+                    'research/integration_v1/source_gate.py','tests/test_integration_source_successor.py'}
     assert changes == allowed, changes
+    for name in ('pcs/intake_verify_v06.py','pcs/receipt_contract_v06.py','tests/test_intake_verify_v06.py'):
+        assert (candidate/name).read_bytes() == subprocess.check_output(['git','-C',str(candidate),'show',f'8c1aa88ec82ef9bef5274c993a17461e0192f319:{name}'])
+    suffix = '' if expected == '8c1aa88ec82ef9bef5274c993a17461e0192f319' else '_'+expected[:7]
     assert not subprocess.check_output(['git','-C',str(candidate),'status','--porcelain'],text=True).strip()
     # Reuse exactly the original corpus constructors, selecting only deliberate
     # repair deltas and a separate output path. No original evidence is replaced.
@@ -69,20 +76,24 @@ main()
 (OUT/'REPAIR_TAMPER_CONTROLS.json').write_text(json.dumps(_tamper,indent=2)+'\n')
 '''
     env=dict(os.environ);env['PYTHONPATH']=str(candidate)
+    if suffix:
+        for prefix in ('REPAIRED_INTAKE_DIFFERENTIAL','REPAIR_TAMPER_CONTROLS'):
+            source=source.replace(prefix+'.json',prefix+suffix+'.json')
+            controls=controls.replace(prefix+'.json',prefix+suffix+'.json')
     run=subprocess.run([sys.executable,'-c',source+'\n'+controls],cwd=candidate,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-    (OUT/'REPAIR_INDEPENDENT_VALIDATION.log').write_text(run.stdout)
+    (OUT/('REPAIR_INDEPENDENT_VALIDATION'+suffix+'.log')).write_text(run.stdout)
     assert run.returncode == 0,run.stdout
     before=json.loads((OUT/'INTAKE_DIFFERENTIAL.json').read_text())
-    after=json.loads((OUT/'REPAIRED_INTAKE_DIFFERENTIAL.json').read_text())
+    after=json.loads((OUT/('REPAIRED_INTAKE_DIFFERENTIAL'+suffix+'.json')).read_text())
     assert after['cases']==28 and after['receipt_write_failures']==0
     keys=('case','route','old_accepted','new_accepted','new_valid','new_authoritative','failed_stage','lean_accepted','formal_package_authority')
     assert [{k:r[k] for k in keys} for r in before['results']]==[{k:r[k] for k in keys} for r in after['results']]
-    tamper=json.loads((OUT/'REPAIR_TAMPER_CONTROLS.json').read_text())
+    tamper=json.loads((OUT/('REPAIR_TAMPER_CONTROLS'+suffix+'.json')).read_text())
     result={'candidate_commit':expected,'baseline_commit':BASELINE,'source_changes':sorted(changes),'actual_lean_cases':28,
             'original_acceptance_decisions_preserved':True,'rejection_receipt_write_failures_before':20,
             'rejection_receipt_write_failures_after':0,'independent_tamper_checks_rejected':len(tamper),
             'mocked_positive_authority':False,'release_approval':False}
-    (OUT/'REPAIR_INDEPENDENT_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n')
+    (OUT/('REPAIR_INDEPENDENT_VALIDATION'+suffix+'.json')).write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 
 
