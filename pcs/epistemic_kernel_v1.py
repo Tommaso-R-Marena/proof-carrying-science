@@ -1047,8 +1047,8 @@ def register(subparsers) -> None:
     parser = subparsers.add_parser(
         "epistemic-kernel-v1",
         help=(
-            "stratified compositional assurance kernel; rejects forbidden promotion and "
-            "keeps continuum/empirical/causal residuals OPEN"
+            "experimental ESCA declared-label calculus; no PCS package authority; "
+            "external scientific correspondence remains OPEN"
         ),
     )
     parser.add_argument(

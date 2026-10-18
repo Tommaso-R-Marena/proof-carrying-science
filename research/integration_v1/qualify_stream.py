@@ -64,8 +64,15 @@ def main():
                                 break
     (out / "OUTPUT_RELOCATION.json").write_text(json.dumps(remapped, indent=2) + "\n")
     import pytest
-    return pytest.main(["-q", "tests", f"--junitxml={out / 'tests.xml'}",
+    code = pytest.main(["-q", "-ra", "tests", f"--junitxml={out / 'tests.xml'}",
                         "-o", f"cache_dir={out / 'pytest-cache'}"])
+    import xml.etree.ElementTree as ET
+    skipped = sum(int(s.attrib.get("skipped", 0)) for s in
+                  ET.parse(out / "tests.xml").getroot().iter("testsuite"))
+    if skipped:
+        print(f"INCOMPLETE: {skipped} skipped tests; qualification requires the missing tools.")
+        return code or 2
+    return code
 
 
 if __name__ == "__main__":

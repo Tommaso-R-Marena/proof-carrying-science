@@ -78,6 +78,8 @@ def replay_interval(certificate: dict) -> ScopedObservation:
     from certnum.certificate.checker import check_certificate
     if certificate.get("format") != "certnum-cert-v1" or certificate.get("kind") != "interval_enclosure":
         raise ValueError("only interval_enclosure is supported by this adapter")
+    if set(certificate) - {"format", "kind", "claim", "witness", "meta"}:
+        raise ValueError("unsupported certificate fields; producer authority flags are not evidence")
     result = check_certificate(certificate)
     if not result.accepted:
         raise ValueError(f"interval rejected: {result.reasons}")

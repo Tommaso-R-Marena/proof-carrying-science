@@ -513,7 +513,7 @@ def command(args) -> int:
 def register(subparsers) -> None:
     parser = subparsers.add_parser(
         "assurance-lattice-v1",
-        help="check typed epistemic composition; silent promotion stays rejected")
+        help="experimental typed epistemic composition; no PCS package authority")
     parser.add_argument("--package", required=True, help="assurance lattice package JSON")
     parser.add_argument("--output", required=True, help="evidence output directory")
     parser.add_argument("--kernel", action="store_true",

@@ -5,6 +5,7 @@ Run: python -m research.integration_v1.demo --out /fresh/output/directory
 from __future__ import annotations
 import argparse
 from fractions import Fraction
+import hashlib
 import html
 import json
 from pathlib import Path
@@ -14,6 +15,8 @@ from .scoped_evidence import (ROOT, component, digest, replay_conservation,
 
 
 def run_demo():
+    profile = ROOT / "docs/integration/2026-10-18/SOURCE_PROFILE.json"
+    profile_sha256 = hashlib.sha256(profile.read_bytes()).hexdigest()
     contract = json.loads((ROOT / "incubation/pcs_conservation_algebra_v1/examples/mass_action/glucose_cleavage.json").read_text())
     conservation, report = replay_conservation(contract)
     trajectory = next(c for c in report["certificates"] if c["kind"] == "trajectory_conservation")
@@ -33,6 +36,7 @@ def run_demo():
     observed = replay_interval(numerical)
     return {
         "format": "pcs-integrated-scientific-demo-v1",
+        "source_profile_sha256": profile_sha256,
         "synthetic": True, "system_sha256": digest(contract),
         "contract": contract, "conservation": report,
         "scoped_observations": [o.to_dict() for o in conservation] + [observed.to_dict()],
