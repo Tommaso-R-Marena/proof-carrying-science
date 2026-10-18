@@ -1,0 +1,13 @@
+# Scientific scope and negative results
+
+Assurance categories remain separate: kernel-checked mathematical implications; computationally reproduced outputs; cryptographically authenticated artifacts; independently replayed evidence; empirically supported scientific claims; OPEN obligations; experimentally observed security properties; and unproved environmental assumptions.
+
+The combined demo replays glucose cleavage's rational Euler trajectory and named C/H/O pools6/12/6, plus an interval certificate for glucose across13 declared states. These distinct scopes do not establish a continuum enclosure or validate a chemical model. The causal witness recomputes two finite SCMs with observational total variation0 and interventional variation1/2; its conclusion is NOT_IDENTIFIABLE, not a supported causal effect. Sticky falsification reopens scientific support in an actual PCSNext dependency cone; conditional mathematical theorems remain true.
+
+The independent ReLU campaign preserves16,384 transitions,4,081 finite-gate accepts,76 losses of previously correct integer predictions,441 bounded-window regressions,12 overlapping,3,576 passing both stronger diagnostics. Finite improvement, universal preservation, pointwise error dominance, and held-out empirical improvement are distinct conditions. No accelerating recursive self-improvement is inferred. Pointwise/PGSC6 policies use different target models and cannot be silently interchanged.
+
+Original public-data documentation137 overgeneralizes: not all fixtures are synthetic or Apache-2.0. The supplied nlmixr2data metadata declare2.0.10 and GPL>=3, with the full license retained. Journal manifest coverage does not authenticate the added R datasets. An upstream URL is not exact release provenance. e-Drug3D attribution and OSP/per-dataset rights require separate review before redistribution or external scientific use. Synthetic-only demonstration is the default here; no broad legal clearance or external participant validation is claimed.
+
+CertNum's expression-level Lean IsChecked fragment supports constants, variables, negation and abs. Binary interval arithmetic has separate lemmas, but no general Python expression/refinement proof follows. Informational root statuses and sample-only expression equivalence must not be treated as global mathematical theorems. The integration adapter accepts interval_enclosure only.
+
+The two known Rust/Python JCS formatting disagreements remain explicit independent diagnostic negatives; the approximate Rust renderer is not promoted to PCS canonicalization authority. The corrected causal rule-two fork counterexample and failed initial optional-component tests are retained as useful falsification results.

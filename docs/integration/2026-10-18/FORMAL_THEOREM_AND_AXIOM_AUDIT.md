@@ -1,0 +1,13 @@
+# Formal source and theorem reconciliation
+
+V7: all 38 ProofGated modules are byte-identical to PR149 at d832b6b2318c1f350eb4c6d59b53000966ad3547 (the full authoritative SHA is in the ledger). The source-preservation gate uses the exact captured Git object, not this abbreviated prose. PR151/152 introduce no newer formal implementation into this profile. The independent V7 run at efaf3d0 passed 38 modules, 818 declarations, 8,502 codec checks, 754 checker checks, 19,199 V6 checks, 12,776 V7 checks and14 actual file-authority cases. The full axiom map records64 axiom-free,122 propext-only,193 propext+Quot.sound,439 all three permitted standard axioms. These are audited declarations, not818 newly invented theorems.
+
+Frozen PGSI1: seven original133 formal modules and the complete research subtree retain exact bytes. Minimal standalone Lake configuration is a documented adaptation. A fresh native rebuild produced the original binary SHA fba78ce0cc5178dd0e1ff0f239031244069b4735711643c315433a22f5133534 and manifest SHA e7b2e10454b48f7c2e85f2f0a1abc15688c72e12c16c81d0e90e63cb6070d456. All173 tests passed at8cc145d; receiving source gates19/35/41 passed. Fresh large campaigns are recorded separately when completed.
+
+ESCA141 sources are relocated unchanged; only their Python FORMAL_ROOT selects the isolated project. EOL146 keeps root PCSEpistemic. AssuranceLattice145 keeps PCSAssuranceLattice. No cross-calculus coercion or semantic equivalence is assumed.
+
+HECK144: all53 authored theorem statements are identical to the original actual Lean #check output. Proof-body changes remove native compiler dependencies:34 are now axiom-free;19 use only permitted standard axioms. Full environment audits include generated theorems and must not be mistaken for authored theorem counts. Source inventories report authored counts separately.
+
+The new isolated PCSIntegration project attempts four additional theorems: transfer_conserves, conserved_complement_enclosure, sample_certificate_accepts, sample_complement_enclosed. Qualification is in progress; do not cite these as established until its actual build and axiom audit pass. The general result explicitly assumes numerical-certificate acceptance, environment-in-box, and an expression/state semantic link. It does not prove Python decoding, kinetics, positivity, continuum accuracy, GPU execution or empirical chemistry.
+
+Main's historical untrusted proof exercises and unsafe prover workers are byte-pinned, but are not production authority. Existing scripts/verify_lean.sh retains its exact protected admission scope. New imported research Lean receives an additional comment-aware forbidden-token audit; no historical task is rewritten to manufacture a clean scan.
