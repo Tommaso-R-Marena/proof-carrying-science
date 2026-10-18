@@ -829,3 +829,7 @@ must declare what would refute them, evidence classes cannot silently promote, a
 upstream refutation reopens dependents. It grants **no** package or scientific
 authority. Run `pcs epistemic-lattice-v1 --help`.
 
+
+### Consolidated research integration (draft)
+
+The [32-PR integration report](docs/integration/2026-10-18/EXECUTIVE_INTEGRATION_REPORT.md) maps the versioned research libraries, exact source profiles, tests, negative findings, and open obligations. Run `python -m research.integration_v1.demo --out /fresh/output` for a synthetic conservation/numerics/causal/falsification replay. The [reproduction guide](docs/integration/2026-10-18/REPRODUCIBILITY_GUIDE.md) includes real Lean qualification. Empirical validity, external implementation refinement, and V8 completion remain explicit obligations; these research interfaces grant no production model promotion or deployment authority.
