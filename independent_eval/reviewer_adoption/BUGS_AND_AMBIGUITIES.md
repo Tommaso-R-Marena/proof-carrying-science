@@ -1,0 +1,39 @@
+# Bugs and ambiguities — Workstream D
+
+1. **Certificate vs receipt status** — Workbench prefers receipt decisions when
+   present and labels them *reported*. Neither is workbench-decided ACCEPT.
+   `inspection_class` is recomputed after receipt overlays; it remains a
+   heuristic aid, never authority.
+2. **Keyword tabletop scoring** — Simulator uses substring keywords; answers must
+   include exact phrases from `acceptable_keywords`. Facilitators should treat
+   heuristic pass/fail as a dry-run aid, not incident-grade grading.
+3. **Blind label taxonomy** — Core judgments are
+   `accept_as_valid` / `reject_as_invalid` / `accept_computational_only` /
+   `abstain`. Finer distinction dimensions are encoded via ground-truth labels
+   and `distinction_tags`, not separate scored axes in v1.
+4. **Checklist filename** — Canonical file is `CHECKLIST.json` only. A previous
+   dual `checklist.json` pair failed repository integrity (case-insensitive
+   path collision) and was removed. Loader still requires
+   `external_validation_complete_allowed=false` plus forbidden
+   `EXTERNAL_VALIDATION_COMPLETE`.
+5. **Duplicate case files** — Concurrent edits can leave duplicate `case_id`s;
+   `load_cases` keeps the first sorted path. Prefer a single file per id.
+6. **Claim-strength lattice boundaries** — Scientific claims reported as
+   `COMPUTATIONALLY_SUPPORTED` map to `empirically_unsupported` (computational
+   label ≠ scientific adequacy). Pure `OPEN` scientific claims map to
+   `scientific_adequacy_open`. Ambiguous statuses fall through to
+   `unknown_or_ambiguous`. Reviewers must not treat these as ACCEPT/PASS.
+7. **CLI cross-check vs demo fixtures** — `pcs verify` on
+   `workbench/fixtures/sample_bundle` fails schema validation (not a real
+   attest package). Cross-check marks that case `inconclusive` rather than
+   hard disagreement. When CLI fails on a real package while
+   `inspection_class` remains `computationally_supported` /
+   `cryptographic_validity` without a failure warning, classification is
+   `disagreement` (CLI is authority; lattice is not mutated).
+
+## Open questions
+
+- Whether receipt `valid: true` without Lean authority needs a stronger banner.
+- Human multi-rater response-sheet schema (out of scope for synthetic fixtures).
+- Whether soft agreement (CLI fail + workbench warning only) should be a
+  separate classification from full agreement.

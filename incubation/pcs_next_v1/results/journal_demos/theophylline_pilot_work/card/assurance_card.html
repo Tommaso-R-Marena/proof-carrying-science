@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PCS Next Assurance Card — journal-theophylline-demo</title>
+<style>
+:root {
+  --bg0:#0f1c17; --bg1:#1a2e24; --ink:#e8f0ea; --muted:#9db5a8;
+  --tech:#3d7a5c; --warn:#a67c2a; --open:#3a5f8a; --danger:#8a3a3a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,serif;
+  --sans:"Avenir Next","Segoe UI",sans-serif;
+}
+body{margin:0;font-family:var(--sans);color:var(--ink);
+background:radial-gradient(1200px 600px at 10% -10%,#243d32,transparent),
+linear-gradient(160deg,var(--bg0),var(--bg1));min-height:100vh;}
+main{max-width:920px;margin:0 auto;padding:2.5rem 1.25rem 4rem;}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.8rem,4vw,2.6rem);margin:0 0 .5rem;}
+.lead{color:var(--muted);max-width:40rem;line-height:1.5;}
+.disclaimer{border-left:3px solid var(--warn);padding:.75rem 1rem;margin:1.5rem 0;color:var(--muted);}
+.block{margin:1.25rem 0;padding:1rem 1.1rem;background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);}
+.block h2{font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;margin:0 0 .75rem;color:var(--muted);}
+.tone-tech{border-color:rgba(61,122,92,.55);}
+.tone-open{border-color:rgba(58,95,138,.55);}
+pre{white-space:pre-wrap;word-break:break-word;margin:0;font-size:.85rem;line-height:1.45;}
+.ids{font-family:ui-monospace,monospace;font-size:.8rem;color:var(--muted);}
+</style>
+</head>
+<body>
+<main>
+  <h1>Proof-Carrying Science</h1>
+  <p class="lead">Assurance Card for project <strong>journal-theophylline-demo</strong>.
+  Technical verification and scientific validation are shown separately.</p>
+  <p class="disclaimer">Technical verification statuses must not be read as clinical, biological, or external-lab scientific approval.</p>
+  <section class="block tone-tech"><h2>Technical verification</h2><pre>{
+  &quot;assumptions&quot;: [],
+  &quot;claim_class&quot;: &quot;TECHNICAL_VERIFICATION&quot;,
+  &quot;evidence_ids&quot;: [],
+  &quot;limitations&quot;: [
+    &quot;Teaching-dataset demonstration only&quot;,
+    &quot;External laboratory validation OPEN&quot;,
+    &quot;Not equivalent to published NLME analyses in Pinheiro &amp; Bates&quot;
+  ],
+  &quot;reason&quot;: &quot;12/12 subjects met oral grid-fit relative-error threshold&quot;,
+  &quot;status&quot;: &quot;COMPUTATIONALLY_TESTED&quot;
+}</pre></section>
+  <section class="block tone-neutral"><h2>Formal status</h2><pre>{
+  &quot;assumptions&quot;: [
+    &quot;Lean 4.28.0 toolchain available&quot;
+  ],
+  &quot;claim_class&quot;: &quot;FORMAL_THEOREM&quot;,
+  &quot;evidence_ids&quot;: [],
+  &quot;limitations&quot;: [],
+  &quot;reason&quot;: &quot;Lean workspace present; kernel check deferred to formal validate step&quot;,
+  &quot;status&quot;: &quot;CONDITIONAL&quot;
+}</pre></section>
+  <section class="block tone-neutral"><h2>Independent reconstruction</h2><pre>{
+  &quot;limitations&quot;: [
+    &quot;Independent of producer PASS only within this receiver implementation.&quot;,
+    &quot;Not evidence that an outside laboratory performed the review.&quot;
+  ],
+  &quot;status&quot;: &quot;INDEPENDENTLY_REPRODUCED&quot;
+}</pre></section>
+  <section class="block tone-open"><h2>Scientific validation (external)</h2><pre>{
+  &quot;assumptions&quot;: [],
+  &quot;claim_class&quot;: &quot;SCIENTIFIC_CLAIM&quot;,
+  &quot;evidence_ids&quot;: [],
+  &quot;limitations&quot;: [],
+  &quot;reason&quot;: &quot;No outside laboratory has completed this pilot.&quot;,
+  &quot;status&quot;: &quot;OPEN&quot;
+}</pre></section>
+  <section class="block tone-neutral"><h2>Unresolved questions</h2><pre>[
+  &quot;Would an independent pharmacometrics lab reproduce these grid-fit thresholds?&quot;,
+  &quot;Should secondary redistributions require byte-identity with a canonical archive?&quot;
+]</pre></section>
+  <p class="ids">policy=c279c9f9b6545484674d3401ff892478a322a972a5059925110ca30daf3a6e05<br/>
+  lock=d28257025ca69a2edfbaf70e5e2b5e04bef9e2624a94a73495eb8b36c888cc26<br/>
+  bundle=a82793ccc653bfa9ccd993de4d1a6227afd81b208e1f5839d694c0f1dbc80caf</p>
+</main>
+</body>
+</html>
