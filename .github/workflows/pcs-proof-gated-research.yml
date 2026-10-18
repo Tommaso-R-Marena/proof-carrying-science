@@ -27,16 +27,36 @@ jobs:
           cd research/proof-gated-self-improvement-v1
           python -m unittest discover -s tests -v
           python global_falsification.py
+          python relu_replay_campaign.py
+          # Real independent replay, no Lean verdict fabricated by Python.
+          python - <<'PY'
+          from universal_relu import Net, Term
+          from relu_certificate_export import build_certificate
+          from relu_certificate_replay import replay
+          target = Net((Term(1, 2, 1),))
+          bad = replay(build_certificate(
+              Net((Term(1, 3, -3),)),
+              Net((Term(1, 3, -1),)), target))
+          assert not bad.no_forgetting and bad.counterexample == 4
+          good = replay(build_certificate(
+              Net((Term(1, 0, 0),)), target, target))
+          assert good.no_forgetting and good.no_worse_in_window
+          print("PASS: independent all-integer ReLU certificate replay")
+          PY
       - name: Kernel-check frozen Lean policy and theorems
         shell: bash
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
           cd formal
-          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer PCS.V2.ProofGatedAudit
           tmp="$(mktemp -d)"
           trap 'rm -rf "$tmp"' EXIT
-          lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt"
+          if ! lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt" 2>&1; then
+            cat "$tmp/axiom-audit.txt"
+            echo "FAIL: legacy axiom audit failed after the V5 codec migration" >&2
+            exit 1
+          fi
           cat "$tmp/axiom-audit.txt"
           if grep -E 'sorryAx|error:' "$tmp/axiom-audit.txt"; then
             echo 'FAIL: untrusted theorem dependency in axiom audit' >&2

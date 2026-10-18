@@ -103,21 +103,21 @@ theorem computational_atom_not_formal_accept :
     let atoms := [a]
     let c : CompositeClaim := { id := 0, requiredLevel := .formal, leafIds := [1] }
     accept atoms c = false := by
-  native_decide
+  decide
 
 /-- Unsupported formal leaf rejects (concrete). -/
 theorem unsupported_formal_rejects :
     let a : EvidenceAtom :=
       { id := 1, level := .formal, supported := false, claimId := 0 }
     accept [a] { id := 0, requiredLevel := .formal, leafIds := [1] } = false := by
-  native_decide
+  decide
 
 /-- Underleveled empirical leaf rejects Formal requirement (concrete). -/
 theorem underleveled_empirical_rejects :
     let a : EvidenceAtom :=
       { id := 1, level := .empirical, supported := true, claimId := 0 }
     accept [a] { id := 0, requiredLevel := .formal, leafIds := [1] } = false := by
-  native_decide
+  decide
 
 /-- Heterogeneous formal+empirical pair: accepts Empirical req, rejects Formal req. -/
 theorem heterogeneous_pair_law :
@@ -130,6 +130,6 @@ theorem heterogeneous_pair_law :
     accept atoms { id := 1, requiredLevel := .formal, leafIds := [1, 2] } = false ∧
     achievedLevel atoms { id := 2, requiredLevel := .empirical, leafIds := [1, 2] }
       = Level.empirical := by
-  native_decide
+  decide
 
 end PCSCompose.Compose
