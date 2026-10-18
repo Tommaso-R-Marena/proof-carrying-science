@@ -1,6 +1,6 @@
 name = "PCS"
 version = "0.5.0"
-defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check", "PCSCountermodel", "pcs-countermodel-replay", "PCSOmega", "PCSDecisionDiagram"]
+defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check", "PCSCountermodel", "pcs-countermodel-replay", "PCSOmega", "PCSDecisionDiagram", "PCSEpistemic"]
 
 [[lean_lib]]
 name = "PCS"
@@ -19,6 +19,13 @@ root = "PCSSemanticCheck"
 name = "PCSCountermodel"
 roots = ["PCSCountermodel"]
 defaultFacets = ["leanArts"]
+
+# Experimental falsifier-carrying epistemic obligation lattice (no PCS authority).
+[[lean_lib]]
+name = "PCSEpistemic"
+roots = ["PCSEpistemic"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
 
 [[lean_exe]]
 name = "pcs-countermodel-replay"

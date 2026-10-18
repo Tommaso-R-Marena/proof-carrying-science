@@ -1,0 +1,20 @@
+{
+  "format": "pcs-epistemic-lattice-v1",
+  "claims": [
+    {
+      "id": "C_magic",
+      "class": "empirical",
+      "dependencies": [],
+      "falsifiers": [],
+      "support_requires": [{"atom": "obs.n_subjects_ge_30", "expects": true}]
+    }
+  ],
+  "evidence": [
+    {"claim_id": "C_magic", "class": "empirical", "pass": true}
+  ],
+  "observations": {
+    "atoms": {
+      "obs.n_subjects_ge_30": true
+    }
+  }
+}
