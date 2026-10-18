@@ -2,7 +2,7 @@
 # Regenerates PCS/V2/ProofGatedFullAudit.lean: one `#print axioms` line for every public
 # top-level `theorem` of every PCS/V2/ProofGated* module (audit files excluded).
 set -euo pipefail
-MODS="SelfImprovement Symbolic Artifacts Promotion Inference Multilayer Generic Wide Deep Codec V1Analysis NetArtifacts Limits NoForget Robust StrongGate DeepCert StrongArtifacts Bytes Certificate CertCodec Protocol Interpreter DeepCertGen V6Limits V6EndToEnd"
+MODS="SelfImprovement Symbolic Artifacts Promotion Inference Multilayer Generic Wide Deep Codec V1Analysis NetArtifacts Limits NoForget Robust StrongGate DeepCert StrongArtifacts Bytes Certificate CertCodec Protocol Interpreter DeepCertGen V6Limits V6EndToEnd SweepCert Cert7 Policy Boundary Receipt RuntimeContract V7EndToEnd V7Limits"
 OUT=PCS/V2/ProofGatedFullAudit.lean
 {
   for m in $MODS; do echo "import PCS.V2.ProofGated$m"; done
