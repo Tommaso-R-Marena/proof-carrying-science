@@ -28,9 +28,17 @@ def isolated_identity_repository(tmp_path, monkeypatch):
         shutil.copy2(REPOSITORY / name, target)
     subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
     subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    _commit_fixture(tmp_path)
     monkeypatch.setattr(gate, "ROOT", tmp_path)
     monkeypatch.setattr(gate, "REPORTS", tmp_path / "docs/integration/2026-10-18")
     return tmp_path
+
+
+def _commit_fixture(root):
+    subprocess.run([
+        "git", "-c", "user.name=PCS source test", "-c", "user.email=pcs-test@example.invalid",
+        "commit", "-qm", "Commit isolated source identity fixture",
+    ], cwd=root, check=True)
 
 
 def test_successor_keeps_all_original_scope_and_additional_contract_pin(isolated_identity_repository):
@@ -50,6 +58,7 @@ def test_successor_keeps_all_original_scope_and_additional_contract_pin(isolated
     "unrelated_source", "predecessor_bytes", "predecessor_hash", "predecessor_commit",
     "old_hash", "new_hash", "source_and_manifest", "formal_override", "unknown_key",
     "duplicate_key", "mode", "symlink", "absent_successor", "gate_source",
+    "gate_and_manifest", "uncommitted_manifest",
 ])
 def test_successor_fails_closed_on_identity_mutation(isolated_identity_repository, mutation):
     root = isolated_identity_repository
@@ -96,9 +105,19 @@ def test_successor_fails_closed_on_identity_mutation(isolated_identity_repositor
     elif mutation == "gate_source":
         path = root / gate.GATE_PATH
         path.write_bytes(path.read_bytes() + b"\n# Unreviewed gate change\n")
+    elif mutation == "gate_and_manifest":
+        path = root / gate.GATE_PATH
+        path.write_bytes(path.read_bytes() + b"\n# Gate and manifest changed together\n")
+        successor["files"][gate.GATE_PATH]["new_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    elif mutation == "uncommitted_manifest":
+        successor["review_status"] = "independently_reviewed"
     if mutation not in {"duplicate_key", "absent_successor"}:
         successor_path.write_text(json.dumps(successor), encoding="utf-8")
+    # Exercise the fixed allowlists/hashes even after a manifest edit is
+    # committed. The separate two working-tree controls test the HEAD boundary.
+    if mutation not in {"gate_and_manifest", "uncommitted_manifest"}:
+        subprocess.run(["git", "add", "-A"], cwd=root, check=True)
+        _commit_fixture(root)
     result = gate.check_profile()
     assert result["passed"] is False, result
     assert result["failures"], result
-

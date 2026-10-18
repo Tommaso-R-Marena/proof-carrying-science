@@ -47,10 +47,18 @@ def _successor_files(profile, tracked):
         return files, None
     if path.is_symlink() or not path.is_file() or SUCCESSOR_PATH not in tracked:
         raise ValueError("successor must be a tracked regular file")
+    # The successor names reviewed source, not an editable working-tree grant.
+    # Git HEAD and this gate remain trusted configuration, not an immutable root.
+    raw_successor = path.read_bytes()
+    committed = subprocess.check_output(
+        ["git", "show", f"HEAD:{SUCCESSOR_PATH}"], cwd=ROOT
+    )
+    if raw_successor != committed:
+        raise ValueError("successor differs from committed Git HEAD")
     predecessor = REPORTS / "SOURCE_PROFILE.json"
     if predecessor.is_symlink() or hashlib.sha256(predecessor.read_bytes()).hexdigest() != PREDECESSOR_PROFILE_SHA256:
         raise ValueError("successor predecessor profile bytes differ")
-    successor = json.loads(path.read_bytes(), object_pairs_hook=_unique_object)
+    successor = json.loads(raw_successor, object_pairs_hook=_unique_object)
     keys = {"format", "predecessor_commit", "predecessor_profile_sha256", "scope", "review_status", "files"}
     if not isinstance(successor, dict) or set(successor) != keys:
         raise ValueError("successor has unexpected fields")
@@ -80,7 +88,7 @@ def _successor_files(profile, tracked):
                 or hashlib.sha256(file.read_bytes()).hexdigest() != entry["new_sha256"]):
             raise ValueError(f"successor file identity or mode differs: {name}")
         files[name] = {**(prior or {}), "sha256": entry["new_sha256"]}
-    return files, hashlib.sha256(path.read_bytes()).hexdigest()
+    return files, hashlib.sha256(raw_successor).hexdigest()
 
 
 def check_profile():
@@ -90,7 +98,7 @@ def check_profile():
     failures = []
     try:
         files, successor_sha256 = _successor_files(profile, tracked)
-    except (ValueError, TypeError, OSError) as exc:
+    except (ValueError, TypeError, OSError, subprocess.SubprocessError) as exc:
         failures.append(f"source successor invalid: {exc}")
         files, successor_sha256 = profile["files"], None
     for path, expected in files.items():
