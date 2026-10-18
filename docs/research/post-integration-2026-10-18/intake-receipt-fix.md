@@ -135,3 +135,31 @@ negative controls). The identity gate passes all 1,992 predecessor entries plus
 one additional receipt-contract pin. JUnit evidence for this session is
 `/workspace/.onboarding/intake-receipt-combined.xml`; pre-successor and initial
 partial-provisioning results are retained separately, not overwritten.
+
+## Independent successor falsification and repair
+
+Independent source review of `08f0a751` found one unsupported boundary claim:
+changing the gate file and its self-hash manifest together could pass while the
+previous gate code remained loaded. Eleven other independent identity controls
+behaved as expected. The review's raw negative evidence is preserved in its
+`SOURCE_SUCCESSOR_REVIEW_08f0a75.json`; the earlier 120-test result above predates
+this additional attack and does not claim to cover it.
+
+Commit `a7e2b50` requires the fixed successor file's bytes to equal the exact
+object at `git show HEAD:<fixed successor path>`. The temporary test repositories
+now commit their initial fixtures. Invalid hash/path/source-plus-manifest
+controls are also committed before checking, so they still exercise the
+hard-pinned identities independently of the working-tree boundary. Two new
+controls reject uncommitted gate-plus-manifest substitutions and review-status
+changes.
+
+This is a Git-commit identity boundary with explicitly trusted gate code, Git
+and reviewed HEAD. An actor able to replace the trusted commit and its verifier
+code is outside that boundary. It is not an external immutable execution root.
+No artifact receiving acceptance or actual Lean verdict changed in this repair.
+
+Final local committed-source candidate `a7e2b50`: **122 passed, zero skips**, in
+38.13 s (105 behavioral and 17 identity checks). The intentional duplicate-ZIP
+warning remains. JUnit: `/workspace/.onboarding/intake-receipt-final-committed-successor.xml`.
+Independent final successor review is tracked separately; this document does not
+self-approve it or PR #153.
