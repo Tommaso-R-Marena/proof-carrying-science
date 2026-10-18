@@ -33,13 +33,14 @@ cd incubation/pcs_epistemic_calculus_v1
 
 # Python
 python3 -m pip install -e ".[dev]"
-pytest -q
-python scripts/run_campaign.py
-python -m pcs_epistemic dialectic examples/pk_dialectic/ensemble.json
-python -m pcs_epistemic verify examples/pk_dialectic/dialectic_certificate.json
+python3 -m pytest -q
+python3 scripts/run_campaign.py
+python3 -m pcs_epistemic dialectic examples/pk_dialectic/ensemble.json
+python3 -m pcs_epistemic verify examples/pk_dialectic/dialectic_certificate.json
 
 # Lean (Lean 4.28.0 on PATH)
 lake build
+bash scripts/axiom_audit.sh
 ```
 
 ## Non-claims

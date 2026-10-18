@@ -57,7 +57,19 @@ Synthetic one- vs two-compartment ensemble:
 - Negative: hidden claim cannot receive world non-impact endorsement
 - Negative: computational→formal promotion rejected
 
+## Added rigor (continuation)
+
+- Lattice laws: reflexivity, transitivity, antisymmetry, incomparability
+- Assures: rejected evidence blocks; empirical↛formal; formal covers computational
+- Dialectic: agreement/dispute disjointness; empty-ensemble; candidate subset
+- Invalidation: `incomplete_never_endorses`; impact/nonimpact complementarity
+- Lean↔Python differential vectors for all Controls fixtures
+- Commons seed-corpus bridge (read-only) for INV-001..003 alignment
+- Adversarial checker tests + single-byte mutation sweep
+- `scripts/axiom_audit.sh` gates approved axiom closure
+
 ## Limits
 
 Finite ensembles and declared graphs only. No continuous-time PK theorem, no
-empirical study, no production signing, no Claim-IR coupling.
+empirical study, no production signing, no Claim-IR coupling. Lean↔Python
+agreement is finite differential evidence, not a refinement theorem.

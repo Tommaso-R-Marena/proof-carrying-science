@@ -80,4 +80,43 @@ theorem formal_evidence_assures_formal
   refine ⟨hcls, ?_⟩
   simp [supportsClaim, hreq, findEvidence, EvidenceRecord.discharges, EvidenceClass.le, hcls]
 
+/-- Rejected evidence cannot discharge even when the class lattice would allow it. -/
+theorem rejected_evidence_blocks
+    (Γ : Context) (claim : ClaimNode) (eid : Nat) (cls : EvidenceClass)
+    (hcls : claim.requiredClass = cls)
+    (hreq : claim.requiredEvidence = [eid]) :
+    ¬ Assures Γ cls claim
+        [{ id := eid, cls := cls, accepted := false }] := by
+  intro h
+  have hs := h.2
+  simp [supportsClaim, hreq, findEvidence, EvidenceRecord.discharges, hcls] at hs
+
+/-- Vacuous obligations: a claim with no required evidence is supported. -/
+theorem empty_requirements_supported (claim : ClaimNode)
+    (hreq : claim.requiredEvidence = []) (E : List EvidenceRecord) :
+    supportsClaim claim E = true := by
+  simp [supportsClaim, hreq]
+
+/-- Formal evidence also discharges a computational claim obligation. -/
+theorem formal_evidence_assures_computational
+    (Γ : Context) (claim : ClaimNode) (eid : Nat)
+    (hcls : claim.requiredClass = .computational)
+    (hreq : claim.requiredEvidence = [eid]) :
+    Assures Γ .computational claim
+      [{ id := eid, cls := .formal, accepted := true }] := by
+  refine ⟨hcls, ?_⟩
+  simp [supportsClaim, hreq, findEvidence, EvidenceRecord.discharges, EvidenceClass.le, hcls]
+
+/-- Empirical evidence cannot assure a formal claim. -/
+theorem empirical_cannot_assure_formal
+    (Γ : Context) (claim : ClaimNode) (eid : Nat)
+    (hcls : claim.requiredClass = .formal)
+    (hreq : claim.requiredEvidence = [eid]) :
+    ¬ Assures Γ .formal claim
+        [{ id := eid, cls := .empirical, accepted := true }] := by
+  intro h
+  have hs := h.2
+  simp [supportsClaim, hreq, findEvidence, EvidenceRecord.discharges,
+        EvidenceClass.le, hcls] at hs
+
 end PcsEpistemic

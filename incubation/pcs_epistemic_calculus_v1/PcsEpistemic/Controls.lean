@@ -1,8 +1,9 @@
 import PcsEpistemic.Dialectic
+import PcsEpistemic.Laws
 
 /-!
 Executable kernel-checked controls for the epistemic calculus.
-Prefer `decide` over `native_decide` for Boolean finite checks.
+Prefer ordinary `decide` for Boolean finite checks.
 -/
 set_option autoImplicit false
 
@@ -84,5 +85,46 @@ theorem control_distinguishing_computational :
     Distinguishing sampleEnsemble computationalClaim := by
   unfold Distinguishing
   decide
+
+theorem control_rejected_blocks_formal :
+    ¬ Assures emptyContext .formal formalClaim
+        [{ id := 10, cls := .formal, accepted := false }] :=
+  rejected_evidence_blocks emptyContext formalClaim 10 .formal rfl rfl
+
+theorem control_formal_covers_computational_claim :
+    Assures emptyContext .computational computationalClaim
+      [{ id := 11, cls := .formal, accepted := true }] :=
+  formal_evidence_assures_computational emptyContext computationalClaim 11 rfl rfl
+
+theorem control_empirical_rejects_formal :
+    ¬ Assures emptyContext .formal formalClaim
+        [{ id := 10, cls := .empirical, accepted := true }] :=
+  empirical_cannot_assure_formal emptyContext formalClaim 10 rfl rfl
+
+theorem control_agreement_dispute_disjoint :
+    formalClaim ∉ disputeFrontier sampleEnsemble [formalClaim, computationalClaim] := by
+  exact agreement_dispute_disjoint sampleEnsemble
+    [formalClaim, computationalClaim] formalClaim
+    (by decide)
+
+theorem control_changed_artifact_in_impact :
+    memNat (computeImpact sampleGraph [0]).affectedArtifacts 0 = true := by
+  decide
+
+theorem control_seed_reaches_processed :
+    memNat (computeImpact sampleGraph [0]).affectedArtifacts 1 = true := by
+  decide
+
+theorem control_incomplete_never_endorses :
+    ¬ NonImpact sampleGraph [0] 99 false :=
+  incomplete_never_endorses sampleGraph [0] 99
+
+theorem control_le_trans_formal_comp_prov :
+    EvidenceClass.formal.le .provenance = true := by
+  exact le_trans .formal .computational .provenance rfl rfl
+
+theorem control_lattice_antisymm_comp :
+    EvidenceClass.computational = EvidenceClass.computational :=
+  le_antisymm .computational .computational rfl rfl
 
 end PcsEpistemic.Controls

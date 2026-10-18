@@ -31,6 +31,10 @@ Four classes remain distinct:
 - `no_provenance_to_formal`
 - `no_provenance_to_empirical`
 - `formal_covers_computational`
+- `le_refl` / `le_trans` / `le_antisymm` (partial order)
+- `computational_incomparable_empirical`, `formal_incomparable_empirical`
+- `meet_formal_empirical_collapses` — heterogeneous scientific meet collapses to
+  provenance and must **not** be read as a discharge GLB or silent promotion
 
 ## Assurance
 

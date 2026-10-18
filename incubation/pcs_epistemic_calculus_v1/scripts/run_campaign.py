@@ -15,7 +15,9 @@ from pcs_epistemic.assures import assure
 from pcs_epistemic.checker import verify_certificate
 from pcs_epistemic.compose import compose_assures
 from pcs_epistemic.dialectic import dialectic_report
+from pcs_epistemic.differential import run_differential
 from pcs_epistemic.invalidate import compute_impact, nonimpact
+from pcs_epistemic.lattice import EvidenceClass, le
 
 
 def sha_file(path: Path) -> str:
@@ -44,6 +46,15 @@ def main() -> int:
         level_downstream="computational",
     )
     receipt = verify_certificate((example / "dialectic_certificate.json").read_bytes())
+    diff = run_differential()
+
+    # Lattice exhaustive non-promotion spot checks
+    lattice_ok = (
+        le(EvidenceClass.COMPUTATIONAL, EvidenceClass.FORMAL) is False
+        and le(EvidenceClass.EMPIRICAL, EvidenceClass.FORMAL) is False
+        and le(EvidenceClass.PROVENANCE, EvidenceClass.FORMAL) is False
+        and le(EvidenceClass.FORMAL, EvidenceClass.COMPUTATIONAL) is True
+    )
 
     cases = [
         {
@@ -77,6 +88,19 @@ def main() -> int:
             "passed": receipt["accepted"] is True and receipt["production_authority"] is False,
             "detail": {"certificate_sha256": receipt["certificate_sha256"]},
         },
+        {
+            "id": "lean_python_differential_controls",
+            "passed": diff["failed"] == 0,
+            "detail": {"passed": diff["passed"], "total": diff["total"]},
+        },
+        {
+            "id": "lattice_non_promotion_matrix",
+            "passed": lattice_ok,
+        },
+        {
+            "id": "agreement_dispute_disjoint_example",
+            "passed": set(dialectic["agreement_core"]).isdisjoint(set(dialectic["dispute_frontier"])),
+        },
     ]
     passed = sum(1 for c in cases if c["passed"])
     report = {
@@ -106,10 +130,7 @@ def main() -> int:
                 "",
                 "| Case | Result |",
                 "| --- | --- |",
-                *[
-                    f"| `{c['id']}` | {'PASS' if c['passed'] else 'FAIL'} |"
-                    for c in cases
-                ],
+                *[f"| `{c['id']}` | {'PASS' if c['passed'] else 'FAIL'} |" for c in cases],
                 "",
                 "No production or scientific authority is granted.",
                 "",

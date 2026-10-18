@@ -1,4 +1,5 @@
 import PcsEpistemic.Evidence
+import PcsEpistemic.Laws
 import PcsEpistemic.Graph
 import PcsEpistemic.Assures
 import PcsEpistemic.Composition

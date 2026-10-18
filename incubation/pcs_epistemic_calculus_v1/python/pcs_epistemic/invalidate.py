@@ -6,9 +6,18 @@ from collections import deque
 from typing import Any, Mapping, Sequence
 
 
+def _workflow_nodes(graph: Mapping[str, Any]) -> list:
+    """Accept either a bare node list or commons `{nodes: [...]}` shape."""
+    workflow = graph.get("workflow", [])
+    if isinstance(workflow, dict):
+        nodes = workflow.get("nodes", [])
+        return nodes if isinstance(nodes, list) else []
+    return workflow if isinstance(workflow, list) else []
+
+
 def _reach_artifacts(graph: Mapping[str, Any], changed: Sequence[str | int]) -> list:
     consumers: dict[Any, list] = {}
-    for node in graph.get("workflow", []):
+    for node in _workflow_nodes(graph):
         for aid in node.get("inputs", []):
             consumers.setdefault(aid, []).append(node)
     affected = set(changed)

@@ -88,4 +88,18 @@ theorem claim_requiring_affected_evidence_is_affected
     claimsRequiring_covers g (evidenceAffected g (reachArtifacts g changed)) c hc eid heid
       (by simpa [computeImpact, impact] using haff)
 
+/-- Completeness false never yields endorsed world non-impact. -/
+theorem incomplete_never_endorses
+    (g : DepGraph) (changed : List Nat) (cid : Nat) :
+    ¬ NonImpact g changed cid false := by
+  intro h
+  exact Bool.false_ne_true h.1
+
+/-- Declared impact and declared non-impact are complementary Booleans. -/
+theorem declared_impact_iff_not_nonimpact
+    (g : DepGraph) (changed : List Nat) (cid : Nat) :
+    claimAffected (computeImpact g changed) cid =
+      !(declaredNonImpact g changed cid) := by
+  simp [declaredNonImpact, claimAffected, Bool.not_not]
+
 end PcsEpistemic

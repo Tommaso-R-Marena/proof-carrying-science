@@ -93,4 +93,54 @@ theorem agreement_core_singleton
     c ∈ agreementCore ⟨[m]⟩ [c] := by
   simp [agreementCore, h]
 
+/-- Empty ensembles have empty agreement cores. -/
+theorem agreement_core_empty_ensemble
+    (candidates : List ClaimNode) :
+    agreementCore ⟨[]⟩ candidates = [] := by
+  simp [agreementCore]
+
+/-- Agreement and dispute are disjoint. -/
+theorem agreement_dispute_disjoint
+    (ens : Ensemble) (candidates : List ClaimNode) (c : ClaimNode)
+    (ha : c ∈ agreementCore ens candidates) :
+    c ∉ disputeFrontier ens candidates := by
+  intro hd
+  have ha' := List.mem_filter.mp ha
+  have hd' := List.mem_filter.mp hd
+  -- simp unfolds `List.all`/`List.any` equalities into quantifiers.
+  have hall : ∀ m ∈ ens.models, m.supports c = true := by
+    have hbool := ha'.2
+    simp [Bool.and_eq_true] at hbool
+    exact hbool.2
+  have hfail : ∃ m ∈ ens.models, m.supports c = false := by
+    have hbool := hd'.2
+    simp [Bool.and_eq_true] at hbool
+    exact hbool.2
+  rcases hfail with ⟨m, hm, href⟩
+  exact absurd (hall m hm) (by simpa using href)
+
+/-- Unanimous support cannot be distinguishing. -/
+theorem unanimous_not_distinguishing
+    (ens : Ensemble) (obs : ClaimNode)
+    (hall : ens.models.all (fun m => m.supports obs) = true) :
+    ¬ Distinguishing ens obs := by
+  intro h
+  exact (distinguishing_not_unanimous ens obs h).2 hall
+
+/-- Every agreement-core member is among the candidate list. -/
+theorem agreement_core_subset_candidates
+    (ens : Ensemble) (candidates : List ClaimNode) (c : ClaimNode)
+    (h : c ∈ agreementCore ens candidates) :
+    c ∈ candidates := by
+  simp [agreementCore, List.mem_filter] at h
+  exact h.1
+
+/-- Every dispute-frontier member is among the candidate list. -/
+theorem dispute_frontier_subset_candidates
+    (ens : Ensemble) (candidates : List ClaimNode) (c : ClaimNode)
+    (h : c ∈ disputeFrontier ens candidates) :
+    c ∈ candidates := by
+  simp [disputeFrontier, List.mem_filter] at h
+  exact h.1
+
 end PcsEpistemic
