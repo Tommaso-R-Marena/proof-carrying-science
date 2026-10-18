@@ -22,6 +22,7 @@ jobs:
           set -euo pipefail
           D=research/proof-gated-self-improvement-v1/v7_independent
           F=formal/fixtures/proof_gated/v7
+          test -f "$F/policies/pinned0.pgpol7" || { echo "Missing canonical V7 fixtures: PR #148 must be tested against V7 PR #149"; exit 1; }
           python3 "$D/v7_independent_audit.py" --fixtures "$F" --mutations 20000 > /tmp/pcs-v7-independent-semantic.json
           python3 "$D/v7_boundary_falsification.py" --fixtures "$F" --out /tmp/pcs-v7-independent-history.json > /dev/null
           python3 - <<'PY'
