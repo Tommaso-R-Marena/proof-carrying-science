@@ -1,0 +1,131 @@
+name: PCS Consolidated Research Integration
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pcs-integration-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  focused-python:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        streams: ['121 122 123 124 126 128', '137 139 143 147', '140 144']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install hash-pinned qualification dependencies
+        run: |
+          python -m pip install --require-hashes -r research/integration_v1/requirements.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Build actual production authority and qualify isolated streams
+        shell: bash
+        env:
+          STREAMS: ${{ matrix.streams }}
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          if [[ " $STREAMS " == *" 121 "* ]]; then
+            rustup toolchain install 1.93.1 --profile minimal
+            export RUSTUP_TOOLCHAIN=1.93.1
+          fi
+          lake -d formal build pcs-lean-authority
+          export PCS_LEAN_AUTHORITY="$PWD/formal/.lake/build/bin/pcs-lean-authority"
+          export PCS_LEAN_AUTHORITY_BIN="$PCS_LEAN_AUTHORITY"
+          export PCS_REQUIRE_LEAN_AUTHORITY=1
+          for stream in $STREAMS; do
+            python -m research.integration_v1.qualify_stream --stream "$stream" --out "$RUNNER_TEMP/pcs-integration/$stream"
+          done
+          python -m research.integration_v1.source_gate
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: focused-streams-${{ strategy.job-index }}
+          path: ${{ runner.temp }}/pcs-integration
+          if-no-files-found: error
+  cross-pr:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install pinned dependencies and build real authorities
+        run: |
+          set -euo pipefail
+          python -m pip install --require-hashes -r research/integration_v1/requirements.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          source scripts/activate_lean_428.sh
+          lake -d formal build pcs-lean-authority PCS.V2.ProofGatedCertCodec PCS.V2.ProofGatedPolicy
+          lake -d research/isolated/pgsi1/formal build
+      - name: Execute all fifteen cross-PR tests without mocked authorization
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          export PCS_REQUIRE_LEAN_AUTHORITY=1
+          export PCS_LEAN_AUTHORITY_BIN="$PWD/formal/.lake/build/bin/pcs-lean-authority"
+          python -m pytest -q research/integration_v1/tests --junitxml="$RUNNER_TEMP/cross-pr.xml"
+          python -m research.integration_v1.demo --out "$RUNNER_TEMP/scoped-demo"
+          python -m research.integration_v1.source_gate
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: cross-pr-evidence
+          path: |
+            ${{ runner.temp }}/cross-pr.xml
+            ${{ runner.temp }}/scoped-demo
+          if-no-files-found: error
+  formal-research:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Exact toolchain, dependency cache, full builds and theorem environments
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          python -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_certified_numerics_v1
+          python -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_conservation_algebra_v1
+          python -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_causal_laboratory_v1/lean
+          python -m research.integration_v1.prepare_mathlib_cache --project research/integration_v1/formal
+          python -m research.integration_v1.formal_audit --project incubation/pcs_next_v1/formal --import PcsNext --import PcsNextTests --prefix PcsNext --out "$RUNNER_TEMP/formal-audits/137"
+          python -m research.integration_v1.formal_audit --project incubation/pcs_certified_numerics_v1 --import CertNum --prefix CertNum --out "$RUNNER_TEMP/formal-audits/139"
+          python -m research.integration_v1.formal_audit --project incubation/pcs_epistemic_calculus_v1 --import PcsEpistemic --prefix PcsEpistemic --out "$RUNNER_TEMP/formal-audits/140"
+          python -m research.integration_v1.formal_audit --project research/epistemic-stratification-v1/formal --import PCSEpistemic --prefix PCSEpistemic --out "$RUNNER_TEMP/formal-audits/141"
+          python -m research.integration_v1.formal_audit --project incubation/pcs_causal_laboratory_v1/lean --import PcsCausal --prefix PcsCausal --out "$RUNNER_TEMP/formal-audits/143"
+          python -m research.integration_v1.formal_audit --project incubation/pcs_heterogeneous_compose_v1/formal --import PCSCompose --prefix PCSCompose --out "$RUNNER_TEMP/formal-audits/144"
+          python -m research.integration_v1.formal_audit --project formal --import PCSAssuranceLattice --prefix PCSAssuranceLattice --out "$RUNNER_TEMP/formal-audits/145"
+          python -m research.integration_v1.formal_audit --project formal --import PCSEpistemic --prefix PCSEpistemic --out "$RUNNER_TEMP/formal-audits/146"
+          python -m research.integration_v1.formal_audit --project incubation/pcs_conservation_algebra_v1 --import PCCA --prefix PCCA --out "$RUNNER_TEMP/formal-audits/147"
+          python -m research.integration_v1.formal_audit --project research/integration_v1/formal --import PCSIntegration --prefix PCSIntegration --out "$RUNNER_TEMP/formal-audits/bridge"
+          python -m pytest -q tests/test_epistemic_kernel_v1.py tests/test_assurance_lattice_v1.py tests/test_epistemic_lattice_v1.py
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: integrated-formal-environments
+          path: ${{ runner.temp }}/formal-audits
+          if-no-files-found: error

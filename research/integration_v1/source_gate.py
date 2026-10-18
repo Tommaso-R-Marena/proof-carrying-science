@@ -10,6 +10,7 @@ REPORTS = ROOT / "docs/integration/2026-10-18"
 
 
 def check_profile():
+    from scripts.audit_lean_source import audit
     profile = json.loads((REPORTS / "SOURCE_PROFILE.json").read_text())
     tracked = set(subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0"))
     failures = []
@@ -28,6 +29,7 @@ def check_profile():
         if file.suffix == ".sh" and not file.stat().st_mode & 0o111:
             failures.append(f"shell script lacks executable mode: {path}")
     modules = {p.relative_to(ROOT).as_posix() for p in (ROOT / "formal/PCS/V2").glob("ProofGated*.lean")}
+    failures.extend(audit([ROOT / path for path in profile["files"] if path.endswith(".lean")]))
     if modules != set(profile["V7_modules"]):
         failures.append("V7 module discovery differs from the exact audited source profile")
     ledger = json.loads((REPORTS / "OPEN_PR_LEDGER.json").read_text())
