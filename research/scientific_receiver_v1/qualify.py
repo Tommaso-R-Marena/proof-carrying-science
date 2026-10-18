@@ -89,6 +89,8 @@ def qualify(out: Path, dependency_checkout: Path | None = None) -> dict:
         command = ["lake", "env", "lean", "--run", str(PROJECT / "Main.lean")]
         audit_command = ["lake", "env", "lean", str(PROJECT / "Audit.lean")]
         dependency_evidence = {"mode": "Lake pinned dependencies", "fresh_new_library_build": True}
+    if not dependency_checkout:
+        env["LEAN_PATH"] = subprocess.check_output(["lake", "env", "printenv", "LEAN_PATH"], cwd=PROJECT, env=env, text=True).strip()
     p = subprocess.run(audit_command, cwd=PROJECT, env=env, text=True, capture_output=True, check=True)
     output = p.stdout + p.stderr
     (out / "statements-and-axioms.log").write_text(output)
@@ -98,10 +100,35 @@ def qualify(out: Path, dependency_checkout: Path | None = None) -> dict:
         raise RuntimeError("empty or unapproved actual theorem closure")
     if before != {str(p.relative_to(ROOT)): sha(p) for p in pinned}:
         raise RuntimeError("source changed during qualification")
+    imported = subprocess.run([*audit_command[:-1], str(PROJECT / "Imports.lean")], cwd=PROJECT, env=env, capture_output=True, text=True, check=True)
+    (out / "imports.log").write_text(imported.stdout + imported.stderr)
+    names = sorted(set(re.findall(r"PCS_MODULE ([A-Za-z0-9_.]+)", imported.stdout + imported.stderr)))
+    if "Main" not in names or "PCSScientificReceiver.Receiver" not in names:
+        raise RuntimeError("actual transitive module inventory missing authority")
+    roots = [Path(s) if Path(s).is_absolute() else PROJECT / s for s in env["LEAN_PATH"].split(os.pathsep) if s]
+    roots.append(lean.parent.parent / "lib/lean")
+    artifacts = []
+    for name in names:
+        relative = Path(*name.split("."))
+        found = next((r / relative for r in roots if (r / relative).with_suffix(".olean").is_file()), None)
+        if found is None:
+            raise RuntimeError("cannot bind imported module: " + name)
+        for suffix in (".olean", ".olean.private", ".olean.server", ".ir"):
+            file = found.with_suffix(suffix)
+            if file.is_file():
+                artifacts.append({"module": name, "kind": suffix, "path": str(file.resolve()), "sha256": sha(file)})
+    for folder in (lean.parent.parent / "lib", lean.parent.parent / "lib/lean"):
+        for file in sorted(folder.glob("*.so*")):
+            if file.is_file():
+                artifacts.append({"module": "toolchain-runtime", "kind": "shared-library", "path": str(file.resolve()), "sha256": sha(file)})
+    artifact_report = {"format": "pcs-declared-lean-module-artifacts-v1", "modules": len(names), "artifacts": artifacts,
+                       "scope": "Actual Lean environment direct/transitive import inventory and resolved artifact bytes, plus toolchain shared libraries. This is not OS loading attestation, compiler verification or an immutable host root."}
+    (out / "module-artifacts.json").write_text(json.dumps(artifact_report, indent=2, sort_keys=True) + "\n")
     report = {"format": "pcs-scientific-receiver-qualification-v1", "git_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_sha256": before, "lean_version": version.strip(), "lean_sha256": sha(lean),
               "dependency_evidence": dependency_evidence, "axiom_closures": dict(sorted(closures.items())),
-              "theorems_including_generated": len(closures), "wall_seconds": time.monotonic() - started,
+              "theorems_including_generated": len(closures), "imported_modules": len(names),
+              "module_artifacts_sha256": sha(out / "module-artifacts.json"), "wall_seconds": time.monotonic() - started,
               "command": command, "cwd": str(PROJECT), "execution": "Lean --run compiled IR; not standalone native executable",
               "scientific_acceptance": False, "production_authority": False,
               "trust": "Lean kernel/compiler/runtime, import objects, toolchain, IO, JSON rendering, reviewed source/configuration, Git and host remain trusted. No independently protected root is established."}
