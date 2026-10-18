@@ -2422,6 +2422,9 @@ def build_parser():
     from pcs.calibration_kernel_v1 import register as register_calibration
     register_calibration(sub)
 
+    from pcs.assurance_lattice_v1 import register as register_assurance_lattice
+    register_assurance_lattice(sub)
+
     return p
 
 
