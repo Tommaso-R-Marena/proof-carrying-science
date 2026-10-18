@@ -1,8 +1,8 @@
 # Real-world mutation campaign
 
-- Mutations: 37
-- Expected-detection probes: 34
-- Caught: 34
+- Mutations: 44
+- Expected-detection probes: 41
+- Caught: 41
 - Missed: 0
 - False alarms: 0
 - Benign OK (boundary controls): 3
@@ -51,3 +51,10 @@
 - **CAUGHT** `evidence_store` / `tamper_event_payload` / verify_chain: CAUGHT — PCS_NEXT_HASH_MISMATCH: event hash mismatch at 1
 - **CAUGHT** `osp_synthetic` / `cl_auc_dose_inconsistent` / osp_consistency: CAUGHT — CL vs Dose/AUC inconsistent rel_err=0.980
 - **CAUGHT** `pcs_pkpd_translation_benchmark` / `halve_all_effects_adapter` / emax_adapter: CAUGHT — effect rows deviate from direct Emax model
+- **CAUGHT** `signed_receipt` / `bitflip_signature` / signature_verify: CAUGHT — signature_invalid
+- **CAUGHT** `signed_receipt` / `unpinned_signer` / signer_pin: CAUGHT — signer_not_pinned
+- **CAUGHT** `experiment_registration` / `mutate_frozen_plan` / plan_hash_guard: CAUGHT — PCS_NEXT_HASH_MISMATCH: frozen plan mutated
+- **CAUGHT** `pcs_notebook_demo` / `inject_exec_cell` / notebook_static: CAUGHT — ['dynamic_execution:exec']
+- **CAUGHT** `half_life_adapter` / `inconsistent_t_half` / one_compartment_t_half: CAUGHT — t½ inconsistent with V/CL rel_err=0.993
+- **CAUGHT** `pog` / `cyclic_obligations` / assert_well_formed: CAUGHT — 
+- **CAUGHT** `pog` / `dangling_dependency` / assert_well_formed: CAUGHT — 

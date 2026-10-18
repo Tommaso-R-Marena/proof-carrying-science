@@ -10,21 +10,17 @@ python incubation/pcs_next_v1/scripts/run_real_world_campaign.py
 
 | Metric | Value |
 |---|---|
-| Mutations | 37 |
-| Expected-detection probes | 34 |
-| Caught | 34 |
+| Mutations | 44 |
+| Expected-detection probes | 41 |
+| Caught | 41 |
 | Missed | 0 |
 | False alarms | 0 |
 | Boundary controls (BENIGN_OK) | 3 |
 | Catch rate | 1.0 |
 
-## Targets
+## New probes (this increment)
 
-PCS examples (PK/PD, mass-action, biopharma, translation benchmark, workflow v3), journal Theoph/Puromycin/Indometh/e-Drug3D, OSP DDI+Pediatrics, nlmixr2data (`theo_sd`, `warfarin`, `Bolus_1CPT`), packaged evidence, metamorphic PK, evidence-store tamper, OSP CL/AUC synthetic, proof-gated certificates, unit adapter↔oracle differential.
-
-## Detectors
-
-Unit-aware PK, nonnegative/longitudinal integrity, group-label registration, Emax PD adapter, conservation adapter, metamorphic dose homogeneity, evidence-chain verify, OSP CL≈Dose/AUC (coarse).
+Ed25519 bitflip / unpinned signer, frozen experiment-plan tamper, notebook `exec` cell, half-life inconsistency, POG cycles / dangling deps.
 
 ## Interpretation
 

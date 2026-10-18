@@ -34,3 +34,7 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | OSP CL/AUC consistency | `adapters/osp_consistency.py` | COMPLETE | unit | n/a | Coarse; units often incommensurate |
 | Finite improvement certificates | `research/proof_gated/models.py` | COMPLETE | unit+campaign | ScalarGuard.lean | Explicit finite domains only |
 | Differential oracle suite | `scripts/run_differential_oracles.py` | COMPLETE | validate_all | n/a | Same-host; external lab OPEN |
+| Signed receipt helpers | `trust/signed_receipt.py` | COMPLETE | unit+campaign | n/a | Demo keys only; pin required |
+| Half-life 1cmt adapter | `adapters/half_life.py` | COMPLETE | unit+campaign | n/a | 1-compartment only |
+| POG well-formedness | `translation/pog.py` | COMPLETE | unit+campaign | ClaimIR.lean | Cycles/dangling fail closed |
+| Lean Homogeneity | `formal/PcsNext/Homogeneity.lean` | COMPLETE | lake | Homogeneity.lean | Nat dose-scale proxy |

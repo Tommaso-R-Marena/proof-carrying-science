@@ -948,6 +948,202 @@ def baseline_proof_gated_certificate() -> list[Finding]:
     ]
 
 
+def mutate_signed_registration_notebook_pog(work: Path) -> list[Finding]:
+    from ..adapters.half_life import check_half_life
+    from ..adapters.notebook import inspect_notebook
+    from ..core.errors import PcsNextError
+    from ..core.statuses import AssuranceStatus
+    from ..falsification.registration import freeze_experiment_plan, record_deviation
+    from ..translation.pog import ObligationNode, ProofObligationGraph, aggregate_status, assert_well_formed
+    from ..trust.policy import pin_policy
+    from ..trust.signed_receipt import detect_signature_faults, mint_demo_signer, sign_package_hashes
+
+    findings: list[Finding] = []
+
+    # Signed receipt: bit-flip signature must fail; unpinned signer must fail
+    signer = mint_demo_signer()
+    pol_raw = _load_json(OWN / "fixtures/synthetic_pilot/acceptance_policy.json")
+    pol_raw = deepcopy(pol_raw)
+    pol_raw["pinned_signer_fingerprints"] = [signer["fingerprint"]]
+    policy = pin_policy(pol_raw)
+    lock_h = "a" * 64
+    bundle_h = "b" * 64
+    sig = sign_package_hashes(lock_hash=lock_h, bundle_hash=bundle_h, private_der=signer["private_der"])
+    ok_fault = detect_signature_faults(
+        lock_hash=lock_h, bundle_hash=bundle_h, public_der=signer["public_der"], signature=sig, policy=policy
+    )
+    findings.append(
+        Finding("signed_receipt", "baseline", None, "valid_signature", False, ok_fault == "ok", "OK" if ok_fault == "ok" else "BAD", ok_fault)
+    )
+    flipped = bytes([sig[0] ^ 0x01]) + sig[1:]
+    flip_fault = detect_signature_faults(
+        lock_hash=lock_h, bundle_hash=bundle_h, public_der=signer["public_der"], signature=flipped, policy=policy
+    )
+    findings.append(
+        Finding(
+            "signed_receipt",
+            "mutation",
+            "bitflip_signature",
+            "signature_verify",
+            True,
+            flip_fault == "signature_invalid",
+            "CAUGHT" if flip_fault == "signature_invalid" else "MISSED",
+            flip_fault,
+        )
+    )
+    other = mint_demo_signer()
+    unpinned = detect_signature_faults(
+        lock_hash=lock_h, bundle_hash=bundle_h, public_der=other["public_der"], signature=sig, policy=policy
+    )
+    findings.append(
+        Finding(
+            "signed_receipt",
+            "mutation",
+            "unpinned_signer",
+            "signer_pin",
+            True,
+            unpinned == "signer_not_pinned",
+            "CAUGHT" if unpinned == "signer_not_pinned" else "MISSED",
+            unpinned,
+        )
+    )
+
+    # Registration: mutate frozen plan after freeze → hash mismatch on deviation record
+    plan = {
+        "experiment_id": "camp-reg-1",
+        "hypotheses": ["H0"],
+        "outcomes": ["auc"],
+        "metrics": ["rmse"],
+        "split_rules": {"train": 0.7},
+        "baselines": ["null"],
+        "stopping_criteria": ["n=10"],
+        "randomization": {"seed": 1},
+        "negative_controls": ["shuffle"],
+        "planned_comparisons": ["A vs B"],
+        "analysis_class": "confirmatory",
+    }
+    frozen = freeze_experiment_plan(plan)
+    frozen["plan"]["metrics"] = ["hacked"]
+    tamper_detected = False
+    detail = ""
+    try:
+        record_deviation(frozen, {"kind": "endpoint_change"})
+        detail = "accepted"
+    except PcsNextError as exc:
+        tamper_detected = True
+        detail = str(exc)
+    findings.append(
+        Finding(
+            "experiment_registration",
+            "mutation",
+            "mutate_frozen_plan",
+            "plan_hash_guard",
+            True,
+            tamper_detected,
+            "CAUGHT" if tamper_detected else "MISSED",
+            detail[:160],
+        )
+    )
+
+    # Notebook: inject exec
+    nb_src = EXT / "pcs_notebook_demo" / "analysis.ipynb"
+    out_nb = work / "mut_nb"
+    out_nb.mkdir(parents=True, exist_ok=True)
+    nb = json.loads(nb_src.read_text())
+    nb["cells"].append(
+        {"cell_type": "code", "execution_count": 3, "metadata": {}, "outputs": [], "source": ["exec('print(1)')\n"]}
+    )
+    bad_nb = out_nb / "analysis.ipynb"
+    bad_nb.write_text(json.dumps(nb))
+    insp = inspect_notebook(bad_nb)
+    exec_flag = any("dynamic_execution" in f for f in insp.get("flags", []))
+    findings.append(
+        Finding(
+            "pcs_notebook_demo",
+            "mutation",
+            "inject_exec_cell",
+            "notebook_static",
+            True,
+            exec_flag,
+            "CAUGHT" if exec_flag else "MISSED",
+            str(insp.get("flags")),
+        )
+    )
+
+    # Half-life adapter on synthetic inconsistent drug
+    hl = check_half_life(volume=10.0, clearance=1.0, t_half=1000.0, rel_tol=0.5)
+    findings.append(
+        Finding(
+            "half_life_adapter",
+            "mutation",
+            "inconsistent_t_half",
+            "one_compartment_t_half",
+            True,
+            hl["status"] == "REFUTED",
+            "CAUGHT" if hl["status"] == "REFUTED" else "MISSED",
+            hl.get("reason", ""),
+        )
+    )
+
+    # POG: cycle + dangling deps must fail well-formedness; refute aggregates weakest
+    g = ProofObligationGraph()
+    g.add(ObligationNode(id="a", claim="A", depends_on=["b"]))
+    g.add(ObligationNode(id="b", claim="B", depends_on=["a"]))
+    cycle_caught = False
+    try:
+        assert_well_formed(g)
+    except PcsNextError:
+        cycle_caught = True
+    findings.append(
+        Finding(
+            "pog",
+            "mutation",
+            "cyclic_obligations",
+            "assert_well_formed",
+            True,
+            cycle_caught,
+            "CAUGHT" if cycle_caught else "MISSED",
+            "",
+        )
+    )
+    g2 = ProofObligationGraph()
+    g2.add(ObligationNode(id="root", claim="R", depends_on=["missing"]))
+    dang_caught = False
+    try:
+        assert_well_formed(g2)
+    except PcsNextError:
+        dang_caught = True
+    findings.append(
+        Finding(
+            "pog",
+            "mutation",
+            "dangling_dependency",
+            "assert_well_formed",
+            True,
+            dang_caught,
+            "CAUGHT" if dang_caught else "MISSED",
+            "",
+        )
+    )
+    g3 = ProofObligationGraph()
+    g3.add(ObligationNode(id="ok", claim="ok", status=AssuranceStatus.COMPUTATIONALLY_TESTED))
+    g3.add(ObligationNode(id="bad", claim="bad", status=AssuranceStatus.REFUTED))
+    agg = aggregate_status(g3)
+    findings.append(
+        Finding(
+            "pog",
+            "baseline",
+            None,
+            "aggregate_weakest_refuted",
+            False,
+            agg.value == "REFUTED",
+            "OK" if agg.value == "REFUTED" else "BAD",
+            agg.value,
+        )
+    )
+    return findings
+
+
 def mutate_hard_cases(work: Path) -> list[Finding]:
     """Deliberate near-boundary / semantic errors — some may be missed."""
     findings: list[Finding] = []
@@ -1115,6 +1311,7 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
         ("baseline_metamorphic_and_pd", baseline_metamorphic_and_pd),
         ("mutate_metamorphic_evidence_osp", lambda: mutate_metamorphic_evidence_osp(work)),
         ("baseline_proof_gated_certificate", baseline_proof_gated_certificate),
+        ("mutate_signed_registration_notebook_pog", lambda: mutate_signed_registration_notebook_pog(work)),
     ]
     errors = []
     for name, fn in steps:
@@ -1145,6 +1342,7 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
             "metamorphic PK + Emax adapter + conservation",
             "evidence store tamper + OSP CL/AUC consistency",
             "proof-gated finite improvement certificates",
+            "signed receipts + registration + notebook + POG + half-life",
         ],
         "n_findings": len(findings),
         "n_mutations": len(mut),

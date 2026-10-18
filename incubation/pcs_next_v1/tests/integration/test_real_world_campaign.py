@@ -20,6 +20,13 @@ MUST_CATCH = {
     "tamper_event_payload",
     "cl_auc_dose_inconsistent",
     "halve_all_effects_adapter",
+    "bitflip_signature",
+    "unpinned_signer",
+    "mutate_frozen_plan",
+    "inject_exec_cell",
+    "inconsistent_t_half",
+    "cyclic_obligations",
+    "dangling_dependency",
 }
 
 

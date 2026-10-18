@@ -140,3 +140,38 @@ class ProofObligationGraph:
 
 def set_status(graph: ProofObligationGraph, node_id: str, status: str) -> None:
     graph.nodes[node_id].status = classify_status(status)
+
+
+def missing_dependencies(graph: ProofObligationGraph) -> list[tuple[str, str]]:
+    """Return (node_id, missing_dep_id) for edges pointing outside the graph."""
+    missing = []
+    for n in graph.nodes.values():
+        for d in n.depends_on:
+            if d not in graph.nodes:
+                missing.append((n.id, d))
+    return missing
+
+
+def assert_well_formed(graph: ProofObligationGraph) -> dict[str, Any]:
+    """Fail closed on cycles or dangling dependencies."""
+    cycles = graph.detect_cycles()
+    dangling = missing_dependencies(graph)
+    if cycles or dangling:
+        raise PcsNextError(
+            ErrorCode.STATE_ILLEGAL,
+            "POG not well-formed",
+            details={"cycles": cycles, "missing_dependencies": dangling},
+        )
+    return {"ok": True, "n_nodes": len(graph.nodes), "n_edges": len(graph.edges())}
+
+
+def aggregate_status(graph: ProofObligationGraph) -> AssuranceStatus:
+    """Weakest status across nodes using core status strength order; empty → OPEN."""
+    from ..core.statuses import weaker
+
+    if not graph.nodes:
+        return AssuranceStatus.OPEN
+    acc = AssuranceStatus.INDEPENDENTLY_REPRODUCED
+    for n in graph.nodes.values():
+        acc = weaker(acc, n.status)
+    return acc

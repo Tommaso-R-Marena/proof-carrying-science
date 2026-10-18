@@ -10,5 +10,6 @@
 | `public_nlmixr2data` | Subset of [nlmixr2/nlmixr2data](https://github.com/nlmixr2/nlmixr2data) (`data/`, LICENSE) | GPL-3+; ACOP/NONMEM teaching datasets |
 | `public_osp_observed` | Subset of OSP Database-for-observed-data v1.9 | Digitized literature PK/DDI tables |
 | Journal demos | `fixtures/journal_demos` | Theoph, Indometh, e-Drug3D, Puromycin |
+| `pcs_notebook_demo` | Owned minimal notebook fixture | Static notebook + exec injection probe |
 
 Production trees were **not** modified. Campaign mutations run only under `results/real_world_campaign/work/`.

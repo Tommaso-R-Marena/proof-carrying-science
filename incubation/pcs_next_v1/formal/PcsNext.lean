@@ -12,3 +12,4 @@ import PcsNext.Units
 import PcsNext.Conservation
 import PcsNext.MM
 import PcsNext.Emax
+import PcsNext.Homogeneity
