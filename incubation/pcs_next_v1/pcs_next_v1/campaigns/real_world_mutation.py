@@ -810,6 +810,144 @@ def baseline_unit_oracle_diff() -> list[Finding]:
     ]
 
 
+def baseline_metamorphic_and_pd() -> list[Finding]:
+    from ..adapters.metamorphic_pk import check_dose_homogeneity
+    from ..adapters.pd import verify_emax_rows
+    from ..adapters.conservation import check_trajectory_conservation, check_transfer_preserves_total
+
+    meta = check_dose_homogeneity(100.0, 10.0, 1.0, [0.0, 0.5, 1.0, 2.0, 5.0], scale=2.0)
+    src = EXT / "pcs_pkpd_translation_benchmark"
+    model = _load_json(src / "model.json")
+    rows = [(float(r["concentration"]), float(r["effect"])) for r in csv.DictReader((src / "predictions.csv").open())]
+    pd_st = verify_emax_rows(model["pd"], rows)
+    xfer = check_transfer_preserves_total(10.0, 3.0, 4.0)
+    contract = _load_json(EXT / "pcs_scientific_workflow_v3" / "contract.json")
+    vols = {c["id"]: _frac_to_float(c["volume"]) for c in contract["cells"]}
+    traj = []
+    for r in csv.DictReader((EXT / "pcs_scientific_workflow_v3" / "trajectory.csv").open()):
+        traj.append({cid: _frac_to_float(r[cid]) for cid in vols})
+    cons = check_trajectory_conservation(vols, traj)
+    return [
+        Finding("metamorphic_pk", "baseline", None, "dose_homogeneity", False, meta["status"] == "COMPUTATIONALLY_TESTED", meta["status"], meta.get("reason", "")),
+        Finding("pcs_pkpd_translation_benchmark", "baseline", None, "emax_adapter", False, pd_st["status"] == "COMPUTATIONALLY_TESTED", pd_st["status"], pd_st.get("reason", "")),
+        Finding("conservation_transfer", "baseline", None, "transfer_total", False, xfer["status"] == "COMPUTATIONALLY_TESTED", xfer["status"], xfer.get("reason", "")),
+        Finding("pcs_scientific_workflow_v3", "baseline", None, "conservation_adapter", False, cons["status"] == "COMPUTATIONALLY_TESTED", cons["status"], cons.get("reason", "")),
+    ]
+
+
+def mutate_metamorphic_evidence_osp(work: Path) -> list[Finding]:
+    from ..adapters.metamorphic_pk import check_prediction_table_dose_scale
+    from ..adapters.osp_consistency import check_cl_auc_dose_consistency
+    from ..adapters.pd import verify_emax_rows
+    from ..trust.evidence_store import EvidenceStore
+    from ..core.errors import PcsNextError
+
+    findings: list[Finding] = []
+    src = EXT / "pcs_pkpd_one_compartment"
+    rows = [(float(r["time"]), float(r["concentration"])) for r in csv.DictReader((src / "predictions.csv").open())]
+    # Claim dose×2 but only scale some rows → must refute
+    scaled = [(t, c * 2.0 if i != 2 else c * 1.1) for i, (t, c) in enumerate(rows)]
+    meta = check_prediction_table_dose_scale({"dose": 100.0}, rows, scaled, scale=2.0)
+    findings.append(
+        Finding(
+            "metamorphic_pk",
+            "mutation",
+            "partial_dose_scale_table",
+            "dose_homogeneity_table",
+            True,
+            meta["status"] == "REFUTED",
+            "CAUGHT" if meta["status"] == "REFUTED" else "MISSED",
+            meta.get("reason", ""),
+        )
+    )
+
+    # Evidence store: tamper event payload after commit
+    store_dir = work / "evstore"
+    store = EvidenceStore(store_dir)
+    store.commit("a", {"x": 1})
+    c2 = store.commit("b", {"y": 2})
+    # Corrupt the second event file
+    ev_files = sorted(store_dir.glob("evt-*.json"))
+    target = ev_files[-1]
+    body = json.loads(target.read_text())
+    body["payload"]["y"] = 999
+    target.write_text(json.dumps(body))
+    tamper_detected = False
+    detail = ""
+    try:
+        store.verify_chain()
+        detail = "chain_accepted_tamper"
+    except PcsNextError as exc:
+        tamper_detected = True
+        detail = str(exc)
+    findings.append(
+        Finding(
+            "evidence_store",
+            "mutation",
+            "tamper_event_payload",
+            "verify_chain",
+            True,
+            tamper_detected,
+            "CAUGHT" if tamper_detected else "MISSED",
+            detail[:160],
+        )
+    )
+
+    # OSP synthetic: Dose/CL/AUC inconsistent
+    bad_row = {"Dose": "100", "CL Avg": "50", "AUC Avg": "100"}  # implied CL=1, declared 50
+    st = check_cl_auc_dose_consistency(bad_row, rel_tol=0.5)
+    assert st is not None
+    findings.append(
+        Finding(
+            "osp_synthetic",
+            "mutation",
+            "cl_auc_dose_inconsistent",
+            "osp_consistency",
+            True,
+            st["status"] == "REFUTED",
+            "CAUGHT" if st["status"] == "REFUTED" else "MISSED",
+            st.get("reason", ""),
+        )
+    )
+
+    # PD: corrupt emax table via adapter
+    model = _load_json(EXT / "pcs_pkpd_translation_benchmark" / "model.json")
+    pd_rows = [(float(r["concentration"]), float(r["effect"]) * 0.5) for r in csv.DictReader((EXT / "pcs_pkpd_translation_benchmark" / "predictions.csv").open())]
+    pd_st = verify_emax_rows(model["pd"], pd_rows)
+    findings.append(
+        Finding(
+            "pcs_pkpd_translation_benchmark",
+            "mutation",
+            "halve_all_effects_adapter",
+            "emax_adapter",
+            True,
+            pd_st["status"] == "REFUTED",
+            "CAUGHT" if pd_st["status"] == "REFUTED" else "MISSED",
+            pd_st.get("reason", ""),
+        )
+    )
+    return findings
+
+
+def baseline_proof_gated_certificate() -> list[Finding]:
+    from ..research.proof_gated.models import ScalarIntModel, TinyReluNet, improvement_certificate, relu_net_no_forgetting
+
+    old = ScalarIntModel(0, 0)
+    new = ScalarIntModel(2, 0)
+    data = [(1, 2), (2, 4), (3, 6)]
+    cert = improvement_certificate(old, new, data, range(-2, 5), max_pointwise_increase=10**9)
+    # Tight preservation must fail for large change
+    cert_tight = improvement_certificate(old, new, data, range(0, 3), max_pointwise_increase=0)
+    net_old = TinyReluNet(w1=((1, 0),), b1=(0,), w2=(1,), b2=0)
+    net_new = TinyReluNet(w1=((1, 0),), b1=(0,), w2=(1,), b2=5)
+    ok, bad = relu_net_no_forgetting(net_old, net_new, [(0, 0), (1, 0), (2, 1)], max_pointwise_increase=0)
+    return [
+        Finding("proof_gated", "baseline", None, "improvement_certificate_accept", False, cert["accepted"] is True, "OK" if cert["accepted"] else "BAD", json.dumps({k: cert[k] for k in ("old_loss", "new_loss", "accepted")})),
+        Finding("proof_gated", "baseline", None, "improvement_certificate_reject_drift", False, cert_tight["accepted"] is False, "OK" if not cert_tight["accepted"] else "BAD", "tight bound must reject large drift"),
+        Finding("proof_gated", "baseline", None, "relu_net_no_forgetting", False, ok is False and bool(bad), "OK", f"bad={bad[:3]}"),
+    ]
+
+
 def mutate_hard_cases(work: Path) -> list[Finding]:
     """Deliberate near-boundary / semantic errors — some may be missed."""
     findings: list[Finding] = []
@@ -974,6 +1112,9 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
         ("mutate_package_adversarial", lambda: mutate_package_adversarial(work)),
         ("mutate_hard_cases", lambda: mutate_hard_cases(work)),
         ("baseline_unit_oracle_diff", baseline_unit_oracle_diff),
+        ("baseline_metamorphic_and_pd", baseline_metamorphic_and_pd),
+        ("mutate_metamorphic_evidence_osp", lambda: mutate_metamorphic_evidence_osp(work)),
+        ("baseline_proof_gated_certificate", baseline_proof_gated_certificate),
     ]
     errors = []
     for name, fn in steps:
@@ -1001,6 +1142,9 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
             "nlmixr2data theo_sd.rda + warfarin.rda + Bolus_1CPT.rda",
             "packaged real pkpd evidence",
             "unit conversion adapter↔oracle differential",
+            "metamorphic PK + Emax adapter + conservation",
+            "evidence store tamper + OSP CL/AUC consistency",
+            "proof-gated finite improvement certificates",
         ],
         "n_findings": len(findings),
         "n_mutations": len(mut),

@@ -19,7 +19,7 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | Adapters | `adapters/` | COMPLETE | unit | n/a | Restricted fragments |
 | Benchmarks | `benchmarks/suite.py` | COMPLETE | run_benchmarks | n/a | Small suite |
 | Proof-gated research | `research/proof_gated/` | PARTIAL | unit | ScalarGuard.lean | Finite domains |
-| Lean workspace | `formal/` | PARTIAL | lake if avail | ClaimIR, ScalarGuard, Approx | Needs elan/lake |
+| Lean workspace | `formal/` | PARTIAL | lake if avail | ClaimIR, ScalarGuard, Approx, NCA, Bateman, Units, Conservation, MM, Emax | Discrete Nat fragments only |
 | External lab completion | kit docs | OPEN | n/a | n/a | Needs real participant |
 | Production integration | proposals | OPEN | n/a | n/a | Human authorization |
 | Journal demos (Theoph/Indometh/e-Drug3D/OSP) | `demos/`, `fixtures/journal_demos/` | COMPLETE | scientific+adv | NCA.lean | External lab OPEN; public data only |
@@ -28,3 +28,9 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | Unit-aware PK + clearance oracle | `adapters/units.py`, `oracles/units_oracle.py` | COMPLETE | unit+property | Units.lean | Restricted unit vocabulary |
 | Tabular / longitudinal integrity | `adapters/tabular_integrity.py` | COMPLETE | unit | Conservation.lean | Registration required for group-label swap |
 | Puromycin group-label registration | `demos/puromycin_demo.py` | COMPLETE | scientific | n/a | Needs registration pin |
+| Emax PD adapter | `adapters/pd.py` | COMPLETE | unit+bench | Emax.lean | Direct effect only |
+| Conservation adapter | `adapters/conservation.py` | COMPLETE | unit | Conservation.lean | Closed-system assumption |
+| Metamorphic PK | `adapters/metamorphic_pk.py` | COMPLETE | unit+bench | n/a | Linear IV bolus only |
+| OSP CL/AUC consistency | `adapters/osp_consistency.py` | COMPLETE | unit | n/a | Coarse; units often incommensurate |
+| Finite improvement certificates | `research/proof_gated/models.py` | COMPLETE | unit+campaign | ScalarGuard.lean | Explicit finite domains only |
+| Differential oracle suite | `scripts/run_differential_oracles.py` | COMPLETE | validate_all | n/a | Same-host; external lab OPEN |

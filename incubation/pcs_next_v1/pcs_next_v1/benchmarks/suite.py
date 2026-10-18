@@ -6,12 +6,16 @@ import time
 from pathlib import Path
 from typing import Any
 
+from ..adapters.metamorphic_pk import check_dose_homogeneity
+from ..adapters.pd import predict_emax, verify_emax_rows
 from ..adapters.pkpd import predict_concentration, verify_predictions
+from ..adapters.units import challenge_clearance_unit_value_consistency
 from ..core.canonical import canonicalize
 from ..falsification.challenges import challenge_data_leakage, challenge_unit_error
 from ..translation.formalize import formalize_text
 from ..demos.theophylline_demo import load_theoph, by_subject, falsify_iv_bolus_on_oral
 from ..demos.nca import trapezoidal_auc
+from ..research.proof_gated.models import ScalarIntModel, improvement_certificate
 
 
 def run_benchmarks() -> dict[str, Any]:
@@ -63,6 +67,46 @@ def run_benchmarks() -> dict[str, Any]:
     # NCA AUC oracle
     auc = trapezoidal_auc([r["time"] for r in subj], [r["conc"] for r in subj])
     results.append({"case": "theoph_auc_positive", "pass": auc > 0, "baseline": "nca_trapezoid"})
+
+    # Metamorphic dose homogeneity
+    results.append(
+        {
+            "case": "metamorphic_dose_homogeneity",
+            "result": check_dose_homogeneity(100.0, 10.0, 1.0, [0.0, 1.0, 2.0, 4.0], scale=2.5),
+            "expect_status": "COMPUTATIONALLY_TESTED",
+        }
+    )
+
+    # Unit-aware label swap must refute
+    rows_u = [(t, predict_concentration(100.0, 10.0, 1.0, t)) for t in [0.0, 1.0, 2.0]]
+    model_u = {
+        "dose": {"value": 100.0, "unit": "mg"},
+        "volume": {"value": 10.0, "unit": "L"},
+        "clearance": {"value": 1.0, "unit": "mL/min"},
+    }
+    results.append(
+        {
+            "case": "unit_label_only_swap",
+            "result": challenge_clearance_unit_value_consistency(model_u, rows_u),
+            "expect_status": "REFUTED",
+        }
+    )
+
+    # Emax honest / wrong
+    pd = {"e0": 0.0, "emax": 100.0, "ec50": 2.0}
+    erows = [(c, predict_emax(c, 0.0, 100.0, 2.0)) for c in (0.0, 1.0, 4.0)]
+    results.append({"case": "emax_honest", "result": verify_emax_rows(pd, erows), "expect_status": "COMPUTATIONALLY_TESTED"})
+    results.append(
+        {
+            "case": "emax_wrong",
+            "result": verify_emax_rows(pd, [(c, e * 0.5) for c, e in erows]),
+            "expect_status": "REFUTED",
+        }
+    )
+
+    # Proof-gated certificate: improvement with loose preservation
+    cert = improvement_certificate(ScalarIntModel(0, 0), ScalarIntModel(2, 0), [(1, 2), (2, 4)], range(0, 1), max_pointwise_increase=10**9)
+    results.append({"case": "finite_improvement_certificate", "pass": cert["accepted"] is True, "baseline": "proof_gated"})
 
     scored = []
     for item in results:

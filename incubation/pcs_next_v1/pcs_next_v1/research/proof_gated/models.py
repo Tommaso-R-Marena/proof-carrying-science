@@ -110,3 +110,55 @@ def greedy_scalar_search(
             "Loss decrease on frozen data does not imply general improvement.",
         ],
     }
+
+
+def improvement_certificate(
+    old: ScalarIntModel,
+    new: ScalarIntModel,
+    data: list[tuple[int, int]],
+    domain: range,
+    *,
+    max_pointwise_increase: int = 0,
+) -> dict:
+    """Emit an explicit finite-domain certificate: improves ∧ preserves.
+
+    Does not claim transfer beyond the supplied data/domain.
+    """
+    old_loss = task_loss(old, data)
+    new_loss = task_loss(new, data)
+    improved = new_loss < old_loss
+    preserved, bad = no_forgetting_guard(old, new, domain, max_pointwise_increase=max_pointwise_increase)
+    accepted = improved and preserved
+    return {
+        "format": "pcs-next-finite-improvement-certificate-v1",
+        "old": {"a": old.a, "b": old.b},
+        "new": {"a": new.a, "b": new.b},
+        "old_loss": old_loss,
+        "new_loss": new_loss,
+        "improves_on_data": improved,
+        "preserves_on_domain": preserved,
+        "counterexamples": bad,
+        "accepted": accepted,
+        "domain_size": len(domain),
+        "data_size": len(data),
+        "limitations": [
+            "Certificate is only over the explicit finite data and domain.",
+            "Does not imply general improvement or recursive self-improvement.",
+        ],
+    }
+
+
+def relu_net_no_forgetting(
+    old: TinyReluNet,
+    new: TinyReluNet,
+    domain: list[tuple[int, ...]],
+    *,
+    max_pointwise_increase: int = 0,
+) -> tuple[bool, list[tuple[int, ...]]]:
+    bad: list[tuple[int, ...]] = []
+    for x in domain:
+        if abs(new(x) - old(x)) > max_pointwise_increase:
+            bad.append(x)
+            if len(bad) >= 20:
+                break
+    return (len(bad) == 0), bad

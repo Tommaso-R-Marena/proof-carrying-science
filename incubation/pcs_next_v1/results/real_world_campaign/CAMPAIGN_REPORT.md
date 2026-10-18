@@ -1,8 +1,8 @@
 # Real-world mutation campaign
 
-- Mutations: 33
-- Expected-detection probes: 30
-- Caught: 30
+- Mutations: 37
+- Expected-detection probes: 34
+- Caught: 34
 - Missed: 0
 - False alarms: 0
 - Benign OK (boundary controls): 3
@@ -47,3 +47,7 @@
 - **CAUGHT** `pcs_pkpd_one_compartment` / `swap_csv_value_order` / pkpd_or_parse: CAUGHT — predictions deviate from one-compartment IV bolus model
 - **BENIGN_OK** `pcs_pkpd_one_compartment` / `5e-7_all_rows_within_rel_tol` / pkpd_verify_within_tol: COMPUTATIONALLY_TESTED — just below rel_tol=1e-6
 - **CAUGHT** `pcs_pkpd_one_compartment` / `2e-6_all_rows_over_rel_tol` / pkpd_verify: CAUGHT — predictions deviate from one-compartment IV bolus model
+- **CAUGHT** `metamorphic_pk` / `partial_dose_scale_table` / dose_homogeneity_table: CAUGHT — scaled prediction table violates dose homogeneity
+- **CAUGHT** `evidence_store` / `tamper_event_payload` / verify_chain: CAUGHT — PCS_NEXT_HASH_MISMATCH: event hash mismatch at 1
+- **CAUGHT** `osp_synthetic` / `cl_auc_dose_inconsistent` / osp_consistency: CAUGHT — CL vs Dose/AUC inconsistent rel_err=0.980
+- **CAUGHT** `pcs_pkpd_translation_benchmark` / `halve_all_effects_adapter` / emax_adapter: CAUGHT — effect rows deviate from direct Emax model

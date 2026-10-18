@@ -16,14 +16,18 @@ MUST_CATCH = {
     "swap_treated_untreated_labels",
     "zero_one_concentration",
     "1e-12_time_jitter",
+    "partial_dose_scale_table",
+    "tamper_event_payload",
+    "cl_auc_dose_inconsistent",
+    "halve_all_effects_adapter",
 }
 
 
 def test_campaign_runs(tmp_path):
     report = run_campaign(tmp_path / "camp")
-    assert report["n_mutations"] >= 25
+    assert report["n_mutations"] >= 30
     assert not report["errors"], report["errors"]
-    assert report["n_expected_detections"] >= 20
+    assert report["n_expected_detections"] >= 30
     assert report["catch_rate"] is not None
     # Boundary controls must not false-alarm
     false_alarms = [f for f in report["findings"] if f.get("outcome") == "FALSE_ALARM"]
