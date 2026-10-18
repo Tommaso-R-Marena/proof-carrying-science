@@ -11,3 +11,6 @@ Exact V7 sources coexist with a repo-shaped frozen PGSI1 project. The latter pre
 Repairs include incomplete numerical coverage and absent incumbent rejection; actual-base branch auditing and inconclusive missing refs; explicit optional-component pinning; causal rule-two outgoing-edge semantics; and kernel `decide` proofs replacing native compiler controls. None changes the original mathematical propositions. The production host change from120 is an explicitly justified received-intake veto, never broader Lean acceptance.
 
 Verification status, including infrastructure retries and scientific negatives, is detailed in REGRESSION_COMPARISON.md and the machine-readable evidence. This is not production self-modification functionality or an empirical scientific breakthrough.
+
+
+Draft PR: https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/153. No source branch or main was modified. A subsequent head recheck found all32 original heads unchanged;153 is the only additional open PR. The source identity gate now pins1992 files, including the exact main build configuration and all isolated research configurations. The five-theorem conservation/enclosure bridge, fixed Python–Lean fixture,22 native-intake tests and15 cross-PR tests pass; final full production and hosted checks remain separately tracked rather than inferred from those successes.

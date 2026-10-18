@@ -11,3 +11,8 @@ Run python -m research.integration_v1.demo --out /fresh/output. A clean Git arch
 Historical frozen campaigns use research/isolated/pgsi1/research/proof-gated-self-improvement-v1. Build a fresh authority bundle, set PCS_PGSI_AUTHORITY_BUNDLE and PCS_PGSI_REQUIRE_NATIVE=1, execute tests, kernel/tests and pointwise/tests, then original campaign/verify_results/negative-control/oracle/preserved-composition commands. Use fresh output directories; never regenerate old expected hashes.
 
 Dependency-cache sharing verifies exact manifest revisions and clean tracked source before linking an owned checkout cache. It is a build optimization, not binary attestation. Reconstruct the cache with lake exe cache get in a fresh checkout. Actual tested toolchains, durations, commands and source commits remain in evidence records; timestamp-bearing logs are distinct from deterministic semantic outputs.
+
+
+145/146 use `research/assurance-lattice-v1/formal` and `research/epistemic-lattice-v1/formal`; their srcDir points at unchanged theorem sources in the root formal directory. Do not append their targets to the hash-protected root configuration. The CLI private replay remains executable with its original formal source identities.
+
+After dependency setup, run `python -m research.integration_v1.bridge_fixture` for the fixed exact Python/PCCA/CertNum–Lean comparison, and `python -m research.integration_v1.bridge_negative_controls` for actual rejection of false claims. This comparison explicitly leaves general implementation refinement OPEN. The standard demo additionally includes the distinct computational glucose example.

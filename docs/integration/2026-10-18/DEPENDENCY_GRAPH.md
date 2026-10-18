@@ -40,3 +40,8 @@ graph TD
 ```
 
 Every edge records the frozen base branch, not a semantic subsumption claim.
+
+
+## Final build isolation
+
+Main formal/lakefile.toml remains exactly authoritative main.145 and146 compile their unchanged root source namespaces via separate research projects with external srcDir;141 compiles its relocated, distinct PCSEpistemic source namespace in its own project. These compiler environments must not be merged into one LEAN_PATH. The shared adapter consumes version-scoped computational observations and supplies no cross-calculus formal coercion.
