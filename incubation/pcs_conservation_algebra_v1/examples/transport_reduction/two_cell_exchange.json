@@ -1,0 +1,27 @@
+{
+  "format": "pcca-mass-action-contract-v1",
+  "question": "Does total amount conserve under a two-cell exchange reaction (transport reduction)?",
+  "species": [
+    {"id": "cell0", "formula": "X"},
+    {"id": "cell1", "formula": "X"}
+  ],
+  "reactions": [
+    {
+      "id": "exchange",
+      "reactants": [{"species": "cell0", "coefficient": 1}],
+      "products": [{"species": "cell1", "coefficient": 1}],
+      "rate_constant": "1/5",
+      "rate_unit": "s^-1"
+    }
+  ],
+  "initial": {"cell0": "3/2", "cell1": "1/4"},
+  "concentration_unit": "mol/L",
+  "time_unit": "s",
+  "time_step": "1/4",
+  "steps": 8,
+  "assumptions": [
+    "Synthetic transport reduction of amount conservation to stoichiometry.",
+    "Formula X is a placeholder moiety, not a chemical claim."
+  ],
+  "license": "CC0-1.0"
+}
