@@ -809,3 +809,23 @@ response sensitivity, with a frozen real-data Delft yacht experiment:
 The [executed real-data report](docs/PCS_EXPERIMENTAL_CALIBRATION_V1_REPORT.md)
 includes all 22 hull groups, held-out comparisons, exact minimax limits and
 conditional model-error exclusions.
+
+## Epistemic stratification kernel (research)
+
+The [epistemic stratification kernel](docs/PCS_EPISTEMIC_STRATIFICATION_V1.md)
+makes continuum/empirical/causal residuals first-class, proves fail-closed
+anti-promotion across strata, and composes stratified certificates at the meet
+stratum with residual-obligation union. Run
+`pcs epistemic-kernel-v1 --mode campaign --help`. It is research-grade reference
+theory and an executable receiver; it does not change production package
+authority or grant scientific acceptance.
+
+
+## Experimental epistemic obligation lattice
+
+The [epistemic obligation lattice](docs/PCS_EPISTEMIC_OBLIGATION_LATTICE_V1.md)
+is an experimental falsifier-carrying calculus: empirical and computational claims
+must declare what would refute them, evidence classes cannot silently promote, and
+upstream refutation reopens dependents. It grants **no** package or scientific
+authority. Run `pcs epistemic-lattice-v1 --help`.
+
