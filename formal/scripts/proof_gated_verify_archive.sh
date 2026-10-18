@@ -7,10 +7,10 @@
 #      authority tests) passes *inside the extraction*, with no build cache.
 # Writes dist/ARCHIVE_VERIFICATION.json. Exit code 0 iff everything passed.
 #
-#   ./scripts/proof_gated_verify_archive.sh [dist/pcs_proof_gated_v6.tar.gz]
+#   ./scripts/proof_gated_verify_archive.sh [dist/pcs_proof_gated_v7.tar.gz]
 set -uo pipefail
 
-ARCHIVE=${1:-dist/pcs_proof_gated_v6.tar.gz}
+ARCHIVE=${1:-dist/pcs_proof_gated_v7.tar.gz}
 OUT=$(dirname "$ARCHIVE")/ARCHIVE_VERIFICATION.json
 ROOT=$(pwd)
 WORK=$(mktemp -d /tmp/pg_verify.XXXXXX)
