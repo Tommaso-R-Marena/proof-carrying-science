@@ -1,0 +1,23 @@
+{
+  "workflow": [
+    {"id": "prepare", "inputs": ["raw_plasma"], "outputs": ["clean_plasma"]},
+    {"id": "fit", "inputs": ["clean_plasma"], "outputs": ["params"]},
+    {"id": "predict", "inputs": ["params"], "outputs": ["prediction"]}
+  ],
+  "evidence": [
+    {
+      "id": "e_mass",
+      "artifact_ids": ["params"],
+      "claim_ids": ["mass_conserved"]
+    },
+    {
+      "id": "e_pred",
+      "artifact_ids": ["prediction"],
+      "claim_ids": ["cmax_bound"]
+    }
+  ],
+  "claims": [
+    {"id": "mass_conserved", "required_evidence": ["e_mass"]},
+    {"id": "cmax_bound", "required_evidence": ["e_pred"]}
+  ]
+}
