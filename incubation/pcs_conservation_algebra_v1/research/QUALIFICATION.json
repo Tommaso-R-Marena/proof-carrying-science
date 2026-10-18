@@ -1,0 +1,91 @@
+{
+  "axiom_closure": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "demos": {
+    "exchange": {
+      "accepted": true,
+      "certificate_count": 2,
+      "laws": [
+        {
+          "kind": "elemental",
+          "name": "X",
+          "weights": {
+            "cell0": "1",
+            "cell1": "1"
+          }
+        }
+      ],
+      "pcs_authority": false,
+      "reasons": [
+        "verified conservation law X (elemental)",
+        "verified trajectory conservation for X over 8 steps"
+      ],
+      "scientific_acceptance": false,
+      "trajectory_pools": {
+        "X": "7/4"
+      }
+    },
+    "glucose": {
+      "accepted": true,
+      "certificate_count": 6,
+      "laws": [
+        {
+          "kind": "elemental",
+          "name": "C",
+          "weights": {
+            "glucose": "6",
+            "isomer": "3",
+            "lactate": "3"
+          }
+        },
+        {
+          "kind": "elemental",
+          "name": "H",
+          "weights": {
+            "glucose": "12",
+            "isomer": "6",
+            "lactate": "6"
+          }
+        },
+        {
+          "kind": "elemental",
+          "name": "O",
+          "weights": {
+            "glucose": "6",
+            "isomer": "3",
+            "lactate": "3"
+          }
+        }
+      ],
+      "pcs_authority": false,
+      "reasons": [
+        "verified conservation law C (elemental)",
+        "verified conservation law H (elemental)",
+        "verified conservation law O (elemental)",
+        "verified trajectory conservation for C over 12 steps",
+        "verified trajectory conservation for H over 12 steps",
+        "verified trajectory conservation for O over 12 steps"
+      ],
+      "scientific_acceptance": false,
+      "trajectory_pools": {
+        "C": "6",
+        "H": "12",
+        "O": "6"
+      }
+    },
+    "leak": {
+      "accepted": false,
+      "reasons": [
+        "formulas present but no elemental conservation law verified"
+      ]
+    },
+    "leak_exit_nonzero": true
+  },
+  "lean_build": "PASS",
+  "package": "pcca",
+  "pytest": "18 passed",
+  "version": "0.1.0"
+}
