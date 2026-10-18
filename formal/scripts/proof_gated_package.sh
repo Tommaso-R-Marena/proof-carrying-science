@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Builds the final archive from the exact committed project files.
 #
-#   ./scripts/proof_gated_package.sh            # writes dist/pcs_proof_gated_v6.tar.gz
+#   ./scripts/proof_gated_package.sh            # writes dist/pcs_proof_gated_v7.tar.gz
 #
 # 1. requires a clean git working tree (so the archive is exactly the commit HEAD);
 # 2. writes PROOF_GATED_SHA256SUMS (sha256sum format, every archived file except itself)
@@ -9,11 +9,11 @@
 #    except the two manifest files) at the project root;
 # 3. creates a reproducible tar.gz (sorted names, fixed mtime/owner, gzip -n) containing
 #    precisely: every git-tracked file + the two manifest files;
-# 4. writes dist/pcs_proof_gated_v6.tar.gz.sha256.
+# 4. writes dist/pcs_proof_gated_v7.tar.gz.sha256.
 # Verify with ./scripts/proof_gated_verify_archive.sh.
 set -euo pipefail
 
-NAME=pcs_proof_gated_v6
+NAME=pcs_proof_gated_v7
 DIST=dist
 ARCHIVE=$DIST/$NAME.tar.gz
 SUMS=PROOF_GATED_SHA256SUMS
