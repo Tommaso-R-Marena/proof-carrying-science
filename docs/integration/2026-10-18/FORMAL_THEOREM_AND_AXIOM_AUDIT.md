@@ -15,3 +15,6 @@ A fixed A→B fixture is now replayed by PCCA, CertNum, and actual Lean with mat
 The root formal/lakefile.toml is restored byte-for-byte to authoritative main, SHA25697eb035fd06b11fb1f2ccde06704cde429f8225e27b9a24e22f6a102f3173350. Existing formal_environment_contract_v2.py and every historical identity remain unchanged.145/146 retain original root theorem sources, compiled through separate minimal configurations with explicit external srcDir.141 retains its distinct isolated source project. No production build fence was weakened to admit these libraries.
 
 Main's historical untrusted proof exercises and unsafe prover workers are byte-pinned, but are not production authority. Existing scripts/verify_lean.sh retains its exact protected admission scope. New imported research Lean receives an additional comment-aware forbidden-token audit; no historical task is rewritten to manufacture a clean scan.
+
+
+The final source gate verifies1992 files;385 existing main formal-source/configuration files remain exact. Standard Lean and Mathlib real bridge gates pass with the protected root configuration restored. Full retained command output is in evidence/CORE_FULL_GATE_PASS.log and evidence/MATHLIB_REAL_BRIDGE_PASS.log. The public theorem environment counts include generated structural theorems and are not reported as new authored mathematical results.

@@ -16,3 +16,8 @@ Baseline: `fabc704efdbda4c8822881366e4db3d3e31f066a`. This initial register reco
 | Scientific validity | Synthetic/public data labels and open empirical assumptions retained | No external-laboratory validation has been established by this integration. |
 | Independent implementations | Separate reference algorithms and processes retained | Generic python_harness namespaces need separate subprocesses. |
 | CI | Existing gates retained, actual executed steps required | A skipped/no-op check is not passing verification evidence. |
+
+
+## Final integration boundary
+
+The initial audit entries above remain historical observations. Current source/configuration identities and exact executed observations are in SOURCE_PROFILE.json, SOURCE_ADAPTATIONS.json and evidence/LOCAL_QUALIFICATION.json. Main's formal configuration is unchanged.145/146 use isolated compiler configurations over unchanged source files;141 keeps its separate original calculus. Original ownership gates remain unchanged and passed their original single-workstream heads. Composite-tree ownership is checked by the explicit consolidated source/disposition gate, not a fabricated pass of an original non-overlap predicate whose scope no longer applies.

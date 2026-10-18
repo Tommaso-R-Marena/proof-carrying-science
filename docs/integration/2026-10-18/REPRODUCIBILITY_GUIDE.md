@@ -16,3 +16,6 @@ Dependency-cache sharing verifies exact manifest revisions and clean tracked sou
 145/146 use `research/assurance-lattice-v1/formal` and `research/epistemic-lattice-v1/formal`; their srcDir points at unchanged theorem sources in the root formal directory. Do not append their targets to the hash-protected root configuration. The CLI private replay remains executable with its original formal source identities.
 
 After dependency setup, run `python -m research.integration_v1.bridge_fixture` for the fixed exact Python/PCCA/CertNum–Lean comparison, and `python -m research.integration_v1.bridge_negative_controls` for actual rejection of false claims. This comparison explicitly leaves general implementation refinement OPEN. The standard demo additionally includes the distinct computational glucose example.
+
+
+Local reference execution completed the whole core gate with PCS_REQUIRE_PROVER=1 and PCS_REQUIRE_CALIBRATION_KERNEL=1:1,992 tests passed, zero skipped. Node24.19.0 was available locally; hosted production parity retains its pinned Node22.23.3 lane. Five paired CLI startup observations had medians0.170s baseline and0.142s integration during concurrent verification; this is not a controlled speedup claim. Native root/toolchain/storage assumptions and third-party dataset rights remain explicit.

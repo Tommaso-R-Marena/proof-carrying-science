@@ -125,6 +125,14 @@ jobs:
           python -m research.integration_v1.bridge_negative_controls > "$RUNNER_TEMP/formal-audits/bridge-negative.json"
           python -m research.integration_v1.bridge_fixture > "$RUNNER_TEMP/formal-audits/bridge-fixed-fixture.json"
           python -m pytest -q tests/test_epistemic_kernel_v1.py tests/test_assurance_lattice_v1.py tests/test_epistemic_lattice_v1.py
+          bash scripts/verify_epistemic.sh > "$RUNNER_TEMP/formal-audits/esca-original-gate.json"
+          python - <<'PY'
+          import os, runpy
+          from pathlib import Path
+          main = runpy.run_path('research/assurance-lattice-v1/run_experiment.py')['main']
+          main.__globals__['OUT'] = Path(os.environ['RUNNER_TEMP']) / 'formal-audits' / 'assurance-original-vectors'
+          assert main() == 0
+          PY
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:

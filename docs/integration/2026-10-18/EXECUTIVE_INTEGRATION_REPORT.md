@@ -14,3 +14,25 @@ Verification status, including infrastructure retries and scientific negatives, 
 
 
 Draft PR: https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/153. No source branch or main was modified. A subsequent head recheck found all32 original heads unchanged;153 is the only additional open PR. The source identity gate now pins1992 files, including the exact main build configuration and all isolated research configurations. The five-theorem conservation/enclosure bridge, fixed Python–Lean fixture,22 native-intake tests and15 cross-PR tests pass; final full production and hosted checks remain separately tracked rather than inferred from those successes.
+
+
+## Completed local qualification
+
+The complete prescribed core gate now passes:1,992 Python tests, zero failures/skips, both25-case foundational and12-case v0.6 adversarial campaigns rejected every attack, actual standard Lean builds/audits passed, and the Mathlib real-analysis bridge plus its3 statistics checks passed. All15 cross-PR tests,22 native-intake tests including a fresh cleanroom, and five new authored bridge theorems pass. The two deliberate false claims are rejected by actual Lean. The exact source profile and executed commands are in evidence/LOCAL_QUALIFICATION.json and retained logs. Earlier failures remain preserved and are not counted as final successes.
+
+All32 source PR heads were rechecked unchanged. V8 remains incomplete. Hosted verification must be assessed on the final PR head/merge SHA through https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/153/checks; this snapshot does not fabricate a future CI conclusion. The PR remains draft for independent review, with no main merge or deployment.
+
+
+```mermaid
+flowchart LR
+  Z[Signed canonical PCS package] --> L[Existing Lean authority]
+  L --> I[Received-intake consistency veto]
+  I --> R[Production receiving receipt]
+  F[Frozen PGSI1 native and pointwise project] --> E[Scoped research evidence]
+  V[Exact V7 and pinned PGSC6 experiments] --> E
+  P[PCCA and CertNum replay plus typed Lean bridge] --> E
+  C[Causal counterexample and sticky falsification] --> E
+  E --> W[Reviewer report and non-authoritative card]
+```
+
+There is no research-to-production activation edge. Formal truth, host correspondence, scientific assumptions and empirical validity retain separate statuses.

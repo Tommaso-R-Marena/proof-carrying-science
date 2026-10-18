@@ -7,3 +7,10 @@
 5. Python/Lean codec, GPU/float, filesystem/crash, executable pinning and deployed inference refinements remain open beyond the tested scoped correspondences. Journal recovery has a documented microstep gap.
 6. Empirical validity, causal/model assumptions, continuum accuracy, complete governance history, independent protected storage and external participant trials remain separate unresolved obligations.
 7. Public dataset upstream version provenance and exact redistribution rights require review. Use synthetic fixtures for the advertised demo.
+
+
+## Completed local qualification
+
+The complete prescribed core gate now passes:1,992 Python tests, zero failures/skips, both25-case foundational and12-case v0.6 adversarial campaigns rejected every attack, actual standard Lean builds/audits passed, and the Mathlib real-analysis bridge plus its3 statistics checks passed. All15 cross-PR tests,22 native-intake tests including a fresh cleanroom, and five new authored bridge theorems pass. The two deliberate false claims are rejected by actual Lean. The exact source profile and executed commands are in evidence/LOCAL_QUALIFICATION.json and retained logs. Earlier failures remain preserved and are not counted as final successes.
+
+All32 source PR heads were rechecked unchanged. V8 remains incomplete. Hosted verification must be assessed on the final PR head/merge SHA through https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/153/checks; this snapshot does not fabricate a future CI conclusion. The PR remains draft for independent review, with no main merge or deployment.
