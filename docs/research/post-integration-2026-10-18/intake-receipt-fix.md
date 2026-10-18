@@ -96,3 +96,42 @@ PR #153 evidence and original source identities remain retained.
 
 No merge, deployment, source PR modification, or approval of PR #153 is performed
 by this repair branch.
+
+## Explicit source-profile successor
+
+The original `docs/integration/2026-10-18/SOURCE_PROFILE.json` is preserved
+byte-for-byte, SHA-256
+`0610914446b24a6b2e7fb70cd385155531c42d65a95ec04b896d37c29f9d7297`.
+The raw expected pre-successor two-file mismatch is retained in
+`intake-receipt-source-gate-before.json` alongside this report.
+
+A fixed-path, versioned `receipt-source-profile-successor.json` records exact
+predecessor commit/profile identity, old/new source hashes, mode and reason.
+Only three predecessor entries can progress: the intake implementation, its
+tests, and the identity gate itself. The existing receipt contract is one
+additional pinned source file; it was not in the predecessor profile. All 1,992
+original checks, all 38 V7 modules, and all baseline formal protections remain
+mandatory.
+
+The gate code pins both old and permitted new identities for the three repair
+files. Editing a source file and its manifest hash together cannot authorize
+another replacement. Duplicate/unknown manifest keys, extra paths, wrong hashes,
+mode changes, symlinks, and unrelated source mutations reject. No environment
+variable or caller-selected profile participates. The gate's own exact new SHA
+is recorded and checked by the successor, with its predecessor SHA fixed by
+code; reviewing a change to gate code remains essential. The repository, Git,
+reviewed gate code and reviewed manifest remain trusted configuration, not an
+immutable root. `pending_independent_review` is metadata, not approval.
+
+The independent reviewer separately validated code commit `8c1aa88`: all 28
+actual-Lean decisions matched its prior observations, all 20 previously blocked
+negative receipts became writable, and 176 fresh contradictory receipt mutations
+rejected. This validates bounded behavior and receipt consistency; it does not
+constitute a general theorem about receiving acceptance sets.
+
+Combined final local run: **120 passed, zero skips**, 36.38 s, including all 105
+affected behavioral tests plus 15 source-successor checks (one positive and 14
+negative controls). The identity gate passes all 1,992 predecessor entries plus
+one additional receipt-contract pin. JUnit evidence for this session is
+`/workspace/.onboarding/intake-receipt-combined.xml`; pre-successor and initial
+partial-provisioning results are retained separately, not overwritten.
