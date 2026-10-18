@@ -53,7 +53,8 @@ def sampleCertificate : IntervalEnclosureCert where
   claimed := .nonempty (3 / 5) (7 / 10) (by norm_num)
 
 theorem sample_certificate_accepts : checkIntervalEnclosure sampleCertificate = true := by
-  decide
+  norm_num [checkIntervalEnclosure, sampleCertificate, Expr.evalInterval,
+            Enclosure.ok, Interval.singleton]
 
 /-- Independently checkable concrete instance: one firing of 1/3 from (1,0). -/
 theorem sample_complement_enclosed :

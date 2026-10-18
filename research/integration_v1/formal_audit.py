@@ -24,7 +24,16 @@ def audit(project: Path, imports: list[str], prefix: str, out: Path):
                for p in paths if p.endswith(".lean")}
     if not sources:
         raise RuntimeError("no tracked project Lean sources")
-    findings = source_audit([ROOT / p for p in sources])
+    # The shared main formal project also contains unrelated, deliberately
+    # untrusted prover tasks. Its protected authority keeps verify_lean.sh's
+    # existing scope. Audit this requested library's source namespace here;
+    # all newly imported Lean is additionally covered by source_gate.py.
+    admission_sources = (list(sources) if relative != "formal" else
+                         [p for p in sources if
+                          (ROOT / p).relative_to(project).parts[0].startswith(prefix)])
+    if not admission_sources:
+        raise RuntimeError("selected library has no tracked Lean source namespace")
+    findings = source_audit([ROOT / p for p in admission_sources])
     if findings:
         raise RuntimeError("forbidden active Lean source: " + "\n".join(findings))
     started = time.monotonic()
@@ -68,6 +77,7 @@ run_cmd do
     result = {"format": "pcs-public-theorem-environment-audit-v1", "project": relative,
               "imports": imports, "prefix": prefix, "theorems": len(closures),
               "axiom_closures": dict(sorted(closures.items())), "source_sha256": sources,
+              "admission_source_paths": admission_sources,
               "actual_lean_build": True, "source_unchanged_during_audit": True,
               "elapsed_seconds": round(time.monotonic() - started, 3),
               "note": "Public theorem inventory includes compiler-generated theorem declarations; private dependencies are included in closure.",
