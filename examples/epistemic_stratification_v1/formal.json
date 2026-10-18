@@ -1,0 +1,44 @@
+{
+  "format": "pcs-epistemic-certificate-v1",
+  "assumptions": [
+    {
+      "id": "A_model",
+      "statement": "bounded finite transport model assumptions are explicit"
+    }
+  ],
+  "claim": {
+    "id": "C_discrete",
+    "stratum": "formal",
+    "predicate": "amount-conserved",
+    "required_evidence": ["E_matrix"],
+    "assumptions": ["A_model"]
+  },
+  "evidence": [
+    {
+      "id": "E_matrix",
+      "stratum": "formal",
+      "outcome": "PASS",
+      "predicate": "amount-conserved",
+      "artifact_ids": ["matrix.json"]
+    }
+  ],
+  "stratum": "formal",
+  "residuals": [
+    {
+      "id": "C_discrete:continuum-residual",
+      "stratum": "continuum",
+      "reason": "Discrete/formal support does not discharge continuum accuracy; residual truncation/refinement obligations remain OPEN."
+    },
+    {
+      "id": "C_discrete:empirical-residual",
+      "stratum": "empirical",
+      "reason": "Continuum residual bounds do not discharge empirical/statistical adequacy; observational validation remains OPEN."
+    },
+    {
+      "id": "C_discrete:causal-residual",
+      "stratum": "causal",
+      "reason": "Empirical association does not discharge causal/external-world claims; identification assumptions remain OPEN."
+    }
+  ],
+  "scientific_acceptance": false
+}

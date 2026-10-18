@@ -2422,6 +2422,9 @@ def build_parser():
     from pcs.calibration_kernel_v1 import register as register_calibration
     register_calibration(sub)
 
+    from pcs.epistemic_kernel_v1 import register as register_epistemic_kernel
+    register_epistemic_kernel(sub)
+
     return p
 
 

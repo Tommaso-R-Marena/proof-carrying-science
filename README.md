@@ -68,6 +68,16 @@ states. Run `python -m pcs.cli transport-kernel-v1 --help`. It composes with the
 existing signed scientific workflow; implementation correspondence, continuum
 accuracy and empirical validity remain separate OPEN obligations.
 
+## Epistemic stratification kernel (research)
+
+The [epistemic stratification kernel](docs/PCS_EPISTEMIC_STRATIFICATION_V1.md)
+makes continuum/empirical/causal residuals first-class, proves fail-closed
+anti-promotion across strata, and composes stratified certificates at the meet
+stratum with residual-obligation union. Run
+`pcs epistemic-kernel-v1 --mode campaign --help`. It is research-grade reference
+theory and an executable receiver; it does not change production package
+authority or grant scientific acceptance.
+
 ## Guided v0.6 project onboarding
 
 Scientists no longer need to hand-author a PCS manifest from scratch.
