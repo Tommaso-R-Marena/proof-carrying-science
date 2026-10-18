@@ -29,8 +29,12 @@ FORMAT = "pcs-epistemic-certificate-v1"
 COMPOSE_FORMAT = "pcs-epistemic-composition-v1"
 INVALIDATION_FORMAT = "pcs-epistemic-invalidation-v1"
 CAMPAIGN_FORMAT = "pcs-epistemic-campaign-v1"
+BRIDGE_FORMAT = "pcs-epistemic-bridge-v1"
+TRANSPORT_LIFT_FORMAT = "pcs-epistemic-transport-lift-v1"
+LATTICE_FORMAT = "pcs-epistemic-lattice-v1"
 ROOT = Path(__file__).resolve().parents[1]
 FORMAL_ROOT = ROOT / "formal"
+SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "epistemic_certificate_v1.schema.json"
 STRATA = (
     "integrity",
     "computational",
@@ -44,18 +48,29 @@ APPROVED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 PRINCIPAL_THEOREMS = [
     "PCSEpistemic.Stratum.formal_lt_continuum",
     "PCSEpistemic.Stratum.computational_lt_empirical",
+    "PCSEpistemic.Stratum.meet_assoc",
+    "PCSEpistemic.Stratum.meet_join_absorb",
+    "PCSEpistemic.Stratum.discharge_table_complete",
     "PCSEpistemic.computational_cannot_assure_empirical",
     "PCSEpistemic.formal_cannot_assure_continuum",
     "PCSEpistemic.continuum_cannot_assure_causal",
     "PCSEpistemic.formal_support_keeps_continuum_residual",
     "PCSEpistemic.compose_meet_le_left",
     "PCSEpistemic.compose_meet_le_right",
+    "PCSEpistemic.bad_bridge_rejected",
+    "PCSEpistemic.checkSupportB_rejects_computational_to_empirical",
     "PCSEpistemic.Controls.positive_formal_support",
     "PCSEpistemic.Controls.negative_computational_to_empirical",
     "PCSEpistemic.Controls.negative_formal_to_continuum",
     "PCSEpistemic.Controls.composition_meet_is_computational",
     "PCSEpistemic.Controls.invalidation_marks_matrix_claim",
 ]
+# Transport-kernel OPEN obligations that discrete ACCEPT cannot close.
+TRANSPORT_OPEN_OBLIGATIONS = (
+    "implementation_correspondence",
+    "continuum_accuracy",
+    "empirical_validity",
+)
 
 
 class EpistemicKernelError(ValueError):
@@ -92,6 +107,10 @@ def meet(a: str, b: str) -> str:
     return a if rank(a) <= rank(b) else b
 
 
+def join(a: str, b: str) -> str:
+    return b if rank(a) <= rank(b) else a
+
+
 def can_discharge(evidence_stratum: str, claim_stratum: str) -> bool:
     return rank(claim_stratum) <= rank(evidence_stratum)
 
@@ -100,12 +119,200 @@ def forbidden_promotion(evidence_stratum: str, claim_stratum: str) -> bool:
     return rank(evidence_stratum) < rank(claim_stratum)
 
 
+def validate_schema(certificate: dict[str, Any]) -> None:
+    """Fail-closed structural schema check complementary to load_certificate."""
+    try:
+        from jsonschema import Draft202012Validator
+    except ImportError as exc:  # pragma: no cover - optional in minimal envs
+        raise EpistemicKernelError("jsonschema is required for schema validation") from exc
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    errors = sorted(Draft202012Validator(schema).iter_errors(certificate), key=lambda e: list(e.path))
+    if errors:
+        raise EpistemicKernelError(f"schema validation failed: {errors[0].message}")
+
+
+def lattice_self_check() -> dict[str, Any]:
+    """Exhaustive finite lattice and discharge-table checks over all strata."""
+    cases: dict[str, bool] = {}
+    for a in STRATA:
+        cases[f"meet_idempotent:{a}"] = meet(a, a) == a
+        cases[f"join_idempotent:{a}"] = join(a, a) == a
+        for b in STRATA:
+            cases[f"meet_comm:{a}:{b}"] = meet(a, b) == meet(b, a)
+            cases[f"join_comm:{a}:{b}"] = join(a, b) == join(b, a)
+            cases[f"meet_le_left:{a}:{b}"] = rank(meet(a, b)) <= rank(a)
+            cases[f"meet_le_right:{a}:{b}"] = rank(meet(a, b)) <= rank(b)
+            cases[f"absorb_meet_join:{a}:{b}"] = meet(a, join(a, b)) == a
+            cases[f"absorb_join_meet:{a}:{b}"] = join(a, meet(a, b)) == a
+            for c in STRATA:
+                cases[f"meet_assoc:{a}:{b}:{c}"] = meet(meet(a, b), c) == meet(a, meet(b, c))
+                cases[f"join_assoc:{a}:{b}:{c}"] = join(join(a, b), c) == join(a, join(b, c))
+            # Discharge table completeness: discharge ∨ forbidden ∨ equal.
+            cases[f"discharge_complete:{a}:{b}"] = (
+                can_discharge(a, b) or forbidden_promotion(a, b) or a == b
+            )
+            if forbidden_promotion(a, b):
+                cases[f"forbidden_blocks:{a}:{b}"] = not can_discharge(a, b)
+    return {
+        "format": LATTICE_FORMAT,
+        "cases": cases,
+        "passed": all(cases.values()),
+        "stratum_count": len(STRATA),
+        "case_count": len(cases),
+        "scientific_acceptance": False,
+    }
+
+
+def apply_bridge(
+    bridge: dict[str, Any],
+    residual: dict[str, Any],
+    evidence: dict[str, Any],
+    claim: dict[str, Any],
+) -> dict[str, Any]:
+    """Fail-closed typed residual bridge. Never silently raises stratum."""
+    if not isinstance(bridge, dict) or not isinstance(residual, dict):
+        raise EpistemicKernelError("bridge and residual objects required")
+    if not isinstance(evidence, dict) or not isinstance(claim, dict):
+        raise EpistemicKernelError("evidence and claim objects required")
+    src = _require_stratum(bridge.get("src"), field="bridge.src")
+    dst = _require_stratum(bridge.get("dst"), field="bridge.dst")
+    residual_id = _require_id(bridge.get("residual_id"), field="bridge.residual_id")
+    claim_stratum = _require_stratum(claim.get("stratum"), field="claim.stratum")
+    residual_stratum = _require_stratum(residual.get("stratum"), field="residual.stratum")
+    evidence_stratum = _require_stratum(evidence.get("stratum"), field="evidence.stratum")
+    reasons = []
+    well_typed = rank(src) < rank(dst)
+    if not well_typed:
+        reasons.append("bridge must strictly raise stratum")
+    if residual.get("id") != residual_id:
+        reasons.append("residual id does not match bridge")
+    if residual_stratum != dst:
+        reasons.append("residual stratum must equal bridge destination")
+    if claim_stratum != dst:
+        reasons.append("claim stratum must equal bridge destination")
+    discharge_ok = (
+        evidence.get("outcome") == "PASS"
+        and evidence.get("predicate") == residual.get("reason")
+        and can_discharge(evidence_stratum, residual_stratum)
+    )
+    if not discharge_ok:
+        reasons.append("residual discharge evidence insufficient")
+    accepted = (
+        well_typed
+        and residual.get("id") == residual_id
+        and residual_stratum == dst
+        and claim_stratum == dst
+        and discharge_ok
+    )
+    if accepted:
+        reasons = []
+    return {
+        "format": BRIDGE_FORMAT,
+        "bridge": {"id": bridge.get("id"), "src": src, "dst": dst, "residual_id": residual_id},
+        "accepted": accepted,
+        "reasons": reasons,
+        "scientific_acceptance": False,
+        "note": "Bridge acceptance discharges only the named residual; broader strata remain OPEN.",
+    }
+
+
+def lift_transport_opens(
+    *,
+    claim_id: str = "C_transport",
+    open_obligations: list[str] | None = None,
+    discrete_supported: bool = True,
+) -> dict[str, Any]:
+    """Lift transport-kernel OPEN obligations into stratified residuals.
+
+    Discrete/formal matrix support may be recorded, but continuum/empirical
+    obligations remain OPEN residuals. This does not replay a transport package.
+    """
+    opens = list(open_obligations or TRANSPORT_OPEN_OBLIGATIONS)
+    for name in opens:
+        _require_id(name, field="open_obligation")
+    residuals = []
+    mapping = {
+        "implementation_correspondence": ("formal", "Implementation correspondence remains OPEN."),
+        "continuum_accuracy": ("continuum", "Continuum accuracy remains OPEN after discrete support."),
+        "empirical_validity": ("empirical", "Empirical validity remains OPEN after discrete support."),
+    }
+    for name in opens:
+        stratum, reason = mapping.get(name, ("empirical", f"Obligation {name} remains OPEN."))
+        residuals.append(
+            {
+                "id": f"{claim_id}:{name}",
+                "stratum": stratum,
+                "reason": reason,
+                "status": "OPEN",
+            }
+        )
+    certificate = {
+        "format": FORMAT,
+        "assumptions": [
+            {
+                "id": "A_transport_model",
+                "statement": "finite transport matrix assumptions are explicit",
+            }
+        ],
+        "claim": {
+            "id": claim_id,
+            "stratum": "formal" if discrete_supported else "computational",
+            "predicate": "transport-discrete-support",
+            "required_evidence": ["E_transport_discrete"],
+            "assumptions": ["A_transport_model"],
+        },
+        "evidence": [
+            {
+                "id": "E_transport_discrete",
+                "stratum": "formal" if discrete_supported else "computational",
+                "outcome": "PASS" if discrete_supported else "UNVERIFIED",
+                "predicate": "transport-discrete-support",
+                "artifact_ids": ["transport-contract.json"],
+            }
+        ],
+        "stratum": "formal" if discrete_supported else "computational",
+        "residuals": residuals,
+        "scientific_acceptance": False,
+    }
+    assessment = assess(certificate)
+    return {
+        "format": TRANSPORT_LIFT_FORMAT,
+        "open_obligations": opens,
+        "certificate": certificate,
+        "assessment": assessment,
+        "continuum_residual_open": any(
+            r["stratum"] == "continuum" and r["status"] == "OPEN" for r in assessment["residuals"]
+        ),
+        "empirical_residual_open": any(
+            r["stratum"] == "empirical" and r["status"] == "OPEN" for r in assessment["residuals"]
+        ),
+        "scientific_acceptance": False,
+        "accepted": assessment["accepted"] and any(
+            r["stratum"] == "continuum" and r["status"] == "OPEN" for r in assessment["residuals"]
+        ),
+    }
+
+
 def load_certificate(raw: bytes) -> dict[str, Any]:
     if len(raw) > 2 * 1024 * 1024:
         raise EpistemicKernelError("certificate exceeds 2 MiB")
     data = strict_json_loads(raw)
     if not isinstance(data, dict) or data.get("format") != FORMAT:
         raise EpistemicKernelError(f"exact {FORMAT} required")
+    allowed = {
+        "format",
+        "assumptions",
+        "claim",
+        "evidence",
+        "stratum",
+        "residuals",
+        "scientific_acceptance",
+    }
+    extra = set(data) - allowed
+    if extra:
+        raise EpistemicKernelError(f"unsupported certificate fields: {sorted(extra)}")
+    if data.get("scientific_acceptance", False) is not False:
+        raise EpistemicKernelError("scientific_acceptance must be false")
     assumptions = data.get("assumptions")
     claim = data.get("claim")
     evidence = data.get("evidence")
@@ -119,10 +326,15 @@ def load_certificate(raw: bytes) -> dict[str, Any]:
         raise EpistemicKernelError("bounded residuals required")
     if not isinstance(claim, dict):
         raise EpistemicKernelError("claim object required")
+    claim_allowed = {"id", "stratum", "predicate", "required_evidence", "assumptions"}
+    if set(claim) - claim_allowed:
+        raise EpistemicKernelError(f"unsupported claim fields: {sorted(set(claim) - claim_allowed)}")
     parsed_assumptions = []
     for item in assumptions:
         if not isinstance(item, dict):
             raise EpistemicKernelError("assumption objects required")
+        if set(item) - {"id", "statement"}:
+            raise EpistemicKernelError("unsupported assumption fields")
         parsed_assumptions.append(
             {
                 "id": _require_id(item.get("id"), field="assumption.id"),
@@ -133,6 +345,8 @@ def load_certificate(raw: bytes) -> dict[str, Any]:
     for item in evidence:
         if not isinstance(item, dict):
             raise EpistemicKernelError("evidence objects required")
+        if set(item) - {"id", "stratum", "outcome", "predicate", "artifact_ids"}:
+            raise EpistemicKernelError("unsupported evidence fields")
         artifacts = item.get("artifact_ids", [])
         if not isinstance(artifacts, list) or len(artifacts) > 32:
             raise EpistemicKernelError("bounded artifact_ids required")
@@ -166,6 +380,10 @@ def load_certificate(raw: bytes) -> dict[str, Any]:
     for item in residuals:
         if not isinstance(item, dict):
             raise EpistemicKernelError("residual objects required")
+        if set(item) - {"id", "stratum", "reason", "status"}:
+            raise EpistemicKernelError("unsupported residual fields")
+        if item.get("status", "OPEN") != "OPEN":
+            raise EpistemicKernelError("residual.status must be OPEN")
         parsed_residuals.append(
             {
                 "id": _require_id(item.get("id"), field="residual.id"),
@@ -503,10 +721,59 @@ def run_campaign() -> dict[str, Any]:
         canonicalize_jcs_bytes(downstream),
     )
     invalidation = invalidate(canonicalize_jcs_bytes(formal), ["matrix.json"])
+    lattice = lattice_self_check()
+    bad_bridge = apply_bridge(
+        {
+            "id": "B_bad",
+            "src": "formal",
+            "dst": "continuum",
+            "residual_id": "R_continuum",
+        },
+        {
+            "id": "R_continuum",
+            "stratum": "continuum",
+            "reason": "continuum-accuracy",
+        },
+        {
+            "id": "E_comp",
+            "stratum": "computational",
+            "outcome": "PASS",
+            "predicate": "continuum-accuracy",
+        },
+        {
+            "id": "C_continuum",
+            "stratum": "continuum",
+        },
+    )
+    transport_lift = lift_transport_opens()
+    predicate_mismatch = assess(
+        {
+            **formal,
+            "evidence": [
+                {
+                    **formal["evidence"][0],
+                    "predicate": "different-predicate",
+                }
+            ],
+        }
+    )
+    failed_evidence = assess(
+        {
+            **formal,
+            "evidence": [
+                {
+                    **formal["evidence"][0],
+                    "outcome": "FAIL",
+                }
+            ],
+        }
+    )
     cases = {
         "positive_formal_support": formal_assessment["accepted"] is True,
-        "reject_computational_to_empirical": false_empirical_assessment["accepted"] is False
-        and false_empirical_assessment["forbidden_promotions"],
+        "reject_computational_to_empirical": (
+            false_empirical_assessment["accepted"] is False
+            and bool(false_empirical_assessment["forbidden_promotions"])
+        ),
         "reject_formal_to_continuum": false_continuum_assessment["accepted"] is False,
         "formal_keeps_continuum_residual": any(
             r["stratum"] == "continuum" and r["status"] == "OPEN"
@@ -519,6 +786,12 @@ def run_campaign() -> dict[str, Any]:
         ),
         "invalidation_reopens_claim": invalidation["affected_claims"] == ["C_discrete"]
         and invalidation["accepted"] is False,
+        "lattice_self_check": lattice["passed"] is True,
+        "reject_computational_continuum_bridge": bad_bridge["accepted"] is False,
+        "transport_lift_keeps_continuum_open": transport_lift["continuum_residual_open"] is True,
+        "transport_lift_keeps_empirical_open": transport_lift["empirical_residual_open"] is True,
+        "reject_predicate_mismatch": predicate_mismatch["accepted"] is False,
+        "reject_failed_evidence": failed_evidence["status"] == "FALSIFIED_OR_CHECK_FAILED",
     }
     return {
         "format": CAMPAIGN_FORMAT,
@@ -537,6 +810,16 @@ def run_campaign() -> dict[str, Any]:
                 "affected_claims": invalidation["affected_claims"],
                 "affected_evidence": invalidation["affected_evidence"],
                 "accepted": invalidation["accepted"],
+            },
+            "lattice": {
+                "passed": lattice["passed"],
+                "case_count": lattice["case_count"],
+            },
+            "bad_bridge": bad_bridge,
+            "transport_lift": {
+                "accepted": transport_lift["accepted"],
+                "continuum_residual_open": transport_lift["continuum_residual_open"],
+                "empirical_residual_open": transport_lift["empirical_residual_open"],
             },
         },
         "scientific_acceptance": False,
@@ -713,7 +996,10 @@ def command(args) -> int:
                 result = {**result, "lean_audit": kernel_audit(timeout=args.timeout)}
                 result["passed"] = result["passed"] and result["lean_audit"].get("accepted", False)
         elif args.mode == "assess":
-            result = assess(load_certificate(Path(args.certificate).read_bytes()))
+            cert = load_certificate(Path(args.certificate).read_bytes())
+            if args.schema:
+                validate_schema(cert)
+            result = assess(cert)
         elif args.mode == "compose":
             result = compose(Path(args.left).read_bytes(), Path(args.right).read_bytes())
         elif args.mode == "invalidate":
@@ -723,6 +1009,20 @@ def command(args) -> int:
             result = invalidate(Path(args.certificate).read_bytes(), changed)
         elif args.mode == "lean-audit":
             result = kernel_audit(timeout=args.timeout)
+        elif args.mode == "lattice":
+            result = lattice_self_check()
+        elif args.mode == "transport-lift":
+            result = lift_transport_opens()
+        elif args.mode == "bridge":
+            payload = strict_json_loads(Path(args.bridge).read_bytes())
+            if not isinstance(payload, dict):
+                raise EpistemicKernelError("bridge request must be a JSON object")
+            result = apply_bridge(
+                payload.get("bridge", {}),
+                payload.get("residual", {}),
+                payload.get("evidence", {}),
+                payload.get("claim", {}),
+            )
         else:
             raise EpistemicKernelError(f"unsupported mode: {args.mode}")
         export_evidence(Path(args.output), result)
@@ -754,12 +1054,27 @@ def register(subparsers) -> None:
     parser.add_argument(
         "--mode",
         required=True,
-        choices=["campaign", "assess", "compose", "invalidate", "lean-audit"],
+        choices=[
+            "campaign",
+            "assess",
+            "compose",
+            "invalidate",
+            "lean-audit",
+            "lattice",
+            "transport-lift",
+            "bridge",
+        ],
     )
     parser.add_argument("--certificate", help="stratified certificate JSON")
     parser.add_argument("--left", help="upstream certificate JSON for compose")
     parser.add_argument("--right", help="downstream certificate JSON for compose")
     parser.add_argument("--changed", help="JSON list of changed artifact ids")
+    parser.add_argument("--bridge", help="bridge request JSON for --mode bridge")
+    parser.add_argument(
+        "--schema",
+        action="store_true",
+        help="with assess mode, also validate against the JSON schema",
+    )
     parser.add_argument(
         "--lean-audit",
         action="store_true",

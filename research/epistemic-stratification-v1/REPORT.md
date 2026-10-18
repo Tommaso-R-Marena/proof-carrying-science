@@ -17,12 +17,16 @@ theorems. It needs an epistemic lattice where:
 
 ## Delivered artifacts
 
-- Lean library `formal/PCSEpistemic/` with strata, judgment, composition,
-  invalidation, and kernel controls.
+- Lean library `formal/PCSEpistemic/` with strata, lattice laws, judgment,
+  composition, invalidation, typed residual bridges, checker controls.
 - Python receiver `pcs/epistemic_kernel_v1.py` and CLI
-  `pcs epistemic-kernel-v1`.
+  `pcs epistemic-kernel-v1` (`campaign`, `lattice`, `transport-lift`, `bridge`,
+  `assess --schema`, `lean-audit`).
 - Deterministic adversarial campaign covering positive support, promotion
-  attacks, residual retention, composition, and invalidation.
+  attacks, residual retention, composition, invalidation, lattice self-check,
+  bridge rejection, transport OPEN lift, predicate/FAIL rejection.
+- JSON schema `pcs/schemas/epistemic_certificate_v1.schema.json`.
+- Isolated verifier `scripts/verify_epistemic.sh`.
 - Examples under `examples/epistemic_stratification_v1/`.
 - Design note `docs/PCS_EPISTEMIC_STRATIFICATION_V1.md`.
 

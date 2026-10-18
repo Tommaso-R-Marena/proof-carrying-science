@@ -83,10 +83,24 @@ package and audit principal axioms against `{propext, Classical.choice, Quot.sou
 - Signed bytes remain distinct from stratified support; stratified support remains
   distinct from scientific acceptance.
 
+## Additional rigor
+
+- Finite lattice laws in `formal/PCSEpistemic/Lattice.lean` (assoc/absorb/glb/lub/discharge table).
+- Typed residual bridges in `formal/PCSEpistemic/Bridge.lean` rejecting computational→continuum raise.
+- Executable checker controls in `formal/PCSEpistemic/Checker.lean`.
+- Exhaustive Python lattice self-check over all stratum triples.
+- Transport OPEN-obligation lift that preserves continuum/empirical residuals.
+- JSON schema `pcs/schemas/epistemic_certificate_v1.schema.json` with `scientific_acceptance: false`.
+- Isolated verifier script: `scripts/verify_epistemic.sh`.
+
 ## Use
 
 ```bash
 pcs epistemic-kernel-v1 --mode campaign --output /tmp/esca-campaign
 pcs epistemic-kernel-v1 --mode campaign --lean-audit --output /tmp/esca-campaign-lean
-pcs epistemic-kernel-v1 --mode assess --certificate examples/epistemic_stratification_v1/formal.json --output /tmp/esca-assess
+pcs epistemic-kernel-v1 --mode assess --schema --certificate examples/epistemic_stratification_v1/formal.json --output /tmp/esca-assess
+pcs epistemic-kernel-v1 --mode lattice --output /tmp/esca-lattice
+pcs epistemic-kernel-v1 --mode transport-lift --output /tmp/esca-transport-lift
+pcs epistemic-kernel-v1 --mode bridge --bridge examples/epistemic_stratification_v1/bad_bridge.json --output /tmp/esca-bridge
+./scripts/verify_epistemic.sh
 ```
