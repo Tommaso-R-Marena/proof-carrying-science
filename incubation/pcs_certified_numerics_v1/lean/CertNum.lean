@@ -3,3 +3,8 @@ import CertNum.Interval.Basic
 import CertNum.Interval.Arithmetic
 import CertNum.Interval.Soundness
 import CertNum.Interval.MulSoundness
+import CertNum.Interval.AbsSquareSoundness
+import CertNum.Interval.RecipSoundness
+import CertNum.Expr.Basic
+import CertNum.Expr.Soundness
+import CertNum.Certificate.Checker

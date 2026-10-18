@@ -8,7 +8,11 @@ Statuses: `IMPLEMENTED_AND_VERIFIED` | `IMPLEMENTED_TESTED` | `PARTIALLY_IMPLEME
 | Isolation namespace only | `IMPLEMENTED_TESTED` | `scripts/noninterference_check.sh` |
 | Lean 4.28 + Mathlib pin | `IMPLEMENTED_TESTED` | `lean-toolchain`, `lakefile.toml`, `lake build` OK |
 | Rational interval arithmetic (Python) | `IMPLEMENTED_TESTED` | `python/certnum/interval/`, unit+hypothesis tests |
-| Rational interval soundness (Lean) | `IMPLEMENTED_AND_VERIFIED` | `mem_neg/add/sub/mul`, hull, inter; `lake build` |
+| Rational interval soundness (Lean) | `IMPLEMENTED_AND_VERIFIED` | `mem_neg/add/sub/mul/abs/square/recip/div`, hull, inter; `lake build` |
+| Lean expr fragment soundness | `IMPLEMENTED_AND_VERIFIED` | `evalInterval_sound_arith` for const/var/neg/abs |
+| Interval Newton root refinement | `IMPLEMENTED_TESTED` | `root/newton.py` |
+| Certified sqrt/log enclosures | `IMPLEMENTED_TESTED` | squaring-verified sqrt; artanh series log |
+| BnB provenance coverage | `IMPLEMENTED_TESTED` | `opt/coverage.py` |
 | Typed expression language | `IMPLEMENTED_TESTED` | AST, parser, exact+interval eval |
 | Mean-value enclosure | `IMPLEMENTED_TESTED` | `mean_value_enclosure` + benchmarks |
 | Forward AD | `IMPLEMENTED_TESTED` | `ad/forward.py` |

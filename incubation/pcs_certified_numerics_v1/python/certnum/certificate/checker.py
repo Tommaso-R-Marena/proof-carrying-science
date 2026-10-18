@@ -17,6 +17,7 @@ from certnum.expr.simplify import simplify
 from certnum.interval.interval import Interval
 from certnum.linalg.basic import residual_certificate
 from certnum.opt.branch_bound import verify_coverage
+from certnum.opt.coverage import verify_coverage_1d
 from certnum.ode.euler import linear_scalar_enclosure
 from certnum.root.isolation import RootStatus, classify_interval
 from certnum.stochastic.markov import ProbDist, StochasticMatrix
