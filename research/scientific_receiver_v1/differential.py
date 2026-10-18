@@ -12,6 +12,9 @@ from datetime import datetime, timezone
 from fractions import Fraction as F
 import hashlib
 import json
+import os
+import platform
+import sys
 from pathlib import Path
 import random
 import struct
@@ -159,7 +162,10 @@ def executable_identity(checker: Path, checker_args: tuple[str, ...] = (), check
             argument_files.append({"path":str(path.resolve()),"sha256":hashlib.sha256(path.read_bytes()).hexdigest()})
     return {"path": str(resolved), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw),
             "command": [str(resolved), *checker_args], "cwd":str(directory),
-            "argument_files":argument_files}
+            "argument_files":argument_files,
+            "execution_mode": "Lean --run compiled IR; not standalone native" if "--run" in checker_args else "standalone executable",
+            "lean_path":os.environ.get("LEAN_PATH"),
+            "python_version":sys.version,"platform":platform.platform()}
 
 
 def query_lean(checker: Path, raws: list[bytes], *, timeout: float = 120,
