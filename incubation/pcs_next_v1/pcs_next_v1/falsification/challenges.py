@@ -37,7 +37,7 @@ def challenge_unit_error(model: dict[str, Any]) -> ChallengeResult:
     unit = model.get("clearance_unit")
     if clearance is None:
         return ChallengeResult("unit_errors", "UNKNOWN", {"note": "no clearance field"})
-    if unit not in {"L/h", "mL/min", "1/h"}:
+    if unit not in {"L/h", "mL/min", "mL/h", "L/min", "1/h"}:
         return ChallengeResult(
             "unit_errors",
             "OBSERVED_FAILURE",
@@ -49,6 +49,9 @@ def challenge_unit_error(model: dict[str, Any]) -> ChallengeResult:
             "OBSERVED_FAILURE",
             {"note": "clearance unit 1/h inconsistent with volume-bearing PK parameterization"},
         )
+    # Scale sanity: with volume in L (or volume_unit L), mL/min clearance of order ~1 with V~10 L
+    # yields k = CL/V that is tiny vs typical L/h teaching examples — not a hard refute alone.
+    # Pair with unit-aware prediction checks in adapters.units for numeric consistency.
     return ChallengeResult("unit_errors", "PASS", {"note": "units within supported fragment"})
 
 

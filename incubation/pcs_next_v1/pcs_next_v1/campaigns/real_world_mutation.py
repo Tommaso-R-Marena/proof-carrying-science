@@ -15,6 +15,8 @@ from ..adapters.chemistry import atom_balance
 from ..adapters.csv_tabular import inspect_csv
 from ..adapters.pkpd import verify_predictions
 from ..adapters.python_static import PythonStaticAdapter
+from ..adapters.tabular_integrity import check_nonnegative_concentrations, check_subject_time_integrity
+from ..adapters.units import challenge_clearance_unit_value_consistency
 from ..core.canonical import CanonicalError, canonicalize, loads_strict
 from ..demos.edrug3d_demo import check_half_life_consistency, load_rows as load_edrug
 from ..demos.nca import trapezoidal_auc
@@ -465,38 +467,23 @@ def mutate_translation_benchmark(work: Path) -> list[Finding]:
             f"e={e} e_hat={e_hat}",
         )
     )
-    # M2: silent unit label swap on clearance without changing value — current PK verifier ignores units → expected MISSED
+    # M2: silent unit label swap on clearance without changing value — unit-aware verifier must catch
     model2 = deepcopy(model)
     model2["clearance"]["unit"] = "mL/min"  # was L/h; value left at 1.0
     (out / "model_unit_label.json").write_text(json.dumps(model2, indent=2) + "\n")
-    flat = {
-        "dose": float(model2["dose"]["value"]),
-        "volume": float(model2["volume"]["value"]),
-        "clearance": float(model2["clearance"]["value"]),
-    }
     rows = [(float(r["time"]), float(r["concentration"])) for r in csv.DictReader((src / "predictions.csv").open())]
-    ver = verify_predictions(flat, rows, rel_tol=1e-6, abs_tol=1e-8)
-    # Honest gap probe: PK verifier ignores unit strings; catch only if unit_error challenge fires.
-    unit_chal = challenge_unit_error(
-        {
-            "dose": flat["dose"],
-            "volume": flat["volume"],
-            "clearance": flat["clearance"],
-            "clearance_unit": model2["clearance"]["unit"],
-            "evidence_kind": "simulation",
-        }
-    ).to_status()
-    unit_detected = ver["status"] == "REFUTED" or unit_chal["status"] == "REFUTED"
+    unit_cons = challenge_clearance_unit_value_consistency(model2, rows)
+    unit_detected = unit_cons["status"] == "REFUTED"
     findings.append(
         Finding(
             "pcs_pkpd_translation_benchmark",
             "mutation",
             "clearance_unit_label_only_mL_min",
-            "unit_aware_or_pk_refute",
+            "unit_aware_consistency",
             True,
             unit_detected,
             "CAUGHT" if unit_detected else "MISSED",
-            f"pk={ver['status']} unit_chal={unit_chal['status']}",
+            unit_cons.get("reason", ""),
         )
     )
     return findings
@@ -567,7 +554,11 @@ def baseline_puromycin_indometh() -> list[Finding]:
 
 def mutate_puromycin_indometh(work: Path) -> list[Finding]:
     from ..demos.indomethacin_demo import monoexponential_sse
-    from ..demos.puromycin_demo import fit_mm
+    from ..demos.puromycin_demo import (
+        check_labels_against_registration,
+        fit_mm,
+        register_group_params,
+    )
 
     out = work / "mut_journals"
     out.mkdir(parents=True, exist_ok=True)
@@ -584,7 +575,6 @@ def mutate_puromycin_indometh(work: Path) -> list[Finding]:
         rows.append({"conc": float(r["conc"]), "rate": float(r["rate"]), "state": r["state"].strip()})
     treated = [r for r in rows if r["state"] == "treated"]
     fit = fit_mm([r["conc"] for r in treated], [r["rate"] for r in treated])
-    # baseline treated median_rel is low; after spike expect worse rmse or CONDITIONAL/higher error
     detected = fit["rmse"] > 30.0 or fit["median_rel"] > 0.3
     findings.append(
         Finding(
@@ -598,7 +588,8 @@ def mutate_puromycin_indometh(work: Path) -> list[Finding]:
             f"rmse={fit['rmse']:.3f} med_rel={fit['median_rel']:.3f}",
         )
     )
-    # Puromycin subtle: swap state labels only — MM still fits each group; no cross-group check → often MISSED
+    # Puromycin: swap state labels — catch via registration pin of pristine group params
+    registration = register_group_params()
     text2 = (JD / "puromycin" / "raw" / "Puromycin.csv").read_text().splitlines()
     swapped = [text2[0]]
     for line in text2[1:]:
@@ -606,24 +597,25 @@ def mutate_puromycin_indometh(work: Path) -> list[Finding]:
         p[3] = "untreated" if p[3].strip() == "treated" else "treated"
         swapped.append(",".join(p))
     (out / "Puromycin_swapped_state.csv").write_text("\n".join(swapped) + "\n")
-    rows_s = [{"conc": float(r["conc"]), "rate": float(r["rate"]), "state": r["state"].strip()} for r in csv.DictReader((out / "Puromycin_swapped_state.csv").open())]
-    t2 = [r for r in rows_s if r["state"] == "treated"]
-    fit2 = fit_mm([r["conc"] for r in t2], [r["rate"] for r in t2])
-    # Detection would require comparing to registered untreated parameters; we only check if fit "looks bad"
-    label_detected = fit2["rmse"] > 80.0
+    rows_s = [
+        {"conc": float(r["conc"]), "rate": float(r["rate"]), "state": r["state"].strip()}
+        for r in csv.DictReader((out / "Puromycin_swapped_state.csv").open())
+    ]
+    label_status = check_labels_against_registration(rows_s, registration)
+    label_detected = label_status["status"] == "REFUTED"
     findings.append(
         Finding(
             "journal_puromycin",
             "mutation",
             "swap_treated_untreated_labels",
-            "label_semantics",
+            "registered_group_params",
             True,
             label_detected,
             "CAUGHT" if label_detected else "MISSED",
-            f"rmse={fit2['rmse']:.3f} — group labels are semantic; MM still fits swapped cohort",
+            label_status.get("reason", ""),
         )
     )
-    # Indometh: zero one concentration — NCA/mono should notice or raise
+    # Indometh: zero one concentration — nonnegative concentration integrity must catch
     indo_text = (JD / "indomethacin" / "raw" / "Indometh.csv").read_text().splitlines()
     ip = indo_text[2].split(",")
     ip[-1] = "0.0"
@@ -633,25 +625,23 @@ def mutate_puromycin_indometh(work: Path) -> list[Finding]:
     for r in csv.DictReader((out / "Indometh.csv").open()):
         indo_rows.append({"subject": int(float(r["Subject"])), "time": float(r["time"]), "conc": float(r["conc"])})
     sub1 = [r for r in indo_rows if r["subject"] == 1]
+    conc_check = check_nonnegative_concentrations([r["conc"] for r in sub1], allow_zero=False)
     try:
         mono = monoexponential_sse(sub1)
-        # Zero point excluded by time>0 and conc>0 filter — may not change much → probe gap
-        baseline_like = mono["rmse"] < 2.0
-        detected = not baseline_like  # weak detector: only catches if fit blows up
-        detail = f"rmse={mono['rmse']:.4f}"
+        detail = f"integrity={conc_check['status']} rmse={mono['rmse']:.4f}"
     except Exception as exc:  # noqa: BLE001
-        detected = True
-        detail = str(exc)
+        detail = f"integrity={conc_check['status']} mono_exc={exc}"
+    detected = conc_check["status"] == "REFUTED"
     findings.append(
         Finding(
             "journal_indometh",
             "mutation",
             "zero_one_concentration",
-            "monoexp_or_nca",
+            "nonnegative_concentration_integrity",
             True,
             detected,
             "CAUGHT" if detected else "MISSED",
-            detail + " — zero may be dropped by conc>0 filter",
+            detail,
         )
     )
     return findings
@@ -701,29 +691,122 @@ def mutate_nlmixr_warfarin(work: Path) -> list[Finding]:
     df = list(pyreadr.read_r(str(path)).values())[0].copy()
     out = work / "mut_warfarin"
     out.mkdir(parents=True, exist_ok=True)
-    # Flip one observation id mapping: set evid=0 observation to negative dv
+    # Flip one observation to negative dv
     obs = df[(df["evid"] == 0) | (df["evid"] == "0")]
     idx = obs.index[10]
     df.loc[idx, "dv"] = -abs(float(df.loc[idx, "dv"]) or 1.0)
     df.to_csv(out / "warfarin_mut.csv", index=False)
     neg = int((df["dv"].astype(float) < 0).sum())
-    # Tiny time jitter on one row — unlikely to be flagged without longitudinal model
+    conc_integrity = check_nonnegative_concentrations(df["dv"].astype(float).tolist(), allow_zero=True)
+    neg_detected = neg >= 1 and conc_integrity["status"] == "REFUTED"
+    # Collapse a within-subject gap to 1e-12 — longitudinal integrity with min_delta=1e-9
     df2 = list(pyreadr.read_r(str(path)).values())[0].copy()
-    jidx = df2.index[20]
-    df2.loc[jidx, "time"] = float(df2.loc[jidx, "time"]) + 1e-12
-    time_detected = False  # no checker for 1e-12 jitter wired
+    df2 = df2.sort_values(["id", "time"]).reset_index(drop=True)
+    time_detected = False
+    detail = "no pair"
+    for i in range(len(df2) - 1):
+        if df2.loc[i, "id"] == df2.loc[i + 1, "id"]:
+            df2.loc[i + 1, "time"] = float(df2.loc[i, "time"]) + 1e-12
+            rows = [{"id": r.id, "time": float(r.time)} for r in df2.itertuples()]
+            tcheck = check_subject_time_integrity(rows, id_key="id", time_key="time", min_delta=1e-9)
+            time_detected = tcheck["status"] == "REFUTED"
+            detail = tcheck.get("reason", "")
+            break
     return [
-        Finding("nlmixr2data_warfarin", "mutation", "negative_dv_obs", "neg_count", True, neg >= 1, "CAUGHT" if neg >= 1 else "MISSED", f"neg={neg}"),
+        Finding(
+            "nlmixr2data_warfarin",
+            "mutation",
+            "negative_dv_obs",
+            "nonnegative_concentration_integrity",
+            True,
+            neg_detected,
+            "CAUGHT" if neg_detected else "MISSED",
+            f"neg={neg} integrity={conc_integrity['status']}",
+        ),
         Finding(
             "nlmixr2data_warfarin",
             "mutation",
             "1e-12_time_jitter",
-            "longitudinal_detector",
+            "longitudinal_time_integrity",
             True,
             time_detected,
             "CAUGHT" if time_detected else "MISSED",
-            "no longitudinal integrity check on raw teaching tables — known gap",
+            detail,
         ),
+    ]
+
+
+def mutate_nlmixr_bolus_1cpt(work: Path) -> list[Finding]:
+    """Mutate nlmixr2 Bolus_1CPT teaching table (large; sample integrity checks)."""
+    try:
+        import pyreadr
+    except Exception as exc:  # noqa: BLE001
+        return [Finding("nlmixr2data_bolus_1cpt", "mutation", "load", "pyreadr", True, False, "MISSED", str(exc))]
+    path = EXT / "public_nlmixr2data" / "data" / "Bolus_1CPT.rda"
+    df = list(pyreadr.read_r(str(path)).values())[0].copy()
+    out = work / "mut_bolus"
+    out.mkdir(parents=True, exist_ok=True)
+    sid = df["ID"].iloc[0]
+    sub = df[df["ID"] == sid].copy()
+    # Corrupt one positive DV on subject 1
+    pos = sub[(sub["EVID"] == 0) | (sub["EVID"] == "0")]
+    pos = pos[pos["DV"].astype(float) > 0]
+    idx = pos.index[0]
+    df.loc[idx, "DV"] = -abs(float(df.loc[idx, "DV"]))
+    sub = df[df["ID"] == sid]
+    df.to_csv(out / "Bolus_1CPT_mut.csv", index=False)
+    conc_st = check_nonnegative_concentrations(sub["DV"].astype(float).tolist(), allow_zero=True)
+    rows = [{"id": int(r.ID), "time": float(r.TIME)} for r in sub.sort_values("TIME").itertuples()]
+    if len(rows) >= 2:
+        rows[1]["time"] = rows[0]["time"] + 1e-12
+    t_st = check_subject_time_integrity(rows, min_delta=1e-9)
+    return [
+        Finding(
+            "nlmixr2data_bolus_1cpt",
+            "mutation",
+            "negative_dv_subject1",
+            "nonnegative_concentration_integrity",
+            True,
+            conc_st["status"] == "REFUTED",
+            "CAUGHT" if conc_st["status"] == "REFUTED" else "MISSED",
+            conc_st.get("reason", ""),
+        ),
+        Finding(
+            "nlmixr2data_bolus_1cpt",
+            "mutation",
+            "time_jitter_subject1",
+            "longitudinal_time_integrity",
+            True,
+            t_st["status"] == "REFUTED",
+            "CAUGHT" if t_st["status"] == "REFUTED" else "MISSED",
+            t_st.get("reason", ""),
+        ),
+    ]
+
+
+def baseline_unit_oracle_diff() -> list[Finding]:
+    from ..adapters.units import clearance_to_L_per_h
+    from ..oracles.units_oracle import oracle_clearance_to_L_per_h
+
+    mismatches = []
+    for unit in ("L/h", "mL/min", "mL/h", "L/min"):
+        for v in (0.0, 1.0, 2.5, 100.0):
+            a = clearance_to_L_per_h(v, unit)
+            b = oracle_clearance_to_L_per_h(v, unit)
+            if abs(a - b) > 1e-15 * max(1.0, abs(b)):
+                mismatches.append((unit, v, a, b))
+    ok = len(mismatches) == 0
+    return [
+        Finding(
+            "unit_conversion_oracle",
+            "baseline",
+            None,
+            "adapter_vs_oracle",
+            False,
+            ok,
+            "MATCH" if ok else "MISMATCH",
+            f"mismatches={len(mismatches)}",
+        )
     ]
 
 
@@ -887,8 +970,10 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
         ("baseline_nlmixr_theo_sd", baseline_nlmixr_theo_sd),
         ("mutate_nlmixr_theo_sd", lambda: mutate_nlmixr_theo_sd(work)),
         ("mutate_nlmixr_warfarin", lambda: mutate_nlmixr_warfarin(work)),
+        ("mutate_nlmixr_bolus_1cpt", lambda: mutate_nlmixr_bolus_1cpt(work)),
         ("mutate_package_adversarial", lambda: mutate_package_adversarial(work)),
         ("mutate_hard_cases", lambda: mutate_hard_cases(work)),
+        ("baseline_unit_oracle_diff", baseline_unit_oracle_diff),
     ]
     errors = []
     for name, fn in steps:
@@ -913,8 +998,9 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
             "pcs_scientific_workflow_v3",
             "journal Theoph / Puromycin / Indometh",
             "e-Drug3D + OSP DDI + OSP Pediatrics",
-            "nlmixr2data theo_sd.rda + warfarin.rda",
+            "nlmixr2data theo_sd.rda + warfarin.rda + Bolus_1CPT.rda",
             "packaged real pkpd evidence",
+            "unit conversion adapter↔oracle differential",
         ],
         "n_findings": len(findings),
         "n_mutations": len(mut),
@@ -930,7 +1016,8 @@ def run_campaign(out_dir: str | Path) -> dict[str, Any]:
             "Working copies only; production examples were not modified",
             "Catch rate is among expected-detection mutations in this suite, not universal security",
             "External laboratory validation remains OPEN",
-            "Some MISSED outcomes are intentional gap probes (semantics, units, near-tolerance)",
+            "Near-tolerance boundary controls are expected non-detections (BENIGN_OK)",
+            "Group-label detection requires a registration pin of per-group parameters",
         ],
     }
     out.mkdir(parents=True, exist_ok=True)

@@ -12,6 +12,10 @@ MUST_CATCH = {
     "double_CellA_last_step",
     "halve_effect_keep_conc",
     "swap_csv_value_order",
+    "clearance_unit_label_only_mL_min",
+    "swap_treated_untreated_labels",
+    "zero_one_concentration",
+    "1e-12_time_jitter",
 }
 
 

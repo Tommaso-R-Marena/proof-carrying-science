@@ -17,21 +17,28 @@ python incubation/pcs_next_v1/scripts/run_real_world_campaign.py
 | `pcs_scientific_workflow_v3` | PCS finite-volume transport example |
 | Journal Theoph / Puromycin / Indometh | Public redistributed teaching datasets |
 | e-Drug3D + OSP DDI + OSP Pediatrics | Public chemistry / observed-PK tables |
-| nlmixr2data `theo_sd` + `warfarin` | Public R teaching package subset |
+| nlmixr2data `theo_sd` + `warfarin` + `Bolus_1CPT` | Public R teaching package subset |
 | Packaged PK/PD evidence | Freeze / policy / stale / duplicate-key probes |
+| Unit conversion adapter↔oracle | Differential check |
 
 Production trees were **not** modified. Mutations run only under `results/real_world_campaign/work/`.
 
+## Detectors hardened after gap probes
+
+| Former gap | Detector |
+|---|---|
+| Clearance unit label-only (`L/h`→`mL/min`) | `challenge_clearance_unit_value_consistency` (unit-aware PK) |
+| Puromycin treated/untreated swap | `check_labels_against_registration` |
+| Indometh zero concentration | `check_nonnegative_concentrations` |
+| Warfarin / Bolus 1e-12 time jitter | `check_subject_time_integrity` |
+
 ## Deliberate errors
 
-Gross: concentration scale, unit nonsense, causal overclaim, stoichiometry break, `exec`/`eval`, train/test leakage, missing columns, Theoph/Puromycin spikes, inconsistent t½, blank DDI/Pediatrics references, negative CL/DV, policy swap, stale artifact, duplicate JSON keys, CSV value-order swap, PD effect halve, conservation leak, over-tolerance PK scale.
-
-Subtle / gap probes: 1e-9 and 5e-7 within-tolerance scales, clearance unit label-only swap (`L/h`→`mL/min` with value unchanged), treated/untreated label swap, zero concentration dropped by filters, 1e-12 time jitter, correct non-causal claim (must not false-alarm).
+Gross and subtle mutations across the targets above, plus near-tolerance boundary controls (expected BENIGN_OK).
 
 ## Interpretation
 
 - `CAUGHT` / `MISSED` apply only to mutations with `expected_detection=true`.
 - Catch rate = caught / expected-detection probes (boundary controls excluded).
-- Near-tolerance perturbations are labeled expected non-detections (`BENIGN_OK`).
-- `MISSED` outcomes are reported honestly as detector gaps for this suite.
 - Catch rate ≠ production security proof; external lab validation remains OPEN.
+- Lean `PcsNext.Units` and `PcsNext.Conservation` are discrete Nat fragments, not IEEE/runtime proofs.

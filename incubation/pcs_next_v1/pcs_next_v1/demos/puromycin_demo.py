@@ -79,6 +79,37 @@ def falsify_linear(concs: list[float], rates: list[float]) -> dict[str, Any]:
     )
 
 
+def register_group_params(rows: list[dict[str, Any]] | None = None) -> dict[str, dict[str, float]]:
+    """Fit MM parameters per state group — used as a registration pin for label checks."""
+    data = rows if rows is not None else load()
+    groups: dict[str, list] = {}
+    for r in data:
+        groups.setdefault(r["state"], []).append(r)
+    reg: dict[str, dict[str, float]] = {}
+    for state, grows in groups.items():
+        fit = fit_mm([g["conc"] for g in grows], [g["rate"] for g in grows])
+        reg[state] = {"vmax": float(fit["vmax"]), "km": float(fit["km"])}
+    return reg
+
+
+def check_labels_against_registration(
+    rows: list[dict[str, Any]],
+    registration: dict[str, dict[str, float]],
+    *,
+    rel_tol: float = 0.15,
+) -> dict[str, Any]:
+    from ..adapters.tabular_integrity import check_registered_group_params
+
+    groups: dict[str, list] = {}
+    for r in rows:
+        groups.setdefault(r["state"], []).append(r)
+    observed: dict[str, dict[str, float]] = {}
+    for state, grows in groups.items():
+        fit = fit_mm([g["conc"] for g in grows], [g["rate"] for g in grows])
+        observed[state] = {"vmax": float(fit["vmax"]), "km": float(fit["km"])}
+    return check_registered_group_params(observed, registration, rel_tol=rel_tol)
+
+
 def run_demo(out_dir: str | Path) -> dict[str, Any]:
     verify_manifest()
     out = Path(out_dir)

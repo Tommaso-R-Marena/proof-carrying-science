@@ -4,6 +4,8 @@ from pcs_next_v1.demos.oral_pk import bateman
 from pcs_next_v1.oracles.nca_oracle import oracle_trapezoidal_auc, oracle_cmax_tmax
 from pcs_next_v1.oracles.bateman_oracle import oracle_bateman, oracle_michaelis_menten
 from pcs_next_v1.oracles.canonical_diff import compare_to_production
+from pcs_next_v1.oracles.units_oracle import oracle_clearance_to_L_per_h
+from pcs_next_v1.adapters.units import clearance_to_L_per_h
 
 def test_nca_matches_oracle():
     times = [0.0, 0.5, 1.0, 2.0, 4.0]
@@ -25,3 +27,8 @@ def test_mm_saturation():
 def test_canonical_diff_runs():
     r = compare_to_production({"a": 1, "b": [True, None]})
     assert r["status"] in {"COMPUTATIONALLY_TESTED", "SKIPPED", "OPEN", "REFUTED"}
+
+def test_units_oracle_matches_adapter():
+    for unit in ("L/h", "mL/min", "mL/h", "L/min"):
+        for v in (0.0, 1.0, 12.5):
+            assert abs(clearance_to_L_per_h(v, unit) - oracle_clearance_to_L_per_h(v, unit)) < 1e-15

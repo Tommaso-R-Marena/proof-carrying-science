@@ -24,4 +24,7 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | Production integration | proposals | OPEN | n/a | n/a | Human authorization |
 | Journal demos (Theoph/Indometh/e-Drug3D/OSP) | `demos/`, `fixtures/journal_demos/` | COMPLETE | scientific+adv | NCA.lean | External lab OPEN; public data only |
 | Puromycin MM demo + oracles + cleanroom | `demos/puromycin_demo.py`, `oracles/`, `scripts/run_cleanroom_replay.py` | COMPLETE | unit+scientific | Bateman.lean | Cleanroom ≠ external lab |
-| Real-world mutation campaign | `campaigns/real_world_mutation.py` | COMPLETE | integration | n/a | Expanded multi-target suite; catch rate among expected probes; honest MISSED gap probes; external lab OPEN |
+| Real-world mutation campaign | `campaigns/real_world_mutation.py` | COMPLETE | integration | n/a | Multi-target suite; catch rate among expected probes; external lab OPEN |
+| Unit-aware PK + clearance oracle | `adapters/units.py`, `oracles/units_oracle.py` | COMPLETE | unit+property | Units.lean | Restricted unit vocabulary |
+| Tabular / longitudinal integrity | `adapters/tabular_integrity.py` | COMPLETE | unit | Conservation.lean | Registration required for group-label swap |
+| Puromycin group-label registration | `demos/puromycin_demo.py` | COMPLETE | scientific | n/a | Needs registration pin |
