@@ -7,3 +7,4 @@ import PcsNext.ClaimIR
 import PcsNext.ScalarGuard
 import PcsNext.Approx
 import PcsNext.NCA
+import PcsNext.Bateman

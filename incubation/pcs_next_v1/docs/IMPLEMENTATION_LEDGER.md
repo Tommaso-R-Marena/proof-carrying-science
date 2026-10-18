@@ -23,3 +23,4 @@ Statuses: COMPLETE | PARTIAL | BLOCKED | OPEN | UNSTARTED
 | External lab completion | kit docs | OPEN | n/a | n/a | Needs real participant |
 | Production integration | proposals | OPEN | n/a | n/a | Human authorization |
 | Journal demos (Theoph/Indometh/e-Drug3D/OSP) | `demos/`, `fixtures/journal_demos/` | COMPLETE | scientific+adv | NCA.lean | External lab OPEN; public data only |
+| Puromycin MM demo + oracles + cleanroom | `demos/puromycin_demo.py`, `oracles/`, `scripts/run_cleanroom_replay.py` | COMPLETE | unit+scientific | Bateman.lean | Cleanroom ≠ external lab |

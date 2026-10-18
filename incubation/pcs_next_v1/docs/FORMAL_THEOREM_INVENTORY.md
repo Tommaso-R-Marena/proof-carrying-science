@@ -15,3 +15,6 @@ Build: `cd incubation/pcs_next_v1/formal && lake build` (exit 0 on 2026-10-17)
 Audit: no `sorry`, `admit`, `axiom`, `unsafe`, `implemented_by`, `native_decide` in `PcsNext/`.
 
 These theorems do **not** prove OS correctness, clinical validity, or general intelligence.
+
+| `proxyTerm_nonneg` / `proxyTerm_mono_dose` | `PcsNext.Bateman` | Nat proxy term nonnegative and monotone in dose | Nat arithmetic proxy — not IEEE Bateman |
+| `trapAUC_nonneg` | `PcsNext.NCA` | Discrete Nat trapezoid AUC nonnegative | Nat samples; not float runtime |

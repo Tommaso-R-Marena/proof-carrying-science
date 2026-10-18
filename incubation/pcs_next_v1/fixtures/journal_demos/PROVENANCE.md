@@ -17,3 +17,5 @@ PCS Next uses them for assurance-method demonstration only.
 - Digitized secondary tables may contain transcription error; fail closed on inconsistency.
 
 | Paper blurb fixture | `paper_abstracts/pinheiro_bates_theoph_blurb.txt` | Paraphrased public teaching-context sentences about Theoph modeling (not a verbatim copyrighted abstract) | Fixture / fair-use paraphrase | For claim-extraction plumbing only |
+
+| Puromycin | `puromycin/raw/Puromycin.csv` | Bates & Watts (1988) Nonlinear Regression Analysis; R `datasets::Puromycin` / Rdatasets | Public redistribution (Rdatasets) | Enzyme velocity vs substrate; treated vs untreated |

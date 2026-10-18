@@ -20,6 +20,7 @@ from pcs_next_v1.demos.osp_ddi_demo import run_demo as osp
 from pcs_next_v1.demos.provenance import verify_manifest
 from pcs_next_v1.demos.theophylline_demo import run_demo as theoph
 from pcs_next_v1.demos.paper_claim_demo import run_demo as paper_claim
+from pcs_next_v1.demos.puromycin_demo import run_demo as puro
 from pcs_next_v1.pilot.runner import PilotRunner
 from pcs_next_v1.reviewer.assurance_card import export_card, render_html
 from pcs_next_v1.reviewer.independent import review_package
@@ -145,6 +146,7 @@ def main() -> int:
         "edrug3d": edrug(out / "edrug3d"),
         "osp_ddi": osp(out / "osp_ddi"),
         "paper_claims": paper_claim(out / "paper_claims"),
+        "puromycin": puro(out / "puromycin"),
     }
     pilot = package_theoph_as_pilot(out)
     summary = {

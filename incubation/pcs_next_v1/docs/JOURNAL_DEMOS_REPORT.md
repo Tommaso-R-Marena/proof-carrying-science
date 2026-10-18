@@ -10,6 +10,7 @@ See `fixtures/journal_demos/PROVENANCE.md` and `MANIFEST.json` (SHA-256 pinned).
 | Indomethacin biexponential + mono negative control | R `datasets::Indometh` | Monoexponential refuted; biexponential computational support; external **OPEN** |
 | e-Drug3D t½↔VD/Cl consistency | Zenodo 10.5281/zenodo.17063565 (CC BY 4.0) | 1072 complete rows checked; 820 within 50% 1-cmt diagnostic |
 | OSP DDI literature table | OSP Database for observed data v1.9 | 635 rows; 0 missing references; 0 non-positive AUCR |
+| Puromycin Michaelis–Menten | R `datasets::Puromycin` / Bates & Watts 1988 | MM grid per treated/untreated; linear negative control; external **OPEN** |
 | Paper blurb claim extraction | Fixture paraphrasing public Theoph modeling context | Obligations extracted; no scientific authority conferred |
 
 ## Non-claims
