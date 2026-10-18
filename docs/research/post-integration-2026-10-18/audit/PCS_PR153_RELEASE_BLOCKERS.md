@@ -9,3 +9,5 @@ Reviewed source: `b916eec1b9d0d5c02c9cc19b070f7a47df5e5d87`; original main: `fab
 5. **LOW, nonblocking:** correct the 15 misleading exact-copy enums in a separate reviewable metadata update; their hashes and adaptation explanations are preserved and independently verified.
 
 The narrow data-only scientific receiver program may proceed on its isolated branch while these release blockers remain explicit. Fresh kernel builds, source identities, adversarial receiver tests and an independent repair review are required before promotion. A green hosted pipeline alone does not close the newly reproduced semantic receipt inconsistency.
+
+Independent follow-up: candidate `8c1aa88ec82ef9bef5274c993a17461e0192f319` repairs the observed receipt behavior in the independent 28-case corpus and rejects 176 extra tamper controls. The original finding remains open at PR #153's b916 source. The candidate still requires a narrowly reviewed source-profile successor before source-integrity qualification can pass; original profile hashes must not be regenerated.

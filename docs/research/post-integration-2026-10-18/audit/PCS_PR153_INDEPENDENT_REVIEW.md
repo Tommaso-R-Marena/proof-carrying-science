@@ -84,3 +84,9 @@ GitHub was independently queried after the original final qualification. `verifi
 - Dataset provenance/licensing and external participant validation remain separate obligations.
 
 This packet identifies a concrete receiving regression and supports isolated next-stage research. It does not self-approve PR #153, certify all imported scientific algorithms, or grant release readiness.
+
+## Independent follow-up validation of the isolated repair
+
+The separate repair candidate `8c1aa88ec82ef9bef5274c993a17461e0192f319` was independently tested without editing its worktree. Its delta is exactly the intake verifier, receipt contract, intake tests and one repair note. All 28 original real-Lean cases retain every acceptance decision, all 20 formerly unwritable negative receipts now serialize, and 176 additional tampered receipt controls reject. Actual Lean ACCEPT and mathematical replay coverage remain truthful subresults; final receiving rejection stays false. `REPAIR_INDEPENDENT_VALIDATION.json` records the exact commit and outcomes; `validate_receipt_repair.py` is the independent validator.
+
+The original failing evidence and source assessment at b916 remain unchanged. This fixes the observed functional defect in the separate candidate, not PR #153 itself. Its inherited source profile still intentionally detects the changed pinned bytes. An explicit, independently reviewed successor identity mechanism is pending; no source gate is declared passed for that repair until the mechanism and its negative controls execute. This observation is not merge approval.
