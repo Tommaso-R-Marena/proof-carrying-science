@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .scoped_evidence import (ROOT, component, digest, replay_conservation,
                               replay_interval, replay_nonidentifiability, falsify_dependency)
+from .bridge_fixture import fixture
 
 
 def run_demo():
@@ -46,6 +47,7 @@ def run_demo():
                             "species": "glucose", "coordinate": position,
                             "state_count": len(values)},
         "causal_negative": replay_nonidentifiability(),
+        "two_species_bridge_fixture": fixture(),
         "falsification": falsify_dependency(),
         "empirical_validity": "OPEN", "python_lean_refinement": "OPEN",
         "pcs_authority": False, "scientific_acceptance": False,

@@ -346,6 +346,9 @@ def test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env(tmp_pat
     assert hashlib.sha256(rebuilt.read_bytes()).hexdigest() == provenance["authority_sha256"]
     assert (tmp_path / "cleanroom" / "CLEANROOM_SUMMARY.json").is_file()
     assert (tmp_path / "cleanroom" / "CLEANROOM_AUTHORITY_PROVENANCE.json").is_file()
+    assert summary["python_build_lockfile_sha256"] == hashlib.sha256(
+        (ROOT / "requirements-build.lock").read_bytes()).hexdigest()
+    assert summary["python_install_mode"] == "hash-pinned-build-and-dev-locks-no-build-isolation"
     assert (
         tmp_path
         / "cleanroom"
@@ -355,3 +358,29 @@ def test_cleanroom_independent_pilot_rebuilds_lean_without_inherited_env(tmp_pat
         / "bin"
         / "pcs-lean-authority"
     ).is_file()
+
+
+def test_cleanroom_transport_allowlist_does_not_inherit_authority_or_python_overrides(tmp_path, monkeypatch):
+    from pcs.independent_pilot_v1 import _cleanroom_environment
+    monkeypatch.setenv("HTTPS_PROXY", "http://proxy.example.invalid:8080")
+    monkeypatch.setenv("REQUESTS_CA_BUNDLE", "/trusted/session-ca.pem")
+    blocked = {"PCS_LEAN_AUTHORITY_BIN", "PCS_LEAN_AUTHORITY", "LEAN_PATH", "PYTHONPATH",
+               "PYTHONHOME", "LD_PRELOAD", "GITHUB_TOKEN", "PIP_INDEX_URL", "PIP_EXTRA_INDEX_URL"}
+    for name in blocked:
+        monkeypatch.setenv(name, "untrusted-parent-setting")
+    env = _cleanroom_environment(tmp_path)
+    assert env["HTTPS_PROXY"] == "http://proxy.example.invalid:8080"
+    assert env["REQUESTS_CA_BUNDLE"] == "/trusted/session-ca.pem"
+    assert not blocked.intersection(env)
+    assert env["HOME"] == str(tmp_path / "home")
+    assert env["PYTHONNOUSERSITE"] == "1" and env["PIP_NO_CACHE_DIR"] == "1"
+
+
+def test_cleanroom_missing_hash_locks_rejects_before_bootstrap(tmp_path, monkeypatch):
+    import pcs.independent_pilot_v1 as pilot_module
+    missing = tmp_path / "missing-repository"
+    missing.mkdir()
+    monkeypatch.setattr(pilot_module, "_repo_root", lambda: missing)
+    with pytest.raises(IndependentPilotError, match="hash-pinned"):
+        run_cleanroom_independent_pilot_v1(tmp_path / "cleanroom")
+    assert not (tmp_path / "cleanroom/venv").exists()

@@ -1154,6 +1154,34 @@ def _build_cleanroom_lean_authority(
     }
 
 
+_CLEANROOM_TRANSPORT_KEYS = (
+    "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "NO_PROXY",
+    "http_proxy", "https_proxy", "all_proxy", "no_proxy",
+    "SSL_CERT_FILE", "SSL_CERT_DIR", "REQUESTS_CA_BUNDLE", "CURL_CA_BUNDLE", "PIP_CERT",
+    "SYSTEMROOT", "WINDIR", "COMSPEC", "PATHEXT",
+)
+
+
+def _cleanroom_environment(out: Path) -> dict[str, str]:
+    """Retain required OS/network transport, never caller authority or Python paths.
+
+    Proxy/CA configuration belongs to the trusted host transport, not a science
+    trust root. Values may contain transport credentials and must not be logged.
+    Downloaded build/runtime dependencies still require their committed hashes.
+    """
+    env = {
+        "PATH": os.environ.get("PATH", ""),
+        "HOME": str(out / "home"),
+        "TMPDIR": str(out / "tmp"),
+        "PYTHONNOUSERSITE": "1",
+        "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+        "PIP_NO_CACHE_DIR": "1",
+        "LANG": "C.UTF-8",
+    }
+    env.update({name: os.environ[name] for name in _CLEANROOM_TRANSPORT_KEYS if name in os.environ})
+    return env
+
+
 def run_cleanroom_independent_pilot_v1(
     output_dir: str | Path,
     *,
@@ -1170,7 +1198,8 @@ def run_cleanroom_independent_pilot_v1(
     - by default rebuilds ``pcs-lean-authority`` from a fresh formal checkout copy
       and never inherits ``PCS_LEAN_AUTHORITY_BIN`` from the ambient environment;
     - records Lean/lake versions, authority SHA-256, source commit, and provenance;
-    - invokes the pilot as a subprocess with a cleared credential-like env.
+    - invokes the pilot with authority/Python overrides and API credentials removed,
+      retaining only required OS/proxy/CA transport settings (without logging values).
 
     Passing ``lean_authority_path`` is an explicit reviewer override for tooling
     experiments; it is recorded as non-independent. Production clean-room claims
@@ -1184,12 +1213,21 @@ def run_cleanroom_independent_pilot_v1(
     out.mkdir(parents=True, exist_ok=False)
 
     root = _repo_root()
+    build_lock = root / "requirements-build.lock"
+    lockfile = root / "requirements-dev.lock"
+    if not build_lock.is_file() or not lockfile.is_file():
+        raise IndependentPilotError("clean-room requires both hash-pinned build and dev lockfiles")
+    lockfile_sha = _sha256_file(lockfile)
+    build_lock_sha = _sha256_file(build_lock)
+    env = _cleanroom_environment(out)
+    (out / "home").mkdir(exist_ok=True)
+    (out / "tmp").mkdir(exist_ok=True)
     py = python_executable or sys.executable
     venv_dir = out / "venv"
     pilot_out = out / "pilot"
 
     try:
-        subprocess.run([py, "-m", "venv", str(venv_dir)], check=True, cwd=root)
+        subprocess.run([py, "-m", "venv", str(venv_dir)], check=True, cwd=root, env=env)
     except subprocess.CalledProcessError as exc:
         raise IndependentPilotError(
             "failed to create a clean-room virtualenv. On Debian/Ubuntu install "
@@ -1202,51 +1240,22 @@ def run_cleanroom_independent_pilot_v1(
         venv_python = venv_dir / "bin" / "python"
         venv_pip = venv_dir / "bin" / "pip"
 
-    # Fresh install; disable user site and pip cache for the clean-room claim.
-    # Never propagate PCS_LEAN_AUTHORITY_BIN from the parent environment.
-    env = {
-        "PATH": os.environ.get("PATH", ""),
-        "HOME": str(out / "home"),
-        "TMPDIR": str(out / "tmp"),
-        "PYTHONNOUSERSITE": "1",
-        "PIP_DISABLE_PIP_VERSION_CHECK": "1",
-        "PIP_NO_CACHE_DIR": "1",
-        "LANG": "C.UTF-8",
-    }
-    (out / "home").mkdir(exist_ok=True)
-    (out / "tmp").mkdir(exist_ok=True)
-
-    lockfile = root / "requirements-dev.lock"
-    lockfile_sha = _sha256_file(lockfile) if lockfile.is_file() else None
-
+    # Use ensurepip's bundled installer and exact repository locks. No floating
+    # pip/setuptools/wheel upgrade or isolated-build dependency download.
     subprocess.run(
         [
             str(venv_pip),
             "install",
-            "--upgrade",
-            "pip",
-            "setuptools",
-            "wheel",
+            "--require-hashes",
+            "-r", str(build_lock),
+            "-r", str(lockfile),
         ],
         check=True,
         cwd=root,
         env=env,
     )
-    if lockfile.is_file():
-        subprocess.run(
-            [
-                str(venv_pip),
-                "install",
-                "--require-hashes",
-                "-r",
-                str(lockfile),
-            ],
-            check=True,
-            cwd=root,
-            env=env,
-        )
     subprocess.run(
-        [str(venv_pip), "install", "--no-deps", "-e", str(root)],
+        [str(venv_pip), "install", "--no-deps", "--no-build-isolation", "-e", str(root)],
         check=True,
         cwd=root,
         env=env,
@@ -1329,6 +1338,9 @@ def run_cleanroom_independent_pilot_v1(
         "evidence": evidence,
         "authority_provenance": authority_provenance,
         "python_lockfile_sha256": lockfile_sha,
+        "python_build_lockfile_sha256": build_lock_sha,
+        "python_install_mode": "hash-pinned-build-and-dev-locks-no-build-isolation",
+        "forwarded_transport_environment_keys": sorted(name for name in _CLEANROOM_TRANSPORT_KEYS if name in env),
         "inherited_PCS_LEAN_AUTHORITY_BIN": False,
         "stdout_sha256": hashlib.sha256(proc.stdout.encode()).hexdigest(),
         "stderr_sha256": hashlib.sha256(proc.stderr.encode()).hexdigest(),

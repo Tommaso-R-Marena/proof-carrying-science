@@ -123,6 +123,7 @@ jobs:
           python -m research.integration_v1.formal_audit --project incubation/pcs_conservation_algebra_v1 --import PCCA --prefix PCCA --out "$RUNNER_TEMP/formal-audits/147"
           python -m research.integration_v1.formal_audit --project research/integration_v1/formal --import PCSIntegration --prefix PCSIntegration --out "$RUNNER_TEMP/formal-audits/bridge"
           python -m research.integration_v1.bridge_negative_controls > "$RUNNER_TEMP/formal-audits/bridge-negative.json"
+          python -m research.integration_v1.bridge_fixture > "$RUNNER_TEMP/formal-audits/bridge-fixed-fixture.json"
           python -m pytest -q tests/test_epistemic_kernel_v1.py tests/test_assurance_lattice_v1.py tests/test_epistemic_lattice_v1.py
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()

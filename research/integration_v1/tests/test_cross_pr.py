@@ -131,6 +131,10 @@ def test_08_conservation_and_numerical_enclosure_keep_distinct_scopes():
     assert any(s.startswith("certnum.interval_enclosure:") for s in scopes)
     assert result["conservation"]["trajectory_pools"] == {"C": "6", "H": "12", "O": "6"}
     assert result["numeric_binding"]["state_count"] == 13
+    bridge = result["two_species_bridge_fixture"]
+    assert bridge["trajectory_certificate"]["claim"]["states"][-1] == ["2/3", "1/3"]
+    assert bridge["lean_execution"] == "NOT_RUN"
+    assert bridge["python_lean_general_refinement"] == "OPEN"
     assert result["empirical_validity"] == "OPEN"
     contract = result["contract"]
     contract["reactions"][0]["reactants"][0]["coefficient"] = 1.5
