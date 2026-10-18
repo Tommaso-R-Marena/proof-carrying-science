@@ -1,0 +1,50 @@
+name: PCS V7 Independent Wire and Authority History Audit
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/v7_independent/**'
+      - 'formal/fixtures/proof_gated/v7/**'
+      - '.github/workflows/pcs-v7-independent-history-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-v7-history:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Run 20k mutation semantic audit and history falsification
+        shell: bash
+        run: |
+          set -euo pipefail
+          D=research/proof-gated-self-improvement-v1/v7_independent
+          F=formal/fixtures/proof_gated/v7
+          python3 "$D/v7_independent_audit.py" --fixtures "$F" --mutations 20000 > /tmp/pcs-v7-independent-semantic.json
+          python3 "$D/v7_boundary_falsification.py" --fixtures "$F" --out /tmp/pcs-v7-independent-history.json > /dev/null
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/pcs-v7-independent-semantic.json').read_text())
+          b=json.loads(Path('/tmp/pcs-v7-independent-history.json').read_text())
+          assert a['result']=='PASS', a
+          assert a['counts']['receipts_replayed']==7, a
+          assert a['counts']['random_semantics']==6000, a
+          assert b['status']=='PASS', b
+          assert b['counts']['accepted_equivocations']==90, b
+          assert b['counts']['rejected_equivocations']==120, b
+          assert b['counts']['governance_silent_pairs']==2, b
+          assert b['counts']['cross_policy_regression_controls']==1, b
+          print('PASS: independent V7 semantic and history experiments')
+          PY
+      - name: Preserve reproducibility evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pcs-v7-independent-history-results
+          path: |
+            /tmp/pcs-v7-independent-semantic.json
+            /tmp/pcs-v7-independent-history.json
+          if-no-files-found: warn
