@@ -84,7 +84,7 @@ def main() -> None:
         if (name.startswith("PCS/V2/ProofGated") and name.endswith(".lean")
                 and name not in MODULES
                 and name != "PCS/V2/ProofGatedFullAudit.lean"):
-            path = repo / name.removeprefix("PCS/")
+            path = repo / "formal" / name
             # The release is a standalone formal tree; the PCS repo formal tree differs.
             if not path.is_file():
                 raise RuntimeError("Prior Lean module missing from PCS base: " + str(path))
