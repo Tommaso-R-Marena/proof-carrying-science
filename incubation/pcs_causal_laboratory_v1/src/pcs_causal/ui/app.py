@@ -75,7 +75,8 @@ def create_app() -> "Flask":
 
 def run_app(host: str = "127.0.0.1", port: int = 8765) -> None:
     app = create_app()
-    app.run(host=host, port=port, debug=False)
+    # threaded=True so long witness searches do not block other UI requests
+    app.run(host=host, port=port, debug=False, threaded=True)
 
 
 INDEX_HTML = """<!doctype html>
