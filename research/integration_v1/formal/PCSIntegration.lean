@@ -69,9 +69,30 @@ theorem sample_complement_enclosed :
                   PCCA.Stoich.fire, transfer, Fin.sum_univ_one])
   simpa using result.2.2
 
+def unrelatedCertificate : IntervalEnclosureCert where
+  expr := .const 0
+  arith := .const _
+  box := []
+  claimed := .singleton 0
+
+/-- Checking a numerical statement about another quantity cannot bound this
+network's B coordinate. This concrete countermodel explains the semantic link. -/
+theorem acceptance_without_semantic_link_is_insufficient :
+    checkIntervalEnclosure unrelatedCertificate = true ∧
+    ¬ (PCCA.Stoich.evolve transfer (fun _ _ => (1 / 3 : ℚ))
+        (fun s => if s = 0 then 1 else 0) 1 1 ∈ᵢ
+        Interval.sub (Interval.singleton 1) unrelatedCertificate.claimed) := by
+  constructor
+  · norm_num [checkIntervalEnclosure, unrelatedCertificate, Expr.evalInterval,
+              Enclosure.ok, Interval.singleton]
+  · norm_num [PCCA.Stoich.evolve, PCCA.Stoich.fire, transfer, Fin.sum_univ_one,
+              unrelatedCertificate, Interval.sub, Interval.add, Interval.neg,
+              Interval.singleton, Interval.mk', Interval.Mem]
+
 #print axioms transfer_conserves
 #print axioms conserved_complement_enclosure
 #print axioms sample_certificate_accepts
 #print axioms sample_complement_enclosed
+#print axioms acceptance_without_semantic_link_is_insufficient
 
 end PCSIntegration
