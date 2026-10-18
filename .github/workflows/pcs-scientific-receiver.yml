@@ -1,0 +1,58 @@
+name: PCS Scientific Byte Receiver
+on:
+  pull_request:
+    branches: [integration/pcs-all-open-prs-synthesis-20261018-sol-high]
+    paths:
+      - 'research/scientific_receiver_v1/**'
+      - '.github/workflows/pcs-scientific-receiver.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pcs-scientific-receiver-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  scientific-byte-receiver:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Pinned dependencies and actual Lean receiver build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --require-hashes -r research/integration_v1/requirements.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          python -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_certified_numerics_v1
+          python -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_conservation_algebra_v1
+          python -m research.integration_v1.prepare_mathlib_cache --project research/integration_v1/formal
+          python -m research.integration_v1.prepare_mathlib_cache --project research/scientific_receiver_v1/formal
+          python -m research.scientific_receiver_v1.qualify --out "$RUNNER_TEMP/receiver/formal"
+      - name: Independent byte correspondence and preregistered synthetic pilot
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          export LEAN_PATH="$(lake -d research/scientific_receiver_v1/formal env printenv LEAN_PATH)"
+          export PCS_SCIENTIFIC_LEAN="$(command -v lean)"
+          export PCS_SCIENTIFIC_MAIN="$PWD/research/scientific_receiver_v1/formal/Main.lean"
+          export PCS_SCIENTIFIC_CWD="$PWD/research/scientific_receiver_v1/formal"
+          python -m pytest -q research/scientific_receiver_v1/tests --junitxml="$RUNNER_TEMP/receiver/tests.xml"
+          python -m research.scientific_receiver_v1.differential --checker "$PCS_SCIENTIFIC_LEAN" --checker-arg=--run --checker-arg="$PCS_SCIENTIFIC_MAIN" --checker-cwd "$PCS_SCIENTIFIC_CWD" --out "$RUNNER_TEMP/receiver/differential"
+          python -m research.scientific_receiver_v1.pilot --checker "$PCS_SCIENTIFIC_LEAN" --checker-arg=--run --checker-arg="$PCS_SCIENTIFIC_MAIN" --checker-cwd "$PCS_SCIENTIFIC_CWD" --out "$RUNNER_TEMP/receiver/pilot"
+          python -m research.integration_v1.source_gate
+          python scripts/check_repository_integrity.py
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: scientific-receiver-evidence
+          path: ${{ runner.temp }}/receiver
+          if-no-files-found: error
