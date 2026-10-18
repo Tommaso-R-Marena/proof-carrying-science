@@ -1,0 +1,16 @@
+{
+  "scenario_id": "TT-ARCHIVE-001",
+  "synthetic": true,
+  "live_credential_changes_performed": false,
+  "answers": {
+    "E1": "Archive is corrupt: CRC failure and hash mismatch.",
+    "E2": "Use published manifest digests and an alternate mirror as source of truth.",
+    "E3": "Hold \u2014 do not accept; re-download a clean archive."
+  },
+  "after_action_notes": [
+    "No live credential was rotated by the simulator",
+    "Integrity failure recorded",
+    "Acceptance held until integrity restored",
+    "Alternate mirror or republish path noted"
+  ]
+}

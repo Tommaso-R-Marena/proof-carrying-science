@@ -1,0 +1,108 @@
+{
+  "artifacts": [
+    {
+      "id": "pk_model",
+      "media_type": "application/json",
+      "path": "model.json",
+      "role": "restricted-pk-model"
+    },
+    {
+      "id": "pk_predictions",
+      "media_type": "text/csv",
+      "path": "predictions.csv",
+      "role": "pk-predictions"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A_PK_MODEL",
+      "rationale": "Separates computational verification from empirical PK model validation.",
+      "scope": [
+        "C_PK_CONTRACT",
+        "C_PK_REPLAY"
+      ],
+      "statement": "The restricted one-compartment IV-bolus equation is the declared computational model; no claim of biological adequacy is made."
+    }
+  ],
+  "checks": [
+    {
+      "claim_ids": [
+        "C_PK_CONTRACT"
+      ],
+      "id": "E_PK_CONTRACT",
+      "model_artifact": "pk_model",
+      "type": "pkpd_contract"
+    },
+    {
+      "abs_tol": 1e-12,
+      "claim_ids": [
+        "C_PK_REPLAY"
+      ],
+      "concentration_column": "concentration",
+      "effect_column": "effect",
+      "id": "E_PK_REPLAY",
+      "model_artifact": "pk_model",
+      "output_artifact": "pk_predictions",
+      "rel_tol": 1e-09,
+      "time_column": "time",
+      "type": "pkpd_reference_match"
+    }
+  ],
+  "claims": [
+    {
+      "assumptions": [
+        "A_PK_MODEL"
+      ],
+      "id": "C_PK_CONTRACT",
+      "kind": "computational",
+      "predicate": {
+        "model_artifact": "pk_model",
+        "type": "pkpd_contract"
+      },
+      "required_evidence": [
+        "E_PK_CONTRACT"
+      ],
+      "statement": "The PK model artifact satisfies the restricted positivity and dimensional contract."
+    },
+    {
+      "assumptions": [
+        "A_PK_MODEL"
+      ],
+      "id": "C_PK_REPLAY",
+      "kind": "computational",
+      "predicate": {
+        "abs_tol": 1e-12,
+        "concentration_column": "concentration",
+        "effect_column": "effect",
+        "model_artifact": "pk_model",
+        "output_artifact": "pk_predictions",
+        "rel_tol": 1e-09,
+        "time_column": "time",
+        "type": "pkpd_reference_match"
+      },
+      "required_evidence": [
+        "E_PK_REPLAY"
+      ],
+      "statement": "The prediction artifact matches the declared analytic one-compartment IV-bolus PK and direct Emax PD model within the stated numeric tolerance."
+    }
+  ],
+  "subject": "independent-eval-01_pkpd_one_compartment",
+  "workflow": {
+    "nodes": [
+      {
+        "contract": {
+          "equation": "C(t)=(Dose/V)*exp(-(CL/V)*t); E(C)=E0+Emax*C/(EC50+C)",
+          "validation_scope": "computational replay only"
+        },
+        "id": "N_PK",
+        "inputs": [
+          "pk_model"
+        ],
+        "operation": "restricted_one_compartment_iv_bolus",
+        "outputs": [
+          "pk_predictions"
+        ]
+      }
+    ]
+  }
+}

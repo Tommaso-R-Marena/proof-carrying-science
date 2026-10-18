@@ -1,0 +1,16 @@
+{
+  "scenario_id": "TT-VERIFIER-001",
+  "synthetic": true,
+  "live_credential_changes_performed": false,
+  "answers": {
+    "E1": "Compare local verifier digest and version against published pins.",
+    "E2": "Prior reviews may be non-authoritative; plan to re-verify to avoid false accept impact.",
+    "E3": "Refresh verifier offline and re-run checks; document without changing live CI pins in this exercise."
+  },
+  "after_action_notes": [
+    "No live credential was rotated by the simulator",
+    "Version or digest mismatch confirmed offline",
+    "Reverification plan recorded",
+    "Residual false-accept risk noted"
+  ]
+}

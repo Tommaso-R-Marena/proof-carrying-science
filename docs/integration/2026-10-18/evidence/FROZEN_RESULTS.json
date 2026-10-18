@@ -1,0 +1,156 @@
+{
+  "commit": "8cc145d3edf1082206097244d1ba6cea4c503b47",
+  "records": [
+    {
+      "label": "build_authority",
+      "command": [
+        "python",
+        "build_authority.py",
+        "--output",
+        "/workspace/.onboarding/pcs-integration-8cc145d-frozen/native-authority"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-8cc145d/research/isolated/pgsi1/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 8.685,
+      "log_sha256": "93caf3f267b91d446f58a04ac6ba7699e4dea6dba592e3093ff6173de4a9e14e",
+      "log": "/workspace/.onboarding/pcs-integration-8cc145d-frozen/build_authority.log",
+      "tests": null,
+      "skips": 0,
+      "failures": [],
+      "errors": [],
+      "output_tail": "\u2714 [2/5] Built PCS.V2.ProofGatedSelfImprovement (1.5s)\n\u2714 [3/5] Built PCS.V2.ProofGatedArtifacts (1.0s)\n\u26a0 [4/5] Built PCS.V2.ProofGatedPromotion (1.0s)\nwarning: PCS/V2/ProofGatedPromotion.lean:29:5: unused variable `hg`\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nwarning: PCS/V2/ProofGatedPromotion.lean:30:7: unused variable `hp`\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nwarning: PCS/V2/ProofGatedPromotion.lean:31:9: unused variable `ha`\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n\u2714 [5/5] Built PCS.V2.ProofGatedInference (892ms)\nBuild completed successfully (5 jobs).\n{\"binary_sha256\": \"fba78ce0cc5178dd0e1ff0f239031244069b4735711643c315433a22f5133534\", \"lean_version\": \"Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)\", \"manifest_sha256\": \"e7b2e10454b48f7c2e85f2f0a1abc15688c72e12c16c81d0e90e63cb6070d456\"}\n"
+    },
+    {
+      "label": "frozen_seven_build",
+      "command": [
+        "lake",
+        "build",
+        "PCS.V2.ProofGatedSelfImprovement",
+        "PCS.V2.ProofGatedSymbolic",
+        "PCS.V2.ProofGatedArtifacts",
+        "PCS.V2.ProofGatedPromotion",
+        "PCS.V2.ProofGatedInference",
+        "PCS.V2.ProofGatedMultilayer",
+        "PCS.V2.ProofGatedAudit"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-8cc145d/research/isolated/pgsi1/formal",
+      "exit_code": 0,
+      "duration_seconds": 4.466,
+      "log_sha256": "0004ae6bf3810869d8eea6b02647d5d82e4cb49cf493ea281dea18281ef5cb0b",
+      "log": "/workspace/.onboarding/pcs-integration-8cc145d-frozen/frozen_seven_build.log",
+      "tests": null,
+      "skips": 0,
+      "failures": [],
+      "errors": [],
+      "output_tail": "0: 'PCS.V2.ProofGatedMultilayer.accepted_preserves' depends on axioms: [propext]\ninfo: PCS/V2/ProofGatedAudit.lean:43:0: 'PCS.V2.ProofGatedMultilayer.accepted_expands' depends on axioms: [propext]\ninfo: PCS/V2/ProofGatedAudit.lean:44:0: 'PCS.V2.ProofGatedMultilayer.trace_length_bound' depends on axioms: [propext, Quot.sound]\ninfo: PCS/V2/ProofGatedAudit.lean:45:0: 'PCS.V2.ProofGatedMultilayer.arbitrary_proposers_preserve' depends on axioms: [propext]\ninfo: PCS/V2/ProofGatedAudit.lean:46:0: 'PCS.V2.ProofGatedMultilayer.arbitrary_proposers_nonincrease' depends on axioms: [propext]\ninfo: PCS/V2/ProofGatedAudit.lean:47:0: 'PCS.V2.ProofGatedMultilayer.swapHidden_semantics' depends on axioms: [propext, Quot.sound]\ninfo: PCS/V2/ProofGatedAudit.lean:48:0: 'PCS.V2.ProofGatedMultilayer.two_generations_certified' does not depend on any axioms\ninfo: PCS/V2/ProofGatedAudit.lean:49:0: 'PCS.V2.ProofGatedMultilayer.complete_terminal' depends on axioms: [propext]\nBuild completed successfully (8 jobs).\n"
+    },
+    {
+      "label": "formal_boundary",
+      "command": [
+        "python",
+        "validate_formal_boundary.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-8cc145d/research/isolated/pgsi1/research/proof-gated-self-improvement-v1",
+      "exit_code": 2,
+      "duration_seconds": 0.032,
+      "log_sha256": "7851ef329be092bbf26e21348e839f6559e4a75b81cee25f6e1f998d9d90e9cd",
+      "log": "/workspace/.onboarding/pcs-integration-8cc145d-frozen/formal_boundary.log",
+      "tests": null,
+      "skips": 0,
+      "failures": [],
+      "errors": [],
+      "output_tail": "usage: validate_formal_boundary.py [-h] --audit AUDIT [--output OUTPUT]\nvalidate_formal_boundary.py: error: the following arguments are required: --audit\n"
+    },
+    {
+      "label": "native119",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-8cc145d/research/isolated/pgsi1/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 20.515,
+      "log_sha256": "1f34af6562a1dd86ad0de668c0a40c499820064df8a6a93e857deefdb2ed8732",
+      "log": "/workspace/.onboarding/pcs-integration-8cc145d-frozen/native119.log",
+      "tests": 119,
+      "skips": 0,
+      "failures": [],
+      "errors": [],
+      "output_tail": "orgetting_stronger_than_finite_corpus) ... ok\ntest_original_two_generation_sequence_preserves_all_correct_cases (test_universal_relu.UniversalExactReLUTests.test_original_two_generation_sequence_preserves_all_correct_cases) ... ok\ntest_randomized_equivalence_against_bounded_brute_force (test_universal_relu.UniversalExactReLUTests.test_randomized_equivalence_against_bounded_brute_force) ... ok\ntest_randomized_no_forgetting_against_bounded_brute_force (test_universal_relu.UniversalExactReLUTests.test_randomized_no_forgetting_against_bounded_brute_force) ... ok\ntest_trillion_scale_exact_interval_without_enumeration (test_universal_relu.UniversalExactReLUTests.test_trillion_scale_exact_interval_without_enumeration) ... ok\ntest_two_hidden_complete_model_matches_target_all_integers (test_universal_relu.UniversalExactReLUTests.test_two_hidden_complete_model_matches_target_all_integers) ... ok\n\n----------------------------------------------------------------------\nRan 119 tests in 20.320s\n\nOK\n"
+    },
+    {
+      "label": "kernel29",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "kernel/tests",
+        "-v"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-8cc145d/research/isolated/pgsi1/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 46.323,
+      "log_sha256": "81b176f4c69e02cdacee4f7de591816e03eb11d4b2da78279b67318f75280aa9",
+      "log": "/workspace/.onboarding/pcs-integration-8cc145d-frozen/kernel29.log",
+      "tests": 29,
+      "skips": 0,
+      "failures": [],
+      "errors": [],
+      "output_tail": "kernel.ReceiverSchemaTests.test_canonical_json_attack_controls) ... ok\ntest_claimed_kernel_flag_rejected (test_kernel.ReceiverSchemaTests.test_claimed_kernel_flag_rejected) ... ok\ntest_exact_model_roundtrip (test_kernel.ReceiverSchemaTests.test_exact_model_roundtrip) ... ok\ntest_model_code_and_unknown_fields_rejected (test_kernel.ReceiverSchemaTests.test_model_code_and_unknown_fields_rejected) ... ok\ntest_negative_certificate_requires_real_witness (test_kernel.ReceiverSchemaTests.test_negative_certificate_requires_real_witness) ... ok\ntest_noninteger_and_oversized_models_rejected (test_kernel.ReceiverSchemaTests.test_noninteger_and_oversized_models_rejected) ... ok\ntest_receiver_model_binding (test_kernel.ReceiverSchemaTests.test_receiver_model_binding) ... ok\ntest_receiver_property_and_interval_binding (test_kernel.ReceiverSchemaTests.test_receiver_property_and_interval_binding) ... ok\n\n----------------------------------------------------------------------\nRan 29 tests in 46.218s\n\nOK\n"
+    },
+    {
+      "label": "pointwise25",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "pointwise/tests",
+        "-v"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-8cc145d/research/isolated/pgsi1/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 40.827,
+      "log_sha256": "9c1095dc9b0bc8c08d07d13904ca7dc07ee82d39f6caa359b01e5bf7d5de0063",
+      "log": "/workspace/.onboarding/pcs-integration-8cc145d-frozen/pointwise25.log",
+      "tests": 25,
+      "skips": 0,
+      "failures": [],
+      "errors": [],
+      "output_tail": "equest_path_replacement_receipt_binds_original_bytes (test_pointwise.RealKernelTests.test_request_path_replacement_receipt_binds_original_bytes) ... ok\ntest_supported_tail_negative_real_kernel (test_pointwise.RealKernelTests.test_supported_tail_negative_real_kernel) ... ok\ntest_useful_two_stage_improvement (test_pointwise.RealKernelTests.test_useful_two_stage_improvement) ... ok\ntest_exact_fields_and_decision_types (test_pointwise.SchemaTests.test_exact_fields_and_decision_types) ... ok\ntest_integer_injection_and_resource_bounds (test_pointwise.SchemaTests.test_integer_injection_and_resource_bounds) ... ok\ntest_negative_witness_type (test_pointwise.SchemaTests.test_negative_witness_type) ... ok\ntest_receiver_model_binding (test_pointwise.SchemaTests.test_receiver_model_binding) ... ok\ntest_strict_json_and_model_parser (test_pointwise.SchemaTests.test_strict_json_and_model_parser) ... ok\n\n----------------------------------------------------------------------\nRan 25 tests in 40.697s\n\nOK\n"
+    }
+  ],
+  "native_bundle": {
+    "binary_sha256": "fba78ce0cc5178dd0e1ff0f239031244069b4735711643c315433a22f5133534",
+    "manifest_sha256": "e7b2e10454b48f7c2e85f2f0a1abc15688c72e12c16c81d0e90e63cb6070d456",
+    "manifest": {
+      "binary_sha256": "fba78ce0cc5178dd0e1ff0f239031244069b4735711643c315433a22f5133534",
+      "bwrap_sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f",
+      "format": "pgsi-native-authority-manifest-v1",
+      "generated_bridge_c_sha256": "32df34ef5574c9fd076552916013a160e91249d1ad3ebc4d53d5365dc0a9b76a",
+      "kernel_proved_native_execution_correspondence": false,
+      "lean_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+      "sources": {
+        "formal/PCS/V2/ProofGatedArtifacts.lean": "00b01b8743ba6ed7e7e3231d8cbf30d286d1d8785fca7daadddfc692757be689",
+        "formal/PCS/V2/ProofGatedAudit.lean": "e9586fa1948a69aaea48f39422ab1bd9c74bc078eb3ecdc0c2e434b141ac2044",
+        "formal/PCS/V2/ProofGatedInference.lean": "fbcde844cf19d68601592791d32040c62499456c4e61e1f82659f26568aea2d3",
+        "formal/PCS/V2/ProofGatedMultilayer.lean": "db1d68aaac99e8fa752240e3ffed15cd86c2f70ed071e099f75941e6b5bbbaed",
+        "formal/PCS/V2/ProofGatedPromotion.lean": "46e1429c164f0c8c2bfb13c251497e2cda45216180d4f1ca5382c2c8b1cbb43d",
+        "formal/PCS/V2/ProofGatedSelfImprovement.lean": "1e411707f69db942f48e65042cf8789ae34c655a6fc638f63c9f514c7e9f121c",
+        "formal/PCS/V2/ProofGatedSymbolic.lean": "ffbffde2eeb39a763879c0b1aea747dac38b103a642a0826db8149a590be2de3",
+        "research/proof-gated-self-improvement-v1/authority/Bridge.lean": "8da1fb7662e5525f89cb6ffbdf9b4baa180e6245ecbcd5a4142cd7aceb5abf10",
+        "research/proof-gated-self-improvement-v1/authority/driver.c": "413d41ba76a0435a0520fed1e6b788a4d7549b0b9533359c0986053ffa22f146"
+      },
+      "wire_version": "PGSI1"
+    }
+  },
+  "tracked_source_diff": []
+}

@@ -1,0 +1,196 @@
+name: PCS Proof-Gated Self-Improvement Research
+on:
+  pull_request:
+    paths:
+      - 'formal/PCS/V2/ProofGated*.lean'
+      - 'research/proof-gated-self-improvement-v1/**'
+      - '.github/workflows/pcs-proof-gated-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Python reference and adversarial tests
+        run: |
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -v
+          python global_falsification.py
+      - name: Kernel-check frozen Lean policy and theorems
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          lake env lean PCS/V2/ProofGatedAudit.lean > "$tmp/axiom-audit.txt"
+          cat "$tmp/axiom-audit.txt"
+          if grep -E 'sorryAx|error:' "$tmp/axiom-audit.txt"; then
+            echo 'FAIL: untrusted theorem dependency in axiom audit' >&2
+            exit 1
+          fi
+          printf 'PGSI1|R|0|0' > "$tmp/old.pgsi"
+          printf 'PGSI1|R|1|1' > "$tmp/candidate.pgsi"
+          lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/candidate.pgsi" | grep -x ACCEPT
+          printf 'PGSI1|R|1|2' > "$tmp/bad.pgsi"
+          if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/candidate.pgsi" "$tmp/bad.pgsi"; then
+            echo 'FAIL: regressive artifact accepted' >&2
+            exit 1
+          fi
+          for malformed in 'PGSI1|R|01|1' 'PGSI1|R|-0|1' 'PGSI1|R|33|1' 'PGSI1|R|1|1|override' 'PGSI1|R|1|1 ' 'PGSI1|Q|1|1' 'PGSI2|R|1|1'; do
+            printf '%s' "$malformed" > "$tmp/bad.pgsi"
+            if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/bad.pgsi"; then
+              echo 'FAIL: invalid artifact accepted' >&2
+              exit 1
+            fi
+          done
+          printf 'PGSI1|R|1|1\\n' > "$tmp/bad.pgsi"
+          if lake env lean --run PCS/V2/ProofGatedArtifacts.lean "$tmp/old.pgsi" "$tmp/bad.pgsi"; then
+            echo 'FAIL: trailing newline accepted' >&2
+            exit 1
+          fi
+          cd ../research/proof-gated-self-improvement-v1
+          python - <<'PY'
+          import subprocess
+          import tempfile
+          from pathlib import Path
+          from proof_gate import Model, automatic_search, wire_bytes, artifact_gate
+          with tempfile.TemporaryDirectory() as d:
+              a = Path(d) / "a.pgsi"
+              b = Path(d) / "b.pgsi"
+              a.write_bytes(wire_bytes(Model(True, 0, 0)))
+              b.write_bytes(wire_bytes(Model(True, 1, 1)))
+              cmd = ["lake", "env", "lean", "--run",
+                     "PCS/V2/ProofGatedArtifacts.lean", str(a.resolve()), str(b.resolve())]
+              p = subprocess.run(cmd, capture_output=True, text=True, cwd=Path("../../formal").resolve())
+              assert p.returncode == 0 and p.stdout == "ACCEPT\n" and p.stderr == ""
+              assert artifact_gate(a, b, Path("../../formal").resolve())
+          r = automatic_search(formal_dir=Path("../../formal").resolve())
+          assert r["generation_count"] == 2
+          assert r["final"] == {"relu": True, "weight": 2, "bias": 1}
+          print("PASS: two steps authorized by Lean artifact authority")
+          PY
+      - name: Live content-addressed promotion and readback through Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/proof-gated-self-improvement-v1
+          python - <<'PY'
+          from pathlib import Path
+          import tempfile
+          from promotion_v2 import (
+              ResearchPromotionStore, StaleHead, ProposalRejected, blob_hash
+          )
+          from proof_gate import Model, wire_bytes
+          with tempfile.TemporaryDirectory(prefix="pcs-promotion-ci-") as td:
+              store = ResearchPromotionStore.initialize(
+                  Path(td) / "store", Path("../../formal").resolve(), Model(True, 0, 0))
+              original = store.snapshot()
+              first = store.promote(wire_bytes(Model(True, 1, 1)), original)
+              assert first.generation == 1
+              assert store.audit() == first
+              try:
+                  store.promote(wire_bytes(Model(True, 2, 1)), original)
+                  raise AssertionError("stale update was admitted")
+              except StaleHead:
+                  pass
+              try:
+                  store.promote(wire_bytes(Model(True, 0, 0)), first)
+                  raise AssertionError("regression was admitted")
+              except ProposalRejected:
+                  pass
+              second = store.promote(wire_bytes(Model(True, 2, 1)), first)
+              assert second.generation == 2
+              assert store.audit() == second
+              head, active = store.read_active()
+              assert head == second
+              assert active == wire_bytes(Model(True, 2, 1))
+              assert blob_hash(active) == second.active_sha256
+              from sealed_inference import load_sealed
+              loaded = load_sealed(store, expected=second)
+              assert loaded.artifact == active
+              assert loaded.model == Model(True, 2, 1)
+              for x in range(-20, 21):
+                  assert loaded.predict(x) == max(0, 2*x + 1)
+              try:
+                  load_sealed(store, expected=first)
+                  raise AssertionError("old generation was served")
+              except StaleHead:
+                  pass
+              print("PASS: two Lean-authorized CAS promotions + exact-byte sealed inference")
+          PY
+
+  native-hardening:
+    # Ubuntu 24.04 runner denied Bubblewrap loopback setup; qualify the same
+    # mandatory namespace/readonly/seal/peer tests on a supported Linux image.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Require real Linux namespaces and native build tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$RUNNER_TEMP/pgsi-hardening"
+          mkdir "$evidence"
+          uname -sr > "$evidence/host-kernel.txt"
+          if ! command -v bwrap >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends bubblewrap
+          fi
+          test -x /usr/bin/cc
+          test -x /usr/bin/strip
+          # Failure is a failed isolation qualification, never an unisolated fallback.
+          bwrap --version | tee "$evidence/bubblewrap-version.txt"
+          bwrap --unshare-all --die-with-parent --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 -- /usr/bin/true 2>&1 | tee "$evidence/sandbox-preflight.log"
+      - name: Compile pinned authority, audit frozen proofs, run every real boundary test
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-hardening"
+          test -d "$evidence"
+          cd formal
+          lake build PCS.V2.ProofGatedSelfImprovement PCS.V2.ProofGatedSymbolic PCS.V2.ProofGatedArtifacts PCS.V2.ProofGatedPromotion PCS.V2.ProofGatedInference PCS.V2.ProofGatedMultilayer
+          lake env lean PCS/V2/ProofGatedAudit.lean > "$evidence/axioms.log"
+          cd ../research/proof-gated-self-improvement-v1
+          python validate_formal_boundary.py --audit "$evidence/axioms.log" --output "$evidence/formal-boundary.json"
+          python build_authority.py --output "$RUNNER_TEMP/pgsi-native"
+          export PCS_PGSI_AUTHORITY_BUNDLE="$RUNNER_TEMP/pgsi-native"
+          export PCS_PGSI_REQUIRE_NATIVE=1
+          python -m unittest discover -s tests -v 2>&1 | tee "$evidence/tests.log"
+          python check_hardening_evidence.py
+          python scientific_campaign.py --bundle "$PCS_PGSI_AUTHORITY_BUNDLE" --output "$evidence/experiment"
+          # Second independent execution must reproduce semantic decisions;
+          # timing, source/protocol inventory and host binary identities are separate.
+          python scientific_campaign.py --bundle "$PCS_PGSI_AUTHORITY_BUNDLE" --output "$RUNNER_TEMP/pgsi-repeat"
+          python - "$evidence/experiment/RESULTS.json" "$RUNNER_TEMP/pgsi-repeat/RESULTS.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(p)) for p in sys.argv[1:]]
+          assert a['semantic_results_sha256']==b['semantic_results_sha256']
+          assert a['native_python_gate_mismatches']==b['native_python_gate_mismatches']==0
+          print('REPRODUCED_SEMANTIC_RESULTS',a['semantic_results_sha256'])
+          PY
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: pcs-pgsi-hardening-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pgsi-hardening
+          if-no-files-found: error
+          retention-days: 14

@@ -6,13 +6,27 @@ The producer of a certificate is not trusted merely because it produced the cert
 
 ## Current trusted computing base
 
-For v0.4:
+### v0.6 production boundary (authoritative)
+
+For Lean-authoritative v0.6 verification (`pcs verify-v06-bundle` / `pcs-lean-authority`):
+
+- the compiled Lean authority accepting exact canonical ZIP / package bytes;
+- the receiver-owned public-key fingerprint pin and Ed25519 verification assumptions;
+- Python archive I/O, observation transcript capture, and workflow/environment prechecks that must agree with Lean before `valid: true`;
+- the operating system/filesystem used to read delivered bytes.
+
+See `docs/LEAN_KERNEL_STATUS.md` and `docs/TRUST_BOUNDARY_ASSESSMENT_INDEPENDENT_PILOT_V1.md` for the separation of kernel-proved guarantees, independently tested properties, and unproved environmental assumptions. Reviewer receipts may be signed; unsigned receipts remain audit records of a verifier invocation only.
+
+### Historical v0.4/v0.5 note (retained)
+
+For the legacy v0.4/v0.5 path documented below:
+
 - the Python PCS checker;
 - the Python runtime and relevant standard-library behavior;
 - cryptographic primitives supplied by the `cryptography` package for Ed25519 operations;
 - the operating system/filesystem used to read packaged bytes.
 
-The Lean source is a research path toward a smaller formally specified acceptance kernel; it is not yet the executable TCB.
+That older note treated Lean as not-yet-executable TCB; it is superseded for the production v0.6 ZIP path but retained so historical certificates remain interpretable.
 
 ## Integrity layers
 

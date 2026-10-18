@@ -1,0 +1,51 @@
+{
+  "format": "pcs-workbench-fixture-certificate-v1",
+  "subject": "synthetic-reviewer-workbench-demo",
+  "semantic_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "assumptions": [
+    {
+      "id": "A_MODEL",
+      "statement": "The declared equation is the computational model under test; biological adequacy is not claimed.",
+      "rationale": "Separates computational replay from scientific validity.",
+      "scope": ["C_REPLAY"]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_REPLAY",
+      "statement": "Predictions match the declared analytic model within tolerance.",
+      "kind": "computational",
+      "required_evidence": ["E_REPLAY"],
+      "assumptions": ["A_MODEL"],
+      "assessment": {
+        "status": "COMPUTATIONALLY_SUPPORTED",
+        "note": "Fixture status reported by synthetic certificate only."
+      }
+    },
+    {
+      "id": "C_BIOLOGY",
+      "statement": "The model is biologically adequate for clinical use.",
+      "kind": "scientific",
+      "required_evidence": [],
+      "assumptions": ["A_MODEL"],
+      "assessment": {
+        "status": "OPEN",
+        "note": "Intentionally unsupported scientific claim in fixture."
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "model",
+      "path": "artifacts/model.json",
+      "role": "model",
+      "media_type": "application/json"
+    },
+    {
+      "id": "predictions",
+      "path": "artifacts/predictions.csv",
+      "role": "predictions",
+      "media_type": "text/csv"
+    }
+  ]
+}

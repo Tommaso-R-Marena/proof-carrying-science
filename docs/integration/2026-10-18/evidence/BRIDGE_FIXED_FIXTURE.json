@@ -1,0 +1,188 @@
+{
+  "actual_lean_frame": "PCSAB1|-1|1|1|0|1/3|1|2/3|1/3|2/3|3/5|7/10|3/10|2/5|true",
+  "contract": {
+    "assumptions": [
+      "Declared synthetic A\u2192B network; one exact rational firing.",
+      "No empirical chemistry or continuum accuracy is asserted."
+    ],
+    "concentration_unit": "mol/L",
+    "format": "pcca-mass-action-contract-v1",
+    "initial": {
+      "A": "1",
+      "B": "0"
+    },
+    "reactions": [
+      {
+        "id": "transfer",
+        "products": [
+          {
+            "coefficient": 1,
+            "species": "B"
+          }
+        ],
+        "rate_constant": "1/3",
+        "rate_unit": "s^-1",
+        "reactants": [
+          {
+            "coefficient": 1,
+            "species": "A"
+          }
+        ]
+      }
+    ],
+    "species": [
+      {
+        "formula": "C",
+        "id": "A"
+      },
+      {
+        "formula": "C",
+        "id": "B"
+      }
+    ],
+    "steps": 1,
+    "time_step": "1",
+    "time_unit": "s"
+  },
+  "expected_lean_frame": "PCSAB1|-1|1|1|0|1/3|1|2/3|1/3|2/3|3/5|7/10|3/10|2/5|true",
+  "lean_execution": "FIXED_FIXTURE_MATCH",
+  "lean_fixture_source_sha256": "cef1952a4fe88b88127058ef2979379b369f78b52b4bd3d271a5ff1b76456ee9",
+  "note": "Kernel theorem audit is separate; this is one exact implementation differential.",
+  "numerical_certificate": {
+    "claim": {
+      "box": {},
+      "enclosure": {
+        "hi": "7/10",
+        "lo": "3/5"
+      },
+      "expr": {
+        "op": "const",
+        "value": "2/3"
+      }
+    },
+    "format": "certnum-cert-v1",
+    "kind": "interval_enclosure",
+    "meta": {},
+    "witness": {}
+  },
+  "production_authority": false,
+  "promotion_authority": false,
+  "python_lean_general_refinement": "OPEN",
+  "scientific_acceptance": false,
+  "scoped_observations": [
+    {
+      "assumptions": [
+        "Declared synthetic A\u2192B network; one exact rational firing.",
+        "No empirical chemistry or continuum accuracy is asserted."
+      ],
+      "category": "computationally_reproduced",
+      "format": "pcs-scoped-research-evidence-v1",
+      "id": "pcca:981dcb7364288466debae85a983b753b0c6fd991b863c8d884d30af7cd87b478",
+      "open_obligations": [
+        "Python-to-Lean correspondence OPEN.",
+        "Continuum accuracy OPEN.",
+        "Empirical chemistry OPEN."
+      ],
+      "outcome": "REPLAYED",
+      "pcs_authority": false,
+      "promotion_authority": false,
+      "scientific_acceptance": false,
+      "scope": "pcca.conservation_law:ba6698cf5b190042598cd9134299df83ab6fcb002caff949008c0eea0a1983bc",
+      "subject_sha256": "4e70e14ead45c60391eda9f7b2dd500e3ffec6f674af04481db8532e28cc1ddd"
+    },
+    {
+      "assumptions": [
+        "Declared synthetic A\u2192B network; one exact rational firing.",
+        "No empirical chemistry or continuum accuracy is asserted."
+      ],
+      "category": "computationally_reproduced",
+      "format": "pcs-scoped-research-evidence-v1",
+      "id": "pcca:4a10de6bd3bb65f29d61407f4c3eb43e931f869014762ba174653d43fbac19bd",
+      "open_obligations": [
+        "Python-to-Lean correspondence OPEN.",
+        "Continuum accuracy OPEN.",
+        "Empirical chemistry OPEN."
+      ],
+      "outcome": "REPLAYED",
+      "pcs_authority": false,
+      "promotion_authority": false,
+      "scientific_acceptance": false,
+      "scope": "pcca.trajectory_conservation:462c5e2e3cc3e2cec29f54a80daae367a126e135239e16f8f188b9679dc715da",
+      "subject_sha256": "4e70e14ead45c60391eda9f7b2dd500e3ffec6f674af04481db8532e28cc1ddd"
+    },
+    {
+      "assumptions": [
+        "Exact rational expression and declared box."
+      ],
+      "category": "computationally_reproduced",
+      "format": "pcs-scoped-research-evidence-v1",
+      "id": "certnum:296b0dd7b1bc0cbad7b71627d87c8f0e80e1e4c3a845a76cf2a42d5d709ce2ce",
+      "open_obligations": [
+        "Python-to-Lean correspondence OPEN.",
+        "Empirical validity OPEN."
+      ],
+      "outcome": "REPLAYED",
+      "pcs_authority": false,
+      "promotion_authority": false,
+      "scientific_acceptance": false,
+      "scope": "certnum.interval_enclosure:7312222feeac07ef747b840012be89b96609705c18b42f86c7dc253e2d32fa3c",
+      "subject_sha256": "296b0dd7b1bc0cbad7b71627d87c8f0e80e1e4c3a845a76cf2a42d5d709ce2ce"
+    }
+  ],
+  "system_sha256": "4e70e14ead45c60391eda9f7b2dd500e3ffec6f674af04481db8532e28cc1ddd",
+  "trajectory_certificate": {
+    "claim": {
+      "formulas": [
+        "C",
+        "C"
+      ],
+      "matrix": [
+        [
+          "-1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "name": "C",
+      "reactions": [
+        "transfer"
+      ],
+      "species": [
+        "A",
+        "B"
+      ],
+      "states": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "2/3",
+          "1/3"
+        ]
+      ],
+      "weights": {
+        "A": "1",
+        "B": "1"
+      },
+      "xis": [
+        [
+          "1/3"
+        ]
+      ]
+    },
+    "format": "pcca-cert-v1",
+    "kind": "trajectory_conservation",
+    "limitations": [
+      "Mathematical stoichiometric conservation only.",
+      "Does not establish continuum ODE accuracy.",
+      "Does not establish empirical/biological validity.",
+      "Does not grant PCS package authority or scientific acceptance."
+    ],
+    "sha256": "29ff2eba7a4a48a353431f7d71243109d19598432e382961396c3c95458a1ea3",
+    "witness": {
+      "expected_pool": "1"
+    }
+  }
+}
