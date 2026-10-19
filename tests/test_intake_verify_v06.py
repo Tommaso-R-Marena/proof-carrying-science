@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import hashlib
+import copy
 import json
 import os
+import shutil
+import subprocess
+import sys
 import zipfile
 from pathlib import Path
 
@@ -23,10 +27,34 @@ from pcs.lean_authority_v06 import V06LeanAuthorityError, resolve_lean_authority
 from pcs.package_v06 import build_package_manifest_v06, sign_package_manifest_v06
 from pcs.signing import public_key_fingerprint
 from pcs.verifier_zip_v06 import load_package_zip_v06, verify_package_zip_end_to_end_v06
+from pcs.verifier_io_v06 import (
+    V06VerifierIOError,
+    verify_package_directory_end_to_end_v06,
+    write_verification_receipt_v06,
+)
+from pcs.receipt_contract_v06 import audit_verification_receipt_v06
+from pcs.receipt_signature_v06 import (
+    sign_verification_receipt_v06,
+    verify_verification_receipt_signature_v06,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY = ROOT / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+
+
+def _actual_authority_path() -> Path:
+    """Use the receiver's actual binary, including isolated cleanroom builds."""
+    if AUTHORITY.is_file() and os.access(AUTHORITY, os.X_OK):
+        return AUTHORITY
+    resolved = resolve_lean_authority_v06(None)
+    path = resolved.get("path")
+    if path is None:
+        raise V06LeanAuthorityError("a compiled real authority binary is required")
+    candidate = Path(path)
+    if not candidate.is_file() or not os.access(candidate, os.X_OK):
+        raise V06LeanAuthorityError("resolved authority is not an executable file")
+    return candidate
 
 
 def _authority_available() -> bool:
@@ -101,7 +129,7 @@ def _confirmed_manifest_and_lock(lab: Path) -> tuple[Path, Path, dict]:
     return manifest, lab / "pilot.lock.json", lock
 
 
-def _attest_honest_bundle(tmp_path: Path) -> tuple[Path, Path, str, dict, Ed25519PrivateKey]:
+def _attest_honest_bundle(tmp_path: Path, *, include_lock: bool = True) -> tuple[Path, Path, str, dict, Ed25519PrivateKey]:
     lab = tmp_path / "lab"
     stage_external_lab_project(lab)
     manifest, lock_path, lock = _confirmed_manifest_and_lock(lab)
@@ -113,7 +141,7 @@ def _attest_honest_bundle(tmp_path: Path) -> tuple[Path, Path, str, dict, Ed2551
         priv_path,
         pub_path,
         expected_fingerprint=fingerprint,
-        intake_lock=lock_path,
+        intake_lock=lock_path if include_lock else None,
         lean_authority_path=AUTHORITY if AUTHORITY.is_file() else None,
         overwrite=True,
         generated_at="2026-10-17T00:00:00+00:00",
@@ -318,3 +346,171 @@ def test_frozen_at_is_not_preregistration_evidence():
     assert checked["valid"] is True
     assert checked["frozen_at"] == "2099-01-01T00:00:00+00:00"
     assert checked["preregistration_evidence"] == "none"
+
+
+def _received_path(bundle: Path, transport: str, tmp_path: Path) -> Path:
+    if transport == "zip":
+        return bundle
+    directory = tmp_path / "received"
+    directory.mkdir()
+    # Test-generated canonical archive, not arbitrary untrusted extraction.
+    with zipfile.ZipFile(bundle) as archive:
+        archive.extractall(directory)
+    return directory
+
+
+@pytest.mark.parametrize("transport", ["zip", "directory"])
+@pytest.mark.parametrize("failure", ["expected_hash", "missing", "invalid_lock", "certificate_mismatch"])
+def test_real_lean_accept_with_intake_veto_persists_signed_negative_receipt(tmp_path, transport, failure):
+    bundle, pub, fingerprint, lock, private = _attest_honest_bundle(
+        tmp_path, include_lock=failure != "missing"
+    )
+    if failure in {"invalid_lock", "certificate_mismatch"}:
+        if failure == "invalid_lock":
+            substituted = {"format": "invalid-intake"}
+        else:
+            changed = copy.deepcopy(lock["intake"])
+            changed["claims"][0]["statement"] = "Substituted statement."
+            substituted = freeze_intake(changed, frozen_at=lock["frozen_at"])
+        bundle = _malicious_resign_with_substituted_lock(
+            bundle, private_key=private, substituted_lock=substituted,
+            out=tmp_path / "substituted.pcs.zip",
+        )
+    received = _received_path(bundle, transport, tmp_path)
+    verify = (verify_package_zip_end_to_end_v06 if transport == "zip"
+              else verify_package_directory_end_to_end_v06)
+    kwargs = {"require_intake_lock": True}
+    if failure == "expected_hash":
+        kwargs["expected_intake_semantic_hash"] = "ab" * 32
+    result = verify(received, pub, expected_fingerprint=fingerprint,
+                    lean_authority_path=_actual_authority_path(), **kwargs)
+    assert result["lean_authority"]["accepted"] is True
+    assert result["lean_authority"]["verdict"] == "ACCEPT"
+    assert result["stages"]["lean_authority"] is True
+    assert result["formal_coverage"]["package_authority"] == "LEAN_AUTHORITATIVE_ACCEPT"
+    assert all(result[name] is False for name in ("valid", "accepted", "authoritative"))
+    assert result["failed_stage"] == "intake_lock"
+    assert audit_verification_receipt_v06(result)["valid"] is True
+    receipt = write_verification_receipt_v06(result, tmp_path / "negative.json")
+    _reviewer, reviewer_private, reviewer_public, reviewer_fp = _keys(tmp_path / "reviewer")
+    signature = tmp_path / "negative.sig.json"
+    sign_verification_receipt_v06(receipt, reviewer_private, signature)
+    replay = verify_verification_receipt_signature_v06(
+        receipt, signature, reviewer_public,
+        expected_reviewer_fingerprint=reviewer_fp,
+        bundle_path=bundle if transport == "zip" else None,
+        producer_public_key_path=pub, authority_path=_actual_authority_path(),
+    )
+    assert replay["valid"] is True
+    assert replay["pcs_valid"] is False
+    assert replay["reviewer_accepted"] is False
+
+    # Signing a rejection cannot authenticate subsequent changes to its veto.
+    changed = copy.deepcopy(result)
+    changed["intake_lock"]["errors"].append("Altered after signing")
+    receipt.write_text(json.dumps(changed), encoding="utf-8")
+    assert verify_verification_receipt_signature_v06(
+        receipt, signature, reviewer_public
+    )["valid"] is False
+
+
+@pytest.mark.parametrize("transport", ["zip", "directory"])
+def test_cli_writes_and_signs_real_lean_intake_rejection(tmp_path, transport):
+    bundle, pub, fingerprint, _lock, _private = _attest_honest_bundle(tmp_path)
+    received = _received_path(bundle, transport, tmp_path)
+    _reviewer, reviewer_private, reviewer_public, _reviewer_fp = _keys(tmp_path / "reviewer")
+    receipt = tmp_path / "cli-negative.json"
+    command = "verify-v06-bundle" if transport == "zip" else "verify-v06"
+    run = subprocess.run([
+        sys.executable, "-m", "pcs.cli", command, str(received),
+        "--public-key", str(pub), "--expected-signer-fingerprint", fingerprint,
+        "--lean-authority", str(_actual_authority_path()), "--require-intake-lock",
+        "--expected-intake-semantic-hash", "ab" * 32,
+        "--receipt", str(receipt), "--reviewer-private-key", str(reviewer_private),
+    ], capture_output=True, text=True, cwd=ROOT, timeout=60)
+    assert run.returncode == 1, run.stderr
+    output = json.loads(run.stdout)
+    assert output["accepted"] is False
+    assert output["lean_authority"]["accepted"] is True
+    assert Path(output["receipt_written"]) == receipt
+    assert verify_verification_receipt_signature_v06(
+        receipt, output["receipt_signature_written"], reviewer_public
+    )["valid"] is True
+
+
+@pytest.mark.parametrize("mutation", [
+    "erase_veto", "valid_veto", "wrong_stage", "erase_errors", "all_stages_pass",
+    "wrong_expected_hash", "invalid_member_hash", "accept_package", "erase_lean_accept",
+])
+def test_intake_veto_cannot_launder_contradictory_receipt(tmp_path, mutation):
+    bundle, pub, fingerprint, lock, _private = _attest_honest_bundle(tmp_path)
+    result = verify_package_zip_end_to_end_v06(
+        bundle, pub, expected_fingerprint=fingerprint, lean_authority_path=_actual_authority_path(),
+        require_intake_lock=True, expected_intake_semantic_hash="ab" * 32,
+    )
+    assert result["lean_authority"]["accepted"] is True
+    if mutation == "erase_veto":
+        del result["intake_lock"]
+    elif mutation == "valid_veto":
+        result["intake_lock"]["valid"] = True
+    elif mutation == "wrong_stage":
+        result["failed_stage"] = "arbitrary-host-failure"
+    elif mutation == "erase_errors":
+        result["errors"] = []
+    elif mutation == "all_stages_pass":
+        result["intake_lock"]["stages"]["expected_hash_bound"] = True
+    elif mutation == "wrong_expected_hash":
+        result["intake_lock"]["expected_intake_semantic_hash"] = lock["intake_semantic_hash"]
+    elif mutation == "invalid_member_hash":
+        result["intake_lock"]["member_sha256"] = "invalid"
+    elif mutation == "accept_package":
+        for name in ("valid", "authoritative", "accepted"):
+            result[name] = True
+    elif mutation == "erase_lean_accept":
+        result["lean_authority"]["accepted"] = False
+        result["lean_authority"]["verdict"] = "REJECT"
+    assert audit_verification_receipt_v06(result)["valid"] is False
+    with pytest.raises(V06VerifierIOError, match="receipt contract failed"):
+        write_verification_receipt_v06(result, tmp_path / "must-not-persist.json")
+
+
+@pytest.mark.parametrize("transport", ["zip", "directory"])
+def test_isolated_authority_from_environment_writes_signed_negative_receipt(tmp_path, monkeypatch, transport):
+    """Actual binary outside the checkout, selected only by receiver environment.
+
+    Redirecting the test's absent-path sentinel does not replace verification.
+    The copied real Lean executable runs during attestation and the actual CLI.
+    """
+    isolated = tmp_path / "receiver-owned" / "pcs-lean-authority"
+    isolated.parent.mkdir()
+    source = _actual_authority_path()
+    shutil.copy2(source, isolated)
+    digest = hashlib.sha256(isolated.read_bytes()).hexdigest()
+    assert digest == hashlib.sha256(source.read_bytes()).hexdigest()
+    monkeypatch.setenv("PCS_LEAN_AUTHORITY_BIN", str(isolated))
+    monkeypatch.setattr(sys.modules[__name__], "AUTHORITY", tmp_path / "absent-checkout" / "pcs-lean-authority")
+    assert _actual_authority_path() == isolated.resolve()
+    bundle, pub, fingerprint, _lock, _private = _attest_honest_bundle(tmp_path)
+    received = _received_path(bundle, transport, tmp_path)
+    _reviewer, reviewer_private, reviewer_public, _reviewer_fp = _keys(tmp_path / "reviewer")
+    receipt_path = tmp_path / "isolated-negative.json"
+    command = "verify-v06-bundle" if transport == "zip" else "verify-v06"
+    # Intentionally omit --lean-authority: this reproduces the public CI layout.
+    run = subprocess.run([
+        sys.executable, "-m", "pcs.cli", command, str(received),
+        "--public-key", str(pub), "--expected-signer-fingerprint", fingerprint,
+        "--require-intake-lock", "--expected-intake-semantic-hash", "ab" * 32,
+        "--receipt", str(receipt_path), "--reviewer-private-key", str(reviewer_private),
+    ], capture_output=True, text=True, cwd=ROOT, timeout=60)
+    assert run.returncode == 1, run.stderr
+    result = json.loads(run.stdout)
+    assert result["lean_authority"]["accepted"] is True
+    assert result["lean_authority"]["authority_sha256"] == digest
+    assert all(result[name] is False for name in ("valid", "accepted", "authoritative"))
+    replay = verify_verification_receipt_signature_v06(
+        receipt_path, result["receipt_signature_written"], reviewer_public,
+        bundle_path=bundle if transport == "zip" else None,
+        producer_public_key_path=pub, authority_path=_actual_authority_path(),
+    )
+    assert replay["valid"] is True
+    assert replay["pcs_valid"] is False and replay["reviewer_accepted"] is False

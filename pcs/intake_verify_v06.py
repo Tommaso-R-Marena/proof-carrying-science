@@ -224,6 +224,9 @@ def enforce_package_intake_lock_v06(
             expected_intake_semantic_hash=expected_intake_semantic_hash,
         )
 
+    # Record the receiver-owned input, not merely an error-string rendering of
+    # it, so a negative signed receipt can retain the exact binding requested.
+    intake["expected_intake_semantic_hash"] = expected_intake_semantic_hash
     stages["intake_lock"] = bool(intake.get("valid"))
     result["stages"] = stages
     result["intake_lock"] = intake
