@@ -198,3 +198,30 @@ unchanged. The reviewed successor's exact test hash, gate constant and gate
 self-hash progress together; committed-HEAD binding, the narrow path allowlist
 and all formal/source gates remain mandatory. Production receiver and authority
 source bytes do not change in this follow-up.
+
+Follow-up qualification at source commit `729b581`:
+
+- **124 affected tests passed, zero skips**, 38.91 s, with the checkout authority
+  physically absent throughout and only the receiver-owned environment binary
+  available. The worktree's own binary was restored afterward.
+- The exact public-job pilot/intake/archive selection passed **40 tests**, zero
+  skips, with **three deliberate `-k 'not cleanroom'` deselections**, 17.88 s,
+  in that same absent-checkout-binary layout.
+- The separately selected mandatory cleanroom test passed **one test**, 64.16 s,
+  rebuilding the actual Lean authority from a fresh formal checkout and clearing
+  the poisoned inherited authority setting. No cached verifier substitutes for
+  this build.
+- The independent review's original **28-case corpus was replayed**: every prior
+  acceptance decision stayed unchanged (28 original baseline accepts, eight
+  receiving accepts), and all receipts remained writable. This is a replay of
+  the reviewer's corpus, not a claim of a new independent review.
+- The exact source gate passed all **1,992 predecessor entries**, the additional
+  contract pin and **38 V7 module identities**. Original profile bytes and all
+  production/formal source bytes are unchanged from `45c22c9`.
+
+Separate fresh evidence remains at `/workspace/.onboarding/intake-receipt-isolated-final.xml`,
+`intake-receipt-cleanroom-selection.xml`, `intake-receipt-fresh-cleanroom.xml`, and
+`intake-receipt-ci-regression-28/INTAKE_DIFFERENTIAL.json`. The original failing
+reproduction and historical qualification records are retained. Hosted CI
+rerun and parent review remain pending; no merge or deployment is authorized by
+these local results.
