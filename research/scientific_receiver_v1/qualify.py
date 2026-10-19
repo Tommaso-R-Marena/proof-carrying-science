@@ -35,6 +35,7 @@ def qualify(out: Path, dependency_checkout: Path | None = None) -> dict:
     if findings:
         raise RuntimeError("forbidden formal source: " + repr(findings))
     pinned = sources + [PROJECT / name for name in ("lakefile.toml", "lake-manifest.json", "lean-toolchain")]
+    pinned += [Path(__file__), ROOT / "scripts/audit_lean_source.py", ROOT / "lake-manifest.json"]
     before = {str(p.relative_to(ROOT)): sha(p) for p in pinned}
     env = os.environ.copy()
     lean = Path(shutil.which("lean") or "").resolve()
@@ -124,16 +125,17 @@ def qualify(out: Path, dependency_checkout: Path | None = None) -> dict:
     artifact_report = {"format": "pcs-declared-lean-module-artifacts-v1", "modules": len(names), "artifacts": artifacts,
                        "scope": "Actual Lean environment direct/transitive import inventory and resolved artifact bytes, plus toolchain shared libraries. This is not OS loading attestation, compiler verification or an immutable host root."}
     (out / "module-artifacts.json").write_text(json.dumps(artifact_report, indent=2, sort_keys=True) + "\n")
+    (out / "environment.json").write_text(json.dumps({"LEAN_PATH": env.get("LEAN_PATH", "")}) + "\n")
     report = {"format": "pcs-scientific-receiver-qualification-v1", "git_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_sha256": before, "lean_version": version.strip(), "lean_sha256": sha(lean),
               "dependency_evidence": dependency_evidence, "axiom_closures": dict(sorted(closures.items())),
               "theorems_including_generated": len(closures), "imported_modules": len(names),
-              "module_artifacts_sha256": sha(out / "module-artifacts.json"), "wall_seconds": time.monotonic() - started,
+              "module_artifacts_sha256": sha(out / "module-artifacts.json"),
+              "environment_sha256": sha(out / "environment.json"), "wall_seconds": time.monotonic() - started,
               "command": command, "cwd": str(PROJECT), "execution": "Lean --run compiled IR; not standalone native executable",
               "scientific_acceptance": False, "production_authority": False,
               "trust": "Lean kernel/compiler/runtime, import objects, toolchain, IO, JSON rendering, reviewed source/configuration, Git and host remain trusted. No independently protected root is established."}
     (out / "qualification.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
-    (out / "environment.json").write_text(json.dumps({"LEAN_PATH": env.get("LEAN_PATH", "")}) + "\n")
     return report
 
 
