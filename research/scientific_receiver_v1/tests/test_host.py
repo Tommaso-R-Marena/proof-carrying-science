@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import signal
+import time
 
 import pytest
 
@@ -139,6 +141,43 @@ def test_postcheck_detects_self_modifying_child(tmp_path):
     receipt = host.ReceiverService(negative_config(tmp_path, code)).verify_bytes(b'bad')['receipt']
     assert receipt['accepted'] is False
     assert 'identity differs' in receipt['errors'][0]
+
+
+def test_bounded_deep_json_becomes_signed_rejection(tmp_path):
+    config = negative_config(tmp_path, 'print("["*12000+"0"+"]"*12000)')
+    service = host.ReceiverService(config)
+    envelope = service.verify_bytes(b'bad')
+    assert envelope['receipt']['accepted'] is False
+    assert 'nesting exceeds' in envelope['receipt']['errors'][0]
+    assert host.replay_signed_receipt(envelope, service.public_key_hex)
+
+
+def test_exited_leader_does_not_leave_same_group_child_running(tmp_path):
+    pid_file = tmp_path / 'descendant.pid'
+    code = ('import subprocess,sys\nfrom pathlib import Path\n'
+            'child=subprocess.Popen([sys.executable,"-c","import time;time.sleep(30)"],'
+            'stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)\n'
+            f'Path({str(pid_file)!r}).write_text(str(child.pid))\n' + 'print("{}")\n')
+    config = negative_config(tmp_path, code, timeout_seconds=0.5)
+    receipt = host.ReceiverService(config).verify_bytes(b'bad')['receipt']
+    assert receipt['accepted'] is False
+    descendant = int(pid_file.read_text())
+    try:
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline:
+            try:
+                state = Path(f'/proc/{descendant}/stat').read_text().split()[2]
+            except FileNotFoundError:
+                return
+            if state == 'Z':
+                return
+            time.sleep(0.01)
+        pytest.fail('negative diagnostic descendant remained running after leader exit')
+    finally:
+        try:
+            os.kill(descendant, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
 
 
 def test_input_snapshot_does_not_reopen_mutable_path(actual_service, tmp_path, monkeypatch):

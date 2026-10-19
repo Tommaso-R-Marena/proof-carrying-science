@@ -43,8 +43,11 @@ def _json(raw: bytes) -> Any:
                 raise HostRejected("duplicate response/config field")
             result[key] = value
         return result
-    return json.loads(raw, object_pairs_hook=unique,
-                      parse_constant=lambda _: (_ for _ in ()).throw(HostRejected("nonfinite JSON")))
+    try:
+        return json.loads(raw, object_pairs_hook=unique,
+                          parse_constant=lambda _: (_ for _ in ()).throw(HostRejected("nonfinite JSON")))
+    except RecursionError as exc:
+        raise HostRejected("JSON nesting exceeds parser resource limit") from exc
 
 
 def _canonical(value: Any) -> bytes:
@@ -216,11 +219,13 @@ def _bounded_process(config: OperatorConfig, framed: bytes) -> bytes:
     finally:
         selector.close()
         # Terminate descendants as well, including a child retaining pipe FDs.
-        if process.returncode is None:
-            try:
-                os.killpg(process.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
+        # The leader may already have exited while a descendant detached its
+        # pipes but remains in our session's group. Clean that group in either
+        # case. A hostile descendant creating a new session remains out of scope.
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
         process.wait()
         for stream in (process.stdin, process.stdout, process.stderr):
             if stream is not None:
@@ -299,7 +304,7 @@ class ReceiverService:
                 checks["pins_after"] = True
             response = _validated_response(raw, output)
             checks["response_checked"] = True
-        except (HostRejected, OSError, ValueError, TypeError) as exc:
+        except (HostRejected, OSError, ValueError, TypeError, RecursionError) as exc:
             errors.append(f"{type(exc).__name__}: {exc}")
         return self._receipt(raw if type(raw) is bytes and len(raw) <= MAX_BYTES else None, response, errors, checks)
 

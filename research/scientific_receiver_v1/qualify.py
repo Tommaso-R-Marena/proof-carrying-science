@@ -92,6 +92,7 @@ def qualify(out: Path, dependency_checkout: Path | None = None) -> dict:
         dependency_evidence = {"mode": "Lake pinned dependencies", "fresh_new_library_build": True}
     if not dependency_checkout:
         env["LEAN_PATH"] = subprocess.check_output(["lake", "env", "printenv", "LEAN_PATH"], cwd=PROJECT, env=env, text=True).strip()
+        command = [str(lean), "--run", str(PROJECT / "Main.lean")]
     p = subprocess.run(audit_command, cwd=PROJECT, env=env, text=True, capture_output=True, check=True)
     output = p.stdout + p.stderr
     (out / "statements-and-axioms.log").write_text(output)
