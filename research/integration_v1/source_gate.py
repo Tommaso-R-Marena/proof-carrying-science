@@ -19,7 +19,7 @@ RECEIPT_REPAIR_IDENTITIES = {
     ),
     "tests/test_intake_verify_v06.py": (
         "6b034c6324d127ccf35664108ed134dd3b1e1eade19c6963bf2f05d834bc797b",
-        "b947ccd40ca67d85ef825af23fbe70890cccd3cbbe01cd7b21a42b82c4df2437",
+        "923b6e345eff82ffdadceba06e0f7edb3215850bf12fe683d59b1839eeb5d31b",
     ),
     "pcs/receipt_contract_v06.py": (
         "35d7e8b53b7fe009b58812fc9f1abd2ec03645e7cabee9044a9e7a716522019e",

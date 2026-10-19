@@ -6,6 +6,7 @@ import hashlib
 import copy
 import json
 import os
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -40,6 +41,20 @@ from pcs.receipt_signature_v06 import (
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY = ROOT / "formal" / ".lake" / "build" / "bin" / "pcs-lean-authority"
+
+
+def _actual_authority_path() -> Path:
+    """Use the receiver's actual binary, including isolated cleanroom builds."""
+    if AUTHORITY.is_file() and os.access(AUTHORITY, os.X_OK):
+        return AUTHORITY
+    resolved = resolve_lean_authority_v06(None)
+    path = resolved.get("path")
+    if path is None:
+        raise V06LeanAuthorityError("a compiled real authority binary is required")
+    candidate = Path(path)
+    if not candidate.is_file() or not os.access(candidate, os.X_OK):
+        raise V06LeanAuthorityError("resolved authority is not an executable file")
+    return candidate
 
 
 def _authority_available() -> bool:
@@ -368,7 +383,7 @@ def test_real_lean_accept_with_intake_veto_persists_signed_negative_receipt(tmp_
     if failure == "expected_hash":
         kwargs["expected_intake_semantic_hash"] = "ab" * 32
     result = verify(received, pub, expected_fingerprint=fingerprint,
-                    lean_authority_path=AUTHORITY, **kwargs)
+                    lean_authority_path=_actual_authority_path(), **kwargs)
     assert result["lean_authority"]["accepted"] is True
     assert result["lean_authority"]["verdict"] == "ACCEPT"
     assert result["stages"]["lean_authority"] is True
@@ -384,7 +399,7 @@ def test_real_lean_accept_with_intake_veto_persists_signed_negative_receipt(tmp_
         receipt, signature, reviewer_public,
         expected_reviewer_fingerprint=reviewer_fp,
         bundle_path=bundle if transport == "zip" else None,
-        producer_public_key_path=pub, authority_path=AUTHORITY,
+        producer_public_key_path=pub, authority_path=_actual_authority_path(),
     )
     assert replay["valid"] is True
     assert replay["pcs_valid"] is False
@@ -409,7 +424,7 @@ def test_cli_writes_and_signs_real_lean_intake_rejection(tmp_path, transport):
     run = subprocess.run([
         sys.executable, "-m", "pcs.cli", command, str(received),
         "--public-key", str(pub), "--expected-signer-fingerprint", fingerprint,
-        "--lean-authority", str(AUTHORITY), "--require-intake-lock",
+        "--lean-authority", str(_actual_authority_path()), "--require-intake-lock",
         "--expected-intake-semantic-hash", "ab" * 32,
         "--receipt", str(receipt), "--reviewer-private-key", str(reviewer_private),
     ], capture_output=True, text=True, cwd=ROOT, timeout=60)
@@ -430,7 +445,7 @@ def test_cli_writes_and_signs_real_lean_intake_rejection(tmp_path, transport):
 def test_intake_veto_cannot_launder_contradictory_receipt(tmp_path, mutation):
     bundle, pub, fingerprint, lock, _private = _attest_honest_bundle(tmp_path)
     result = verify_package_zip_end_to_end_v06(
-        bundle, pub, expected_fingerprint=fingerprint, lean_authority_path=AUTHORITY,
+        bundle, pub, expected_fingerprint=fingerprint, lean_authority_path=_actual_authority_path(),
         require_intake_lock=True, expected_intake_semantic_hash="ab" * 32,
     )
     assert result["lean_authority"]["accepted"] is True
@@ -457,3 +472,45 @@ def test_intake_veto_cannot_launder_contradictory_receipt(tmp_path, mutation):
     assert audit_verification_receipt_v06(result)["valid"] is False
     with pytest.raises(V06VerifierIOError, match="receipt contract failed"):
         write_verification_receipt_v06(result, tmp_path / "must-not-persist.json")
+
+
+@pytest.mark.parametrize("transport", ["zip", "directory"])
+def test_isolated_authority_from_environment_writes_signed_negative_receipt(tmp_path, monkeypatch, transport):
+    """Actual binary outside the checkout, selected only by receiver environment.
+
+    Redirecting the test's absent-path sentinel does not replace verification.
+    The copied real Lean executable runs during attestation and the actual CLI.
+    """
+    isolated = tmp_path / "receiver-owned" / "pcs-lean-authority"
+    isolated.parent.mkdir()
+    source = _actual_authority_path()
+    shutil.copy2(source, isolated)
+    digest = hashlib.sha256(isolated.read_bytes()).hexdigest()
+    assert digest == hashlib.sha256(source.read_bytes()).hexdigest()
+    monkeypatch.setenv("PCS_LEAN_AUTHORITY_BIN", str(isolated))
+    monkeypatch.setattr(sys.modules[__name__], "AUTHORITY", tmp_path / "absent-checkout" / "pcs-lean-authority")
+    assert _actual_authority_path() == isolated.resolve()
+    bundle, pub, fingerprint, _lock, _private = _attest_honest_bundle(tmp_path)
+    received = _received_path(bundle, transport, tmp_path)
+    _reviewer, reviewer_private, reviewer_public, _reviewer_fp = _keys(tmp_path / "reviewer")
+    receipt_path = tmp_path / "isolated-negative.json"
+    command = "verify-v06-bundle" if transport == "zip" else "verify-v06"
+    # Intentionally omit --lean-authority: this reproduces the public CI layout.
+    run = subprocess.run([
+        sys.executable, "-m", "pcs.cli", command, str(received),
+        "--public-key", str(pub), "--expected-signer-fingerprint", fingerprint,
+        "--require-intake-lock", "--expected-intake-semantic-hash", "ab" * 32,
+        "--receipt", str(receipt_path), "--reviewer-private-key", str(reviewer_private),
+    ], capture_output=True, text=True, cwd=ROOT, timeout=60)
+    assert run.returncode == 1, run.stderr
+    result = json.loads(run.stdout)
+    assert result["lean_authority"]["accepted"] is True
+    assert result["lean_authority"]["authority_sha256"] == digest
+    assert all(result[name] is False for name in ("valid", "accepted", "authoritative"))
+    replay = verify_verification_receipt_signature_v06(
+        receipt_path, result["receipt_signature_written"], reviewer_public,
+        bundle_path=bundle if transport == "zip" else None,
+        producer_public_key_path=pub, authority_path=_actual_authority_path(),
+    )
+    assert replay["valid"] is True
+    assert replay["pcs_valid"] is False and replay["reviewer_accepted"] is False

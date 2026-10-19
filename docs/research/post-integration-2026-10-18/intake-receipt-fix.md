@@ -163,3 +163,38 @@ Final local committed-source candidate `a7e2b50`: **122 passed, zero skips**, in
 warning remains. JUnit: `/workspace/.onboarding/intake-receipt-final-committed-successor.xml`.
 Independent final successor review is tracked separately; this document does not
 self-approve it or PR #153.
+
+## Isolated-authority public CI regression
+
+Public workflow run `39154782008` reported a failure in
+`independent-pilot-cleanroom`. Its setup rebuilds the real Lean authority outside
+the checkout and supplies `PCS_LEAN_AUTHORITY_BIN`; no authority binary exists at
+the checkout's default build path. The nineteen new intake regression cases had
+incorrectly hardcoded that default path in verifier, receipt-anchor and CLI
+arguments, unlike the inherited environment-aware tests.
+
+At exact published head `45c22c9`, an actual local reproduction temporarily
+renamed only this worktree's copied binary and supplied the existing real
+receiver binary through `PCS_LEAN_AUTHORITY_BIN`. Both CLI cases failed because
+an explicit nonexistent path overrode the valid receiver environment, returning
+exit 2 before writing the intended signed rejection. The local binary was
+restored in `finally`; no other worktree or binary was changed. The raw failure
+log is `/workspace/.onboarding/intake-receipt-isolated-authority-before.log`.
+This independently confirms the defect; attribution of the hosted failure is
+consistent with its job setup, while its inaccessible blob logs are not claimed
+as inspected.
+
+The new tests now obtain an actual executable path through the existing
+receiver resolver whenever the checkout binary is absent. The identical path is
+used for real checking, CLI arguments and executable-hash receipt replay.
+Two new ZIP/directory integration cases copy the real authority into an isolated
+temporary receiver directory, select it solely through the environment, omit
+`--lean-authority` in the actual CLI invocation, and replay the signed negative
+receipt against that exact binary. This uses no fake positive verifier, weaker
+assertion or infrastructure skip.
+
+The original source profile, old receipts and prior qualification evidence are
+unchanged. The reviewed successor's exact test hash, gate constant and gate
+self-hash progress together; committed-HEAD binding, the narrow path allowlist
+and all formal/source gates remain mandatory. Production receiver and authority
+source bytes do not change in this follow-up.
