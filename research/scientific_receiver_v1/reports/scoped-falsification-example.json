@@ -1,0 +1,503 @@
+{
+  "empirical_validation": false,
+  "format": "pcs-scientific-assurance-control-experiment-v1",
+  "positive_computational_case": {
+    "assumptions": [
+      {
+        "expected": true,
+        "id": "closed",
+        "predicate": "closed_compartment",
+        "statement": "The declared compartment is closed.",
+        "subject_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a"
+      }
+    ],
+    "composition_engines": {
+      "heck_predictive": {
+        "sha256": "695d462cac44e8d9830b83356a1c58184621b783b90f5bffb4740913d6c279c0",
+        "source_file": "incubation/pcs_heterogeneous_compose_v1/heck/predictive.py"
+      },
+      "pcsnext_pog": {
+        "sha256": "b6aede4cfefd4c1ca61686cb6d64d999e6c7be867045d42d5eb43dcde2eaa5c8",
+        "source_file": "incubation/pcs_next_v1/pcs_next_v1/translation/pog.py"
+      }
+    },
+    "dimensions": {
+      "artifact_integrity": {
+        "raw_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+        "status": "RAW_SHA256_MATCHED"
+      },
+      "authenticated_history": {
+        "status": "NOT_ESTABLISHED"
+      },
+      "causal_identification": {
+        "status": "NOT_CLAIMED"
+      },
+      "computational_reproducibility": {
+        "invalidated_by_observation": false,
+        "result": {
+          "finalA": [
+            13,
+            2
+          ],
+          "finalB": [
+            7,
+            2
+          ],
+          "lowerA": [
+            5,
+            1
+          ],
+          "lowerB": [
+            2,
+            1
+          ],
+          "physical": true,
+          "referenceStep": 3,
+          "total": [
+            10,
+            1
+          ],
+          "unitCode": false,
+          "upperA": [
+            8,
+            1
+          ],
+          "upperB": [
+            5,
+            1
+          ]
+        },
+        "status": "EXACT_REFERENCE_REPLAYED"
+      },
+      "cryptographic_authentication": {
+        "status": "NOT_ESTABLISHED"
+      },
+      "data_provenance": {
+        "status": "RAW_IDENTITY_ONLY_NO_EXTERNAL_PROVENANCE"
+      },
+      "empirical_validation": {
+        "status": "NOT_ESTABLISHED",
+        "synthetic_only": true
+      },
+      "executable_correspondence": {
+        "actual_replay": {
+          "acceptance": null,
+          "status": "NOT_RUN"
+        },
+        "limitation": "Compiler, IR/import objects, source-to-executable, IO and OS remain trusted.",
+        "status": "OPEN"
+      },
+      "formal_mathematics": {
+        "conditional_on": "Pure receive(raw)=some(result), under the declared supported semantics.",
+        "fresh_kernel_audit_in_this_composition": false,
+        "invalidated_by_observation": false,
+        "local_theorem_source_modules": {
+          "Codec.lean": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1",
+          "Receiver.lean": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a",
+          "Semantics.lean": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320",
+          "Types.lean": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+        },
+        "selected_checker_source_binding": "OPEN; separate executable/import qualification required",
+        "source_sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a",
+        "status": "CONDITIONAL_THEOREM_SOURCE_IDENTIFIED",
+        "theorem": "PCSScientificReceiver.verifiedWireSound"
+      },
+      "known_refutations": {
+        "empirical_refutation_established": false,
+        "prediction_ids": [],
+        "status": "NONE_OBSERVED"
+      },
+      "numerical_uncertainty": {
+        "scope": "Declared discrete model only; no measurement or continuum uncertainty theorem.",
+        "status": "EXACT_DECLARED_RATIONAL_ENCLOSURE"
+      },
+      "scientific_applicability": {
+        "falsified_predictions": [],
+        "status": "CONDITIONAL_UNVALIDATED"
+      }
+    },
+    "format": "pcs-scientific-assurance-composition-v1",
+    "model_scope": "PCS-SCI-BOUND-V1 exact finite rational A\u2192B schedule and final enclosures",
+    "obligation_graph": {
+      "content_hash": "1896c070b138e5df87c27b8faa537ce874f4c3123c5a0cc598f8a64f06be02d1",
+      "edges": [
+        {
+          "from": "prediction:closed",
+          "to": "assumption:closed"
+        },
+        {
+          "from": "scientific:applicability",
+          "to": "prediction:closed"
+        }
+      ],
+      "format": "pcs-next-pog-v1",
+      "nodes": {
+        "assumption:closed": {
+          "artifact_ids": [
+            "23cc81c5834763c7b95314fd916e14dd406002a24460e0cb45d202b63060fb3c"
+          ],
+          "assumptions": [],
+          "claim": "The declared compartment is closed.",
+          "counterexamples": [],
+          "depends_on": [],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "assumption:closed",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "OPEN"
+        },
+        "computation:487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a": {
+          "artifact_ids": [
+            "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a"
+          ],
+          "assumptions": [],
+          "claim": "Exact rational replay of these model bytes",
+          "counterexamples": [],
+          "depends_on": [],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "computation:487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "COMPUTATIONALLY_TESTED"
+        },
+        "prediction:closed": {
+          "artifact_ids": [],
+          "assumptions": [],
+          "claim": "Synthetic compatibility under declared premise",
+          "counterexamples": [],
+          "depends_on": [
+            "assumption:closed"
+          ],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "prediction:closed",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "CONDITIONAL"
+        },
+        "scientific:applicability": {
+          "artifact_ids": [],
+          "assumptions": [],
+          "claim": "Applicability to the declared scientific case",
+          "counterexamples": [],
+          "depends_on": [
+            "prediction:closed"
+          ],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "scientific:applicability",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "CONDITIONAL"
+        }
+      }
+    },
+    "observations": [],
+    "open_obligations": [
+      "External empirical adequacy and measurement validity",
+      "Independent protected execution and authenticated history",
+      "Compiler/IO/OS and transitive runtime correspondence",
+      "Dependency completeness and cross-calculus refinement"
+    ],
+    "production_authority": false,
+    "promotion_authority": false,
+    "reopened": [],
+    "report_sha256": "10e673ab4d0d89ffdb570aa5cb286190f70072f8831aa36de58566b899748e61",
+    "scientific_acceptance": false,
+    "subject_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a"
+  },
+  "production_authority": false,
+  "synthetic_negative_with_actual_lean_replay": {
+    "assumptions": [
+      {
+        "expected": true,
+        "id": "closed",
+        "predicate": "closed_compartment",
+        "statement": "The declared compartment is closed.",
+        "subject_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a"
+      }
+    ],
+    "composition_engines": {
+      "heck_predictive": {
+        "sha256": "695d462cac44e8d9830b83356a1c58184621b783b90f5bffb4740913d6c279c0",
+        "source_file": "incubation/pcs_heterogeneous_compose_v1/heck/predictive.py"
+      },
+      "pcsnext_pog": {
+        "sha256": "b6aede4cfefd4c1ca61686cb6d64d999e6c7be867045d42d5eb43dcde2eaa5c8",
+        "source_file": "incubation/pcs_next_v1/pcs_next_v1/translation/pog.py"
+      }
+    },
+    "dimensions": {
+      "artifact_integrity": {
+        "raw_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+        "status": "RAW_SHA256_MATCHED"
+      },
+      "authenticated_history": {
+        "status": "NOT_ESTABLISHED"
+      },
+      "causal_identification": {
+        "status": "NOT_CLAIMED"
+      },
+      "computational_reproducibility": {
+        "invalidated_by_observation": false,
+        "result": {
+          "finalA": [
+            13,
+            2
+          ],
+          "finalB": [
+            7,
+            2
+          ],
+          "lowerA": [
+            5,
+            1
+          ],
+          "lowerB": [
+            2,
+            1
+          ],
+          "physical": true,
+          "referenceStep": 3,
+          "total": [
+            10,
+            1
+          ],
+          "unitCode": false,
+          "upperA": [
+            8,
+            1
+          ],
+          "upperB": [
+            5,
+            1
+          ]
+        },
+        "status": "EXACT_REFERENCE_REPLAYED"
+      },
+      "cryptographic_authentication": {
+        "status": "NOT_ESTABLISHED"
+      },
+      "data_provenance": {
+        "status": "RAW_IDENTITY_ONLY_NO_EXTERNAL_PROVENANCE"
+      },
+      "empirical_validation": {
+        "status": "NOT_ESTABLISHED",
+        "synthetic_only": true
+      },
+      "executable_correspondence": {
+        "actual_replay": {
+          "acceptance": true,
+          "checker_identity": {
+            "argument_files": [
+              {
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+                "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+              }
+            ],
+            "bytes": 9024,
+            "command": [
+              "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+              "--run",
+              "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+            ],
+            "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+            "path": "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+            "sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf"
+          },
+          "response": {
+            "accepted": true,
+            "error": "",
+            "policy": 1,
+            "production_authority": false,
+            "protocol": "PCS-SCI-BOUND-V1",
+            "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c31337c327c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+            "result": {
+              "finalA": "13/2",
+              "finalB": "7/2",
+              "lowerA": "5/1",
+              "lowerB": "2/1",
+              "physical": true,
+              "stepCount": 3,
+              "total": "10/1",
+              "unitCode": false,
+              "upperA": "8/1",
+              "upperB": "5/1"
+            },
+            "scientific_acceptance": false
+          },
+          "scope": "Research executable observation, not protected execution attestation.",
+          "status": "ACTUAL_COMPILED_RECEIVER_REPLAYED"
+        },
+        "limitation": "Compiler, IR/import objects, source-to-executable, IO and OS remain trusted.",
+        "status": "OPEN"
+      },
+      "formal_mathematics": {
+        "conditional_on": "Pure receive(raw)=some(result), under the declared supported semantics.",
+        "fresh_kernel_audit_in_this_composition": false,
+        "invalidated_by_observation": false,
+        "local_theorem_source_modules": {
+          "Codec.lean": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1",
+          "Receiver.lean": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a",
+          "Semantics.lean": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320",
+          "Types.lean": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+        },
+        "selected_checker_source_binding": "OPEN; separate executable/import qualification required",
+        "source_sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a",
+        "status": "CONDITIONAL_THEOREM_SOURCE_IDENTIFIED",
+        "theorem": "PCSScientificReceiver.verifiedWireSound"
+      },
+      "known_refutations": {
+        "empirical_refutation_established": false,
+        "prediction_ids": [
+          "closed"
+        ],
+        "status": "SYNTHETIC_COUNTEREXAMPLES_REPLAYED"
+      },
+      "numerical_uncertainty": {
+        "scope": "Declared discrete model only; no measurement or continuum uncertainty theorem.",
+        "status": "EXACT_DECLARED_RATIONAL_ENCLOSURE"
+      },
+      "scientific_applicability": {
+        "falsified_predictions": [
+          "closed"
+        ],
+        "status": "REOPENED_BY_SYNTHETIC_FALSIFIER"
+      }
+    },
+    "format": "pcs-scientific-assurance-composition-v1",
+    "model_scope": "PCS-SCI-BOUND-V1 exact finite rational A\u2192B schedule and final enclosures",
+    "obligation_graph": {
+      "content_hash": "49f3a0c082d5f9146f10fb387a5067291c19d150903e7e2b82ca3392032ab2b7",
+      "edges": [
+        {
+          "from": "prediction:closed",
+          "to": "assumption:closed"
+        },
+        {
+          "from": "scientific:applicability",
+          "to": "prediction:closed"
+        }
+      ],
+      "format": "pcs-next-pog-v1",
+      "nodes": {
+        "assumption:closed": {
+          "artifact_ids": [
+            "23cc81c5834763c7b95314fd916e14dd406002a24460e0cb45d202b63060fb3c"
+          ],
+          "assumptions": [],
+          "claim": "The declared compartment is closed.",
+          "counterexamples": [],
+          "depends_on": [],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "assumption:closed",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "OPEN"
+        },
+        "computation:487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a": {
+          "artifact_ids": [
+            "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a"
+          ],
+          "assumptions": [],
+          "claim": "Exact rational replay of these model bytes",
+          "counterexamples": [],
+          "depends_on": [],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "computation:487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "COMPUTATIONALLY_TESTED"
+        },
+        "prediction:closed": {
+          "artifact_ids": [],
+          "assumptions": [],
+          "claim": "Synthetic compatibility under declared premise",
+          "counterexamples": [],
+          "depends_on": [
+            "assumption:closed"
+          ],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "prediction:closed",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "OPEN"
+        },
+        "scientific:applicability": {
+          "artifact_ids": [],
+          "assumptions": [],
+          "claim": "Applicability to the declared scientific case",
+          "counterexamples": [],
+          "depends_on": [
+            "prediction:closed"
+          ],
+          "evidence_requirements": [],
+          "external_deps": [],
+          "id": "scientific:applicability",
+          "lemmas": [],
+          "method": "unspecified",
+          "status": "OPEN"
+        }
+      }
+    },
+    "observations": [
+      {
+        "empirical_validation_granted": false,
+        "heck_internal_status": "falsified",
+        "heck_observation_kind": "contradict",
+        "index": 0,
+        "observation": {
+          "assumption_id": "closed",
+          "prediction_key": "23cc81c5834763c7b95314fd916e14dd406002a24460e0cb45d202b63060fb3c",
+          "subject_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+          "synthetic": true,
+          "value": false
+        },
+        "reopened": [
+          "assumption:closed",
+          "prediction:closed",
+          "scientific:applicability"
+        ]
+      },
+      {
+        "empirical_validation_granted": false,
+        "heck_internal_status": "falsified",
+        "heck_observation_kind": "match",
+        "index": 1,
+        "observation": {
+          "assumption_id": "closed",
+          "prediction_key": "23cc81c5834763c7b95314fd916e14dd406002a24460e0cb45d202b63060fb3c",
+          "subject_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+          "synthetic": true,
+          "value": true
+        },
+        "reopened": [
+          "assumption:closed",
+          "prediction:closed",
+          "scientific:applicability"
+        ]
+      }
+    ],
+    "open_obligations": [
+      "External empirical adequacy and measurement validity",
+      "Independent protected execution and authenticated history",
+      "Compiler/IO/OS and transitive runtime correspondence",
+      "Dependency completeness and cross-calculus refinement"
+    ],
+    "production_authority": false,
+    "promotion_authority": false,
+    "reopened": [
+      "assumption:closed",
+      "prediction:closed",
+      "scientific:applicability"
+    ],
+    "report_sha256": "3cb56452ae29c6933477d428a7c07029e7f86a186251d05d83dfaf5cdc1f776f",
+    "scientific_acceptance": false,
+    "subject_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a"
+  }
+}

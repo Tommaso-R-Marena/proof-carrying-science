@@ -1,0 +1,349 @@
+{
+  "cases": [
+    {
+      "actual_lean_response": {
+        "accepted": true,
+        "error": "",
+        "policy": 1,
+        "production_authority": false,
+        "protocol": "PCS-SCI-BOUND-V1",
+        "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c31337c327c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+        "result": {
+          "finalA": "13/2",
+          "finalB": "7/2",
+          "lowerA": "5/1",
+          "lowerB": "2/1",
+          "physical": true,
+          "stepCount": 3,
+          "total": "10/1",
+          "unitCode": false,
+          "upperA": "8/1",
+          "upperB": "5/1"
+        },
+        "scientific_acceptance": false
+      },
+      "category": "compiled_lean_receiver_accepted",
+      "empirical_validity": "unverified",
+      "id": "exact-discrete-a-to-b",
+      "independent_reference": {
+        "finalA": [
+          13,
+          2
+        ],
+        "finalB": [
+          7,
+          2
+        ],
+        "lowerA": [
+          5,
+          1
+        ],
+        "lowerB": [
+          2,
+          1
+        ],
+        "physical": true,
+        "referenceStep": 3,
+        "total": [
+          10,
+          1
+        ],
+        "unitCode": false,
+        "upperA": [
+          8,
+          1
+        ],
+        "upperB": [
+          5,
+          1
+        ]
+      },
+      "production_authority": false,
+      "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c31337c327c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+      "raw_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+      "scientific_acceptance": false,
+      "scope": "Exact declared rational A\u2192B schedule, conserved total, final-coordinate binding and enclosure; the receiving theorem is checked separately in Lean. This process exercises compiled byte receiving, whose compiler/IO/OS and protected-root obligations remain open.",
+      "synthetic": true
+    },
+    {
+      "category": "computationally_reproduced",
+      "component": {
+        "path": "pcs/adapters/pkpd.py",
+        "sha256": "dfb26f83a6c0504a0a341f6430a7bb668a36dfc59d9e55062f31b4ba11114b93"
+      },
+      "concentration_mg_per_L": [
+        "10",
+        "9.04837418035959573164249059446436621194705360980400952056257",
+        "8.18730753077981858669935508619039424358591256269015672478029",
+        "6.70320046035639300744432925147826071936980925210812199888910"
+      ],
+      "empirical_validity": "unverified",
+      "id": "transparent-one-compartment-pk",
+      "input_sha256": "19bcb1b848abf7bb3dc595e798727c75a7408cb85c093da4d142ff88dc3e6a78",
+      "lean_acceptance": "unverified",
+      "production_authority": false,
+      "replay": {
+        "abs_tol": 1e-12,
+        "concentration_column": "concentration",
+        "contract_valid": true,
+        "effect_column": null,
+        "max_concentration_abs_error": 2e-15,
+        "max_concentration_rel_error": 2.0000000000000005e-16,
+        "max_effect_abs_error": null,
+        "max_effect_rel_error": null,
+        "mismatch_count_reported": 0,
+        "mismatches": [],
+        "model_type": "one_compartment_iv_bolus",
+        "pd_equation": null,
+        "pd_model_type": null,
+        "pk_equation": "C(t) = (Dose / V) * exp(-(CL / V) * t)",
+        "rel_tol": 1e-09,
+        "row_count": 4,
+        "scope": "PK/PD output replay against restricted analytic equations; not empirical model validation",
+        "time_column": "time"
+      },
+      "replay_accepted": true,
+      "sample_times_h": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "scientific_acceptance": false,
+      "scope": "Four synthetic sample values reconstructed under the restricted analytic IV-bolus equation, using the original PK adapter. Computational replay only; no fitted data, physiology, clinical safety, continuum-error theorem or Lean proof of this PK calculation.",
+      "specification": {
+        "clearance": {
+          "unit": "L/h",
+          "value": 1
+        },
+        "concentration_unit": "mg/L",
+        "dose": {
+          "unit": "mg",
+          "value": 100
+        },
+        "model_type": "one_compartment_iv_bolus",
+        "time_unit": "h",
+        "volume": {
+          "unit": "L",
+          "value": 10
+        }
+      },
+      "synthetic": true,
+      "tampered_input_sha256": "db04c9a1452148e9838cac4c4a3b0defc4da788d665a8b0567575ada2764030b",
+      "tampered_replay": {
+        "abs_tol": 1e-12,
+        "concentration_column": "concentration",
+        "contract_valid": true,
+        "effect_column": null,
+        "max_concentration_abs_error": 0.6703200460356404,
+        "max_concentration_rel_error": 0.10000000000000019,
+        "max_effect_abs_error": null,
+        "max_effect_rel_error": null,
+        "mismatch_count_reported": 1,
+        "mismatches": [
+          {
+            "abs_error": 0.6703200460356404,
+            "expected": 6.703200460356392,
+            "field": "concentration",
+            "observed": 7.373520506392032,
+            "rel_error": 0.10000000000000019,
+            "row": 5
+          }
+        ],
+        "model_type": "one_compartment_iv_bolus",
+        "pd_equation": null,
+        "pd_model_type": null,
+        "pk_equation": "C(t) = (Dose / V) * exp(-(CL / V) * t)",
+        "rel_tol": 1e-09,
+        "row_count": 4,
+        "scope": "PK/PD output replay against restricted analytic equations; not empirical model validation",
+        "time_column": "time"
+      },
+      "tampered_replay_accepted": false
+    },
+    {
+      "category": "computationally_reproduced_negative",
+      "causal_effect_supported": false,
+      "components": [
+        {
+          "path": "incubation/pcs_causal_laboratory_v1/src/pcs_causal/nonident/witness_search.py",
+          "sha256": "aec533174dd14285b2b821e456ad4c39089011bf8a29296098738ad298ecb119"
+        },
+        {
+          "path": "incubation/pcs_causal_laboratory_v1/src/pcs_causal/nonident/witness_verifier.py",
+          "sha256": "19d4bc8f4d274cd19870686b1a703db002d8551241dff418470985e509671d51"
+        }
+      ],
+      "empirical_validity": "unverified",
+      "equal_models_negative_control": {
+        "accepted": false,
+        "interventional_outcome_total_variation": [
+          0,
+          1
+        ],
+        "observational_total_variation": [
+          0,
+          1
+        ],
+        "reasons": [
+          "interventional outcome distributions agree; witness does not show disagreement"
+        ],
+        "scope": "Conclusion scoped to the finite SCM model class with the declared endogenous/exogenous structure of the two witness models. A finite witness does not prove non-identifiability in every causal formalism.",
+        "status": "UNSUPPORTED"
+      },
+      "id": "finite-scm-nonidentifiability",
+      "interventional_a": [
+        {
+          "assignment": {
+            "Y": 0
+          },
+          "probability": "1/1"
+        },
+        {
+          "assignment": {
+            "Y": 1
+          },
+          "probability": "0/1"
+        }
+      ],
+      "interventional_b": [
+        {
+          "assignment": {
+            "Y": 0
+          },
+          "probability": "1/2"
+        },
+        {
+          "assignment": {
+            "Y": 1
+          },
+          "probability": "1/2"
+        }
+      ],
+      "lean_acceptance": "unverified",
+      "observational_a": [
+        {
+          "assignment": {
+            "X": 0,
+            "Y": 0
+          },
+          "probability": "1/1"
+        },
+        {
+          "assignment": {
+            "X": 0,
+            "Y": 1
+          },
+          "probability": "0/1"
+        },
+        {
+          "assignment": {
+            "X": 1,
+            "Y": 0
+          },
+          "probability": "0/1"
+        },
+        {
+          "assignment": {
+            "X": 1,
+            "Y": 1
+          },
+          "probability": "0/1"
+        }
+      ],
+      "observational_b": [
+        {
+          "assignment": {
+            "X": 0,
+            "Y": 0
+          },
+          "probability": "1/1"
+        },
+        {
+          "assignment": {
+            "X": 0,
+            "Y": 1
+          },
+          "probability": "0/1"
+        },
+        {
+          "assignment": {
+            "X": 1,
+            "Y": 0
+          },
+          "probability": "0/1"
+        },
+        {
+          "assignment": {
+            "X": 1,
+            "Y": 1
+          },
+          "probability": "0/1"
+        }
+      ],
+      "production_authority": false,
+      "query": "P(Y|do(X=1))",
+      "scientific_acceptance": false,
+      "scope": "Exact finite witness: equal permitted observational distributions, differing intervention distributions. Nonidentifiability is conditional on this finite model class and information set; it grants no causal-effect support or theorem for every causal formalism.",
+      "synthetic": true,
+      "verdict": {
+        "accepted": true,
+        "interventional_outcome_total_variation": [
+          1,
+          2
+        ],
+        "observational_total_variation": [
+          0,
+          1
+        ],
+        "reasons": [
+          "models agree exactly on permitted observational margins",
+          "models disagree on target interventional outcome distribution",
+          "therefore the target is not uniquely identified from those observations within this finite model class"
+        ],
+        "scope": "Conclusion scoped to the finite SCM model class with the declared endogenous/exogenous structure of the two witness models. A finite witness does not prove non-identifiability in every causal formalism.",
+        "status": "NOT_IDENTIFIABLE"
+      },
+      "witness_label": "classic_confounding_witness"
+    }
+  ],
+  "checker": {
+    "argument_files": [
+      {
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+        "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+      }
+    ],
+    "bytes": 9024,
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "--run",
+      "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+    ],
+    "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+    "execution_mode": "Lean --run compiled IR; not standalone native",
+    "lean_path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/research/integration_v1/formal/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/incubation/pcs_certified_numerics_v1/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/incubation/pcs_conservation_algebra_v1/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/formal/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/plausible/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/aesop/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/Qq/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/pcs-all-prs-integration-20261018/.lake/packages/batteries/.lake/build/lib/lean",
+    "path": "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf"
+  },
+  "finished_utc": "2026-10-19T02:29:26.407239+00:00",
+  "format": "pcs-scientific-receiver-pilot-v1",
+  "open_obligations": [
+    "Python-to-Lean refinement outside the byte receiver theorem",
+    "Compiler/IO/OS correspondence and independent execution root",
+    "Empirical adequacy of any chemical or pharmacological model",
+    "Measurement, continuum and discretization error",
+    "Cryptographic provenance and production deployment authority"
+  ],
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "preregistration_sha256": "a8abe16db96298383c118fb9196764886b9bf632bb0614bcc10aeea3d96a23ef",
+  "production_authority": false,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "scientific_acceptance": false,
+  "source_commit": "2499ef41ff45a12ee6223bbd4fb9fea310c0089e",
+  "started_utc": "2026-10-19T02:29:23.960374+00:00",
+  "synthetic_only": true,
+  "wall_seconds": 2.446861443000003
+}
