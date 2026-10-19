@@ -14,7 +14,9 @@ previously misplaced proof file was moved from
 `research/scientific_receiver_v1/formal/PCSScientificReceiver/History.lean` without
 changing its bytes. Its SHA256 is
 `ac0cfc0d6733c0b4f287dd15941795bdb67b8907c407c96be955aa69b52d65db`.
-The standalone project pins Lean and Mathlib v4.28.0.
+The standalone project pins Lean v4.28.0 and Mathlib commit
+`8f9d9cff6bd728b17a24e163c9402775d9e6a365` (the v4.28.0 revision), with every
+transitive Git dependency committed in its own `lake-manifest.json`.
 
 ## Protocol and API
 
@@ -40,6 +42,10 @@ unknown fields/classes and uppercase hex fail closed. Each byte field is bounded
 to 1 MiB, wire input to 16 MiB, and generations to signed SQLite integer range.
 There is no candidate/certificate digest substitution: all bytes are signed and
 persisted. No executable is invoked on these untrusted bytes.
+
+The post-review resource controls below additionally bound the entire stored
+history. Per-field limits alone did not bound the initial implementation's total
+replay cost; the historical 17-test report predates these controls.
 
 Event IDs are opaque fresh labels. A compact external `Anchor` holds generation,
 exact incumbent, tip and a SHA256 chain digest. The genesis digest covers a
@@ -153,7 +159,7 @@ external root/checkpoint or additional trusted observation.
 | No partial event/head publication after tested process crashes | SQLite single-transaction experiment at three crash points; no Lean filesystem/crash theorem |
 | Deterministic one-intent recovery | Runtime tests for before/after commit and ambiguous recovery; no Lean recovery refinement theorem |
 | No serving of a scientifically unverified model | **Not established**: this experiment has no model-serving path or scientific verifier |
-| Eventual recovery / progress | Only if honest OS/SQLite operations eventually complete and exact root/prior anchor/intent survive. General liveness, witness availability and distributed recovery remain open |
+| Eventual recovery / progress | Only within the explicit resource domain, if honest OS/SQLite operations eventually complete and exact root/prior anchor/intent survive. General liveness, witness availability and distributed recovery remain open |
 
 ## Formal/runtime correspondence analysis
 
@@ -181,27 +187,100 @@ scientific correctness. Policy rotation, checker upgrades, authority rotation,
 retirement/revocation events and independent witness checkpoint publication need
 a later protocol; unknown event classes currently fail closed.
 
+## Post-review resource and dependency hardening (2026-10-19)
+
+Replay now enforces these explicit research limits:
+
+| Limit | Enforcement |
+| --- | --- |
+| 1,024 events | SQL `count(*)` before loading persisted BLOB contents into Python |
+| 64 MiB aggregate envelope wire bytes | SQL `sum(length(envelope))` before BLOB loads; prospective append included before insertion |
+| 16 MiB per stored envelope/root wire object | SQL maximum BLOB length metadata check; decoder repeats wire bound |
+| 128 MiB primary database file/pages | `lstat` before SQLite open; logical page budget checked during audit and again after insert/head update before COMMIT |
+| 16 MiB + 8 KiB SQLite row length | Actual `SQLITE_LIMIT_LENGTH` on every runtime connection, including space for row metadata |
+| Regular nonsymlink primary file | `lstat` before open; no claim against malicious OS or a concurrent pathname replacement race |
+| DELETE rollback-journal mode only | WAL/SHM sidecars rejected; rollback journal must be regular/nonsymlink and at most twice the database budget plus 1 MiB |
+
+Root/head row counts and BLOB length metadata are also checked before returning
+their byte fields to Python. The exact-schema check first requires exactly three
+schema objects. Resource failure rejects the whole operation, preserving the
+handle's expected anchor; a post-insertion page-budget failure rolls back both
+event and head. Database creation is exclusive; an interrupted initialization may
+leave an unusable file that will fail closed rather than be silently replaced.
+
+These are finite input/storage/retained-history budgets, not universal denial of
+service resistance. There is no CPU deadline, OS memory quota, disk quota or
+protection against a hostile filesystem, interpreter, SQLite implementation or
+unbounded scheduling delay. SQL metadata checks still perform work proportional
+to the bounded database/history. Replay intentionally halts at the domain limit;
+no checkpoint compaction or longer-history liveness protocol is supplied. The
+formal unbounded-`Nat` serial model does not prove these runtime resource bounds.
+
+The new tests include 1,025 actual same-schema rows, a real oversized on-disk BLOB
+created with SQLite `zeroblob`, oversized root/head metadata, an actual SQLite
+length-limit failure, a sparse file beyond 128 MiB, symlinks and unapproved or
+oversized sidecars. Small lowered test budgets exercise aggregate/count/page
+append boundaries without filling the filesystem. The tests assert rejection
+before envelope decoding and byte-for-byte database/anchor preservation on
+resource failure. Temporary adversarial databases use their own unrestricted
+writer connection; the receiver's schema remains unchanged.
+
+Before compiling against cached dependencies, `check_formal.py` now checks the
+standalone dependency set against the committed root manifest, including exact
+Git revisions and package configuration. It validates **every** cached dependency
+checkout's Git HEAD, clean tracked source and absence of assume-unchanged or
+skip-worktree flags. Only validated package directories enter `LEAN_PATH`.
+Unused packages need not contain build outputs; Lean must resolve every actual
+import. The project's tracked, regular Lean sources must be clean, contain no
+untracked Lean files and pass the existing admission/escape-hatch parser before
+cached objects are imported. Fresh project compilation and every theorem's axiom
+closure audit follow these checks.
+
+This is source/dependency validation, **not object-file attestation**. Git, the
+compiler, standard library and downloaded/preexisting dependency oleans remain
+trusted. A malicious `.olean` that disagrees with clean pinned source is outside
+this check's guarantee. No dependency checkout or baseline cache was modified by
+the local tests; negative cache/source fixtures live in separate temporary Git
+repositories. The original proof's bytes and axioms remain unchanged.
+
+The dedicated `pcs-authorization-history-research.yml` workflow targets pull
+requests to `integration/pcs-all-open-prs-synthesis-20261018-sol-high` and manual
+dispatch. Its job runs only for public repositories on a standard GitHub-hosted
+runner, with read-only permissions and commit-pinned actions. It installs the
+hash-pinned existing Python lock, obtains the pinned root Mathlib cache, prepares
+this project's cache with its committed manifest, runs the runtime/input tests,
+checks formal inputs and all axioms, and runs a standalone `lake build` with an
+unchanged-manifest check. Reports are uploaded on success or failure. No paid
+runner, secret, production service or deployment is involved. The workflow was
+validated locally with actionlint; a remote workflow/Lake build has not yet run.
+
 ## Reproduction and recorded results
 
 From the repository root, using Python with `requirements.txt` installed:
 
 ```sh
-python -m unittest research.authorization_history_v1.test_history -v
+python -m unittest research.authorization_history_v1.test_history \
+  research.authorization_history_v1.test_resources \
+  research.authorization_history_v1.test_formal_inputs -v
 python research/authorization_history_v1/check_formal.py \
   --lean /path/to/lean-4.28.0/bin/lean \
   --cache-root /path/to/repository-with-compatible-mathlib-cache
 ```
 
-The checker writes only this experiment's `.lake/build/`; it reads existing
-Mathlib/import caches without downloading, copying or modifying them. For an
+The checker writes only this experiment's `.lake/build/`; it validates and reads
+existing pinned Mathlib/import caches without downloading, copying or modifying
+them. For an
 independent clean dependency setup, `cd research/authorization_history_v1/formal`
 and `lake build` use this project's pinned configuration. That network/bootstrap
 path was not run in this session; fresh source compilation used the existing
 v4.28.0 cache and direct pinned Lean executable.
 
-Recorded reports live in `research/authorization_history_v1/reports/`. Refreshed
-on 2026-10-19 after workspace restoration: all 17 runtime tests and all 28 theorem
-axiom closures pass; retained logs were not lost. Runtime tests use Python
+Recorded reports live in `research/authorization_history_v1/reports/`. The
+original `runtime-tests.txt` and `formal-axioms.txt` retain the initial 17-test
+evidence unchanged. New `hardened-runtime-tests.txt` records all 32 passing tests
+(17 original, 10 resource and 5 formal-input tests), and
+`hardened-formal-axioms.txt` records validated source/dependency inputs followed
+by fresh compilation and all 28 passing theorem axiom closures. Runtime tests use Python
 3.12.14, actual Ed25519 with cryptography 50.0.2, SQLite 3.53.1, real temporary
 database files and independent spawned processes. Tests cover all signed payload
 fields, both signatures, canonical ambiguity, trusted scopes, replay, stale CAS,

@@ -14,6 +14,7 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import stat
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
@@ -22,6 +23,11 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 MAX_BYTES = 1 << 20
 MAX_WIRE = 16 << 20
 MAX_GENERATION = (1 << 63) - 1
+# Explicit research-domain budgets, not a general availability guarantee.
+MAX_EVENTS = 1024
+MAX_TOTAL_WIRE = 64 << 20
+MAX_DATABASE_BYTES = 128 << 20
+SQLITE_LENGTH_LIMIT = MAX_WIRE + (8 << 10)  # Includes SQLite row headers/columns.
 SIGNING_DOMAIN = b"PCS-AUTHORIZATION-HISTORY-V1\x00"
 ROOT_DOMAIN = b"PCS-AUTHORIZATION-ROOT-V1\x00"
 LINK_DOMAIN = b"PCS-AUTHORIZATION-LINK-V1\x00"
@@ -245,14 +251,38 @@ SCHEMA = {
 
 def _connect(path: Path) -> sqlite3.Connection:
     # mode=rw prevents an absent history from silently becoming a new genesis.
+    try:
+        metadata = path.lstat()
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > MAX_DATABASE_BYTES:
+            raise Rejected("History must be a bounded regular nonsymlink file")
+        # This protocol creates DELETE-mode databases. A WAL sidecar would bypass
+        # the primary-file budget; it is outside this experiment's storage format.
+        for suffix in ("-wal", "-shm", "-journal"):
+            sidecar = Path(str(path) + suffix)
+            if sidecar.exists() or sidecar.is_symlink():
+                info = sidecar.lstat()
+                if (suffix != "-journal" or not stat.S_ISREG(info.st_mode)
+                        or info.st_size > 2 * MAX_DATABASE_BYTES + (1 << 20)):
+                    raise Rejected("Unapproved or oversized SQLite sidecar")
+    except OSError as exc:
+        raise Rejected("Cannot inspect bounded history file") from exc
     connection = sqlite3.connect(path.resolve().as_uri() + "?mode=rw", uri=True, timeout=10,
                                  isolation_level=None)
-    connection.execute("PRAGMA trusted_schema=OFF")
-    connection.execute("PRAGMA synchronous=FULL")
+    try:
+        connection.setlimit(sqlite3.SQLITE_LIMIT_LENGTH, SQLITE_LENGTH_LIMIT)
+        connection.execute("PRAGMA trusted_schema=OFF")
+        connection.execute("PRAGMA synchronous=FULL")
+        if connection.execute("PRAGMA journal_mode").fetchone() != ("delete",):
+            raise Rejected("Only DELETE journal mode is supported")
+    except BaseException:
+        connection.close()
+        raise
     return connection
 
 
 def _schema(connection: sqlite3.Connection):
+    if connection.execute("SELECT count(*) FROM sqlite_master").fetchone() != (len(SCHEMA),):
+        raise Rejected("Altered or unknown SQLite schema count")
     rows = connection.execute("SELECT type, name, tbl_name, sql FROM sqlite_master ORDER BY name").fetchall()
     expected = [("table", name, name, SCHEMA[name]) for name in sorted(SCHEMA)]
     if rows != expected:
@@ -265,8 +295,38 @@ class Snapshot:
     envelopes: tuple[Envelope, ...]
 
 
+def _resource_budget(connection: sqlite3.Connection, *, additional_wire=0, additional_events=0):
+    # length(BLOB) reads SQLite's length metadata, without returning BLOB contents
+    # to Python. Check all aggregates before fetching any persisted byte fields.
+    count, total, largest = connection.execute(
+        "SELECT count(*), coalesce(sum(length(envelope)), 0), "
+        "coalesce(max(length(envelope)), 0) FROM events").fetchone()
+    if count + additional_events > MAX_EVENTS:
+        raise Rejected("History event count exceeds research budget")
+    if total + additional_wire > MAX_TOTAL_WIRE or largest > MAX_WIRE:
+        raise Rejected("History wire bytes exceed research budget")
+    count, largest = connection.execute("SELECT count(*), max(length(root)) FROM config").fetchone()
+    if count != 1 or largest is None or largest > MAX_WIRE:
+        raise Rejected("Invalid or oversized root metadata")
+    count, incumbent, tip, digest = connection.execute(
+        "SELECT count(*), max(length(incumbent)), max(length(tip)), max(length(chain_digest)) FROM head"
+    ).fetchone()
+    if (count != 1 or incumbent is None or incumbent > MAX_BYTES
+            or tip is None or tip > MAX_BYTES or digest != 32):
+        raise Rejected("Invalid or oversized head metadata")
+
+
+def _database_pages_budget(connection: sqlite3.Connection):
+    pages = connection.execute("PRAGMA page_count").fetchone()[0]
+    size = connection.execute("PRAGMA page_size").fetchone()[0]
+    if pages * size > MAX_DATABASE_BYTES:
+        raise Rejected("Database pages exceed research budget")
+
+
 def _replay(connection: sqlite3.Connection, root: Root) -> tuple[Snapshot, tuple[Anchor, ...]]:
     _schema(connection)
+    _database_pages_budget(connection)
+    _resource_budget(connection)
     if connection.execute("SELECT id, root FROM config").fetchall() != [(1, root.encode())]:
         raise Rejected("Store root differs from receiver-pinned root")
     current = initial(root)
@@ -355,6 +415,7 @@ class History:
                 raise Rejected("Stale external expected anchor")
             next_anchor = _advance(self.root, snapshot.anchor, envelope,
                                    {e.payload.event_id for e in snapshot.envelopes})
+            _resource_budget(connection, additional_wire=len(envelope_bytes), additional_events=1)
             connection.execute("INSERT INTO events VALUES (?, ?)",
                                (next_anchor.generation, envelope_bytes))
             changed = connection.execute(
@@ -365,6 +426,7 @@ class History:
                  snapshot.anchor.chain_digest)).rowcount
             if changed != 1:
                 raise Rejected("Generation CAS failed")
+            _database_pages_budget(connection)  # Reject growth before COMMIT; roll back.
             connection.commit()  # Local logical linearization point.
             self.expected_anchor = next_anchor
             return next_anchor

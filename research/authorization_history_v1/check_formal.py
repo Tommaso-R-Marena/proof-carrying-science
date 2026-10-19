@@ -12,6 +12,11 @@ from pathlib import Path
 import re
 import subprocess
 
+try:
+    from .formal_inputs import dependency_pins, verify_cache, audit_project_sources
+except ImportError:  # Direct script invocation documented in README.
+    from formal_inputs import dependency_pins, verify_cache, audit_project_sources
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -24,9 +29,11 @@ def main():
     if "version 4.28.0," not in version:
         raise SystemExit("Requires Lean 4.28.0")
     print(version.strip(), flush=True)
-    caches = sorted(args.cache_root.resolve().glob(".lake/packages/*/.lake/build/lib/lean"))
-    if not any((cache / "Mathlib" / "Tactic.olean").is_file() for cache in caches):
-        raise SystemExit("Compatible prebuilt Mathlib cache required")
+    pins = dependency_pins(project)
+    audit_project_sources(project)
+    caches = verify_cache(args.cache_root, pins)
+    if not (args.cache_root / ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean").is_file():
+        raise SystemExit("Pinned prebuilt Mathlib cache required")
     output = project / ".lake" / "build" / "lib" / "lean"
     (output / "PCSAuthorizationHistoryV1").mkdir(parents=True, exist_ok=True)
     environment = dict(os.environ, LEAN_PATH=os.pathsep.join(map(str, [output, *caches])))
