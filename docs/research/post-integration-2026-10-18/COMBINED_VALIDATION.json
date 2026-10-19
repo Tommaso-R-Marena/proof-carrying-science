@@ -1,0 +1,56 @@
+{
+  "format": "pcs-post-research-combined-validation-v1",
+  "tested_merge_commit": "b1abffbb74a962a3f396e69b65f7b5bf9c70a99b",
+  "component_heads": {
+    "receiver": "eec5c653950c3d7975f3f3da0b72ce073b5afda4",
+    "receipt": "ba07e16a8f63fa031e9823b08a41f837a7a8531a",
+    "history": "044f9c67263f57f722ddc078df2016d2284fa78e"
+  },
+  "pytest": {
+    "status": "EXECUTED_PASS",
+    "test_functions_and_parameter_cases": 316,
+    "additional_passed_subtests": 47,
+    "junit_rows_including_subtests": 363,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "warning_scope": "Existing intentional duplicate-ZIP-member fixture",
+    "wall_seconds": 96.36
+  },
+  "formal": {
+    "new_receiver_namespace_theorems_including_generated": 190,
+    "new_receiver_authored_theorems": 54,
+    "history_authored_theorems": 28,
+    "status": "PROVED",
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "fresh_new_modules": true,
+    "dependencies": "Validated source-identical read-only prebuilt Mathlib imports; no fresh dependency rebuild claim"
+  },
+  "source_gate": {
+    "format": "pcs-consolidated-source-gate-v1",
+    "passed": true,
+    "files_checked": 1992,
+    "V7_modules": 38,
+    "additional_files_checked": 1,
+    "successor_sha256": "a0190d64ecf6a04fc5fb07123fdf24d1da4f2f92724bd429c59982079fb4ffed",
+    "failures": [],
+    "production_authority": false,
+    "admission_scope": "new research Lean; unchanged main authority separately requires scripts/verify_lean.sh"
+  },
+  "production_formal_unchanged_relative_to_b916": true,
+  "no_main_pr153_or_original_pr_changes": true,
+  "scope": "Only this new validation branch locally merges three exact draft heads. No GitHub PR merge/deployment. Coexistence does not establish scientific-history runtime refinement or a protected root.",
+  "evidence": {
+    "history-formal.log": "8febd6b70b810447f2aa5049acb6c874a6a2aa672821fcc7605f3f84d8b58f50",
+    "receiver-qualification.json": "053e2af1586e4d915d8c0736787decc7a7d19bc8449367b42f0dd81e81e07ffb",
+    "repository-integrity.json": "8f6ae4c6bdff1a04a3100a714b12207a4532ac7ee5723407343e8fb9204c9797",
+    "source-gate.json": "3ca82e9d3ce65c1c6bb4d5cc8c51bc51d060ead23163c3294892483e13ab68b1",
+    "tests.log": "2d0437315786a9456d50c8399e05baefe1cf8a20c966acfec226a56397e5f102",
+    "tests.xml": "bc0d7dc832241a63b01a8378c1fcd25c77c607b51782280d13cb77a64bc353f5"
+  }
+}
