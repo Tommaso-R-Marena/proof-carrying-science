@@ -79,9 +79,9 @@ arithmetic refinement supplies its structural premises.
 
 ## Trust and proof status
 
-The initial complete environment audit inventories 150 theorem declarations
-before the additional `CodecBounds` strengthening,
-including compiler-generated declarations. Every closure is a subset of
+The final complete environment audit inventories 190 theorem declarations,
+including 54 authored theorems and compiler-generated declarations. The initial
+pre-`CodecBounds` audit had 150 declarations. Every final closure is a subset of
 `propext`, `Classical.choice`, and `Quot.sound`. No new admission or axiom is
 used. See the recorded environment statement/axiom log and qualification JSON.
 

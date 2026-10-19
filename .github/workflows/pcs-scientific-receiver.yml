@@ -48,6 +48,7 @@ jobs:
           python -m pytest -q research/scientific_receiver_v1/tests --junitxml="$RUNNER_TEMP/receiver/tests.xml"
           QUALIFICATION_SHA="$(sha256sum "$RUNNER_TEMP/receiver/formal/qualification.json" | cut -d ' ' -f 1)"
           python -m research.scientific_receiver_v1.full_profile --qualification "$RUNNER_TEMP/receiver/formal" --qualification-sha256 "$QUALIFICATION_SHA" --out "$RUNNER_TEMP/receiver/full-profile"
+          python -m research.scientific_receiver_v1.stress --checker "$PCS_SCIENTIFIC_LEAN" --checker-arg=--run --checker-arg="$PCS_SCIENTIFIC_MAIN" --checker-cwd "$PCS_SCIENTIFIC_CWD" --environment-json "$RUNNER_TEMP/receiver/formal/environment.json" --out "$RUNNER_TEMP/receiver/resource-stress"
           python -m research.scientific_receiver_v1.differential --checker "$PCS_SCIENTIFIC_LEAN" --checker-arg=--run --checker-arg="$PCS_SCIENTIFIC_MAIN" --checker-cwd "$PCS_SCIENTIFIC_CWD" --out "$RUNNER_TEMP/receiver/differential"
           python -m research.scientific_receiver_v1.pilot --checker "$PCS_SCIENTIFIC_LEAN" --checker-arg=--run --checker-arg="$PCS_SCIENTIFIC_MAIN" --checker-cwd "$PCS_SCIENTIFIC_CWD" --out "$RUNNER_TEMP/receiver/pilot"
           python -m research.integration_v1.source_gate
