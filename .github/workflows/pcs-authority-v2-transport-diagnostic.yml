@@ -38,14 +38,14 @@ jobs:
             python scripts/run_transport_kernel_v1.py --output "$RUNNER_TEMP/transport-diagnostic/model"
             python scripts/verify_transport_trace_formal.py --output "$RUNNER_TEMP/transport-diagnostic/trace-static.json"
             python - <<'PYPROBE'
-          import hashlib,json,platform,resource,sys
+          import hashlib,json,os,platform,resource,sys
           from pathlib import Path
           from pcs import transport_trace_kernel_v1 as trace
           root=Path.cwd()
           result=trace.replay((root/'examples/scientific_workflow_v3/contract.json').read_bytes(), (root/'examples/scientific_workflow_v3/trajectory.csv').read_bytes())
-          print('ACTUAL_LITERAL_TRACE_PROBE', json.dumps({'python':sys.version,'platform':platform.platform(),'stack_limit':resource.getrlimit(resource.RLIMIT_STACK),'accepted':result['accepted'],'kernel':result.get('kernel')},sort_keys=True))
+          print('ACTUAL_LITERAL_TRACE_PROBE', json.dumps({'python':sys.version,'platform':platform.platform(),'machine':platform.machine(),'cpu_count':os.cpu_count(),'stack_limit':resource.getrlimit(resource.RLIMIT_STACK),'accepted':result['accepted'],'kernel':result.get('kernel')},sort_keys=True))
           Path(__import__('os').environ['RUNNER_TEMP'],'transport-diagnostic/actual-literal-probe.json').write_text(json.dumps(result,indent=2)+'\n')
-          assert result['accepted'], 'Actual Lean literal probe failed; full subprocess stdout/stderr retained above'
+          # Keep an initial rejection as evidence and still execute every registered comparison.
           original_stack=resource.getrlimit(resource.RLIMIT_STACK)
           limits=[4*1024*1024,8*1024*1024,16*1024*1024,8*1024*1024]
           frozen={name:hashlib.sha256(raw).hexdigest() for name,raw in trace.sources().items()}
@@ -63,6 +63,7 @@ jobs:
               resource.setrlimit(resource.RLIMIT_STACK,original_stack)
           assert frozen=={name:hashlib.sha256(raw).hexdigest() for name,raw in trace.sources().items()}
           Path(__import__('os').environ['RUNNER_TEMP'],'transport-diagnostic/stack-comparison.json').write_text(json.dumps({'protocol_limits':limits,'source_sha256':frozen,'results':campaign,'original_stack_restored':True},indent=2)+'\n')
+          assert result['accepted'], 'Initial real Lean probe rejected; all controlled comparisons retained; no affirmative verdict substituted'
           PYPROBE
             PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 python -m pytest -q tests/test_transport_trace_kernel_v1.py --junitxml="$RUNNER_TEMP/transport-diagnostic/trace-tests.xml"
             python scripts/run_transport_trace_kernel_v1.py --output "$RUNNER_TEMP/transport-diagnostic/trace" --signed-base "$RUNNER_TEMP/transport-diagnostic/model/signed-v3-base"
