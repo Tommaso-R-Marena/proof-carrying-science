@@ -1,0 +1,351 @@
+{
+  "controls": [
+    {
+      "id": "actual_genesis_server_and_authority_open",
+      "passed": true
+    },
+    {
+      "id": "prepared_only_not_eligible",
+      "outcome": "AuthorityRejected: No matching finalized local/witness checkpoint",
+      "passed": true
+    },
+    {
+      "id": "conflicting_pending_request_refused",
+      "outcome": "Rejected: Witness unavailable or transport failed",
+      "passed": true
+    },
+    {
+      "id": "witness_can_finalize_own_commit_without_claiming_remote_local_commit",
+      "passed": true
+    },
+    {
+      "id": "witness_finalized_local_old_not_eligible",
+      "outcome": "AuthorityRejected: No matching finalized local/witness checkpoint",
+      "passed": true
+    },
+    {
+      "id": "exact_witness_material_recovery",
+      "passed": true
+    },
+    {
+      "id": "recovered_result_has_exact_checked_candidate",
+      "passed": true
+    },
+    {
+      "id": "cosigned_false_science_refused",
+      "outcome": "Rejected: Witness unavailable or transport failed",
+      "passed": true
+    },
+    {
+      "id": "false_science_does_not_advance_or_reserve_witness",
+      "passed": true
+    },
+    {
+      "id": "whole_producer_rollback_refused_live_authority",
+      "outcome": "Rejected: History differs from external expected anchor",
+      "passed": true
+    },
+    {
+      "id": "whole_producer_rollback_refused_reopened_authority",
+      "outcome": "AuthorityRejected: No matching finalized local/witness checkpoint",
+      "passed": true
+    },
+    {
+      "id": "whole_producer_rollback_reconstructs_exact_witness_history",
+      "passed": true
+    },
+    {
+      "id": "wrong_receiver_pinned_witness_key_refused",
+      "outcome": "Rejected: Wrong pinned response domain/root/profile/key/nonce",
+      "passed": true
+    },
+    {
+      "id": "cross_root_checkpoint_transplant_refused",
+      "outcome": "Rejected: Wrong pinned response domain/root/profile/key/nonce",
+      "passed": true
+    },
+    {
+      "id": "nonce_replayed_checkpoint_refused",
+      "outcome": "Rejected: Wrong pinned response domain/root/profile/key/nonce",
+      "passed": true
+    },
+    {
+      "id": "checkpoint_role_confusion_refused",
+      "outcome": "Rejected: Wrong pinned response domain/root/profile/key/nonce",
+      "passed": true
+    },
+    {
+      "counterexample": true,
+      "id": "witness_store_rollback_counterexample",
+      "passed": true,
+      "scope": "Both trusted witness durability/monotonic continuity and retained latest checkpoint are lost; same pinned key/root alone authenticate a fresh old head. This is outside producer-only rollback protection."
+    },
+    {
+      "counterexample": true,
+      "id": "both_stores_rollback_counterexample",
+      "passed": true,
+      "scope": "Simultaneously rolling back producer and trusted witness stores with no retained monotonic checkpoint is observationally accepted; not an unconditional rollback-resistance guarantee."
+    }
+  ],
+  "external_empirical_validation": false,
+  "finished_utc": "2026-10-20T07:45:29.014508+00:00",
+  "format": "pcs-authority-v2-independent-actual-process-review-v1",
+  "no_positive_mocks": true,
+  "operator_config_identity": {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "--run",
+      "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+    ],
+    "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+    "environment_value_sha256": {
+      "LEAN_PATH": "c05f91e4ce3dbaa4de63ea4438f15b48e6fbc951bba33fe0d4fc5b4f4d415323"
+    },
+    "executable_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+    "pins": [
+      {
+        "kind": "dependency",
+        "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Codec.olean",
+        "sha256": "8581ea09ca9a4aba0854e8c6582a6494f75e95016a8b0c928ccf160cb11a1f90"
+      },
+      {
+        "kind": "dependency",
+        "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/CodecBounds.olean",
+        "sha256": "0febe1b8f74f2d63bb231a622ea33ba7c31a7557a2d955dc2616b9ed3d19a2ad"
+      },
+      {
+        "kind": "dependency",
+        "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Receiver.olean",
+        "sha256": "af6b48900b60b829bcb17c8dccce5b41ba0e0e6bb06b04377ee03baedb692a52"
+      },
+      {
+        "kind": "dependency",
+        "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Semantics.olean",
+        "sha256": "b2c1a3a87bcd0ca1460bcc3cd23775181c1d41bcf0226d8c383d468fef768e97"
+      },
+      {
+        "kind": "dependency",
+        "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Types.olean",
+        "sha256": "146321d5bc9e260178ffcee035369dba432ab6f7ca437446a544c63ef767ea04"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-historical-scientific-replay-v1/research/scientific_history_v2/__init__.py",
+        "sha256": "e310077ffab56dc6256fd1ecc1dab2ba10b44821e939909bbb7838af51db5fdf"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-historical-scientific-replay-v1/research/scientific_history_v2/audit.py",
+        "sha256": "a9db2df33a3fe597780e0d8a50e281579e47499f8d19f46b2e371c0f2c28c62d"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_history_v1/receiver.py",
+        "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_receiver_v1/host.py",
+        "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_receiver_v1/reference.py",
+        "sha256": "bcba6bd4dedeaa6620bda11db42c2cd0fe3727c01802db40062d646aa52f0f77"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/__init__.py",
+        "sha256": "3238f616ccd21dd3d2ad8ecf292fb1d20741f54ad45b0b85612568cbfc46eb03"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/client.py",
+        "sha256": "b96f58371ed0fdeee936b91994058bfc49328f880639579927f14ecb29482449"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/protocol.py",
+        "sha256": "ee7b8ed02b6db722324bdb73fe067d4dd02fa417edccf96f8f50b10fd9da9b15"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/server.py",
+        "sha256": "699abc64f392a0be06f0225ce55a293bb6db58273c85ebf353336e4dc7d98361"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/store.py",
+        "sha256": "95f5f63e975ba2d3a4aa59421536deb765961e7f17248e9596266de33cb3f118"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-authority-v2/research/scientific_authority_v2/__init__.py",
+        "sha256": "d49d7c69b3ad970ba1c6c6904e718431ee28a0f5b7d97315f7c40bfed0dd5bf8"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-authority-v2/research/scientific_authority_v2/coordinator.py",
+        "sha256": "4291df3059cca4e4fc17873d8ec5ef5079675ac5c3b45b1060795354db055821"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+        "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+        "sha256": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+        "sha256": "16d34055a6ce790b5baa8254145388cf3cc79729c7d7e5cd9992f95f3efc2cd3"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+        "sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+        "sha256": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320"
+      },
+      {
+        "kind": "source",
+        "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Types.lean",
+        "sha256": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+      }
+    ],
+    "stderr_limit": 8192,
+    "stdout_limit": 32768,
+    "timeout_seconds": 60,
+    "toolchain_operator_declared": "Lean 4.28.0; partial research fixture source/import inventory, not full root attestation"
+  },
+  "passed": true,
+  "preregistration_sha256": "ed6fdf4576d6f8756db7247d4bbb63102045f6d2006341550e317b131a0509da",
+  "profile": "A: separate real server process and keys on one underlying host/admin",
+  "receipts": [
+    {
+      "receipt": {
+        "signature": "a63fd8ce92055eed604fbecbf243932d9edf1cb931b59bde0516c16c9249a96eec1beb33cd84fe945ea1c25be752f0011b16bd867bd54b9bca0899ec46b7b900",
+        "statement": {
+          "checker": "c0558e71fc92f76e3e7c1302ca68b602f80bc5931c53642e4addbbe931a9dbc0",
+          "kind": "prepared",
+          "nonce": "",
+          "payload": {
+            "intent": "7b22617574686f726974795f7369676e6174757265223a223861623631323034363939646232646431316432346631616239666264306238386437306164633831343463356466376134373265626563363339363533643666626434383333333663656366343661623932633231626565353433353165316137356464613266626138636330366437333130323133396439353532653035222c22666f726d6174223a227063732d617574686f72697a6174696f6e2d656e76656c6f70652d7631222c227061796c6f6164223a7b22617574686f72697479223a2238363638356338373861313761306336636138393537376366613865343863353936373831653565303165356661666137646636653639396261363862363937222c2263616e646964617465223a223530343335333264353334333439326434323466353534653434326435363331376333313763333137633330376333313763326433313763333137633331376333313763333037633333376333303763333137633331376333313763333133303763333137633330376333313763333133333763333237633336376333313763333737633331376333353763333137633338376333313763333133303763333137633333376333313763333137633332376333313763333137633332222c226365727469666963617465223a22222c22636865636b6572223a2263303535386537316663393266373665336537633133303263613638623630326638306263353933316335333634326534616464626265393331613964626330222c226576656e745f636c617373223a226d6f64656c2d70726f6d6f74696f6e2d617574686f72697a6174696f6e222c226576656e745f6964223a2236313633363336353730373436353634222c2265787065637465645f636861696e5f646967657374223a2232653038313435663262356432303466333633353064616138653633363061643964396131373962623033383336396363373964393639306464383338353336222c2265787065637465645f67656e65726174696f6e223a302c2265787065637465645f696e63756d62656e74223a223530343335333264353334333439326434323466353534653434326435363331376333313763333137633330376333313763326433313763333137633331376333313763333037633330376333303763333037633331376333313763333037633331376333303763333137633330376333313763333037633331376333303763333137633330376333313763333037633331376333303763333137633330222c22666f726d6174223a227063732d617574686f72697a6174696f6e2d7061796c6f61642d7631222c226e6578745f67656e65726174696f6e223a312c22706f6c696379223a22353034333533326435333433343932643438343935333534346635323539326435363331222c2270726576696f75735f6964223a223639366536343635373036353665363436353665373432643637363536653635373336393733222c227769746e657373223a2236396639643863636436653761646435663739366264366336373636666661373536346439303238326565626365393736316439613536366265303734613833227d2c227769746e6573735f7369676e6174757265223a223264633036353962653566303866313461353232396231343036353366343930616330316634356464363939636232333139643238346237626132316565343164643830633437393033333265306462343639613534666463386465393234666561386635343235373866383336373539343234633433633731326437643066227d",
+            "intent_sha256": "deef41c5d900155ad518fcf8a599059f96b23421613400e9f3634e23de49c316",
+            "next": {
+              "chain_digest": "16b16de1ed312269ab67f94984e50b63a045c0da3e8fe415a9c05b37ac938a4d",
+              "generation": 1,
+              "incumbent": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c31337c327c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+              "tip": "6163636570746564"
+            },
+            "previous": {
+              "chain_digest": "2e08145f2b5d204f36350daa8e6360ad9d9a179bb038369cc79d9690dd838536",
+              "generation": 0,
+              "incumbent": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c307c307c307c317c317c307c317c307c317c307c317c307c317c307c317c307c317c307c317c307c317c30",
+              "tip": "696e646570656e64656e742d67656e65736973"
+            },
+            "verification": {
+              "host_receipt_sha256": "ea7dea8dc8ba0abf97a71057caa4beaf47f4287a1d5af135eb3cdeb46d58207e",
+              "response": {
+                "accepted": true,
+                "error": "",
+                "policy": 1,
+                "production_authority": false,
+                "protocol": "PCS-SCI-BOUND-V1",
+                "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c31337c327c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+                "result": {
+                  "finalA": "13/2",
+                  "finalB": "7/2",
+                  "lowerA": "5/1",
+                  "lowerB": "2/1",
+                  "physical": true,
+                  "stepCount": 3,
+                  "total": "10/1",
+                  "unitCode": false,
+                  "upperA": "8/1",
+                  "upperB": "5/1"
+                },
+                "scientific_acceptance": false
+              },
+              "response_sha256": "fa45ceb6096ff89e2ea9327ee307dce81c760609f69a57937654d574b42be8a8"
+            }
+          },
+          "protocol": "PCS-SCI-WITNESS-V1",
+          "root_id": "ee6650a4471410871681b4327bec128c4de25e6b933a498899dd161a54b0a05f",
+          "witness_key": "364a058582f91d36ace22594ea68d8946fa283e648387fabd4cb2587d58ed53a"
+        }
+      }
+    },
+    {
+      "receipt": {
+        "signature": "e291884fa0747336431fcc0f222f303da5bb0bac1603b71382349de8d5d10acab76a4737ff181d7c2abcf0244c181d491d10faca7079ff5a653b60e7ac05330a",
+        "statement": {
+          "checker": "c0558e71fc92f76e3e7c1302ca68b602f80bc5931c53642e4addbbe931a9dbc0",
+          "kind": "finalized",
+          "nonce": "",
+          "payload": {
+            "anchor": {
+              "chain_digest": "16b16de1ed312269ab67f94984e50b63a045c0da3e8fe415a9c05b37ac938a4d",
+              "generation": 1,
+              "incumbent": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c31337c327c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+              "tip": "6163636570746564"
+            },
+            "intent_sha256": "deef41c5d900155ad518fcf8a599059f96b23421613400e9f3634e23de49c316",
+            "prepared_sha256": "1a9c2d9b812326cebd3239deb89764c13737841b4c7f1153a45fd7069ad780dc",
+            "previous": {
+              "chain_digest": "2e08145f2b5d204f36350daa8e6360ad9d9a179bb038369cc79d9690dd838536",
+              "generation": 0,
+              "incumbent": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c307c307c307c317c317c307c317c307c317c307c317c307c317c307c317c307c317c307c317c307c317c30",
+              "tip": "696e646570656e64656e742d67656e65736973"
+            }
+          },
+          "protocol": "PCS-SCI-WITNESS-V1",
+          "root_id": "ee6650a4471410871681b4327bec128c4de25e6b933a498899dd161a54b0a05f",
+          "witness_key": "364a058582f91d36ace22594ea68d8946fa283e648387fabd4cb2587d58ed53a"
+        }
+      }
+    }
+  ],
+  "root": {
+    "authority": "86685c878a17a0c6ca89577cfa8e48c596781e5e01e5fafa7df6e699ba68b697",
+    "checker": "c0558e71fc92f76e3e7c1302ca68b602f80bc5931c53642e4addbbe931a9dbc0",
+    "format": "pcs-authorization-root-v1",
+    "genesis_generation": 0,
+    "genesis_id": "696e646570656e64656e742d67656e65736973",
+    "genesis_incumbent": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c307c307c307c317c317c307c317c307c317c307c317c307c317c307c317c307c317c307c317c307c317c30",
+    "policy": "5043532d5343492d484953544f52592d5631",
+    "witness": "69f9d8ccd6e7add5f796bd6c6766ffa7564d90282eebce9761d9a566be074a83"
+  },
+  "source_after": {
+    "/workspace/pcs-historical-scientific-replay-v1/research/scientific_history_v2/__init__.py": "e310077ffab56dc6256fd1ecc1dab2ba10b44821e939909bbb7838af51db5fdf",
+    "/workspace/pcs-historical-scientific-replay-v1/research/scientific_history_v2/audit.py": "a9db2df33a3fe597780e0d8a50e281579e47499f8d19f46b2e371c0f2c28c62d",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/__init__.py": "3238f616ccd21dd3d2ad8ecf292fb1d20741f54ad45b0b85612568cbfc46eb03",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/client.py": "b96f58371ed0fdeee936b91994058bfc49328f880639579927f14ecb29482449",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/protocol.py": "ee7b8ed02b6db722324bdb73fe067d4dd02fa417edccf96f8f50b10fd9da9b15",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/server.py": "699abc64f392a0be06f0225ce55a293bb6db58273c85ebf353336e4dc7d98361",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/store.py": "95f5f63e975ba2d3a4aa59421536deb765961e7f17248e9596266de33cb3f118",
+    "/workspace/pcs-scientific-authority-v2/research/scientific_authority_v2/__init__.py": "d49d7c69b3ad970ba1c6c6904e718431ee28a0f5b7d97315f7c40bfed0dd5bf8",
+    "/workspace/pcs-scientific-authority-v2/research/scientific_authority_v2/coordinator.py": "4291df3059cca4e4fc17873d8ec5ef5079675ac5c3b45b1060795354db055821"
+  },
+  "source_before": {
+    "/workspace/pcs-historical-scientific-replay-v1/research/scientific_history_v2/__init__.py": "e310077ffab56dc6256fd1ecc1dab2ba10b44821e939909bbb7838af51db5fdf",
+    "/workspace/pcs-historical-scientific-replay-v1/research/scientific_history_v2/audit.py": "a9db2df33a3fe597780e0d8a50e281579e47499f8d19f46b2e371c0f2c28c62d",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/__init__.py": "3238f616ccd21dd3d2ad8ecf292fb1d20741f54ad45b0b85612568cbfc46eb03",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/client.py": "b96f58371ed0fdeee936b91994058bfc49328f880639579927f14ecb29482449",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/protocol.py": "ee7b8ed02b6db722324bdb73fe067d4dd02fa417edccf96f8f50b10fd9da9b15",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/server.py": "699abc64f392a0be06f0225ce55a293bb6db58273c85ebf353336e4dc7d98361",
+    "/workspace/pcs-independent-witness-v1/research/scientific_witness_v1/store.py": "95f5f63e975ba2d3a4aa59421536deb765961e7f17248e9596266de33cb3f118",
+    "/workspace/pcs-scientific-authority-v2/research/scientific_authority_v2/__init__.py": "d49d7c69b3ad970ba1c6c6904e718431ee28a0f5b7d97315f7c40bfed0dd5bf8",
+    "/workspace/pcs-scientific-authority-v2/research/scientific_authority_v2/coordinator.py": "4291df3059cca4e4fc17873d8ec5ef5079675ac5c3b45b1060795354db055821"
+  },
+  "sources_stable": true,
+  "started_utc": "2026-10-20T07:44:49.781548+00:00",
+  "wall_seconds": 39.23273812700063,
+  "witness_public_key": "364a058582f91d36ace22594ea68d8946fa283e648387fabd4cb2587d58ed53a"
+}

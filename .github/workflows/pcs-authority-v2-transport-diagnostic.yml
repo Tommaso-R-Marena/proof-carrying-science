@@ -1,0 +1,56 @@
+name: PCS Authority V2 Inherited Transport Diagnostic
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unchanged-transport-reproduction:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Reproduce unchanged mandatory commands and expose bounded diagnostics
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p "$RUNNER_TEMP/transport-diagnostic"
+          (
+            set -euo pipefail
+            source scripts/activate_lean_428.sh
+            lake exe cache get
+            bash scripts/verify_lean_real.sh
+            python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+            python -m pip install --no-deps --no-build-isolation -e .
+            lake -d formal build pcs-lean-authority
+            python scripts/verify_transport_formal.py --output "$RUNNER_TEMP/transport-diagnostic/static.json"
+            PCS_REQUIRE_TRANSPORT_KERNEL=1 python -m pytest -q tests/test_transport_kernel_v1.py --junitxml="$RUNNER_TEMP/transport-diagnostic/model-tests.xml"
+            python scripts/run_transport_kernel_v1.py --output "$RUNNER_TEMP/transport-diagnostic/model"
+            python scripts/verify_transport_trace_formal.py --output "$RUNNER_TEMP/transport-diagnostic/trace-static.json"
+            PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 python -m pytest -q tests/test_transport_trace_kernel_v1.py --junitxml="$RUNNER_TEMP/transport-diagnostic/trace-tests.xml"
+            python scripts/run_transport_trace_kernel_v1.py --output "$RUNNER_TEMP/transport-diagnostic/trace" --signed-base "$RUNNER_TEMP/transport-diagnostic/model/signed-v3-base"
+          ) 2>&1 | tee "$RUNNER_TEMP/transport-diagnostic/console.log"
+          PCS_DIAGNOSTIC_STATUS=${PIPESTATUS[0]}
+          export PCS_DIAGNOSTIC_STATUS
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          if os.environ['PCS_DIAGNOSTIC_STATUS'] != '0':
+              log = Path(os.environ['RUNNER_TEMP']) / 'transport-diagnostic/console.log'
+              tail = log.read_text(errors='replace')[-24000:]
+              escaped = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+              print('::error title=Unchanged transport reproduction failed::' + escaped)
+          PY
+          exit "$PCS_DIAGNOSTIC_STATUS"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: authority-v2-inherited-transport-diagnostic
+          path: ${{ runner.temp }}/transport-diagnostic
+          retention-days: 14

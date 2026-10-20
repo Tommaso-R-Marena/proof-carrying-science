@@ -1,0 +1,38 @@
+{
+  "format": "pcs-authority-v2-independent-controls-v1",
+  "frozen_utc": "2026-10-20T07:42:10.445735+00:00",
+  "status": "FROZEN_BEFORE_FINAL_ACTUAL_PROCESS_CAMPAIGN",
+  "earlier_exploratory_findings": [
+    "Unauthenticated HTTP parser head-of-line blockage and lack of absolute deadline; repaired then independently retested",
+    "Static accepted-domain mismatch event_id257; repaired before independent runtime probe; postrepair rejects"
+  ],
+  "profiles": {
+    "A": "Separate server process/keys, same host/admin",
+    "B": "Unavailable distinct outer-UID privilege/helper; usernamespace UID0 only maps same outer UID",
+    "C": "No external independently administered host/key provided"
+  },
+  "positive_controls": [
+    "Actual fixed Lean genesis and candidate verification through real witness HTTP service",
+    "Exact witness-export reconstruction and full retrospective audit"
+  ],
+  "negative_controls": [
+    "Witness finalized without producer localcommit is not servingeligible",
+    "Whole producer-store rollback rejected with witness continuity intact",
+    "Co-signed false scientific candidate rejected without witness advance",
+    "Wrong root / wrong pinned public key / nonce or role replay rejected",
+    "Malformed/noncanonical RPC and resource-domain refusals"
+  ],
+  "required_counterexamples": [
+    "Rolling back witness state itself with same trusted key/root permits a fresh stateless client to authenticate an old head; this violates durable-witness continuity assumption",
+    "Replacing every trusted bootstrap component can authenticate another world; cannot establish unconditional security"
+  ],
+  "limits": {
+    "actual_heavy_lean_processes": 1,
+    "max_campaign_seconds": 180,
+    "max_history_events": 2,
+    "no_fake_positive_verdicts": true,
+    "physical_power_failure_tested": false,
+    "external_empirical_validation": false
+  },
+  "minimum_acceptable": "All expected safe refusals occur; positive cases require actual Lean; expected counterexamples retained and correctly scoped. Any unexpected acceptance/commit/availability failure is reported, not relabeled."
+}
