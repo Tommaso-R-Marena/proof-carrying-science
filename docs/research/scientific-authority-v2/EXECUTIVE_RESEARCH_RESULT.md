@@ -27,7 +27,7 @@ clinical adequacy, neural promotion or empirical scientific acceptance follows.
 | Producer-store rollback detection/reconstruction | EXECUTED_PASS | Live witness, exact material reconstruction |
 | Witness/all-store rollback immunity | FALSIFIED under lost-continuity model | Independent18-control campaign retains2counterexamples |
 | Separate process, one host/admin (Profile A) | EXECUTED_PASS | Actual server/client and process identifiers |
-| Distinct outer-user storage/key principal (Profile B) | BLOCKED_TECHNICAL | UID1000, no capabilities/sudo/mapping helpers |
+| Distinct-user producer/witness boundary (Profile B) | EXECUTED_PASS, limited boundary | UID65534 producer/UID1000 witness, zero capabilities, verified TLS, withheld key/socket; see principal-separation/ |
 | Independently administered witness (Profile C) | BLOCKED_EXTERNAL | No independent operator/host/bootstrap provided |
 | General Python/crypto/SQLite/compiler refinement | UNVERIFIED | Explicit runtime correspondence obligations |
 | Empirical adequacy/external laboratory adoption | UNVERIFIED | Synthetic research demonstration only |
@@ -64,3 +64,8 @@ This document is a pre-publication qualification record. The final integration
 head, actual GitHub proposed-merge commit, tree identity and hosted results are
 recorded in its PR description and external final handoff after execution.
 No green parent workflow substitutes for final-stack qualification.
+
+The later `principal-separation/` follow-up supersedes the original native-route
+Profile B blockage for the producer/witness boundary only. Full distributed
+coordinator crash qualification remains Profile A; independently administered
+Profile C is still unavailable.
