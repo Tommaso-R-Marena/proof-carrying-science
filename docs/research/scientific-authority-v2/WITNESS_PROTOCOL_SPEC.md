@@ -59,6 +59,11 @@ field. Client methods generate nonces internally and authenticate every response
 - `checkpoint`: payload `{anchor,pending,finalized}`. `pending` is null or
   `{intent,intent_sha256,next_anchor,receipt}`. This fresh response, rather than
   an old permanent receipt, describes current witness state.
+  `WitnessClient.checkpoint()` retains its payload-compatible interface;
+  `checkpoint_evidence()` returns the complete actual signed response **after**
+  the identical receiver-generated nonce/root/profile/key verification. This
+  preserves independently replayable signature evidence. Its captured nonce is
+  not a substitute for a later observer's own fresh currentness challenge.
 - `prepare`: additional `intent` is exact old envelope bytes, hex-encoded.
   Authenticate old signatures/scope/generation/incumbent/predecessor/event
   freshness before launching Lean. Actual `ReceiverService` must return a signed,

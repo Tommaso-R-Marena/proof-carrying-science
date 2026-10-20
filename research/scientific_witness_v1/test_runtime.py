@@ -215,6 +215,13 @@ class WitnessRuntimeTests(unittest.TestCase):
     def test_actual_separate_server_client_signature_and_complete_material(self):
         client,process=self.launch();self.assertIsNone(process.poll())
         self.assertEqual(client.checkpoint()["anchor"],anchor_json(self.initial))
+        evidence=client.checkpoint_evidence()
+        nonce=bytes.fromhex(evidence["statement"]["nonce"])
+        self.assertEqual(len(nonce),32)
+        authenticated=verify(evidence,self.root,self.store.public_key,kind="response:checkpoint",nonce=nonce)
+        self.assertEqual(authenticated["anchor"],anchor_json(self.initial))
+        with self.assertRaises(Rejected):
+            verify(evidence,self.root,self.store.public_key,kind="response:checkpoint",nonce=bytes(32))
         raw=self.intent();prepared=client.prepare(raw)["receipt"]
         verify(prepared,self.root,self.store.public_key,kind="prepared")
         self.assertIsNotNone(client.checkpoint()["pending"])

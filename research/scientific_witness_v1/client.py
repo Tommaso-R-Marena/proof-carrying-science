@@ -35,7 +35,7 @@ class WitnessClient:
     @property
     def witness_public_key(self): return self._public_key
 
-    def _call(self, action, **fields):
+    def _call(self, action, *, retain_envelope=False, **fields):
         nonce = os.urandom(32)
         request = {"protocol": PROTOCOL, "action": action, "nonce": nonce.hex(), **fields}
         raw = canonical(request)
@@ -64,10 +64,19 @@ class WitnessClient:
                 envelope = parse(body)
         except (OSError, urllib.error.URLError) as exc:
             raise Rejected("Witness unavailable or transport failed") from exc
-        return verify(envelope, self._root, self._public_key,
-                      kind="response:" + action, nonce=nonce)
+        payload = verify(envelope, self._root, self._public_key,
+                         kind="response:" + action, nonce=nonce)
+        return envelope if retain_envelope else payload
 
     def checkpoint(self): return self._call("checkpoint")
+    def checkpoint_evidence(self):
+        """Retain the actual signed response after the same fresh-nonce checks.
+
+        A later reviewer can authenticate its scoped historical statement. Its
+        recorded nonce does not prove currentness to that reviewer: they need
+        their own new challenge against the independently pinned witness.
+        """
+        return self._call("checkpoint", retain_envelope=True)
     def export(self): return self._call("export")
     def prepare(self, intent: bytes):
         if type(intent) is not bytes: raise Rejected("Immutable intent bytes required")
