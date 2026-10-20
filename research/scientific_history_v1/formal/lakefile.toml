@@ -1,0 +1,15 @@
+name = "PCSScientificHistoryResearch"
+version = "0.1.0"
+defaultTargets = ["PCSScientificHistoryV1"]
+
+[[require]]
+name = "PCSScientificReceiverResearch"
+path = "../../scientific_receiver_v1/formal"
+
+[[require]]
+name = "PCSAuthorizationHistoryResearch"
+path = "../../authorization_history_v1/formal"
+
+[[lean_lib]]
+name = "PCSScientificHistoryV1"
+defaultFacets = ["leanArts"]

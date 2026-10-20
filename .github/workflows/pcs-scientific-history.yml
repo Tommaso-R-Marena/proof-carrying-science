@@ -1,0 +1,73 @@
+name: PCS Scientific History Join
+on:
+  pull_request:
+    paths:
+      - 'research/scientific_history_v1/**'
+      - 'research/scientific_receiver_v1/**'
+      - 'research/authorization_history_v1/**'
+      - 'research/integration_v1/**'
+      - 'incubation/pcs_certified_numerics_v1/**'
+      - 'incubation/pcs_conservation_algebra_v1/**'
+      - 'formal/**'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'lean-toolchain'
+      - 'requirements*.lock'
+      - 'scripts/audit_lean_source.py'
+      - 'scripts/activate_lean_428.sh'
+      - '.github/workflows/pcs-scientific-history.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: scientific-history-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  scientific-history-join:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Build the isolated join and audit every new theorem
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          for project in \
+            incubation/pcs_certified_numerics_v1 \
+            incubation/pcs_conservation_algebra_v1 \
+            research/integration_v1/formal \
+            research/scientific_receiver_v1/formal \
+            research/authorization_history_v1/formal \
+            research/scientific_history_v1/formal; do
+            python -m research.integration_v1.prepare_mathlib_cache --project "$project"
+          done
+          python research/scientific_history_v1/check_formal.py --lean "$(command -v lean)"
+      - name: Actual Lean admission, signatures, concurrent CAS and crash recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --require-hashes -r requirements-dev.lock
+          source scripts/activate_lean_428.sh
+          export LEAN_PATH="$(lake -d research/scientific_history_v1/formal env printenv LEAN_PATH)"
+          export PCS_SCIENTIFIC_LEAN="$(command -v lean)"
+          export PCS_SCIENTIFIC_MAIN="$PWD/research/scientific_receiver_v1/formal/Main.lean"
+          export PCS_SCIENTIFIC_CWD="$PWD/research/scientific_receiver_v1/formal"
+          mkdir -p "$RUNNER_TEMP/scientific-history"
+          python -m unittest research.scientific_history_v1.test_receiver -v 2>&1 | tee "$RUNNER_TEMP/scientific-history/runtime.txt"
+          python -m research.integration_v1.source_gate > "$RUNNER_TEMP/scientific-history/source-gate.json"
+          python scripts/check_repository_integrity.py > "$RUNNER_TEMP/scientific-history/repository-integrity.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: scientific-history-evidence
+          path: |
+            research/scientific_history_v1/formal/.lake/build/lib/lean/formal-report.json
+            research/scientific_history_v1/formal/.lake/build/lib/lean/statements-and-axioms.log
+            ${{ runner.temp }}/scientific-history
