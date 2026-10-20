@@ -1,0 +1,16 @@
+{
+  "format": "pcs-full-history-replay-benchmark-preregistration-v1",
+  "parent": "7be674df70eb3108c9dbd8b0b97f42a728bde000",
+  "cases": [0, 1, 8, 32],
+  "expected_acceptance": [true, true, true, true],
+  "expected_artifact_checks": [1, 2, 9, 33],
+  "scientific_fixtures": ["zero-step", "one-step"],
+  "authorization": "Two fresh real Ed25519 keys; fixed receiver-owned Root; exact chained signed envelopes",
+  "mathematical_verification": "Each artifact actually reexecuted by pinned Lean 4.28.0 receiver, including checked genesis; no cached positive",
+  "metrics": ["elapsed_seconds", "artifact_count", "total_scientific_bytes", "maximum_observed_child_peak_RSS_KiB", "authentication_only_replay_seconds"],
+  "limits": {"events": 32, "scientific_bytes": 262144, "envelope_bytes": 1048576, "elapsed_acceptance_seconds_per_audit": 300},
+  "minimum_acceptable_performance": "Each accepted audit completes within its declared elapsed acceptance budget; no throughput or speedup threshold is claimed",
+  "negative_controls": ["Invalid old scientific artifact followed by valid current artifact must reject", "No historical occurrence inferred from retrospective rechecking"],
+  "incremental_authenticated_cache": "NOT_IMPLEMENTED; every restart rechecks genesis and all events",
+  "profile": "Same-host research, partial fixture pin inventory; no protected root or external empirical validation"
+}

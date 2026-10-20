@@ -1,0 +1,1226 @@
+{
+  "authored_theorems": 64,
+  "declarations": {
+    "PCSScientificAuthorityV2.Authority.mk.inj": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.Authority.mk.inj {witness : PCSScientificAuthorityV2.Witness}\n  {localState : PCSAuthorizationHistoryV1.State} {witness\u271d : PCSScientificAuthorityV2.Witness}\n  {localState\u271d : PCSAuthorizationHistoryV1.State} :\n  { witness := witness, localState := localState } = { witness := witness\u271d, localState := localState\u271d } \u2192\n    witness = witness\u271d \u2227 localState = localState\u271d"
+    },
+    "PCSScientificAuthorityV2.Authority.mk.injEq": {
+      "authored": false,
+      "axioms": [
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.Authority.mk.injEq (witness : PCSScientificAuthorityV2.Witness)\n  (localState : PCSAuthorizationHistoryV1.State) (witness\u271d : PCSScientificAuthorityV2.Witness)\n  (localState\u271d : PCSAuthorizationHistoryV1.State) :\n  ({ witness := witness, localState := localState } = { witness := witness\u271d, localState := localState\u271d }) =\n    (witness = witness\u271d \u2227 localState = localState\u271d)"
+    },
+    "PCSScientificAuthorityV2.Authority.mk.sizeOf_spec": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.Authority.mk.sizeOf_spec (witness : PCSScientificAuthorityV2.Witness)\n  (localState : PCSAuthorizationHistoryV1.State) :\n  SizeOf.sizeOf { witness := witness, localState := localState } = 1 + SizeOf.sizeOf witness + SizeOf.sizeOf localState"
+    },
+    "PCSScientificAuthorityV2.CompleteAuditFacts.exactHistory": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.CompleteAuditFacts.exactHistory {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}\n  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :\n  final.history = es"
+    },
+    "PCSScientificAuthorityV2.CompleteAuditFacts.finalIncumbent": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.CompleteAuditFacts.finalIncumbent {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}\n  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :\n  final.incumbent = PCSScientificAuthorityV2.lastArtifact root.genesisIncumbent es"
+    },
+    "PCSScientificAuthorityV2.CompleteAuditFacts.generation": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.CompleteAuditFacts.generation {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}\n  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :\n  final.generation = root.genesisGeneration + es.length"
+    },
+    "PCSScientificAuthorityV2.CompleteAuditFacts.genesis": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.CompleteAuditFacts.genesis {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}\n  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :\n  \u2203 r,\n    PCSScientificReceiver.receive root.genesisIncumbent = Option.some r \u2227\n      PCSScientificReceiver.ScopedScientificClaimHolds root.genesisIncumbent r"
+    },
+    "PCSScientificAuthorityV2.CompleteAuditFacts.invariant": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.CompleteAuditFacts.invariant {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}\n  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :\n  PCSScientificAuthorityV2.HistoryInvariant root verify final"
+    },
+    "PCSScientificAuthorityV2.CompleteAuditFacts.policy": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.CompleteAuditFacts.policy {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}\n  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :\n  root.policy = PCSScientificHistoryV1.policyBytes"
+    },
+    "PCSScientificAuthorityV2.HistoryInvariant.authenticated": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.HistoryInvariant.authenticated {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}\n  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) :\n  PCSAuthorizationHistoryV1.AuthenticatedHistory root verify s"
+    },
+    "PCSScientificAuthorityV2.HistoryInvariant.count": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.HistoryInvariant.count {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}\n  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) :\n  s.generation = root.genesisGeneration + s.history.length"
+    },
+    "PCSScientificAuthorityV2.HistoryInvariant.incumbent": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.HistoryInvariant.incumbent {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}\n  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) : PCSScientificHistoryV1.Checked s.incumbent"
+    },
+    "PCSScientificAuthorityV2.HistoryInvariant.linked": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.HistoryInvariant.linked {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}\n  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) :\n  PCSAuthorizationHistoryV1.LinkedHistory root.genesisId s.history s.tip"
+    },
+    "PCSScientificAuthorityV2.HistoryInvariant.science": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.HistoryInvariant.science {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}\n  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) : PCSScientificHistoryV1.ScientificHistory s"
+    },
+    "PCSScientificAuthorityV2.HistoryInvariant.scopePinned": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.HistoryInvariant.scopePinned {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}\n  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) : PCSScientificAuthorityV2.ScopedHistory root s"
+    },
+    "PCSScientificAuthorityV2.Prepared.mk.inj": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.Prepared.mk.inj {before : PCSAuthorizationHistoryV1.State}\n  {envelope : PCSAuthorizationHistoryV1.Envelope} {result : PCSScientificReceiver.Result}\n  {before\u271d : PCSAuthorizationHistoryV1.State} {envelope\u271d : PCSAuthorizationHistoryV1.Envelope}\n  {result\u271d : PCSScientificReceiver.Result} :\n  { before := before, envelope := envelope, result := result } =\n      { before := before\u271d, envelope := envelope\u271d, result := result\u271d } \u2192\n    before = before\u271d \u2227 envelope = envelope\u271d \u2227 result = result\u271d"
+    },
+    "PCSScientificAuthorityV2.Prepared.mk.injEq": {
+      "authored": false,
+      "axioms": [
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.Prepared.mk.injEq (before : PCSAuthorizationHistoryV1.State)\n  (envelope : PCSAuthorizationHistoryV1.Envelope) (result : PCSScientificReceiver.Result)\n  (before\u271d : PCSAuthorizationHistoryV1.State) (envelope\u271d : PCSAuthorizationHistoryV1.Envelope)\n  (result\u271d : PCSScientificReceiver.Result) :\n  ({ before := before, envelope := envelope, result := result } =\n      { before := before\u271d, envelope := envelope\u271d, result := result\u271d }) =\n    (before = before\u271d \u2227 envelope = envelope\u271d \u2227 result = result\u271d)"
+    },
+    "PCSScientificAuthorityV2.Prepared.mk.sizeOf_spec": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.Prepared.mk.sizeOf_spec (before : PCSAuthorizationHistoryV1.State)\n  (envelope : PCSAuthorizationHistoryV1.Envelope) (result : PCSScientificReceiver.Result) :\n  SizeOf.sizeOf { before := before, envelope := envelope, result := result } =\n    1 + SizeOf.sizeOf before + SizeOf.sizeOf envelope + SizeOf.sizeOf result"
+    },
+    "PCSScientificAuthorityV2.RecoveryFacts.checked": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.RecoveryFacts.checked {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}\n  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) :\n  PCSScientificAuthorityV2.audit root verify archive = Option.some a.localState"
+    },
+    "PCSScientificAuthorityV2.RecoveryFacts.checkpoint": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.RecoveryFacts.checkpoint {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}\n  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) : a.localState = w.committed"
+    },
+    "PCSScientificAuthorityV2.RecoveryFacts.exactWitness": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.RecoveryFacts.exactWitness {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}\n  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) : a.witness = w"
+    },
+    "PCSScientificAuthorityV2.RecoveryFacts.noPending": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.RecoveryFacts.noPending {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}\n  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) : w.pending = Option.none"
+    },
+    "PCSScientificAuthorityV2.RecoveryFacts.scientific": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.RecoveryFacts.scientific {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}\n  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) :\n  PCSScientificAuthorityV2.CompleteAuditFacts root verify archive a.localState"
+    },
+    "PCSScientificAuthorityV2.RecoveryFacts.serve": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.RecoveryFacts.serve {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}\n  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) :\n  PCSScientificAuthorityV2.serve a = Option.some a.localState"
+    },
+    "PCSScientificAuthorityV2.Witness.mk.inj": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.Witness.mk.inj {committed : PCSAuthorizationHistoryV1.State}\n  {pending : Option PCSScientificAuthorityV2.Prepared} {committed\u271d : PCSAuthorizationHistoryV1.State}\n  {pending\u271d : Option PCSScientificAuthorityV2.Prepared} :\n  { committed := committed, pending := pending } = { committed := committed\u271d, pending := pending\u271d } \u2192\n    committed = committed\u271d \u2227 pending = pending\u271d"
+    },
+    "PCSScientificAuthorityV2.Witness.mk.injEq": {
+      "authored": false,
+      "axioms": [
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.Witness.mk.injEq (committed : PCSAuthorizationHistoryV1.State)\n  (pending : Option PCSScientificAuthorityV2.Prepared) (committed\u271d : PCSAuthorizationHistoryV1.State)\n  (pending\u271d : Option PCSScientificAuthorityV2.Prepared) :\n  ({ committed := committed, pending := pending } = { committed := committed\u271d, pending := pending\u271d }) =\n    (committed = committed\u271d \u2227 pending = pending\u271d)"
+    },
+    "PCSScientificAuthorityV2.Witness.mk.sizeOf_spec": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.Witness.mk.sizeOf_spec (committed : PCSAuthorizationHistoryV1.State)\n  (pending : Option PCSScientificAuthorityV2.Prepared) :\n  SizeOf.sizeOf { committed := committed, pending := pending } = 1 + SizeOf.sizeOf committed + SizeOf.sizeOf pending"
+    },
+    "PCSScientificAuthorityV2.WitnessAction.finalize.inj": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.WitnessAction.finalize.inj {envelope envelope\u271d : PCSAuthorizationHistoryV1.Envelope} :\n  PCSScientificAuthorityV2.WitnessAction.finalize envelope = PCSScientificAuthorityV2.WitnessAction.finalize envelope\u271d \u2192\n    envelope = envelope\u271d"
+    },
+    "PCSScientificAuthorityV2.WitnessAction.finalize.injEq": {
+      "authored": false,
+      "axioms": [
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.WitnessAction.finalize.injEq (envelope envelope\u271d : PCSAuthorizationHistoryV1.Envelope) :\n  (PCSScientificAuthorityV2.WitnessAction.finalize envelope =\n      PCSScientificAuthorityV2.WitnessAction.finalize envelope\u271d) =\n    (envelope = envelope\u271d)"
+    },
+    "PCSScientificAuthorityV2.WitnessAction.finalize.sizeOf_spec": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.WitnessAction.finalize.sizeOf_spec (envelope : PCSAuthorizationHistoryV1.Envelope) :\n  SizeOf.sizeOf (PCSScientificAuthorityV2.WitnessAction.finalize envelope) = 1 + SizeOf.sizeOf envelope"
+    },
+    "PCSScientificAuthorityV2.WitnessAction.prepare.inj": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.WitnessAction.prepare.inj {envelope envelope\u271d : PCSAuthorizationHistoryV1.Envelope} :\n  PCSScientificAuthorityV2.WitnessAction.prepare envelope = PCSScientificAuthorityV2.WitnessAction.prepare envelope\u271d \u2192\n    envelope = envelope\u271d"
+    },
+    "PCSScientificAuthorityV2.WitnessAction.prepare.injEq": {
+      "authored": false,
+      "axioms": [
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.WitnessAction.prepare.injEq (envelope envelope\u271d : PCSAuthorizationHistoryV1.Envelope) :\n  (PCSScientificAuthorityV2.WitnessAction.prepare envelope = PCSScientificAuthorityV2.WitnessAction.prepare envelope\u271d) =\n    (envelope = envelope\u271d)"
+    },
+    "PCSScientificAuthorityV2.WitnessAction.prepare.sizeOf_spec": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.WitnessAction.prepare.sizeOf_spec (envelope : PCSAuthorizationHistoryV1.Envelope) :\n  SizeOf.sizeOf (PCSScientificAuthorityV2.WitnessAction.prepare envelope) = 1 + SizeOf.sizeOf envelope"
+    },
+    "PCSScientificAuthorityV2.WitnessInvariant.checkedArchive": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.WitnessInvariant.checkedArchive {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  (self : PCSScientificAuthorityV2.WitnessInvariant root verify w) :\n  \u2203 es, PCSScientificAuthorityV2.audit root verify es = Option.some w.committed"
+    },
+    "PCSScientificAuthorityV2.WitnessInvariant.pendingSound": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.WitnessInvariant.pendingSound {root : PCSAuthorizationHistoryV1.Root}\n  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}\n  (self : PCSScientificAuthorityV2.WitnessInvariant root verify w) : PCSScientificAuthorityV2.PendingSound root verify w"
+    },
+    "PCSScientificAuthorityV2.audit.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.audit.eq_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.audit root verify es =\n    if root.policy = PCSScientificHistoryV1.policyBytes then\n      match PCSScientificReceiver.receive root.genesisIncumbent with\n      | Option.none => Option.none\n      | Option.some val => PCSScientificAuthorityV2.auditFrom root verify (PCSAuthorizationHistoryV1.initial root) es\n    else Option.none"
+    },
+    "PCSScientificAuthorityV2.auditFrom.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.auditFrom.eq_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (x\u271d : PCSAuthorizationHistoryV1.State) :\n  PCSScientificAuthorityV2.auditFrom root verify x\u271d [] = Option.some x\u271d"
+    },
+    "PCSScientificAuthorityV2.auditFrom.eq_2": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.auditFrom.eq_2 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (x\u271d : PCSAuthorizationHistoryV1.State)\n  (e : PCSAuthorizationHistoryV1.Envelope) (es : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.auditFrom root verify x\u271d (e :: es) =\n    match PCSScientificHistoryV1.scientificTransition root verify x\u271d e with\n    | (fst, Option.none) => Option.none\n    | (next, Option.some val) => PCSScientificAuthorityV2.auditFrom root verify next es"
+    },
+    "PCSScientificAuthorityV2.auditFrom.eq_def": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.auditFrom.eq_def (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (x\u271d : PCSAuthorizationHistoryV1.State)\n  (x\u271d\u00b9 : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.auditFrom root verify x\u271d x\u271d\u00b9 =\n    match x\u271d, x\u271d\u00b9 with\n    | s, [] => Option.some s\n    | s, e :: es =>\n      match PCSScientificHistoryV1.scientificTransition root verify s e with\n      | (fst, Option.none) => Option.none\n      | (next, Option.some val) => PCSScientificAuthorityV2.auditFrom root verify next es"
+    },
+    "PCSScientificAuthorityV2.auditFrom_append": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 212,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.auditFrom_append (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)\n  (front back : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.auditFrom root verify s (front ++ back) =\n    (PCSScientificAuthorityV2.auditFrom root verify s front).bind fun next =>\n      PCSScientificAuthorityV2.auditFrom root verify next back"
+    },
+    "PCSScientificAuthorityV2.auditFrom_final_incumbent": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 119,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.auditFrom_final_incumbent (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s final : PCSAuthorizationHistoryV1.State)\n  (es : List PCSAuthorizationHistoryV1.Envelope)\n  (success : PCSScientificAuthorityV2.auditFrom root verify s es = Option.some final) :\n  final.incumbent = PCSScientificAuthorityV2.lastArtifact s.incumbent es"
+    },
+    "PCSScientificAuthorityV2.auditFrom_sound": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 91,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.auditFrom_sound (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s final : PCSAuthorizationHistoryV1.State)\n  (es : List PCSAuthorizationHistoryV1.Envelope) (start : PCSScientificAuthorityV2.HistoryInvariant root verify s)\n  (success : PCSScientificAuthorityV2.auditFrom root verify s es = Option.some final) :\n  PCSScientificAuthorityV2.HistoryInvariant root verify final \u2227 final.history = s.history ++ es"
+    },
+    "PCSScientificAuthorityV2.audit_append_accepted": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 223,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.audit_append_accepted (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (s : PCSAuthorizationHistoryV1.State) (e : PCSAuthorizationHistoryV1.Envelope) (r : PCSScientificReceiver.Result)\n  (success : PCSScientificAuthorityV2.audit root verify es = Option.some s)\n  (accepted : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.some r) :\n  PCSScientificAuthorityV2.audit root verify (es ++ [e]) = Option.some (PCSAuthorizationHistoryV1.commit s e)"
+    },
+    "PCSScientificAuthorityV2.audit_sound": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 153,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.audit_sound (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (final : PCSAuthorizationHistoryV1.State)\n  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) :\n  PCSScientificAuthorityV2.CompleteAuditFacts root verify es final"
+    },
+    "PCSScientificAuthorityV2.audited_entry_scientific": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 172,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.audited_entry_scientific (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (final : PCSAuthorizationHistoryV1.State)\n  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) (e : PCSAuthorizationHistoryV1.Envelope)\n  (member : e \u2208 es) :\n  e.payload.certificate = [] \u2227 \u2203 r, PCSScientificReceiver.ScopedScientificClaimHolds e.payload.candidate r"
+    },
+    "PCSScientificAuthorityV2.audited_incumbent_scientific": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 181,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.audited_incumbent_scientific (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (final : PCSAuthorizationHistoryV1.State)\n  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) :\n  \u2203 r, PCSScientificReceiver.ScopedScientificClaimHolds final.incumbent r"
+    },
+    "PCSScientificAuthorityV2.audited_signatures_authenticated": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 187,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.audited_signatures_authenticated (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature)\n  (Authenticated : PCSAuthorizationHistoryV1.Bytes \u2192 PCSAuthorizationHistoryV1.Payload \u2192 Prop)\n  (signatureSound :\n    \u2200 (key : PCSAuthorizationHistoryV1.Bytes) (payload : PCSAuthorizationHistoryV1.Payload)\n      (signature : PCSAuthorizationHistoryV1.Bytes),\n      verify key payload signature = Bool.true \u2192 Authenticated key payload)\n  (es : List PCSAuthorizationHistoryV1.Envelope) (final : PCSAuthorizationHistoryV1.State)\n  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) (e : PCSAuthorizationHistoryV1.Envelope)\n  (member : e \u2208 es) : Authenticated root.authority e.payload \u2227 Authenticated root.witness e.payload"
+    },
+    "PCSScientificAuthorityV2.finalize.eq_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.finalize.eq_1 (w : PCSScientificAuthorityV2.Witness) (e : PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.finalize w e =\n    match w.pending with\n    | Option.none => (w, Bool.false)\n    | Option.some p =>\n      if p.before = w.committed \u2227 p.envelope = e then\n        ({ committed := PCSAuthorizationHistoryV1.commit w.committed e, pending := Option.none }, Bool.true)\n      else (w, Bool.false)"
+    },
+    "PCSScientificAuthorityV2.finalize_checks": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 104,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_checks (w : PCSScientificAuthorityV2.Witness) (e : PCSAuthorizationHistoryV1.Envelope)\n  (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :\n  \u2203 p, w.pending = Option.some p \u2227 p.before = w.committed \u2227 p.envelope = e"
+    },
+    "PCSScientificAuthorityV2.finalize_generation": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 153,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_generation (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :\n  (PCSScientificAuthorityV2.finalize w e).1.committed.generation = w.committed.generation + 1"
+    },
+    "PCSScientificAuthorityV2.finalize_generation_monotone": {
+      "authored": true,
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 158,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_generation_monotone (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) :\n  w.committed.generation \u2264 (PCSScientificAuthorityV2.finalize w e).1.committed.generation"
+    },
+    "PCSScientificAuthorityV2.finalize_generation_monotone._proof_1_1": {
+      "authored": false,
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.finalize_generation_monotone._proof_1_1 (w : PCSScientificAuthorityV2.Witness) :\n  \u00acw.committed.generation \u2264 w.committed.generation + 1 \u2192 False"
+    },
+    "PCSScientificAuthorityV2.finalize_prepared_science": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 129,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_prepared_science (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w)\n  (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :\n  \u2203 r,\n    PCSScientificHistoryV1.scientificTransition root verify w.committed e =\n        (PCSAuthorizationHistoryV1.commit w.committed e, Option.some r) \u2227\n      PCSScientificReceiver.ScopedScientificClaimHolds e.payload.candidate r"
+    },
+    "PCSScientificAuthorityV2.finalize_preserves_invariant": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 140,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_preserves_invariant (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :\n  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.finalize w e).1"
+    },
+    "PCSScientificAuthorityV2.finalize_rejected_unchanged": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 122,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_rejected_unchanged (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) (rejected : (PCSScientificAuthorityV2.finalize w e).2 = Bool.false) :\n  PCSScientificAuthorityV2.finalize w e = (w, Bool.false)"
+    },
+    "PCSScientificAuthorityV2.finalize_stale_rejected": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 164,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_stale_rejected (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w)\n  (stale : e.payload.expectedGeneration \u2260 w.committed.generation) :\n  PCSScientificAuthorityV2.finalize w e = (w, Bool.false)"
+    },
+    "PCSScientificAuthorityV2.finalize_state": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 116,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.finalize_state (w : PCSScientificAuthorityV2.Witness) (e : PCSAuthorizationHistoryV1.Envelope)\n  (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :\n  PCSScientificAuthorityV2.finalize w e =\n    ({ committed := PCSAuthorizationHistoryV1.commit w.committed e, pending := Option.none }, Bool.true)"
+    },
+    "PCSScientificAuthorityV2.initial_invariant": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 49,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.initial_invariant (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature)\n  (checked : PCSScientificHistoryV1.Checked root.genesisIncumbent) :\n  PCSScientificAuthorityV2.HistoryInvariant root verify (PCSAuthorizationHistoryV1.initial root)"
+    },
+    "PCSScientificAuthorityV2.initializeWitness.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.initializeWitness.eq_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) :\n  PCSScientificAuthorityV2.initializeWitness root verify =\n    Option.map (fun s => { committed := s, pending := Option.none }) (PCSScientificAuthorityV2.audit root verify [])"
+    },
+    "PCSScientificAuthorityV2.initialize_sound": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 58,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.initialize_sound (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (success : PCSScientificAuthorityV2.initializeWitness root verify = Option.some w) :\n  PCSScientificAuthorityV2.WitnessInvariant root verify w"
+    },
+    "PCSScientificAuthorityV2.initialized_trace_serving_scientific": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 157,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.initialized_trace_serving_scientific (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (start : PCSScientificAuthorityV2.Witness)\n  (initialized : PCSScientificAuthorityV2.initializeWitness root verify = Option.some start)\n  (actions : List PCSScientificAuthorityV2.WitnessAction) (localState served : PCSAuthorizationHistoryV1.State)\n  (eligible :\n    PCSScientificAuthorityV2.serve\n        { witness := PCSScientificAuthorityV2.witnessRun root verify start actions, localState := localState } =\n      Option.some served) :\n  \u2203 archive,\n    PCSScientificAuthorityV2.audit root verify archive = Option.some served \u2227\n      \u2203 r, PCSScientificReceiver.ScopedScientificClaimHolds served.incumbent r"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_1 (a\u271d : PCSScientificAuthorityV2.Witness)\n  (a\u271d\u00b9 : PCSAuthorizationHistoryV1.State) : { witness := a\u271d, localState := a\u271d\u00b9 } = { witness := a\u271d, localState := a\u271d\u00b9 }"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_2": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_2 (a\u271d : PCSScientificAuthorityV2.Witness)\n  (a\u271d\u00b9 b\u271d : PCSAuthorizationHistoryV1.State) :\n  \u00aca\u271d\u00b9 = b\u271d \u2192 { witness := a\u271d, localState := a\u271d\u00b9 } = { witness := a\u271d, localState := b\u271d } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_3": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_3 (a\u271d : PCSScientificAuthorityV2.Witness)\n  (a\u271d\u00b9 : PCSAuthorizationHistoryV1.State) (b\u271d : PCSScientificAuthorityV2.Witness)\n  (b\u271d\u00b9 : PCSAuthorizationHistoryV1.State) :\n  \u00aca\u271d = b\u271d \u2192 { witness := a\u271d, localState := a\u271d\u00b9 } = { witness := b\u271d, localState := b\u271d\u00b9 } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_1 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 : PCSAuthorizationHistoryV1.Envelope) (a\u271d\u00b2 : PCSScientificReceiver.Result) :\n  { before := a\u271d, envelope := a\u271d\u00b9, result := a\u271d\u00b2 } = { before := a\u271d, envelope := a\u271d\u00b9, result := a\u271d\u00b2 }"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_2": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_2 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 : PCSAuthorizationHistoryV1.Envelope) (a\u271d\u00b2 b\u271d : PCSScientificReceiver.Result) :\n  \u00aca\u271d\u00b2 = b\u271d \u2192 { before := a\u271d, envelope := a\u271d\u00b9, result := a\u271d\u00b2 } = { before := a\u271d, envelope := a\u271d\u00b9, result := b\u271d } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_3": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_3 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 : PCSAuthorizationHistoryV1.Envelope) (a\u271d\u00b2 : PCSScientificReceiver.Result)\n  (b\u271d : PCSAuthorizationHistoryV1.Envelope) (b\u271d\u00b9 : PCSScientificReceiver.Result) :\n  \u00aca\u271d\u00b9 = b\u271d \u2192 { before := a\u271d, envelope := a\u271d\u00b9, result := a\u271d\u00b2 } = { before := a\u271d, envelope := b\u271d, result := b\u271d\u00b9 } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_4": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_4 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 : PCSAuthorizationHistoryV1.Envelope) (a\u271d\u00b2 : PCSScientificReceiver.Result) (b\u271d : PCSAuthorizationHistoryV1.State)\n  (b\u271d\u00b9 : PCSAuthorizationHistoryV1.Envelope) (b\u271d\u00b2 : PCSScientificReceiver.Result) :\n  \u00aca\u271d = b\u271d \u2192 { before := a\u271d, envelope := a\u271d\u00b9, result := a\u271d\u00b2 } = { before := b\u271d, envelope := b\u271d\u00b9, result := b\u271d\u00b2 } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_1 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 : Option PCSScientificAuthorityV2.Prepared) :\n  { committed := a\u271d, pending := a\u271d\u00b9 } = { committed := a\u271d, pending := a\u271d\u00b9 }"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_2": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_2 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 b\u271d : Option PCSScientificAuthorityV2.Prepared) :\n  \u00aca\u271d\u00b9 = b\u271d \u2192 { committed := a\u271d, pending := a\u271d\u00b9 } = { committed := a\u271d, pending := b\u271d } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_3": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_3 (a\u271d : PCSAuthorizationHistoryV1.State)\n  (a\u271d\u00b9 : Option PCSScientificAuthorityV2.Prepared) (b\u271d : PCSAuthorizationHistoryV1.State)\n  (b\u271d\u00b9 : Option PCSScientificAuthorityV2.Prepared) :\n  \u00aca\u271d = b\u271d \u2192 { committed := a\u271d, pending := a\u271d\u00b9 } = { committed := b\u271d, pending := b\u271d\u00b9 } \u2192 False"
+    },
+    "PCSScientificAuthorityV2.invalid_genesis_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 202,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.invalid_genesis_rejects (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (bad : PCSScientificReceiver.receive root.genesisIncumbent = Option.none) :\n  PCSScientificAuthorityV2.audit root verify es = Option.none"
+    },
+    "PCSScientificAuthorityV2.lastArtifact.eq_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.lastArtifact.eq_1 (x\u271d : PCSAuthorizationHistoryV1.Bytes) :\n  PCSScientificAuthorityV2.lastArtifact x\u271d [] = x\u271d"
+    },
+    "PCSScientificAuthorityV2.lastArtifact.eq_2": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.lastArtifact.eq_2 (x\u271d : PCSAuthorizationHistoryV1.Bytes)\n  (e : PCSAuthorizationHistoryV1.Envelope) (es : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.lastArtifact x\u271d (e :: es) = PCSScientificAuthorityV2.lastArtifact e.payload.candidate es"
+    },
+    "PCSScientificAuthorityV2.lastArtifact.eq_def": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.lastArtifact.eq_def (x\u271d : PCSAuthorizationHistoryV1.Bytes)\n  (x\u271d\u00b9 : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.lastArtifact x\u271d x\u271d\u00b9 =\n    match x\u271d, x\u271d\u00b9 with\n    | genesis, [] => genesis\n    | x, e :: es => PCSScientificAuthorityV2.lastArtifact e.payload.candidate es"
+    },
+    "PCSScientificAuthorityV2.localCommit.eq_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.localCommit.eq_1 (a : PCSScientificAuthorityV2.Authority)\n  (e : PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.localCommit a e =\n    match a.witness.pending with\n    | Option.none => (a, Bool.false)\n    | Option.some p =>\n      if p.before = a.witness.committed \u2227 p.before = a.localState \u2227 p.envelope = e then\n        ({ witness := a.witness, localState := PCSAuthorizationHistoryV1.commit a.localState e }, Bool.true)\n      else (a, Bool.false)"
+    },
+    "PCSScientificAuthorityV2.localCommit_checks": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 63,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.localCommit_checks (a : PCSScientificAuthorityV2.Authority)\n  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.localCommit a e).2 = Bool.true) :\n  \u2203 p, a.witness.pending = Option.some p \u2227 p.before = a.witness.committed \u2227 p.before = a.localState \u2227 p.envelope = e"
+    },
+    "PCSScientificAuthorityV2.localCommit_state": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 76,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.localCommit_state (a : PCSScientificAuthorityV2.Authority)\n  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.localCommit a e).2 = Bool.true) :\n  PCSScientificAuthorityV2.localCommit a e =\n    ({ witness := a.witness, localState := PCSAuthorizationHistoryV1.commit a.localState e }, Bool.true)"
+    },
+    "PCSScientificAuthorityV2.localCommit_witness_unchanged": {
+      "authored": true,
+      "axioms": [],
+      "line": 56,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.localCommit_witness_unchanged (a : PCSScientificAuthorityV2.Authority)\n  (e : PCSAuthorizationHistoryV1.Envelope) : (PCSScientificAuthorityV2.localCommit a e).1.witness = a.witness"
+    },
+    "PCSScientificAuthorityV2.local_commit_without_finalization_not_serving": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 84,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.local_commit_without_finalization_not_serving (a : PCSScientificAuthorityV2.Authority)\n  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.localCommit a e).2 = Bool.true) :\n  PCSScientificAuthorityV2.serve (PCSScientificAuthorityV2.localCommit a e).1 = Option.none"
+    },
+    "PCSScientificAuthorityV2.mathematical_acceptance_not_empirical": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 139,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.mathematical_acceptance_not_empirical :\n  \u2203 EmpiricallyAdequate s,\n    PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n          [PCSScientificHistoryV1.sampleEnvelope] =\n        Option.some s \u2227\n      \u00acEmpiricallyAdequate s.incumbent"
+    },
+    "PCSScientificAuthorityV2.mismatched_local_checkpoint_not_serving": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 96,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.mismatched_local_checkpoint_not_serving (a : PCSScientificAuthorityV2.Authority)\n  (different : a.localState \u2260 a.witness.committed) : PCSScientificAuthorityV2.serve a = Option.none"
+    },
+    "PCSScientificAuthorityV2.no_conflicting_finalization_later": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 218,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.no_conflicting_finalization_later (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (first second : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w)\n  (accepted : (PCSScientificAuthorityV2.finalize w first).2 = Bool.true)\n  (samePredecessorGeneration : second.payload.expectedGeneration = first.payload.expectedGeneration)\n  (later : List PCSScientificAuthorityV2.WitnessAction) :\n  have after := PCSScientificAuthorityV2.witnessRun root verify (PCSScientificAuthorityV2.finalize w first).1 later;\n  PCSScientificAuthorityV2.finalize after second = (after, Bool.false)"
+    },
+    "PCSScientificAuthorityV2.no_conflicting_finalization_later._proof_1_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.no_conflicting_finalization_later._proof_1_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (first second : PCSAuthorizationHistoryV1.Envelope)\n  (samePredecessorGeneration : second.payload.expectedGeneration = first.payload.expectedGeneration)\n  (later : List PCSScientificAuthorityV2.WitnessAction) (hg : first.payload.expectedGeneration = w.committed.generation)\n  (monotone :\n    w.committed.generation + 1 \u2264\n      (PCSScientificAuthorityV2.witnessRun root verify (PCSScientificAuthorityV2.finalize w first).1\n            later).committed.generation) :\n  second.payload.expectedGeneration =\n      (PCSScientificAuthorityV2.witnessRun root verify (PCSScientificAuthorityV2.finalize w first).1\n            later).committed.generation \u2192\n    False"
+    },
+    "PCSScientificAuthorityV2.pending_not_serving": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 53,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.pending_not_serving (a : PCSScientificAuthorityV2.Authority)\n  (p : PCSScientificAuthorityV2.Prepared) (pending : a.witness.pending = Option.some p) :\n  PCSScientificAuthorityV2.serve a = Option.none"
+    },
+    "PCSScientificAuthorityV2.prepare.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.prepare.eq_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.prepare root verify w e =\n    match w.pending with\n    | Option.some p => if p.before = w.committed \u2227 p.envelope = e then (w, Bool.true) else (w, Bool.false)\n    | Option.none =>\n      match PCSScientificHistoryV1.scientificTransition root verify w.committed e with\n      | (fst, Option.none) => (w, Bool.false)\n      | (fst, Option.some r) =>\n        ({ committed := w.committed, pending := Option.some { before := w.committed, envelope := e, result := r } },\n          Bool.true)"
+    },
+    "PCSScientificAuthorityV2.prepare_committed_unchanged": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 68,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.prepare_committed_unchanged (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) :\n  (PCSScientificAuthorityV2.prepare root verify w e).1.committed = w.committed"
+    },
+    "PCSScientificAuthorityV2.prepare_preserves_invariant": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 83,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.prepare_preserves_invariant (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :\n  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.prepare root verify w e).1"
+    },
+    "PCSScientificAuthorityV2.prepare_rejected_unchanged": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 75,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.prepare_rejected_unchanged (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope)\n  (rejected : (PCSScientificAuthorityV2.prepare root verify w e).2 = Bool.false) :\n  PCSScientificAuthorityV2.prepare root verify w e = (w, Bool.false)"
+    },
+    "PCSScientificAuthorityV2.recover.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.recover.eq_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (archive : List PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.recover root verify w archive = do\n    let s \u2190 PCSScientificAuthorityV2.audit root verify archive\n    if s = w.committed \u2227 w.pending = Option.none then Option.some { witness := w, localState := s } else Option.none"
+    },
+    "PCSScientificAuthorityV2.recovered_history_not_invented": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 149,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.recovered_history_not_invented (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (archive : List PCSAuthorizationHistoryV1.Envelope) (a : PCSScientificAuthorityV2.Authority)\n  (success : PCSScientificAuthorityV2.recover root verify w archive = Option.some a) : a.localState.history = archive"
+    },
+    "PCSScientificAuthorityV2.recovery_invalid_archive_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 134,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.recovery_invalid_archive_rejects (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (archive : List PCSAuthorizationHistoryV1.Envelope)\n  (bad : PCSScientificAuthorityV2.audit root verify archive = Option.none) :\n  PCSScientificAuthorityV2.recover root verify w archive = Option.none"
+    },
+    "PCSScientificAuthorityV2.recovery_pending_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 138,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.recovery_pending_rejects (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (archive : List PCSAuthorizationHistoryV1.Envelope) (pending : w.pending \u2260 Option.none) :\n  PCSScientificAuthorityV2.recover root verify w archive = Option.none"
+    },
+    "PCSScientificAuthorityV2.recovery_sound": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 117,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.recovery_sound (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (archive : List PCSAuthorizationHistoryV1.Envelope) (a : PCSScientificAuthorityV2.Authority)\n  (success : PCSScientificAuthorityV2.recover root verify w archive = Option.some a) :\n  PCSScientificAuthorityV2.RecoveryFacts root verify w archive a"
+    },
+    "PCSScientificAuthorityV2.recovery_wrong_checkpoint_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 144,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.recovery_wrong_checkpoint_rejects (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (archive : List PCSAuthorizationHistoryV1.Envelope) (s : PCSAuthorizationHistoryV1.State)\n  (checked : PCSScientificAuthorityV2.audit root verify archive = Option.some s) (wrong : s \u2260 w.committed) :\n  PCSScientificAuthorityV2.recover root verify w archive = Option.none"
+    },
+    "PCSScientificAuthorityV2.rejected_entry_stops_audit": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 206,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.rejected_entry_stops_audit (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)\n  (e : PCSAuthorizationHistoryV1.Envelope) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (bad : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.none) :\n  PCSScientificAuthorityV2.auditFrom root verify s (e :: es) = Option.none"
+    },
+    "PCSScientificAuthorityV2.sampleFinalWitness.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.sampleFinalWitness.eq_1 :\n  PCSScientificAuthorityV2.sampleFinalWitness =\n    {\n      committed :=\n        PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n          PCSScientificHistoryV1.sampleEnvelope,\n      pending := Option.none }"
+    },
+    "PCSScientificAuthorityV2.sampleInitialWitness.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.sampleInitialWitness.eq_1 :\n  PCSScientificAuthorityV2.sampleInitialWitness =\n    { committed := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot, pending := Option.none }"
+    },
+    "PCSScientificAuthorityV2.samplePendingWitness.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.samplePendingWitness.eq_1 :\n  PCSScientificAuthorityV2.samplePendingWitness =\n    { committed := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot,\n      pending := Option.some PCSScientificAuthorityV2.samplePrepared }"
+    },
+    "PCSScientificAuthorityV2.samplePrepared.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.samplePrepared.eq_1 :\n  PCSScientificAuthorityV2.samplePrepared =\n    { before := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot,\n      envelope := PCSScientificHistoryV1.sampleEnvelope,\n      result := PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample }"
+    },
+    "PCSScientificAuthorityV2.sample_complete_audit": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 23,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_complete_audit :\n  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n      [PCSScientificHistoryV1.sampleEnvelope] =\n    Option.some\n      (PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n        PCSScientificHistoryV1.sampleEnvelope)"
+    },
+    "PCSScientificAuthorityV2.sample_duplicate_history_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 32,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_duplicate_history_rejects :\n  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n      [PCSScientificHistoryV1.sampleEnvelope, PCSScientificHistoryV1.sampleEnvelope] =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_empty_audit": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 18,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_empty_audit :\n  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify [] =\n    Option.some (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)"
+    },
+    "PCSScientificAuthorityV2.sample_final_can_serve": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 88,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_final_can_serve :\n  PCSScientificAuthorityV2.serve\n      { witness := PCSScientificAuthorityV2.sampleFinalWitness,\n        localState :=\n          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n            PCSScientificHistoryV1.sampleEnvelope } =\n    Option.some\n      (PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n        PCSScientificHistoryV1.sampleEnvelope)"
+    },
+    "PCSScientificAuthorityV2.sample_finalize": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 84,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_finalize :\n  PCSScientificAuthorityV2.finalize PCSScientificAuthorityV2.samplePendingWitness\n      PCSScientificHistoryV1.sampleEnvelope =\n    (PCSScientificAuthorityV2.sampleFinalWitness, Bool.true)"
+    },
+    "PCSScientificAuthorityV2.sample_genesis_receive": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 14,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_genesis_receive :\n  PCSScientificReceiver.receive PCSScientificHistoryV1.sampleRoot.genesisIncumbent =\n    Option.some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample)"
+    },
+    "PCSScientificAuthorityV2.sample_initialize": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 59,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_initialize :\n  PCSScientificAuthorityV2.initializeWitness PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify =\n    Option.some PCSScientificAuthorityV2.sampleInitialWitness"
+    },
+    "PCSScientificAuthorityV2.sample_invalid_genesis_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 112,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_invalid_genesis_rejects :\n  PCSScientificAuthorityV2.audit\n      (have __src := PCSScientificHistoryV1.sampleRoot;\n      { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,\n        genesisId := __src.genesisId, genesisIncumbent := [], genesisGeneration := __src.genesisGeneration })\n      PCSScientificHistoryV1.sampleVerify [] =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_invalid_genesis_rejects._proof_1_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.sample_invalid_genesis_rejects._proof_1_1 :\n  PCSScientificReceiver.decode\n      (let __src := PCSScientificHistoryV1.sampleRoot;\n        { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,\n          genesisId := __src.genesisId, genesisIncumbent := [],\n          genesisGeneration := __src.genesisGeneration }).genesisIncumbent =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_local_commit": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 74,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_local_commit :\n  PCSScientificAuthorityV2.localCommit\n      { witness := PCSScientificAuthorityV2.samplePendingWitness,\n        localState := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot }\n      PCSScientificHistoryV1.sampleEnvelope =\n    ({ witness := PCSScientificAuthorityV2.samplePendingWitness,\n        localState :=\n          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n            PCSScientificHistoryV1.sampleEnvelope },\n      Bool.true)"
+    },
+    "PCSScientificAuthorityV2.sample_local_commit_cannot_serve": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 79,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_local_commit_cannot_serve :\n  PCSScientificAuthorityV2.serve\n      { witness := PCSScientificAuthorityV2.samplePendingWitness,\n        localState :=\n          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n            PCSScientificHistoryV1.sampleEnvelope } =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_pending_cannot_serve": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 69,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_pending_cannot_serve :\n  PCSScientificAuthorityV2.serve\n      { witness := PCSScientificAuthorityV2.samplePendingWitness,\n        localState := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot } =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_prepare": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 63,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_prepare :\n  PCSScientificAuthorityV2.prepare PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n      PCSScientificAuthorityV2.sampleInitialWitness PCSScientificHistoryV1.sampleEnvelope =\n    (PCSScientificAuthorityV2.samplePendingWitness, Bool.true)"
+    },
+    "PCSScientificAuthorityV2.sample_recovery_exact_archive": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 100,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_recovery_exact_archive :\n  PCSScientificAuthorityV2.recover PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n      PCSScientificAuthorityV2.sampleFinalWitness [PCSScientificHistoryV1.sampleEnvelope] =\n    Option.some\n      { witness := PCSScientificAuthorityV2.sampleFinalWitness,\n        localState :=\n          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)\n            PCSScientificHistoryV1.sampleEnvelope }"
+    },
+    "PCSScientificAuthorityV2.sample_recovery_missing_event_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 105,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_recovery_missing_event_rejects :\n  PCSScientificAuthorityV2.recover PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n      PCSScientificAuthorityV2.sampleFinalWitness [] =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_rollback_local_cannot_serve": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 93,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_rollback_local_cannot_serve :\n  PCSScientificAuthorityV2.serve\n      { witness := PCSScientificAuthorityV2.sampleFinalWitness,\n        localState := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot } =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.sample_valid_current_invalid_old_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 45,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.sample_valid_current_invalid_old_rejects :\n  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify\n      [have __src := PCSScientificHistoryV1.sampleEnvelope;\n        {\n          payload :=\n            have __src := PCSScientificHistoryV1.sampleEnvelope.payload;\n            { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,\n              previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,\n              nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent, candidate := [],\n              certificate := __src.certificate },\n          authoritySignature := __src.authoritySignature, witnessSignature := __src.witnessSignature },\n        PCSScientificHistoryV1.sampleEnvelope] =\n    Option.none"
+    },
+    "PCSScientificAuthorityV2.serve.eq_1": {
+      "authored": false,
+      "axioms": [],
+      "statement": "PCSScientificAuthorityV2.serve.eq_1 (a : PCSScientificAuthorityV2.Authority) :\n  PCSScientificAuthorityV2.serve a =\n    if a.witness.pending = Option.none \u2227 a.localState = a.witness.committed then Option.some a.localState\n    else Option.none"
+    },
+    "PCSScientificAuthorityV2.serve_checks": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 30,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.serve_checks (a : PCSScientificAuthorityV2.Authority) (s : PCSAuthorizationHistoryV1.State)\n  (success : PCSScientificAuthorityV2.serve a = Option.some s) :\n  a.witness.pending = Option.none \u2227 a.localState = a.witness.committed \u2227 s = a.witness.committed"
+    },
+    "PCSScientificAuthorityV2.serve_requires_finalized_checkpoint": {
+      "authored": true,
+      "axioms": [
+        "propext"
+      ],
+      "line": 39,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.serve_requires_finalized_checkpoint (a : PCSScientificAuthorityV2.Authority)\n  (s : PCSAuthorizationHistoryV1.State) (success : PCSScientificAuthorityV2.serve a = Option.some s) :\n  s = a.witness.committed"
+    },
+    "PCSScientificAuthorityV2.serving_artifact_scientific": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 43,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.serving_artifact_scientific (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (a : PCSScientificAuthorityV2.Authority)\n  (s : PCSAuthorizationHistoryV1.State) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify a.witness)\n  (success : PCSScientificAuthorityV2.serve a = Option.some s) :\n  \u2203 es,\n    PCSScientificAuthorityV2.audit root verify es = Option.some s \u2227\n      \u2203 r, PCSScientificReceiver.ScopedScientificClaimHolds s.incumbent r"
+    },
+    "PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 124,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean",
+      "statement": "PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel :\n  PCSScientificAuthorityV2.replacedRoot \u2260 PCSScientificHistoryV1.sampleRoot \u2227\n    PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify [] =\n        Option.some (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot) \u2227\n      PCSScientificAuthorityV2.audit PCSScientificAuthorityV2.replacedRoot PCSScientificHistoryV1.sampleVerify [] =\n        Option.some (PCSAuthorizationHistoryV1.initial PCSScientificAuthorityV2.replacedRoot)"
+    },
+    "PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel._proof_1_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel._proof_1_1 :\n  PCSScientificAuthorityV2.replacedRoot.authority \u2260 PCSScientificHistoryV1.sampleRoot.authority"
+    },
+    "PCSScientificAuthorityV2.transition_preserves_invariant": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 75,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.transition_preserves_invariant (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)\n  (e : PCSAuthorizationHistoryV1.Envelope) (h : PCSScientificAuthorityV2.HistoryInvariant root verify s) :\n  PCSScientificAuthorityV2.HistoryInvariant root verify (PCSScientificHistoryV1.scientificTransition root verify s e).1"
+    },
+    "PCSScientificAuthorityV2.transition_preserves_invariant._proof_1_1": {
+      "authored": false,
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.transition_preserves_invariant._proof_1_1 (root : PCSAuthorizationHistoryV1.Root)\n  (s : PCSAuthorizationHistoryV1.State) (count : s.generation = root.genesisGeneration + s.history.length) :\n  \u00acs.generation + 1 = root.genesisGeneration + (s.history.length + 1) \u2192 False"
+    },
+    "PCSScientificAuthorityV2.transition_preserves_scope": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 60,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.transition_preserves_scope (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)\n  (e : PCSAuthorizationHistoryV1.Envelope) (scopePinned : PCSScientificAuthorityV2.ScopedHistory root s) :\n  PCSScientificAuthorityV2.ScopedHistory root (PCSScientificHistoryV1.scientificTransition root verify s e).1"
+    },
+    "PCSScientificAuthorityV2.witnessRun_generation_monotone": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 204,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.witnessRun_generation_monotone (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (actions : List PCSScientificAuthorityV2.WitnessAction) :\n  w.committed.generation \u2264 (PCSScientificAuthorityV2.witnessRun root verify w actions).committed.generation"
+    },
+    "PCSScientificAuthorityV2.witnessRun_invariant": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 197,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.witnessRun_invariant (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (actions : List PCSScientificAuthorityV2.WitnessAction)\n  (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :\n  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.witnessRun root verify w actions)"
+    },
+    "PCSScientificAuthorityV2.witnessStep.eq_1": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.witnessStep.eq_1 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.witnessStep root verify w (PCSScientificAuthorityV2.WitnessAction.prepare e) =\n    (PCSScientificAuthorityV2.prepare root verify w e).1"
+    },
+    "PCSScientificAuthorityV2.witnessStep.eq_2": {
+      "authored": false,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "statement": "PCSScientificAuthorityV2.witnessStep.eq_2 (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (e : PCSAuthorizationHistoryV1.Envelope) :\n  PCSScientificAuthorityV2.witnessStep root verify w (PCSScientificAuthorityV2.WitnessAction.finalize e) =\n    (PCSScientificAuthorityV2.finalize w e).1"
+    },
+    "PCSScientificAuthorityV2.witnessStep_invariant": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 190,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean",
+      "statement": "PCSScientificAuthorityV2.witnessStep_invariant (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)\n  (a : PCSScientificAuthorityV2.WitnessAction) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :\n  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.witnessStep root verify w a)"
+    },
+    "PCSScientificAuthorityV2.witness_finalize_does_not_assert_local_commit": {
+      "authored": true,
+      "axioms": [],
+      "line": 91,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean",
+      "statement": "PCSScientificAuthorityV2.witness_finalize_does_not_assert_local_commit (a : PCSScientificAuthorityV2.Authority)\n  (e : PCSAuthorizationHistoryV1.Envelope) : (PCSScientificAuthorityV2.finalizeAuthority a e).localState = a.localState"
+    },
+    "PCSScientificAuthorityV2.wrong_audit_policy_rejects": {
+      "authored": true,
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "line": 198,
+      "source": "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean",
+      "statement": "PCSScientificAuthorityV2.wrong_audit_policy_rejects (root : PCSAuthorizationHistoryV1.Root)\n  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)\n  (wrong : root.policy \u2260 PCSScientificHistoryV1.policyBytes) :\n  PCSScientificAuthorityV2.audit root verify es = Option.none"
+    }
+  },
+  "dependency_revisions": {
+    "Cli": "4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e",
+    "LeanSearchClient": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+    "Qq": "b8f98e9087e02c8553945a2c5abf07cec8e798c3",
+    "aesop": "f642a64c76df8ba9cb53dba3b919425a0c2aeaf1",
+    "batteries": "495c008c3e3f4fb4256ff5582ddb3abf3198026f",
+    "importGraph": "85b59af46828c029a9168f2f9c35119bd0721e6e",
+    "mathlib": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+    "plausible": "55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3",
+    "proofwidgets": "be3b2e63b1bbf496c478cef98b86972a37c1417d"
+  },
+  "format": "pcs-scientific-authority-v2-formal-qualification-v1",
+  "imports": {
+    "fresh_dependency_rebuild_claimed": false,
+    "history_join_object_sha256": {
+      "/workspace/pcs-authenticated-history-v1/research/authorization_history_v1/formal/.lake/build/lib/lean/PCSAuthorizationHistoryV1.olean": "43ee2e2827c7e52c86f8ade327f1e91d0f4f56bac5c76fb8158d797d70dc93ed",
+      "/workspace/pcs-authenticated-history-v1/research/authorization_history_v1/formal/.lake/build/lib/lean/PCSAuthorizationHistoryV1/History.olean": "45587cdbf924e46d8af1f47cba856b5e4ab57f0844399704cedc0f6990e3caaa",
+      "/workspace/pcs-scientific-history-v1/research/scientific_history_v1/formal/.lake/build/lib/lean/PCSScientificHistoryV1.olean": "89aa9372c9055c1e1e01cbedd7b3fedfcfb3e82635d63a89604676ae7d9e5d7d",
+      "/workspace/pcs-scientific-history-v1/research/scientific_history_v1/formal/.lake/build/lib/lean/PCSScientificHistoryV1/Fixtures.olean": "7f5ee9b58173253d618b863e18e76fe39e3f9a055eded95a29b1933c1871516f",
+      "/workspace/pcs-scientific-history-v1/research/scientific_history_v1/formal/.lake/build/lib/lean/PCSScientificHistoryV1/Join.olean": "748c7b45cc71bacde969881e9394e6300699c1e83026c2de1aaf464bacb1c0e2"
+    },
+    "mode": "fresh new modules with source-checked read-only imports",
+    "receiver_qualification_sha256": "7f33464e773904590582f22786b44d2d17b856cddc34a9ce1ae486e8469998a2",
+    "source_to_prebuilt_object_correspondence_proved": false
+  },
+  "independent_administration_established": false,
+  "lean_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+  "lean_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "production_authority": false,
+  "scientific_acceptance": false,
+  "sources": {
+    "research/scientific_authority_v2/check_formal.py": "14192fb327f77b700d4610ab94830be0af24d9f8ab318c9f24b24cd70d61ab37",
+    "research/scientific_authority_v2/formal/Audit.lean": "8ce8d09929decf6fad2a575d9b67a47fffbabe39f95f5f22b6a98ff746b26cf5",
+    "research/scientific_authority_v2/formal/PCSScientificAuthorityV2.lean": "6f497c9ff1c5db86df9be94048c84a0e9932e14c8e61f232512d73515f6b9372",
+    "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Audit.lean": "f620fdd4122dd0844da0aca1871fc63ea07787c6a9c9af9022a1451b309e1f05",
+    "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Fixtures.lean": "b29b9fc5158818f9f29612fd89b50d9c64d20c7bf518079e91b09c566811896a",
+    "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Recovery.lean": "6027b0255a649928ed1144f235f7ca3558975325443a9377674385a50667dcec",
+    "research/scientific_authority_v2/formal/PCSScientificAuthorityV2/Witness.lean": "f6d7c85af1c8e5d9d8d8f2d91700fbf1fdcbcd56f41f52ec7b216fe0de964271",
+    "research/scientific_authority_v2/formal/lake-manifest.json": "1145de1b86d7fbb981972b39c941357dfff5ce4f42dea524073ba5b6a9b1526e",
+    "research/scientific_authority_v2/formal/lakefile.toml": "8c1cc81d9fbc44223324409ca91180d8852cfe0980c20e7a82fd2a3483783a69",
+    "research/scientific_authority_v2/formal/lean-toolchain": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028"
+  },
+  "theorems_including_generated": 133
+}

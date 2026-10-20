@@ -1,0 +1,627 @@
+........................F....EEEEEEEEEE....................E.EE......... [ 34%]
+........................................................................ [ 69%]
+.......FFFFFFFFF................................................                               [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[zero-step-True] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[one-step-True] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[multi-step-nonsingleton-True] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[signed-algebraic-True] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[sixty-four-steps-True] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[wrong-total-False] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[wrong-environment-False] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[wrong-step-False] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[nonreduced-rational-False] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_lean_snapshot_and_signed_receipt[physical-intermediate-negative-False] _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+______ ERROR at setup of test_input_snapshot_does_not_reopen_mutable_path ______
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_______ ERROR at setup of test_request_has_no_verifier_selection_surface _______
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+_ ERROR at setup of test_actual_cli_with_operator_config_creates_signed_receipt _
+
+    @pytest.fixture(scope='module')
+    def actual_service():
+>       return host.ReceiverService(real_config())
+                                    ^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_host.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def real_config():
+        # Local explicit integration profile, never a requester-selected verifier.
+        # CI/operator uses its own absolute config and rebuilt executable/source pins.
+        if os.environ.get('PCS_SCI_HOST_OPERATOR_CONFIG'):
+            return host.OperatorConfig.load(Path(os.environ['PCS_SCI_HOST_OPERATOR_CONFIG']))
+        if os.environ.get('PCS_SCIENTIFIC_LEAN'):
+            executable = Path(os.environ['PCS_SCIENTIFIC_LEAN'])
+            main = Path(os.environ['PCS_SCIENTIFIC_MAIN'])
+            cwd = Path(os.environ['PCS_SCIENTIFIC_CWD'])
+            lean_path = os.environ['LEAN_PATH']
+        else:
+            executable, main, cwd = LEAN, PRIMARY / 'formal/Main.lean', PRIMARY / 'formal'
+            environment_file = Path('/tmp/pcs-receiver-lean-env.json')
+            if not environment_file.exists():
+>               pytest.fail('Actual Lean integration environment required; no mocked success fallback')
+E               Failed: Actual Lean integration environment required; no mocked success fallback
+
+research/scientific_receiver_v1/tests/test_host.py:40: Failed
+=================================== FAILURES ===================================
+_ test_actual_compiled_lean_replay_remains_true_after_synthetic_falsification __
+
+    def test_actual_compiled_lean_replay_remains_true_after_synthetic_falsification():
+        names = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in names):
+>           pytest.fail("Actual Lean assurance test requires " + ", ".join(names) + " and qualified LEAN_PATH")
+E           Failed: Actual Lean assurance test requires PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and qualified LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_assurance.py:167: Failed
+________ test_real_transport_rejects_and_closes[\x00-truncated_header] _________
+
+payload = b'\x00', error = 'truncated_header'
+
+    @pytest.mark.parametrize("payload,error", [
+        (b"\0", "truncated_header"),
+        (b"\0\0\0", "truncated_header"),
+        (struct.pack(">I", 3) + b"x", "truncated_body"),
+        (struct.pack(">I", 8193), "oversize_frame"),
+        (struct.pack(">I", 2**32-1), "oversize_frame"),
+    ])
+    def test_real_transport_rejects_and_closes(payload, error):
+>       rows = execute(payload)
+               ^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+____ test_real_transport_rejects_and_closes[\x00\x00\x00-truncated_header] _____
+
+payload = b'\x00\x00\x00', error = 'truncated_header'
+
+    @pytest.mark.parametrize("payload,error", [
+        (b"\0", "truncated_header"),
+        (b"\0\0\0", "truncated_header"),
+        (struct.pack(">I", 3) + b"x", "truncated_body"),
+        (struct.pack(">I", 8193), "oversize_frame"),
+        (struct.pack(">I", 2**32-1), "oversize_frame"),
+    ])
+    def test_real_transport_rejects_and_closes(payload, error):
+>       rows = execute(payload)
+               ^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+___ test_real_transport_rejects_and_closes[\x00\x00\x00\x03x-truncated_body] ___
+
+payload = b'\x00\x00\x00\x03x', error = 'truncated_body'
+
+    @pytest.mark.parametrize("payload,error", [
+        (b"\0", "truncated_header"),
+        (b"\0\0\0", "truncated_header"),
+        (struct.pack(">I", 3) + b"x", "truncated_body"),
+        (struct.pack(">I", 8193), "oversize_frame"),
+        (struct.pack(">I", 2**32-1), "oversize_frame"),
+    ])
+    def test_real_transport_rejects_and_closes(payload, error):
+>       rows = execute(payload)
+               ^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+_____ test_real_transport_rejects_and_closes[\x00\x00 \x01-oversize_frame] _____
+
+payload = b'\x00\x00 \x01', error = 'oversize_frame'
+
+    @pytest.mark.parametrize("payload,error", [
+        (b"\0", "truncated_header"),
+        (b"\0\0\0", "truncated_header"),
+        (struct.pack(">I", 3) + b"x", "truncated_body"),
+        (struct.pack(">I", 8193), "oversize_frame"),
+        (struct.pack(">I", 2**32-1), "oversize_frame"),
+    ])
+    def test_real_transport_rejects_and_closes(payload, error):
+>       rows = execute(payload)
+               ^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+___ test_real_transport_rejects_and_closes[\xff\xff\xff\xff-oversize_frame] ____
+
+payload = b'\xff\xff\xff\xff', error = 'oversize_frame'
+
+    @pytest.mark.parametrize("payload,error", [
+        (b"\0", "truncated_header"),
+        (b"\0\0\0", "truncated_header"),
+        (struct.pack(">I", 3) + b"x", "truncated_body"),
+        (struct.pack(">I", 8193), "oversize_frame"),
+        (struct.pack(">I", 2**32-1), "oversize_frame"),
+    ])
+    def test_real_transport_rejects_and_closes(payload, error):
+>       rows = execute(payload)
+               ^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+_______________________ test_eof_between_frames_is_clean _______________________
+
+    def test_eof_between_frames_is_clean():
+>       assert execute(b"") == []
+               ^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+_________________ test_real_mixed_frames_bind_exact_same_bytes _________________
+
+    def test_real_mixed_frames_bind_exact_same_bytes():
+        good = (HERE / "fixtures/multi-step-nonsingleton.wire").read_bytes()
+        raws = [b"", b"\xff\x00", good, good + b"\n", good]
+>       rows = execute(b"".join(map(frame, raws)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+________ test_oversize_header_does_not_consume_a_following_valid_frame _________
+
+    def test_oversize_header_does_not_consume_a_following_valid_frame():
+        good = (HERE / "fixtures/one-step.wire").read_bytes()
+>       rows = execute(struct.pack(">I", 8193) + frame(good))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+research/scientific_receiver_v1/tests/test_transport.py:21: in execute
+    command, cwd = actual_command()
+                   ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+_______________________ test_fragmented_header_and_body ________________________
+
+    def test_fragmented_header_and_body():
+>       command, cwd = actual_command()
+                       ^^^^^^^^^^^^^^^^
+
+research/scientific_receiver_v1/tests/test_transport.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def actual_command():
+        required = ("PCS_SCIENTIFIC_LEAN", "PCS_SCIENTIFIC_MAIN", "PCS_SCIENTIFIC_CWD")
+        if any(not os.environ.get(name) for name in required):
+>           pytest.fail("Actual Lean transport tests require " + ", ".join(required) + " and its operator-configured LEAN_PATH")
+E           Failed: Actual Lean transport tests require PCS_SCIENTIFIC_LEAN, PCS_SCIENTIFIC_MAIN, PCS_SCIENTIFIC_CWD and its operator-configured LEAN_PATH
+
+research/scientific_receiver_v1/tests/test_transport.py:16: Failed
+=========================== short test summary info ============================
+FAILED research/scientific_receiver_v1/tests/test_assurance.py::test_actual_compiled_lean_replay_remains_true_after_synthetic_falsification
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_real_transport_rejects_and_closes[\x00-truncated_header]
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_real_transport_rejects_and_closes[\x00\x00\x00-truncated_header]
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_real_transport_rejects_and_closes[\x00\x00\x00\x03x-truncated_body]
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_real_transport_rejects_and_closes[\x00\x00 \x01-oversize_frame]
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_real_transport_rejects_and_closes[\xff\xff\xff\xff-oversize_frame]
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_eof_between_frames_is_clean
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_real_mixed_frames_bind_exact_same_bytes
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_oversize_header_does_not_consume_a_following_valid_frame
+FAILED research/scientific_receiver_v1/tests/test_transport.py::test_fragmented_header_and_body
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[zero-step-True]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[one-step-True]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[multi-step-nonsingleton-True]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[signed-algebraic-True]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[sixty-four-steps-True]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[wrong-total-False]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[wrong-environment-False]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[wrong-step-False]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[nonreduced-rational-False]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_lean_snapshot_and_signed_receipt[physical-intermediate-negative-False]
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_input_snapshot_does_not_reopen_mutable_path
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_request_has_no_verifier_selection_surface
+ERROR research/scientific_receiver_v1/tests/test_host.py::test_actual_cli_with_operator_config_creates_signed_receipt
+10 failed, 185 passed, 13 errors, 50 subtests passed in 112.39s (0:01:52)
