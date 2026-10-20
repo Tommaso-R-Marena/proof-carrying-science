@@ -1,5 +1,8 @@
 name: PCS Authority V2 Inherited Transport Diagnostic
 on:
+  pull_request:
+    paths:
+      - '.github/workflows/pcs-authority-v2-transport-diagnostic.yml'
   workflow_dispatch:
 permissions:
   contents: read
