@@ -1,5 +1,5 @@
 """Canonical signed-intent domain check only; no mathematical verdict is mocked."""
-import sys,json,hashlib,importlib.util
+import sys,json,hashlib,importlib.util,argparse
 from pathlib import Path
 sys.dont_write_bytecode=True
 WITNESS=Path('/workspace/pcs-independent-witness-v1');AUDITOR=Path('/workspace/pcs-historical-scientific-replay-v1')
@@ -9,7 +9,8 @@ from research.authorization_history_v1 import history
 from research.scientific_history_v1.receiver import POLICY,checker_identity
 from research.scientific_history_v1.test_receiver import real_config,FIXTURES
 from research.scientific_history_v2 import audit
-out=Path(__file__).resolve().parent
+parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--out',type=Path,required=True)
+args=parser.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
 source=WITNESS/'research/scientific_witness_v1/protocol.py'
 raw=source.read_bytes();snapshot=out/'protocol-domain-review-snapshot.py';snapshot.write_bytes(raw)
 spec=importlib.util.spec_from_file_location('review_protocol_snapshot',snapshot);p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)

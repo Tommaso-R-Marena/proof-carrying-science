@@ -218,12 +218,13 @@ From this audit checkout, with the three implementation worktrees at the recorde
 source hashes and the qualified Lean4.28.0 fixture environment available:
 
 ```sh
-/workspace/.onboarding/pcs-integration-env/bin/python docs/research/scientific-authority-v2/independent-review/actual_process_review.py
+/workspace/.onboarding/pcs-integration-env/bin/python docs/research/scientific-authority-v2/independent-review/actual_process_review.py --out /new/path/actual-process-replay
 /workspace/.onboarding/pcs-integration-env/bin/python docs/research/scientific-authority-v2/independent-review/availability_retest.py
-/workspace/.onboarding/pcs-integration-env/bin/python docs/research/scientific-authority-v2/independent-review/domain_boundary_probe.py
+/workspace/.onboarding/pcs-integration-env/bin/python docs/research/scientific-authority-v2/independent-review/domain_boundary_probe.py --out /new/path/domain-replay
 /workspace/.onboarding/pcs-integration-env/bin/python docs/research/scientific-authority-v2/independent-review/principal_probe.py
 ```
 
 The scripts use disposable local fixtures and never edit reviewed implementation
-sources. Preserve existing reports before rerunning: these fixed filenames are
-for the captured review campaign, not an append-only evidence service.
+sources. The two scripts that create evidence require a new `--out` directory and refuse
+existing paths. Original captured reports remain unchanged. Parser/OS probes print
+to standard output; redirect only to a fresh path when saving a new execution.

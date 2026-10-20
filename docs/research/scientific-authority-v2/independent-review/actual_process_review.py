@@ -11,7 +11,7 @@ W=Path('/workspace/pcs-independent-witness-v1');A=Path('/workspace/pcs-historica
 sys.path[:0]=[str(W),str(A),str(C)]
 from dataclasses import replace,asdict
 from datetime import datetime,timezone
-import os,json,hashlib,tempfile,time,subprocess,shutil,atexit
+import os,json,hashlib,tempfile,time,subprocess,shutil,atexit,argparse
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 from research.authorization_history_v1 import history
@@ -24,13 +24,17 @@ from research.scientific_witness_v1 import protocol as p
 from research.scientific_history_v2 import audit
 from research.scientific_authority_v2 import coordinator
 
-OUT=Path(__file__).resolve().parent
+CAPTURE=Path(__file__).resolve().parent
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--out',type=Path,required=True,help='New evidence directory; existing paths are never overwritten')
+args=parser.parse_args()
+OUT=args.out.resolve();OUT.mkdir(parents=True,exist_ok=False)
 sha=lambda raw:hashlib.sha256(raw).hexdigest()
 files=[*(W/'research/scientific_witness_v1'/name for name in ('__init__.py','protocol.py','store.py','client.py','server.py')),
        *(A/'research/scientific_history_v2'/name for name in ('__init__.py','audit.py')),
        *(C/'research/scientific_authority_v2'/name for name in ('__init__.py','coordinator.py'))]
 def identities():return {str(path):sha(path.read_bytes()) for path in files}
-report={'format':'pcs-authority-v2-independent-actual-process-review-v1','started_utc':datetime.now(timezone.utc).isoformat(),'preregistration_sha256':sha((OUT/'PREREGISTERED_CONTROLS.json').read_bytes()),'source_before':identities(),'controls':[],'receipts':[],'profile':'A: separate real server process and keys on one underlying host/admin','no_positive_mocks':True,'external_empirical_validation':False}
+report={'format':'pcs-authority-v2-independent-actual-process-review-v1','started_utc':datetime.now(timezone.utc).isoformat(),'preregistration_sha256':sha((CAPTURE/'PREREGISTERED_CONTROLS.json').read_bytes()),'source_before':identities(),'controls':[],'receipts':[],'profile':'A: separate real server process and keys on one underlying host/admin','no_positive_mocks':True,'external_empirical_validation':False}
 start=time.monotonic()
 def retain_partial():
  if not (OUT/'actual-process-results.json').exists():
