@@ -47,9 +47,12 @@ jobs:
           from pathlib import Path
           if os.environ['PCS_DIAGNOSTIC_STATUS'] != '0':
               log = Path(os.environ['RUNNER_TEMP']) / 'transport-diagnostic/console.log'
-              tail = log.read_text(errors='replace')[-24000:]
-              escaped = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
-              print('::error title=Unchanged transport reproduction failed::' + escaped)
+              # GitHub truncates each annotation near4KiB; keep the actual end.
+              tail = log.read_text(errors='replace').encode('ascii', 'backslashreplace').decode('ascii')[-12000:]
+              chunks = [tail[i:i+2000] for i in range(0, len(tail), 2000)]
+              for index, chunk in enumerate(chunks, 1):
+                  escaped = chunk.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+                  print(f'::error title=Transport diagnostic {index}/{len(chunks)}::' + escaped)
           PY
           exit "$PCS_DIAGNOSTIC_STATUS"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
