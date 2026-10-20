@@ -196,6 +196,25 @@ class AuditTests(unittest.TestCase):
                     audit.audit_history(path, self.root, self.initial, self.config)
         self.assertFalse(self.path.with_name("missing.sqlite").exists())
 
+    def test_change_during_actual_replay_cannot_return_a_complete_audit(self):
+        final = self.store.append(self.signed())
+        actual = audit._check_artifact
+        calls = 0
+
+        def verify_then_corrupt(raw, root, config, service):
+            nonlocal calls
+            checked = actual(raw, root, config, service)  # Actual Lean, unchanged verdict.
+            calls += 1
+            if calls == 2:
+                with sqlite3.connect(self.path) as connection:
+                    connection.execute("UPDATE head SET generation=99")
+            return checked
+
+        with patch.object(audit, "_check_artifact", side_effect=verify_then_corrupt):
+            with self.assertRaises(history.Rejected):
+                audit.audit_history(self.path, self.root, final, self.config)
+        self.assertEqual(calls, 2)  # Both checks really completed before the negative store fault.
+
     def test_cli_bootstrap_is_strict_and_files_are_bounded_regular(self):
         self.assertEqual(load_root(self.root.encode()), self.root)
         anchor_raw = audit.canonical({"generation": self.initial.generation,
