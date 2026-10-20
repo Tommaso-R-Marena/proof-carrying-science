@@ -1,0 +1,232 @@
+{
+  "rfc9162": {
+    "url": "https://www.rfc-editor.org/rfc/rfc9162.txt",
+    "sha256": "a0e432ce7580c99fcc8faf0cf3f6191f9ce6b4864f949158e020d4ecb295081f",
+    "local_read_cache": "/workspace/.onboarding/pcs-v2-review-prior-art/rfc9162.txt",
+    "reviewed_sections": [
+      "2.1.4 Merkle consistency proofs",
+      "Security discussion on cross-client STH comparison/gossip"
+    ]
+  },
+  "crossref": [
+    {
+      "DOI": "10.1145/1132863.1132867",
+      "title": [
+        "Consensus on transaction commit"
+      ],
+      "author": [
+        {
+          "given": "Jim",
+          "family": "Gray",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Microsoft Research, San Francisco, CA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Leslie",
+          "family": "Lamport",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Microsoft Research, Mountain View, CA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2006,
+            3
+          ]
+        ]
+      },
+      "URL": "https://doi.org/10.1145/1132863.1132867",
+      "abstract": "<jats:p>\n                    The distributed transaction commit problem requires reaching agreement on whether a transaction is committed or aborted. The classic Two-Phase Commit protocol blocks if the coordinator fails. Fault-tolerant consensus algorithms also reach agreement, but do not block whenever any majority of the processes are working. The Paxos Commit algorithm runs a Paxos consensus algorithm on the commit/abort decision of each participant to obtain a transaction commit protocol that uses 2\n                    <jats:italic>F</jats:italic>\n                    + 1 coordinators and makes progress if at least\n                    <jats:italic>F</jats:italic>\n                    + 1 of them are working properly. Paxos Commit has the same stable-storage write delay, and can be implemented to have the same message delay in the fault-free case as Two-Phase Commit, but it uses more messages. The classic Two-Phase Commit algorithm is obtained as the special\n                    <jats:italic>F</jats:italic>\n                    = 0 case of the Paxos Commit algorithm.\n                  </jats:p>"
+    },
+    {
+      "DOI": "10.1145/2737924.2737958",
+      "title": [
+        "Verdi: a framework for implementing and formally verifying distributed systems"
+      ],
+      "author": [
+        {
+          "given": "James R.",
+          "family": "Wilcox",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Doug",
+          "family": "Woos",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Pavel",
+          "family": "Panchekha",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Zachary",
+          "family": "Tatlock",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Xi",
+          "family": "Wang",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Michael D.",
+          "family": "Ernst",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Thomas",
+          "family": "Anderson",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2015,
+            6,
+            3
+          ]
+        ]
+      },
+      "URL": "https://doi.org/10.1145/2737924.2737958",
+      "abstract": null
+    },
+    {
+      "DOI": "10.1145/263699.263712",
+      "title": [
+        "Proof-carrying code"
+      ],
+      "author": [
+        {
+          "given": "George C.",
+          "family": "Necula",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            1997
+          ]
+        ]
+      },
+      "URL": "https://doi.org/10.1145/263699.263712",
+      "abstract": null
+    }
+  ],
+  "crossref_scope": "Bibliographic metadata retrieved; not a claim to full-paper review.",
+  "transaction_commit_primary_pdf": {
+    "url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/consensus-on-transaction-commit.pdf",
+    "landing_page": "https://www.microsoft.com/en-us/research/publication/consensus-on-transaction-commit/",
+    "sha256": "4c552e58080ad945a92384bed4b0c94eb3fb26012c6639105468dd5ee15d6ff0",
+    "bytes": 378806,
+    "local_read_cache": "/workspace/.onboarding/pcs-v2-review-prior-art/transaction-commit.pdf",
+    "initial_wrong_URL_result": "Lamport /pubs/transaction-commit.pdf returned404; correctprimaryPDF locatedfromauthorbibliography/MSRpublicationpage"
+  }
+}
