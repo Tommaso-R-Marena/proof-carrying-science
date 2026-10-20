@@ -1,0 +1,74 @@
+{
+  "application_source_commit": "020b8c4d6be81bc49c23fabf862ed9e0ba14b1c8",
+  "benchmark": {
+    "actual_artifacts_checked": [
+      1,
+      2,
+      9,
+      33
+    ],
+    "authentication_only_32_events_seconds": 0.028072686996893026,
+    "elapsed_seconds": [
+      3.4140004470027634,
+      6.106908420995751,
+      28.395756605001225,
+      86.4676520819994
+    ],
+    "events": [
+      0,
+      1,
+      8,
+      32
+    ],
+    "increments_cached": false,
+    "manifest_sha256": "e3a2f9e8fdbb21c4a35bbde1ba455f288ff5580611c663e83daf3235dc95ffc9",
+    "maximum_observed_child_peak_RSS_KiB": 2924608,
+    "old_invalid_current_valid_rejected": true,
+    "status": "EXECUTED_PASS"
+  },
+  "commands": [
+    "python -m unittest research.scientific_history_v2.tests.test_audit -v",
+    "python -m research.scientific_history_v2.benchmark --out <new-output-directory>",
+    "python -m research.scientific_history_v2.cli --root <independently-trusted-root> --anchor <independently-trusted-anchor> --operator-config <fixed-reviewed-config> --material <canonical-exact-envelope-material> --report <new-output-file>"
+  ],
+  "formal_scope": "No new Lean authored in this workstream; imported existing scientific receive and history statements unchanged. New pure trace proof is separate integration work. Python/IO/crypto/SQLite refinement is not proved.",
+  "format": "pcs-scientific-history-v2-workstream-qualification",
+  "parent": "7be674df70eb3108c9dbd8b0b97f42a728bde000",
+  "repaired_test_defect": "Negative authorization controls now use the exact hypothetical final checkpoint, so rejecting a mismatched dummy anchor cannot mask omitted signature/scope/CAS checks.",
+  "sources": {
+    "research/authorization_history_v1/history.py": "9d95533958806e3526167aa489b1530abf0c6b23accc2e1c33e3955db304e735",
+    "research/scientific_history_v1/receiver.py": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d",
+    "research/scientific_history_v2/BENCHMARK_MANIFEST.json": "e3a2f9e8fdbb21c4a35bbde1ba455f288ff5580611c663e83daf3235dc95ffc9",
+    "research/scientific_history_v2/audit.py": "a9db2df33a3fe597780e0d8a50e281579e47499f8d19f46b2e371c0f2c28c62d",
+    "research/scientific_history_v2/benchmark.py": "c4cf5900bcc92f1100b85e17410805b6a31af374bd3f7a60382ffe8b01e2f807",
+    "research/scientific_history_v2/cli.py": "2d3824f0313a38e9f3fdd145f1fcf22cf72853b32c11fb14ed9be721a460aadd",
+    "research/scientific_history_v2/tests/test_audit.py": "a014ce59b034a2dcb5db2f505d4800ba352dea102ba07763d6af6383cea9a816",
+    "research/scientific_receiver_v1/host.py": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd",
+    "research/scientific_receiver_v1/reference.py": "bcba6bd4dedeaa6620bda11db42c2cd0fe3727c01802db40062d646aa52f0f77"
+  },
+  "status": {
+    "empirical_validity": "UNVERIFIED",
+    "historically_authenticated_verification": "UNVERIFIED",
+    "independently_administered_witness": "NOT_RUN",
+    "production_authority": false,
+    "retrospective_mathematical_replay": "EXECUTED_PASS"
+  },
+  "tests": {
+    "count_scope": "Separate overlapping runs; do not sum as independent tests",
+    "earlier16_seconds": 23.988,
+    "earlier16_suite_passed": 16,
+    "errors": 0,
+    "failures": 0,
+    "final_suite_passed": 17,
+    "preflight_only_passed": 9,
+    "preflight_run_scope": "Unqualified development evidence: initial dummy final-anchor fixtures could make some auth negatives vacuous; strengthened before final16/17runs. Do not count this as final qualification.",
+    "seconds": 28.738,
+    "skipped": 0
+  },
+  "warnings": [
+    "Process-bound timeout does not bound trusted host pin-file IO; whole-audit elapsed budget is fail-closed acceptance deadline, not hard process-preemption guarantee.",
+    "Path replay uses old snapshot resource ceiling1024events/64MiB before enforcing narrower32event/1MiB/256KiB scientific domain.",
+    "Old historical profile identity includes absolute paths/cwd/environment; source-identical replacement at other paths is not silently authorized.",
+    "Reports retain exact candidate bytes and Lean response plus host receipt digests; they are not complete ephemeral host-receipt archives. Independent mathematical replay reruns the exact bytes."
+  ]
+}
