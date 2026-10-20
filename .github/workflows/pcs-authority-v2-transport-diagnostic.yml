@@ -23,6 +23,7 @@ jobs:
         shell: bash
         run: |
           set -uo pipefail
+          set +e  # Capture the unchanged command status before re-emitting it below.
           mkdir -p "$RUNNER_TEMP/transport-diagnostic"
           (
             set -euo pipefail
