@@ -101,9 +101,10 @@ channel. Existing evidence directories are never overwritten.
 
 ## Scientific and security scope
 
-The deterministic campaign contains11 actual Lean cases: the original5-cell,
+The deterministic campaign contains12 actual Lean cases: the original5-cell,
 16-step trace; three faults; independent edge-flux-generated2/4/8/16-cell traces;
-64-step oscillation; a final-step oscillation fault; and a16-cell scalar fault. This independently coded
+64-step oscillation; a final-step oscillation fault; a16-cell scalar fault; and
+a16-cell,16-step generated trace. This independently coded
 flux oracle proposes data; mathematical truth still comes from checked proofs of
 the unchanged matrix/trace semantics. The fixture problems are bounded exact
 discrete rational models. This is no empirical validation, general transport
