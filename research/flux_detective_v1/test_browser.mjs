@@ -6,10 +6,11 @@ import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
 import {chromium} from 'playwright';
 import {puzzle, exportCase} from './engine.mjs';
+import {forgeCase,regionFor,sliderAmount} from './forge.mjs';
 const root = fileURLToPath(new URL('.', import.meta.url));
 let server, browser, base;
 before(async () => {
-  const allowed = {'/':'text/html', '/index.html':'text/html', '/style.css':'text/css', '/engine.mjs':'text/javascript', '/app.mjs':'text/javascript', '/README.md':'text/plain'};
+  const allowed = {'/':'text/html', '/index.html':'text/html', '/style.css':'text/css', '/engine.mjs':'text/javascript', '/forge.mjs':'text/javascript', '/app.mjs':'text/javascript', '/README.md':'text/plain'};
   server = createServer(async (req, res) => {
     if (!Object.hasOwn(allowed, req.url)) { res.writeHead(404).end(); return; }
     try { res.writeHead(200, {'Content-Type':allowed[req.url]}); res.end(await readFile(join(root, req.url === '/' ? 'index.html' : req.url.slice(1)))); }
@@ -70,4 +71,38 @@ test('mobile layout, invalid seeds, maximum seed and campaign reset', async () =
   assert.equal(await page.locator('#score').textContent(), '0 / 18 stars');
   assert.equal(await page.locator('#error').textContent(), ''); assert.equal(new URL(page.url()).hash, '#seed=0');
   assert.deepEqual(errors, []); await page.close();
+});
+test('workshop builds and downloads a counterexample without changing the puzzle score', async()=>{
+  const page=await browser.newPage();await page.goto(base);await page.locator('#forge-half').click();
+  assert.match(await page.locator('#forge-status').textContent(),/Impostor constructed/);
+  const p=puzzle(20261021,0), amount=sliderAmount(regionFor(p,0,1),50);
+  assert.equal(await page.locator('#forge-amount').inputValue(),amount);
+  const download=page.waitForEvent('download');await page.locator('#forge-export').click();
+  const file=await download, stream=await file.createReadStream();let raw='';for await(const chunk of stream) raw+=chunk;
+  assert.deepEqual(JSON.parse(raw),forgeCase(p,0,1,amount).bundle);
+  assert.equal(await page.locator('#score').textContent(),'0 / 18 stars');
+  await page.locator('#forge-reset').click();assert.match(await page.locator('#forge-status').textContent(),/Exact model restored/);
+  await page.close();
+});
+test('mobile workshop fails closed on bad input and handles zero-width intervals', async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}}), errors=[];
+  page.on('pageerror',e=>errors.push(e.message));await page.goto(base);
+  await page.locator('#forge-right').selectOption('0');assert.ok(await page.locator('#forge-export').isDisabled());
+  assert.match(await page.locator('#forge-error').textContent(),/different/);
+  await page.locator('#forge-right').selectOption('1');
+  await page.locator('#forge-amount').fill('2/4');await page.locator('#forge-form button').click();
+  assert.ok(await page.locator('#forge-export').isDisabled());assert.match(await page.locator('#forge-error').textContent(),/Canonical/);
+  await page.locator('#forge-reset').click();
+  await page.locator('#forge-amount').fill('1000');await page.locator('#forge-form button').click();
+  assert.match(await page.locator('#forge-details').textContent(),/Bounds FAIL/);
+  for(let level=0;level<3;level++) {
+    const p=puzzle(20261021,level);await page.locator('.choose').nth(p.candidates.findIndex(c=>!c.analysis.fault)).click();await page.locator('#next').click();
+  }
+  await page.locator('#forge-left').selectOption('3');await page.locator('#forge-right').selectOption('4');
+  assert.ok(await page.locator('#forge-slider').isDisabled());assert.match(await page.locator('#forge-details').textContent(),/Only zero/);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await capture(page,'mobile-zero-width-workshop.png');
+  await page.locator('#forge-left').selectOption('0');await page.locator('#forge-right').selectOption('1');await page.locator('#forge-half').click();
+  assert.match(await page.locator('#forge-status').textContent(),/Impostor constructed/);
+  await capture(page,'mobile-workshop.png');assert.deepEqual(errors,[]);await page.close();
 });
