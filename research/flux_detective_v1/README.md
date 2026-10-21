@@ -117,6 +117,18 @@ unchanged consolidated source gate. The mathematical compatibility test covers
 1,224 exports are cases inside one test, not 1,224 independent pytest tests.
 Actual run results and tested commit are reported in the PR, not inferred here.
 
+## Counterexample workshop extension
+
+The stacked extension adds an interactive exact amount-transfer workshop below
+the puzzle cards, six generic Lean interval theorems, a duplicate-aware policy
+experiment, and independent whole-model checks. It retains the original data-only
+export envelope and checker. See [the workshop research report](../flux_forge_v1/README.md)
+in the repository for assumptions, results and reproduction. The standalone HTTP
+server serves only this game directory; use the repository to read that report.
+
+The extended workflow runs 19 Node/browser tests, 75 Python tests and a fresh
+formal object audit. Earlier counts above describe the frozen PR167 baseline.
+
 ## Next useful milestone
 
 Before promoting this into a public research activity, evaluate whether people
