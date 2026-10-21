@@ -1,0 +1,38 @@
+name: PCS Transport Invariant Counterexample Family V1
+on:
+  pull_request:
+    paths:
+      - 'research/transport_invariant_counterexamples_v1/**'
+      - '.github/workflows/pcs-transport-invariant-family-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-kernel-and-fresh-object-replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Compile captured source, audit exact closures and replay fresh objects
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          python -m research.transport_invariant_counterexamples_v1.audit --out "$RUNNER_TEMP/invariant-family-evidence"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: invariant-family-${{ matrix.os }}
+          path: ${{ runner.temp }}/invariant-family-evidence
+          retention-days: 14
