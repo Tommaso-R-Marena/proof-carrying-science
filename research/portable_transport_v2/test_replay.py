@@ -3,6 +3,9 @@ from fractions import Fraction
 import hashlib
 import json
 from pathlib import Path
+import os
+import subprocess
+import sys
 
 import pytest
 
@@ -147,3 +150,21 @@ def test_evidence_never_overwritten_or_rebound_to_other_bytes(positive, tmp_path
     assert before == (folder / "SHA256.json").read_bytes()
     with pytest.raises(ValueError):
         engine.export(tmp_path / "wrong", positive, CONTRACT, CSV + b"\n")
+
+
+def test_actual_reviewer_cli_uses_real_lean_for_negative_material(negative, tmp_path):
+    raw, r = negative
+    folder = tmp_path / "evidence"
+    engine.export(folder, r, CONTRACT, raw)
+    p = subprocess.run([sys.executable, "-m", "research.portable_transport_v2.replay", "verify", str(folder)],
+                       cwd=engine.HERE.parents[1], capture_output=True, text=True, timeout=180)
+    assert p.returncode == 10, p.stdout + p.stderr
+    r = json.loads(p.stdout)
+    assert r["negative_kernel_checked"] and not r["kernel_supported"] and not r["pcs_authority"]
+
+
+def test_reviewer_cli_missing_material_never_reports_success(tmp_path):
+    p = subprocess.run([sys.executable, "-m", "research.portable_transport_v2.replay", "verify", str(tmp_path / "missing")],
+                       cwd=engine.HERE.parents[1], capture_output=True, text=True, timeout=30)
+    assert p.returncode == 20
+    assert json.loads(p.stdout)["kernel_supported"] is False

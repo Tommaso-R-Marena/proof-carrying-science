@@ -18,6 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
@@ -30,13 +31,15 @@ jobs:
           lake exe cache get
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
           python -m pip install --no-deps --no-build-isolation -e .
+          python -m research.portable_transport_v2.preservation > "$RUNNER_TEMP/portable-preservation.json"
+          python -m research.integration_v1.source_gate > "$RUNNER_TEMP/portable-source-gate.json"
           python -m research.portable_transport_v2.diagnose --out "$RUNNER_TEMP/portable-trace-diagnostic"
       - name: Require actual partitioned proofs, scalar refutations and hostile reviewer checks
         shell: bash
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          python -m research.portable_transport_v2.campaign --out "$RUNNER_TEMP/portable-trace-campaign"
+          /usr/bin/time -v -o "$RUNNER_TEMP/portable-campaign-resources.txt" python -m research.portable_transport_v2.campaign --out "$RUNNER_TEMP/portable-trace-campaign"
           python -m pytest -q research/portable_transport_v2/test_replay.py --junitxml="$RUNNER_TEMP/portable-trace-tests.xml"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
@@ -46,4 +49,7 @@ jobs:
             ${{ runner.temp }}/portable-trace-diagnostic
             ${{ runner.temp }}/portable-trace-campaign
             ${{ runner.temp }}/portable-trace-tests.xml
+            ${{ runner.temp }}/portable-preservation.json
+            ${{ runner.temp }}/portable-source-gate.json
+            ${{ runner.temp }}/portable-campaign-resources.txt
           retention-days: 14

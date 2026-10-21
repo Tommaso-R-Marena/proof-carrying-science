@@ -255,3 +255,42 @@ def verify_export(folder: Path, *, timeout=120):
     if snapshot["Replay.lean"] != proof:
         raise ValueError("Changed or noncanonical generated proof")
     return replay(contract, trajectory, timeout=timeout)
+
+
+def main():
+    import argparse
+    p = argparse.ArgumentParser(__doc__)
+    sub = p.add_subparsers(dest="operation", required=True)
+    check = sub.add_parser("check")
+    check.add_argument("contract", type=Path)
+    check.add_argument("trajectory", type=Path)
+    check.add_argument("out", type=Path)
+    verify = sub.add_parser("verify")
+    verify.add_argument("evidence", type=Path)
+    args = p.parse_args()
+    try:
+        if args.operation == "verify":
+            result = verify_export(args.evidence)
+        else:
+            def capture(path):
+                with path.open("rb") as f:
+                    raw = f.read(trace.workflow.MAX_BYTES + 1)
+                if len(raw) > trace.workflow.MAX_BYTES:
+                    raise ValueError("Bounded captured input required")
+                return raw
+            contract, trajectory = capture(args.contract), capture(args.trajectory)
+            result = replay(contract, trajectory)
+            if "proof" in result:
+                export(args.out, result, contract, trajectory)
+        print(json.dumps({k: result.get(k) for k in [
+            "status", "kernel_supported", "negative_kernel_checked", "fault",
+            "proof_sha256", "wall_seconds", "error", "pcs_authority", "scientific_acceptance"]}))
+        raise SystemExit(0 if result["kernel_supported"] else 10 if result["negative_kernel_checked"] else 20)
+    except (OSError, ValueError, KeyError) as e:
+        print(json.dumps({"status": "REJECTED", "error": f"{type(e).__name__}: {e}",
+                          "kernel_supported": False, "pcs_authority": False}))
+        raise SystemExit(20)
+
+
+if __name__ == "__main__":
+    main()
