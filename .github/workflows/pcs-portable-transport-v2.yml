@@ -1,0 +1,39 @@
+name: PCS Portable Transport Proof Construction V2
+on:
+  pull_request:
+    paths:
+      - 'research/portable_transport_v2/**'
+      - '.github/workflows/pcs-portable-transport-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-kernel:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Build actual Lean inputs and expose unmasked kernel failures
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          python -m research.portable_transport_v2.diagnose --out "$RUNNER_TEMP/portable-trace-diagnostic"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: portable-trace-${{ matrix.os }}
+          path: ${{ runner.temp }}/portable-trace-diagnostic
+          retention-days: 14
