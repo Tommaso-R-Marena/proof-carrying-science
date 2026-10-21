@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Flux Detective · PCS research lab</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header><span class="brand">PCS / PLAYABLE RESEARCH</span><span class="tag">Synthetic world · exact arithmetic</span></header>
+  <section class="intro"><p class="eyebrow">A good summary can hide a bad simulation.</p><h1>Flux Detective<span class="dot">.</span></h1>
+    <p class="lead">Three trajectories. All conserve mass, stay in bounds, and lose energy. Only one follows the declared update rule. Can you find it?</p></section>
+  <form id="seed-form"><label for="seed">Challenge seed</label><input id="seed" value="20261021" inputmode="numeric" maxlength="10" required aria-describedby="seed-help"><button type="submit">New campaign</button><span id="seed-help">Share the URL to share the same six puzzles.</span></form>
+  <p id="error" role="alert"></p>
+  <section aria-labelledby="case-title"><div class="case-head"><div><p id="progress" class="eyebrow"></p><h2 id="case-title"></h2></div><p id="score"></p></div>
+    <p id="brief"></p><div id="model" class="model"></div>
+    <details><summary>How the model works</summary><p>Across each edge, transfer Δt × conductance × (left concentration − right concentration). Subtract that amount on the left, add it on the right, then divide each amount by its cell volume. All edges read the same previous row.</p><p>Mass is Σ volume × concentration. Energy here means Σ volume × concentration². A lower energy alone does not prove the update is correct.</p></details>
+    <div id="candidates" class="candidates"></div>
+    <div class="actions"><button id="hint">Inspect exact residuals (costs one star)</button><button id="next" hidden>Next case →</button></div>
+    <p id="feedback" role="status" aria-live="polite"></p><div id="explanation"></div>
+  </section>
+  <section class="replay"><h2>Take the evidence with you</h2><p>Export any trajectory, including an impostor. The download contains the exact model and CSV, with no claimed verification verdict.</p>
+    <p>From this research checkout, run:</p><pre>python -m research.flux_detective_v1.check case.json /new/evidence-dir</pre>
+    <p>The separate Lean checker can support or refute the exported trace. It does not validate physical reality.</p></section>
+  <footer>Browser results are exact JavaScript arithmetic, not kernel proofs. Research prototype; no PCS authorization, empirical validation, accounts, tracking, or leaderboard. <a href="README.md">Reproduce &amp; inspect the trust boundary</a>.</footer>
+</main><script type="module" src="app.mjs"></script>
+</body></html>

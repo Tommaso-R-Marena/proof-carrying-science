@@ -1,0 +1,61 @@
+name: PCS Flux Detective Research
+on:
+  pull_request:
+    paths:
+      - 'research/flux_detective_v1/**'
+      - 'research/portable_transport_v2/**'
+      - 'pcs/transport*kernel_v1.py'
+      - 'pcs/scientific_workflow_v3.py'
+      - 'formal/real/PCSReal/Transport*.lean'
+      - '.github/workflows/pcs-flux-detective-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  puzzle-to-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24.19.0'
+      - name: Install pinned research tools
+        run: |
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          npm ci --ignore-scripts --prefix research/flux_detective_v1
+          cd research/flux_detective_v1
+          npx --no-install playwright install --with-deps chromium
+      - name: Exact engine, actual browser and independent matrix correspondence
+        env:
+          PCS_FLUX_SCREENSHOTS: ${{ runner.temp }}/flux-browser
+          PCS_FLUX_EVIDENCE_DIR: ${{ runner.temp }}/flux-lean
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m research.flux_detective_v1.preservation > "$RUNNER_TEMP/flux-preservation.json"
+          python -m research.integration_v1.source_gate > "$RUNNER_TEMP/flux-source-gate.json"
+          node --test research/flux_detective_v1/test_engine.mjs research/flux_detective_v1/test_browser.mjs
+          python -m pytest -q research/flux_detective_v1/test_correspondence.py --junitxml="$RUNNER_TEMP/flux-tests.xml"
+          python -m pytest -q research/portable_transport_v2/test_replay.py --junitxml="$RUNNER_TEMP/flux-inherited-tests.xml"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: flux-detective-actual-kernel
+          path: |
+            ${{ runner.temp }}/flux-browser
+            ${{ runner.temp }}/flux-lean
+            ${{ runner.temp }}/flux-tests.xml
+            ${{ runner.temp }}/flux-inherited-tests.xml
+            ${{ runner.temp }}/flux-preservation.json
+            ${{ runner.temp }}/flux-source-gate.json
+          retention-days: 14
