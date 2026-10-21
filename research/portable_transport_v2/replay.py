@@ -63,8 +63,18 @@ def render(data, fault=None):
         names = []
         for k in range(data["steps"]):
             name = f"row_{k}"
+            cells = []
+            for i in range(len(data["model"]["initial"])):
+                cell = f"{name}_cell_{i}"
+                rows += (f"theorem {cell} : states {k + 1} {i} = "
+                         f"step matrix (states {k}) {i} := by pcs_kernel_decide_raw\n")
+                cells.append(cell)
+                names.append("PCSTransportTraceReplay." + cell)
+            cell_cases = "fun impossible => Fin.elim0 impossible"
+            for cell in reversed(cells):
+                cell_cases = f"Fin.cases {cell} ({cell_cases})"
             rows += (f"theorem {name} : ∀ i, states {k + 1} i = "
-                     f"step matrix (states {k}) i := by pcs_kernel_decide_raw\n")
+                     f"step matrix (states {k}) i := by\n  exact {cell_cases}\n")
             names.append("PCSTransportTraceReplay." + name)
         cases = "fun impossible => Fin.elim0 impossible"
         for k in reversed(range(data["steps"])):

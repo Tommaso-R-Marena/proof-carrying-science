@@ -39,8 +39,12 @@ All invocations retain the original `-M2048`, `-j1`, `Elab.async=false` settings
 
 ## Implemented proof construction
 
-`replay.py` proves one recurrence row at a time, then assembles the finite family
-with `Fin.cases` and `Certificate.rows_sound`. The final `trace_checked` statement
+`replay.py` proves one scalar recurrence at a time, assembles each row and then
+the finite row family with `Fin.cases` and `Certificate.rows_sound`. The initial
+row-only construction repaired the original5-cell example but hosted run39564779991
+found memory exhaustion inside a16-cell row. That failed qualification remains
+retained; scalar decomposition is the subsequent repair, not a weakened gate.
+The final `trace_checked` statement
 and all existing derived rational/real trace claims remain identical. The kernel
 checks every row proof and the composition. Resource exhaustion remains a refusal.
 
@@ -97,9 +101,9 @@ channel. Existing evidence directories are never overwritten.
 
 ## Scientific and security scope
 
-The deterministic campaign contains10 actual Lean cases: the original5-cell,
+The deterministic campaign contains11 actual Lean cases: the original5-cell,
 16-step trace; three faults; independent edge-flux-generated2/4/8/16-cell traces;
-64-step oscillation; and a final-step oscillation fault. This independently coded
+64-step oscillation; a final-step oscillation fault; and a16-cell scalar fault. This independently coded
 flux oracle proposes data; mathematical truth still comes from checked proofs of
 the unchanged matrix/trace semantics. The fixture problems are bounded exact
 discrete rational models. This is no empirical validation, general transport

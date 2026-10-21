@@ -31,7 +31,7 @@ def negative():
 def test_actual_positive_has_exact_full_inventory_and_no_scientific_authority(positive):
     assert positive["contract_sha256"] == hashlib.sha256(CONTRACT).hexdigest()
     assert positive["trajectory_sha256"] == hashlib.sha256(CSV).hexdigest()
-    assert len(positive["axiom_closures"]) == 51
+    assert len(positive["axiom_closures"]) == 131
     assert set(engine.GENERAL) <= set(positive["axiom_closures"])
     assert all(set(a) <= engine.model.APPROVED_AXIOMS for a in positive["axiom_closures"].values())
     assert all(e["exitcode"] == 0 for e in positive["executions"])

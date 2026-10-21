@@ -57,6 +57,8 @@ def cases():
     for width in [2, 4, 8, 16]:
         contract, raw = generated(width, 4, 20261021 + width)
         yield f"flux-{width}-cells", contract, raw, True
+        if width == 16:
+            yield "flux-16-cells-fault", contract, corrupt(raw, "recurrence"), False
     contract = json.loads(CONTRACT)
     contract["cells"] = [{"id": "A", "volume": "1", "initial_concentration": "1"},
                          {"id": "B", "volume": "1", "initial_concentration": "0"}]
