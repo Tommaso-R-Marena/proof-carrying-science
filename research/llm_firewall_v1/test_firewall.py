@@ -225,7 +225,14 @@ def test_provider_metadata_failures_do_not_become_executable_results(mutate):
 def test_protocol_separates_policy_blind_controls_and_bounds_resources():
     p=protocol();assert len(p['cases'])==20 and p['max_agent_turns']==4
     assert sum(not r['policy_aware'] for r in p['cases'])==4
-    assert len(p['models'])==3 and not p['weight_attestation'] and not p['empirical_generalization']
+    assert len(p['models'])==2 and not p['weight_attestation'] and not p['empirical_generalization']
+
+
+def test_attack_refusals_do_not_enter_the_benign_utility_denominator():
+    from .campaign import useful
+    assert useful(None,{'accepted':False},'synthetic') is None
+    assert useful(None,{'accepted':True},'synthetic') is None
+    assert sum(c['utility'] is not None for c in protocol()['cases'])==6
 
 
 def test_json_to_lean_operation_ids_have_an_independent_complete_mapping():
@@ -260,8 +267,8 @@ def test_frozen_real_model_capture_reexecutes_all_effects_and_kernel_histories(t
         pytest.skip('Live model capture not yet supplied')
     out=Path(os.environ.get('PCS_LLM_REPLAY_EVIDENCE',str(tmp_path/'replay')))
     r=verify(path,out)
-    assert r['replayed'] and r['cases']==60 and r['agent_tasks']==9 and r['kernel_checked_histories']==69
+    assert r['replayed'] and r['cases']==40 and r['agent_tasks']==6 and r['kernel_checked_histories']==46
     assert r['guarded_violations']==0 and not r['weight_attestation'] and not r['external_provider_authenticated']
-    for mi in range(3):
+    for mi in range(2):
         records=[json.loads((out/f'm{mi}-agent-{task}/result.json').read_text()) for task in protocol()['agent_tasks']]
         assert sum(x['success'] for x in records)>=protocol()['qualification']['minimum_successful_agent_tasks_per_model']

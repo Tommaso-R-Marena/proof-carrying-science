@@ -14,7 +14,7 @@ import urllib.error
 
 from .monitor import digest
 
-MODELS=('@cf/nvidia/nemotron-3-120b-a12b','@cf/google/gemma-4-26b-a4b-it','@cf/qwen/qwen3.8-27b')
+MODELS=('@cf/nvidia/nemotron-3-120b-a12b','@cf/qwen/qwen3.8-27b')
 
 
 def extract(raw:bytes,model:str):

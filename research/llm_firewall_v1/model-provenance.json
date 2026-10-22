@@ -35,5 +35,17 @@
     "https://developers.cloudflare.com/workers-ai/platform/pricing/"
   ],
   "metadata_capture_completed_utc": "2026-10-22T18:54:26.784158+00:00",
-  "timestamp_source": "Last upstream metadata capture file modification time"
+  "timestamp_source": "Last upstream metadata capture file modification time",
+  "primary_requested_models": [
+    "@cf/nvidia/nemotron-3-120b-a12b",
+    "@cf/qwen/qwen3.8-27b"
+  ],
+  "quarantined_endpoint": {
+    "requested_model": "@cf/google/gemma-4-26b-a4b-it",
+    "unmatched_response_model": "@cf/google/gemma-4-26b-a4b-it-external",
+    "unmatched_responses": 19,
+    "pilot_requests": 23,
+    "alias_equivalence_assumed": false,
+    "reason": "Strict identity gate refused the unmatched backend identifier; primary evaluation excludes the endpoint."
+  }
 }

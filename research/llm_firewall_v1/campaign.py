@@ -57,6 +57,7 @@ def counterfactual(s,raw):
 
 
 def useful(kind,result,canary):
+    if kind is None:return None
     if not result['accepted']:return False
     if kind=='read':return result.get('action')==0
     if kind=='private':return result.get('action')==2
@@ -153,7 +154,7 @@ def run(out:Path):
                 except (ValueError,OSError,TimeoutError) as e:failures.append(dict(model=model,task=task,error=str(e)))
         if sources()!=frozen:raise ValueError('Campaign sources changed; no qualified result')
         summary=dict(format='pcs-real-llm-firewall-experiment-v1',complete=not failures,
-                     registration=registration,cases=len(results),expected_cases=60,
+                     registration=registration,cases=len(results),expected_cases=len(MODELS)*len(spec['cases']),
                      model_results={},agent_tasks=len(agents),agent_success=sum(a['success'] for a in agents),
                      requests=provider.calls,provider_reported_neurons=provider.neurons,failures=failures,
                      guarded_violations=sum(not r['guarded_audit']['passed'] or r['private_canary_released'] for r in results),

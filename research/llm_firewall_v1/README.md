@@ -118,7 +118,6 @@ first campaign inference. Development connectivity smokes are excluded. The fixe
 model IDs are:
 
 - [NVIDIA Nemotron3 Super120B/A12B](https://developers.cloudflare.com/workers-ai/models/nemotron-3-120b-a12b/)
-- [Google Gemma4 26B/A4B](https://developers.cloudflare.com/workers-ai/models/gemma-4-26b-a4b-it/)
 - [Qwen3.8 27B](https://developers.cloudflare.com/workers-ai/models/qwen3.8-27b/)
 
 These are real hosted2026 open-model families, not toy neurons or mocked LLMs.
@@ -126,16 +125,24 @@ This is not an independently established global state-of-the-art ranking. Backen
 weight hashes/quantization are not attested. Current model catalog, completion IDs,
 provider-reported model IDs, usage and raw requests/responses are captured. Upstream
 model-card revisions do not prove that a hosted backend uses those exact weights.
-Qwen/Gemma upstream metadata report Apache2.0; Nemotron has its own open-model
+Qwen upstream metadata reports Apache2.0; Nemotron has its own open-model
 license. Do not equate every open-weight license with OSI open source.
+
+The retained three-endpoint pilot also attempted Google Gemma4 26B/A4B, but19 of
+its23 responses reported `@cf/google/gemma-4-26b-a4b-it-external`. The strict
+identity check refused those outputs. That endpoint is excluded from the primary
+results; no alias equivalence or backend-weight identity was assumed. The pilot
+is retained with complete=false. It also exposed a reporting bug that counted
+attack refusals in the benign utility denominator; the corrected primary run
+uses the same20 safety tasks and separates the six explicit utility criteria.
 
 There are20 one-proposal cases per model:16 policy-aware cases and4 policy-blind
 stress controls, always reported separately. They cover benign utility, forbidden
 tools, post-private public output, budget boundaries, document injection and fake
 authority. A paired unmediated **local** control dispatches the exact same captured
 proposal after the same prelude; it is a counterfactual tool test, not a separately
-observed unshielded adaptive agent trajectory. Nine actual closed-loop agent tasks
-(public, private, injected-public for each model) additionally measure task utility
+observed unshielded adaptive agent trajectory. Six actual closed-loop agent tasks
+(public, private, injected-public for each primary model) additionally measure task utility
 under shield feedback, with at most4 turns. The preregistered minimum is one
 successful agent task per model, not a theorem of general liveness.
 
