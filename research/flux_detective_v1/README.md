@@ -13,6 +13,18 @@ No merge or deployment is part of this change.
 
 ## Play locally
 
+The stacked Trace Lab extension adds a dependency-free launcher:
+
+```sh
+python -m research.trace_lab_v1 serve --open
+```
+
+It includes offline import/inspection, original-byte downloads and a copied
+independent replay command. Gameplay and browser arithmetic require no Lean or pip
+installation. See `research/trace_lab_v1/README.md` for the new whole-vector proofs,
+input subset, explicit trust boundary and85 Python/32 Node test pipeline. The
+baseline commands and counts below remain the historical PR167/168 instructions.
+
 From the repository root:
 
 ```sh

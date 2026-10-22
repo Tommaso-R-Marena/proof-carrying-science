@@ -11,6 +11,7 @@
   <header><span class="brand">PCS / PLAYABLE RESEARCH</span><span class="tag">Synthetic world · exact arithmetic</span></header>
   <section class="intro"><p class="eyebrow">A good summary can hide a bad simulation.</p><h1>Flux Detective<span class="dot">.</span></h1>
     <p class="lead">Three trajectories. All conserve mass, stay in bounds, and lose energy. Only one follows the declared update rule. Can you find it?</p></section>
+  <nav class="lab-nav" aria-label="Research lab tools"><button data-lab-target="case-title">1. Play</button><button data-lab-target="forge-title">2. Build</button><button data-lab-target="inspect-title">3. Inspect &amp; replay</button></nav>
   <form id="seed-form"><label for="seed">Challenge seed</label><input id="seed" value="20261021" inputmode="numeric" maxlength="10" required aria-describedby="seed-help"><button type="submit">New campaign</button><span id="seed-help">Share the URL to share the same six puzzles.</span></form>
   <p id="error" role="alert"></p>
   <section aria-labelledby="case-title"><div class="case-head"><div><p id="progress" class="eyebrow"></p><h2 id="case-title"></h2></div><p id="score"></p></div>
@@ -24,14 +25,19 @@
     <p>Start with the exact model trace. Move an amount between any two cells in its final row. Can you keep the summaries green while breaking the update rule?</p>
     <form id="forge-form"><label for="forge-left">From cell</label><select id="forge-left"></select><label for="forge-right">To cell</label><select id="forge-right"></select><label for="forge-amount">Amount (mol)</label><input id="forge-amount" value="0" maxlength="96" aria-describedby="forge-help"><button type="submit">Apply transfer</button></form>
     <p id="forge-help">Use canonical integers or fractions, such as 0, 1/32 or -1/8. Positive amounts move from the first cell to the second. Negative amounts reverse direction.</p>
-    <label for="forge-slider">Explore the exact safe interval</label><input id="forge-slider" type="range" min="0" max="100" value="0">
-    <div class="actions"><button id="forge-half">Try the interval midpoint</button><button id="forge-reset">Restore the model</button><button id="forge-export">Export workshop case</button></div>
+    <label for="forge-slider">Explore the summary-preserving interval</label><input id="forge-slider" type="range" min="0" max="100" value="0">
+    <div class="actions"><button id="forge-half">Try the interval midpoint</button><button id="forge-reset">Restore the model</button><button id="forge-inspect" disabled>Inspect this case</button><button id="forge-export">Export workshop case</button></div>
     <p id="forge-error" role="alert"></p><p id="forge-status" role="status" aria-live="polite"></p><div id="forge-details"></div>
     <p class="scope">The interval keeps mass, bounds, and energy no greater than the model's final energy. It is stricter than the earlier energy summary. Its mathematical formula is proved separately in Lean; these browser calculations are tested implementations. Export a case to check its actual trace with Lean.</p>
   </section>
-  <section class="replay"><h2>Take the evidence with you</h2><p>Export any trajectory, including an impostor. The download contains the exact model and CSV, with no claimed verification verdict.</p>
-    <p>From this research checkout, run:</p><pre>python -m research.flux_detective_v1.check case.json /new/evidence-dir</pre>
-    <p>The separate Lean checker can support or refute the exported trace. It does not validate physical reality.</p></section>
+  <section class="replay" aria-labelledby="inspect-title"><p class="eyebrow">Offline case inspector</p><h2 id="inspect-title">Inspect a case. Then replay it independently.</h2>
+    <p>Choose an exported JSON file, or use “Inspect this case” in the workshop. Your file stays in this browser. The inspector checks the complete declared model and every recorded row using exact arithmetic.</p>
+    <label for="inspect-file">Case JSON (up to 256 KiB)</label><input id="inspect-file" type="file" accept=".json,application/json">
+    <p id="inspect-status" role="status" aria-live="polite">Choose an exported case. Lean has not run.</p><p id="inspect-error" role="alert"></p><p id="inspect-digest"></p><div id="inspect-result"></div>
+    <div class="actions"><button id="inspect-download" disabled>Download captured input</button><button id="inspect-copy">Copy Lean replay command</button></div><p id="inspect-copy-status" role="status"></p>
+    <pre id="inspect-command"></pre>
+    <p>Save the captured input as <code>inspected-case.json</code> and run the command from the reviewed research checkout. A new evidence directory is required each time. Exit 0 means kernel support, 10 means kernel refutation, and 20 means refusal. The browser never supplies a Lean verdict.</p>
+    <p>The independent checker requires the pinned Lean and Python setup in the README. It does not validate physical reality. Quoted CSV and cases exceeding browser resource limits should go directly to the CLI.</p></section>
   <footer>Browser results are exact JavaScript arithmetic, not kernel proofs. Research prototype; no PCS authorization, empirical validation, accounts, tracking, or leaderboard. <a href="README.md">Reproduce &amp; inspect the trust boundary</a>.</footer>
-</main><script type="module" src="app.mjs"></script>
+</main><script type="module" src="app.mjs"></script><script type="module" src="inspector-ui.mjs"></script>
 </body></html>
