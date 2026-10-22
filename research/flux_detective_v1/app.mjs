@@ -58,7 +58,7 @@ function updateForge(amount) {
   try {
     forged=forgeCase(current, Number($('forge-left').value), Number($('forge-right').value), amount);
     const s=forged.summary, f=forged.analysis.fault;
-    $('forge-amount').value=amount; $('forge-error').textContent=''; $('forge-export').disabled=false;
+    $('forge-amount').value=amount; $('forge-error').textContent=''; $('forge-export').disabled=false; $('forge-inspect').disabled=false;
     $('forge-status').textContent=s.invariant_impostor ? 'Impostor constructed: all stronger summaries pass, but the exact model fails.' : s.exact_model ? 'Exact model restored. No recurrence fault.' : 'The model fails. One or more stronger conditions also fail.';
     const label=`[${s.low}, ${s.high}]`; $('forge-slider').setAttribute('aria-valuetext', `Amount ${amount}; exact interval ${label}`);
     $('forge-slider').disabled=s.low===s.high;
@@ -74,7 +74,7 @@ function updateForge(amount) {
       el('p',f ? `Exact mismatch at update ${f.step+1}, ${current.contract.cells[f.cell].id}: observed ${f.observed}, expected ${f.expected}, residual ${f.residual}.` : 'Every model update matches.'),
       el('p',`Final concentrations: ${forged.rows.at(-1).map((x,i)=>`${current.contract.cells[i].id} = ${x}`).join('; ')}`));
     if(s.low===s.high) $('forge-details').append(el('p','Only zero is allowed for this pair. Choose cells with different concentrations.'));
-  } catch(e) { forged=null; $('forge-export').disabled=true; $('forge-error').textContent=e.message; $('forge-status').textContent='No current workshop result. Correct the input.'; $('forge-details').replaceChildren(); }
+  } catch(e) { forged=null; $('forge-export').disabled=true; $('forge-inspect').disabled=true; $('forge-error').textContent=e.message; $('forge-status').textContent='No current workshop result. Correct the input.'; $('forge-details').replaceChildren(); }
 }
 function resetForge() {
   for(const id of ['forge-left','forge-right']) { $(id).replaceChildren(); current.contract.cells.forEach((c,i)=>{ const option=el('option',c.id); option.value=String(i); $(id).append(option); }); }
@@ -93,5 +93,6 @@ $('forge-half').addEventListener('click',()=>{ try { updateForge(sliderAmount(re
 $('forge-reset').addEventListener('click',()=>updateForge('0'));
 $('forge-slider').addEventListener('input',()=>{ try { const r=regionFor(current,Number($('forge-left').value),Number($('forge-right').value)); updateForge(sliderAmount(r,Number($('forge-slider').value))); } catch(e) { updateForge($('forge-amount').value); } });
 $('forge-export').addEventListener('click',()=>{ if(forged) saveBundle(forged.bundle,`flux-${seed}-level-${level+1}-workshop.json`); });
+$('forge-inspect').addEventListener('click',()=>{ if(forged) window.dispatchEvent(new CustomEvent('pcs:inspect-case',{detail:{raw:JSON.stringify(forged.bundle,null,2)+'\n'}})); });
 const match = /^#seed=(.*)$/.exec(location.hash);
 start(match ? match[1] : '20261021');

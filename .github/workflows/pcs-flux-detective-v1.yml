@@ -4,6 +4,7 @@ on:
     paths:
       - 'research/flux_detective_v1/**'
       - 'research/flux_forge_v1/**'
+      - 'research/trace_lab_v1/**'
       - 'research/portable_transport_v2/**'
       - 'pcs/transport*kernel_v1.py'
       - 'pcs/scientific_workflow_v3.py'
@@ -50,16 +51,18 @@ jobs:
           PCS_FLUX_SCREENSHOTS: ${{ runner.temp }}/flux-browser
           PCS_FLUX_EVIDENCE_DIR: ${{ runner.temp }}/flux-lean
           PCS_FORGE_EVIDENCE_DIR: ${{ runner.temp }}/forge-lean
+          PCS_LAB_EVIDENCE_DIR: ${{ runner.temp }}/lab-lean
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
           python -m research.flux_detective_v1.preservation > "$RUNNER_TEMP/flux-preservation.json"
           python -m research.flux_forge_v1.preservation > "$RUNNER_TEMP/forge-preservation.json"
+          python -m research.trace_lab_v1.preservation > "$RUNNER_TEMP/lab-preservation.json"
           python -m research.integration_v1.source_gate > "$RUNNER_TEMP/flux-source-gate.json"
-          python -m research.flux_forge_v1.audit --out "$RUNNER_TEMP/forge-formal"
+          python -m research.trace_lab_v1.audit --out "$RUNNER_TEMP/lab-formal"
           python -m research.flux_forge_v1.experiment --out "$RUNNER_TEMP/forge-experiment"
-          node --test research/flux_detective_v1/test_engine.mjs research/flux_detective_v1/test_browser.mjs research/flux_detective_v1/test_forge.mjs
-          python -m pytest -q research/flux_detective_v1/test_correspondence.py research/flux_forge_v1/test_forge.py --junitxml="$RUNNER_TEMP/flux-tests.xml"
+          node --test research/flux_detective_v1/test_engine.mjs research/flux_detective_v1/test_browser.mjs research/flux_detective_v1/test_forge.mjs research/flux_detective_v1/test_inspector.mjs
+          python -m pytest -q research/flux_detective_v1/test_correspondence.py research/flux_forge_v1/test_forge.py research/trace_lab_v1/test_lab.py --junitxml="$RUNNER_TEMP/flux-tests.xml"
           python -m pytest -q research/portable_transport_v2/test_replay.py --junitxml="$RUNNER_TEMP/flux-inherited-tests.xml"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
@@ -73,7 +76,9 @@ jobs:
             ${{ runner.temp }}/flux-preservation.json
             ${{ runner.temp }}/flux-source-gate.json
             ${{ runner.temp }}/forge-lean
-            ${{ runner.temp }}/forge-formal
+            ${{ runner.temp }}/lab-formal
             ${{ runner.temp }}/forge-experiment
             ${{ runner.temp }}/forge-preservation.json
+            ${{ runner.temp }}/lab-preservation.json
+            ${{ runner.temp }}/lab-lean
           retention-days: 14
