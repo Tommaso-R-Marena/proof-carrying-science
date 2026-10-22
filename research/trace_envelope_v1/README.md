@@ -127,6 +127,7 @@ python -m research.trace_envelope_v1.experiment --out ./new-experiment
 python -m pytest -q research/trace_envelope_v1/test_envelope.py research/portable_transport_v2/test_replay.py
 python -m research.trace_envelope_v1.preservation
 python -m research.integration_v1.source_gate
+python scripts/audit_lean_source.py research/trace_envelope_v1/Envelope.lean
 ```
 
 The deterministic experiment covers432 constructed cases: widths2,3,5,8;
