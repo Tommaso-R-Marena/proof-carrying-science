@@ -28,6 +28,11 @@ jobs:
           python -m pip install --no-deps --no-build-isolation -e .
       - name: Download exact real public GGUF weights and pinned CPU runtime
         run: python -m research.local_weights_v1 download "$RUNNER_TEMP/local-weights"
+      - name: Run a fresh full neural inference campaign on both real CPU models
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m research.local_weights_v1 evaluate "$RUNNER_TEMP/local-weights" "$RUNNER_TEMP/local-validation/fresh-cpu-campaign"
       - name: Require actual CPU inference and independent Lean tool replay
         env:
           PCS_REQUIRE_LOCAL_WEIGHTS: '1'

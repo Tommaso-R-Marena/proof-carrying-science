@@ -5,7 +5,8 @@ Qwen GGUF releases on CPU. It preserves every blob/mode at predecessor
 `68702256fe646a235e67416dd957d7af09186e8f` (PR #174), including all 26 general Lean
 theorems, the compiled monitor and production PCS authority. No merge or deployment.
 
-These small models fit the available two-core, roughly 10 GiB, GPU-free machine.
+These small models fit the available two-core, GPU-free machine with an 8 GiB
+cgroup memory limit (the host reports roughly 10 GiB).
 They are **not the 27B/120B hosted models** from the predecessor experiment and
 are not claimed to establish a current global state-of-the-art ranking.
 
@@ -92,9 +93,12 @@ Offline capture replay needs no weights/API key/GPU: it reconstructs requests,
 reuses exact captured completions, rebuilds the actual Lean monitor, checks its
 26 axiom inventories and fresh object, reexecutes local effects and regenerates all
 46 history proofs. **Replay does not rerun neural inference or authenticate the
-captured weight-binding observations.** The separate actual-weight tests download
-and hash both real models, load sealed snapshots and require new CPU inference
-from each in CI. Missing captures/weights fail CI; no mock LLM/affirmative verifier
+captured weight-binding observations.** CI additionally downloads and hashes both
+models, runs the full fresh 40-case/six-agent neural campaign with new Lean
+certificates, and tests new CPU inference from each model separately. Fresh neural
+outputs may differ across CPU hardware; CI requires complete observations and
+policy enforcement, not a predetermined utility score. Missing captures/weights
+fail CI; no mock LLM/affirmative verifier
 stands in for these tests. The suite also retains all 72 predecessor tests.
 
 Weights are intentionally not committed or embedded in the portable evidence.
