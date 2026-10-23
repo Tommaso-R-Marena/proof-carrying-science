@@ -57,3 +57,15 @@ No continuous-time path-space measure or finite-time reachability bound is prove
 The Lean executable runs as a subprocess, but the host controls Python, source emission, storage and dependency objects. This is not an independently administered verifier service. Neither Python privacy, content hashes nor filesystem permissions establish an unconditionally immutable boundary. The interface accepts typed numeric evidence, not caller-specified verifier executables or raw proof-source payloads.
 
 The next priorities are a proved byte-to-model decoder, scalable ordinary-kernel checking for the quarantined numerical instances, a formally constructed continuous-time correspondence, and empirical assay/model validation on an independently selected dataset. Production authority integration should follow a separate review after those boundaries are resolved.
+
+## Final local qualification
+
+The source snapshot at `12fd9acc361533ded972034b0e4902f87c46b37b` passed all **53 tests**, with zero failures and zero skips, in 395.61 seconds. This includes 12 real-Lean integration tests, 38 parser/semantic tests, one exact provenance test and two storage publication tests. A fresh child process rebuilt all admitted libraries and rederived the joint scientific evidence. False Lean propositions and a numerically false AION certificate were actually rejected; no mock affirmative verifier is used. Forged replay claims leave no accepted output package.
+
+Additional independent checks accepted six honest PRISM certificates and rejected their six tampered counterparts in both Python and Lean, with zero disagreements. The five provided `BDcert` results (`upper_ok`, `lower_ok`, `upper_val`, `lower_val`, `sandwich`) were audited separately and use only the three standard assumptions.
+
+The upstream baseline reproduced 400 finite-model instances: 177 impossible and 223 optimal, 134 brute-force comparisons, 21 greedy failures, 19 adaptivity gaps, and 1,122 tamper rejections with zero false accepts. All 38 upstream serialization rejection cases and all 18 AION unit tests passed. These counts describe separate campaigns and are not added together as independent scientific discoveries.
+
+Machine-readable results and the exact code-source snapshot are in `evidence/intake-20261023/qualification.json`; full theorem closures are in `core-build.json`, and actual compiler invocations and rejection diagnostics are in `authority-executions.json`. Initial failures and memory-limited attempts remain alongside the passing results. GitHub CI runs the final source and retains fresh proof packages and compiled artifacts; its current status is visible in PR #179.
+
+This interface is qualified on the reviewed Linux x86_64 Lean binary and Python 3.12.14. Other host platforms are not qualified by these runs. It is suitable for expert research review of the declared model claims; production scientific or AI-safety deployment requires the outstanding correspondence and empirical obligations above.
