@@ -87,6 +87,12 @@ Kernel seals protect the captured image; compiler, system libraries, OS and host
 code remain trusted. Python-to-SQLite refinement and actual process semantics are
 tested, not kernel proved. Do not deploy this as a confidential-processing service.
 
+The later [live retained-checkpoint wrapper](checkpoint/README.md) additionally
+refuses rollback of an active database, including when its old generation is
+supplied by the caller. Its seven real-authority regressions preserve the unanchored
+counterexample. The primary model experiment below uses the frozen parent broker;
+the wrapper is separately tested and does not rewrite that historical evidence.
+
 ## Real-weight evaluation
 
 Use the same actual official Apache 2.0 Qwen3 0.6B/1.7B Q8_0 weights and CPU engine
@@ -126,7 +132,7 @@ python -m research.local_weights_v1 download /tmp/pcs-pinned-weights
 python -m research.causal_firewall_v1 audit ./fresh-effect-audit
 python -m research.causal_firewall_v1 evaluate /tmp/pcs-pinned-weights ./fresh-causal-experiment
 python -m research.causal_firewall_v1 replay research/causal_firewall_v1/evidence/causal-v1.json ./fresh-effect-replay
-PCS_REQUIRE_CAUSAL_FIXTURE=1 python -m pytest -q research/causal_firewall_v1/test_effects.py research/causal_firewall_v1/test_capture.py tests/test_action_shield_v1.py
+PCS_REQUIRE_CAUSAL_FIXTURE=1 python -m pytest -q research/causal_firewall_v1/test_effects.py research/causal_firewall_v1/test_capture.py research/causal_firewall_v1/checkpoint/test_checkpoint.py tests/test_action_shield_v1.py
 ```
 
 Fresh output directories are mandatory. CI separately performs full fresh real
