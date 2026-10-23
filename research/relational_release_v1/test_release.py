@@ -72,6 +72,16 @@ def test_withholding_closes_only_when_trusted_host_finalizes(session):
     assert session.audit()['public']==[]
     assert session.finalize()==bytes([3,2,0,0,2])
 
+def test_private_proposal_exhaustion_cannot_consume_trusted_completion_slot(session):
+    session.read_private();accepted=0;refused=0
+    for _ in range(100):
+        try:
+            assert session.propose(b'{"count":2,"style":"forward","submit":false}')['valid'];accepted+=1
+        except ValueError:refused+=1
+    assert accepted==6 and refused==94 and session.audit()['attempts']==7
+    assert session.finalize()==bytes([3,2,0,0,2])
+    assert session.audit()['attempts']==8 and session.audit()['public']==[bytes([3,2,0,0,2])]
+
 def test_actual_staged_payload_substitution_rolls_back(session,monkeypatch):
     original=session._dispatch
     def wrong(c,request,reply):

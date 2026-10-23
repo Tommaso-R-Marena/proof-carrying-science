@@ -59,7 +59,9 @@ class Session:
             c=None
             try:
                 c=self.connection();c.execute('BEGIN IMMEDIATE');before=self._audit(c)
-                if before['attempts']>=8:raise ValueError('Receipt budget exhausted')
+                # Private proposals must never consume the trusted completion
+                # slot: otherwise quota exhaustion recreates suppression.
+                if before['attempts']>=(8 if action==2 else 7):raise ValueError('Reserved completion/receipt budget exhausted')
                 q,mask,hidden=self.contract;request=packet(q,before['closed'],mask,hidden,action,style,reported)
                 reply=self.authority.query(request)
                 if reply[1] not in {0,1} or reply[3]!=action:raise ValueError('Unexpected native verdict')

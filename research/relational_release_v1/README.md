@@ -72,6 +72,13 @@ anchor. Missing files, invalid receipts, native failures, contract changes,
 staged substitutions and concurrent finalization fail closed. The private
 observation is delivered only after its receipt commits. Audit packets and hashes
 depend on private resources and **never enter public effects or model prompts**.
+One of the eight receipt slots is reserved exclusively for trusted completion;
+private proposals after the seventh recorded operation refuse without consuming
+it. A retained real-authority development counterexample showed that sharing all
+eight slots allowed private proposal exhaustion to suppress finalization. The
+regression tries100 private proposals and still commits the exact canonical result.
+The incomplete first registration was aborted before neural requests to repair
+this defect; its artifacts remain excluded development evidence.
 
 Host execution of finalization is an explicit premise. Process death before it
 leaves an empty public trace; this is retained as a negative test. Actual wall
