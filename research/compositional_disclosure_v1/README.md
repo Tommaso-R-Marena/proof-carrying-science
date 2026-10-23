@@ -33,6 +33,15 @@ source/tool/artifact digests around every call, and generates ordinary `by decid
 proofs of captured request/reply pairs. It offers no caller-selected verifier.
 No `native_decide`, extra axioms, or production authority changes.
 
+`bounds/Bounds.lean` adds twelve independently checked theorems. The gate is
+maximally permissive **within truthful deterministic gates whose answer/deny
+decision is independent of the actual world at a fixed public possibility set**.
+A finite closure proof establishes at least three remaining worlds and integer
+majority bounds of two thirds for every bounded adaptive planner. Interpreting
+these ratios as posterior probabilities assumes a uniform six-world prior and
+independent public planning randomness. The two-thirds bound is attained; this
+is useful disclosure with residual inference risk, not perfect secrecy.
+
 The SQLite ledger commits exact native replies, generation-aware updates and
 hash-chained receipts in one transaction. It replays all receipts before and
 after staging and checks actual public SQL rows against the native plan. A live
@@ -65,7 +74,7 @@ query choices and is outside this contract.
 Activate the repository's Lean 4.28.0 and Python environment:
 
 ```sh
-python -m pytest -q research/compositional_disclosure_v1/test_ledger.py
+python -m pytest -q research/compositional_disclosure_v1/test_ledger.py research/compositional_disclosure_v1/bounds/test_bounds.py research/compositional_disclosure_v1/control/test_control.py
 python -m research.compositional_disclosure_v1 evaluate /path/to/local-weights /tmp/fresh-campaign
 python -m research.compositional_disclosure_v1 replay research/compositional_disclosure_v1/evidence/adaptive-v1.json /tmp/fresh-replay
 python -m research.compositional_disclosure_v1.preservation
@@ -81,3 +90,14 @@ The stateless baseline intentionally resets its safety check to the initial
 prior. It does not bypass Lean truth checking. Guess accuracy and deterministic
 reconstruction are reported separately. No model training, held-out benchmark,
 state-of-the-art model claim or production deployment.
+
+
+The primary 96-request experiment is preserved even though it did not discover
+an attack: 0.6B emitted an extra field on all 36 query requests; 1.7B asked for the
+already-known total on all 36. Each guessed the bit correctly in half of its
+cases under both policies. No policy effectiveness claim is inferred from that
+vacuous contrast. The separately registered post-primary `control/` campaign
+uses strict JSON-schema output and a host-supplied 2,4,8 query schedule. It tests
+real neural transport through the authority and ledger; it is explicitly **not**
+autonomous discovery, a held-out attack, or evidence of improved model reasoning.
+See `RESULTS.md` for measured outcomes and exact commits.

@@ -28,6 +28,7 @@ jobs:
       - name: Formal invariants, exhaustive differential cases, hostile storage and replay
         env:
           PCS_REQUIRE_DISCLOSURE_CAPTURE: '1'
+          PCS_DISCLOSURE_CONTROL_REPLAY_OUT: ${{ runner.temp }}/disclosure-formal/control-replay
           PCS_DISCLOSURE_REPLAY_OUT: ${{ runner.temp }}/disclosure-formal/replay
         run: |
           set -euo pipefail
@@ -35,8 +36,8 @@ jobs:
           mkdir -p "$RUNNER_TEMP/disclosure-formal"
           python -m research.compositional_disclosure_v1.preservation > "$RUNNER_TEMP/disclosure-formal/preservation.json"
           python -m research.integration_v1.source_gate > "$RUNNER_TEMP/disclosure-formal/source-gate.json"
-          python scripts/audit_lean_source.py research/compositional_disclosure_v1/Ledger.lean research/compositional_disclosure_v1/Main.lean > "$RUNNER_TEMP/disclosure-formal/source-audit.log"
-          python -m pytest -q research/compositional_disclosure_v1/test_ledger.py --basetemp="$RUNNER_TEMP/disclosure-formal/pytest" --junitxml="$RUNNER_TEMP/disclosure-formal/tests.xml"
+          python scripts/audit_lean_source.py research/compositional_disclosure_v1/Ledger.lean research/compositional_disclosure_v1/Main.lean research/compositional_disclosure_v1/bounds/Bounds.lean > "$RUNNER_TEMP/disclosure-formal/source-audit.log"
+          python -m pytest -q research/compositional_disclosure_v1/test_ledger.py research/compositional_disclosure_v1/bounds/test_bounds.py research/compositional_disclosure_v1/control/test_control.py --basetemp="$RUNNER_TEMP/disclosure-formal/pytest" --junitxml="$RUNNER_TEMP/disclosure-formal/tests.xml"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
@@ -67,6 +68,7 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           python -m research.compositional_disclosure_v1 evaluate "$RUNNER_TEMP/local-weights" "$RUNNER_TEMP/disclosure-neural"
+          python -m research.compositional_disclosure_v1.control evaluate "$RUNNER_TEMP/local-weights" "$RUNNER_TEMP/disclosure-neural/control"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
