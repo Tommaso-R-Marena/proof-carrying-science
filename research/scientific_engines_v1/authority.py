@@ -4,7 +4,11 @@ A trusted host and pinned Mathlib dependency cache are required. Hashes do not
 create an independently controlled immutable verifier root.
 """
 
-import hashlib, json, os, re, shutil, subprocess
+import hashlib
+import json
+import re
+import shutil
+import subprocess
 from pathlib import Path
 from pcs.transport_kernel_v1 import _inventory
 from research.trace_lab_v1.audit import pinned_tool

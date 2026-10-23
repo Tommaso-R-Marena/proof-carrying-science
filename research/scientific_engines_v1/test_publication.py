@@ -3,7 +3,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
 from .verifier import _publish
-from . import parsing
 
 
 def test_concurrent_publication_has_one_winner_and_complete_bytes(tmp_path):

@@ -1,6 +1,9 @@
 """Bounded strict input contract. No coercion, executable metadata or fuzzy numbers."""
 
-import itertools, json, math, re
+import itertools
+import json
+import math
+import re
 from fractions import Fraction
 from pcs.jsonio import strict_json_loads
 from .vendor.prism.python.prism import serialize as ps

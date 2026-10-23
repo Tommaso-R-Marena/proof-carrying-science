@@ -1,6 +1,7 @@
 """Numeric-only proof generation. Descriptive strings never enter Lean source."""
 
-import copy, tempfile
+import copy
+import tempfile
 from pathlib import Path
 from .vendor.prism.python.prism.core import Problem
 from .vendor.prism.python.prism.lean_export import export

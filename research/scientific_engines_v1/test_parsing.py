@@ -1,4 +1,4 @@
-import copy, json
+import json
 from pathlib import Path
 import pytest
 from . import parsing, emission

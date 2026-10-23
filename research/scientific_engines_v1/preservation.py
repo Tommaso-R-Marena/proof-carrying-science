@@ -1,4 +1,5 @@
-import json, subprocess
+import json
+import subprocess
 from pathlib import Path
 
 BASE = "b025ad4297252c0601b7b9c9a85859267a89c1fb"

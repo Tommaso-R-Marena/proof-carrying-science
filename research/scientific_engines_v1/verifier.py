@@ -1,6 +1,8 @@
 """Typed scientific claims with ordinary Lean evidence and independent replay."""
 
-import json, os, tempfile
+import json
+import os
+import tempfile
 from pathlib import Path
 from . import parsing, emission
 from .authority import Authority, digest, RISK_NAMES
