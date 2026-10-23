@@ -130,7 +130,9 @@ source scripts/activate_lean_428.sh
 python -m research.local_weights_v1 download /tmp/pcs-weights
 python -m research.relational_release_v1 evaluate /tmp/pcs-weights ./fresh-release-run
 python -m research.relational_release_v1 replay research/relational_release_v1/evidence/relational-v1.json ./fresh-release-replay
-PCS_REQUIRE_RELATIONAL_FIXTURE=1 python -m pytest -q research/relational_release_v1/test_release.py tests/test_action_shield_v1.py
+python -m research.relational_release_v1.followup evaluate /tmp/pcs-weights ./fresh-pair-experiment
+python -m research.relational_release_v1.followup replay research/relational_release_v1/evidence/fresh-pairs-v1.json ./fresh-pair-replay
+PCS_REQUIRE_RELATIONAL_FIXTURE=1 python -m pytest -q research/relational_release_v1/test_release.py research/relational_release_v1/followup/test_followup.py tests/test_action_shield_v1.py
 ```
 
 Fresh directories are required. Separate CI jobs run fresh actual inference and
@@ -139,3 +141,6 @@ requests versus an independent oracle, all64 data/query inputs, malformed
 encodings, verified eight-bit transmission, withholding, actual payload
 substitution, tampering, live/commit-window rollback, concurrent finalizers,
 verifier failure, scheduler fallback, and host process death before completion.
+
+See [RESULTS.md](RESULTS.md) for all primary outcomes, failed deliberate encoders,
+the subsequent fresh-engine reversed-order falsification, scope and prior work.
