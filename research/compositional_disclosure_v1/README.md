@@ -74,7 +74,7 @@ query choices and is outside this contract.
 Activate the repository's Lean 4.28.0 and Python environment:
 
 ```sh
-python -m pytest -q research/compositional_disclosure_v1/test_ledger.py research/compositional_disclosure_v1/bounds/test_bounds.py research/compositional_disclosure_v1/control/test_control.py
+python -m pytest -q research/compositional_disclosure_v1/test_ledger.py research/compositional_disclosure_v1/bounds/test_bounds.py research/compositional_disclosure_v1/control/test_control.py research/compositional_disclosure_v1/adversarial/test_process.py
 python -m research.compositional_disclosure_v1 evaluate /path/to/local-weights /tmp/fresh-campaign
 python -m research.compositional_disclosure_v1 replay research/compositional_disclosure_v1/evidence/adaptive-v1.json /tmp/fresh-replay
 python -m research.compositional_disclosure_v1.preservation
