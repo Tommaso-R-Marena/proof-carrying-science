@@ -26,7 +26,8 @@ Outputs must be fresh paths. Replay reconstructs the captured requests, builds a
 fresh pinned supervisor, executes actual local SQL tools, compares every native
 reply and receipt, and generates fresh ordinary-kernel proofs of the exact wire
 replies and abstract path. Producer proof source and reported verdicts are never
-executed or accepted as authority. No proof traces are used for model training.
+executed or accepted as authority. No proof traces are used for model training. Resource exhaustion or unsupported
+proof tools refuses formal support.
 
 For another bounded finite model, use the existing action-shield model format:
 
@@ -128,7 +129,8 @@ is adopted. This avoids repeatedly checking the identical Std import closure.
 Independent replay uses a new process and builds its own image.
 
 Effects, generation-aware updates and hash-chain receipts commit in one SQLite
-transaction. Repeated request IDs are idempotent only for identical original bytes.
+transaction. The trusted host supplies fresh request IDs for new turns. Repeated IDs are
+retries, do not advance progress, and are idempotent only for identical original bytes.
 A live memory anchor detects prefix rollback, and replay checks materialized
 payload/public rows. Existing ledgers are refused on construction: no unanchored
 restart recovery or durable anti-rollback authority is claimed. Tests include

@@ -31,7 +31,8 @@ def test_receipt_corruption_effect_substitution_and_unsafe_proof_labels(tmp_path
         with pytest.raises(ValueError,match='safe fixed proof label'):certify_path(b._authority,[],label='../../outside')
 
 
-def test_real_process_crash_after_commit_refuses_unanchored_restart(tmp_path):
+@pytest.mark.parametrize('crash_at',[1,4])
+def test_real_process_crash_after_commit_refuses_unanchored_restart(tmp_path,crash_at):
     db=tmp_path/'crash.sqlite';build=tmp_path/'crash-native'
     code=r'''
 import os,sys
@@ -41,15 +42,15 @@ class CrashAfterRealCommit:
  def __getattr__(self,n):return getattr(actual,n)
  def execute(self,sql,*args):
   result=actual.execute(sql,*args)
-  if sql=='COMMIT':os._exit(73)
+  if sql=='COMMIT' and actual.execute('SELECT generation FROM meta').fetchone()[0]==int(sys.argv[3]):os._exit(73)
   return result
 b._db=CrashAfterRealCommit()
-b.step(b'{"action":0}','committed-before-crash')
+for i in range(4):b.step(b'{"action":5}','step-'+str(i))
 '''
-    run=subprocess.run([sys.executable,'-c',code,str(db),str(build)],capture_output=True,timeout=300)
+    run=subprocess.run([sys.executable,'-c',code,str(db),str(build),str(crash_at)],capture_output=True,timeout=300)
     assert run.returncode==73,run.stderr
     with sqlite3.connect(db) as sql:
-        assert sql.execute('SELECT state,generation FROM meta').fetchone()==(1,1)
-        assert sql.execute('SELECT COUNT(*) FROM events').fetchone()==(1,)
-        assert sql.execute('SELECT COUNT(*) FROM public').fetchone()==(0,)
+        assert sql.execute('SELECT state,generation FROM meta').fetchone()==((1,1) if crash_at==1 else (4,4))
+        assert sql.execute('SELECT COUNT(*) FROM events').fetchone()==(crash_at,)
+        assert sql.execute('SELECT COUNT(*) FROM public').fetchone()==((0,) if crash_at==1 else (1,))
     with pytest.raises(FileExistsError,match='external restart anchor'):Broker(db,tmp_path/'no-restart')
