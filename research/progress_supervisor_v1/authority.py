@@ -12,7 +12,8 @@ TOOLS={'lean':'3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf'
  'leanc':'871b10499518fd713bb1088dd98ca2833efdc0c6342cf972b056ef2224b4057d'}
 PROGRESS=['PCSProgress.'+n for n in ('check_iff','force_succ','force_mono','winning_can_force','force_implies_winning','losing_no_finite_bound','pick_sound','pick_exists','choose_sound','choose_available','chosen_step_progresses','path_bound','completion_at_bound','preserves_existing_safety','goals_halt')]
 WIRE=['PCSProgressWire.'+n for n in ('selected_from_choose','selected_all_outcomes','halt_is_goal','malformed_refuses')]
-DATA=['PCSProgressData.'+n for n in ('certificate_checked','winning','losing')]
+CODEC=['PCSProgressCodec.'+n for n in ('request_roundtrip','request_injective','request_decode_canonical','selected_roundtrip','typed_roundtrip','process_selected_sound','raw_selected_all_outcomes','typed_octets','process_octets','batch_octets','native_octets_roundtrip')]
+DATA=['PCSProgressData.'+n for n in ('certificate_checked','winning','losing','wire_bounds')]
 SEALS=15
 
 def packet(state,proposal):
@@ -28,23 +29,23 @@ class Authority:
   self.out=Path(out).resolve();self.out.mkdir(parents=True,exist_ok=False);self.fd=None;self.executions=[]
   self.model_raw=bytes(model_raw);self.cert_raw=bytes(cert_raw)
   self.sources={'PCSActionShield.lean':(ROOT/'formal/PCSActionShield.lean').read_bytes(),
-    **{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Main.lean']},'Data.lean':literal_source(model_raw,cert_raw)}
+    **{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Codec.lean','Main.lean']},'Data.lean':literal_source(model_raw,cert_raw)}
   lean=shutil.which('lean')
   if lean is None:raise ValueError('Lean 4.28.0 required; no substitute')
   self.tools={n:Path(lean).with_name(n) for n in TOOLS};self._check_tools()
   self.env={'PATH':str(Path(lean).parent)+':/usr/bin:/bin','LANG':'C.UTF-8','LEAN_PATH':str(self.out)}
-  self.host_sources={n:sha((HERE/n).read_bytes()) for n in ['authority.py','certificate.py','broker.py','example.py']}
+  self.host_sources={n:sha((HERE/n).read_bytes()) for n in ['authority.py','certificate.py','broker.py','example.py','trace.py','evidence.py','worker.py','__main__.py']}
   self.axioms={};started=time.monotonic()
   try:
-   for n in ['PCSActionShield.lean','Progress.lean','Wire.lean','Data.lean','Main.lean']:
-    names=PROGRESS if n=='Progress.lean' else WIRE if n=='Wire.lean' else DATA if n=='Data.lean' else []
+   for n in ['PCSActionShield.lean','Progress.lean','Wire.lean','Codec.lean','Data.lean','Main.lean']:
+    names=PROGRESS if n=='Progress.lean' else WIRE if n=='Wire.lean' else CODEC if n=='Codec.lean' else DATA if n=='Data.lean' else []
     raw=self.sources[n]+('\n'+'\n'.join('#print axioms '+t for t in names)+'\n').encode()
     (self.out/n).write_bytes(raw)
     log=self._run([self.tools['lean'],'-j1','-M2048','-D','Elab.async=false','--root='+str(self.out),'-o',n[:-5]+'.olean','-c',n[:-5]+'.c',n],90)
     if (self.out/n).read_bytes()!=raw:raise ValueError('staged source changed')
     if names:self.axioms.update(_inventory(log,names))
    self._run([self.tools['leanchecker'],'--fresh','Main'],180)
-   self._run([self.tools['leanc'],'-O2','-o','supervisor',*[n+'.c' for n in ['Main','Data','Wire','Progress','PCSActionShield']]],90)
+   self._run([self.tools['leanc'],'-O2','-o','supervisor',*[n+'.c' for n in ['Main','Data','Codec','Wire','Progress','PCSActionShield']]],90)
    self.artifacts={p.name:sha(p.read_bytes()) for p in self.out.iterdir() if p.is_file()}
    image=(self.out/'supervisor').read_bytes();self.binary_sha256=sha(image)
    self.fd=os.memfd_create('pcs-progress-supervisor',os.MFD_CLOEXEC|os.MFD_ALLOW_SEALING)
@@ -70,7 +71,7 @@ class Authority:
  def check(self):
   self._check_tools()
   if {n:sha((HERE/n).read_bytes()) for n in self.host_sources}!=self.host_sources:raise ValueError('host adapter source changed')
-  actual={'PCSActionShield.lean':(ROOT/'formal/PCSActionShield.lean').read_bytes(),**{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Main.lean']},'Data.lean':literal_source(self.model_raw,self.cert_raw)}
+  actual={'PCSActionShield.lean':(ROOT/'formal/PCSActionShield.lean').read_bytes(),**{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Codec.lean','Main.lean']},'Data.lean':literal_source(self.model_raw,self.cert_raw)}
   if actual!=self.sources:raise ValueError('source/model identity changed')
   if {n:sha((self.out/n).read_bytes()) for n in self.artifacts}!=self.artifacts:raise ValueError('compiled artifact identity changed')
   if self.fd is None or fcntl.fcntl(self.fd,1034)!=SEALS:raise ValueError('native image seals missing')

@@ -19,7 +19,7 @@ Linux x86_64, Python 3.12, and the repository's exact Lean 4.28.0 toolchain:
 source scripts/activate_lean_428.sh
 python -m research.progress_supervisor_v1 demo /tmp/new-progress-demo
 python -m research.progress_supervisor_v1 replay /tmp/new-progress-demo/capture.json /tmp/new-progress-replay
-python -m pytest -q research/progress_supervisor_v1/test_progress.py research/progress_supervisor_v1/test_replay.py
+python -m pytest -q research/progress_supervisor_v1
 ```
 
 Outputs must be fresh paths. Replay reconstructs the captured requests, builds a
@@ -46,7 +46,8 @@ is not a generic executor for arbitrary model-provided tools.
 ## Exact formal guarantee
 
 `Progress.lean` imports the unchanged `PCSActionShield` library and proves fifteen
-named theorems. `Wire.lean` adds four; each generated concrete model adds three:
+named theorems. `Wire.lean` adds four, `Codec.lean` adds eleven, and each generated
+concrete model adds four, for 34 audited closures:
 
 | Theorem | Scope |
 | --- | --- |
@@ -60,10 +61,15 @@ named theorems. `Wire.lean` adds four; each generated concrete model adds three:
 | `goals_halt` | No further action is selected at a goal. |
 | `PCSProgressWire.selected_all_outcomes` / `halt_is_goal` | The typed native decision inherits progress/safety, and a halt is justified by a checked goal. |
 | `malformed_refuses` | Undecodable requests produce the fixed malformed response. |
+| `PCSProgressCodec.request_roundtrip` / `request_injective` / `request_decode_canonical` | Exactly the bounded requests round-trip; successful decoding admits no alternate request encoding. |
+| `selected_roundtrip` / `typed_roundtrip` | Reply decoding recovers the exact action/rank, with explicit wire bounds. |
+| `process_selected_sound` / `raw_selected_all_outcomes` | A selected action decoded from the raw process output has the typed choice and every modeled outcome progresses safely. |
+| `typed_octets` / `process_octets` / `batch_octets` | All generated reply integers are bytes under the certificate's wire bounds. |
+| `native_octets_roundtrip` | Main's conversion through UInt8 preserves the complete batch response without truncation. |
 
 `force_succ`, `force_mono`, `pick_sound`, `pick_exists` and
 `selected_from_choose` are the supporting named proofs. Generated
-`PCSProgressData.certificate_checked`, `winning` and `losing` instantiate these
+`PCSProgressData.certificate_checked`, `winning`, `losing` and `wire_bounds` instantiate these
 contracts with exact numeric literals. Recorded executions additionally receive
 `Capture.actual` and `CapturedPath.path`, `bounded`, `completed` proofs.
 All closures are audited exactly; no new axiom, `native_decide`, `sorry` or `admit`
@@ -116,7 +122,7 @@ The original protected action-shield example can also be checked unchanged.
 ## Execution and evidence boundary
 
 The authority compiles fixed first-party Lean sources and numeric-only model
-literals, audits all 22 exact theorem names, runs pinned `leanchecker --fresh Main`
+literals, audits all 34 exact theorem names, runs pinned `leanchecker --fresh Main`
 over the compiled import closure, and compiles the same decision to native code.
 Every positive effect requires an actual native response. Linux memfd seals protect
 the captured executable image against writes/growth/shrinkage; file replacement
@@ -139,9 +145,11 @@ SQLite COMMIT. All side effects here are transactional SQL; arbitrary external
 network/file/tool effects would require a different crash protocol.
 
 The model/certificate codecs and Python/Lean correspondence are tested, not
-universally source-extracted. The 6-byte wire codec is independently differentially
-tested; its typed-decision theorems and concrete captured-packet proofs are not a
-universal raw-byte decode/encode refinement theorem. Python, SQLite, compiler,
+universally source-extracted. The six-byte Lean codec now has general
+round-trip, canonicality and raw-decision refinement proofs, conditional on explicit
+wire bounds that are separately proved for each concrete certificate. The actual
+compiled boundary is also independently differentially tested. This does not prove
+the Python encoder, C compiler or operating-system IO faithful to the Lean semantics. Python, SQLite, compiler,
 linker, Std/shared libraries, operating system and trusted observation/adapter code
 remain outside the general kernel theorem. Hashes, Python privacy, file permissions
 and a sealed image do not establish an independently administered immutable root.
@@ -149,5 +157,48 @@ and a sealed image do not establish an independently administered immutable root
 No real neural-model evaluation, model gain, empirical AI-safety result, external
 review, human study or world-first scientific claim is established by these tests.
 The guarantee is model-conditional and policy-agnostic. Next milestones are a
-separately proved concrete codec/adapter correspondence, explicit partial-observation
+separately proved Python/SQL adapter correspondence, explicit partial-observation
 games, and controlled real-model experiments with independently validated tool models.
+
+
+## Run a process-owned session
+
+```sh
+printf '%s\n' '{"action":5}' '{"action":4}' 'not JSON' '{"action":65535}' | \
+  python -m research.progress_supervisor_v1 serve /tmp/new-progress-session
+python -m research.progress_supervisor_v1 replay /tmp/new-progress-session/capture.json /tmp/new-session-replay
+```
+
+The trusted launcher chooses a fresh output directory, fixture mode, request limit
+(default 32, maximum 256) and per-frame deadline (`--frame-timeout`, default 30
+seconds, finite and at most 300). The producer sends only LF-terminated proposal
+bytes, up to 4,096 bytes per frame. The worker owns the verifier, true state,
+generation and fixed SQL tools; it mints `turn-0000` and subsequent request IDs.
+Supplied state, verifier or request-ID fields are malformed proposals and use the
+same preauthorized fallback. Each complete valid-size frame advances this fixed
+workflow once. A model cannot request arbitrary tools or read the private payload
+through the protocol.
+
+Output is JSONL: `READY`, zero or more `STEP` events, then either `COMPLETE`,
+`INCOMPLETE` or `REFUSED_OR_UNAVAILABLE`. Completion includes actual fresh kernel
+wire/path proofs and writes a replayable capture. It closes the session at the
+goal, ignoring any queued subsequent proposals. Exit 0 denotes checked completion;
+21 denotes EOF/request-budget exhaustion without completion; 20 denotes a boundary
+failure. Oversized or unterminated frames and silent/slow input end the session
+without resynchronizing or authorizing another effect. Parsing a deeply nested
+bounded JSON frame produces a malformed fallback. There is no wall-clock guarantee
+for native compilation, tools, stdout consumption or the host scheduler.
+
+The producer and authority no longer need to share Python object references.
+This is **process separation**, not independently administered verification or a
+same-user filesystem/process security boundary. A hostile host, debugger, imported
+module, OS or compiler remains outside the claim. The worker never reopens an old
+ledger or claims restart availability. Its synthetic SQL workflow is Linux-qualified;
+there is no deployment to production or generic-agent tool authority.
+
+Source fingerprints intentionally changed for this extension. Capsules from
+`ce726e17b998052518dab54178581da75dae417c` must be replayed with that revision;
+the retained historical evidence is unchanged. New capsules have the same schema
+with the expanded exact source inventory. Both batch and process captures replay
+through the same receiving implementation, including idempotent retry observations
+that do not count as additional committed path edges.

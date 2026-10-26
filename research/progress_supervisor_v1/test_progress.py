@@ -7,7 +7,7 @@ import pytest
 from pcs.action_shield_v1 import evaluate as safety_evaluate,propose as safety_propose
 from .certificate import encode,propose,evaluate,load_certificate,brute_force_bounds
 from .example import model
-from .authority import Authority,packet,SEALS
+from .authority import Authority,packet,SEALS,PROGRESS,WIRE,CODEC,DATA
 from .broker import Broker,PRIVATE,PUBLIC
 
 
@@ -81,7 +81,7 @@ def test_real_native_codec_all_field_bytes_all_declared_choices_and_captured_ker
     assert len(frames)==1626
     for n in range(1,6):assert native.query_raw(base[:n])==bytes([1,3,0,0,0,0])
     proof=native.certify([(b,native.query_raw(b)) for b in frames[:20]],'real-wire')
-    assert proof['kernel_checked'];assert len(native.axioms)==22
+    assert proof['kernel_checked'];assert len(native.axioms)==len(PROGRESS+WIRE+CODEC+DATA)
     assert native.manifest['fresh_objects_checked'] and native.manifest['kernel_checked']
     with pytest.raises(ValueError):native.query(0,True)
 
@@ -94,6 +94,12 @@ def test_goal_halts_unknown_states_refuse_and_noop_unsafe_forbidden_are_overridd
     assert native.query(4,5)['status']=='HALT'
     assert native.query(6,None)['status']=='REFUSED'
     assert native.query(65535,65535)['status']=='REFUSED'
+
+
+def test_forged_captured_positive_native_response_is_rejected_by_real_kernel(native):
+    forged=bytes([1,1,5,0,4,0])
+    with pytest.raises(ValueError,match='Actual Lean/build process rejected'):
+        native.certify([(packet(0,5),forged)],'forged-allow')
 
 
 def test_native_seals_path_substitution_and_manifest_aliases(native):

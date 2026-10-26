@@ -14,7 +14,7 @@ jobs:
   checked-progress:
     if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -32,7 +32,7 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           mkdir -p "$RUNNER_TEMP/progress-evidence"
-          python -m pytest -q research/progress_supervisor_v1/test_progress.py research/progress_supervisor_v1/test_replay.py tests/test_action_shield_v1.py tests/test_control_monitor_v1.py --junitxml="$RUNNER_TEMP/progress-evidence/tests.xml"
+          python -m pytest -q research/progress_supervisor_v1/test_progress.py research/progress_supervisor_v1/test_replay.py research/progress_supervisor_v1/test_codec.py research/progress_supervisor_v1/test_worker.py tests/test_action_shield_v1.py tests/test_control_monitor_v1.py --junitxml="$RUNNER_TEMP/progress-evidence/tests.xml"
           python -m research.progress_supervisor_v1 demo "$RUNNER_TEMP/progress-evidence/capture"
           python -m research.progress_supervisor_v1 replay "$RUNNER_TEMP/progress-evidence/capture/capture.json" "$RUNNER_TEMP/progress-evidence/replay"
           python - <<'PYGOALS'
@@ -42,6 +42,8 @@ jobs:
           PYGOALS
           python -m research.progress_supervisor_v1 synthesize examples/action_shield_v1/model.json "$RUNNER_TEMP/progress-goals.json" "$RUNNER_TEMP/progress-evidence/original-certificate.json"
           python -m research.progress_supervisor_v1 check examples/action_shield_v1/model.json "$RUNNER_TEMP/progress-evidence/original-certificate.json" "$RUNNER_TEMP/progress-evidence/original-model"
+          printf '%s\n' '{"action":5}' '{"action":4}' 'not JSON' '{"action":65535}' | python -m research.progress_supervisor_v1 serve "$RUNNER_TEMP/progress-evidence/process" > "$RUNNER_TEMP/progress-evidence/process-session.jsonl"
+          python -m research.progress_supervisor_v1 replay "$RUNNER_TEMP/progress-evidence/process/capture.json" "$RUNNER_TEMP/progress-evidence/process-replay"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
@@ -49,5 +51,6 @@ jobs:
           path: |
             ${{ runner.temp }}/progress-evidence/**/*.json
             ${{ runner.temp }}/progress-evidence/**/*.lean
+            ${{ runner.temp }}/progress-evidence/*.jsonl
             ${{ runner.temp }}/progress-evidence/tests.xml
           retention-days: 14

@@ -37,7 +37,7 @@ def parse_proposal(raw):
         a=d['action']
         if a is not None and (type(a) is not int or not 0<=a<65536):return None,'MALFORMED_FALLBACK'
         return a,'TYPED_PROPOSAL'
-    except (ValueError,UnicodeError):return None,'MALFORMED_FALLBACK'
+    except (ValueError,UnicodeError,RecursionError):return None,'MALFORMED_FALLBACK'
 
 class Broker:
     def __init__(self,path,build_dir,*,pre_sanitized=False):

@@ -31,6 +31,16 @@ def test_receipt_corruption_effect_substitution_and_unsafe_proof_labels(tmp_path
         with pytest.raises(ValueError,match='safe fixed proof label'):certify_path(b._authority,[],label='../../outside')
 
 
+def test_replay_distinguishes_retry_observations_from_committed_transitions(tmp_path):
+    execute(tmp_path/'original')
+    capture=json.loads((tmp_path/'original/capture.json').read_text())
+    capture['samples'].insert(1,dict(capture['samples'][0]))
+    result=execute(tmp_path/'with-retry',capture=capture)
+    assert result['replayed'] and result['transitions']==4
+    report=json.loads((tmp_path/'with-retry/result.json').read_text())
+    assert report['captured_path_proof']['kernel_checked']
+
+
 @pytest.mark.parametrize('crash_at',[1,4])
 def test_real_process_crash_after_commit_refuses_unanchored_restart(tmp_path,crash_at):
     db=tmp_path/'crash.sqlite';build=tmp_path/'crash-native'

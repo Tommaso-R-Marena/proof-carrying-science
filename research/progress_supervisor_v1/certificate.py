@@ -89,10 +89,11 @@ def literal_source(model_raw:bytes,cert_raw:bytes):
     nums=lambda a:'['+','.join(map(str,a))+']'
     edges='['+','.join('⟨'+','.join(str(e[k]) for k in ['source','action','target'])+'⟩' for e in m['transitions'])+']'
     pairs=lambda a:'['+','.join('('+str(s)+','+str(v)+')' for s,v in a)+']'
-    return (f'import Progress\nnamespace PCSProgressData\ndef spec : PCSProgress.Spec := ⟨⟨{nums(m["initial"])},{nums(m["safe"])},{edges},{pairs(c["allowed"])},{nums(m["forbidden"])}⟩,{nums(c["goals"])},{pairs(c["ranks"])}⟩\n'
+    return (f'import Codec\nnamespace PCSProgressData\ndef spec : PCSProgress.Spec := ⟨⟨{nums(m["initial"])},{nums(m["safe"])},{edges},{pairs(c["allowed"])},{nums(m["forbidden"])}⟩,{nums(c["goals"])},{pairs(c["ranks"])}⟩\n'
         'theorem certificate_checked : PCSProgress.check spec = true := by decide\n'
         'theorem winning : ∀ s ∈ PCSProgress.region spec, PCSProgress.CanForce spec.base spec.goals (PCSProgress.rank spec s) s := PCSProgress.winning_can_force certificate_checked\n'
         'theorem losing {s : Nat} (h : s ∉ PCSProgress.region spec) : ∀ n, ¬ PCSProgress.CanForce spec.base spec.goals n s := PCSProgress.losing_no_finite_bound certificate_checked h\n'
+        'theorem wire_bounds : PCSProgressCodec.FitsWire spec := by decide\n'
         'end PCSProgressData\n').encode()
 
 def brute_force_bounds(model_raw:bytes,goals:list[int]):

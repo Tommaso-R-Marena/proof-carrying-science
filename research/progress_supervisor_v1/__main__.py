@@ -1,25 +1,12 @@
 """Research CLI; unknown inputs or failed Lean execution never grant authority."""
 from __future__ import annotations
-import argparse,json,subprocess,sys
+import argparse,json,sqlite3,subprocess,sys
 from pathlib import Path
 from pcs.jsonio import strict_json_loads
 from .certificate import encode,sha,propose,evaluate
 from .authority import Authority
 from .broker import Broker
-from .trace import certify_path
-HERE=Path(__file__).resolve().parent
-ROOT=HERE.parents[1]
-IMPLEMENTATION=['Progress.lean','Wire.lean','Main.lean','authority.py','broker.py','certificate.py','example.py','trace.py','__main__.py']
-
-def sources():
-    return {**{n:sha((HERE/n).read_bytes()) for n in IMPLEMENTATION},'formal/PCSActionShield.lean':sha((ROOT/'formal/PCSActionShield.lean').read_bytes())}
-def read(path,limit=2*1024*1024):
-    with Path(path).open('rb') as f:raw=f.read(limit+1)
-    if len(raw)>limit:raise ValueError('input exceeds byte limit')
-    return raw
-
-def write(path,value):
-    with Path(path).open('xb') as f:f.write(encode(value)+b'\n')
+from .evidence import sources, read, write, publish
 
 def execute(out,*,pre_sanitized=False,capture=None):
     out=Path(out).resolve();out.mkdir(parents=True,exist_ok=False)
@@ -43,18 +30,7 @@ def execute(out,*,pre_sanitized=False,capture=None):
             if capture and r!=capture['samples'][i]['record']:raise ValueError('fresh native/effect receipt disagrees with capture')
         final=b.snapshot()
         if capture and final!=capture['final']:raise ValueError('fresh final effects disagree with capture')
-        if final['state']!=4 or final['transitions']>4:raise ValueError('workflow failed its certified bound')
-        records=[s['record'] for s in samples if 'action' in s['record']]
-        pairs=[(bytes.fromhex(r['request_hex']),bytes.fromhex(r['reply_hex'])) for r in records]
-        wire=b._authority.certify(pairs,'workflow-wire');path=certify_path(b._authority,records)
-        # A process-owned qualified supervisor may be shared; publish independent
-        # source/proof evidence, never claim the host or a directory is immutable.
-        artifact=dict(format='pcs-progress-supervisor-capture-v1',data_origin='synthetic fixed-tool experiment; no participant data',sources=before,
-            model_hex=b.model_raw.hex(),certificate_hex=b.cert_raw.hex(),pre_sanitized=pre_sanitized,samples=samples,final=final)
-        write(out/'capture.json',artifact)
-        write(out/'result.json',dict(format='pcs-progress-supervisor-result-v1',analysis=evaluate(b.model_raw,b.cert_raw),native_build=b._authority.manifest,
-            captured_wire_proof=wire,captured_path_proof=path,final=final,replayed=capture is not None,pcs_authority=False,
-            implementation_correspondence='TESTED_NOT_PROVED',deployment_safety='OPEN',empirical_model_safety='NOT_ESTABLISHED'))
+        publish(out,b,samples,before,pre_sanitized=pre_sanitized,replayed=capture is not None)
     if sources()!=before:raise ValueError('implementation changed during capture/replay')
     return dict(output=str(out),transitions=final['transitions'],final_state=final['state'],captured_wire_kernel_checked=True,captured_path_kernel_checked=True,replayed=capture is not None,pcs_authority=False)
 
@@ -64,8 +40,15 @@ def main():
     replay=s.add_parser('replay');replay.add_argument('capture');replay.add_argument('output')
     syn=s.add_parser('synthesize');syn.add_argument('model');syn.add_argument('goals');syn.add_argument('output')
     ck=s.add_parser('check');ck.add_argument('model');ck.add_argument('certificate');ck.add_argument('output')
+    server=s.add_parser('serve',help='one process-owned action-only JSONL session')
+    server.add_argument('output');server.add_argument('--pre-sanitized',action='store_true')
+    server.add_argument('--max-requests',type=int,default=32)
+    server.add_argument('--frame-timeout',type=float,default=30)
     args=p.parse_args()
     try:
+        if args.command=='serve':
+            from .worker import serve
+            return serve(args.output,pre_sanitized=args.pre_sanitized,max_requests=args.max_requests,frame_timeout=args.frame_timeout)
         if args.command=='demo':r=execute(args.output,pre_sanitized=args.pre_sanitized)
         elif args.command=='replay':r=execute(args.output,capture=strict_json_loads(read(args.capture,1024*1024).decode('utf-8',errors='strict')))
         elif args.command=='synthesize':
@@ -74,6 +57,6 @@ def main():
             raw,cert=read(args.model),read(args.certificate)
             with Authority(raw,cert,args.output) as authority:r=dict(analysis=evaluate(raw,cert),kernel_checked=True,build=authority.manifest,pcs_authority=False)
         print(json.dumps(r));return 0
-    except (OSError,ValueError,RuntimeError,subprocess.SubprocessError) as e:
+    except (OSError,ValueError,RuntimeError,sqlite3.Error,subprocess.SubprocessError) as e:
         print(json.dumps(dict(status='REFUSED_OR_UNAVAILABLE',error=str(e)[-2000:],kernel_checked=False,pcs_authority=False)),file=sys.stderr);return 20
 if __name__=='__main__':raise SystemExit(main())
