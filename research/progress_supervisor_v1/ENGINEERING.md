@@ -87,6 +87,12 @@ empirical AI-safety validation, production registration, merge or deployment.
   synthetic. Worker captures record this explicitly, receiving replay preserves
   the annotation, and results deny automatic training eligibility. No proof of
   provenance, consent or the truth of a producer annotation is implied by replay.
+- A maximum-size valid graph (32 states, 16 actions, 512 transitions) exposed
+  Lean's default elaboration recursion limit. It correctly refused support.
+  Lean elaboration now uses a fixed depth budget of 4,096 for builds and capture
+  proofs; the 2,048 MiB memory, command timeouts, fresh kernel and axiom checks
+  remain unchanged. A regression exercises the full graph, 544 native decisions
+  and an actual captured-packet kernel proof without changing any specification.
 
 ## Reproducible qualification
 

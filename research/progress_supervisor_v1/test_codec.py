@@ -1,7 +1,7 @@
 """Actual native full-width IDs; these are not mock authorization tests."""
 import time
 
-from .authority import Authority, CODEC, DATA, PROGRESS, WIRE
+from .authority import Authority, CODEC, DATA, PROGRESS, WIRE, MAX_REC_DEPTH, packet
 from .certificate import encode, propose
 from .example import model
 from .test_progress import expected
@@ -41,3 +41,34 @@ def test_every_uint16_state_and_proposal_with_high_id_model(tmp_path, record_tes
         ]
         proof = authority.certify([(f, authority.query_raw(f)) for f in witnesses], "wide-wire")
         assert proof["kernel_checked"]
+
+
+def test_maximum_graph_build_native_decisions_and_captured_proof(tmp_path, record_testsuite_property):
+    states = [2114 * i for i in range(31)] + [65535]
+    actions = list(range(15)) + [65535]
+    m = model()
+    m.update(states=states, actions=actions, initial=[0], safe=states, forbidden=[65535], transitions=[
+        dict(source=s, action=a, target=states[min(i + 1, 31)] if a == 0 else s)
+        for i, s in enumerate(states) for a in actions
+    ])
+    raw = encode(m)
+    with Authority(raw, encode(propose(raw, [65535])), tmp_path / "maximum-native") as authority:
+        frames, answers = [], []
+        for i, s in enumerate(states):
+            for a in [None, *actions]:
+                frames.append(packet(s, a))
+                answers.append(bytes([1, 0, 0, 0, 0, 0]) if i == 31 else bytes([1, 1, 0, 0, 31 - i, 0]))
+        started = time.monotonic()
+        assert authority.query_raw(b"".join(frames)) == b"".join(answers)
+        query_seconds = time.monotonic() - started
+        proof = authority.certify([(frames[i], answers[i]) for i in [0, 16, 17, 272, 543]], "maximum-wire")
+        assert proof["kernel_checked"]
+        lean_calls = [call for call in authority.executions if call["command"][0] == str(authority.tools["lean"])]
+        assert lean_calls and all(f"maxRecDepth={MAX_REC_DEPTH}" in call["command"] for call in lean_calls)
+        assert len(authority.axioms) == len(PROGRESS + WIRE + CODEC + DATA)
+        record_testsuite_property("maximum_graph_states", 32)
+        record_testsuite_property("maximum_graph_actions", 16)
+        record_testsuite_property("maximum_graph_edges", 512)
+        record_testsuite_property("maximum_graph_native_cases", len(frames))
+        record_testsuite_property("maximum_graph_build_seconds", authority.manifest["build_seconds"])
+        record_testsuite_property("maximum_graph_query_and_checks_seconds", query_seconds)

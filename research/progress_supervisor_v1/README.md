@@ -154,6 +154,12 @@ linker, Std/shared libraries, operating system and trusted observation/adapter c
 remain outside the general kernel theorem. Hashes, Python privacy, file permissions
 and a sealed image do not establish an independently administered immutable root.
 
+Generated models and capture proofs use a fixed Lean elaboration recursion budget
+of 4,096 so the declared 512-transition graph limit is usable. Memory/time limits,
+fresh kernel checks and exact axiom audits remain mandatory; resource exhaustion
+still refuses support. The maximum-size regression measures compilation and checks
+544 native decisions, including a separate actual captured-packet proof.
+
 No real neural-model evaluation, model gain, empirical AI-safety result, external
 review, human study or world-first scientific claim is established by these tests.
 The guarantee is model-conditional and policy-agnostic. Next milestones are a

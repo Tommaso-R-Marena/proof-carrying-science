@@ -15,6 +15,7 @@ WIRE=['PCSProgressWire.'+n for n in ('selected_from_choose','selected_all_outcom
 CODEC=['PCSProgressCodec.'+n for n in ('request_roundtrip','request_injective','request_decode_canonical','selected_roundtrip','typed_roundtrip','process_selected_sound','raw_selected_all_outcomes','typed_octets','process_octets','batch_octets','native_octets_roundtrip')]
 DATA=['PCSProgressData.'+n for n in ('certificate_checked','winning','losing','wire_bounds')]
 SEALS=15
+MAX_REC_DEPTH=4096
 
 def packet(state,proposal):
  if type(state) is not int or not 0<=state<65536:raise ValueError('exact state ID required')
@@ -60,6 +61,9 @@ class Authority:
    (self.out/'build.json').write_text(json.dumps(self.manifest,indent=2)+'\n');self._write_log()
   except BaseException:self._write_log();self.close();raise
  def _run(self,cmd,timeout):
+  # The declared 512-edge limit exceeds Lean's default elaboration recursion
+  # depth. Keep time/memory limits, ordinary kernel checks and axiom audits.
+  if Path(cmd[0])==self.tools['lean']:cmd=[cmd[0],'-D',f'maxRecDepth={MAX_REC_DEPTH}',*cmd[1:]]
   p=subprocess.run(list(map(str,cmd)),cwd=self.out,env=self.env,capture_output=True,text=True,timeout=timeout)
   with self._log_lock:self.executions.append(dict(command=list(map(str,cmd)),returncode=p.returncode,stdout=p.stdout,stderr=p.stderr))
   if p.returncode:raise ValueError('Actual Lean/build process rejected: '+(p.stdout+p.stderr)[-2000:])
