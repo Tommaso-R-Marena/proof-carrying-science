@@ -13,6 +13,9 @@ IMPLEMENTATION = (
     "broker.py", "certificate.py", "example.py", "trace.py", "__main__.py",
     "evidence.py", "worker.py",
 )
+SYNTHETIC_ORIGIN = "synthetic fixed-tool experiment; no participant data"
+EXTERNAL_ORIGIN = "external proposal bytes; provenance/consent unverified; synthetic fixed tools"
+ORIGINS = (SYNTHETIC_ORIGIN, EXTERNAL_ORIGIN)
 
 
 def sources():
@@ -35,12 +38,14 @@ def write(path, value):
         stream.write(encode(value) + b"\n")
 
 
-def publish(out, broker, samples, before, *, pre_sanitized, replayed):
+def publish(out, broker, samples, before, *, pre_sanitized, replayed, data_origin=SYNTHETIC_ORIGIN):
     """Publish only after actual native/SQL completion and fresh kernel checks.
 
     A duplicate request is an idempotent observation, not an additional edge in
     the path. Replay still compares every observation to its original receipt.
     """
+    if data_origin not in ORIGINS:
+        raise ValueError("unsupported proposal provenance annotation")
     final = broker.snapshot()
     if final["state"] != 4 or final["transitions"] > 4:
         raise ValueError("workflow failed its certified bound")
@@ -61,7 +66,7 @@ def publish(out, broker, samples, before, *, pre_sanitized, replayed):
         raise ValueError("implementation changed during capture/replay")
     artifact = dict(
         format="pcs-progress-supervisor-capture-v1",
-        data_origin="synthetic fixed-tool experiment; no participant data",
+        data_origin=data_origin,
         sources=before, model_hex=broker.model_raw.hex(),
         certificate_hex=broker.cert_raw.hex(), pre_sanitized=pre_sanitized,
         samples=samples, final=final,
@@ -73,6 +78,7 @@ def publish(out, broker, samples, before, *, pre_sanitized, replayed):
         captured_path_proof=path_proof, final=final, replayed=replayed,
         pcs_authority=False, implementation_correspondence="TESTED_NOT_PROVED",
         deployment_safety="OPEN", empirical_model_safety="NOT_ESTABLISHED",
+        proposal_data_eligibility="NOT_EVALUATED_DO_NOT_TRAIN_WITHOUT_REVIEW",
     )
     # Both are fresh outputs. They are inspectable evidence, not restart anchors.
     write(Path(out) / "capture.json", artifact)

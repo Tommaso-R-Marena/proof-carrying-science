@@ -196,6 +196,13 @@ module, OS or compiler remains outside the claim. The worker never reopens an ol
 ledger or claims restart availability. Its synthetic SQL workflow is Linux-qualified;
 there is no deployment to production or generic-agent tool authority.
 
+Worker proposal bytes may come from an external model or a person. Their provenance
+and consent are marked unverified, independently of the synthetic SQL fixture;
+replay preserves that annotation without attesting its truth. Results mark proposal
+data ineligible for training without separate review. The code performs no training
+or automatic upload. Raw proposals are retained as hex in the local capture, so a
+capture is an evidence artifact rather than a sanitized public dataset.
+
 Source fingerprints intentionally changed for this extension. Capsules from
 `ce726e17b998052518dab54178581da75dae417c` must be replayed with that revision;
 the retained historical evidence is unchanged. New capsules have the same schema

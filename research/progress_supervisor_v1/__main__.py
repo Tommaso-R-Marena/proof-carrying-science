@@ -6,16 +6,18 @@ from pcs.jsonio import strict_json_loads
 from .certificate import encode,sha,propose,evaluate
 from .authority import Authority
 from .broker import Broker
-from .evidence import sources, read, write, publish
+from .evidence import ORIGINS, SYNTHETIC_ORIGIN, sources, read, write, publish
 
 def execute(out,*,pre_sanitized=False,capture=None):
     out=Path(out).resolve();out.mkdir(parents=True,exist_ok=False)
     before=sources()
+    data_origin=SYNTHETIC_ORIGIN
     if capture is not None:
         expected={'format','data_origin','sources','model_hex','certificate_hex','pre_sanitized','samples','final'}
-        if type(capture) is not dict or set(capture)!=expected or capture['format']!='pcs-progress-supervisor-capture-v1' or capture['data_origin']!='synthetic fixed-tool experiment; no participant data':raise ValueError('unsupported capture schema')
+        if type(capture) is not dict or set(capture)!=expected or capture['format']!='pcs-progress-supervisor-capture-v1' or capture['data_origin'] not in ORIGINS:raise ValueError('unsupported capture schema')
         if capture['sources']!=before:raise ValueError('capture belongs to different implementation sources')
         pre_sanitized=capture['pre_sanitized']
+        data_origin=capture['data_origin']
         if type(capture['samples']) is not list or not 1<=len(capture['samples'])<=32:raise ValueError('bounded capture required')
         for s in capture['samples']:
             if type(s) is not dict or set(s)!={'request_id','proposal_hex','record'} or type(s['proposal_hex']) is not str or len(s['proposal_hex'])>8192:raise ValueError('invalid captured sample')
@@ -30,7 +32,7 @@ def execute(out,*,pre_sanitized=False,capture=None):
             if capture and r!=capture['samples'][i]['record']:raise ValueError('fresh native/effect receipt disagrees with capture')
         final=b.snapshot()
         if capture and final!=capture['final']:raise ValueError('fresh final effects disagree with capture')
-        publish(out,b,samples,before,pre_sanitized=pre_sanitized,replayed=capture is not None)
+        publish(out,b,samples,before,pre_sanitized=pre_sanitized,replayed=capture is not None,data_origin=data_origin)
     if sources()!=before:raise ValueError('implementation changed during capture/replay')
     return dict(output=str(out),transitions=final['transitions'],final_state=final['state'],captured_wire_kernel_checked=True,captured_path_kernel_checked=True,replayed=capture is not None,pcs_authority=False)
 

@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from .broker import PUBLIC, parse_proposal
+from .evidence import EXTERNAL_ORIGIN
 from .worker import FrameReader, FramingError, MAX_PROPOSAL
 
 
@@ -47,6 +48,8 @@ def test_real_worker_owns_ids_state_verifier_effects_and_replay(tmp_path):
     assert complete["wire_proof"]["kernel_checked"] and complete["path_proof"]["kernel_checked"]
     assert all(e["pcs_authority"] is False for e in events)
     capsule = json.loads((out / "capture.json").read_text())
+    assert capsule["data_origin"] == EXTERNAL_ORIGIN
+    assert json.loads((out / "result.json").read_text())["proposal_data_eligibility"] == "NOT_EVALUATED_DO_NOT_TRAIN_WITHOUT_REVIEW"
     assert len(capsule["samples"]) == 4  # Input after the goal never executes.
     replay = subprocess.run(
         [sys.executable, "-m", "research.progress_supervisor_v1", "replay", str(out / "capture.json"), str(tmp_path / "replay")],
@@ -55,6 +58,7 @@ def test_real_worker_owns_ids_state_verifier_effects_and_replay(tmp_path):
     assert replay.returncode == 0, replay.stderr
     assert json.loads(replay.stdout)["replayed"]
     assert observed(tmp_path / "replay") == observed(out)
+    assert json.loads((tmp_path / "replay/capture.json").read_text())["data_origin"] == EXTERNAL_ORIGIN
 
 
 @pytest.mark.parametrize("kind", ["oversized", "unterminated", "limited"])

@@ -83,6 +83,10 @@ empirical AI-safety validation, production registration, merge or deployment.
 - New host/source fingerprints include all execution/evidence entry points. An
   old capsule must be replayed at its exact old revision; historical evidence is
   retained, and no source-integrity check is loosened for compatibility.
+- Process inputs have unverified provenance/consent even though the tools are
+  synthetic. Worker captures record this explicitly, receiving replay preserves
+  the annotation, and results deny automatic training eligibility. No proof of
+  provenance, consent or the truth of a producer annotation is implied by replay.
 
 ## Reproducible qualification
 

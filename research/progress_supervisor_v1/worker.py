@@ -16,7 +16,7 @@ from pathlib import Path
 
 from .broker import Broker
 from .certificate import encode, sha
-from .evidence import publish, sources, write
+from .evidence import EXTERNAL_ORIGIN, publish, sources, write
 
 FORMAT = "pcs-progress-supervisor-session-v1"
 MAX_PROPOSAL = 4096
@@ -102,7 +102,8 @@ def serve(output, *, pre_sanitized=False, max_requests=32, frame_timeout=30):
                 _emit("STEP", request_id=request_id, record=record, final=final)
                 if final["state"] == 4:
                     result = publish(out, broker, samples, before,
-                                     pre_sanitized=pre_sanitized, replayed=False)
+                                     pre_sanitized=pre_sanitized, replayed=False,
+                                     data_origin=EXTERNAL_ORIGIN)
                     write(out / "session.json", dict(
                         format=FORMAT, sources=before, max_requests=max_requests,
                         requests=len(samples), status="COMPLETE", pcs_authority=False,
