@@ -12,16 +12,17 @@ from .certificate import encode, literal_source, sha
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
+SPEC_FILES = ("Adapter.lean", "AdapterBridge.lean", "AdapterTable.lean")
 NATIVE_FILES = ("Progress.lean", "Wire.lean", "Codec.lean", "Main.lean")
 HOST_FILES = (
     "authority.py", "certificate.py", "broker.py", "example.py", "trace.py",
-    "evidence.py", "worker.py", "__main__.py", "binding.py", "intake.py",
+    "evidence.py", "worker.py", "__main__.py", "binding.py", "intake.py", "effects.py", "adapter.py",
 )
 
 
 def source_inventory():
     return {
-        **{name: sha((HERE / name).read_bytes()) for name in (*NATIVE_FILES, *HOST_FILES)},
+        **{name: sha((HERE / name).read_bytes()) for name in (*NATIVE_FILES, *HOST_FILES, *SPEC_FILES)},
         "formal/PCSActionShield.lean": sha((ROOT / "formal/PCSActionShield.lean").read_bytes()),
     }
 
@@ -40,7 +41,7 @@ class SourceBinding:
             *((name, (HERE / name).read_bytes()) for name in NATIVE_FILES),
             ("Data.lean", literal_source(model_raw, cert_raw)),
         )
-        return cls(native, tuple((n, sha((HERE / n).read_bytes())) for n in HOST_FILES),
+        return cls(native, tuple((n, sha((HERE / n).read_bytes())) for n in (*HOST_FILES, *SPEC_FILES)),
                    sha(model_raw), sha(cert_raw))
 
     @property

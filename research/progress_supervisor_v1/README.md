@@ -1,6 +1,8 @@
 # Checked safety and progress for finite tool workflows
 
-The latest [intake and CI engineering notes](INTAKE.md) describe whole-capture
+The latest [transactional adapter refinement](ADAPTER.md) adds full-row precommit
+checks, a separately proved adapter model and actual SQL/Lean differential tests.
+The preceding [intake and CI engineering notes](INTAKE.md) describe whole-capture
 validation before effects, immutable replay plans/source identity, and required
 parallel verification campaigns. [ENGINEERING.md](ENGINEERING.md) records the
 preceding protocol/process extension; [RESULTS.md](RESULTS.md) preserves its

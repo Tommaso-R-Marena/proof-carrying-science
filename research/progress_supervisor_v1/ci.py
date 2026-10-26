@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -20,6 +21,7 @@ SHARDS = {
     "replay": (PREFIX + "test_replay.py",),
     "authority": (PREFIX + "test_progress.py", "tests/test_action_shield_v1.py", "tests/test_control_monitor_v1.py"),
     "codec": (PREFIX + "test_codec.py",),
+    "adapter": (PREFIX + "test_adapter.py",),
     "intake": (PREFIX + "test_intake.py", PREFIX + "test_ci.py"),
 }
 
@@ -50,7 +52,7 @@ def run(shard, output):
     return subprocess.run([
         sys.executable, "-m", "pytest", "-q", *SHARDS[shard],
         "--junitxml=" + str(target / "tests.xml"),
-    ], cwd=ROOT).returncode
+    ], cwd=ROOT, env=dict(os.environ, PCS_PROGRESS_QUALIFICATION_DIR=str(target))).returncode
 
 
 def aggregate(reports, output):

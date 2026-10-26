@@ -10,8 +10,7 @@ from pcs.jsonio import strict_json_loads
 from .certificate import encode,sha,propose,groups
 from .example import model
 from .authority import Authority,packet
-PRIVATE='PCS_SYNTHETIC_PRIVATE_CANARY'
-PUBLIC='APPROVED_PUBLIC_SUMMARY'
+from .effects import PRIVATE,PUBLIC,read_rows,project,check_effects
 
 _FIXED_AUTHORITY=None
 _BUILD_LOCK=threading.Lock()
@@ -57,7 +56,7 @@ class Broker:
             self._db.execute('INSERT INTO payload VALUES(?,0,?)',(PUBLIC if pre_sanitized else PRIVATE,int(pre_sanitized)))
             self._anchor=(0,0,self._seed)
         except BaseException:raise
-    def _verify(self):
+    def _verify(self,pending_anchor=None):
         self._authority.check();state=0;head=self._seed;generation=0
         payload=PUBLIC if self._pre else PRIVATE;loaded=0;sanitized=int(self._pre);public=[]
         edges=groups(model())
@@ -76,8 +75,9 @@ class Broker:
                 if payload!=PUBLIC or not sanitized:raise ValueError('unapproved publication')
                 public.append(PUBLIC)
             state=target;generation+=1;head=event['event_sha256']
-        observed=tuple(self._db.execute('SELECT state,generation,head FROM meta').fetchone() or ())
-        if observed!=(state,generation,head) or observed!=self._anchor:raise ValueError('state rollback/substitution or unanchored restart')
+        observed=self._db.execute('SELECT state,generation,head FROM meta').fetchall()
+        expected_anchor=self._anchor if pending_anchor is None else pending_anchor
+        if observed!=[(state,generation,head)] or (state,generation,head)!=expected_anchor:raise ValueError('state rollback/substitution or unanchored restart')
         if self._db.execute('SELECT value,loaded,sanitized FROM payload').fetchall()!=[(payload,loaded,sanitized)] or self._db.execute('SELECT value FROM public').fetchall()!=[(v,) for v in public]:raise ValueError('materialized effects disagree with checked history')
         return state,generation,head
     def _apply(self,state,action):
@@ -110,7 +110,10 @@ class Broker:
                 if reply[1]!=1:
                     self._db.execute('ROLLBACK')
                     return dict(status='HALTED' if reply[1]==0 else 'REFUSED',state=state,generation=generation,pcs_authority=False)
-                action=reply[2]+256*reply[3];target=self._apply(state,action)
+                action=reply[2]+256*reply[3]
+                expected=project(state,action,read_rows(self._db))
+                target=self._apply(state,action)
+                check_effects(self._db,target,expected)
                 ranks=dict(json.loads(self.cert_raw)['ranks'])
                 if target not in groups(model())[state,action] or ranks.get(target,65536)>=ranks[state] or reply[4]+256*reply[5]!=ranks[state]:raise ValueError('actual tool outcome does not match progress model')
                 event=dict(request_id=request_id,generation=generation+1,source=state,target=target,action=action,proposal=proposal,
@@ -120,6 +123,11 @@ class Broker:
                 self._db.execute('INSERT INTO events VALUES(?,?,?,?)',(request_id,generation+1,sha(raw),encode(event).decode()))
                 changed=self._db.execute('UPDATE meta SET state=?,generation=?,head=? WHERE state=? AND generation=? AND head=?',(target,generation+1,event['event_sha256'],state,generation,head)).rowcount
                 if changed!=1:raise ValueError('stale state/generation')
+                check_effects(self._db,target,expected)
+                # Validate receipts, exact metadata cardinality, native decisions
+                # and materialized history against the prospective anchor before
+                # committing. The live anchor changes only after successful COMMIT.
+                self._verify((target,generation+1,event['event_sha256']))
                 self._db.execute('COMMIT');self._anchor=(target,generation+1,event['event_sha256'])
                 self._verify();return event
             except BaseException:

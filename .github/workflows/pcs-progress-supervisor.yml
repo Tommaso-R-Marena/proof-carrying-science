@@ -59,6 +59,17 @@ jobs:
           name: progress-supervisor-tests-${{ matrix.shard }}
           path: ${{ runner.temp }}/progress-tests/tests.xml
           retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && matrix.shard == 'adapter' }}
+        with:
+          name: progress-supervisor-adapter-qualification
+          path: |
+            ${{ runner.temp }}/progress-tests/adapter-spec/qualification.json
+            ${{ runner.temp }}/progress-tests/adapter-spec/table.csv
+            ${{ runner.temp }}/progress-tests/adapter-spec/executions.json
+            ${{ runner.temp }}/progress-tests/adapter-spec/adapter/*.lean
+            ${{ runner.temp }}/progress-tests/adapter-spec/supervisor/build.json
+          retention-days: 14
   evidence:
     needs: matrix
     runs-on: ubuntu-24.04
