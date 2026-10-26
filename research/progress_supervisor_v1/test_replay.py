@@ -2,6 +2,7 @@
 import json,os,sqlite3,subprocess,sys
 from pathlib import Path
 import pytest
+from concurrent.futures import ThreadPoolExecutor
 from .__main__ import execute
 from .certificate import encode
 from .broker import Broker
@@ -39,6 +40,19 @@ def test_replay_distinguishes_retry_observations_from_committed_transitions(tmp_
     assert result['replayed'] and result['transitions']==4
     report=json.loads((tmp_path/'with-retry/result.json').read_text())
     assert report['captured_path_proof']['kernel_checked']
+
+
+def test_concurrent_workflows_share_only_the_fixed_image_and_own_their_proofs(tmp_path):
+    outputs=[tmp_path/f'workflow-{i}' for i in range(3)]
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results=list(pool.map(execute,outputs))
+    assert all(r['transitions']==4 and r['captured_path_kernel_checked'] for r in results)
+    reports=[json.loads((out/'result.json').read_text()) for out in outputs]
+    assert all(r['final']==reports[0]['final'] for r in reports)
+    for out in outputs:
+        assert (out/'proofs/Capture-workflow-wire.lean').is_file()
+        assert (out/'proofs/Path-workflow.lean').is_file()
+    assert len({(out/'proofs/Capture-workflow-wire.lean').read_bytes() for out in outputs})==1
 
 
 @pytest.mark.parametrize('crash_at',[1,4])

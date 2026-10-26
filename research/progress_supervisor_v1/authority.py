@@ -1,6 +1,6 @@
 """Fixed-source native Lean supervisor. Linux host/compiler/stdlib remain trusted."""
 from __future__ import annotations
-import fcntl,json,os,re,shutil,subprocess,time
+import fcntl,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from pcs.transport_kernel_v1 import _inventory
 from .certificate import literal_source,sha,load_certificate
@@ -26,7 +26,7 @@ class Authority:
  """No caller-selected verifier/binary/source. This is NOT an immutable host root."""
  def __init__(self,model_raw,cert_raw,out):
   load_certificate(model_raw,cert_raw)
-  self.out=Path(out).resolve();self.out.mkdir(parents=True,exist_ok=False);self.fd=None;self.executions=[]
+  self.out=Path(out).resolve();self.out.mkdir(parents=True,exist_ok=False);self.fd=None;self.executions=[];self._log_lock=threading.RLock()
   self.model_raw=bytes(model_raw);self.cert_raw=bytes(cert_raw)
   self.sources={'PCSActionShield.lean':(ROOT/'formal/PCSActionShield.lean').read_bytes(),
     **{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Codec.lean','Main.lean']},'Data.lean':literal_source(model_raw,cert_raw)}
@@ -61,11 +61,11 @@ class Authority:
   except BaseException:self._write_log();self.close();raise
  def _run(self,cmd,timeout):
   p=subprocess.run(list(map(str,cmd)),cwd=self.out,env=self.env,capture_output=True,text=True,timeout=timeout)
-  self.executions.append(dict(command=list(map(str,cmd)),returncode=p.returncode,stdout=p.stdout,stderr=p.stderr))
+  with self._log_lock:self.executions.append(dict(command=list(map(str,cmd)),returncode=p.returncode,stdout=p.stdout,stderr=p.stderr))
   if p.returncode:raise ValueError('Actual Lean/build process rejected: '+(p.stdout+p.stderr)[-2000:])
   return p.stdout
  def _write_log(self):
-  (self.out/'executions.json').write_text(json.dumps(self.executions,indent=2)+'\n')
+  with self._log_lock:(self.out/'executions.json').write_text(json.dumps(self.executions,indent=2)+'\n')
  def _check_tools(self):
   if {n:sha(p.read_bytes()) for n,p in self.tools.items()}!=TOOLS:raise ValueError('reviewed proof/compiler tool bytes required')
  def check(self):
@@ -87,16 +87,20 @@ class Authority:
   if len(r)!=6 or r[0]!=1 or r[1] not in [0,1,2,3]:raise ValueError('native protocol failure')
   if r[1]!=1 and r[2:]!=bytes(4):raise ValueError('noncanonical native refusal')
   return dict(status=['HALT','SELECTED','REFUSED','MALFORMED'][r[1]],action=r[2]+256*r[3] if r[1]==1 else None,rank=r[4]+256*r[5])
- def certify(self,pairs,label='capture'):
+ def certify(self,pairs,label='capture',*,proof_dir=None):
   if not re.fullmatch('[a-z0-9_-]{1,40}',label) or not 1<=len(pairs)<=100:raise ValueError('bounded fresh capture required')
   def nums(raw):
    if type(raw) is not bytes or len(raw)>32768:raise ValueError('bounded captured bytes required')
    return '['+','.join(map(str,raw))+']'
   ins='['+','.join(nums(a) for a,b in pairs)+']';outs='['+','.join(nums(b) for a,b in pairs)+']'
   source=f'import Data\nimport Wire\nnamespace Capture\ntheorem actual : ({ins} : List (List Nat)).map (PCSProgressWire.batch PCSProgressData.spec) = {outs} := by decide\nend Capture\n#print axioms Capture.actual\n'
-  p=self.out/('Capture-'+label+'.lean')
+  # A workflow owns its generated proof outputs even when the fixed verified
+  # image is shared by multiple ledgers. Output selection never selects code.
+  directory=self.out if proof_dir is None else Path(proof_dir).resolve()
+  directory.mkdir(parents=True,exist_ok=True)
+  p=directory/('Capture-'+label+'.lean')
   with p.open('x') as f:f.write(source)
-  self.check();log=self._run([self.tools['lean'],'-j1','-M2048','-D','maxHeartbeats=8000000','--root='+str(self.out),p],90)
+  self.check();log=self._run([self.tools['lean'],'-j1','-M2048','-D','maxHeartbeats=8000000','--root='+str(directory),p],90)
   if p.read_text()!=source:raise ValueError('capture source changed')
   self.check();self._write_log();return dict(kernel_checked=True,proof_sha256=sha(source.encode()),axioms=_inventory(log,['Capture.actual']),pcs_authority=False)
  def close(self):

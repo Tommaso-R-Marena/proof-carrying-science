@@ -1,9 +1,10 @@
 """Ordinary-kernel proof of the exact recorded abstract path, not SQL correctness."""
 import re
+from pathlib import Path
 from .certificate import sha,load_certificate
 from pcs.transport_kernel_v1 import _inventory
 
-def certify_path(authority,records,label='workflow'):
+def certify_path(authority,records,label='workflow',*,proof_dir=None):
     if type(label) is not str or re.fullmatch('[a-z0-9_-]{1,40}',label) is None:raise ValueError('safe fixed proof label required')
     if not records or len(records)>32:raise ValueError('bounded nonempty captured path required')
     m,c=load_certificate(authority.model_raw,authority.cert_raw)
@@ -30,9 +31,11 @@ end CapturedPath
 #print axioms CapturedPath.bounded
 #print axioms CapturedPath.completed
 '''
-    p=authority.out/('Path-'+label+'.lean')
+    directory=authority.out if proof_dir is None else Path(proof_dir).resolve()
+    directory.mkdir(parents=True,exist_ok=True)
+    p=directory/('Path-'+label+'.lean')
     with p.open('x') as f:f.write(text)
-    authority.check();log=authority._run([authority.tools['lean'],'-j1','-M2048','--root='+str(authority.out),p],60)
+    authority.check();log=authority._run([authority.tools['lean'],'-j1','-M2048','--root='+str(directory),p],60)
     if p.read_text()!=text:raise ValueError('captured proof changed')
     authority.check();authority._write_log()
     return dict(kernel_checked=True,proof_sha256=sha(text.encode()),axiom_closures=_inventory(log,['CapturedPath.path','CapturedPath.bounded','CapturedPath.completed']),pcs_authority=False)

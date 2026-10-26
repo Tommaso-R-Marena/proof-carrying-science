@@ -74,6 +74,12 @@ empirical AI-safety validation, production registration, merge or deployment.
   observations of one idempotent receipt from separate committed transitions;
   retries do not inflate the kernel path length.
 - Both entry points handle actual SQLite failures without an affirmative verdict.
+- Generated proofs belong to each workflow's own output directory. A regression
+  test exposed `FileExistsError` when a second workflow reused the verified image
+  but attempted to reuse a fixed proof filename. The earlier run failed closed
+  (21 tests passed before the failure); it is not counted as a passing campaign.
+  Sequential retry replay and concurrent workflows now exercise the correction.
+  Shared build-command logging is serialized across concurrent proof requests.
 - New host/source fingerprints include all execution/evidence entry points. An
   old capsule must be replayed at its exact old revision; historical evidence is
   retained, and no source-integrity check is loosened for compatibility.

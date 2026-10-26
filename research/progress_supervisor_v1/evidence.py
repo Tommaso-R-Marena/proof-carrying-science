@@ -54,8 +54,9 @@ def publish(out, broker, samples, before, *, pre_sanitized, replayed):
             records[generation] = record
     path = [records[g] for g in sorted(records)]
     pairs = [(bytes.fromhex(r["request_hex"]), bytes.fromhex(r["reply_hex"])) for r in path]
-    wire = broker._authority.certify(pairs, "workflow-wire")
-    path_proof = certify_path(broker._authority, path)
+    proof_dir = Path(out) / "proofs"
+    wire = broker._authority.certify(pairs, "workflow-wire", proof_dir=proof_dir)
+    path_proof = certify_path(broker._authority, path, proof_dir=proof_dir)
     if sources() != before:
         raise ValueError("implementation changed during capture/replay")
     artifact = dict(
