@@ -9,17 +9,22 @@ from .test_progress import expected
 
 def test_every_uint16_state_and_proposal_with_high_id_model(tmp_path, record_testsuite_property):
     mapped = [0, 1, 255, 256, 32767, 65534, 65535]
+    # Exercise 65535 as an actually authorized reply, not merely an unknown or
+    # denied proposal. The review fallback now carries both output bytes as FF.
+    actions = [65535, 1, 255, 256, 32767, 65534, 0]
     m = model()
-    for field in ["states", "actions", "initial", "safe", "forbidden"]:
-        m[field] = [mapped[n] for n in m[field]]
-    m["transitions"] = [
-        {key: mapped[value] for key, value in edge.items()} for edge in m["transitions"]
-    ]
+    for field in ["states", "initial", "safe"]:
+        m[field] = sorted(mapped[n] for n in m[field])
+    for field in ["actions", "forbidden"]:
+        m[field] = sorted(actions[n] for n in m[field])
+    triples = sorted((mapped[e["source"]], actions[e["action"]], mapped[e["target"]]) for e in m["transitions"])
+    m["transitions"] = [dict(source=s, action=a, target=t) for s, a, t in triples]
     raw = encode(m)
     c = propose(raw, [mapped[4]])
     with Authority(raw, encode(c), tmp_path / "wide-native") as authority:
         assert len(authority.axioms) == len(PROGRESS + WIRE + CODEC + DATA)
         assert "PCSProgressData.wire_bounds" in authority.axioms
+        assert authority.query(0, 65535) == dict(status="SELECTED", action=65535, rank=4)
         frames = []
         for n in range(65536):
             # All state IDs, then all proposed action IDs at a winning state.
