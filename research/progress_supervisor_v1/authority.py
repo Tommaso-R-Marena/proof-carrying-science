@@ -3,7 +3,8 @@ from __future__ import annotations
 import fcntl,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from pcs.transport_kernel_v1 import _inventory
-from .certificate import literal_source,sha,load_certificate
+from .certificate import sha,load_certificate
+from .binding import SourceBinding
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
@@ -29,13 +30,13 @@ class Authority:
   load_certificate(model_raw,cert_raw)
   self.out=Path(out).resolve();self.out.mkdir(parents=True,exist_ok=False);self.fd=None;self.executions=[];self._log_lock=threading.RLock()
   self.model_raw=bytes(model_raw);self.cert_raw=bytes(cert_raw)
-  self.sources={'PCSActionShield.lean':(ROOT/'formal/PCSActionShield.lean').read_bytes(),
-    **{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Codec.lean','Main.lean']},'Data.lean':literal_source(model_raw,cert_raw)}
+  self._binding=SourceBinding.capture(self.model_raw,self.cert_raw)
+  self.sources=dict(self._binding.native)
   lean=shutil.which('lean')
   if lean is None:raise ValueError('Lean 4.28.0 required; no substitute')
   self.tools={n:Path(lean).with_name(n) for n in TOOLS};self._check_tools()
   self.env={'PATH':str(Path(lean).parent)+':/usr/bin:/bin','LANG':'C.UTF-8','LEAN_PATH':str(self.out)}
-  self.host_sources={n:sha((HERE/n).read_bytes()) for n in ['authority.py','certificate.py','broker.py','example.py','trace.py','evidence.py','worker.py','__main__.py']}
+  self.host_sources=dict(self._binding.host)
   self.axioms={};started=time.monotonic()
   try:
    for n in ['PCSActionShield.lean','Progress.lean','Wire.lean','Codec.lean','Data.lean','Main.lean']:
@@ -53,13 +54,21 @@ class Authority:
    view=memoryview(image)
    while view:view=view[os.write(self.fd,view):]
    fcntl.fcntl(self.fd,1033,SEALS);self.check()
-   self.manifest=dict(format='pcs-progress-supervisor-build-v1',model_sha256=sha(model_raw),certificate_sha256=sha(cert_raw),
+   self._manifest=dict(format='pcs-progress-supervisor-build-v1',model_sha256=sha(model_raw),certificate_sha256=sha(cert_raw),
       sources={n:sha(b) for n,b in self.sources.items()},host_sources=dict(self.host_sources),tools=dict(TOOLS),artifacts=dict(self.artifacts),axiom_closures=json.loads(json.dumps(self.axioms)),
       fresh_objects_checked=True,kernel_checked=True,compiled_implementation_correspondence='TRUSTED_NOT_PROVED',
       executable_image='Linux sealed memfd; host/shared libraries/compiler remain trusted',pcs_authority=False,
       build_seconds=round(time.monotonic()-started,6))
    (self.out/'build.json').write_text(json.dumps(self.manifest,indent=2)+'\n');self._write_log()
   except BaseException:self._write_log();self.close();raise
+ @property
+ def manifest(self):
+  # Published diagnostic metadata is never the mutable verification inventory.
+  return json.loads(json.dumps(self._manifest))
+ @property
+ def source_id(self):return self._binding.source_id
+ @property
+ def source_binding(self):return self._binding
  def _run(self,cmd,timeout):
   # The declared 512-edge limit exceeds Lean's default elaboration recursion
   # depth. Keep time/memory limits, ordinary kernel checks and axiom audits.
@@ -74,9 +83,9 @@ class Authority:
   if {n:sha(p.read_bytes()) for n,p in self.tools.items()}!=TOOLS:raise ValueError('reviewed proof/compiler tool bytes required')
  def check(self):
   self._check_tools()
-  if {n:sha((HERE/n).read_bytes()) for n in self.host_sources}!=self.host_sources:raise ValueError('host adapter source changed')
-  actual={'PCSActionShield.lean':(ROOT/'formal/PCSActionShield.lean').read_bytes(),**{n:(HERE/n).read_bytes() for n in ['Progress.lean','Wire.lean','Codec.lean','Main.lean']},'Data.lean':literal_source(self.model_raw,self.cert_raw)}
-  if actual!=self.sources:raise ValueError('source/model identity changed')
+  actual=SourceBinding.capture(self.model_raw,self.cert_raw)
+  if actual.host!=self._binding.host or self.host_sources!=dict(self._binding.host):raise ValueError('host adapter source changed')
+  if actual!=self._binding or self.sources!=dict(self._binding.native):raise ValueError('source/model identity changed')
   if {n:sha((self.out/n).read_bytes()) for n in self.artifacts}!=self.artifacts:raise ValueError('compiled artifact identity changed')
   if self.fd is None or fcntl.fcntl(self.fd,1034)!=SEALS:raise ValueError('native image seals missing')
  def query_raw(self,raw):

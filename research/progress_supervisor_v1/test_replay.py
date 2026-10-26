@@ -7,6 +7,7 @@ from .__main__ import execute
 from .certificate import encode
 from .broker import Broker
 from .trace import certify_path
+from .intake import preflight
 
 
 def test_actual_capture_and_fresh_process_replay(tmp_path):
@@ -53,6 +54,47 @@ def test_concurrent_workflows_share_only_the_fixed_image_and_own_their_proofs(tm
         assert (out/'proofs/Capture-workflow-wire.lean').is_file()
         assert (out/'proofs/Path-workflow.lean').is_file()
     assert len({(out/'proofs/Capture-workflow-wire.lean').read_bytes() for out in outputs})==1
+
+
+def test_real_capture_numeric_aliases_and_late_tampering_refuse_before_effects(tmp_path):
+    execute(tmp_path/'original')
+    original=json.loads((tmp_path/'original/capture.json').read_text())
+    attacks=[]
+    bad=json.loads(json.dumps(original));bad['samples'][1]['record']['action']=True;attacks.append(bad)
+    bad=json.loads(json.dumps(original));bad['final']['transitions']=4.0;attacks.append(bad)
+    bad=json.loads(json.dumps(original));bad['samples'][-1]['record']['reply_hex']='010105000100';attacks.append(bad)
+    for i,bad in enumerate(attacks):
+        out=tmp_path/f'rejected-{i}'
+        with pytest.raises(ValueError):execute(out,capture=bad)
+        assert not out.exists()
+
+
+def test_actual_replay_consumes_frozen_plan_after_caller_mutates_input(tmp_path,monkeypatch):
+    from . import __main__ as entry
+    execute(tmp_path/'original')
+    cap=json.loads((tmp_path/'original/capture.json').read_text())
+    def validate_then_mutate(value):
+        plan=preflight(value)
+        value['samples'][0]['record']['action']=65535
+        value['final']['transitions']=True
+        value['sources'].clear()
+        return plan
+    monkeypatch.setattr(entry,'preflight',validate_then_mutate)
+    result=entry.execute(tmp_path/'frozen',capture=cap)
+    assert result['replayed'] and result['transitions']==4
+
+
+def test_published_manifest_cannot_mutate_receipt_source_identity(tmp_path):
+    with Broker(tmp_path/'one.sqlite',tmp_path/'native') as one:
+        binding=one._authority.source_binding
+        published=one._authority.manifest
+        published['sources']['Data.lean']='0'*64
+        published['host_sources']['broker.py']='0'*64
+        assert one._authority.source_id==binding.source_id
+        with Broker(tmp_path/'two.sqlite',tmp_path/'unused-native') as two:
+            first=one.step(b'{"action":0}','one')
+            second=two.step(b'{"action":0}','one')
+            assert first==second and first['source_id']==binding.source_id
 
 
 @pytest.mark.parametrize('crash_at',[1,4])

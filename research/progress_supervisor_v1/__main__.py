@@ -7,31 +7,30 @@ from .certificate import encode,sha,propose,evaluate
 from .authority import Authority
 from .broker import Broker
 from .evidence import ORIGINS, SYNTHETIC_ORIGIN, sources, read, write, publish
+from .intake import preflight
 
 def execute(out,*,pre_sanitized=False,capture=None):
-    out=Path(out).resolve();out.mkdir(parents=True,exist_ok=False)
+    # Reject the entire input before creating files, compiling or applying tools.
+    plan=preflight(capture) if capture is not None else None
+    out=Path(out).resolve()
     before=sources()
     data_origin=SYNTHETIC_ORIGIN
-    if capture is not None:
-        expected={'format','data_origin','sources','model_hex','certificate_hex','pre_sanitized','samples','final'}
-        if type(capture) is not dict or set(capture)!=expected or capture['format']!='pcs-progress-supervisor-capture-v1' or capture['data_origin'] not in ORIGINS:raise ValueError('unsupported capture schema')
-        if capture['sources']!=before:raise ValueError('capture belongs to different implementation sources')
-        pre_sanitized=capture['pre_sanitized']
-        data_origin=capture['data_origin']
-        if type(capture['samples']) is not list or not 1<=len(capture['samples'])<=32:raise ValueError('bounded capture required')
-        for s in capture['samples']:
-            if type(s) is not dict or set(s)!={'request_id','proposal_hex','record'} or type(s['proposal_hex']) is not str or len(s['proposal_hex'])>8192:raise ValueError('invalid captured sample')
-        inputs=[(s['request_id'],bytes.fromhex(s['proposal_hex'])) for s in capture['samples']]
+    if plan is not None:
+        if dict(plan.sources)!=before:raise ValueError('implementation changed after preflight')
+        pre_sanitized=plan.pre_sanitized
+        data_origin=plan.data_origin
+        inputs=[(s.request_id,s.proposal) for s in plan.samples]
     else:
         inputs=[('round-'+str(i),raw) for i,raw in enumerate([b'{"action":5,"verifier":"ALLOW"}',b'not JSON',b'{"action":3}',b'{"action":65535}'])]
+    out.mkdir(parents=True,exist_ok=False)
     with Broker(out/'effects.sqlite',out/'authority',pre_sanitized=pre_sanitized) as b:
-        if capture and (capture['model_hex']!=b.model_raw.hex() or capture['certificate_hex']!=b.cert_raw.hex()):raise ValueError('model/certificate byte identity mismatch')
+        if plan is not None and (plan.model_raw!=b.model_raw or plan.certificate_raw!=b.cert_raw or plan.binding!=b._authority.source_binding):raise ValueError('preflight/native source identity mismatch')
         samples=[]
         for i,(rid,raw) in enumerate(inputs):
             r=b.step(raw,rid);samples.append(dict(request_id=rid,proposal_hex=raw.hex(),record=r))
-            if capture and r!=capture['samples'][i]['record']:raise ValueError('fresh native/effect receipt disagrees with capture')
+            if plan is not None and encode(r)!=plan.samples[i].receipt_json:raise ValueError('fresh native/effect receipt disagrees with capture')
         final=b.snapshot()
-        if capture and final!=capture['final']:raise ValueError('fresh final effects disagree with capture')
+        if plan is not None and encode(final)!=plan.final_json:raise ValueError('fresh final effects disagree with capture')
         publish(out,b,samples,before,pre_sanitized=pre_sanitized,replayed=capture is not None,data_origin=data_origin)
     if sources()!=before:raise ValueError('implementation changed during capture/replay')
     return dict(output=str(out),transitions=final['transitions'],final_state=final['state'],captured_wire_kernel_checked=True,captured_path_kernel_checked=True,replayed=capture is not None,pcs_authority=False)

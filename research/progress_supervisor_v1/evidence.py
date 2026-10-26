@@ -5,24 +5,15 @@ from pathlib import Path
 
 from .certificate import encode, evaluate, sha
 from .trace import certify_path
+from .binding import source_inventory
 
-HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
-IMPLEMENTATION = (
-    "Progress.lean", "Wire.lean", "Codec.lean", "Main.lean", "authority.py",
-    "broker.py", "certificate.py", "example.py", "trace.py", "__main__.py",
-    "evidence.py", "worker.py",
-)
 SYNTHETIC_ORIGIN = "synthetic fixed-tool experiment; no participant data"
 EXTERNAL_ORIGIN = "external proposal bytes; provenance/consent unverified; synthetic fixed tools"
 ORIGINS = (SYNTHETIC_ORIGIN, EXTERNAL_ORIGIN)
 
 
 def sources():
-    return {
-        **{name: sha((HERE / name).read_bytes()) for name in IMPLEMENTATION},
-        "formal/PCSActionShield.lean": sha((ROOT / "formal/PCSActionShield.lean").read_bytes()),
-    }
+    return source_inventory()
 
 
 def read(path, limit=2 * 1024 * 1024):

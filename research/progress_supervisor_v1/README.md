@@ -1,5 +1,11 @@
 # Checked safety and progress for finite tool workflows
 
+The latest [intake and CI engineering notes](INTAKE.md) describe whole-capture
+validation before effects, immutable replay plans/source identity, and required
+parallel verification campaigns. [ENGINEERING.md](ENGINEERING.md) records the
+preceding protocol/process extension; [RESULTS.md](RESULTS.md) preserves its
+original source-bound observations.
+
 An independently checked action shield can still admit safe idle loops or deny
 every action. This research extension supplies **bounded safe completion against
 every declared outcome**, or a checked losing-region witness that rules out every

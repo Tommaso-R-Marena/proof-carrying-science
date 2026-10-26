@@ -51,8 +51,8 @@ class Broker:
             self._db=sqlite3.connect(self.path,isolation_level=None,check_same_thread=False)
             self._db.execute('PRAGMA journal_mode=WAL');self._db.execute('PRAGMA synchronous=FULL')
             self._db.executescript('CREATE TABLE meta(state INTEGER,generation INTEGER,head TEXT); CREATE TABLE events(id TEXT PRIMARY KEY,generation INTEGER UNIQUE,body_sha TEXT,event_json TEXT); CREATE TABLE payload(value TEXT,loaded INTEGER,sanitized INTEGER); CREATE TABLE public(value TEXT);')
-            self._source_id=sha(encode({'native':self._authority.manifest['sources'],'host':self._authority.manifest['host_sources']}))
-            self._seed=sha(encode(dict(model=sha(self.model_raw),certificate=sha(self.cert_raw),source=self._source_id,pre_sanitized=pre_sanitized)))
+            self._source_id=self._authority.source_id
+            self._seed=self._authority.source_binding.seed(pre_sanitized)
             self._db.execute('INSERT INTO meta VALUES(0,0,?)',(self._seed,))
             self._db.execute('INSERT INTO payload VALUES(?,0,?)',(PUBLIC if pre_sanitized else PRIVATE,int(pre_sanitized)))
             self._anchor=(0,0,self._seed)
