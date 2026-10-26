@@ -22,6 +22,7 @@ SHARDS = {
     "authority": (PREFIX + "test_progress.py", "tests/test_action_shield_v1.py", "tests/test_control_monitor_v1.py"),
     "codec": (PREFIX + "test_codec.py",),
     "adapter": (PREFIX + "test_adapter.py",),
+    "rowgate": (PREFIX + "test_row_gate.py",),
     "intake": (PREFIX + "test_intake.py", PREFIX + "test_ci.py"),
 }
 

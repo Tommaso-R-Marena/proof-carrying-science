@@ -1,6 +1,8 @@
 # Checked safety and progress for finite tool workflows
 
-The latest [transactional adapter refinement](ADAPTER.md) adds full-row precommit
+The latest [native row gate](ROW_GATE.md) requires actual Lean approval of SQL
+before/after snapshots and carries fresh row proofs in versioned replay evidence.
+The preceding [transactional adapter refinement](ADAPTER.md) adds full-row precommit
 checks, a separately proved adapter model and actual SQL/Lean differential tests.
 The preceding [intake and CI engineering notes](INTAKE.md) describe whole-capture
 validation before effects, immutable replay plans/source identity, and required

@@ -9,6 +9,7 @@ from .binding import source_inventory
 
 SYNTHETIC_ORIGIN = "synthetic fixed-tool experiment; no participant data"
 EXTERNAL_ORIGIN = "external proposal bytes; provenance/consent unverified; synthetic fixed tools"
+CAPTURE_FORMAT = "pcs-progress-supervisor-capture-v2"
 ORIGINS = (SYNTHETIC_ORIGIN, EXTERNAL_ORIGIN)
 
 
@@ -52,21 +53,23 @@ def publish(out, broker, samples, before, *, pre_sanitized, replayed, data_origi
     pairs = [(bytes.fromhex(r["request_hex"]), bytes.fromhex(r["reply_hex"])) for r in path]
     proof_dir = Path(out) / "proofs"
     wire = broker._authority.certify(pairs, "workflow-wire", proof_dir=proof_dir)
+    row_pairs = [(bytes.fromhex(r["row_request_hex"]), bytes.fromhex(r["row_reply_hex"])) for r in path]
+    rows_proof = broker._authority.certify_rows(row_pairs, proof_dir=proof_dir)
     path_proof = certify_path(broker._authority, path, proof_dir=proof_dir)
     if sources() != before:
         raise ValueError("implementation changed during capture/replay")
     artifact = dict(
-        format="pcs-progress-supervisor-capture-v1",
+        format=CAPTURE_FORMAT,
         data_origin=data_origin,
         sources=before, model_hex=broker.model_raw.hex(),
         certificate_hex=broker.cert_raw.hex(), pre_sanitized=pre_sanitized,
         samples=samples, final=final,
     )
     result = dict(
-        format="pcs-progress-supervisor-result-v1",
+        format="pcs-progress-supervisor-result-v2",
         analysis=evaluate(broker.model_raw, broker.cert_raw),
         native_build=broker._authority.manifest, captured_wire_proof=wire,
-        captured_path_proof=path_proof, final=final, replayed=replayed,
+        captured_rows_proof=rows_proof, captured_path_proof=path_proof, final=final, replayed=replayed,
         pcs_authority=False, implementation_correspondence="TESTED_NOT_PROVED",
         deployment_safety="OPEN", empirical_model_safety="NOT_ESTABLISHED",
         proposal_data_eligibility="NOT_EVALUATED_DO_NOT_TRAIN_WITHOUT_REVIEW",

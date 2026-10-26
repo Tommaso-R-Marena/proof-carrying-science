@@ -13,7 +13,8 @@ from .authority import packet
 from .binding import SourceBinding, source_inventory
 from .broker import PUBLIC, parse_proposal
 from .certificate import encode, propose, sha
-from .evidence import EXTERNAL_ORIGIN
+from .evidence import EXTERNAL_ORIGIN, CAPTURE_FORMAT
+from .effects import Rows, PRIVATE, project, row_packet
 from .example import model
 from .intake import preflight
 
@@ -23,6 +24,7 @@ def claimed_fixture(*, pre=False):
     raw = encode(model());cert = encode(propose(raw, [4]))
     binding = SourceBinding.capture(raw, cert)
     head, state, samples = binding.seed(pre), 0, []
+    rows = Rows(PUBLIC if pre else PRIVATE, False, pre, ())
     actions = [0, 1, 3] if pre else [0, 1, 2, 3]
     ranks = {0: 4, 1: 3, 2: 2, 3: 1, 4: 0}
     proposal_raw = b'{"action":5}'
@@ -35,10 +37,14 @@ def claimed_fixture(*, pre=False):
                      request_hex=packet(state, proposal).hex(),
                      reply_hex=bytes([1, 1, action, 0, ranks[state], 0]).hex(),
                      source_id=binding.source_id, previous_sha256=head, pcs_authority=False)
+        _, after = project(state, action, rows)
+        event["row_request_hex"] = row_packet(state, action, rows, target, after).hex()
+        event["row_reply_hex"] = "0201"
+        rows = after
         event["event_sha256"] = sha(encode(event))
         samples.append(dict(request_id=event["request_id"], proposal_hex=proposal_raw.hex(), record=event))
         state, head = target, event["event_sha256"]
-    return dict(format="pcs-progress-supervisor-capture-v1", data_origin=EXTERNAL_ORIGIN,
+    return dict(format=CAPTURE_FORMAT, data_origin=EXTERNAL_ORIGIN,
                 sources=source_inventory(), model_hex=raw.hex(), certificate_hex=cert.hex(),
                 pre_sanitized=pre, samples=samples,
                 final=dict(state=4, transitions=len(actions), head=head, public=[PUBLIC], pcs_authority=False))
@@ -153,4 +159,19 @@ def test_resource_and_non_json_inputs_fail_closed(attack):
     elif attack == "cycle":cap["final"] = cap
     elif attack == "fixture-type":cap["pre_sanitized"] = 1
     else:cap["final"] = object()
+    with pytest.raises(ValueError):preflight(cap)
+
+
+@pytest.mark.parametrize('attack', ['legacy', 'row-request', 'row-reply', 'row-whitespace', 'row-trailing'])
+def test_versioned_row_receipts_refuse_even_with_recomputed_chain(attack):
+    cap = claimed_fixture()
+    record = cap['samples'][0]['record']
+    if attack == 'legacy':cap['format'] = 'pcs-progress-supervisor-capture-v1'
+    elif attack == 'row-request':
+        raw = bytearray.fromhex(record['row_request_hex']);raw[13] = 1
+        record['row_request_hex'] = raw.hex()
+    elif attack == 'row-reply':record['row_reply_hex'] = '0200'
+    elif attack == 'row-whitespace':record['row_request_hex'] += ' '
+    else:record['row_request_hex'] += '00'
+    rechain(cap)
     with pytest.raises(ValueError):preflight(cap)

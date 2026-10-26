@@ -18,7 +18,7 @@ from .broker import Broker
 from .certificate import encode, sha
 from .evidence import EXTERNAL_ORIGIN, publish, sources, write
 
-FORMAT = "pcs-progress-supervisor-session-v1"
+FORMAT = "pcs-progress-supervisor-session-v2"
 MAX_PROPOSAL = 4096
 MAX_TURNS = 256
 
@@ -110,7 +110,8 @@ def serve(output, *, pre_sanitized=False, max_requests=32, frame_timeout=30):
                     ))
                     _emit("COMPLETE", final=result["final"],
                           wire_proof=result["captured_wire_proof"],
-                          path_proof=result["captured_path_proof"])
+                          path_proof=result["captured_path_proof"],
+                          rows_proof=result["captured_rows_proof"])
                     return 0
             _emit("INCOMPLETE", reason="REQUEST_LIMIT", final=broker.snapshot())
             return 21

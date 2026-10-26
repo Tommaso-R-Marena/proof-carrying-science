@@ -10,7 +10,7 @@ from pcs.jsonio import strict_json_loads
 from .certificate import encode,sha,propose,groups
 from .example import model
 from .authority import Authority,packet
-from .effects import PRIVATE,PUBLIC,read_rows,project,check_effects
+from .effects import PRIVATE,PUBLIC,Rows,read_rows,project,check_effects
 
 _FIXED_AUTHORITY=None
 _BUILD_LOCK=threading.Lock()
@@ -63,6 +63,7 @@ class Broker:
         for rid,g,bsha,encoded in self._db.execute('SELECT id,generation,body_sha,event_json FROM events ORDER BY generation'):
             event=json.loads(encoded);core={k:v for k,v in event.items() if k!='event_sha256'}
             if event.get('generation')!=generation+1 or event.get('source')!=state or event.get('previous_sha256')!=head or event.get('request_id')!=rid or event.get('body_sha256')!=bsha or g!=generation+1 or sha(encode(core))!=event.get('event_sha256'):raise ValueError('receipt chain corrupted')
+            before_rows=Rows(payload,bool(loaded),bool(sanitized),tuple(public))
             req=packet(state,event['proposal']);reply=self._authority.query_raw(req)
             if event['request_hex']!=req.hex() or event['reply_hex']!=reply.hex() or reply[1]!=1 or event['source_id']!=self._source_id:raise ValueError('receipt/native correspondence mismatch')
             action=reply[2]+256*reply[3];target=event['target']
@@ -74,6 +75,8 @@ class Broker:
             elif action==3:
                 if payload!=PUBLIC or not sanitized:raise ValueError('unapproved publication')
                 public.append(PUBLIC)
+            row_request,row_reply=self._authority.query_rows(state,action,before_rows,target,Rows(payload,bool(loaded),bool(sanitized),tuple(public)))
+            if event['row_request_hex']!=row_request.hex() or event['row_reply_hex']!=row_reply.hex():raise ValueError('receipt/native row correspondence mismatch')
             state=target;generation+=1;head=event['event_sha256']
         observed=self._db.execute('SELECT state,generation,head FROM meta').fetchall()
         expected_anchor=self._anchor if pending_anchor is None else pending_anchor
@@ -111,13 +114,16 @@ class Broker:
                     self._db.execute('ROLLBACK')
                     return dict(status='HALTED' if reply[1]==0 else 'REFUSED',state=state,generation=generation,pcs_authority=False)
                 action=reply[2]+256*reply[3]
-                expected=project(state,action,read_rows(self._db))
+                before_rows=read_rows(self._db)
+                expected=project(state,action,before_rows)
                 target=self._apply(state,action)
                 check_effects(self._db,target,expected)
+                row_request,row_reply=self._authority.query_rows(state,action,before_rows,target,read_rows(self._db))
                 ranks=dict(json.loads(self.cert_raw)['ranks'])
                 if target not in groups(model())[state,action] or ranks.get(target,65536)>=ranks[state] or reply[4]+256*reply[5]!=ranks[state]:raise ValueError('actual tool outcome does not match progress model')
                 event=dict(request_id=request_id,generation=generation+1,source=state,target=target,action=action,proposal=proposal,
                     proposal_classification=classification,body_sha256=sha(raw),request_hex=req.hex(),reply_hex=reply.hex(),
+                    row_request_hex=row_request.hex(),row_reply_hex=row_reply.hex(),
                     source_id=self._source_id,previous_sha256=head,pcs_authority=False)
                 event['event_sha256']=sha(encode(event))
                 self._db.execute('INSERT INTO events VALUES(?,?,?,?)',(request_id,generation+1,sha(raw),encode(event).decode()))

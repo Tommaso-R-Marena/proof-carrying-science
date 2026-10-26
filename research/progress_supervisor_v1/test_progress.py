@@ -7,7 +7,7 @@ import pytest
 from pcs.action_shield_v1 import evaluate as safety_evaluate,propose as safety_propose
 from .certificate import encode,propose,evaluate,load_certificate,brute_force_bounds
 from .example import model
-from .authority import Authority,packet,SEALS,PROGRESS,WIRE,CODEC,DATA
+from .authority import Authority,packet,SEALS,PROGRESS,WIRE,CODEC,DATA,ROW
 from .broker import Broker,PRIVATE,PUBLIC
 
 
@@ -81,7 +81,7 @@ def test_real_native_codec_all_field_bytes_all_declared_choices_and_captured_ker
     assert len(frames)==1626
     for n in range(1,6):assert native.query_raw(base[:n])==bytes([1,3,0,0,0,0])
     proof=native.certify([(b,native.query_raw(b)) for b in frames[:20]],'real-wire')
-    assert proof['kernel_checked'];assert len(native.axioms)==len(PROGRESS+WIRE+CODEC+DATA)
+    assert proof['kernel_checked'];assert len(native.axioms)==len(PROGRESS+WIRE+CODEC+DATA+ROW)
     assert native.manifest['fresh_objects_checked'] and native.manifest['kernel_checked']
     with pytest.raises(ValueError):native.query(0,True)
 

@@ -33,7 +33,7 @@ def execute(out,*,pre_sanitized=False,capture=None):
         if plan is not None and encode(final)!=plan.final_json:raise ValueError('fresh final effects disagree with capture')
         publish(out,b,samples,before,pre_sanitized=pre_sanitized,replayed=capture is not None,data_origin=data_origin)
     if sources()!=before:raise ValueError('implementation changed during capture/replay')
-    return dict(output=str(out),transitions=final['transitions'],final_state=final['state'],captured_wire_kernel_checked=True,captured_path_kernel_checked=True,replayed=capture is not None,pcs_authority=False)
+    return dict(output=str(out),transitions=final['transitions'],final_state=final['state'],captured_wire_kernel_checked=True,captured_path_kernel_checked=True,captured_rows_kernel_checked=True,replayed=capture is not None,pcs_authority=False)
 
 def main():
     p=argparse.ArgumentParser(__doc__);s=p.add_subparsers(dest='command',required=True)

@@ -1,7 +1,9 @@
 """Actual native full-width IDs; these are not mock authorization tests."""
 import time
+import pytest
+from .effects import Rows, PRIVATE
 
-from .authority import Authority, CODEC, DATA, PROGRESS, WIRE, MAX_REC_DEPTH, packet
+from .authority import Authority, CODEC, DATA, PROGRESS, WIRE, ROW, MAX_REC_DEPTH, packet
 from .certificate import encode, propose
 from .example import model
 from .test_progress import expected
@@ -22,8 +24,11 @@ def test_every_uint16_state_and_proposal_with_high_id_model(tmp_path, record_tes
     raw = encode(m)
     c = propose(raw, [mapped[4]])
     with Authority(raw, encode(c), tmp_path / "wide-native") as authority:
-        assert len(authority.axioms) == len(PROGRESS + WIRE + CODEC + DATA)
+        assert len(authority.axioms) == len(PROGRESS + WIRE + CODEC + DATA + ROW)
         assert "PCSProgressData.wire_bounds" in authority.axioms
+        rows = Rows(PRIVATE, False, False, ())
+        with pytest.raises(ValueError, match='exact fixed workflow certificate'):
+            authority.query_rows(0, 0, rows, 1, rows)
         assert authority.query(0, 65535) == dict(status="SELECTED", action=65535, rank=4)
         frames = []
         for n in range(65536):
@@ -65,7 +70,7 @@ def test_maximum_graph_build_native_decisions_and_captured_proof(tmp_path, recor
         assert proof["kernel_checked"]
         lean_calls = [call for call in authority.executions if call["command"][0] == str(authority.tools["lean"])]
         assert lean_calls and all(f"maxRecDepth={MAX_REC_DEPTH}" in call["command"] for call in lean_calls)
-        assert len(authority.axioms) == len(PROGRESS + WIRE + CODEC + DATA)
+        assert len(authority.axioms) == len(PROGRESS + WIRE + CODEC + DATA + ROW)
         record_testsuite_property("maximum_graph_states", 32)
         record_testsuite_property("maximum_graph_actions", 16)
         record_testsuite_property("maximum_graph_edges", 512)

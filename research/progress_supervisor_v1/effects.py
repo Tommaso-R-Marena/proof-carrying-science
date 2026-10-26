@@ -72,3 +72,17 @@ def check_effects(db: sqlite3.Connection, target: int, expected: tuple[int, Rows
         raise ValueError('fixed adapter checks require an open transaction')
     if type(target) is not int or target != expected[0] or read_rows(db) != expected[1]:
         raise ValueError('fixed adapter postcondition mismatch before commit')
+
+
+def row_packet(state: int, action: int, before: Rows, target: int, after: Rows) -> bytes:
+    """Canonical fixed 16-byte row request. Encoding itself grants no authority."""
+    if any(type(n) is not int or not 0 <= n < 256 for n in (state, action, target)):
+        raise ValueError('exact byte-sized row state/action/target required')
+    def fields(rows):
+        if (type(rows) is not Rows or type(rows.value) is not str or rows.value not in (PRIVATE, PUBLIC)
+                or type(rows.loaded) is not bool or type(rows.sanitized) is not bool
+                or type(rows.public) is not tuple or len(rows.public) >= 256
+                or any(type(v) is not str or v != PUBLIC for v in rows.public)):
+            raise ValueError('canonical fixed row representation required')
+        return [int(rows.value == PUBLIC), int(rows.loaded), int(rows.sanitized), len(rows.public)]
+    return bytes([80, 67, 83, 82, 1, state, action, *fields(before), target, *fields(after)])

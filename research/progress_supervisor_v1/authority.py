@@ -15,6 +15,9 @@ PROGRESS=['PCSProgress.'+n for n in ('check_iff','force_succ','force_mono','winn
 WIRE=['PCSProgressWire.'+n for n in ('selected_from_choose','selected_all_outcomes','halt_is_goal','malformed_refuses')]
 CODEC=['PCSProgressCodec.'+n for n in ('request_roundtrip','request_injective','request_decode_canonical','selected_roundtrip','typed_roundtrip','process_selected_sound','raw_selected_all_outcomes','typed_octets','process_octets','batch_octets','native_octets_roundtrip')]
 DATA=['PCSProgressData.'+n for n in ('certificate_checked','winning','losing','wire_bounds')]
+ADAPTER=['PCSProgressAdapter.'+n for n in ('initial_valid','step_refines','valid_publication','goal_halts','execution_invariant','execution_no_private_publication','completion_rows')]
+ROW_WIRE=['PCSProgressRows.'+n for n in ('flag_bit','request_roundtrip','request_canonical','request_injective','check_sound','raw_acceptance','raw_refines','malformed_refuses','process_octets','batch_octets','native_octets_roundtrip')]
+ROW=ADAPTER+ROW_WIRE
 SEALS=15
 MAX_REC_DEPTH=4096
 
@@ -39,15 +42,15 @@ class Authority:
   self.host_sources=dict(self._binding.host)
   self.axioms={};started=time.monotonic()
   try:
-   for n in ['PCSActionShield.lean','Progress.lean','Wire.lean','Codec.lean','Data.lean','Main.lean']:
-    names=PROGRESS if n=='Progress.lean' else WIRE if n=='Wire.lean' else CODEC if n=='Codec.lean' else DATA if n=='Data.lean' else []
+   for n in ['PCSActionShield.lean','Progress.lean','Wire.lean','Codec.lean','Adapter.lean','RowWire.lean','Data.lean','Main.lean']:
+    names=PROGRESS if n=='Progress.lean' else WIRE if n=='Wire.lean' else CODEC if n=='Codec.lean' else DATA if n=='Data.lean' else ADAPTER if n=='Adapter.lean' else ROW_WIRE if n=='RowWire.lean' else []
     raw=self.sources[n]+('\n'+'\n'.join('#print axioms '+t for t in names)+'\n').encode()
     (self.out/n).write_bytes(raw)
     log=self._run([self.tools['lean'],'-j1','-M2048','-D','Elab.async=false','--root='+str(self.out),'-o',n[:-5]+'.olean','-c',n[:-5]+'.c',n],90)
     if (self.out/n).read_bytes()!=raw:raise ValueError('staged source changed')
     if names:self.axioms.update(_inventory(log,names))
    self._run([self.tools['leanchecker'],'--fresh','Main'],180)
-   self._run([self.tools['leanc'],'-O2','-o','supervisor',*[n+'.c' for n in ['Main','Data','Codec','Wire','Progress','PCSActionShield']]],90)
+   self._run([self.tools['leanc'],'-O2','-o','supervisor',*[n+'.c' for n in ['Main','Data','RowWire','Adapter','Codec','Wire','Progress','PCSActionShield']]],90)
    self.artifacts={p.name:sha(p.read_bytes()) for p in self.out.iterdir() if p.is_file()}
    image=(self.out/'supervisor').read_bytes();self.binary_sha256=sha(image)
    self.fd=os.memfd_create('pcs-progress-supervisor',os.MFD_CLOEXEC|os.MFD_ALLOW_SEALING)
@@ -95,6 +98,24 @@ class Authority:
   self.check()
   if p.returncode or p.stderr or len(p.stdout)!=6*((len(raw)+5)//6):raise ValueError('native process failed or malformed; no effect authorized')
   return p.stdout
+ def query_rows_raw(self,raw):
+  # A fixed executable mode, never a caller-selected verifier or executable.
+  if type(raw) is not bytes or len(raw)>32768:raise ValueError('bounded row request bytes required')
+  self.check()
+  p=subprocess.run(['/proc/self/fd/'+str(self.fd),'--rows-v1'],pass_fds=(self.fd,),input=raw,capture_output=True,cwd=self.out,env=self.env,timeout=15)
+  self.check()
+  if p.returncode or p.stderr or len(p.stdout)!=2*((len(raw)+15)//16) or any(p.stdout[i]!=2 or p.stdout[i+1] not in (0,1) for i in range(0,len(p.stdout),2)):raise ValueError('native row protocol failed; no effect authorized')
+  return p.stdout
+ def query_rows(self,state,action,before,target,after):
+  from .effects import row_packet
+  from .example import model
+  from .certificate import encode,propose
+  raw=encode(model())
+  if self.model_raw!=raw or self.cert_raw!=encode(propose(raw,[4])):raise ValueError('row gate requires the exact fixed workflow certificate')
+  request=row_packet(state,action,before,target,after)
+  reply=self.query_rows_raw(request)
+  if reply!=bytes([2,1]):raise ValueError('Lean row gate refused actual SQL snapshot')
+  return request,reply
  def query(self,state,proposal):
   r=self.query_raw(packet(state,proposal))
   if len(r)!=6 or r[0]!=1 or r[1] not in [0,1,2,3]:raise ValueError('native protocol failure')
@@ -116,6 +137,20 @@ class Authority:
   self.check();log=self._run([self.tools['lean'],'-j1','-M2048','-D','maxHeartbeats=8000000','--root='+str(directory),p],90)
   if p.read_text()!=source:raise ValueError('capture source changed')
   self.check();self._write_log();return dict(kernel_checked=True,proof_sha256=sha(source.encode()),axioms=_inventory(log,['Capture.actual']),pcs_authority=False)
+ def certify_rows(self,pairs,label='workflow-rows',*,proof_dir=None):
+  if not re.fullmatch('[a-z0-9_-]{1,40}',label) or not 1<=len(pairs)<=100:raise ValueError('bounded fresh row capture required')
+  def nums(raw):
+   if type(raw) is not bytes or len(raw)>32768:raise ValueError('bounded captured row bytes required')
+   return '['+','.join(map(str,raw))+']'
+  ins='['+','.join(nums(a) for a,b in pairs)+']';outs='['+','.join(nums(b) for a,b in pairs)+']'
+  source=f'import RowWire\nnamespace CaptureRows\ntheorem actual : ({ins} : List (List Nat)).map PCSProgressRows.batch = {outs} := by decide\nend CaptureRows\n#print axioms CaptureRows.actual\n'
+  directory=self.out if proof_dir is None else Path(proof_dir).resolve()
+  directory.mkdir(parents=True,exist_ok=True);p=directory/('Rows-'+label+'.lean')
+  with p.open('x') as f:f.write(source)
+  self.check();log=self._run([self.tools['lean'],'-j1','-M2048','--root='+str(directory),p],90)
+  if p.read_text()!=source:raise ValueError('captured row source changed')
+  self.check();self._write_log()
+  return dict(kernel_checked=True,proof_sha256=sha(source.encode()),axioms=_inventory(log,['CaptureRows.actual']),pcs_authority=False)
  def close(self):
   if self.fd is not None:os.close(self.fd);self.fd=None
  def __enter__(self):return self

@@ -11,7 +11,7 @@ from .intake import preflight
 
 
 def test_actual_capture_and_fresh_process_replay(tmp_path):
-    result=execute(tmp_path/'capture');assert result['captured_path_kernel_checked']
+    result=execute(tmp_path/'capture');assert result['captured_path_kernel_checked'] and result['captured_rows_kernel_checked']
     command=[sys.executable,'-m','research.progress_supervisor_v1','replay',str(tmp_path/'capture/capture.json'),str(tmp_path/'replayed')]
     run=subprocess.run(command,text=True,capture_output=True,timeout=300)
     assert run.returncode==0,run.stderr
@@ -19,6 +19,7 @@ def test_actual_capture_and_fresh_process_replay(tmp_path):
     before=json.loads((tmp_path/'capture/result.json').read_text());after=json.loads((tmp_path/'replayed/result.json').read_text())
     assert before['final']==after['final'];assert before['captured_path_proof']['proof_sha256']==after['captured_path_proof']['proof_sha256']
     assert before['captured_wire_proof']['proof_sha256']==after['captured_wire_proof']['proof_sha256']
+    assert before['captured_rows_proof']['proof_sha256']==after['captured_rows_proof']['proof_sha256']
     capture=json.loads((tmp_path/'capture/capture.json').read_text());capture['sources']['Progress.lean']='0'*64
     with pytest.raises(ValueError,match='different implementation'):execute(tmp_path/'bad-source',capture=capture)
     capture=json.loads((tmp_path/'capture/capture.json').read_text());capture['samples'][0]['record']['action']=5
@@ -53,6 +54,7 @@ def test_concurrent_workflows_share_only_the_fixed_image_and_own_their_proofs(tm
     for out in outputs:
         assert (out/'proofs/Capture-workflow-wire.lean').is_file()
         assert (out/'proofs/Path-workflow.lean').is_file()
+        assert (out/'proofs/Rows-workflow-rows.lean').is_file()
     assert len({(out/'proofs/Capture-workflow-wire.lean').read_bytes() for out in outputs})==1
 
 

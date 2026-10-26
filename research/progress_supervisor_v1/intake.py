@@ -13,14 +13,15 @@ from .authority import packet
 from .binding import SourceBinding, source_inventory
 from .broker import PUBLIC, parse_proposal
 from .certificate import encode, groups, propose, sha
-from .evidence import ORIGINS
+from .evidence import ORIGINS, CAPTURE_FORMAT
+from .effects import PRIVATE, Rows, project, row_packet
 from .example import model
 
 ROOT_FIELDS = frozenset(("format", "data_origin", "sources", "model_hex", "certificate_hex",
                          "pre_sanitized", "samples", "final"))
 EVENT_FIELDS = frozenset(("request_id", "generation", "source", "target", "action", "proposal",
                           "proposal_classification", "body_sha256", "request_hex", "reply_hex",
-                          "source_id", "previous_sha256", "pcs_authority", "event_sha256"))
+                          "source_id", "previous_sha256", "pcs_authority", "event_sha256", "row_request_hex", "row_reply_hex"))
 SNAPSHOT_FIELDS = frozenset(("state", "transitions", "head", "public", "pcs_authority"))
 HALT_FIELDS = frozenset(("status", "state", "generation", "pcs_authority"))
 
@@ -108,7 +109,7 @@ def preflight(capture):
     """
     cap = _snapshot(capture)
     _object(cap, ROOT_FIELDS, "capture")
-    if cap["format"] != "pcs-progress-supervisor-capture-v1" or cap["data_origin"] not in ORIGINS:
+    if cap["format"] != CAPTURE_FORMAT or cap["data_origin"] not in ORIGINS:
         raise ValueError("unsupported capture schema")
     expected_sources = source_inventory()
     if cap["sources"] != expected_sources:
@@ -124,6 +125,7 @@ def preflight(capture):
         raise ValueError("model/certificate byte identity mismatch")
     binding = SourceBinding.capture(raw, cert_raw)
     state, generation, head = 0, 0, binding.seed(pre)
+    rows = Rows(PUBLIC if pre else PRIVATE, False, pre, ())
     seen, planned = {}, []
     ranks, allowed, edges = dict(cert["ranks"]), {tuple(p) for p in cert["allowed"]}, groups(m)
     samples = cap["samples"]
@@ -155,6 +157,8 @@ def preflight(capture):
                 _hex(record[key], key, size=32)
             _hex(record["request_hex"], "native request", size=6)
             _hex(record["reply_hex"], "native reply", size=6)
+            _hex(record["row_request_hex"], "native row request", size=16)
+            _hex(record["row_reply_hex"], "native row reply", size=2)
             core = {k: v for k, v in record.items() if k != "event_sha256"}
             if record["event_sha256"] != sha(encode(core)):
                 raise ValueError("receipt digest disagrees with canonical fields")
@@ -177,6 +181,10 @@ def preflight(capture):
                 request, reply = packet(state, proposal), bytes([1, 1, action, 0, ranks[state], 0])
                 if record["request_hex"] != request.hex() or record["reply_hex"] != reply.hex():
                     raise ValueError("receipt wire bytes disagree with action/rank")
+                projected_target, after = project(state, action, rows)
+                if projected_target != target or record["row_request_hex"] != row_packet(state, action, rows, target, after).hex() or record["row_reply_hex"] != "0201":
+                    raise ValueError("receipt row bytes disagree with captured effects")
+                rows = after
                 seen[rid] = (proposal_raw, encode(record))
                 state, generation, head = target, generation + 1, record["event_sha256"]
         planned.append(ReplaySample(rid, proposal_raw, encode(record)))

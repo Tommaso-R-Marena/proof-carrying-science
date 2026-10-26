@@ -46,6 +46,7 @@ def test_real_worker_owns_ids_state_verifier_effects_and_replay(tmp_path):
     assert observed(out) == ((4, 4), [(PUBLIC,)])
     complete = events[-1]
     assert complete["wire_proof"]["kernel_checked"] and complete["path_proof"]["kernel_checked"]
+    assert complete["rows_proof"]["kernel_checked"]
     assert all(e["pcs_authority"] is False for e in events)
     capsule = json.loads((out / "capture.json").read_text())
     assert capsule["data_origin"] == EXTERNAL_ORIGIN
