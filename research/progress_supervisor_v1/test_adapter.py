@@ -120,11 +120,15 @@ def test_real_authorized_adapter_fault_never_commits(tmp_path, attack):
             return target
         broker._apply = faulty
         with pytest.raises(ValueError, match='fixed adapter'):broker.step(b'{"action":5}', 'retry')
+        if attack in ('receipt-trigger', 'cas-trigger'):
+            with pytest.raises(ValueError, match='schema mismatch'):broker.snapshot()
+            assert broker._db.execute('SELECT state,generation,head FROM meta').fetchall() == [(before['state'],before['transitions'],before['head'])]
+            assert broker._db.execute('SELECT value FROM public').fetchall() == []
+            broker._db.execute('DROP TRIGGER fault')
         assert broker.snapshot() == before
         assert broker._db.execute('SELECT COUNT(*) FROM events').fetchone() == (0,)
         assert not broker._db.in_transaction
         broker._apply = apply
-        if attack in ('receipt-trigger', 'cas-trigger'):broker._db.execute('DROP TRIGGER fault')
         assert broker.step(b'{"action":5}', 'retry')['generation'] == 1
         assert broker._authority.manifest['kernel_checked']
 
@@ -193,17 +197,24 @@ def test_private_write_at_every_real_workflow_boundary_rolls_back(tmp_path, pre,
 def test_transaction_history_corruption_never_commits(tmp_path, attack):
     with Broker(tmp_path / 'ledger.sqlite', tmp_path / 'native') as broker:
         before = broker.snapshot()
-        triggers = {
-            'event-json': "AFTER INSERT ON events BEGIN UPDATE events SET event_json='{}' WHERE id=NEW.id; END",
-            'meta-head': "AFTER UPDATE ON meta BEGIN UPDATE meta SET head='bad'; END",
-            'meta-duplicate': 'AFTER UPDATE ON meta BEGIN INSERT INTO meta SELECT * FROM meta; END',
-        }
-        broker._db.execute('CREATE TRIGGER fault ' + triggers[attack])
+        actual = broker._db
+        class CorruptPendingData:
+            armed = True
+            def __getattr__(self, name):return getattr(actual, name)
+            def execute(self, sql, *args):
+                result = actual.execute(sql, *args)
+                if self.armed and ((attack == 'event-json' and sql.startswith('INSERT INTO events')) or
+                                   (attack != 'event-json' and sql.startswith('UPDATE meta SET state='))):
+                    self.armed = False
+                    if attack == 'event-json':actual.execute("UPDATE events SET event_json='{}'")
+                    elif attack == 'meta-head':actual.execute("UPDATE meta SET head='bad'")
+                    else:actual.execute('INSERT INTO meta SELECT * FROM meta')
+                return result
+        broker._db = CorruptPendingData()
         with pytest.raises(ValueError, match='receipt|state'):
             broker.step(b'{"action":5}', 'retry')
         assert broker.snapshot() == before
         assert broker._db.execute('SELECT COUNT(*) FROM meta').fetchone() == (1,)
         assert broker._db.execute('SELECT COUNT(*) FROM events').fetchone() == (0,)
         assert not broker._db.in_transaction
-        broker._db.execute('DROP TRIGGER fault')
         assert broker.step(b'{"action":5}', 'retry')['generation'] == 1

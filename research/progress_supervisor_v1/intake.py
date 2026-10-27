@@ -19,9 +19,7 @@ from .example import model
 
 ROOT_FIELDS = frozenset(("format", "data_origin", "sources", "model_hex", "certificate_hex",
                          "pre_sanitized", "samples", "final"))
-EVENT_FIELDS = frozenset(("request_id", "generation", "source", "target", "action", "proposal",
-                          "proposal_classification", "body_sha256", "request_hex", "reply_hex",
-                          "source_id", "previous_sha256", "pcs_authority", "event_sha256", "row_request_hex", "row_reply_hex"))
+from .storage import EVENT_FIELDS
 SNAPSHOT_FIELDS = frozenset(("state", "transitions", "head", "public", "pcs_authority"))
 HALT_FIELDS = frozenset(("status", "state", "generation", "pcs_authority"))
 

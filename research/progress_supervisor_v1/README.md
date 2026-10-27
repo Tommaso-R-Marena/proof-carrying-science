@@ -1,6 +1,8 @@
 # Checked safety and progress for finite tool workflows
 
-The latest [native row gate](ROW_GATE.md) requires actual Lean approval of SQL
+The latest [storage observation boundary](STORAGE.md) adds consistent read
+transactions, fixed schema enforcement and bounded canonical receipt decoding.
+The preceding [native row gate](ROW_GATE.md) requires actual Lean approval of SQL
 before/after snapshots and carries fresh row proofs in versioned replay evidence.
 The preceding [transactional adapter refinement](ADAPTER.md) adds full-row precommit
 checks, a separately proved adapter model and actual SQL/Lean differential tests.
@@ -57,7 +59,9 @@ is not a generic executor for arbitrary model-provided tools.
 
 `Progress.lean` imports the unchanged `PCSActionShield` library and proves fifteen
 named theorems. `Wire.lean` adds four, `Codec.lean` adds eleven, and each generated
-concrete model adds four, for 34 audited closures:
+concrete model adds four, for the original 34 audited closures. The native adapter
+and row codec add seven and eleven respectively, for 52 required runtime closures
+([row gate details](ROW_GATE.md)):
 
 | Theorem | Scope |
 | --- | --- |
@@ -132,7 +136,7 @@ The original protected action-shield example can also be checked unchanged.
 ## Execution and evidence boundary
 
 The authority compiles fixed first-party Lean sources and numeric-only model
-literals, audits all 34 exact theorem names, runs pinned `leanchecker --fresh Main`
+literals, audits all 52 exact theorem names, runs pinned `leanchecker --fresh Main`
 over the compiled import closure, and compiles the same decision to native code.
 Every positive effect requires an actual native response. Linux memfd seals protect
 the captured executable image against writes/growth/shrinkage; file replacement

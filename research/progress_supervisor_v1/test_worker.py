@@ -106,7 +106,7 @@ def test_real_worker_sqlite_failure_returns_structured_refusal_without_effects(t
             db.execute("DROP TABLE meta")
         output, error = process.communicate(b'{"action":0}\n', timeout=60)
         assert process.returncode == 20 and not error
-    assert json.loads(output)["reason"] == "OperationalError"
+    assert json.loads(output)["reason"] == "StorageIntegrityError"
     with sqlite3.connect(out / "effects.sqlite") as db:
         assert db.execute("SELECT COUNT(*) FROM events").fetchone() == (0,)
         assert db.execute("SELECT COUNT(*) FROM public").fetchone() == (0,)

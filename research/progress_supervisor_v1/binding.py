@@ -16,7 +16,7 @@ SPEC_FILES = ("Adapter.lean", "AdapterBridge.lean", "AdapterTable.lean")
 NATIVE_FILES = ("Progress.lean", "Wire.lean", "Codec.lean", "Adapter.lean", "RowWire.lean", "Main.lean")
 HOST_FILES = (
     "authority.py", "certificate.py", "broker.py", "example.py", "trace.py",
-    "evidence.py", "worker.py", "__main__.py", "binding.py", "intake.py", "effects.py", "adapter.py",
+    "evidence.py", "worker.py", "__main__.py", "binding.py", "intake.py", "effects.py", "adapter.py", "storage.py",
 )
 
 

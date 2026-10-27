@@ -10,6 +10,7 @@ from pcs.jsonio import strict_json_loads
 from .certificate import encode,sha,propose,groups
 from .example import model
 from .authority import Authority,packet
+from . import storage
 from .effects import PRIVATE,PUBLIC,Rows,read_rows,project,check_effects
 
 _FIXED_AUTHORITY=None
@@ -48,20 +49,26 @@ class Broker:
         try:
             with self.path.open('xb'):pass  # Never adopt/rewrite an existing ledger.
             self._db=sqlite3.connect(self.path,isolation_level=None,check_same_thread=False)
-            self._db.execute('PRAGMA journal_mode=WAL');self._db.execute('PRAGMA synchronous=FULL')
-            self._db.executescript('CREATE TABLE meta(state INTEGER,generation INTEGER,head TEXT); CREATE TABLE events(id TEXT PRIMARY KEY,generation INTEGER UNIQUE,body_sha TEXT,event_json TEXT); CREATE TABLE payload(value TEXT,loaded INTEGER,sanitized INTEGER); CREATE TABLE public(value TEXT);')
+            storage.configure(self._db)
+            self._db.executescript('BEGIN IMMEDIATE; '+storage.SCHEMA)
             self._source_id=self._authority.source_id
             self._seed=self._authority.source_binding.seed(pre_sanitized)
             self._db.execute('INSERT INTO meta VALUES(0,0,?)',(self._seed,))
             self._db.execute('INSERT INTO payload VALUES(?,0,?)',(PUBLIC if pre_sanitized else PRIVATE,int(pre_sanitized)))
-            self._anchor=(0,0,self._seed)
-        except BaseException:raise
+            storage.check(self._db)
+            self._db.execute('COMMIT');self._anchor=(0,0,self._seed)
+        except BaseException:
+            self._closed=True
+            if hasattr(self,'_db'):
+                if self._db.in_transaction:self._db.execute('ROLLBACK')
+                self._db.close()
+            raise
     def _verify(self,pending_anchor=None):
-        self._authority.check();state=0;head=self._seed;generation=0
+        self._authority.check();storage.check(self._db);state=0;head=self._seed;generation=0
         payload=PUBLIC if self._pre else PRIVATE;loaded=0;sanitized=int(self._pre);public=[]
         edges=groups(model())
-        for rid,g,bsha,encoded in self._db.execute('SELECT id,generation,body_sha,event_json FROM events ORDER BY generation'):
-            event=json.loads(encoded);core={k:v for k,v in event.items() if k!='event_sha256'}
+        for rid,g,bsha,event in storage.events(self._db):
+            core={k:v for k,v in event.items() if k!='event_sha256'}
             if event.get('generation')!=generation+1 or event.get('source')!=state or event.get('previous_sha256')!=head or event.get('request_id')!=rid or event.get('body_sha256')!=bsha or g!=generation+1 or sha(encode(core))!=event.get('event_sha256'):raise ValueError('receipt chain corrupted')
             before_rows=Rows(payload,bool(loaded),bool(sanitized),tuple(public))
             req=packet(state,event['proposal']);reply=self._authority.query_raw(req)
@@ -135,14 +142,22 @@ class Broker:
                 # committing. The live anchor changes only after successful COMMIT.
                 self._verify((target,generation+1,event['event_sha256']))
                 self._db.execute('COMMIT');self._anchor=(target,generation+1,event['event_sha256'])
-                self._verify();return event
+                self.snapshot();return event
             except BaseException:
                 if self._db.in_transaction:self._db.execute('ROLLBACK')
                 raise
     def snapshot(self):
         with self._lock:
-            state,generation,head=self._verify()
-            return dict(state=state,transitions=generation,head=head,public=[v[0] for v in self._db.execute('SELECT value FROM public')],pcs_authority=False)
+            if self._closed:raise ValueError('broker closed/quarantined')
+            if self._db.in_transaction:raise storage.StorageIntegrityError('snapshot requires its own transaction')
+            self._db.execute('BEGIN')
+            try:
+                state,generation,head=self._verify()
+                result=dict(state=state,transitions=generation,head=head,public=[v[0] for v in self._db.execute('SELECT value FROM public')],pcs_authority=False)
+                self._db.execute('COMMIT');return result
+            except BaseException:
+                if self._db.in_transaction:self._db.execute('ROLLBACK')
+                raise
     def close(self):
         with self._lock:
             self._closed=True
