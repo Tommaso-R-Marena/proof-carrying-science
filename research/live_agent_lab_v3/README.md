@@ -89,7 +89,8 @@ checks pass. Completed case proofs do not imply that an interrupted suite finish
 
 ## Bring a bounded task plan
 
-`run --plan plan.json` accepts 1–16 cases with unique safe IDs, titles up to
+`run --plan plan.json` accepts 1–16 cases with unique safe IDs (`authority` is
+reserved for the verifier workspace), titles up to
 120 UTF-8 bytes, task text up to 4,096 bytes and exact Boolean fixture flags:
 
 ```json

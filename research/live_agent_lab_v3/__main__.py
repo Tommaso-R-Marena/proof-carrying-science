@@ -63,6 +63,8 @@ def main():
             if len(args.case)!=len(set(args.case)) or not set(args.case)<={c['id'] for c in plan['cases']}:
                 p.error("Use unique case IDs from the standard plan")
             plan["cases"]=[c for c in plan["cases"] if c["id"] in args.case]
+        if any(case["id"]=="authority" for case in plan["cases"]):
+            p.error("Case ID 'authority' is reserved for the native verifier workspace")
         frozen=run(args.bundle,args.dependencies,args.output,plan,progress=lambda text:print(text,file=sys.stderr,flush=True))
         write_report(frozen,args.output/"report.html","live");mode="live"
     else:

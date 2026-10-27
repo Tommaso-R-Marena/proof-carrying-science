@@ -204,6 +204,14 @@ def test_complete_actual_live_corpus_preserves_model_failures():
             assert all(bytes.fromhex(f["proposal_hex"]).startswith(b'```json\n') for f in parse(episode.frames_json))
 
 
+def test_cli_reserved_workspace_id_refuses_before_creating_output(tmp_path):
+    plan=dict(format=FORMAT,cases=[dict(id="authority",title="Control",task="Control",pre_sanitized=False,mode="oracle")])
+    source=tmp_path/"plan.json";write(source,plan);output=tmp_path/"output"
+    run=subprocess.run([sys.executable,"-m","research.live_agent_lab_v3","run",str(output),"--plan",str(source)],capture_output=True,timeout=15)
+    assert run.returncode==2 and b"reserved for the native verifier workspace" in run.stderr
+    assert not output.exists() and not run.stdout
+
+
 @pytest.mark.parametrize("fault",["request_observation","input_tokens","response_sequence","closed_count","late_control"])
 def test_real_model_dialogue_corruption_refuses(tmp_path,fault,monkeypatch):
     from research.real_model_execution_v2.oracle import Oracle
