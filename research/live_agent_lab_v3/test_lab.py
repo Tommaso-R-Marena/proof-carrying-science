@@ -142,6 +142,15 @@ def test_loaded_report_does_not_adopt_producer_proof_verdict(evidence):
     assert "Recorded responses · kernel replay checked" in html(suite,"replay")
 
 
+def test_loaded_export_does_not_link_unchecked_or_unavailable_proof_files(evidence):
+    suite=prepare(evidence,None)
+    page=html(suite,"loaded")
+    assert 'href="oracle/proofs/' not in page
+    assert "Capture-workflow-wire.lean" in page and "Run replay to generate and check local proof files." in page
+    for mode in ("live","replay"):
+        assert html(suite,mode).count('href="oracle/proofs/')==3
+
+
 def test_untrusted_task_and_title_are_escaped_and_report_has_no_active_content(evidence):
     payload='</style><script>window.pcsInjected=1</script><img src="https://example.invalid/leak">'
     replace(evidence,lambda v:v["plan"]["cases"][0].update(title="<script>bad</script>",task=payload))

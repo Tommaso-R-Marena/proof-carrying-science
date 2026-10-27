@@ -119,8 +119,9 @@ python -m research.live_agent_lab_v3 replay /tmp/new-live-lab /tmp/new-receiving
 ```
 
 `view` validates the complete trace and token/proposal correspondence, then labels
-the result **not replayed on this host**. It does not adopt producer proof metadata
-as a verdict. `replay` freezes all submitted bytes and comparison metadata before
+the result **not replayed on this host**. It lists expected proof names without
+linking unchecked producer files. It does not adopt producer proof metadata as a
+verdict. `replay` freezes all submitted bytes and comparison metadata before
 effects, rebuilds native authority, executes recorded proposals and compares exact
 receipts, captures, rows and newly generated proof inventories. It performs no new
 inference. Producer Lean source is never executed. Reports are passive views,

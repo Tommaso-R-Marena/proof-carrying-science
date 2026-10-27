@@ -63,8 +63,12 @@ def html(suite,mode="loaded"):
 <details><summary>Read the original proposal</summary><pre>{escape(raw)}</pre></details></li>''')
         proof=parse(episode.expected_proofs_json)
         proof_label="Producer proof metadata — replay to check" if mode=="loaded" else "Checks performed on this host"
-        links="".join(f'<li><a href="{case["id"]}/proofs/{name}">{label}</a></li>' for name,label in (
-            ("Capture-workflow-wire.lean","Exact action replies"),("Rows-workflow-rows.lean","Exact row replies"),("Path-workflow.lean","Completed path and progress bound")))
+        proof_files=(("Capture-workflow-wire.lean","Exact action replies"),("Rows-workflow-rows.lean","Exact row replies"),("Path-workflow.lean","Completed path and progress bound"))
+        # A loaded-only export can live anywhere, and intake neither copies nor
+        # verifies producer proof files. Link only locally generated evidence.
+        links=("".join(f'<li><code>{name}</code> · {label}</li>' for name,label in proof_files)
+               +'<li>Run replay to generate and check local proof files.</li>' if mode=="loaded" else
+               "".join(f'<li><a href="{case["id"]}/proofs/{name}">{label}</a></li>' for name,label in proof_files))
         navigation.append(f'<li><a href="#case-{case["id"]}">{escape(case["title"])} · {"public" if case["pre_sanitized"] else "confidential"}</a></li>')
         publication="Reported: approved summary published" if mode=="loaded" else "Published the approved summary"
         sections.append(f'''<details class="case" id="case-{case['id']}" {'open' if case_index==0 else ''}><summary class="workflow-toggle"><h2>{escape(case['title'])} <span class="fixture">· {'initially public' if case['pre_sanitized'] else 'initially confidential'}</span></h2></summary><div class="case-head"><span class="muted">{'Model responses' if case['mode']=='model' else 'Deterministic control; no model generation'}</span><span class="badge">{publication}</span></div>
