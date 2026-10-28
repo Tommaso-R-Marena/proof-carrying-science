@@ -20,7 +20,10 @@ def main():
                 assert page.locator('script,img,iframe,form').count()==0
                 for mode in ('raw','trie'):
                     link=page.locator(f'a[href="{mode}/report.html"]');assert link.count()==1
-                    link.focus();page.keyboard.press('Enter');assert page.title()=='PCS · Local Agent Lab';assert page.locator('.case').count()==16;page.go_back()
+                    link.focus()
+                    with page.expect_navigation(wait_until='load'):page.keyboard.press('Enter')
+                    assert page.title()=='PCS · Local Agent Lab' and page.locator('.case').count()==16
+                    page.go_back(wait_until='load');assert page.title()=='PCS · Action Format Experiment'
                 page.screenshot(path=str(a.output/(label+'.png')),full_page=True)
                 rows.append(dict(width=width,no_horizontal_overflow=True,keyboard_profile_navigation=True,active_content=False));page.close()
         finally:browser.close()

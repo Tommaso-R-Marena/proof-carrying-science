@@ -81,6 +81,15 @@ implementation. Development scratch Lean proof attempts that failed elaboration
 were never admitted as verified artifacts; only the successful exact sources and
 fresh axiom audits form the result.
 
+The initial comparison-page browser smoke asserted the destination title
+immediately after keyboard Enter, before navigation completed. The harness now
+waits for navigation/load while retaining destination title, case count and
+back-navigation assertions. Final Chromium checks passed at 1280 and 390 widths
+on the comparison page and both profile reports: keyboard navigation/disclosures,
+no horizontal overflow, no active content and no page-content network requests
+or dialogs. These are smoke checks, not human-user or complete accessibility
+validation. The initial failure record is retained with qualification evidence.
+
 ## Reproduction and boundaries
 
 `demo/registration.json`, `demo/comparison.json`, and the raw/trie suites retain
