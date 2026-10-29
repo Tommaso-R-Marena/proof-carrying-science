@@ -29,6 +29,7 @@ jobs:
         run: |
           python -m research.integration_v2.reconcile --require-committed
           python -m research.integration_v1.source_gate
+          python scripts/audit_current_readmes.py --check docs/integration/2026-10-29/README_AUDIT.json
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
           python -m pytest -q research/integration_v2/test_reconcile.py tests/test_integration_source_successor.py
           python -m pytest -p research.integration_v2.pytest_phase_context -q research/local_weights_v1/test_local.py::test_predecessor_sources_and_modes_are_unchanged research/causal_firewall_v1/test_capture.py::test_predecessor_sources_and_modes_are_preserved research/relational_release_v1/test_release.py::test_predecessor_blobs_preserved research/compositional_disclosure_v1/test_ledger.py::test_predecessor_blobs_preserved

@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V17 additionally pins the new source/results and documentation.
+reviewable; V18 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V17 manifest rather than rewriting old evidence or
+checker selects a new fixed V18 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -140,3 +140,14 @@ final finite-eliminator substitution; its three focused real replay/source/race
 cases subsequently passed in 75.34 seconds. The hosted diagnostic and required
 43-case job must qualify the exact committed successor before merge. Historical
 V16 source and failed runs remain preserved; no affirmative verdict is simulated.
+
+
+## Deterministic README inventory
+
+The final documentation replay found that the inventory included its own JSON
+report because its filename contains README. V18 inventories documentation text
+formats only, excluding JSON reports. The previous audit and program are retained
+under `predecessor/v17`. The corrected inventory covers 103 README documents and
+checks current entry-point links. CI now requires an exact deterministic inventory
+match with `--check`, which never rewrites an audit. This documentation repair
+does not change the V17 transport runtime, generated Lean proofs or study sources.

@@ -4,11 +4,11 @@ No historical/vendor/source-bound bytes are rewritten to refresh navigation.
 This is documentation checking, never verification or publication authority.
 """
 from pathlib import Path
+import argparse
 import hashlib
 import json
 import re
 import subprocess
-import sys
 from urllib.parse import unquote,urlsplit
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -20,7 +20,8 @@ CURRENT=frozenset(('README.md','formal/README.md','site/README.md','research/REA
 def audit():
     names=subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode().split('\0')
     rows=[];errors=[]
-    for name in sorted(n for n in names if 'readme' in Path(n).name.lower()):
+    for name in sorted(n for n in names if 'readme' in Path(n).name.lower()
+                       and Path(n).suffix.lower() in {'', '.md', '.markdown', '.rst', '.txt'}):
         path=ROOT/name;raw=path.read_bytes()
         if name in CURRENT:scope='CURRENT_ENTRY_POINT'
         elif '/vendor/' in name or '/upstream/' in name:scope='PRESERVED_UPSTREAM_SOURCE'
@@ -39,7 +40,16 @@ def audit():
 
 
 if __name__=='__main__':
+    parser=argparse.ArgumentParser(__doc__)
+    parser.add_argument('--check',action='store_true',help='Require the saved inventory to match without writing it')
+    parser.add_argument('output',nargs='?')
+    args=parser.parse_args()
     result=audit();raw=json.dumps(result,indent=2)+'\n'
-    if len(sys.argv)>1:Path(sys.argv[1]).write_text(raw)
+    if args.check:
+        if not args.output:parser.error('--check requires an inventory path')
+        if Path(args.output).read_bytes()!=raw.encode():
+            raise SystemExit('README inventory differs; review and refresh it explicitly')
+        print('README inventory matches; current links valid:',result['local_current_links_valid'])
+    elif args.output:Path(args.output).write_text(raw)
     else:print(raw,end='')
     raise SystemExit(0 if result['local_current_links_valid'] else 1)
