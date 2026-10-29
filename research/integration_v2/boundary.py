@@ -48,7 +48,7 @@ def main():
             print(json.dumps({"passed": False, "pcs_authority": False, "error": str(exc)}))
             return 1
         print(json.dumps(dict(result, passed=True, original_phase_guard=args.profile,
-                              admitted_contract="EXPLICIT_COMBINED_SOURCE_V14",
+                              admitted_contract="EXPLICIT_COMBINED_SOURCE_V15",
                               original_additions_only_predicate_claimed=False)))
         return 0
     return subprocess.run([sys.executable, "-m", args.profile], cwd=reconcile.ROOT).returncode

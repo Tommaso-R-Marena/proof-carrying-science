@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V14 additionally pins the new source/results and documentation.
+reviewable; V15 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V14 manifest rather than rewriting old evidence or
+checker selects a new fixed V15 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -78,9 +78,34 @@ Apache/public-source authorization.
 
 The V13 run exposed an embedded additions-only check in the transport invariant
 family audit. Its Ubuntu 22.04 job refused the combined tree before Lean ran.
-V14 explicitly selects the pinned whole-source contract when present and records
+V15 explicitly selects the pinned whole-source contract when present and records
 that the old predicate is not claimed. The original standalone branch remains
 unchanged, and its original audit source is retained under `predecessor/v13`.
 All four captured Lean sources, compilation, closure census, fresh object replay,
 limits and source/object stability checks are unchanged. This is source admission
 repair, not a fabricated kernel verdict or a weaker theorem.
+
+
+## Rational trace proof portability
+
+Hosted V14 qualification reproduced the inherited rational-reduction failure and
+showed that the monolithic finite normalization proof exceeded the existing 2 GiB
+limit. The receiver now constructs individual finite equality lemmas, then
+assembles the identical `trace_checked` proposition and unchanged following
+theorems. Incorrect initial/step/time data receive a separately kernel-checked
+counterexample witness; Python selects a witness but cannot establish its truth.
+Original compact/normalized proof renderers remain available for historical
+construction identity. Source hashes and successful proof bytes remain bound,
+including a distinct refutation-construction identity at export. Memory/deadline
+limits, theorem statements and standard axiom allowlists remain unchanged.
+
+The original 39-case local trace/construction suite passed in 518.90 seconds;
+additional export/legacy controls and current hosted qualification are separate.
+The required trace job now demands 41 successful cases, with zero skips. The
+original sources/tests are retained under `predecessor/v14`.
+
+The first manually dispatched model job stopped before inference because an
+inline Python download command had an unmatched parenthesis. The command is
+corrected and its real syntax is now parsed in the default CI unit job. That
+failed attempt produced no new model measurements and is not counted as a
+successful weight experiment. The retained 72-call local study is unchanged.

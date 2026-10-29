@@ -43,6 +43,8 @@ RECEIPT_REPAIR_IDENTITIES.update({'.github/workflows/pcs-ci.yml': ('fd9f0a7de9c8
 RECEIPT_REPAIR_IDENTITIES["README.md"] = ('0dcc965c85fb78f4e2521f6255b0010fc3212ddd63cac903ee8fdc236c4e0d5c', '75c933b85ceafd7b0a262b217d2b46856e4f57a47ecc0f4e356e8338c3b468c0')
 RECEIPT_REPAIR_IDENTITIES[".github/workflows/pcs-public-full-verification.yml"] = ("40e3cc3befb080f73439f80a2587e03324644c610f875d3c4bce1685319c9bf9", 'cfbf20ad09638a79d2dc96595a91082ec5377a21b79dd2e64bfec9e86066b921')
 
+RECEIPT_REPAIR_IDENTITIES["pcs/transport_trace_kernel_v1.py"] = ("f1b994bb9152a3622e8475d58ae6d96f0f6b94a4bb1c64f01dd1743a1e5ed0ae", '48c0f90b1e8315fe72d392b42c473f2215587c2ed3d2f6228be978987f12a03c')
+
 GATE_PATH = "research/integration_v1/source_gate.py"
 PREDECESSOR_GATE_SHA256 = "63b60bcec9538195f43506fed3102c37e960bb36654c57ee07e3d2452df6e625"
 

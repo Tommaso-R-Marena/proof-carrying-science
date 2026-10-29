@@ -18,8 +18,8 @@ import subprocess
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFEST = "docs/integration/2026-10-29/RECONCILIATION_V14.json"
-MANIFEST_SHA256 = 'f7e8a6d59ed9798bdafdccf72fe739c40b9ae84bb50310fbb9b8749e583502a2'
+MANIFEST = "docs/integration/2026-10-29/RECONCILIATION_V15.json"
+MANIFEST_SHA256 = '5521cc073da8021b13fdb78d32696245360e677b6dbea95cf7405497cce80139'
 API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
 WORKFLOW_PREDECESSOR_TREE = "1fdf12112394c1ad7438e2add4460fba8fd34da0"
 
@@ -102,7 +102,7 @@ def _historical_identities(root, prs):
 
 def _verify(root, manifest):
     """Internal checker; the CLI accepts only the compiled-in manifest digest."""
-    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14"}:
+    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15"}:
         raise ValueError("unsupported reconciliation")
     prs = manifest["prs"]
     numbers = [p["number"] for p in prs]
@@ -138,7 +138,7 @@ def _verify(root, manifest):
             if not equal and pr["disposition"] not in {"REVIEWED_ADAPTATION", "HELD"}:
                 raise ValueError("unreviewed adaptation")
             counts[item["relation"]] += 1
-    return {"format": "pcs-source-reconciliation-check-v14", "source_review_complete": True,
+    return {"format": "pcs-source-reconciliation-check-v15", "source_review_complete": True,
             "prs_checked": len(prs), "source_bindings_checked": sum(counts.values()),
             "relations": dict(counts), "dispositions": dict(Counter(p["disposition"] for p in prs)),
             "held_prs": [117], "release_ready": False, "pcs_authority": False,
@@ -219,8 +219,8 @@ def check(*, require_committed=False, live=False):
     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
         raise ValueError("reconciliation manifest differs from fixed reviewed digest")
     manifest = _json(raw)
-    if manifest["format"] != "pcs-source-reconciliation-v14":
-        raise ValueError("current combined admission requires explicit V14 format")
+    if manifest["format"] != "pcs-source-reconciliation-v15":
+        raise ValueError("current combined admission requires explicit V15 format")
     result = _verify(ROOT, manifest)
     _snapshot(ROOT, manifest)
     _workflows(ROOT, manifest)

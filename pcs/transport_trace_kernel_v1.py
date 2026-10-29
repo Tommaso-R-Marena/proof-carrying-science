@@ -139,7 +139,87 @@ def successful_proof(data, kernel):
     method=kernel.get('proof_construction','kernel')
     if method=='kernel':return render(data)
     if method=='finite_norm_num':return render_normalized(data)
+    if method=='finite_partitioned':return render_partitioned(data)
     raise ValueError('unknown fixed proof construction')
+
+
+def render_partitioned(data):
+    """Prove each finite equality separately, avoiding one large tactic context.
+
+    The input definitions, check proposition and following theorems are exact.
+    Every supporting fact is an ordinary kernel-checked rational equality.
+    """
+    original=render(data).decode()
+    n=len(data['model']['initial']);steps=data['steps']
+    facts=[]
+    for i in range(n):
+        facts.append(f'private theorem init_{i} : states 0 ({i} : Fin {n}) = initial ({i} : Fin {n}) := by norm_num [states, initial]')
+    for k in range(steps):
+        for i in range(n):
+            facts.append(f'private theorem recur_{k}_{i} : states ({k}+1) ({i} : Fin {n}) = step matrix (states {k}) ({i} : Fin {n}) := by norm_num [states, matrix, step, Fin.sum_univ_succ]')
+    for k in range(steps+1):
+        facts.append(f'private theorem clock_{k} : times {k} = ({k} : ℚ) * dt := by norm_num [times, dt]')
+    proof=['  refine ⟨?_, ?_, ?_⟩','  · intro i','    fin_cases i']
+    proof += [f'    · exact init_{i}' for i in range(n)]
+    proof += ['  · intro k i','    fin_cases k']
+    for k in range(steps):
+        proof += ['    · fin_cases i']+[f'      · exact recur_{k}_{i}' for i in range(n)]
+    proof += ['  · intro k','    fin_cases k']+[f'    · exact clock_{k}' for k in range(steps+1)]
+    needle='  exact ⟨by decide +kernel, by decide +kernel, by decide +kernel⟩'
+    if original.count(needle)!=1:raise ValueError('exact proof-construction boundary changed')
+    position=original.index('theorem trace_checked :')
+    source=original[:position]+'\n'.join(facts)+'\n'+original[position:]
+    return source.replace(needle,'\n'.join(proof)).replace('import PCSReal.TransportTrace\n',
+        'import PCSReal.TransportTrace\nimport Mathlib.Algebra.BigOperators.Fin\nimport Mathlib.Tactic.FinCases\n',1).encode()
+
+
+def render_refutation(data):
+    """Select a counterexample arithmetically; Lean independently proves it.
+
+    Python chooses only the witness. An incorrect witness cannot prove false.
+    If no witness is found, retain the original negative kernel construction.
+    """
+    from fractions import Fraction
+    validate(data)
+    n=len(data['model']['initial']);steps=data['steps']
+    states=[[Fraction(v) for v in row] for row in data['states']]
+    matrix=[[Fraction(v) for v in row] for row in data['model']['matrix']]
+    initial=[Fraction(v) for v in data['model']['initial']]
+    witness=None
+    for i in range(n):
+        if states[0][i]!=initial[i]:
+            witness=(f'h.1 ({i} : Fin {n})','states, initial');break
+    if witness is None:
+        for k in range(steps):
+            for i in range(n):
+                if states[k+1][i]!=sum(matrix[i][j]*states[k][j] for j in range(n)):
+                    witness=(f'h.2.1 ({k} : Fin {steps}) ({i} : Fin {n})','states, matrix, step, Fin.sum_univ_succ');break
+            if witness is not None:break
+    if witness is None:
+        for k,value in enumerate(data['times']):
+            if Fraction(value)!=k*Fraction(data['dt']):
+                witness=(f'h.2.2 ({k} : Fin {steps+1})','times, dt');break
+    original=render(data,negative=True)
+    if witness is None:return original
+    needle=f'theorem trace_rejected : PCSReal.TransportTrace.check matrix initial states times dt {steps} = false := by decide +kernel'
+    replacement=f'''theorem trace_rejected : PCSReal.TransportTrace.check matrix initial states times dt {steps} = false := by
+  cases hc : PCSReal.TransportTrace.check matrix initial states times dt {steps} with
+  | false => rfl
+  | true =>
+    have h := hc
+    simp only [PCSReal.TransportTrace.check, decide_eq_true_eq] at h
+    have bad := {witness[0]}
+    norm_num [{witness[1]}] at bad'''
+    if original.count(needle.encode())!=1:raise ValueError('exact refutation boundary changed')
+    return original.replace(b'import PCSReal.TransportTrace\n',
+        b'import PCSReal.TransportTrace\nimport Mathlib.Algebra.BigOperators.Fin\n',1).replace(needle.encode(),replacement.encode())
+
+
+def successful_refutation(data, kernel):
+    method=kernel.get('negative_proof_construction','kernel')
+    if method=='kernel':return render(data,negative=True)
+    if method=='finite_witness':return render_refutation(data)
+    raise ValueError('unknown fixed negative proof construction')
 
 
 def kernel_replay(data, *, timeout=120):
@@ -177,17 +257,17 @@ def kernel_replay(data, *, timeout=120):
             if p.returncode and 'did not reduce to `isTrue` or `isFalse`' in p.stdout:
                 # Retain the original rejected proof/diagnostic. The alternative
                 # proves exactly the same check and must independently elaborate.
-                alternative=render_normalized(data)
-                alt_driver=private/'TraceReplayNormalized.lean';alt_driver.write_bytes(alternative)
+                alternative=render_partitioned(data)
+                alt_driver=private/'TraceReplayPartitioned.lean';alt_driver.write_bytes(alternative)
                 alt_cmd=[*cmd[:-1],str(alt_driver)]
                 p=subprocess.run(alt_cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
                 result['executions'].append({'command':alt_cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
                 if alt_driver.read_bytes()!=alternative:raise ValueError('normalized proof source changed during checking')
                 if p.returncode==0:
-                    result.update(proof_construction='finite_norm_num',proof_sha256=model_kernel.sha(alternative),
+                    result.update(proof_construction='finite_partitioned',proof_sha256=model_kernel.sha(alternative),
                         original_proof_sha256=model_kernel.sha(proof))
             if p.returncode:
-                negative_source=render(data,negative=True)
+                negative_source=render_refutation(data)
                 negative_driver=private/'TraceRejected.lean';negative_driver.write_bytes(negative_source)
                 cmd=[*cmd[:-1],str(negative_driver)]
                 neg=subprocess.run(cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
@@ -196,7 +276,8 @@ def kernel_replay(data, *, timeout=120):
                 if neg.returncode==0:
                     names=model_kernel._inventory(neg.stdout,model_kernel.REPLAY_THEOREMS+[NEGATIVE])
                     result.update(status='TRACE_FALSIFIED',negative_kernel_checked=True,
-                        negative_kernel_theorems=names,negative_proof_sha256=model_kernel.sha(render(data,negative=True)))
+                        negative_kernel_theorems=names,negative_proof_sha256=model_kernel.sha(negative_source),
+                        negative_proof_construction='finite_witness')
                 else:result['status']='TRACE_REJECTED'
             else:
                 result['kernel_theorems'].update(model_kernel._inventory(p.stdout,model_kernel.REPLAY_THEOREMS+LITERAL))
@@ -272,6 +353,9 @@ def export(output,result,contract_raw=None,trajectory_raw=None):
                 or result.get('contract_sha256')!=data['model']['contract_sha256']
                 or result.get('trajectory_sha256')!=data['trajectory_sha256']):
             raise ValueError('exported certificate differs from verified proof')
+        if (result['kernel'].get('negative_kernel_checked') is True
+                and model_kernel.sha(successful_refutation(data,result['kernel']))!=result['kernel'].get('negative_proof_sha256')):
+            raise ValueError('exported refutation differs from verified proof')
     frozen=sources() if result.get('trace_certificate') else {}
     if frozen and {n:model_kernel.sha(raw) for n,raw in frozen.items()}!=result['kernel']['source_sha256']:
         raise ValueError('source substitution before trace evidence export')
@@ -282,10 +366,10 @@ def export(output,result,contract_raw=None,trajectory_raw=None):
     if data:=result.get('trace_certificate'):
         (output/'trace-certificate.json').write_bytes(encode(data))
         (output/'TraceReplay.lean').write_bytes(successful_proof(data,result['kernel']))
-        if result['kernel'].get('proof_construction')=='finite_norm_num':
+        if result['kernel'].get('proof_construction') in {'finite_norm_num','finite_partitioned'}:
             (output/'TraceReplayKernelAttempt.lean').write_bytes(render(data))
         if result['kernel']['negative_kernel_checked']:
-            (output/'TraceRejected.lean').write_bytes(render(data,negative=True))
+            (output/'TraceRejected.lean').write_bytes(successful_refutation(data,result['kernel']))
         for name,raw in frozen.items():
             p=output/'receiving-source'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
     (output/'SHA256.json').write_bytes(encode({str(p.relative_to(output)):model_kernel.sha(p.read_bytes())

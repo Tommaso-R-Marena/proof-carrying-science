@@ -35,7 +35,7 @@ def test_negative_first_attempt_has_genuinely_checked_normalized_fallback(monkey
     monkeypatch.setattr(subprocess,'run',negative_first)
     result=trace.replay(CONTRACT,CSV,timeout=180)
     assert injected and result['accepted'] and result['kernel']['kernel_checked']
-    assert result['kernel']['proof_construction']=='finite_norm_num'
+    assert result['kernel']['proof_construction']=='finite_partitioned'
     assert len(result['kernel']['kernel_theorems'])==30
     assert all(set(v)<=model.APPROVED_AXIOMS for v in result['kernel']['kernel_theorems'].values())
     trace.export(tmp_path/'evidence',result,CONTRACT,CSV)
@@ -48,7 +48,7 @@ def test_real_positive_compile_does_not_authorize_changed_proof_bytes(monkeypatc
     real_run=subprocess.run;changed=[]
     def replace_after_real_compile(command,*args,**kwargs):
         result=real_run(command,*args,**kwargs)
-        if command and Path(str(command[-1])).name=='TraceReplay.lean' and result.returncode==0:
+        if command and Path(str(command[-1])).name in {'TraceReplay.lean','TraceReplayPartitioned.lean','TraceReplayNormalized.lean'} and result.returncode==0:
             path=Path(command[-1]);path.write_bytes(path.read_bytes()+b'\n-- replaced after checking\n')
             changed.append(True)
         return result
@@ -57,3 +57,37 @@ def test_real_positive_compile_does_not_authorize_changed_proof_bytes(monkeypatc
     assert changed and not result['accepted'] and not result['kernel']['kernel_checked']
     assert result['kernel']['status']=='UNAVAILABLE_OR_EXHAUSTED'
     assert 'generated proof source changed' in result['kernel']['error']
+
+
+def test_partitioned_certificate_keeps_exact_input_and_final_statement():
+    data=trace.prepare(CONTRACT,CSV);a=trace.render(data);b=trace.render_partitioned(data)
+    signature=b'theorem trace_checked : PCSReal.TransportTrace.check matrix initial states times dt 16 = true := by'
+    assert signature in a and signature in b
+    suffix=b'theorem recorded_states_and_times'
+    assert a[a.index(suffix):]==b[b.index(suffix):]
+    start=b'namespace PCSTransportTraceReplay'
+    end=b'theorem trace_checked'
+    assert a[a.index(start):a.index(end)] in b
+    assert b.count(b'private theorem recur_')==80
+    assert b'native_decide' not in b and b'sorry' not in b
+
+
+def test_legacy_negative_constructor_is_preserved():
+    import pytest
+    data=trace.prepare(CONTRACT,CSV)
+    assert trace.successful_refutation(data,{})==trace.render(data,negative=True)
+    with pytest.raises(ValueError):trace.successful_refutation(data,{'negative_proof_construction':'caller_verifier'})
+
+
+def test_actual_refutation_export_is_bound_to_checked_source(tmp_path):
+    import pytest
+    from copy import deepcopy
+    lines=CSV.decode().splitlines();row=lines[1].split(',');row[1]='0';lines[1]=','.join(row)
+    raw=('\n'.join(lines)+'\n').encode()
+    result=trace.replay(CONTRACT,raw,timeout=180)
+    assert not result['accepted'] and result['kernel']['negative_kernel_checked'] is True
+    trace.export(tmp_path/'negative',result,CONTRACT,raw)
+    assert model.sha((tmp_path/'negative/TraceRejected.lean').read_bytes())==result['kernel']['negative_proof_sha256']
+    altered=deepcopy(result);altered['kernel']['negative_proof_sha256']='0'*64
+    with pytest.raises(ValueError,match='refutation differs'):trace.export(tmp_path/'refused',altered,CONTRACT,raw)
+    assert not (tmp_path/'refused').exists()

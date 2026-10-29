@@ -48,7 +48,7 @@ def preservation() -> dict:
         checked = check(require_committed=True)
         return {"base": BASE, "head": git("rev-parse", "HEAD"),
                 "tree": git("rev-parse", "HEAD^{tree}"),
-                "admitted_contract": "EXPLICIT_COMBINED_SOURCE_V14",
+                "admitted_contract": checked["format"],
                 "original_additions_only_predicate_claimed": False,
                 "combined_source": checked}
     def tree(ref):
