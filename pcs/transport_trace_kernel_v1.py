@@ -186,7 +186,7 @@ def render_partitioned(data):
 
 
 def render_fragments(data):
-    """Compile bounded row lemmas separately, with identical literal definitions."""
+    """Compile at most eight literal equalities per separately checked module."""
     source=render_partitioned(data).decode()
     original=render(data).decode()
     start=source.index('private theorem init_0 :')
@@ -196,7 +196,9 @@ def render_fragments(data):
     groups={}
     for index,match in enumerate(matches):
         body=facts[match.start():matches[index+1].start() if index+1<len(matches) else len(facts)]
-        name=match[1];group='TraceRow'+name.split('_')[1] if name.startswith('recur_') else 'TraceBoundaryFacts'
+        # Bound arithmetic elaboration per process without launching one process
+        # for every small row (notably the 64-step two-cell regression).
+        group=f'TraceFacts{index//8:03d}'
         groups.setdefault(group,[]).append(body.replace('private theorem','theorem',1))
     base=original[:original.index('theorem trace_checked :')]+'end PCSTransportTraceReplay\n'
     files={'TraceLiteralData.lean':base.encode()}

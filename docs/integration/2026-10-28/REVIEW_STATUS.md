@@ -14,6 +14,6 @@ as recorded in the retained V12 evidence bundle.
 The user subsequently authorized qualified publication/merge and the additive
 actual-weight public study completed. Current source qualification, documentation,
 CI and remaining external conditions are recorded in the
-[V18 status](../2026-10-29/README.md). Neither historical qualification nor new
+[V19 status](../2026-10-29/README.md). Neither historical qualification nor new
 research results override the explicit PR #117 hold or establish legal, external
 partner, commercial or general AI-safety readiness.

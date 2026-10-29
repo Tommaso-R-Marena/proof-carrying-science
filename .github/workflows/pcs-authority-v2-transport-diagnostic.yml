@@ -7,6 +7,40 @@ on:
 permissions:
   contents: read
 jobs:
+  bounded-literal-probe:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Pinned source and exact Lean dependencies
+        run: |
+          set -euo pipefail
+          python -m research.integration_v2.reconcile --require-committed
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+      - name: Actual fragment checks after negative compact fault, including 64 steps
+        env:
+          PCS_REQUIRE_TRANSPORT_TRACE_KERNEL: '1'
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q tests/test_transport_proof_construction_v11.py::test_negative_first_attempt_has_genuinely_checked_normalized_fallback tests/test_transport_proof_construction_v11.py::test_64_step_real_fallback_fits_the_original_single_deadline --basetemp="$RUNNER_TEMP/fragment-probe" --junitxml="$RUNNER_TEMP/fragment-probe.xml"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: bounded-literal-fragment-probe
+          path: |
+            ${{ runner.temp }}/fragment-probe
+            ${{ runner.temp }}/fragment-probe.xml
+          if-no-files-found: error
   unchanged-transport-reproduction:
     if: ${{ github.event.repository.private == false }}
     runs-on: ubuntu-24.04

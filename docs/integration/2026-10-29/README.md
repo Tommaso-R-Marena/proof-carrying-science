@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V18 additionally pins the new source/results and documentation.
+reviewable; V19 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V18 manifest rather than rewriting old evidence or
+checker selects a new fixed V19 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -151,3 +151,25 @@ under `predecessor/v17`. The corrected inventory covers 103 README documents and
 checks current entry-point links. CI now requires an exact deterministic inventory
 match with `--check`, which never rewrites an audit. This documentation repair
 does not change the V17 transport runtime, generated Lean proofs or study sources.
+
+
+## Bounded equality groups and long-trace regression
+
+The V17 hosted diagnostic accepted the original 16-step scientific trace and
+all four registered stack-limit repetitions, each with actual Lean closure checks.
+Its original 34-test suite then reported 33 passes and one failure: the 64-step
+two-cell oscillation. The per-row construction launches 67 proof processes for
+that case. V19 instead groups at most eight literal equalities per module,
+including boundary facts: 27 processes for the long case and 15 for the original
+scientific trace. The exact definitions, final theorem and all closure/resource
+checks are preserved; the single original 120-second trace deadline is unchanged.
+
+A new test forces only a negative compact-proof failure, then requires actual
+Lean checking of every fragment, all 30 closures and exact exported source hashes
+for the 64-step trace. It passed locally in 70.746 seconds; the three focused
+source/replay cases passed in 120.70 seconds total. This does not simulate any
+affirmative verdict. The required full trace census increases to 44 with no skips.
+A separate hosted probe publishes fresh proof exports and JUnit evidence while
+the existing diagnostic job retains all original commands byte for byte. Current
+hosted qualification must still pass before merge. Previous sources and failure
+evidence are preserved; no historical record is overwritten.

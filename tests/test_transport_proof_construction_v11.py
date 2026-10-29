@@ -95,7 +95,9 @@ def test_actual_refutation_export_is_bound_to_checked_source(tmp_path):
 
 def test_fragment_sources_keep_exact_data_and_final_statement():
     data=trace.prepare(CONTRACT,CSV);fragments=trace.render_fragments(data)
-    assert len(fragments)==19
+    assert len(fragments)==15
+    assert all(raw.count(b'\ntheorem ')<=8 for name,raw in fragments.items()
+               if name.startswith('TraceFacts'))
     original=trace.render(data)
     assert fragments['TraceLiteralData.lean'].startswith(original[:original.index(b'theorem trace_checked :')])
     driver=fragments['TraceReplayFragments.lean'];suffix=b'theorem recorded_states_and_times'
@@ -121,3 +123,31 @@ def test_caller_mutation_cannot_change_the_verified_fallback_snapshot(monkeypatc
     assert result['proof_construction']=='finite_fragments'
     assert result['trace_certificate_sha256']==original
     assert result['trace_certificate_sha256']!=model.sha(canonicalize_jcs_bytes(data))
+
+
+def test_64_step_real_fallback_fits_the_original_single_deadline(monkeypatch,tmp_path):
+    import json
+    from pcs.canonical_json import canonicalize_jcs_bytes
+    contract=json.loads(CONTRACT)
+    contract['cells']=[{'id':'A','volume':'1','initial_concentration':'1'},
+                       {'id':'B','volume':'1','initial_concentration':'0'}]
+    contract['edges']=[{'left':'A','right':'B','conductance':'1'}]
+    contract['steps']=64;contract['time_step']='1'
+    contract_raw=canonicalize_jcs_bytes(contract)
+    csv=('time_s,A,B\n'+''.join(f'{k},{1-k%2},{k%2}\n' for k in range(65))).encode()
+    real_run=subprocess.run;injected=[]
+    def negative_compact(command,*args,**kwargs):
+        if command and Path(str(command[-1])).name=='TraceReplay.lean' and not injected:
+            injected.append(True)
+            return subprocess.CompletedProcess(command,1,stdout='did not reduce to `isTrue` or `isFalse`',stderr='')
+        return real_run(command,*args,**kwargs)
+    monkeypatch.setattr(subprocess,'run',negative_compact)
+    result=trace.replay(contract_raw,csv,timeout=120)
+    assert injected and result['accepted'],json.dumps(result,sort_keys=True)
+    kernel=result['kernel']
+    assert kernel['proof_construction']=='finite_fragments' and kernel['elapsed_seconds']<120
+    assert len(kernel['kernel_theorems'])==30
+    trace.export(tmp_path/'evidence',result,contract_raw,csv)
+    for name,digest in kernel['proof_fragment_sha256'].items():
+        exported='TraceReplay.lean' if name=='TraceReplayFragments.lean' else name
+        assert model.sha((tmp_path/'evidence'/exported).read_bytes())==digest
