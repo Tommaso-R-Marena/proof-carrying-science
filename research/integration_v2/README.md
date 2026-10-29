@@ -1,7 +1,7 @@
 # Explicit combined-source qualification
 
-The current contract is **V16**, under
-`docs/integration/2026-10-29/RECONCILIATION_V16.json`. It retains the exact historical
+The current contract is **V17**, under
+`docs/integration/2026-10-29/RECONCILIATION_V17.json`. It retains the exact historical
 70-PR census (69 reviewed source integrations plus held #117), original source
 identities, reviewed adaptation reasons, modes and the complete combined tree.
 It additionally pins the new public-study implementation, retained real-model
@@ -30,7 +30,7 @@ configuration remain trusted; these hashes are not an immutable security root.
 
 The original phase-specific preservation programs and model-capture test files
 remain byte-exact. Workflows explicitly select `integration_v2.boundary` and the
-V16 whole-tree predicate. Four historical source assertions run unchanged at
+V17 whole-tree predicate. Four historical source assertions run unchanged at
 their original commits, with current committed qualification before/after. All
 other test nodes execute normally. No assertion or Lean verdict is mocked.
 

@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V16 additionally pins the new source/results and documentation.
+reviewable; V17 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V16 manifest rather than rewriting old evidence or
+checker selects a new fixed V17 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -121,3 +121,22 @@ does not supply a precomputed answer. Negative witnesses use the same reduction.
 All 41 local tests passed in 289.29 seconds under the unchanged 2 GiB bound.
 This is a local result; the new protected hosted run must confirm portability.
 The previous constructor source is retained under `predecessor/v15`.
+
+
+## Bounded fragment replay and caller snapshot
+
+The V16 hosted diagnostic still exhausted interpreter memory. V17 compiles
+the literal data, boundary equalities and each recurrence row into separately
+checked modules, then composes exactly the original check using `Fin.cases`.
+It avoids the finite-case tactic import in this new construction. Each process
+keeps the existing 2 GiB limit; all fragments share the original single deadline.
+Generated source and compiled object identities are checked throughout replay.
+Export includes every exact generated source required for independent replay.
+The input is detached from caller-owned containers before subprocess execution.
+No mutable-host isolation or new mathematical result is inferred from these controls.
+
+The 43-case local trace/construction suite passed in 404.81 seconds before the
+final finite-eliminator substitution; its three focused real replay/source/race
+cases subsequently passed in 75.34 seconds. The hosted diagnostic and required
+43-case job must qualify the exact committed successor before merge. Historical
+V16 source and failed runs remain preserved; no affirmative verdict is simulated.

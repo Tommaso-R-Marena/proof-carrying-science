@@ -140,6 +140,7 @@ def successful_proof(data, kernel):
     if method=='kernel':return render(data)
     if method=='finite_norm_num':return render_normalized(data)
     if method=='finite_partitioned':return render_partitioned(data)
+    if method=='finite_fragments':return render_fragments(data)['TraceReplayFragments.lean']
     raise ValueError('unknown fixed proof construction')
 
 
@@ -182,6 +183,40 @@ def render_partitioned(data):
     source=original[:position]+'\n'.join(facts)+'\n'+original[position:]
     return source.replace(needle,'\n'.join(proof)).replace('import PCSReal.TransportTrace\n',
         'import PCSReal.TransportTrace\nimport Mathlib.Algebra.BigOperators.Fin\nimport Mathlib.Tactic.FinCases\n',1).encode()
+
+
+def render_fragments(data):
+    """Compile bounded row lemmas separately, with identical literal definitions."""
+    source=render_partitioned(data).decode()
+    original=render(data).decode()
+    start=source.index('private theorem init_0 :')
+    end=source.index('theorem trace_checked :')
+    facts=source[start:end]
+    matches=list(re.finditer(r'^private theorem ((?:init|recur|clock)_[0-9_]+) :',facts,re.M))
+    groups={}
+    for index,match in enumerate(matches):
+        body=facts[match.start():matches[index+1].start() if index+1<len(matches) else len(facts)]
+        name=match[1];group='TraceRow'+name.split('_')[1] if name.startswith('recur_') else 'TraceBoundaryFacts'
+        groups.setdefault(group,[]).append(body.replace('private theorem','theorem',1))
+    base=original[:original.index('theorem trace_checked :')]+'end PCSTransportTraceReplay\n'
+    files={'TraceLiteralData.lean':base.encode()}
+    for group,bodies in groups.items():
+        files[group+'.lean']=('import TraceLiteralData\nimport Mathlib.Algebra.BigOperators.Fin\nnamespace PCSTransportTraceReplay\nopen PCSReal.Transport PCSTransportReplay\n'+''.join(bodies)+'end PCSTransportTraceReplay\n').encode()
+    driver='import TraceLiteralData\n'
+    driver+=''.join('import '+group+'\n' for group in groups)
+    def finite_cases(proofs):
+        result='(fun impossible => Fin.elim0 impossible)'
+        for proof in reversed(proofs):result=f'(Fin.cases {proof} {result})'
+        return result
+    n=len(data['model']['initial']);steps=data['steps']
+    initial=finite_cases([f'init_{i}' for i in range(n)])
+    rows=finite_cases([finite_cases([f'recur_{k}_{i}' for i in range(n)]) for k in range(steps)])
+    clock=finite_cases([f'clock_{k}' for k in range(steps+1)])
+    tail=source[end:];proof_start=tail.index('  refine ⟨?_, ?_, ?_⟩');following=tail.index('theorem recorded_states_and_times')
+    tail=tail[:proof_start]+f'  exact ⟨{initial}, {rows}, {clock}⟩\n'+tail[following:]
+    driver+='namespace PCSTransportTraceReplay\nopen PCSReal.Transport PCSTransportReplay\n'+tail
+    files['TraceReplayFragments.lean']=driver.encode()
+    return files
 
 
 def render_refutation(data):
@@ -239,6 +274,9 @@ def kernel_replay(data, *, timeout=120):
     if type(timeout) not in {int,float} or not 0 < timeout <= 180:
         raise ValueError('kernel stage timeout must lie within (0,180]')
     validate(data)
+    # Detach caller-owned containers before any checking subprocess can yield.
+    data=json.loads(encode(data))
+    validate(data)
     started=time.monotonic();deadline=started+timeout
     def remaining():
         value=deadline-time.monotonic()
@@ -270,15 +308,29 @@ def kernel_replay(data, *, timeout=120):
             if p.returncode and 'did not reduce to `isTrue` or `isFalse`' in p.stdout:
                 # Retain the original rejected proof/diagnostic. The alternative
                 # proves exactly the same check and must independently elaborate.
-                alternative=render_partitioned(data)
-                alt_driver=private/'TraceReplayPartitioned.lean';alt_driver.write_bytes(alternative)
-                alt_cmd=[*cmd[:-1],str(alt_driver)]
-                p=subprocess.run(alt_cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
-                result['executions'].append({'command':alt_cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
-                if alt_driver.read_bytes()!=alternative:raise ValueError('normalized proof source changed during checking')
+                fragments=render_fragments(data);objects={};fragment_log=''
+                for name,raw in fragments.items():
+                    fragment=private/name;fragment.write_bytes(raw)
+                    final=name=='TraceReplayFragments.lean'
+                    fragment_cmd=[lean,'-j1','-M2048','-D','Elab.async=false','--root='+str(private)]
+                    if not final:fragment_cmd+=['-o',str(fragment.with_suffix('.olean'))]
+                    fragment_cmd+=[str(fragment)]
+                    p=subprocess.run(fragment_cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
+                    result['executions'].append({'command':fragment_cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
+                    if any((private/n).read_bytes()!=b for n,b in fragments.items() if (private/n).exists()):
+                        raise ValueError('fragment proof source changed during checking')
+                    if any(model_kernel.sha((private/n).read_bytes())!=h for n,h in objects.items()):
+                        raise ValueError('compiled fragment changed during checking')
+                    if p.returncode:break
+                    if name=='TraceLiteralData.lean':fragment_log=p.stdout
+                    if not final:objects[fragment.with_suffix('.olean').name]=model_kernel.sha(fragment.with_suffix('.olean').read_bytes())
                 if p.returncode==0:
-                    result.update(proof_construction='finite_partitioned',proof_sha256=model_kernel.sha(alternative),
-                        original_proof_sha256=model_kernel.sha(proof))
+                    # Imports do not repeat the Data module's axiom print commands.
+                    p=subprocess.CompletedProcess(p.args,p.returncode,stdout=fragment_log+p.stdout,stderr=p.stderr)
+                    result.update(proof_construction='finite_fragments',
+                        proof_sha256=model_kernel.sha(fragments['TraceReplayFragments.lean']),
+                        proof_fragment_sha256={n:model_kernel.sha(b) for n,b in fragments.items()},
+                        proof_fragment_object_sha256=objects,original_proof_sha256=model_kernel.sha(proof))
             if p.returncode:
                 negative_source=render_refutation(data)
                 negative_driver=private/'TraceRejected.lean';negative_driver.write_bytes(negative_source)
@@ -369,6 +421,10 @@ def export(output,result,contract_raw=None,trajectory_raw=None):
         if (result['kernel'].get('negative_kernel_checked') is True
                 and model_kernel.sha(successful_refutation(data,result['kernel']))!=result['kernel'].get('negative_proof_sha256')):
             raise ValueError('exported refutation differs from verified proof')
+    if result.get('trace_certificate') and result['kernel'].get('proof_construction')=='finite_fragments':
+        expected={n:model_kernel.sha(b) for n,b in render_fragments(result['trace_certificate']).items()}
+        if expected!=result['kernel'].get('proof_fragment_sha256'):
+            raise ValueError('exported fragment source differs from verified proof')
     frozen=sources() if result.get('trace_certificate') else {}
     if frozen and {n:model_kernel.sha(raw) for n,raw in frozen.items()}!=result['kernel']['source_sha256']:
         raise ValueError('source substitution before trace evidence export')
@@ -379,8 +435,14 @@ def export(output,result,contract_raw=None,trajectory_raw=None):
     if data:=result.get('trace_certificate'):
         (output/'trace-certificate.json').write_bytes(encode(data))
         (output/'TraceReplay.lean').write_bytes(successful_proof(data,result['kernel']))
-        if result['kernel'].get('proof_construction') in {'finite_norm_num','finite_partitioned'}:
+        if result['kernel'].get('proof_construction') in {'finite_norm_num','finite_partitioned','finite_fragments'}:
             (output/'TraceReplayKernelAttempt.lean').write_bytes(render(data))
+        if result['kernel'].get('proof_construction')=='finite_fragments':
+            fragments=render_fragments(data)
+            if {n:model_kernel.sha(b) for n,b in fragments.items()}!=result['kernel'].get('proof_fragment_sha256'):
+                raise ValueError('exported fragment source differs from verified proof')
+            for name,raw in fragments.items():
+                if name!='TraceReplayFragments.lean':(output/name).write_bytes(raw)
         if result['kernel']['negative_kernel_checked']:
             (output/'TraceRejected.lean').write_bytes(successful_refutation(data,result['kernel']))
         for name,raw in frozen.items():

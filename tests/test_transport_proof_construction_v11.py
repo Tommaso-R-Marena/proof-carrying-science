@@ -35,7 +35,7 @@ def test_negative_first_attempt_has_genuinely_checked_normalized_fallback(monkey
     monkeypatch.setattr(subprocess,'run',negative_first)
     result=trace.replay(CONTRACT,CSV,timeout=180)
     assert injected and result['accepted'] and result['kernel']['kernel_checked']
-    assert result['kernel']['proof_construction']=='finite_partitioned'
+    assert result['kernel']['proof_construction']=='finite_fragments'
     assert len(result['kernel']['kernel_theorems'])==30
     assert all(set(v)<=model.APPROVED_AXIOMS for v in result['kernel']['kernel_theorems'].values())
     trace.export(tmp_path/'evidence',result,CONTRACT,CSV)
@@ -48,7 +48,7 @@ def test_real_positive_compile_does_not_authorize_changed_proof_bytes(monkeypatc
     real_run=subprocess.run;changed=[]
     def replace_after_real_compile(command,*args,**kwargs):
         result=real_run(command,*args,**kwargs)
-        if command and Path(str(command[-1])).name in {'TraceReplay.lean','TraceReplayPartitioned.lean','TraceReplayNormalized.lean'} and result.returncode==0:
+        if command and Path(str(command[-1])).name in {'TraceReplay.lean','TraceReplayPartitioned.lean','TraceReplayNormalized.lean','TraceReplayFragments.lean'} and result.returncode==0:
             path=Path(command[-1]);path.write_bytes(path.read_bytes()+b'\n-- replaced after checking\n')
             changed.append(True)
         return result
@@ -91,3 +91,33 @@ def test_actual_refutation_export_is_bound_to_checked_source(tmp_path):
     altered=deepcopy(result);altered['kernel']['negative_proof_sha256']='0'*64
     with pytest.raises(ValueError,match='refutation differs'):trace.export(tmp_path/'refused',altered,CONTRACT,raw)
     assert not (tmp_path/'refused').exists()
+
+
+def test_fragment_sources_keep_exact_data_and_final_statement():
+    data=trace.prepare(CONTRACT,CSV);fragments=trace.render_fragments(data)
+    assert len(fragments)==19
+    original=trace.render(data)
+    assert fragments['TraceLiteralData.lean'].startswith(original[:original.index(b'theorem trace_checked :')])
+    driver=fragments['TraceReplayFragments.lean'];suffix=b'theorem recorded_states_and_times'
+    assert driver[driver.index(suffix):]==original[original.index(suffix):]
+    assert all(b'native_decide' not in raw and b'sorry' not in raw and b'Mathlib.Tactic.FinCases' not in raw for raw in fragments.values())
+
+
+def test_caller_mutation_cannot_change_the_verified_fallback_snapshot(monkeypatch):
+    from pcs.canonical_json import canonicalize_jcs_bytes
+    data=trace.prepare(CONTRACT,CSV);original=model.sha(canonicalize_jcs_bytes(data))
+    real_run=subprocess.run;mutated=[];forced=[]
+    def racing(command,*args,**kwargs):
+        name=Path(str(command[-1])).name if command else ''
+        if name=='Transport.lean' and not mutated:
+            data['states'][-1][0]='0';mutated.append(True)
+        if name=='TraceReplay.lean' and not forced:
+            forced.append(True)
+            return subprocess.CompletedProcess(command,1,stdout='did not reduce to `isTrue` or `isFalse`',stderr='')
+        return real_run(command,*args,**kwargs)
+    monkeypatch.setattr(subprocess,'run',racing)
+    result=trace.kernel_replay(data,timeout=180)
+    assert mutated and forced and result['kernel_checked'] is True
+    assert result['proof_construction']=='finite_fragments'
+    assert result['trace_certificate_sha256']==original
+    assert result['trace_certificate_sha256']!=model.sha(canonicalize_jcs_bytes(data))
