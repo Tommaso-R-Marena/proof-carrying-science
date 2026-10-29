@@ -1,0 +1,45 @@
+name: PCS PGSC6 Crash Recovery and Authorization Journal (Research Only)
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/pgsc6_journaled_recovery*.py'
+      - 'research/proof-gated-self-improvement-v1/tests/test_pgsc6_journaled_recovery.py'
+      - '.github/workflows/pcs-pgsc6-journaled-recovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recovery-verification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Crash windows and adversarial write-ahead journal fault injection
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -p 'test_pgsc6_journaled_recovery.py' -v
+      - name: Kernel-build V6 and audit full formal corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          bash scripts/proof_gated_ci.sh
+      - name: Real Lean-authorized replay after interrupted model store and anchor commits
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/proof-gated-self-improvement-v1
+          python pgsc6_journaled_recovery_live.py
+      - name: Preserve full adversarial research regression suite
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -v

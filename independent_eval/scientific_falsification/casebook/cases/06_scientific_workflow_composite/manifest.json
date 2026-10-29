@@ -1,0 +1,114 @@
+{
+  "artifacts": [
+    {
+      "id": "rxn",
+      "media_type": "application/json",
+      "path": "reaction.json",
+      "role": "reaction-specification"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A_COMPOSITE",
+      "statement": "Composite computational checks do not jointly establish empirical scientific adequacy."
+    }
+  ],
+  "checks": [
+    {
+      "claim_ids": [
+        "C_RXN"
+      ],
+      "id": "E_RXN",
+      "products": [
+        {
+          "coefficient": 2,
+          "formula": "H2O"
+        }
+      ],
+      "reactants": [
+        {
+          "coefficient": 2,
+          "formula": "H2"
+        },
+        {
+          "coefficient": 1,
+          "formula": "O2"
+        }
+      ],
+      "type": "reaction_balance"
+    },
+    {
+      "claim_ids": [
+        "C_UNITS"
+      ],
+      "id": "E_UNITS",
+      "left_unit": "mol/L",
+      "right_unit": "mmol/mL",
+      "type": "unit_compatible"
+    }
+  ],
+  "claims": [
+    {
+      "assumptions": [
+        "A_COMPOSITE"
+      ],
+      "id": "C_RXN",
+      "kind": "computational",
+      "predicate": {
+        "products": [
+          {
+            "coefficient": 2,
+            "formula": "H2O"
+          }
+        ],
+        "reactants": [
+          {
+            "coefficient": 2,
+            "formula": "H2"
+          },
+          {
+            "coefficient": 1,
+            "formula": "O2"
+          }
+        ],
+        "type": "reaction_balance"
+      },
+      "required_evidence": [
+        "E_RXN"
+      ],
+      "statement": "2 H2 + O2 -> 2 H2O is element-balanced."
+    },
+    {
+      "assumptions": [
+        "A_COMPOSITE"
+      ],
+      "id": "C_UNITS",
+      "kind": "computational",
+      "predicate": {
+        "left_unit": "mol/L",
+        "right_unit": "mmol/mL",
+        "type": "unit_compatible"
+      },
+      "required_evidence": [
+        "E_UNITS"
+      ],
+      "statement": "mol/L and mmol/mL are dimensionally compatible."
+    }
+  ],
+  "subject": "independent-eval-scientific-workflow-composite",
+  "workflow": {
+    "nodes": [
+      {
+        "contract": {
+          "validation_scope": "element balance only"
+        },
+        "id": "N_BALANCE",
+        "inputs": [
+          "rxn"
+        ],
+        "operation": "reaction_balance_check",
+        "outputs": []
+      }
+    ]
+  }
+}

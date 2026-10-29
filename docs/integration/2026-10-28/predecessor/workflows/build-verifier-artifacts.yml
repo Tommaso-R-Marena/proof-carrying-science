@@ -1,0 +1,86 @@
+name: Build PCS Reviewer Verifiers
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - product/verifier-artifact-validation
+      - formal/lean-authoritative-production
+    paths:
+      - 'pcs/**'
+      - 'formal/**'
+      - 'scripts/build_verifier_artifact.py'
+      - 'scripts/smoke_standalone_verifier_v06.py'
+      - 'scripts/verifier_launcher.py'
+      - 'pyproject.toml'
+      - '.github/workflows/build-verifier-artifacts.yml'
+  pull_request:
+    paths:
+      - 'pcs/**'
+      - 'formal/**'
+      - 'scripts/build_verifier_artifact.py'
+      - 'scripts/smoke_standalone_verifier_v06.py'
+      - 'scripts/verifier_launcher.py'
+      - 'pyproject.toml'
+      - '.github/workflows/build-verifier-artifacts.yml'
+
+jobs:
+  build:
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_CROSS_PLATFORM_RUNNERS_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: [self-hosted, linux, x64, pcs-verifier-ci]
+            artifact: pcs-verifier-v06-linux
+          - runner: [self-hosted, windows, x64, pcs-verifier-ci]
+            artifact: pcs-verifier-v06-windows
+          - runner: [self-hosted, macos, x64, pcs-verifier-ci]
+            artifact: pcs-verifier-v06-macos
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install standalone build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[standalone]'
+      - name: Install Lean toolchain
+        shell: bash
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build Lean authority
+        shell: bash
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd formal
+          lake build pcs-lean-authority
+      - name: Build single-file reviewer verifier
+        run: python scripts/build_verifier_artifact.py -o dist/pcs-verifier-v06
+      - name: Smoke-test verifier help
+        shell: bash
+        run: |
+          if [ -f dist/pcs-verifier-v06.exe ]; then
+            dist/pcs-verifier-v06.exe --help
+          else
+            dist/pcs-verifier-v06 --help
+          fi
+      - name: Verify golden bundle through embedded Lean authority
+        shell: bash
+        run: |
+          if [ -f dist/pcs-verifier-v06.exe ]; then
+            python scripts/smoke_standalone_verifier_v06.py dist/pcs-verifier-v06.exe
+          else
+            python scripts/smoke_standalone_verifier_v06.py dist/pcs-verifier-v06
+          fi
+      - name: Upload verifier and SHA-256 manifest
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            dist/pcs-verifier-v06*
+          if-no-files-found: error

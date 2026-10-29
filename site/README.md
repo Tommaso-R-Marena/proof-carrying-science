@@ -1,39 +1,24 @@
-# PCS launch-preview website
+# Archived PCS launch preview
 
-The current launch-preview site is intentionally static so it can be hosted almost anywhere.
+This directory preserves an earlier static preview. The current public website
+is [proof-carrying-science-site](https://github.com/Tommaso-R-Marena/proof-carrying-science-site),
+with [the beginner investigation](https://proof-carrying-science-site.marenatommaso.workers.dev/experience.html)
+on the existing Cloudflare Workers hostname. Website changes and deployment gates
+belong in that separate repository. Serving this directory does not reproduce the
+current website, Commons backend or research/game pages.
 
-## Preview locally
+To inspect this historical preview locally from the core repository root:
 
-From the repository root:
-
-```bash
-python -m http.server 8000 --directory site
+```sh
+python -m http.server 8000 --bind 127.0.0.1 --directory site
 ```
 
-Then open:
+Open `http://127.0.0.1:8000/` or `http://127.0.0.1:8000/demo.html`.
+The browser demonstration is illustrative and does not replace the production
+Lean authority or independent package replay.
 
-```text
-http://localhost:8000/
-```
-
-The interactive demo is:
-
-```text
-http://localhost:8000/demo.html
-```
-
-## Scope
-
-The browser demo is illustrative. It mirrors the PCS assurance model but does not replace the production Python verifier, real Ed25519 verification, or Lean kernel.
-
-Before making the site public:
-
-1. review company/name/trademark choice;
-2. add a contact route;
-3. decide whether the repository/site itself should be public;
-4. remove the "private design-partner alpha" label only after an external pilot exists;
-5. preserve all explicit non-claims around biological, clinical, GxP, and regulatory validity.
-
-## Hosting
-
-The files are deployable to GitHub Pages, Cloudflare Pages, Vercel, Netlify, or any static web host. GitHub Actions runner availability is currently unreliable on this repository, so local preview is the deterministic path today.
+Core, website and CertiForge source publication is already authorized. Long-term
+branding, contact/domain choices and third-party rights remain separately scoped
+requirements; a custom domain is optional. Preserve non-claims about biological,
+clinical, GxP and regulatory validity. Current project instructions are in the
+[root README](../README.md), not this archived preview.

@@ -1,0 +1,33 @@
+{
+  "case_id": "RAW-VALID-001",
+  "ground_truth_label": "valid",
+  "distinction_tags": [
+    "cryptographic_validity",
+    "formally_justified_computational"
+  ],
+  "title": "Valid computational claim",
+  "summary": "Computational claim with matching checks within declared assumptions.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Predictions match declared model.",
+        "kind": "computational",
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "id": "E1",
+        "type": "reference_match",
+        "result": "pass"
+      }
+    ],
+    "limitations": [
+      "No biological adequacy claimed."
+    ]
+  },
+  "reviewer_prompt": "Accept as valid computational claim within limitations."
+}

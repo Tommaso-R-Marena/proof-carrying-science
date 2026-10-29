@@ -1,0 +1,51 @@
+{
+  "format": "pcs-open-model-provenance-v1",
+  "upstream_metadata": [
+    {
+      "id": "Qwen/Qwen3.8-27B",
+      "sha": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+      "lastModified": "2026-08-14T15:00:01.000Z",
+      "license": "apache-2.0",
+      "gated": false,
+      "private": false
+    },
+    {
+      "id": "google/gemma-4-26B-A4B-it",
+      "sha": "4d7ae4984b7db7de8f8457170b3f1a419ee76d52",
+      "lastModified": "2026-07-20T16:42:12.000Z",
+      "license": "apache-2.0",
+      "gated": false,
+      "private": false
+    },
+    {
+      "id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+      "sha": "744b1880a37996c5d56bf454ae164dfd74d77c4e",
+      "lastModified": "2026-08-24T23:48:25.000Z",
+      "license": "other",
+      "gated": false,
+      "private": false
+    }
+  ],
+  "hosted_weight_attestation": false,
+  "global_sota_ranking": false,
+  "sources": [
+    "https://developers.cloudflare.com/workers-ai/models/nemotron-3-120b-a12b/",
+    "https://developers.cloudflare.com/workers-ai/models/gemma-4-26b-a4b-it/",
+    "https://developers.cloudflare.com/workers-ai/models/qwen3.8-27b/",
+    "https://developers.cloudflare.com/workers-ai/platform/pricing/"
+  ],
+  "metadata_capture_completed_utc": "2026-10-22T18:54:26.784158+00:00",
+  "timestamp_source": "Last upstream metadata capture file modification time",
+  "primary_requested_models": [
+    "@cf/nvidia/nemotron-3-120b-a12b",
+    "@cf/qwen/qwen3.8-27b"
+  ],
+  "quarantined_endpoint": {
+    "requested_model": "@cf/google/gemma-4-26b-a4b-it",
+    "unmatched_response_model": "@cf/google/gemma-4-26b-a4b-it-external",
+    "unmatched_responses": 19,
+    "pilot_requests": 23,
+    "alias_equivalence_assumed": false,
+    "reason": "Strict identity gate refused the unmatched backend identifier; primary evaluation excludes the endpoint."
+  }
+}

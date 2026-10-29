@@ -1,0 +1,3359 @@
+[
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "PCSActionShield.olean",
+      "-c",
+      "PCSActionShield.c",
+      "PCSActionShield.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "Progress.olean",
+      "-c",
+      "Progress.c",
+      "Progress.lean"
+    ],
+    "returncode": 0,
+    "stdout": "Progress.lean:159:11: warning: Try `simp at h` instead of `simpa using h`\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n'PCSProgress.check_iff' depends on axioms: [propext, Quot.sound]\n'PCSProgress.force_succ' does not depend on any axioms\n'PCSProgress.force_mono' does not depend on any axioms\n'PCSProgress.winning_can_force' depends on axioms: [propext, Quot.sound]\n'PCSProgress.force_implies_winning' depends on axioms: [propext, Quot.sound]\n'PCSProgress.losing_no_finite_bound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.pick_sound' depends on axioms: [propext]\n'PCSProgress.pick_exists' depends on axioms: [propext, Quot.sound]\n'PCSProgress.choose_sound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.choose_available' depends on axioms: [propext, Quot.sound]\n'PCSProgress.chosen_step_progresses' depends on axioms: [propext, Quot.sound]\n'PCSProgress.path_bound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.completion_at_bound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.preserves_existing_safety' depends on axioms: [propext, Quot.sound]\n'PCSProgress.goals_halt' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "Wire.olean",
+      "-c",
+      "Wire.c",
+      "Wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressWire.selected_from_choose' depends on axioms: [propext, Quot.sound]\n'PCSProgressWire.selected_all_outcomes' depends on axioms: [propext, Quot.sound]\n'PCSProgressWire.halt_is_goal' depends on axioms: [propext, Quot.sound]\n'PCSProgressWire.malformed_refuses' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "Codec.olean",
+      "-c",
+      "Codec.c",
+      "Codec.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressCodec.request_roundtrip' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.request_injective' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.request_decode_canonical' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.selected_roundtrip' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.typed_roundtrip' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.process_selected_sound' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.raw_selected_all_outcomes' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.typed_octets' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.process_octets' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.batch_octets' depends on axioms: [propext, Quot.sound]\n'PCSProgressCodec.native_octets_roundtrip' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "Adapter.olean",
+      "-c",
+      "Adapter.c",
+      "Adapter.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressAdapter.initial_valid' depends on axioms: [propext, Quot.sound]\n'PCSProgressAdapter.step_refines' depends on axioms: [propext, Quot.sound]\n'PCSProgressAdapter.valid_publication' depends on axioms: [propext]\n'PCSProgressAdapter.goal_halts' depends on axioms: [propext]\n'PCSProgressAdapter.execution_invariant' depends on axioms: [propext, Quot.sound]\n'PCSProgressAdapter.execution_no_private_publication' depends on axioms: [propext, Quot.sound]\n'PCSProgressAdapter.completion_rows' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "RowWire.olean",
+      "-c",
+      "RowWire.c",
+      "RowWire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressRows.flag_bit' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.request_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSProgressRows.request_canonical' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.request_injective' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSProgressRows.check_sound' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.raw_acceptance' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.raw_refines' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.malformed_refuses' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.process_octets' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.batch_octets' depends on axioms: [propext, Quot.sound]\n'PCSProgressRows.native_octets_roundtrip' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "Data.olean",
+      "-c",
+      "Data.c",
+      "Data.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressData.certificate_checked' depends on axioms: [propext, Quot.sound]\n'PCSProgressData.winning' depends on axioms: [propext, Quot.sound]\n'PCSProgressData.losing' depends on axioms: [propext, Quot.sound]\n'PCSProgressData.wire_bounds' does not depend on any axioms\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/authority",
+      "-o",
+      "Main.olean",
+      "-c",
+      "Main.c",
+      "Main.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/leanchecker",
+      "--fresh",
+      "Main"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/leanc",
+      "-O2",
+      "-o",
+      "supervisor",
+      "Main.c",
+      "Data.c",
+      "RowWire.c",
+      "Adapter.c",
+      "Codec.c",
+      "Wire.c",
+      "Progress.c",
+      "PCSActionShield.c"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-000/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-000/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-000/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-000/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-001/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-001/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-001/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-001/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-001/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-001/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-002/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-002/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-002/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-002/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-002/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-002/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-003/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-003/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-003/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-003/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-003/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-003/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-004/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-004/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-004/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-004/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-004/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-004/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-005/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-005/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-005/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-005/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-005/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-005/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-006/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-006/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-006/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-006/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-006/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-006/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-007/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-007/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-007/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-007/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-007/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-007/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-008/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-008/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-008/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-008/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-008/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-008/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-009/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-009/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-009/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-009/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-009/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-009/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-010/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-010/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-010/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-010/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-010/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-010/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-011/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-011/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-011/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-011/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-011/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-011/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-012/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-012/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-012/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-012/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-012/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-012/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-013/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-013/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-013/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-013/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-013/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-013/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-014/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-014/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-014/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-014/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-014/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-014/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-015/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-015/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-015/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-015/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-015/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-015/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-016/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-016/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-016/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-016/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-016/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-016/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-017/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-017/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-017/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-017/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-017/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-017/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-018/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-018/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-018/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-018/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-018/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-018/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-019/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-019/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-019/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-019/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-019/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-019/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-020/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-020/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-020/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-020/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-020/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-020/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-021/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-021/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-021/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-021/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-021/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-021/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-022/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-022/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-022/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-022/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-022/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-022/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-023/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-023/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-023/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-023/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-023/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-023/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-024/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-024/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-024/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-024/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-024/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-024/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-025/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-025/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-025/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-025/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-025/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-025/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-026/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-026/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-026/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-026/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-026/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-026/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-027/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-027/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-027/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-027/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-027/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-027/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-028/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-028/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-028/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-028/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-028/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-028/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-029/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-029/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-029/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-029/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-029/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-029/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-030/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-030/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-030/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-030/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-030/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-030/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-031/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-031/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-031/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-031/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-031/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-031/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-032/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-032/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-032/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-032/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-032/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-032/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-033/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-033/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-033/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-033/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-033/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-033/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-034/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-034/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-034/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-034/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-034/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-034/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-035/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-035/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-035/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-035/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-035/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-035/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-036/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-036/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-036/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-036/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-036/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-036/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-037/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-037/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-037/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-037/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-037/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-037/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-038/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-038/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-038/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-038/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-038/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-038/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-039/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-039/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-039/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-039/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-039/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-039/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-040/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-040/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-040/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-040/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-040/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-040/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-041/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-041/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-041/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-041/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-041/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-041/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-042/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-042/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-042/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-042/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-042/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-042/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-043/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-043/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-043/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-043/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-043/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-043/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-044/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-044/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-044/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-044/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-044/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-044/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-045/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-045/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-045/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-045/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-045/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-045/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-046/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-046/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-046/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-046/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-046/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-046/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-047/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-047/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-047/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-047/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-047/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-047/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-048/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-048/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-048/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-048/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-048/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-048/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-049/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-049/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-049/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-049/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-049/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-049/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-050/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-050/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-050/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-050/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-050/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-050/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-051/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-051/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-051/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-051/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-051/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-051/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-052/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-052/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-052/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-052/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-052/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-052/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-053/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-053/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-053/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-053/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-053/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-053/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-054/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-054/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-054/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-054/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-054/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-054/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-055/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-055/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-055/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-055/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-055/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-055/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-056/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-056/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-056/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-056/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-056/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-056/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-057/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-057/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-057/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-057/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-057/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-057/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-058/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-058/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-058/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-058/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-058/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-058/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-059/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-059/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-059/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-059/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-059/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-059/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-060/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-060/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-060/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-060/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-060/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-060/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-061/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-061/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-061/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-061/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-061/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-061/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-062/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-062/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-062/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-062/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-062/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-062/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-063/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-063/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-063/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-063/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-063/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-063/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-064/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-064/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-064/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-064/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-064/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-064/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-065/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-065/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-065/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-065/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-065/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-065/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-066/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-066/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-066/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-066/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-066/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-066/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-067/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-067/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-067/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-067/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-067/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-067/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-068/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-068/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-068/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-068/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-068/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-068/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-069/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-069/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-069/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-069/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-069/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-069/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-070/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-070/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-070/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-070/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-070/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-070/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-071/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-071/proofs/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-071/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-071/proofs/Rows-workflow-rows.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CaptureRows.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-D",
+      "maxRecDepth=4096",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pcs-public-study-receiving-v2/episode-071/proofs",
+      "/tmp/pcs-public-study-receiving-v2/episode-071/proofs/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  }
+]

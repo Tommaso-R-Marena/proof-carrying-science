@@ -25,7 +25,7 @@ jobs:
       - name: Protected predecessor identity and complete test-module census
         id: census
         run: |
-          python -m research.progress_supervisor_v1.preservation
+          python -m research.integration_v2.boundary research.progress_supervisor_v1.preservation
           python -m research.progress_supervisor_v1.ci matrix >> "$GITHUB_OUTPUT"
   tests:
     needs: matrix
@@ -47,7 +47,7 @@ jobs:
       - name: Frozen dependencies and predecessor identity
         run: |
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
-          python -m research.progress_supervisor_v1.preservation
+          python -m research.integration_v2.boundary research.progress_supervisor_v1.preservation
       - name: Independent exact Lean toolchain
         if: ${{ matrix.shard != 'intake' }}
         run: source scripts/activate_lean_428.sh
@@ -85,7 +85,7 @@ jobs:
       - name: Frozen dependencies, exact source and fresh toolchain
         run: |
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
-          python -m research.progress_supervisor_v1.preservation
+          python -m research.integration_v2.boundary research.progress_supervisor_v1.preservation
           source scripts/activate_lean_428.sh
           mkdir -p "$RUNNER_TEMP/progress-evidence"
       - name: Actual batch capture and independent replay

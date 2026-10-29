@@ -1,0 +1,29 @@
+{
+  "case_id": "RAW-INTERP-001",
+  "ground_truth_label": "unsupported_interpretation",
+  "distinction_tags": [
+    "unsupported_interpretation"
+  ],
+  "title": "Unsupported causal interpretation",
+  "summary": "Narrative causal claim without certificate or receipt.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_CAUSE",
+        "statement": "Treatment causes Y.",
+        "kind": "interpretive",
+        "assessment": {
+          "status": "UNREPORTED"
+        }
+      }
+    ],
+    "checks": [],
+    "integrity_alerts": [
+      "no certificate"
+    ],
+    "limitations": [
+      "Narrative only."
+    ]
+  },
+  "reviewer_prompt": "Reject unsupported interpretation."
+}

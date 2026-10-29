@@ -119,6 +119,29 @@ end PCSTransportTraceReplay
     return (text+'\n'.join('#print axioms '+n for n in LITERAL)+'\n').encode()
 
 
+
+def render_normalized(data):
+    """Same positive proposition, explicit finite rational proof construction.
+
+    No native reflection, mathematical specification change or assumed verdict.
+    This fixed fallback addresses imported rational reducibility differences.
+    """
+    original = render(data)
+    needle = '  exact ⟨by decide +kernel, by decide +kernel, by decide +kernel⟩'
+    replacement = '  refine ⟨?_, ?_, ?_⟩\n  · intro i; fin_cases i <;> norm_num [states, initial]\n  · intro k i; fin_cases k <;> fin_cases i <;> norm_num [states, matrix, step, Fin.sum_univ_succ]\n  · intro k; fin_cases k <;> norm_num [times, dt]'
+    if original.count(needle.encode()) != 1:
+        raise ValueError('exact proof-construction boundary changed')
+    return original.replace(b'import PCSReal.TransportTrace\n',
+        b'import PCSReal.TransportTrace\nimport Mathlib.Algebra.BigOperators.Fin\nimport Mathlib.Tactic.FinCases\n',1).replace(needle.encode(),replacement.encode())
+
+
+def successful_proof(data, kernel):
+    method=kernel.get('proof_construction','kernel')
+    if method=='kernel':return render(data)
+    if method=='finite_norm_num':return render_normalized(data)
+    raise ValueError('unknown fixed proof construction')
+
+
 def kernel_replay(data, *, timeout=120):
     if type(timeout) not in {int,float} or not 0 < timeout <= 180:
         raise ValueError('kernel stage timeout must lie within (0,180]')
@@ -131,7 +154,7 @@ def kernel_replay(data, *, timeout=120):
     frozen=sources();hashes={n:model_kernel.sha(raw) for n,raw in frozen.items()}
     proof=render(data)
     result={'kernel_checked':False,'negative_kernel_checked':False,'status':'UNAVAILABLE_OR_EXHAUSTED',
-        'source_sha256':hashes,'proof_sha256':model_kernel.sha(proof),
+        'source_sha256':hashes,'proof_sha256':model_kernel.sha(proof),'proof_construction':'kernel',
         'trace_certificate_sha256':model_kernel.sha(encode(data)), 'kernel_theorems':{},'executions':[]}
     try:
         lean,env,version=model_kernel._environment(min(30,remaining()))
@@ -150,10 +173,26 @@ def kernel_replay(data, *, timeout=120):
             cmd=[lean,'-j1','-M2048','-D','Elab.async=false','--root='+str(private),str(driver)]
             p=subprocess.run(cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
             result['executions'].append({'command':cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
+            if driver.read_bytes()!=proof:raise ValueError('generated proof source changed during checking')
+            if p.returncode and 'did not reduce to `isTrue` or `isFalse`' in p.stdout:
+                # Retain the original rejected proof/diagnostic. The alternative
+                # proves exactly the same check and must independently elaborate.
+                alternative=render_normalized(data)
+                alt_driver=private/'TraceReplayNormalized.lean';alt_driver.write_bytes(alternative)
+                alt_cmd=[*cmd[:-1],str(alt_driver)]
+                p=subprocess.run(alt_cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
+                result['executions'].append({'command':alt_cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
+                if alt_driver.read_bytes()!=alternative:raise ValueError('normalized proof source changed during checking')
+                if p.returncode==0:
+                    result.update(proof_construction='finite_norm_num',proof_sha256=model_kernel.sha(alternative),
+                        original_proof_sha256=model_kernel.sha(proof))
             if p.returncode:
-                driver.write_bytes(render(data,negative=True))
+                negative_source=render(data,negative=True)
+                negative_driver=private/'TraceRejected.lean';negative_driver.write_bytes(negative_source)
+                cmd=[*cmd[:-1],str(negative_driver)]
                 neg=subprocess.run(cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
                 result['executions'].append({'command':cmd,'returncode':neg.returncode,'stdout':neg.stdout,'stderr':neg.stderr})
+                if negative_driver.read_bytes()!=negative_source:raise ValueError('negative proof source changed during checking')
                 if neg.returncode==0:
                     names=model_kernel._inventory(neg.stdout,model_kernel.REPLAY_THEOREMS+[NEGATIVE])
                     result.update(status='TRACE_FALSIFIED',negative_kernel_checked=True,
@@ -229,7 +268,7 @@ def export(output,result,contract_raw=None,trajectory_raw=None):
             raise ValueError('exported source bytes differ from verified input')
     if data:=result.get('trace_certificate'):
         if (result['kernel']['trace_certificate_sha256']!=model_kernel.sha(encode(data))
-                or result['kernel']['proof_sha256']!=model_kernel.sha(render(data))
+                or result['kernel']['proof_sha256']!=model_kernel.sha(successful_proof(data,result['kernel']))
                 or result.get('contract_sha256')!=data['model']['contract_sha256']
                 or result.get('trajectory_sha256')!=data['trajectory_sha256']):
             raise ValueError('exported certificate differs from verified proof')
@@ -242,7 +281,9 @@ def export(output,result,contract_raw=None,trajectory_raw=None):
         if raw is not None:(output/name).write_bytes(raw)
     if data:=result.get('trace_certificate'):
         (output/'trace-certificate.json').write_bytes(encode(data))
-        (output/'TraceReplay.lean').write_bytes(render(data))
+        (output/'TraceReplay.lean').write_bytes(successful_proof(data,result['kernel']))
+        if result['kernel'].get('proof_construction')=='finite_norm_num':
+            (output/'TraceReplayKernelAttempt.lean').write_bytes(render(data))
         if result['kernel']['negative_kernel_checked']:
             (output/'TraceRejected.lean').write_bytes(render(data,negative=True))
         for name,raw in frozen.items():

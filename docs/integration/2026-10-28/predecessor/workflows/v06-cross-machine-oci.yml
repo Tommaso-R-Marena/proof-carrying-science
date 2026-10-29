@@ -1,0 +1,112 @@
+name: PCS cross-machine OCI evidence
+
+on:
+  push:
+    branches:
+      - v06/replay-normalized-wire-v2
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  producer:
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
+    name: producer-ubuntu24-x64
+    runs-on: [self-hosted, linux, x64, pcs-ubuntu24-x64]
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12.14"
+          cache: pip
+      - name: Install PCS
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+      - name: Build signed campaign bundles
+        run: |
+          python scripts/cross_machine_oci_campaign.py produce \
+            --output cross-machine-bundles
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: pcs-cross-machine-bundles
+          path: cross-machine-bundles
+          if-no-files-found: error
+          retention-days: 14
+
+  consumer:
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
+    name: replay-${{ matrix.machine_id }}
+    needs: producer
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: [self-hosted, linux, x64, pcs-ubuntu24-x64]
+            machine_id: ubuntu24-x64
+          - runner: [self-hosted, linux, x64, pcs-ubuntu22-x64]
+            machine_id: ubuntu22-x64
+          - runner: [self-hosted, linux, ARM64, pcs-ubuntu24-arm64]
+            machine_id: ubuntu24-arm64
+          - runner: [self-hosted, linux, ARM64, pcs-ubuntu22-arm64]
+            machine_id: ubuntu22-arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12.14"
+          cache: pip
+      - name: Install PCS
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: pcs-cross-machine-bundles
+          path: cross-machine-bundles
+      - name: Replay signed bundles on independent OCI host
+        run: |
+          python scripts/cross_machine_oci_campaign.py replay \
+            --input cross-machine-bundles \
+            --output "cross-machine-results/${{ matrix.machine_id }}" \
+            --machine-id "${{ matrix.machine_id }}"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: ${{ always() && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
+        with:
+          name: pcs-cross-machine-results-${{ matrix.machine_id }}
+          path: cross-machine-results
+          if-no-files-found: warn
+          retention-days: 14
+
+  aggregate:
+    name: aggregate-cross-machine-evidence
+    needs: consumer
+    if: ${{ always() && github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_CROSS_MACHINE_RUNNERS_ENABLED == 'true' }}
+    runs-on: [self-hosted, linux, x64, pcs-ubuntu24-x64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12.14"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: pcs-cross-machine-results-*
+          path: downloaded-results
+          merge-multiple: true
+      - name: Aggregate evidence
+        run: |
+          python scripts/cross_machine_oci_campaign.py aggregate \
+            --input downloaded-results \
+            --output cross-machine-summary.json
+          cat cross-machine-summary.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: pcs-cross-machine-summary
+          path: cross-machine-summary.json
+          if-no-files-found: error
+          retention-days: 14

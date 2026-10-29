@@ -1,0 +1,16 @@
+{
+  "scenario_id": "TT-DEP-001",
+  "synthetic": true,
+  "live_credential_changes_performed": false,
+  "answers": {
+    "E1": "Package wheel hash diverges from the lockfile pin.",
+    "E2": "Reconstruction is non-identical; TCB boundary is not canonical.",
+    "E3": "Quarantine the wheel; do not publish; rebuild from vendored pinned cache."
+  },
+  "after_action_notes": [
+    "No live credential was rotated by the simulator",
+    "Divergence documented",
+    "Substituted build not treated as canonical",
+    "Pinned rebuild plan recorded"
+  ]
+}

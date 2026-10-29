@@ -24,7 +24,7 @@ jobs:
       - name: Strict parent preservation and unchanged complete regression census
         id: census
         run: |
-          python -m research.real_model_execution_v2.preservation
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
           python -m research.progress_supervisor_v1.ci matrix >> "$GITHUB_OUTPUT"
   regressions:
     needs: matrix
@@ -46,7 +46,7 @@ jobs:
       - name: Frozen dependencies and complete parent preservation
         run: |
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
-          python -m research.real_model_execution_v2.preservation
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
       - name: Pinned independent Lean toolchain
         if: ${{ matrix.shard != 'intake' }}
         run: source scripts/activate_lean_428.sh
@@ -72,7 +72,7 @@ jobs:
       - name: Frozen test dependencies and preservation
         run: |
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
-          python -m research.real_model_execution_v2.preservation
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
       - name: Accounting, model channel and negative controls
         run: |
           python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
@@ -99,7 +99,7 @@ jobs:
       - name: Independent dependencies, source and Lean toolchain
         run: |
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
-          python -m research.real_model_execution_v2.preservation
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
           source scripts/activate_lean_428.sh
       - name: Replay every real-model and control episode through actual Lean and SQL
         run: |

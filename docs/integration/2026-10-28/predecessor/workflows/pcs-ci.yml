@@ -1,0 +1,155 @@
+name: PCS CI
+# Read-only PR tests. NEVER migrate the branch protection away from CircleCI
+# until these checks have executed successfully on the exact head being merged.
+# GitHub-hosted runners on a private repo may be unavailable when quota is exhausted.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Optional self-hosted CI is enabled only when PCS_SELF_HOSTED_CI_ENABLED=true.
+# Never default to private-repository GitHub-hosted compute.
+# Only set this after the security runbook is satisfied; outside-fork PRs fail closed.
+permissions:
+  contents: read
+
+concurrency:
+  group: pcs-trusted-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-integrity:
+    # Never run fork PR source on the private trusted runner.
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    timeout-minutes: 10
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Verify repository metadata and governance invariants
+        run: python scripts/check_repository_integrity.py
+
+  python-assurance:
+    # Never run fork PR source on the private trusted runner.
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    timeout-minutes: 40
+    needs: repository-integrity
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install PCS and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Build mandatory Lean authority before product tests
+        run: bash scripts/verify_lean.sh
+      - name: Unit, integration, and product tests
+        env:
+          PCS_REQUIRE_LEAN_AUTHORITY: "1"
+        run: pytest -q
+      - name: Frozen adversarial campaign
+        run: python scripts/adversarial_campaign.py
+      - name: v0.6 golden demo and hardening campaign
+        run: |
+          python scripts/run_golden_examples_v06.py -o golden-demo-ci
+          python scripts/adversarial_v06_hardening.py
+      - name: Reference certificate round trip
+        run: |
+          pcs certify examples/biopharma_demo/manifest.json -o evidence
+          pcs verify evidence/certificate.json
+          pcs gate evidence/certificate.json --claim C1 --claim C2 --claim C3
+      - name: Formal-source hygiene
+        run: |
+          ! grep -R --line-number --fixed-strings 'sorry' formal/PCS.lean formal/PCS
+
+  lean-kernel:
+    # Never run fork PR source on the private trusted runner.
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    timeout-minutes: 35
+    needs: repository-integrity
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build Lean assurance kernel
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Reject admitted proofs
+        run: |
+          ! grep -R --line-number --fixed-strings 'sorry' formal/PCS.lean formal/PCS
+
+
+  v06-byte-contract:
+    # Never run fork PR source on the private trusted runner.
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    timeout-minutes: 25
+    needs: repository-integrity
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '22.23.3'
+      - name: Install PCS and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Build mandatory Lean authority for cross-language gate
+        run: bash scripts/verify_lean.sh
+      - name: Frozen v0.6 cross-language byte-contract gate
+        run: python scripts/run_v06_contract_gate.py
+      - name: Upload frozen gate evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: pcs-v06-byte-contract-gate
+          path: results/v06-contract-runs/
+          if-no-files-found: warn
+
+  # This is the ONE required check to select in a future GitHub ruleset.
+  # Never mark this successful unless every independent verifier succeeded.
+  verified-integration:
+    name: verified-integration
+    needs:
+      - repository-integrity
+      - python-assurance
+      - lean-kernel
+      - v06-byte-contract
+    if: ${{ always() && github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    timeout-minutes: 5
+    steps:
+      - name: Require completed success in every trust-boundary gate
+        env:
+          INTEGRITY: ${{ needs.repository-integrity.result }}
+          PYTHON: ${{ needs.python-assurance.result }}
+          LEAN: ${{ needs.lean-kernel.result }}
+          BYTES: ${{ needs.v06-byte-contract.result }}
+        run: |
+          for result in "$INTEGRITY" "$PYTHON" "$LEAN" "$BYTES"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Required verification was skipped, cancelled, missing, or failed ($result)"
+              exit 1
+            fi
+          done
+          echo "Every named PCS assurance gate executed successfully."

@@ -1,0 +1,48 @@
+{
+  "scenario_id": "TT-DISCLOSE-001",
+  "title": "Premature disclosure",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "Draft certificate leaked publicly.",
+  "signals": [
+    "Public URL"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Scope the leak.",
+      "acceptable_keywords": [
+        "certificate",
+        "limitations",
+        "semantic",
+        "exposed"
+      ]
+    },
+    {
+      "id": "E2",
+      "prompt": "Stakeholder notice.",
+      "acceptable_keywords": [
+        "notify",
+        "collaborator",
+        "owner",
+        "notice"
+      ]
+    },
+    {
+      "id": "E3",
+      "prompt": "Embargo decision.",
+      "acceptable_keywords": [
+        "embargo",
+        "lift",
+        "public",
+        "irreversible"
+      ]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Scope of leak recorded",
+    "Stakeholders notified in plan",
+    "Process fix identified"
+  ]
+}

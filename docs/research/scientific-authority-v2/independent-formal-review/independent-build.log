@@ -1,0 +1,784 @@
+fresh_module PCSScientificAuthorityV2/Audit
+fresh_module PCSScientificAuthorityV2/Witness
+fresh_module PCSScientificAuthorityV2/Recovery
+fresh_module PCSScientificAuthorityV2/Fixtures
+fresh_module PCSScientificAuthorityV2
+PCSScientificAuthorityV2.mismatched_local_checkpoint_not_serving (a : PCSScientificAuthorityV2.Authority)
+  (different : a.localState ≠ a.witness.committed) : PCSScientificAuthorityV2.serve a = Option.none
+'PCSScientificAuthorityV2.mismatched_local_checkpoint_not_serving' depends on axioms: [propext]
+PCSScientificAuthorityV2.WitnessInvariant.pendingSound {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  (self : PCSScientificAuthorityV2.WitnessInvariant root verify w) : PCSScientificAuthorityV2.PendingSound root verify w
+'PCSScientificAuthorityV2.WitnessInvariant.pendingSound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel._proof_1_1 :
+  PCSScientificAuthorityV2.replacedRoot.authority ≠ PCSScientificHistoryV1.sampleRoot.authority
+'PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.RecoveryFacts.exactWitness {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}
+  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) : a.witness = w
+'PCSScientificAuthorityV2.RecoveryFacts.exactWitness' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Prepared.mk.injEq (before : PCSAuthorizationHistoryV1.State)
+  (envelope : PCSAuthorizationHistoryV1.Envelope) (result : PCSScientificReceiver.Result)
+  (before✝ : PCSAuthorizationHistoryV1.State) (envelope✝ : PCSAuthorizationHistoryV1.Envelope)
+  (result✝ : PCSScientificReceiver.Result) :
+  ({ before := before, envelope := envelope, result := result } =
+      { before := before✝, envelope := envelope✝, result := result✝ }) =
+    (before = before✝ ∧ envelope = envelope✝ ∧ result = result✝)
+'PCSScientificAuthorityV2.Prepared.mk.injEq' depends on axioms: [propext]
+PCSScientificAuthorityV2.Prepared.mk.sizeOf_spec (before : PCSAuthorizationHistoryV1.State)
+  (envelope : PCSAuthorizationHistoryV1.Envelope) (result : PCSScientificReceiver.Result) :
+  SizeOf.sizeOf { before := before, envelope := envelope, result := result } =
+    1 + SizeOf.sizeOf before + SizeOf.sizeOf envelope + SizeOf.sizeOf result
+'PCSScientificAuthorityV2.Prepared.mk.sizeOf_spec' does not depend on any axioms
+PCSScientificAuthorityV2.sample_finalize :
+  PCSScientificAuthorityV2.finalize PCSScientificAuthorityV2.samplePendingWitness
+      PCSScientificHistoryV1.sampleEnvelope =
+    (PCSScientificAuthorityV2.sampleFinalWitness, Bool.true)
+'PCSScientificAuthorityV2.sample_finalize' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.audit_append_accepted (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (s : PCSAuthorizationHistoryV1.State) (e : PCSAuthorizationHistoryV1.Envelope) (r : PCSScientificReceiver.Result)
+  (success : PCSScientificAuthorityV2.audit root verify es = Option.some s)
+  (accepted : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.some r) :
+  PCSScientificAuthorityV2.audit root verify (es ++ [e]) = Option.some (PCSAuthorizationHistoryV1.commit s e)
+'PCSScientificAuthorityV2.audit_append_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_2 (a✝ : PCSScientificAuthorityV2.Witness)
+  (a✝¹ b✝ : PCSAuthorizationHistoryV1.State) :
+  ¬a✝¹ = b✝ → { witness := a✝, localState := a✝¹ } = { witness := a✝, localState := b✝ } → False
+'PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_2' does not depend on any axioms
+PCSScientificAuthorityV2.auditFrom_append (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (front back : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.auditFrom root verify s (front ++ back) =
+    (PCSScientificAuthorityV2.auditFrom root verify s front).bind fun next =>
+      PCSScientificAuthorityV2.auditFrom root verify next back
+'PCSScientificAuthorityV2.auditFrom_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_3 (a✝ : PCSScientificAuthorityV2.Witness)
+  (a✝¹ : PCSAuthorizationHistoryV1.State) (b✝ : PCSScientificAuthorityV2.Witness)
+  (b✝¹ : PCSAuthorizationHistoryV1.State) :
+  ¬a✝ = b✝ → { witness := a✝, localState := a✝¹ } = { witness := b✝, localState := b✝¹ } → False
+'PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_3' does not depend on any axioms
+PCSScientificAuthorityV2.pending_not_serving (a : PCSScientificAuthorityV2.Authority)
+  (p : PCSScientificAuthorityV2.Prepared) (pending : a.witness.pending = Option.some p) :
+  PCSScientificAuthorityV2.serve a = Option.none
+'PCSScientificAuthorityV2.pending_not_serving' depends on axioms: [propext]
+PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_3 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ : Option PCSScientificAuthorityV2.Prepared) (b✝ : PCSAuthorizationHistoryV1.State)
+  (b✝¹ : Option PCSScientificAuthorityV2.Prepared) :
+  ¬a✝ = b✝ → { committed := a✝, pending := a✝¹ } = { committed := b✝, pending := b✝¹ } → False
+'PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_3' does not depend on any axioms
+PCSScientificAuthorityV2.auditFrom_final_incumbent (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s final : PCSAuthorizationHistoryV1.State)
+  (es : List PCSAuthorizationHistoryV1.Envelope)
+  (success : PCSScientificAuthorityV2.auditFrom root verify s es = Option.some final) :
+  final.incumbent = PCSScientificAuthorityV2.lastArtifact s.incumbent es
+'PCSScientificAuthorityV2.auditFrom_final_incumbent' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.samplePendingWitness.eq_1 :
+  PCSScientificAuthorityV2.samplePendingWitness =
+    { committed := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot,
+      pending := Option.some PCSScientificAuthorityV2.samplePrepared }
+'PCSScientificAuthorityV2.samplePendingWitness.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sampleInitialWitness.eq_1 :
+  PCSScientificAuthorityV2.sampleInitialWitness =
+    { committed := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot, pending := Option.none }
+'PCSScientificAuthorityV2.sampleInitialWitness.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_1 (a✝ : PCSScientificAuthorityV2.Witness)
+  (a✝¹ : PCSAuthorizationHistoryV1.State) : { witness := a✝, localState := a✝¹ } = { witness := a✝, localState := a✝¹ }
+'PCSScientificAuthorityV2.instDecidableEqAuthority.decEq._proof_1' does not depend on any axioms
+PCSScientificAuthorityV2.HistoryInvariant.scopePinned {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) : PCSScientificAuthorityV2.ScopedHistory root s
+'PCSScientificAuthorityV2.HistoryInvariant.scopePinned' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.witnessStep_invariant (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (a : PCSScientificAuthorityV2.WitnessAction) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :
+  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.witnessStep root verify w a)
+'PCSScientificAuthorityV2.witnessStep_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.audited_entry_scientific (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (final : PCSAuthorizationHistoryV1.State)
+  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) (e : PCSAuthorizationHistoryV1.Envelope)
+  (member : e ∈ es) :
+  e.payload.certificate = [] ∧ ∃ r, PCSScientificReceiver.ScopedScientificClaimHolds e.payload.candidate r
+'PCSScientificAuthorityV2.audited_entry_scientific' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.CompleteAuditFacts.genesis {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}
+  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :
+  ∃ r,
+    PCSScientificReceiver.receive root.genesisIncumbent = Option.some r ∧
+      PCSScientificReceiver.ScopedScientificClaimHolds root.genesisIncumbent r
+'PCSScientificAuthorityV2.CompleteAuditFacts.genesis' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.CompleteAuditFacts.generation {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}
+  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :
+  final.generation = root.genesisGeneration + es.length
+'PCSScientificAuthorityV2.CompleteAuditFacts.generation' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Prepared.mk.inj {before : PCSAuthorizationHistoryV1.State}
+  {envelope : PCSAuthorizationHistoryV1.Envelope} {result : PCSScientificReceiver.Result}
+  {before✝ : PCSAuthorizationHistoryV1.State} {envelope✝ : PCSAuthorizationHistoryV1.Envelope}
+  {result✝ : PCSScientificReceiver.Result} :
+  { before := before, envelope := envelope, result := result } =
+      { before := before✝, envelope := envelope✝, result := result✝ } →
+    before = before✝ ∧ envelope = envelope✝ ∧ result = result✝
+'PCSScientificAuthorityV2.Prepared.mk.inj' does not depend on any axioms
+PCSScientificAuthorityV2.RecoveryFacts.scientific {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}
+  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) :
+  PCSScientificAuthorityV2.CompleteAuditFacts root verify archive a.localState
+'PCSScientificAuthorityV2.RecoveryFacts.scientific' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.HistoryInvariant.linked {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) :
+  PCSAuthorizationHistoryV1.LinkedHistory root.genesisId s.history s.tip
+'PCSScientificAuthorityV2.HistoryInvariant.linked' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.witness_finalize_does_not_assert_local_commit (a : PCSScientificAuthorityV2.Authority)
+  (e : PCSAuthorizationHistoryV1.Envelope) : (PCSScientificAuthorityV2.finalizeAuthority a e).localState = a.localState
+'PCSScientificAuthorityV2.witness_finalize_does_not_assert_local_commit' does not depend on any axioms
+PCSScientificAuthorityV2.finalize_preserves_invariant (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :
+  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.finalize w e).1
+'PCSScientificAuthorityV2.finalize_preserves_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.auditFrom.eq_def (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (x✝ : PCSAuthorizationHistoryV1.State)
+  (x✝¹ : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.auditFrom root verify x✝ x✝¹ =
+    match x✝, x✝¹ with
+    | s, [] => Option.some s
+    | s, e :: es =>
+      match PCSScientificHistoryV1.scientificTransition root verify s e with
+      | (fst, Option.none) => Option.none
+      | (next, Option.some val) => PCSScientificAuthorityV2.auditFrom root verify next es
+'PCSScientificAuthorityV2.auditFrom.eq_def' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_initialize :
+  PCSScientificAuthorityV2.initializeWitness PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify =
+    Option.some PCSScientificAuthorityV2.sampleInitialWitness
+'PCSScientificAuthorityV2.sample_initialize' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_4 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ : PCSAuthorizationHistoryV1.Envelope) (a✝² : PCSScientificReceiver.Result) (b✝ : PCSAuthorizationHistoryV1.State)
+  (b✝¹ : PCSAuthorizationHistoryV1.Envelope) (b✝² : PCSScientificReceiver.Result) :
+  ¬a✝ = b✝ → { before := a✝, envelope := a✝¹, result := a✝² } = { before := b✝, envelope := b✝¹, result := b✝² } → False
+'PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_4' does not depend on any axioms
+PCSScientificAuthorityV2.recovery_wrong_checkpoint_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (archive : List PCSAuthorizationHistoryV1.Envelope) (s : PCSAuthorizationHistoryV1.State)
+  (checked : PCSScientificAuthorityV2.audit root verify archive = Option.some s) (wrong : s ≠ w.committed) :
+  PCSScientificAuthorityV2.recover root verify w archive = Option.none
+'PCSScientificAuthorityV2.recovery_wrong_checkpoint_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.recovered_history_not_invented (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (archive : List PCSAuthorizationHistoryV1.Envelope) (a : PCSScientificAuthorityV2.Authority)
+  (success : PCSScientificAuthorityV2.recover root verify w archive = Option.some a) : a.localState.history = archive
+'PCSScientificAuthorityV2.recovered_history_not_invented' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.auditFrom_sound (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s final : PCSAuthorizationHistoryV1.State)
+  (es : List PCSAuthorizationHistoryV1.Envelope) (start : PCSScientificAuthorityV2.HistoryInvariant root verify s)
+  (success : PCSScientificAuthorityV2.auditFrom root verify s es = Option.some final) :
+  PCSScientificAuthorityV2.HistoryInvariant root verify final ∧ final.history = s.history ++ es
+'PCSScientificAuthorityV2.auditFrom_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_duplicate_history_rejects :
+  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      [PCSScientificHistoryV1.sampleEnvelope, PCSScientificHistoryV1.sampleEnvelope] =
+    Option.none
+'PCSScientificAuthorityV2.sample_duplicate_history_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.WitnessAction.prepare.sizeOf_spec (envelope : PCSAuthorizationHistoryV1.Envelope) :
+  SizeOf.sizeOf (PCSScientificAuthorityV2.WitnessAction.prepare envelope) = 1 + SizeOf.sizeOf envelope
+'PCSScientificAuthorityV2.WitnessAction.prepare.sizeOf_spec' does not depend on any axioms
+PCSScientificAuthorityV2.finalize_stale_rejected (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w)
+  (stale : e.payload.expectedGeneration ≠ w.committed.generation) :
+  PCSScientificAuthorityV2.finalize w e = (w, Bool.false)
+'PCSScientificAuthorityV2.finalize_stale_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.lastArtifact.eq_def (x✝ : PCSAuthorizationHistoryV1.Bytes)
+  (x✝¹ : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.lastArtifact x✝ x✝¹ =
+    match x✝, x✝¹ with
+    | genesis, [] => genesis
+    | x, e :: es => PCSScientificAuthorityV2.lastArtifact e.payload.candidate es
+'PCSScientificAuthorityV2.lastArtifact.eq_def' does not depend on any axioms
+PCSScientificAuthorityV2.Authority.mk.inj {witness : PCSScientificAuthorityV2.Witness}
+  {localState : PCSAuthorizationHistoryV1.State} {witness✝ : PCSScientificAuthorityV2.Witness}
+  {localState✝ : PCSAuthorizationHistoryV1.State} :
+  { witness := witness, localState := localState } = { witness := witness✝, localState := localState✝ } →
+    witness = witness✝ ∧ localState = localState✝
+'PCSScientificAuthorityV2.Authority.mk.inj' does not depend on any axioms
+PCSScientificAuthorityV2.finalize_generation_monotone (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  w.committed.generation ≤ (PCSScientificAuthorityV2.finalize w e).1.committed.generation
+'PCSScientificAuthorityV2.finalize_generation_monotone' depends on axioms: [propext, Quot.sound]
+PCSScientificAuthorityV2.sample_recovery_exact_archive :
+  PCSScientificAuthorityV2.recover PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      PCSScientificAuthorityV2.sampleFinalWitness [PCSScientificHistoryV1.sampleEnvelope] =
+    Option.some
+      { witness := PCSScientificAuthorityV2.sampleFinalWitness,
+        localState :=
+          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+            PCSScientificHistoryV1.sampleEnvelope }
+'PCSScientificAuthorityV2.sample_recovery_exact_archive' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.finalize_prepared_science (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w)
+  (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :
+  ∃ r,
+    PCSScientificHistoryV1.scientificTransition root verify w.committed e =
+        (PCSAuthorizationHistoryV1.commit w.committed e, Option.some r) ∧
+      PCSScientificReceiver.ScopedScientificClaimHolds e.payload.candidate r
+'PCSScientificAuthorityV2.finalize_prepared_science' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.RecoveryFacts.serve {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}
+  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) :
+  PCSScientificAuthorityV2.serve a = Option.some a.localState
+'PCSScientificAuthorityV2.RecoveryFacts.serve' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.lastArtifact.eq_1 (x✝ : PCSAuthorizationHistoryV1.Bytes) :
+  PCSScientificAuthorityV2.lastArtifact x✝ [] = x✝
+'PCSScientificAuthorityV2.lastArtifact.eq_1' does not depend on any axioms
+PCSScientificAuthorityV2.RecoveryFacts.noPending {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}
+  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) : w.pending = Option.none
+'PCSScientificAuthorityV2.RecoveryFacts.noPending' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.audited_signatures_authenticated (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature)
+  (Authenticated : PCSAuthorizationHistoryV1.Bytes → PCSAuthorizationHistoryV1.Payload → Prop)
+  (signatureSound :
+    ∀ (key : PCSAuthorizationHistoryV1.Bytes) (payload : PCSAuthorizationHistoryV1.Payload)
+      (signature : PCSAuthorizationHistoryV1.Bytes),
+      verify key payload signature = Bool.true → Authenticated key payload)
+  (es : List PCSAuthorizationHistoryV1.Envelope) (final : PCSAuthorizationHistoryV1.State)
+  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) (e : PCSAuthorizationHistoryV1.Envelope)
+  (member : e ∈ es) : Authenticated root.authority e.payload ∧ Authenticated root.witness e.payload
+'PCSScientificAuthorityV2.audited_signatures_authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.WitnessAction.prepare.inj {envelope envelope✝ : PCSAuthorizationHistoryV1.Envelope} :
+  PCSScientificAuthorityV2.WitnessAction.prepare envelope = PCSScientificAuthorityV2.WitnessAction.prepare envelope✝ →
+    envelope = envelope✝
+'PCSScientificAuthorityV2.WitnessAction.prepare.inj' does not depend on any axioms
+PCSScientificAuthorityV2.prepare_committed_unchanged (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  (PCSScientificAuthorityV2.prepare root verify w e).1.committed = w.committed
+'PCSScientificAuthorityV2.prepare_committed_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.transition_preserves_invariant._proof_1_1 (root : PCSAuthorizationHistoryV1.Root)
+  (s : PCSAuthorizationHistoryV1.State) (count : s.generation = root.genesisGeneration + s.history.length) :
+  ¬s.generation + 1 = root.genesisGeneration + (s.history.length + 1) → False
+'PCSScientificAuthorityV2.transition_preserves_invariant._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificAuthorityV2.CompleteAuditFacts.finalIncumbent {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}
+  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :
+  final.incumbent = PCSScientificAuthorityV2.lastArtifact root.genesisIncumbent es
+'PCSScientificAuthorityV2.CompleteAuditFacts.finalIncumbent' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.auditFrom.eq_2 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (x✝ : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (es : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.auditFrom root verify x✝ (e :: es) =
+    match PCSScientificHistoryV1.scientificTransition root verify x✝ e with
+    | (fst, Option.none) => Option.none
+    | (next, Option.some val) => PCSScientificAuthorityV2.auditFrom root verify next es
+'PCSScientificAuthorityV2.auditFrom.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Authority.mk.sizeOf_spec (witness : PCSScientificAuthorityV2.Witness)
+  (localState : PCSAuthorizationHistoryV1.State) :
+  SizeOf.sizeOf { witness := witness, localState := localState } = 1 + SizeOf.sizeOf witness + SizeOf.sizeOf localState
+'PCSScientificAuthorityV2.Authority.mk.sizeOf_spec' does not depend on any axioms
+PCSScientificAuthorityV2.sample_genesis_receive :
+  PCSScientificReceiver.receive PCSScientificHistoryV1.sampleRoot.genesisIncumbent =
+    Option.some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample)
+'PCSScientificAuthorityV2.sample_genesis_receive' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.recovery_pending_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (archive : List PCSAuthorizationHistoryV1.Envelope) (pending : w.pending ≠ Option.none) :
+  PCSScientificAuthorityV2.recover root verify w archive = Option.none
+'PCSScientificAuthorityV2.recovery_pending_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.CompleteAuditFacts.policy {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}
+  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :
+  root.policy = PCSScientificHistoryV1.policyBytes
+'PCSScientificAuthorityV2.CompleteAuditFacts.policy' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.CompleteAuditFacts.invariant {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}
+  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :
+  PCSScientificAuthorityV2.HistoryInvariant root verify final
+'PCSScientificAuthorityV2.CompleteAuditFacts.invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.WitnessAction.finalize.injEq (envelope envelope✝ : PCSAuthorizationHistoryV1.Envelope) :
+  (PCSScientificAuthorityV2.WitnessAction.finalize envelope =
+      PCSScientificAuthorityV2.WitnessAction.finalize envelope✝) =
+    (envelope = envelope✝)
+'PCSScientificAuthorityV2.WitnessAction.finalize.injEq' depends on axioms: [propext]
+PCSScientificAuthorityV2.WitnessAction.finalize.inj {envelope envelope✝ : PCSAuthorizationHistoryV1.Envelope} :
+  PCSScientificAuthorityV2.WitnessAction.finalize envelope = PCSScientificAuthorityV2.WitnessAction.finalize envelope✝ →
+    envelope = envelope✝
+'PCSScientificAuthorityV2.WitnessAction.finalize.inj' does not depend on any axioms
+PCSScientificAuthorityV2.localCommit.eq_1 (a : PCSScientificAuthorityV2.Authority)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.localCommit a e =
+    match a.witness.pending with
+    | Option.none => (a, Bool.false)
+    | Option.some p =>
+      if p.before = a.witness.committed ∧ p.before = a.localState ∧ p.envelope = e then
+        ({ witness := a.witness, localState := PCSAuthorizationHistoryV1.commit a.localState e }, Bool.true)
+      else (a, Bool.false)
+'PCSScientificAuthorityV2.localCommit.eq_1' does not depend on any axioms
+PCSScientificAuthorityV2.no_conflicting_finalization_later (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (first second : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w)
+  (accepted : (PCSScientificAuthorityV2.finalize w first).2 = Bool.true)
+  (samePredecessorGeneration : second.payload.expectedGeneration = first.payload.expectedGeneration)
+  (later : List PCSScientificAuthorityV2.WitnessAction) :
+  have after := PCSScientificAuthorityV2.witnessRun root verify (PCSScientificAuthorityV2.finalize w first).1 later;
+  PCSScientificAuthorityV2.finalize after second = (after, Bool.false)
+'PCSScientificAuthorityV2.no_conflicting_finalization_later' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.finalize.eq_1 (w : PCSScientificAuthorityV2.Witness) (e : PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.finalize w e =
+    match w.pending with
+    | Option.none => (w, Bool.false)
+    | Option.some p =>
+      if p.before = w.committed ∧ p.envelope = e then
+        ({ committed := PCSAuthorizationHistoryV1.commit w.committed e, pending := Option.none }, Bool.true)
+      else (w, Bool.false)
+'PCSScientificAuthorityV2.finalize.eq_1' does not depend on any axioms
+PCSScientificAuthorityV2.no_conflicting_finalization_later._proof_1_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (first second : PCSAuthorizationHistoryV1.Envelope)
+  (samePredecessorGeneration : second.payload.expectedGeneration = first.payload.expectedGeneration)
+  (later : List PCSScientificAuthorityV2.WitnessAction) (hg : first.payload.expectedGeneration = w.committed.generation)
+  (monotone :
+    w.committed.generation + 1 ≤
+      (PCSScientificAuthorityV2.witnessRun root verify (PCSScientificAuthorityV2.finalize w first).1
+            later).committed.generation) :
+  second.payload.expectedGeneration =
+      (PCSScientificAuthorityV2.witnessRun root verify (PCSScientificAuthorityV2.finalize w first).1
+            later).committed.generation →
+    False
+'PCSScientificAuthorityV2.no_conflicting_finalization_later._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_2 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ b✝ : Option PCSScientificAuthorityV2.Prepared) :
+  ¬a✝¹ = b✝ → { committed := a✝, pending := a✝¹ } = { committed := a✝, pending := b✝ } → False
+'PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_2' does not depend on any axioms
+PCSScientificAuthorityV2.local_commit_without_finalization_not_serving (a : PCSScientificAuthorityV2.Authority)
+  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.localCommit a e).2 = Bool.true) :
+  PCSScientificAuthorityV2.serve (PCSScientificAuthorityV2.localCommit a e).1 = Option.none
+'PCSScientificAuthorityV2.local_commit_without_finalization_not_serving' depends on axioms: [propext]
+PCSScientificAuthorityV2.prepare_preserves_invariant (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :
+  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.prepare root verify w e).1
+'PCSScientificAuthorityV2.prepare_preserves_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.HistoryInvariant.science {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) : PCSScientificHistoryV1.ScientificHistory s
+'PCSScientificAuthorityV2.HistoryInvariant.science' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.witnessStep.eq_2 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.witnessStep root verify w (PCSScientificAuthorityV2.WitnessAction.finalize e) =
+    (PCSScientificAuthorityV2.finalize w e).1
+'PCSScientificAuthorityV2.witnessStep.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.samplePrepared.eq_1 :
+  PCSScientificAuthorityV2.samplePrepared =
+    { before := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot,
+      envelope := PCSScientificHistoryV1.sampleEnvelope,
+      result := PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample }
+'PCSScientificAuthorityV2.samplePrepared.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_empty_audit :
+  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify [] =
+    Option.some (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+'PCSScientificAuthorityV2.sample_empty_audit' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_invalid_genesis_rejects._proof_1_1 :
+  PCSScientificReceiver.decode
+      (let __src := PCSScientificHistoryV1.sampleRoot;
+        { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+          genesisId := __src.genesisId, genesisIncumbent := [],
+          genesisGeneration := __src.genesisGeneration }).genesisIncumbent =
+    Option.none
+'PCSScientificAuthorityV2.sample_invalid_genesis_rejects._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_1 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ : PCSAuthorizationHistoryV1.Envelope) (a✝² : PCSScientificReceiver.Result) :
+  { before := a✝, envelope := a✝¹, result := a✝² } = { before := a✝, envelope := a✝¹, result := a✝² }
+'PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_1' does not depend on any axioms
+PCSScientificAuthorityV2.HistoryInvariant.authenticated {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) :
+  PCSAuthorizationHistoryV1.AuthenticatedHistory root verify s
+'PCSScientificAuthorityV2.HistoryInvariant.authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.witnessStep.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.witnessStep root verify w (PCSScientificAuthorityV2.WitnessAction.prepare e) =
+    (PCSScientificAuthorityV2.prepare root verify w e).1
+'PCSScientificAuthorityV2.witnessStep.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.finalize_checks (w : PCSScientificAuthorityV2.Witness) (e : PCSAuthorizationHistoryV1.Envelope)
+  (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :
+  ∃ p, w.pending = Option.some p ∧ p.before = w.committed ∧ p.envelope = e
+'PCSScientificAuthorityV2.finalize_checks' depends on axioms: [propext]
+PCSScientificAuthorityV2.sample_valid_current_invalid_old_rejects :
+  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      [have __src := PCSScientificHistoryV1.sampleEnvelope;
+        {
+          payload :=
+            have __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+            { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+              previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,
+              nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent, candidate := [],
+              certificate := __src.certificate },
+          authoritySignature := __src.authoritySignature, witnessSignature := __src.witnessSignature },
+        PCSScientificHistoryV1.sampleEnvelope] =
+    Option.none
+'PCSScientificAuthorityV2.sample_valid_current_invalid_old_rejects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.sample_rollback_local_cannot_serve :
+  PCSScientificAuthorityV2.serve
+      { witness := PCSScientificAuthorityV2.sampleFinalWitness,
+        localState := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot } =
+    Option.none
+'PCSScientificAuthorityV2.sample_rollback_local_cannot_serve' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.witnessRun_invariant (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (actions : List PCSScientificAuthorityV2.WitnessAction)
+  (valid : PCSScientificAuthorityV2.WitnessInvariant root verify w) :
+  PCSScientificAuthorityV2.WitnessInvariant root verify (PCSScientificAuthorityV2.witnessRun root verify w actions)
+'PCSScientificAuthorityV2.witnessRun_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.recover.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (archive : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.recover root verify w archive = do
+    let s ← PCSScientificAuthorityV2.audit root verify archive
+    if s = w.committed ∧ w.pending = Option.none then Option.some { witness := w, localState := s } else Option.none
+'PCSScientificAuthorityV2.recover.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.HistoryInvariant.incumbent {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) : PCSScientificHistoryV1.Checked s.incumbent
+'PCSScientificAuthorityV2.HistoryInvariant.incumbent' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.wrong_audit_policy_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (wrong : root.policy ≠ PCSScientificHistoryV1.policyBytes) :
+  PCSScientificAuthorityV2.audit root verify es = Option.none
+'PCSScientificAuthorityV2.wrong_audit_policy_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Witness.mk.sizeOf_spec (committed : PCSAuthorizationHistoryV1.State)
+  (pending : Option PCSScientificAuthorityV2.Prepared) :
+  SizeOf.sizeOf { committed := committed, pending := pending } = 1 + SizeOf.sizeOf committed + SizeOf.sizeOf pending
+'PCSScientificAuthorityV2.Witness.mk.sizeOf_spec' does not depend on any axioms
+PCSScientificAuthorityV2.localCommit_witness_unchanged (a : PCSScientificAuthorityV2.Authority)
+  (e : PCSAuthorizationHistoryV1.Envelope) : (PCSScientificAuthorityV2.localCommit a e).1.witness = a.witness
+'PCSScientificAuthorityV2.localCommit_witness_unchanged' does not depend on any axioms
+PCSScientificAuthorityV2.audited_incumbent_scientific (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (final : PCSAuthorizationHistoryV1.State)
+  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) :
+  ∃ r, PCSScientificReceiver.ScopedScientificClaimHolds final.incumbent r
+'PCSScientificAuthorityV2.audited_incumbent_scientific' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.initial_invariant (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature)
+  (checked : PCSScientificHistoryV1.Checked root.genesisIncumbent) :
+  PCSScientificAuthorityV2.HistoryInvariant root verify (PCSAuthorizationHistoryV1.initial root)
+'PCSScientificAuthorityV2.initial_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.recovery_invalid_archive_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (archive : List PCSAuthorizationHistoryV1.Envelope)
+  (bad : PCSScientificAuthorityV2.audit root verify archive = Option.none) :
+  PCSScientificAuthorityV2.recover root verify w archive = Option.none
+'PCSScientificAuthorityV2.recovery_invalid_archive_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_complete_audit :
+  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      [PCSScientificHistoryV1.sampleEnvelope] =
+    Option.some
+      (PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+        PCSScientificHistoryV1.sampleEnvelope)
+'PCSScientificAuthorityV2.sample_complete_audit' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_2 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ : PCSAuthorizationHistoryV1.Envelope) (a✝² b✝ : PCSScientificReceiver.Result) :
+  ¬a✝² = b✝ → { before := a✝, envelope := a✝¹, result := a✝² } = { before := a✝, envelope := a✝¹, result := b✝ } → False
+'PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_2' does not depend on any axioms
+PCSScientificAuthorityV2.rejected_entry_stops_audit (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (bad : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.none) :
+  PCSScientificAuthorityV2.auditFrom root verify s (e :: es) = Option.none
+'PCSScientificAuthorityV2.rejected_entry_stops_audit' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.initialized_trace_serving_scientific (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (start : PCSScientificAuthorityV2.Witness)
+  (initialized : PCSScientificAuthorityV2.initializeWitness root verify = Option.some start)
+  (actions : List PCSScientificAuthorityV2.WitnessAction) (localState served : PCSAuthorizationHistoryV1.State)
+  (eligible :
+    PCSScientificAuthorityV2.serve
+        { witness := PCSScientificAuthorityV2.witnessRun root verify start actions, localState := localState } =
+      Option.some served) :
+  ∃ archive,
+    PCSScientificAuthorityV2.audit root verify archive = Option.some served ∧
+      ∃ r, PCSScientificReceiver.ScopedScientificClaimHolds served.incumbent r
+'PCSScientificAuthorityV2.initialized_trace_serving_scientific' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.finalize_state (w : PCSScientificAuthorityV2.Witness) (e : PCSAuthorizationHistoryV1.Envelope)
+  (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :
+  PCSScientificAuthorityV2.finalize w e =
+    ({ committed := PCSAuthorizationHistoryV1.commit w.committed e, pending := Option.none }, Bool.true)
+'PCSScientificAuthorityV2.finalize_state' depends on axioms: [propext]
+PCSScientificAuthorityV2.transition_preserves_scope (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (scopePinned : PCSScientificAuthorityV2.ScopedHistory root s) :
+  PCSScientificAuthorityV2.ScopedHistory root (PCSScientificHistoryV1.scientificTransition root verify s e).1
+'PCSScientificAuthorityV2.transition_preserves_scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.transition_preserves_invariant (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : PCSScientificAuthorityV2.HistoryInvariant root verify s) :
+  PCSScientificAuthorityV2.HistoryInvariant root verify (PCSScientificHistoryV1.scientificTransition root verify s e).1
+'PCSScientificAuthorityV2.transition_preserves_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_3 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ : PCSAuthorizationHistoryV1.Envelope) (a✝² : PCSScientificReceiver.Result)
+  (b✝ : PCSAuthorizationHistoryV1.Envelope) (b✝¹ : PCSScientificReceiver.Result) :
+  ¬a✝¹ = b✝ → { before := a✝, envelope := a✝¹, result := a✝² } = { before := a✝, envelope := b✝, result := b✝¹ } → False
+'PCSScientificAuthorityV2.instDecidableEqPrepared.decEq._proof_3' does not depend on any axioms
+PCSScientificAuthorityV2.CompleteAuditFacts.exactHistory {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {es : List PCSAuthorizationHistoryV1.Envelope}
+  {final : PCSAuthorizationHistoryV1.State} (self : PCSScientificAuthorityV2.CompleteAuditFacts root verify es final) :
+  final.history = es
+'PCSScientificAuthorityV2.CompleteAuditFacts.exactHistory' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_local_commit_cannot_serve :
+  PCSScientificAuthorityV2.serve
+      { witness := PCSScientificAuthorityV2.samplePendingWitness,
+        localState :=
+          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+            PCSScientificHistoryV1.sampleEnvelope } =
+    Option.none
+'PCSScientificAuthorityV2.sample_local_commit_cannot_serve' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.HistoryInvariant.count {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  (self : PCSScientificAuthorityV2.HistoryInvariant root verify s) :
+  s.generation = root.genesisGeneration + s.history.length
+'PCSScientificAuthorityV2.HistoryInvariant.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_pending_cannot_serve :
+  PCSScientificAuthorityV2.serve
+      { witness := PCSScientificAuthorityV2.samplePendingWitness,
+        localState := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot } =
+    Option.none
+'PCSScientificAuthorityV2.sample_pending_cannot_serve' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.serve_checks (a : PCSScientificAuthorityV2.Authority) (s : PCSAuthorizationHistoryV1.State)
+  (success : PCSScientificAuthorityV2.serve a = Option.some s) :
+  a.witness.pending = Option.none ∧ a.localState = a.witness.committed ∧ s = a.witness.committed
+'PCSScientificAuthorityV2.serve_checks' depends on axioms: [propext]
+PCSScientificAuthorityV2.auditFrom.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (x✝ : PCSAuthorizationHistoryV1.State) :
+  PCSScientificAuthorityV2.auditFrom root verify x✝ [] = Option.some x✝
+'PCSScientificAuthorityV2.auditFrom.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sampleFinalWitness.eq_1 :
+  PCSScientificAuthorityV2.sampleFinalWitness =
+    {
+      committed :=
+        PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+          PCSScientificHistoryV1.sampleEnvelope,
+      pending := Option.none }
+'PCSScientificAuthorityV2.sampleFinalWitness.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.sample_local_commit :
+  PCSScientificAuthorityV2.localCommit
+      { witness := PCSScientificAuthorityV2.samplePendingWitness,
+        localState := PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot }
+      PCSScientificHistoryV1.sampleEnvelope =
+    ({ witness := PCSScientificAuthorityV2.samplePendingWitness,
+        localState :=
+          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+            PCSScientificHistoryV1.sampleEnvelope },
+      Bool.true)
+'PCSScientificAuthorityV2.sample_local_commit' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Witness.mk.injEq (committed : PCSAuthorizationHistoryV1.State)
+  (pending : Option PCSScientificAuthorityV2.Prepared) (committed✝ : PCSAuthorizationHistoryV1.State)
+  (pending✝ : Option PCSScientificAuthorityV2.Prepared) :
+  ({ committed := committed, pending := pending } = { committed := committed✝, pending := pending✝ }) =
+    (committed = committed✝ ∧ pending = pending✝)
+'PCSScientificAuthorityV2.Witness.mk.injEq' depends on axioms: [propext]
+PCSScientificAuthorityV2.localCommit_checks (a : PCSScientificAuthorityV2.Authority)
+  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.localCommit a e).2 = Bool.true) :
+  ∃ p, a.witness.pending = Option.some p ∧ p.before = a.witness.committed ∧ p.before = a.localState ∧ p.envelope = e
+'PCSScientificAuthorityV2.localCommit_checks' depends on axioms: [propext]
+PCSScientificAuthorityV2.prepare.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.prepare root verify w e =
+    match w.pending with
+    | Option.some p => if p.before = w.committed ∧ p.envelope = e then (w, Bool.true) else (w, Bool.false)
+    | Option.none =>
+      match PCSScientificHistoryV1.scientificTransition root verify w.committed e with
+      | (fst, Option.none) => (w, Bool.false)
+      | (fst, Option.some r) =>
+        ({ committed := w.committed, pending := Option.some { before := w.committed, envelope := e, result := r } },
+          Bool.true)
+'PCSScientificAuthorityV2.prepare.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.serve_requires_finalized_checkpoint (a : PCSScientificAuthorityV2.Authority)
+  (s : PCSAuthorizationHistoryV1.State) (success : PCSScientificAuthorityV2.serve a = Option.some s) :
+  s = a.witness.committed
+'PCSScientificAuthorityV2.serve_requires_finalized_checkpoint' depends on axioms: [propext]
+PCSScientificAuthorityV2.witnessRun_generation_monotone (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (actions : List PCSScientificAuthorityV2.WitnessAction) :
+  w.committed.generation ≤ (PCSScientificAuthorityV2.witnessRun root verify w actions).committed.generation
+'PCSScientificAuthorityV2.witnessRun_generation_monotone' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Witness.mk.inj {committed : PCSAuthorizationHistoryV1.State}
+  {pending : Option PCSScientificAuthorityV2.Prepared} {committed✝ : PCSAuthorizationHistoryV1.State}
+  {pending✝ : Option PCSScientificAuthorityV2.Prepared} :
+  { committed := committed, pending := pending } = { committed := committed✝, pending := pending✝ } →
+    committed = committed✝ ∧ pending = pending✝
+'PCSScientificAuthorityV2.Witness.mk.inj' does not depend on any axioms
+PCSScientificAuthorityV2.mathematical_acceptance_not_empirical :
+  ∃ EmpiricallyAdequate s,
+    PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+          [PCSScientificHistoryV1.sampleEnvelope] =
+        Option.some s ∧
+      ¬EmpiricallyAdequate s.incumbent
+'PCSScientificAuthorityV2.mathematical_acceptance_not_empirical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.sample_invalid_genesis_rejects :
+  PCSScientificAuthorityV2.audit
+      (have __src := PCSScientificHistoryV1.sampleRoot;
+      { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+        genesisId := __src.genesisId, genesisIncumbent := [], genesisGeneration := __src.genesisGeneration })
+      PCSScientificHistoryV1.sampleVerify [] =
+    Option.none
+'PCSScientificAuthorityV2.sample_invalid_genesis_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.WitnessInvariant.checkedArchive {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  (self : PCSScientificAuthorityV2.WitnessInvariant root verify w) :
+  ∃ es, PCSScientificAuthorityV2.audit root verify es = Option.some w.committed
+'PCSScientificAuthorityV2.WitnessInvariant.checkedArchive' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.prepare_rejected_unchanged (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope)
+  (rejected : (PCSScientificAuthorityV2.prepare root verify w e).2 = Bool.false) :
+  PCSScientificAuthorityV2.prepare root verify w e = (w, Bool.false)
+'PCSScientificAuthorityV2.prepare_rejected_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.initializeWitness.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) :
+  PCSScientificAuthorityV2.initializeWitness root verify =
+    Option.map (fun s => { committed := s, pending := Option.none }) (PCSScientificAuthorityV2.audit root verify [])
+'PCSScientificAuthorityV2.initializeWitness.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel :
+  PCSScientificAuthorityV2.replacedRoot ≠ PCSScientificHistoryV1.sampleRoot ∧
+    PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify [] =
+        Option.some (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot) ∧
+      PCSScientificAuthorityV2.audit PCSScientificAuthorityV2.replacedRoot PCSScientificHistoryV1.sampleVerify [] =
+        Option.some (PCSAuthorizationHistoryV1.initial PCSScientificAuthorityV2.replacedRoot)
+'PCSScientificAuthorityV2.simultaneous_root_replacement_countermodel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.serving_artifact_scientific (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (a : PCSScientificAuthorityV2.Authority)
+  (s : PCSAuthorizationHistoryV1.State) (valid : PCSScientificAuthorityV2.WitnessInvariant root verify a.witness)
+  (success : PCSScientificAuthorityV2.serve a = Option.some s) :
+  ∃ es,
+    PCSScientificAuthorityV2.audit root verify es = Option.some s ∧
+      ∃ r, PCSScientificReceiver.ScopedScientificClaimHolds s.incumbent r
+'PCSScientificAuthorityV2.serving_artifact_scientific' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.recovery_sound (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (archive : List PCSAuthorizationHistoryV1.Envelope) (a : PCSScientificAuthorityV2.Authority)
+  (success : PCSScientificAuthorityV2.recover root verify w archive = Option.some a) :
+  PCSScientificAuthorityV2.RecoveryFacts root verify w archive a
+'PCSScientificAuthorityV2.recovery_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.RecoveryFacts.checked {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}
+  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) :
+  PCSScientificAuthorityV2.audit root verify archive = Option.some a.localState
+'PCSScientificAuthorityV2.RecoveryFacts.checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_1 (a✝ : PCSAuthorizationHistoryV1.State)
+  (a✝¹ : Option PCSScientificAuthorityV2.Prepared) :
+  { committed := a✝, pending := a✝¹ } = { committed := a✝, pending := a✝¹ }
+'PCSScientificAuthorityV2.instDecidableEqWitness.decEq._proof_1' does not depend on any axioms
+PCSScientificAuthorityV2.lastArtifact.eq_2 (x✝ : PCSAuthorizationHistoryV1.Bytes)
+  (e : PCSAuthorizationHistoryV1.Envelope) (es : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.lastArtifact x✝ (e :: es) = PCSScientificAuthorityV2.lastArtifact e.payload.candidate es
+'PCSScientificAuthorityV2.lastArtifact.eq_2' does not depend on any axioms
+PCSScientificAuthorityV2.RecoveryFacts.checkpoint {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {w : PCSScientificAuthorityV2.Witness}
+  {archive : List PCSAuthorizationHistoryV1.Envelope} {a : PCSScientificAuthorityV2.Authority}
+  (self : PCSScientificAuthorityV2.RecoveryFacts root verify w archive a) : a.localState = w.committed
+'PCSScientificAuthorityV2.RecoveryFacts.checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.Authority.mk.injEq (witness : PCSScientificAuthorityV2.Witness)
+  (localState : PCSAuthorizationHistoryV1.State) (witness✝ : PCSScientificAuthorityV2.Witness)
+  (localState✝ : PCSAuthorizationHistoryV1.State) :
+  ({ witness := witness, localState := localState } = { witness := witness✝, localState := localState✝ }) =
+    (witness = witness✝ ∧ localState = localState✝)
+'PCSScientificAuthorityV2.Authority.mk.injEq' depends on axioms: [propext]
+PCSScientificAuthorityV2.WitnessAction.prepare.injEq (envelope envelope✝ : PCSAuthorizationHistoryV1.Envelope) :
+  (PCSScientificAuthorityV2.WitnessAction.prepare envelope = PCSScientificAuthorityV2.WitnessAction.prepare envelope✝) =
+    (envelope = envelope✝)
+'PCSScientificAuthorityV2.WitnessAction.prepare.injEq' depends on axioms: [propext]
+PCSScientificAuthorityV2.sample_recovery_missing_event_rejects :
+  PCSScientificAuthorityV2.recover PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      PCSScientificAuthorityV2.sampleFinalWitness [] =
+    Option.none
+'PCSScientificAuthorityV2.sample_recovery_missing_event_rejects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificAuthorityV2.finalize_generation_monotone._proof_1_1 (w : PCSScientificAuthorityV2.Witness) :
+  ¬w.committed.generation ≤ w.committed.generation + 1 → False
+'PCSScientificAuthorityV2.finalize_generation_monotone._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificAuthorityV2.WitnessAction.finalize.sizeOf_spec (envelope : PCSAuthorizationHistoryV1.Envelope) :
+  SizeOf.sizeOf (PCSScientificAuthorityV2.WitnessAction.finalize envelope) = 1 + SizeOf.sizeOf envelope
+'PCSScientificAuthorityV2.WitnessAction.finalize.sizeOf_spec' does not depend on any axioms
+PCSScientificAuthorityV2.audit_sound (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (final : PCSAuthorizationHistoryV1.State)
+  (success : PCSScientificAuthorityV2.audit root verify es = Option.some final) :
+  PCSScientificAuthorityV2.CompleteAuditFacts root verify es final
+'PCSScientificAuthorityV2.audit_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.audit.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificAuthorityV2.audit root verify es =
+    if root.policy = PCSScientificHistoryV1.policyBytes then
+      match PCSScientificReceiver.receive root.genesisIncumbent with
+      | Option.none => Option.none
+      | Option.some val => PCSScientificAuthorityV2.auditFrom root verify (PCSAuthorizationHistoryV1.initial root) es
+    else Option.none
+'PCSScientificAuthorityV2.audit.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.invalid_genesis_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (bad : PCSScientificReceiver.receive root.genesisIncumbent = Option.none) :
+  PCSScientificAuthorityV2.audit root verify es = Option.none
+'PCSScientificAuthorityV2.invalid_genesis_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.finalize_generation (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.finalize w e).2 = Bool.true) :
+  (PCSScientificAuthorityV2.finalize w e).1.committed.generation = w.committed.generation + 1
+'PCSScientificAuthorityV2.finalize_generation' depends on axioms: [propext]
+PCSScientificAuthorityV2.finalize_rejected_unchanged (w : PCSScientificAuthorityV2.Witness)
+  (e : PCSAuthorizationHistoryV1.Envelope) (rejected : (PCSScientificAuthorityV2.finalize w e).2 = Bool.false) :
+  PCSScientificAuthorityV2.finalize w e = (w, Bool.false)
+'PCSScientificAuthorityV2.finalize_rejected_unchanged' depends on axioms: [propext]
+PCSScientificAuthorityV2.serve.eq_1 (a : PCSScientificAuthorityV2.Authority) :
+  PCSScientificAuthorityV2.serve a =
+    if a.witness.pending = Option.none ∧ a.localState = a.witness.committed then Option.some a.localState
+    else Option.none
+'PCSScientificAuthorityV2.serve.eq_1' does not depend on any axioms
+PCSScientificAuthorityV2.sample_prepare :
+  PCSScientificAuthorityV2.prepare PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      PCSScientificAuthorityV2.sampleInitialWitness PCSScientificHistoryV1.sampleEnvelope =
+    (PCSScientificAuthorityV2.samplePendingWitness, Bool.true)
+'PCSScientificAuthorityV2.sample_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.initialize_sound (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (w : PCSScientificAuthorityV2.Witness)
+  (success : PCSScientificAuthorityV2.initializeWitness root verify = Option.some w) :
+  PCSScientificAuthorityV2.WitnessInvariant root verify w
+'PCSScientificAuthorityV2.initialize_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificAuthorityV2.localCommit_state (a : PCSScientificAuthorityV2.Authority)
+  (e : PCSAuthorizationHistoryV1.Envelope) (accepted : (PCSScientificAuthorityV2.localCommit a e).2 = Bool.true) :
+  PCSScientificAuthorityV2.localCommit a e =
+    ({ witness := a.witness, localState := PCSAuthorizationHistoryV1.commit a.localState e }, Bool.true)
+'PCSScientificAuthorityV2.localCommit_state' depends on axioms: [propext]
+PCSScientificAuthorityV2.sample_final_can_serve :
+  PCSScientificAuthorityV2.serve
+      { witness := PCSScientificAuthorityV2.sampleFinalWitness,
+        localState :=
+          PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+            PCSScientificHistoryV1.sampleEnvelope } =
+    Option.some
+      (PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+        PCSScientificHistoryV1.sampleEnvelope)
+'PCSScientificAuthorityV2.sample_final_can_serve' depends on axioms: [propext, Classical.choice, Quot.sound]

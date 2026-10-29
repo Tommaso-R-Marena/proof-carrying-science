@@ -1,0 +1,75 @@
+{
+  "format": "pcs-epistemic-certificate-v1",
+  "kind": "dialectic",
+  "models": [
+    {
+      "model_id": "one_compartment",
+      "claims": [
+        {
+          "id": "mass_conserved",
+          "required_class": "formal",
+          "required_evidence": ["e_mass"]
+        },
+        {
+          "id": "cmax_bound",
+          "required_class": "computational",
+          "required_evidence": ["e_cmax"]
+        },
+        {
+          "id": "terminal_slope_matches_ke",
+          "required_class": "computational",
+          "required_evidence": ["e_slope"]
+        }
+      ],
+      "evidence": [
+        {"id": "e_mass", "class": "formal", "accepted": true},
+        {"id": "e_cmax", "class": "computational", "accepted": true},
+        {"id": "e_slope", "class": "computational", "accepted": true}
+      ]
+    },
+    {
+      "model_id": "two_compartment",
+      "claims": [
+        {
+          "id": "mass_conserved",
+          "required_class": "formal",
+          "required_evidence": ["e_mass"]
+        },
+        {
+          "id": "cmax_bound",
+          "required_class": "computational",
+          "required_evidence": ["e_cmax"]
+        },
+        {
+          "id": "terminal_slope_matches_ke",
+          "required_class": "computational",
+          "required_evidence": ["e_slope"]
+        }
+      ],
+      "evidence": [
+        {"id": "e_mass", "class": "formal", "accepted": true},
+        {"id": "e_cmax", "class": "computational", "accepted": true},
+        {"id": "e_slope", "class": "computational", "accepted": false}
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "mass_conserved",
+      "required_class": "formal",
+      "required_evidence": ["e_mass"]
+    },
+    {
+      "id": "cmax_bound",
+      "required_class": "computational",
+      "required_evidence": ["e_cmax"]
+    },
+    {
+      "id": "terminal_slope_matches_ke",
+      "required_class": "computational",
+      "required_evidence": ["e_slope"]
+    }
+  ],
+  "expected_agreement_core": ["mass_conserved", "cmax_bound"],
+  "expected_dispute_frontier": ["terminal_slope_matches_ke"]
+}

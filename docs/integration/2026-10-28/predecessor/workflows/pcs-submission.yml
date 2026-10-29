@@ -1,0 +1,50 @@
+name: PCS submission verification
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'contributions/pcs-submissions/**'
+permissions:
+  contents: read
+jobs:
+  verify:
+    name: PCS Submission Verification
+    # Public PRs run on disposable hosted runners without production secrets.
+    if: ${{ github.repository_owner == 'Tommaso-R-Marena' && github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Validate exact submission manifest and digest bindings
+        run: python scripts/check_contribution_bundle.py
+      - name: Check Python contribution syntax without executing submissions
+        run: |
+          find contributions/pcs-submissions -type f -name '*.py' -print0 | xargs -0 -r -n1 python -m py_compile
+      - name: Install isolated PCS test dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Build formal PCS kernel
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Run PCS tests on unchanged production package plus proposed artifacts
+        run: python -m pytest -q
+      - name: Check contributed Lean files against PCS imports
+        run: |
+          cd formal
+          find ../contributions/pcs-submissions -type f -name '*.lean' -print0 | while IFS= read -r -d '' file; do
+            lake env lean "$file"
+          done
+      - name: Report exact limits
+        run: |
+          echo 'Checks: manifest SHA-256, allowed paths, Python syntax, core PCS regression tests, Lean build and Lean contribution elaboration.'
+          echo 'Passing does NOT establish real-world scientific truth or independently validate a research claim.'

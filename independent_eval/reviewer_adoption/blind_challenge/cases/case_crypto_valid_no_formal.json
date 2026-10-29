@@ -1,0 +1,38 @@
+{
+  "case_id": "RAW-CRYPTO-001",
+  "ground_truth_label": "crypto_valid_without_formal_justification",
+  "distinction_tags": [
+    "cryptographic_validity",
+    "formally_justified_computational"
+  ],
+  "title": "Crypto valid without formal justification",
+  "summary": "Signature and hashes pass; no formal computational certificate.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Predictions are correct.",
+        "kind": "computational",
+        "assessment": {
+          "status": "UNREPORTED"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "id": "E_SIG",
+        "type": "signature",
+        "result": "pass"
+      },
+      {
+        "id": "E_HASH",
+        "type": "artifact_digest",
+        "result": "pass"
+      }
+    ],
+    "limitations": [
+      "Integrity-only evidence."
+    ]
+  },
+  "reviewer_prompt": "Abstain; crypto validity \u2260 formal computational support."
+}
