@@ -143,6 +143,14 @@ def successful_proof(data, kernel):
     raise ValueError('unknown fixed proof construction')
 
 
+def _recurrence_equation(data,k,i):
+    # Copy the actual input scalars; do not compute an assumed correct answer.
+    rhs='(0 : ℚ)'
+    for j in reversed(range(len(data['model']['initial']))):
+        rhs=f"({model_kernel._literal(data['model']['matrix'][i][j])} * {model_kernel._literal(data['states'][k][j])} + {rhs})"
+    return f"{model_kernel._literal(data['states'][k+1][i])} = {rhs}"
+
+
 def render_partitioned(data):
     """Prove each finite equality separately, avoiding one large tactic context.
 
@@ -153,12 +161,15 @@ def render_partitioned(data):
     n=len(data['model']['initial']);steps=data['steps']
     facts=[]
     for i in range(n):
-        facts.append(f'private theorem init_{i} : states 0 ({i} : Fin {n}) = initial ({i} : Fin {n}) := by norm_num [states, initial]')
+        equation=f"{model_kernel._literal(data['states'][0][i])} = {model_kernel._literal(data['model']['initial'][i])}"
+        facts.append(f'private theorem init_{i} : states 0 ({i} : Fin {n}) = initial ({i} : Fin {n}) := by\n  change {equation}\n  norm_num')
     for k in range(steps):
         for i in range(n):
-            facts.append(f'private theorem recur_{k}_{i} : states ({k}+1) ({i} : Fin {n}) = step matrix (states {k}) ({i} : Fin {n}) := by norm_num [states, matrix, step, Fin.sum_univ_succ]')
+            equation=_recurrence_equation(data,k,i)
+            facts.append(f'private theorem recur_{k}_{i} : states ({k}+1) ({i} : Fin {n}) = step matrix (states {k}) ({i} : Fin {n}) := by\n  simp only [step, Fin.sum_univ_succ, Fin.sum_univ_zero]\n  change {equation}\n  norm_num')
     for k in range(steps+1):
-        facts.append(f'private theorem clock_{k} : times {k} = ({k} : ℚ) * dt := by norm_num [times, dt]')
+        equation=f"{model_kernel._literal(data['times'][k])} = ({k} : ℚ) * {model_kernel._literal(data['dt'])}"
+        facts.append(f'private theorem clock_{k} : times {k} = ({k} : ℚ) * dt := by\n  change {equation}\n  norm_num')
     proof=['  refine ⟨?_, ?_, ?_⟩','  · intro i','    fin_cases i']
     proof += [f'    · exact init_{i}' for i in range(n)]
     proof += ['  · intro k i','    fin_cases k']
@@ -188,17 +199,17 @@ def render_refutation(data):
     witness=None
     for i in range(n):
         if states[0][i]!=initial[i]:
-            witness=(f'h.1 ({i} : Fin {n})','states, initial');break
+            witness=(f'h.1 ({i} : Fin {n})',f"{model_kernel._literal(data['states'][0][i])} = {model_kernel._literal(data['model']['initial'][i])}",False);break
     if witness is None:
         for k in range(steps):
             for i in range(n):
                 if states[k+1][i]!=sum(matrix[i][j]*states[k][j] for j in range(n)):
-                    witness=(f'h.2.1 ({k} : Fin {steps}) ({i} : Fin {n})','states, matrix, step, Fin.sum_univ_succ');break
+                    witness=(f'h.2.1 ({k} : Fin {steps}) ({i} : Fin {n})',_recurrence_equation(data,k,i),True);break
             if witness is not None:break
     if witness is None:
         for k,value in enumerate(data['times']):
             if Fraction(value)!=k*Fraction(data['dt']):
-                witness=(f'h.2.2 ({k} : Fin {steps+1})','times, dt');break
+                witness=(f'h.2.2 ({k} : Fin {steps+1})',f"{model_kernel._literal(value)} = ({k} : ℚ) * {model_kernel._literal(data['dt'])}",False);break
     original=render(data,negative=True)
     if witness is None:return original
     needle=f'theorem trace_rejected : PCSReal.TransportTrace.check matrix initial states times dt {steps} = false := by decide +kernel'
@@ -209,7 +220,9 @@ def render_refutation(data):
     have h := hc
     simp only [PCSReal.TransportTrace.check, decide_eq_true_eq] at h
     have bad := {witness[0]}
-    norm_num [{witness[1]}] at bad'''
+    {('simp only [step, Fin.sum_univ_succ, Fin.sum_univ_zero] at bad' if witness[2] else 'skip')}
+    change {witness[1]} at bad
+    norm_num at bad'''
     if original.count(needle.encode())!=1:raise ValueError('exact refutation boundary changed')
     return original.replace(b'import PCSReal.TransportTrace\n',
         b'import PCSReal.TransportTrace\nimport Mathlib.Algebra.BigOperators.Fin\n',1).replace(needle.encode(),replacement.encode())

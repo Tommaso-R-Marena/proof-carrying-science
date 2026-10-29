@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V15 additionally pins the new source/results and documentation.
+reviewable; V16 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V15 manifest rather than rewriting old evidence or
+checker selects a new fixed V16 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -78,7 +78,7 @@ Apache/public-source authorization.
 
 The V13 run exposed an embedded additions-only check in the transport invariant
 family audit. Its Ubuntu 22.04 job refused the combined tree before Lean ran.
-V15 explicitly selects the pinned whole-source contract when present and records
+V16 explicitly selects the pinned whole-source contract when present and records
 that the old predicate is not claimed. The original standalone branch remains
 unchanged, and its original audit source is retained under `predecessor/v13`.
 All four captured Lean sources, compilation, closure census, fresh object replay,
@@ -109,3 +109,15 @@ inline Python download command had an unmatched parenthesis. The command is
 corrected and its real syntax is now parsed in the default CI unit job. That
 failed attempt produced no new model measurements and is not counted as a
 successful weight experiment. The retained 72-call local study is unchanged.
+
+
+## Targeted lookup reduction
+
+V15's individual equality lemmas still expanded the full table during rational
+normalization on the hosted runner. V16 first uses Lean's definitional `change`
+check to expose only the selected input scalars, then proves the explicit
+arithmetic equation. The right side copies actual matrix/state entries; Python
+does not supply a precomputed answer. Negative witnesses use the same reduction.
+All 41 local tests passed in 289.29 seconds under the unchanged 2 GiB bound.
+This is a local result; the new protected hosted run must confirm portability.
+The previous constructor source is retained under `predecessor/v15`.
