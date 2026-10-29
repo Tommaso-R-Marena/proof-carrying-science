@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V13 additionally pins the new source/results and documentation.
+reviewable; V14 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V13 manifest rather than rewriting old evidence or
+checker selects a new fixed V14 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -72,3 +72,15 @@ long-term domain/contact/branding choices. Existing key and retention controls
 already exist. [The owner/external table](../2026-10-28/OWNER_DEPENDENCIES.md)
 records the actual remaining criteria without asking to repeat first-party
 Apache/public-source authorization.
+
+
+## First hosted integration correction
+
+The V13 run exposed an embedded additions-only check in the transport invariant
+family audit. Its Ubuntu 22.04 job refused the combined tree before Lean ran.
+V14 explicitly selects the pinned whole-source contract when present and records
+that the old predicate is not claimed. The original standalone branch remains
+unchanged, and its original audit source is retained under `predecessor/v13`.
+All four captured Lean sources, compilation, closure census, fresh object replay,
+limits and source/object stability checks are unchanged. This is source admission
+repair, not a fabricated kernel verdict or a weaker theorem.

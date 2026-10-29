@@ -39,6 +39,18 @@ def git(*args: str) -> str:
 
 
 def preservation() -> dict:
+    # The original additions-only predicate remains the standalone behavior.
+    # A reviewed combined tree must satisfy its separately pinned whole-source
+    # contract; never report that the historical predicate held on this tree.
+    successor = ROOT / "docs/integration/2026-10-29/RECONCILIATION_V14.json"
+    if successor.exists() or successor.is_symlink():
+        from research.integration_v2.reconcile import check
+        checked = check(require_committed=True)
+        return {"base": BASE, "head": git("rev-parse", "HEAD"),
+                "tree": git("rev-parse", "HEAD^{tree}"),
+                "admitted_contract": "EXPLICIT_COMBINED_SOURCE_V14",
+                "original_additions_only_predicate_claimed": False,
+                "combined_source": checked}
     def tree(ref):
         raw = subprocess.check_output(["git", "ls-tree", "-rz", "-r", ref], cwd=ROOT, timeout=30)
         return {x.split(b"\t", 1)[1]: x.split(b"\t", 1)[0] for x in raw.split(b"\0") if x}
