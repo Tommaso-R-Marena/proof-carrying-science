@@ -225,3 +225,125 @@ def test_dependency_bootstrap_cannot_authorize_other_full_gate_changes(tmp_path,
 def test_ambiguous_paths_refused(path):
     with pytest.raises(ValueError):
         gate._path(path)
+
+
+@pytest.fixture
+def pr117_history(tmp_path):
+    """Real Git add/add history. These are source fixtures, never Lean verdicts."""
+    def git(*args):
+        return subprocess.check_output([
+            "git", "-c", "user.name=PCS source fixture",
+            "-c", "user.email=fixture@example.invalid", *args], cwd=tmp_path)
+    git("init", "-q")
+    git("commit", "--allow-empty", "-qm", "Empty source fixture")
+    base = git("rev-parse", "HEAD").decode().strip()
+    paths = sorted(gate.PR117_CONFLICT_PATHS) + [
+        f"research/proof-gated-self-improvement-v1/source_{i}.py" for i in range(21)]
+    git("checkout", "-qb", "research")
+    for name in paths:
+        p = tmp_path / name
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(b"original source fixture\n")
+    git("add", ".")
+    git("commit", "-qm", "Historical research source fixture")
+    research = git("rev-parse", "HEAD").decode().strip()
+    git("checkout", "-qb", "protected", base)
+    for name in paths:
+        p = tmp_path / name
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(b"reviewed successor fixture\n" if name in gate.PR117_CONFLICT_PATHS
+                      else b"original source fixture\n")
+    codec = tmp_path / "formal/PCS/V2/ProofGatedCodec.lean"
+    codec.write_bytes(b"additional protected source fixture; not a Lean proof\n")
+    git("add", ".")
+    git("commit", "-qm", "Protected source fixture")
+    protected = git("rev-parse", "HEAD").decode().strip()
+    tree = git("rev-parse", "HEAD^{tree}").decode().strip()
+    merged = git("commit-tree", tree, "-p", research, "-p", protected,
+                 "-m", "Resolved source fixture; no verifier result").decode().strip()
+    git("checkout", "-q", "--detach", merged)
+    return tmp_path, dict(protected=protected, research=research), git
+
+
+def test_pr117_resolution_preserves_reviewed_bytes_and_both_histories(pr117_history):
+    root, refs, _ = pr117_history
+    r = gate._pr117_resolution(root, **refs)
+    assert r["original_paths_checked"] == 25
+    assert r["unchanged_original_paths"] == 21
+    assert set(r["reviewed_successors"]) == gate.PR117_CONFLICT_PATHS
+    assert r["proof_family_files_checked"] == 26
+    assert r["protected_main_ancestry"] and r["original_research_ancestry"]
+    assert r["pcs_authority"] is r["release_ready"] is False
+
+
+@pytest.mark.parametrize("name", sorted(gate.PR117_CONFLICT_PATHS))
+def test_each_old_conflict_side_is_rejected_even_if_it_previously_passed(pr117_history, name):
+    root, refs, git = pr117_history
+    (root / name).write_bytes(git("show", refs["research"] + ":" + name))
+    with pytest.raises(ValueError, match="rollback or substitution"):
+        gate._pr117_resolution(root, **refs)
+
+
+@pytest.mark.parametrize("attack", ["missing", "mode", "symlink", "extra_module"])
+def test_pr117_deleted_replaced_and_unreviewed_sources_fail_closed(pr117_history, attack):
+    root, refs, git = pr117_history
+    source = root / "formal/PCS/V2/ProofGatedCodec.lean"
+    if attack == "missing":
+        source.unlink()
+    elif attack == "mode":
+        source.chmod(0o755)
+    elif attack == "symlink":
+        original = root / "unchanged-contents.txt"
+        original.write_bytes(source.read_bytes())
+        source.unlink()
+        source.symlink_to(original)
+    else:
+        extra = root / "formal/PCS/V2/ProofGatedUnreviewed.lean"
+        extra.write_text("unreviewed source fixture\n")
+        git("add", str(extra.relative_to(root)))
+    with pytest.raises((ValueError, OSError)):
+        gate._pr117_resolution(root, **refs)
+
+
+def test_identical_source_without_protected_main_ancestry_is_insufficient(pr117_history):
+    root, refs, git = pr117_history
+    tree = git("rev-parse", "HEAD^{tree}").decode().strip()
+    detached = git("commit-tree", tree, "-p", refs["research"],
+                   "-m", "Copied files without protected ancestry").decode().strip()
+    git("checkout", "-q", "--detach", detached)
+    with pytest.raises(ValueError, match="retain protected main ancestry"):
+        gate._pr117_resolution(root, **refs)
+
+
+def test_original_main_does_not_claim_that_the_held_branch_was_merged(pr117_history):
+    root, refs, git = pr117_history
+    git("checkout", "-q", "--detach", refs["protected"])
+    r = gate._pr117_resolution(root, **refs)
+    assert r["protected_main_ancestry"] and not r["original_research_ancestry"]
+    assert r["release_ready"] is False
+
+
+@pytest.mark.parametrize("ref", ["main", "0" * 39, "HEAD^{tree}", "../unreviewed"])
+def test_pr117_references_cannot_be_selected_by_ambiguous_names(pr117_history, ref):
+    root, refs, _ = pr117_history
+    with pytest.raises(ValueError, match="exact reference"):
+        gate._pr117_resolution(root, protected=ref, research=refs["research"])
+
+
+def test_actual_pr117_source_family_retains_the_protected_versions():
+    r = gate._pr117_resolution(gate.ROOT)
+    assert r["original_paths_checked"] == 25
+    assert len(r["reviewed_successors"]) == 4
+    assert r["proof_family_files_checked"] > 25
+    assert r["release_ready"] is r["pcs_authority"] is False
+
+
+def test_conflict_repair_does_not_rewrite_the_frozen_manifest_or_workflows():
+    manifest = gate._json((gate.ROOT / gate.MANIFEST).read_bytes())
+    assert hashlib.sha256((gate.ROOT / gate.MANIFEST).read_bytes()).hexdigest() == gate.MANIFEST_SHA256
+    for name in [gate.MANIFEST, *manifest["workflow_adaptations"],
+                 "formal/PCS/V2/ProofGatedArtifacts.lean",
+                 "formal/PCS/V2/ProofGatedAudit.lean",
+                 "formal/PCS/V2/ProofGatedInference.lean"]:
+        assert (gate.ROOT / name).read_bytes() == gate._git(
+            gate.ROOT, "show", gate.PR117_PROTECTED_HEAD + ":" + name)

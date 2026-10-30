@@ -21,6 +21,17 @@ ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = "docs/integration/2026-10-29/RECONCILIATION_V20.json"
 MANIFEST_SHA256 = '30d74b87c9bedb598af2cd6ab0c5d9014a99fe50cd6382bc6baf76663c380833'
 API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
+# Exact reviewed source references for reconciling the held research branch.
+# This adds a source rollback check; it does not release PR117 or grant authority.
+PR117_RESEARCH_HEAD = "db1cacf5c750ee108c9d946f5ee0839a53be25f6"
+PR117_PROTECTED_HEAD = "42bc851288b44cc72150e5251a19ec259b943e1f"
+PR117_CONFLICT_PATHS = frozenset({
+    ".github/workflows/pcs-proof-gated-research.yml",
+    "formal/PCS/V2/ProofGatedArtifacts.lean",
+    "formal/PCS/V2/ProofGatedAudit.lean",
+    "formal/PCS/V2/ProofGatedInference.lean",
+})
+
 WORKFLOW_PREDECESSOR_TREE = "1fdf12112394c1ad7438e2add4460fba8fd34da0"
 
 
@@ -222,6 +233,59 @@ def _workflows(root, manifest):
             raise ValueError("workflow changes outside explicit source/pin replacements: " + name)
 
 
+def _pr117_family(name):
+    return (name.startswith("research/proof-gated-self-improvement-v1/")
+            or (name.startswith("formal/PCS/V2/ProofGated") and name.endswith(".lean"))
+            or name in PR117_CONFLICT_PATHS)
+
+
+def _pr117_resolution(root, *, protected=PR117_PROTECTED_HEAD, research=PR117_RESEARCH_HEAD):
+    """Reject stale conflict choices using real Git objects and the active files.
+
+    The CLI fixes both refs above. Tests use real disposable Git histories, not
+    mathematical/verifier verdicts. Existing full-tree and workflow checks still
+    run; no historical receipt, manifest digest or source exception is changed.
+    """
+    if not all(re.fullmatch("[0-9a-f]{40}", ref) for ref in (protected, research)):
+        raise ValueError("PR117 exact reference identities required")
+    base = _git(root, "merge-base", protected, research).decode().strip()
+    original = set(_git(root, "diff", "--name-only", base + "..." + research).decode().splitlines())
+    if len(original) != 25:
+        raise ValueError("PR117 original changed-path census differs")
+    names = set(_git(root, "ls-tree", "-rz", "--name-only", protected).decode().split("\0")) - {""}
+    family = original | {name for name in names if _pr117_family(name)}
+    if not family <= names:
+        raise ValueError("PR117 source missing from protected reference")
+    tracked = set(_git(root, "ls-files", "-z").decode().split("\0")) - {""}
+    if {name for name in tracked if _pr117_family(name)} != {name for name in names if _pr117_family(name)}:
+        raise ValueError("PR117 proof/research family census differs")
+    identities = _historical_identities(root, [
+        dict(head=protected, files=[dict(path=name) for name in sorted(family)]),
+        dict(head=research, files=[dict(path=name) for name in sorted(original)]),
+    ])
+    successors = {name for name in original
+                  if identities[protected, name] != identities[research, name]}
+    if successors != PR117_CONFLICT_PATHS:
+        raise ValueError("PR117 reviewed successor census differs")
+    for name in sorted(family):
+        if name not in tracked or _identity(root, name) != identities[protected, name]:
+            raise ValueError("PR117 protected source rollback or substitution: " + name)
+    ancestor = subprocess.run(["git", "merge-base", "--is-ancestor", protected, "HEAD"],
+                              cwd=root, capture_output=True)
+    if ancestor.returncode != 0:
+        raise ValueError("PR117 integration must retain protected main ancestry")
+    legacy = subprocess.run(["git", "merge-base", "--is-ancestor", research, "HEAD"],
+                            cwd=root, capture_output=True)
+    if legacy.returncode not in {0, 1}:
+        raise ValueError("PR117 research ancestry cannot be checked")
+    return dict(protected_reference=protected, original_research_reference=research,
+                original_paths_checked=len(original), unchanged_original_paths=21,
+                reviewed_successors=sorted(successors), proof_family_files_checked=len(family),
+                protected_main_ancestry=True, original_research_ancestry=legacy.returncode == 0,
+                release_ready=False, pcs_authority=False,
+                scope="EXACT_PROTECTED_SOURCE_PRESERVATION_NOT_SEMANTIC_OR_HOST_SECURITY_PROOF")
+
+
 def check(*, require_committed=False, live=False):
     raw = (ROOT / MANIFEST).read_bytes()
     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
@@ -232,6 +296,7 @@ def check(*, require_committed=False, live=False):
     result = _verify(ROOT, manifest)
     _snapshot(ROOT, manifest)
     _workflows(ROOT, manifest)
+    pr117 = _pr117_resolution(ROOT)
     if require_committed:
         if _git(ROOT, "diff", "--name-only", "HEAD").strip():
             raise ValueError("committed source required; staged/working changes remain")
@@ -249,7 +314,8 @@ def check(*, require_committed=False, live=False):
         if {p["number"]: p["head"]["sha"] for p in actual} != {p["number"]: p["head"] for p in manifest["prs"]}:
             raise ValueError("live PR census changed; a new explicit review is required")
     return dict(result, committed_source_required=require_committed, live_heads_checked=live,
-                manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]))
+                manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
+                pr117_integration=pr117)
 
 
 def main():
