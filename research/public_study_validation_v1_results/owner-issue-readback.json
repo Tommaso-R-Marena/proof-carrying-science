@@ -1,0 +1,91 @@
+{
+  "scope": "Read-only issue-comment retrieval on 2026-10-29; no issue closed or external acceptance asserted",
+  "issues": [
+    {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "number": 9,
+      "comments": [
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/9#issuecomment-5879250130",
+          "body": "Launch-hardening progress:\n- `pcs attest` now automatically emits `runtime.json` and `LIMITATIONS.md` before the package manifest is constructed.\n- Both files are therefore bound by the package hash manifest and, for signed pilots, the Ed25519 package signature.\n- The limitations file is derived from certificate claims/assumptions and carries explicit non-claims around biological adequacy, clinical safety/efficacy, regulatory status, GxP validation, out-of-boundary code, and undiscovered defects.\n- Raw `pcs bundle` now constructs the package manifest needed by `pcs verify-bundle`.\n- Private-key patterns are ignored in Git and refused at evidence-bundle creation.\n\nThis closes several handoff hazards. Still open: intake template, release/version procedure, key rotation procedure, incident response, and counsel-reviewed commercial agreement/SOW."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/9#issuecomment-5879307953",
+          "body": "Operational docs added:\n- `docs/PILOT_INTAKE_TEMPLATE.md`\n- `docs/KEY_MANAGEMENT.md`\n- `docs/RELEASE_AND_INCIDENT_RESPONSE.md`\n\nThese cover reviewer-defined claim intake, scope/out-of-scope, artifact/data classification, retention, signer fingerprint pinning, key rotation/compromise, clean release procedure, no-silent-overwrite, and assurance/integrity/data incident response.\n\nRemaining launch-business dependencies are primarily external: counsel-reviewed agreement/SOW, entity/payment path, and the first real design-partner workflow."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/9#issuecomment-5995758074",
+          "body": "Engineering progress: PR #60 implements the two repository-side controls that were still missing here.\n\nImplemented in #60:\n- hash-bound public signer lifecycle registry with ACTIVE/RETIRED/REVOKED states;\n- explicit rotation semantics and two revocation scopes (`from_time` vs retrospective `all_signatures`);\n- signer assessment at historical certificate/signature time;\n- custody/recovery declarations that never store private key material;\n- practical custody/rotation/revocation runbook;\n- exact hash-bound pilot closeout plan/receipt;\n- every workspace file must be explicitly RETAIN or DELETE;\n- symlink/unsafe-path rejection;\n- exact plan-hash confirmation before deletion;\n- fail-closed abort if workspace bytes/file set changed after planning;\n- post-closeout verification of retained files;\n- explicit non-claim that local unlinking proves secure erasure from backups/snapshots/provider systems;\n- focused CircleCI `pilot-ops-tests` gate and adversarial tests.\n\nThis narrows #9 substantially, but it should remain open. Still genuinely external:\n1. counsel-reviewed pilot/SOW/confidentiality/data-handling language;\n2. approved business/entity/payment path where needed;\n3. exercising the controls in the first true external workflow under #13 and recording any residual founder-only judgment."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/9#issuecomment-6238463636",
+          "body": "The existing signing-key lifecycle and closeout implementation was rechecked in grouped integration PR #119: 33 focused key custody/lifecycle, pilot intake/closeout and disclosure-audit tests passed locally. The practical runbooks and hash-bound controls from #60 are already implemented; no replacement key registry, real key rotation or production partner-data deletion was performed.\n\nRemaining acceptance work is external: counsel-reviewed terms, entity/payment route and use of the controls in a genuine partner workflow under #13. This issue remains open for those criteria."
+        }
+      ]
+    },
+    {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "number": 11,
+      "comments": [
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/11#issuecomment-6052557949",
+          "body": "October 8 release-readiness review: repository `LICENSE` and `pyproject.toml` already declare Apache-2.0, which permits third-party commercial use. Publishing the **existing full Git history** would disclose all reachable prior source, not just the sanitized current tree; the `docs/PUBLIC_RELEASE_GATE.md` HOLD is still appropriate. A private-to-public change is **not authorized yet**. Practical options for founder/counsel decision: (A) Apache-2.0 genuinely open verifier/IR/CLI and sell enterprise integrations, hosted services, support, and domain packs with separately established rights; (B) create a new sanitized, explicitly licensed public *core-only* repository after authorship/IP review, retaining unreleased packs where legally permitted. Resolve contributor permissions/DCO or CLA, publication firewall and academic/collaborator rights, full history secret scan, and Cloudflare CI shared token isolation (#75). Public GitHub-hosted runners are free on standard hardware, and draft PR #76 prepares a public-only full gate, but the financial incentive alone is not sufficient release clearance."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/11#issuecomment-6052669072",
+          "body": "Public-release implementation update (2026-10-08): draft PR #77 stages full standard Apache-2.0 LICENSE text with NOTICE attribution, SECURITY.md, CODE_OF_CONDUCT.md, proposed contributor DCO guidance, public reviewer quickstart, source-history audit script/tests, detailed HOLD/release checklist, and a rights/provenance ledger covering Lean sources, Aristotle-assisted work, Iris (CC BY attribution), Indometh, scientific fixture/data and third-party licenses. No ownership/legal/IP clearance is claimed. Do not convert to public until the ledger, complete history/log scan and founder approval are done. Separate CI-focused draft PR #76 remains conditional on public visibility."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/11#issuecomment-6053108326",
+          "body": "Founder explicitly asserts ownership of original PCS IP and selected Apache-2.0 for the open verification foundation, with DCO-style contribution and separate commercial hosted/integration products; recorded in `docs/OPEN_SOURCE_CHARTER.md` and rights ledger staged in PR #78. GitHub inspection requested 123 reachable ref *tip trees*, finding zero obvious risky secret/credential filenames; not a byte/history/log secret clearance. Full blob-scan and independent third-party data/consent clearance are still OPEN. No public visibility change."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/11#issuecomment-6074230831",
+          "body": "The Owner has made all three repositories public and explicitly reaffirmed complete first-party IP ownership. The open verification foundation deliberately retains Apache-2.0 (`LICENSE`, `NOTICE`, `OPEN_SOURCE_CHARTER.md`); no further first-party visibility or ownership permission is pending. Protected integration #82 and full public main CI have executed. The issue's earlier private-before-public blocker is historical.\n\nKeeping only the external third-party/contributor and historical-disclosure follow-up open: public history scanners and documented adjudication have run, but inaccessible historical artifacts/binaries and independent third-party review are not claimed cleared. Public source does not make private accounts, consented research rows, production keys or hosted products public. This is not a requirement to ask the Owner again for first-party publication authorization."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/11#issuecomment-6238463796",
+          "body": "The owner’s Apache-2.0 / public first-party source decision remains resolved; no repeated publication approval is requested. The latest yacht measurements retain their original CC BY 4.0 attribution, source bytes, DOI, provenance and full license in both core and the website integration.\n\nA fresh redacted scan covered 10,561 reachable local Git objects and 4,412 UTF-8 blobs. Follow-up inspected 62 ZIP directories (1,708 members) and 17 bounded tar directories (580 members). The 54 private-key-header hits yielded no valid unencrypted PEM private key in this bounded inspection. This is not a zero-finding disclosure clearance: 401 binary blobs were outside the original text scan, 66 gzip expansions exceeded the follow-up bound, malformed/non-tar containers and other binaries remain, and nested content/third-party rights need adjudication. No historical evidence or scanner conclusion was rewritten.\n\nIndependent third-party/contributor rights and complete historical disclosure review remain open."
+        }
+      ]
+    },
+    {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "number": 13,
+      "comments": [
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/13#issuecomment-6238463960",
+          "body": "The protected real-data calibration integration (#118), proposed for website exposure in PR #119 (awaiting protected qualification and deployment), provides independently replayable mathematical research evidence. It is a developer-run retrospective analysis of public archived observations and is not the external design-partner exercise required here.\n\nThe existing intake lock, signed package, independent replay and reviewer-receipt mechanisms remain implemented and their focused operations tests were rechecked in core #119. An actual external partner must still define/freeze claims prospectively and provide second-environment replay and feedback. No partner, reviewer acceptance or external validation is fabricated; this issue remains open."
+        }
+      ]
+    },
+    {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "number": 14,
+      "comments": [
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/issues/14#issuecomment-6238464147",
+          "body": "Technical dependency review: the repository now has active GitHub rules requiring pull requests, linear history, no deletion/force-push, up-to-date branches and the GitHub Actions `verified-public-integration` aggregate. That aggregate includes repository integrity and the full dependent gates; the old #54 settings gap is resolved by the current enforced public CI policy.\n\nCore #119 consolidates the five dependency updates; website #119 proposes to expose the protected research/evidence and tested D1 forward maintenance path. Both PRs are awaiting protected qualification. Neither release creates a paid engagement, payment route, legal clearance or external partner result. #9/#11/#13 and counsel-reviewed commercial/entity requirements remain unmet, so this issue remains open."
+        }
+      ]
+    },
+    {
+      "repository": "Tommaso-R-Marena/proof-carrying-science-site",
+      "number": 2,
+      "comments": [
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science-site/issues/2#issuecomment-6052560884",
+          "body": "October 8 issue audit: the live website and Cloudflare deployment already exist; this issue's remaining canonical-domain, branding, contact-identity, source-license/visibility and indexing decisions are **not** completed, so the issue remains open. The website can remain publicly accessible while the `proof-carrying-science-site` GitHub repository remains private. The proposed *core* public CI migration in core PR #76 and core #75 does not force publication of this separate website source. If the website code is eventually made public, add an explicit source license (no root `LICENSE` is currently present) and audit source/history, secrets, and D1/Worker environment boundaries first. No DNS, production, or repository-visibility change was made."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science-site/issues/2#issuecomment-6074231002",
+          "body": "The source-visibility decision is resolved: the Owner made the website, PCS and CertiForge repositories public. Protected website integration #90 and main public CI run 37878964480 succeeded. The current canonical Workers hostname is retained while a custom-domain/long-term contact/branding decision remains open; no domain purchase or canonical switch is inferred.\n\nNew demo/game-data integration is in #91: stateless real countermodel replay, independently checkable JSON/Lean witness exports, consented-data Owner export and an actual fitted search-policy trainer with held-out/hint isolation. Production deployment and live runtime availability will be reported separately from code/CI success."
+        },
+        {
+          "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science-site/issues/2#issuecomment-6238464302",
+          "body": "The integration in PR #119 retains the existing canonical Workers hostname and owner contact, with public source, explicit canonical URLs and index/follow metadata for the new research/calibration pages. Authenticated Cloudflare readback confirms the website is linked to its public repository on main only, previews are disabled, and the two retired core build triggers are absent. Existing nine bindings and the free-tier service remain unchanged.\n\nNo custom domain was acquired or made canonical, and no naming/trademark or legal review is claimed. The remaining long-term domain/contact/branding decision remains open; it does not require repeating the already-resolved first-party source-publication approval. PR #119 is still qualifying; actual deployment will be reported separately."
+        }
+      ]
+    }
+  ]
+}

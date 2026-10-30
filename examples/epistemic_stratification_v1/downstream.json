@@ -1,0 +1,32 @@
+{
+  "format": "pcs-epistemic-certificate-v1",
+  "assumptions": [
+    {
+      "id": "A_model",
+      "statement": "bounded finite transport model assumptions are explicit"
+    },
+    {
+      "id": "C_discrete",
+      "statement": "upstream claim C_discrete"
+    }
+  ],
+  "claim": {
+    "id": "C_pipeline",
+    "stratum": "computational",
+    "predicate": "pipeline-ok",
+    "required_evidence": ["E_pipe"],
+    "assumptions": ["A_model", "C_discrete"]
+  },
+  "evidence": [
+    {
+      "id": "E_pipe",
+      "stratum": "computational",
+      "outcome": "PASS",
+      "predicate": "pipeline-ok",
+      "artifact_ids": ["pipe.json"]
+    }
+  ],
+  "stratum": "computational",
+  "residuals": [],
+  "scientific_acceptance": false
+}

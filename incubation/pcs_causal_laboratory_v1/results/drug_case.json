@@ -1,0 +1,42 @@
+{
+  "title": "Synthetic confounding-by-indication (drug response)",
+  "disclaimer": "Synthetic computational model only. Not clinical advice. Not a claim about any real drug, pathway, or patient population.",
+  "graph": {
+    "nodes": [
+      "Drug",
+      "Outcome",
+      "Severity"
+    ],
+    "edges": [
+      [
+        "Drug",
+        "Outcome"
+      ],
+      [
+        "Severity",
+        "Drug"
+      ],
+      [
+        "Severity",
+        "Outcome"
+      ]
+    ]
+  },
+  "naive_observational_contrast": [
+    -47,
+    770
+  ],
+  "true_ate": [
+    7,
+    50
+  ],
+  "naive_equals_ate": false,
+  "empty_adjustment_valid": false,
+  "severity_adjustment_valid": true,
+  "identification_formula": "P(Outcome | do(Drug=x)) = \u03a3_{Severity} P(Outcome | Drug=x, Severity) P(Severity)",
+  "scientific_status_notes": [
+    "Observational association is misleading under confounding by indication.",
+    "Backdoor adjustment by Severity identifies ATE under declared assumptions.",
+    "Assumptions are not empirically validated by this demonstration."
+  ]
+}

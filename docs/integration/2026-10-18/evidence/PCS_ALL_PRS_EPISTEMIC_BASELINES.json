@@ -1,0 +1,543 @@
+{
+  "format": "pcs-epistemic-original-head-baselines-v1",
+  "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+  "floating_dependencies_installed": false,
+  "suites": [
+    {
+      "pr": 137,
+      "head": "2d05f88073291f3b73cbea37c743e54368e963e2",
+      "component": "pcs_next_v1",
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-137/incubation/pcs_next_v1:/workspace/.onboarding/pcs-pr-baselines/pr-137:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-137-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-137"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-137/incubation/pcs_next_v1",
+          "exit_code": 1,
+          "seconds": 3.858,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-137-pytest.log",
+          "log_sha256": "1395376ffe4a3420a2177110d2d6db858b1db5b70bee622476bdc63907de8ece",
+          "tail": "...........F............................................................ [ 98%]\n.                                                                        [100%]\n=================================== FAILURES ===================================\n______________________________ test_campaign_runs ______________________________\n\ntmp_path = PosixPath('/tmp/pytest-of-agent/pytest-0/test_campaign_runs0')\n\n    def test_campaign_runs(tmp_path):\n        report = run_campaign(tmp_path / \"camp\")\n        assert report[\"n_mutations\"] >= 30\n>       assert not report[\"errors\"], report[\"errors\"]\nE       AssertionError: [{'step': 'mutate_nlmixr_theo_sd', 'error': \"No module named 'pyreadr'\", 'trace': 'Traceback (most recent call last):\\...tion.py\", line 280, in mutate_nlmixr_theo_sd\nE             import pyreadr\nE         ModuleNotFoundError: No module named \\'pyreadr\\'\nE         '}]\nE       assert not [{'step': 'mutate_nlmixr_theo_sd', 'error': \"No module named 'pyreadr'\", 'trace': 'Traceback (most recent call last):\\...tion.py\", line 280, in mutate_nlmixr_theo_sd\\n    import pyreadr\\nModuleNotFoundError: No module named \\'pyreadr\\'\\n'}]\n\ntests/integration/test_real_world_campaign.py:36: AssertionError\n=========================== short test summary info ============================\nFAILED tests/integration/test_real_world_campaign.py::test_campaign_runs - As...\n1 failed, 72 passed in 3.16s\n",
+          "junit": {
+            "tests": 73,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 72
+          }
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "scripts/check_noninterference.py",
+            "--repo",
+            "/workspace/.onboarding/pcs-pr-baselines/pr-137"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-137/incubation/pcs_next_v1",
+          "exit_code": 0,
+          "seconds": 0.487,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-137-ownership.log",
+          "log_sha256": "c687a320ff7e10abda76182b4f7973d1e83178d41ca3ebf4f786363171e414be",
+          "tail": "xt_v1/tests/scientific/test_calibration.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_journal_demos.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_puromycin.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_puromycin_labels.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_canonical.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_chemistry.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_claim_ir.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_crypto.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_evidence_store.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_falsification.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_improvement_certificate.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_intake_freeze.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_nca_oral.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_oracles.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pd_conservation_meta.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pkpd.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pog.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pog_half_life.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_policy.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_python_static.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_registration_notebook.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_research_models.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_signed_receipt.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_state_machine.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_statuses.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_tabular_integrity.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_units_aware.py\nPASS: all changed paths within incubation/pcs_next_v1/\n"
+        },
+        {
+          "command": [
+            "/workspace/.onboarding/pcs-integration-env/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-137-hashlocked-full.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-137-hashlocked"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-137/incubation/pcs_next_v1",
+          "exit_code": 0,
+          "seconds": 1.696,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-137-hashlocked-full.log",
+          "log_sha256": "8bf8c95a820362a33bc3ce8a7b60df12453ec14738e58f8fc47a2f44d573557f",
+          "purpose": "complete-original-head-suite-hashlocked-environment",
+          "qualification_lock": "/workspace/.onboarding/pcs-all-prs-20261018/requirements-integration.lock",
+          "tail": "........................................................................ [ 98%]\n.                                                                        [100%]\n73 passed in 1.34s\n",
+          "junit": {
+            "tests": 73,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 73
+          }
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": "92912e6ed6e5228a7b33a74e0ac90b2911cc77ff",
+      "head_after": "2d05f88073291f3b73cbea37c743e54368e963e2"
+    },
+    {
+      "pr": 139,
+      "head": "193f530a789dcfa6837bfcc13aeee648d88ecd48",
+      "component": "pcs_certified_numerics_v1",
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1/python:/workspace/.onboarding/pcs-pr-baselines/pr-139:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-139-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-139"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1",
+          "exit_code": 2,
+          "seconds": 1.151,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-139-pytest.log",
+          "log_sha256": "ca8fb14863a24bf50c2ad0acde6872982e3116dde8040b0a51c010969d8c0a9a",
+          "tail": "\n==================================== ERRORS ====================================\n_________________ ERROR collecting tests/unit/test_interval.py _________________\nImportError while importing test module '/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1/tests/unit/test_interval.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/unit/test_interval.py:4: in <module>\n    from hypothesis import given, strategies as st\nE   ModuleNotFoundError: No module named 'hypothesis'\n=========================== short test summary info ============================\nERROR tests/unit/test_interval.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.49s\n",
+          "junit": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 1,
+            "skipped": 0,
+            "passed": 0
+          }
+        },
+        {
+          "command": [
+            "bash",
+            "scripts/noninterference_check.sh"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1",
+          "exit_code": 0,
+          "seconds": 0.334,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-139-ownership.log",
+          "log_sha256": "c0f009ed0ff8aada7e73c4e6cf8a9f46e7f9ccd7073ca1b73247d9d2a6e08d49",
+          "tail": "== Noninterference check ==\nrepo=/workspace/.onboarding/pcs-pr-baselines/pr-139\nallowed_prefix=incubation/pcs_certified_numerics_v1\nremote: https://github.com/Tommaso-R-Marena/proof-carrying-science.git\nbranch: HEAD\nOK: all changes confined to incubation/pcs_certified_numerics_v1\n"
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--ignore=tests/unit/test_interval.py",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-139-available-tests.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-139-available"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1",
+          "exit_code": 0,
+          "seconds": 0.866,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-139-available-tests-excluding-unavailable-hypothesis.log",
+          "log_sha256": "180969e8b820a497412c62c4b13371d334fcc05fbe4248facbfe09194bb5c76c",
+          "purpose": "available-tests-excluding-unavailable-hypothesis",
+          "tail": "......................                                                   [100%]\n22 passed in 0.23s\n",
+          "junit": {
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 22
+          },
+          "full_suite_complete": false
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-c",
+            "from certnum.certificate.schema import make_certificate\nfrom certnum.certificate.checker import check_certificate\nfrom certnum.expr.parse import parse_expr\nfrom certnum.expr.ast import expr_to_json\nfrom certnum.interval.interval import Interval\nimport json\ncert=make_certificate('global_optimization',claim={'expr':expr_to_json(parse_expr('x')),'domain':{'x':Interval.mk(0,2).to_json()},'lower_bound':'1','upper_bound':'2','incumbent':{'x':'2'}},witness={'coverage':[{'x':Interval.mk(1,2).to_json()}]})\nr=check_certificate(cert)\nprint(json.dumps({'fixture':cert,'original_accepted':r.accepted,'reasons':r.reasons,'counterexample_x':'0','true_f_at_x':'0','claimed_lower_bound':'1','soundness_violation':r.accepted},sort_keys=True))\nassert r.accepted, 'Expected original defect reproduction changed'\n"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1",
+          "exit_code": 0,
+          "seconds": 0.226,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-139-original-incomplete-coverage-defect-reproduction.log",
+          "log_sha256": "5767b67d7f00eff278cfaae054386680dd076dcbf75ce1062f9b5c52dedd1068",
+          "purpose": "original-incomplete-coverage-defect-reproduction",
+          "tail": "{\"claimed_lower_bound\": \"1\", \"counterexample_x\": \"0\", \"fixture\": {\"claim\": {\"domain\": {\"x\": {\"hi\": \"2\", \"lo\": \"0\"}}, \"expr\": {\"name\": \"x\", \"op\": \"var\"}, \"incumbent\": {\"x\": \"2\"}, \"lower_bound\": \"1\", \"upper_bound\": \"2\"}, \"format\": \"certnum-cert-v1\", \"kind\": \"global_optimization\", \"meta\": {}, \"witness\": {\"coverage\": [{\"x\": {\"hi\": \"2\", \"lo\": \"1\"}}]}}, \"original_accepted\": true, \"reasons\": [\"optimization bounds consistent with coverage\"], \"soundness_violation\": true, \"true_f_at_x\": \"0\"}\n"
+        },
+        {
+          "command": [
+            "/workspace/.onboarding/pcs-integration-env/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-139-hashlocked-full.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-139-hashlocked"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-139/incubation/pcs_certified_numerics_v1",
+          "exit_code": 0,
+          "seconds": 1.086,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-139-hashlocked-full.log",
+          "log_sha256": "f55a1335ed2f84d8f69891334cc537f185fff66089fafd509d5d768f641f5a8e",
+          "purpose": "complete-original-head-suite-hashlocked-environment",
+          "qualification_lock": "/workspace/.onboarding/pcs-all-prs-20261018/requirements-integration.lock",
+          "tail": "..............................                                           [100%]\n30 passed in 0.83s\n",
+          "junit": {
+            "tests": 30,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 30
+          }
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": "c4895e6d45cba9dd5484d5392fd61aaf28ed3b70",
+      "head_after": "193f530a789dcfa6837bfcc13aeee648d88ecd48"
+    },
+    {
+      "pr": 140,
+      "head": "af9853cd3f08579baacfb384eea79e4f321abea3",
+      "component": "pcs_epistemic_calculus_v1",
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-140/incubation/pcs_epistemic_calculus_v1/python:/workspace/.onboarding/pcs-pr-baselines/pr-140:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-140-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-140"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-140/incubation/pcs_epistemic_calculus_v1",
+          "exit_code": 0,
+          "seconds": 0.564,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-140-pytest.log",
+          "log_sha256": "6433d374a4aa54b66de991e4bb1f558f4f01443e97464399b62e2dfc2f13d52a",
+          "tail": ".....................................                                    [100%]\n37 passed in 0.18s\n",
+          "junit": {
+            "tests": 37,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 37
+          }
+        },
+        {
+          "command": [
+            "bash",
+            "scripts/noninterference_check.sh"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-140/incubation/pcs_epistemic_calculus_v1",
+          "exit_code": 0,
+          "seconds": 0.921,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-140-ownership.log",
+          "log_sha256": "1abd08d2d95c2ef6e8657715bbfd852cff6ed214c15e0af9b5af3f92ece94366",
+          "tail": "NONINTERFERENCE OK: only incubation/pcs_epistemic_calculus_v1/\n"
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": "53fff3749e10fa2f37876db304987121c101aa7b",
+      "head_after": "af9853cd3f08579baacfb384eea79e4f321abea3"
+    },
+    {
+      "pr": 141,
+      "head": "4fa6eb2635a1a3dabfa471ab4b8d57589127e6bf",
+      "component": null,
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-141:/workspace/.onboarding/pcs-pr-baselines/pr-141:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_epistemic_kernel_v1.py",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-141-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-141"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-141",
+          "exit_code": 0,
+          "seconds": 1.47,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-141-pytest.log",
+          "log_sha256": "ab8115160f22b4ef16b25b722894f586bfbf18607c59080e42e27b66093c0c41",
+          "tail": "..........................                                               [100%]\n26 passed in 0.60s\n",
+          "junit": {
+            "tests": 26,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 26
+          }
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": null,
+      "head_after": "4fa6eb2635a1a3dabfa471ab4b8d57589127e6bf"
+    },
+    {
+      "pr": 143,
+      "head": "183aaf1b854d810362af9cde9c6301a28b1f1088",
+      "component": "pcs_causal_laboratory_v1",
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-143/incubation/pcs_causal_laboratory_v1/src:/workspace/.onboarding/pcs-pr-baselines/pr-143:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-143-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-143"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-143/incubation/pcs_causal_laboratory_v1",
+          "exit_code": 0,
+          "seconds": 4.136,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-143-pytest.log",
+          "log_sha256": "b71db6006ecc410f6085db2500759568a2da5d0cdf2fd3f7165307654085abe2",
+          "tail": ".............................                                            [100%]\n",
+          "junit": {
+            "tests": 29,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 29
+          }
+        },
+        {
+          "command": [
+            "bash",
+            "scripts/noninterference_audit.sh"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-143/incubation/pcs_causal_laboratory_v1",
+          "exit_code": 0,
+          "seconds": 0.95,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-143-ownership.log",
+          "log_sha256": "eb5c083f79d1fd804c74e7cf7baee845910687d01b3a3727bae4c65322cd6573",
+          "tail": "tory_v1/src/pcs_causal/identification/do_calculus.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/identification/estimands.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/identification/frontdoor.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/nonident/__init__.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/nonident/witness_search.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/nonident/witness_verifier.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/probability/__init__.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/probability/rational_pmf.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/scm/__init__.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/scm/finite_scm.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/scm/interventions.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/sensitivity/__init__.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/sensitivity/bounds.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/sensitivity/confounding.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/ui/__init__.py\n  incubation/pcs_causal_laboratory_v1/src/pcs_causal/ui/app.py\n  incubation/pcs_causal_laboratory_v1/tests/test_certificates.py\n  incubation/pcs_causal_laboratory_v1/tests/test_estimation_discovery.py\n  incubation/pcs_causal_laboratory_v1/tests/test_experiments_cases.py\n  incubation/pcs_causal_laboratory_v1/tests/test_graphs.py\n  incubation/pcs_causal_laboratory_v1/tests/test_identification.py\n  incubation/pcs_causal_laboratory_v1/tests/test_nonident.py\n  incubation/pcs_causal_laboratory_v1/tests/test_probability.py\n  incubation/pcs_causal_laboratory_v1/tests/test_scm_intervention.py\n\nsymlinks under lab:\nAUDIT OK: all changes under incubation/pcs_causal_laboratory_v1/\n"
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-c",
+            "import importlib\nimportlib.import_module('pcs_causal.identification.do_calculus')\n"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-143/incubation/pcs_causal_laboratory_v1",
+          "exit_code": 1,
+          "seconds": 0.134,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-143-original-do-calculus-import.log",
+          "log_sha256": "99e78fd780deb83b9938f4e684db3af5b93126f59e5e872a500d340d7835f478",
+          "purpose": "original-do-calculus-import",
+          "tail": "Traceback (most recent call last):\n  File \"<string>\", line 2, in <module>\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/importlib/__init__.py\", line 90, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 995, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 1133, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 1063, in source_to_code\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\n  File \"/workspace/.onboarding/pcs-pr-baselines/pr-143/incubation/pcs_causal_laboratory_v1/src/pcs_causal/identification/do_calculus.py\", line 91\n    \"\"\"Rule 2 fragment: Y \u22a5 X | Z in G_{\\underline{X}} \u21d2 P(Y|do(X),Z)=P(Y|X,Z).\"\"\"\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 42-43: truncated \\uXXXX escape\n"
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": "b1ac1cf91dba7f7559c175353c1987631b821415",
+      "head_after": "183aaf1b854d810362af9cde9c6301a28b1f1088"
+    },
+    {
+      "pr": 144,
+      "head": "1f8069bd5d6e0e33097bdd50b1f35c959eacdc0e",
+      "component": "pcs_heterogeneous_compose_v1",
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-144/incubation/pcs_heterogeneous_compose_v1:/workspace/.onboarding/pcs-pr-baselines/pr-144:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-144-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-144"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-144/incubation/pcs_heterogeneous_compose_v1",
+          "exit_code": 0,
+          "seconds": 0.829,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-144-pytest.log",
+          "log_sha256": "dba147114f275ae0f2e9c99e2ca6e034b73a99d3a3f72cbac85fef6cb2d486e1",
+          "tail": "................                                                         [100%]\n16 passed in 0.17s\n",
+          "junit": {
+            "tests": 16,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 16
+          }
+        },
+        {
+          "command": [
+            "bash",
+            "scripts/noninterference_check.sh"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-144/incubation/pcs_heterogeneous_compose_v1",
+          "exit_code": 0,
+          "seconds": 0.897,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-144-ownership.log",
+          "log_sha256": "75224e0fbddf6531ee1b6eb72aae835c9f27e98dec674fc215a314a7792bde7d",
+          "tail": "noninterference ok: only incubation/pcs_heterogeneous_compose_v1\n"
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": "1e42d7bedd641502c368d3b429eed0507cb907f9",
+      "head_after": "1f8069bd5d6e0e33097bdd50b1f35c959eacdc0e"
+    },
+    {
+      "pr": 145,
+      "head": "320aa96d1a843f3c8aff91f7fdf30a126ba12797",
+      "component": null,
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-145:/workspace/.onboarding/pcs-pr-baselines/pr-145:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_assurance_lattice_v1.py",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-145-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-145"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-145",
+          "exit_code": 0,
+          "seconds": 5.377,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-145-pytest.log",
+          "log_sha256": "3f30d0c3a3d1ed00d631231af8a274a79cd4b9382aca087ae681f8b12d2f2910",
+          "tail": "............                                                             [100%]\n12 passed in 4.42s\n",
+          "junit": {
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 12
+          }
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": null,
+      "head_after": "320aa96d1a843f3c8aff91f7fdf30a126ba12797"
+    },
+    {
+      "pr": 146,
+      "head": "95d18c33ab7ac3b36f4d11343589de3e6c5bc382",
+      "component": null,
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-146:/workspace/.onboarding/pcs-pr-baselines/pr-146:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_epistemic_lattice_v1.py",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-146-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-146"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-146",
+          "exit_code": 0,
+          "seconds": 0.655,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-146-pytest.log",
+          "log_sha256": "17df259fd122b19e917fcbd4ef04d1815981914e2e4b771fcbd078f0fa42d8a7",
+          "tail": "...........                                                              [100%]\n11 passed in 0.13s\n",
+          "junit": {
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 11
+          }
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": null,
+      "head_after": "95d18c33ab7ac3b36f4d11343589de3e6c5bc382"
+    },
+    {
+      "pr": 147,
+      "head": "4b61c14b222c73be8365d6ef86bf3f3cb63f51c2",
+      "component": "pcs_conservation_algebra_v1",
+      "pythonpath": "/workspace/.onboarding/pcs-pr-baselines/pr-147/incubation/pcs_conservation_algebra_v1/python:/workspace/.onboarding/pcs-pr-baselines/pr-147:/workspace/.onboarding/pcs-site-export-venv/lib/python3.12/site-packages",
+      "executions": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests",
+            "--junitxml=/workspace/.onboarding/epistemic-baseline-logs/pr-147-pytest.xml",
+            "-o",
+            "cache_dir=/workspace/.onboarding/epistemic-baseline-logs/pytest-cache-147"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-147/incubation/pcs_conservation_algebra_v1",
+          "exit_code": 0,
+          "seconds": 0.46,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-147-pytest.log",
+          "log_sha256": "d1efbdbcba767fd8324dac7d96e0938b3d3ca094a0c42728bbf25bf7f267a4bc",
+          "tail": "..................                                                       [100%]\n18 passed in 0.09s\n",
+          "junit": {
+            "tests": 18,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "passed": 18
+          }
+        },
+        {
+          "command": [
+            "bash",
+            "scripts/noninterference_check.sh"
+          ],
+          "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-147/incubation/pcs_conservation_algebra_v1",
+          "exit_code": 0,
+          "seconds": 0.482,
+          "log": "/workspace/.onboarding/epistemic-baseline-logs/pr-147-ownership.log",
+          "log_sha256": "6e6aec211583035f195659b160c37d3be1c0c73ec080a28a6db32e6fffd16364",
+          "tail": "== Noninterference check ==\nrepo=/workspace/.onboarding/pcs-pr-baselines/pr-147\nallowed_prefix=incubation/pcs_conservation_algebra_v1\nremote: https://github.com/Tommaso-R-Marena/proof-carrying-science.git\nbranch: HEAD\nOK: all changes confined to incubation/pcs_conservation_algebra_v1\n"
+        }
+      ],
+      "tracked_status_after": "",
+      "component_git_tree": "23f355d0f59178f7f39775f9c58791403fe35bbe",
+      "head_after": "4b61c14b222c73be8365d6ef86bf3f3cb63f51c2"
+    }
+  ],
+  "notes": [
+    "No source changes or floating installs. Existing default Python combined with existing pytest site-packages via explicit subprocess PYTHONPATH.",
+    "PR139 full suite remains unavailable due missing hypothesis; partial subset is separately labeled, never full-suite PASS.",
+    "PR137 one failure caused by undeclared missing pyreadr.",
+    "PR143 suite passes while separate import of advertised do-calculus API fails SyntaxError.",
+    "PR145 existing positive kernel replay test actually uses Lean4.28.0; no expensive project Lean builds run."
+  ],
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "lean_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "hashlocked_rerun_environment": {
+    "python": "/workspace/.onboarding/pcs-integration-env/bin/python",
+    "lock": "/workspace/.onboarding/pcs-all-prs-20261018/requirements-integration.lock",
+    "lock_sha256": "373c9893e53e963f0030486ba41db04cf7a9523e7e19824c91d44736e424c93f",
+    "full_suite_retests": {
+      "137": {
+        "passed": 73,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "139": {
+        "passed": 30,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  }
+}

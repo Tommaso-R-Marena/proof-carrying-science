@@ -1,0 +1,65 @@
+/workspace/.onboarding/scientific-history-independent-review-20261019/source/ReviewControls.lean:70:91: error: unsolved goals
+hs :
+  PCSScientificReceiver.receive emptyScopesEnvelope.payload.candidate =
+    some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample)
+hh : (transition emptyScopesRoot permissiveSymbolicVerifier (initial emptyScopesRoot) emptyScopesEnvelope).2 = true
+⊢ (if emptyScopesEnvelope.payload.certificate = [] then
+        if
+            (transition
+                  { authority := [], witness := [], policy := policyBytes, checker := [],
+                    genesisId := fixtureRoot.genesisId,
+                    genesisIncumbent := PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample,
+                    genesisGeneration := fixtureRoot.genesisGeneration }
+                  permissiveSymbolicVerifier
+                  (initial
+                    { authority := [], witness := [], policy := policyBytes, checker := [],
+                      genesisId := fixtureRoot.genesisId,
+                      genesisIncumbent := PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample,
+                      genesisGeneration := fixtureRoot.genesisGeneration })
+                  emptyScopesEnvelope).2 =
+              true then
+          ((transition
+                { authority := [], witness := [], policy := policyBytes, checker := [],
+                  genesisId := fixtureRoot.genesisId,
+                  genesisIncumbent := PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample,
+                  genesisGeneration := fixtureRoot.genesisGeneration }
+                permissiveSymbolicVerifier
+                (initial
+                  { authority := [], witness := [], policy := policyBytes, checker := [],
+                    genesisId := fixtureRoot.genesisId,
+                    genesisIncumbent := PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample,
+                    genesisGeneration := fixtureRoot.genesisGeneration })
+                emptyScopesEnvelope).1,
+            some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample))
+        else
+          (initial
+              { authority := [], witness := [], policy := policyBytes, checker := [],
+                genesisId := fixtureRoot.genesisId,
+                genesisIncumbent := PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample,
+                genesisGeneration := fixtureRoot.genesisGeneration },
+            none)
+      else
+        (initial
+            { authority := [], witness := [], policy := policyBytes, checker := [], genesisId := fixtureRoot.genesisId,
+              genesisIncumbent := PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample,
+              genesisGeneration := fixtureRoot.genesisGeneration },
+          none)).2 =
+    some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample)
+/workspace/.onboarding/scientific-history-independent-review-20261019/source/ReviewControls.lean:75:63: warning: This simp argument is unused:
+  hh
+
+Hint: Omit it from the simp argument list.
+  simp [scientificTransition, emptyScopesRoot, sampleRoot, hs,̵ ̵h̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'ScientificHistoryIndependentReview.empty_candidate_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ScientificHistoryIndependentReview.accepting_new_science_does_not_upgrade_old_history' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ScientificHistoryIndependentReview.empty_trace_does_not_repair_genesis' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ScientificHistoryIndependentReview.pure_root_can_have_empty_opaque_scopes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

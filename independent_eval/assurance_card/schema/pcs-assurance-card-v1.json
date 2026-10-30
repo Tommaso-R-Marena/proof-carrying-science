@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proof-carrying-science.local/schema/pcs-assurance-card-v1.json",
+  "title": "PCS Offline Assurance Card v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "format",
+    "card_issues_accept",
+    "inspection_is_not_authority",
+    "disclaimer",
+    "limitations_banner",
+    "authority",
+    "inspection",
+    "provenance",
+    "lane_consistency",
+    "non_claims",
+    "card_integrity"
+  ],
+  "properties": {
+    "format": {
+      "const": "pcs-assurance-card-v1"
+    },
+    "card_issues_accept": {
+      "const": false,
+      "description": "The card never issues ACCEPT/PASS."
+    },
+    "inspection_is_not_authority": {
+      "const": true
+    },
+    "disclaimer": { "type": "string", "minLength": 1 },
+    "limitations_banner": { "type": "string", "minLength": 1 },
+    "authority": {
+      "type": "object",
+      "required": ["cli_is_authority"],
+      "properties": {
+        "cli_is_authority": { "const": true }
+      }
+    },
+    "inspection": {
+      "type": "object",
+      "required": ["card_issues_accept", "inspection_is_not_authority", "claims"],
+      "properties": {
+        "card_issues_accept": { "const": false },
+        "inspection_is_not_authority": { "const": true },
+        "claims": { "type": "array" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["generated_at_utc", "input_sha256", "efficiency"],
+      "properties": {
+        "generated_at_utc": { "type": "string" },
+        "input_sha256": { "type": "object" },
+        "efficiency": {
+          "type": "object",
+          "required": ["network", "lean_rebuild", "verify_only"],
+          "properties": {
+            "network": { "const": false },
+            "lean_rebuild": { "const": false },
+            "verify_only": { "const": true }
+          }
+        }
+      }
+    },
+    "lane_consistency": {
+      "type": "object",
+      "required": ["overall"],
+      "properties": {
+        "overall": {
+          "type": "string",
+          "enum": ["agreement", "disagreement", "inconclusive"]
+        }
+      }
+    },
+    "program_context": {
+      "type": "object",
+      "properties": {
+        "is_authority": { "const": false },
+        "issues_accept": { "const": false }
+      }
+    },
+    "card_integrity": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "canonicalization",
+        "digest_sha256",
+        "sealed_fields_excluded"
+      ],
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "canonicalization": { "const": "json-sort-keys-compact-utf8-v1" },
+        "digest_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sealed_fields_excluded": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "non_claims": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  }
+}

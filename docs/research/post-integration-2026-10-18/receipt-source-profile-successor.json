@@ -1,0 +1,63 @@
+{
+  "files": {
+    ".github/workflows/pcs-ci.yml": {
+      "mode": "100644",
+      "new_sha256": "6b3849a6ee927c5f4dd33e29e865e83320fcf386d346c90222d68dd36d4eb3ad",
+      "old_sha256": "fd9f0a7de9c8a9af320b66d91c016cecf1862062c8bee7771448acbff0d71a0e",
+      "reason": "Exact PR192 Python action pin or paired PR190/191 CodeQL pins; job bodies and acceptance logic preserved"
+    },
+    ".github/workflows/pcs-public-full-verification.yml": {
+      "mode": "100644",
+      "new_sha256": "bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf",
+      "old_sha256": "40e3cc3befb080f73439f80a2587e03324644c610f875d3c4bce1685319c9bf9",
+      "reason": "Exact reviewed action/source-boundary replacements plus pinned Mathlib preparation and both required transport kernel flags before the unchanged complete core gate; every original job command retained."
+    },
+    "README.md": {
+      "mode": "100644",
+      "new_sha256": "75c933b85ceafd7b0a262b217d2b46856e4f57a47ecc0f4e356e8338c3b468c0",
+      "old_sha256": "0dcc965c85fb78f4e2521f6255b0010fc3212ddd63cac903ee8fdc236c4e0d5c",
+      "reason": "Current beginner/production/research navigation and measured study results; old README retained verbatim under the dated V12 predecessor. No mathematical specification or authority change."
+    },
+    "formal/tools/LeanBuiltinCheck.lean": {
+      "mode": "100644",
+      "new_sha256": "78b201d6b9c1d19055b5b542ea13d8d465f57355d7688bdb92f78235986a9872",
+      "old_sha256": "fb9e2e616cdf1abcb73d12b8902ba9d41b15bada6985d46341e5a6b2486b5d49",
+      "reason": "Non-authority differential driver uses the six exact existing decider modules instead of the unrelated PCS umbrella; proof statements and decider code are unchanged"
+    },
+    "pcs/intake_verify_v06.py": {
+      "mode": "100644",
+      "new_sha256": "19763deafefee9179af0cc4b7d67fbd7355f33177c122657a9480a87ee2ddf20",
+      "old_sha256": "af80a68f9f3a91f530a909a4db6cb3708a8f767299837d76c94780d8854eebec",
+      "reason": "Reviewed receiving-veto receipt repair; preserves actual Lean verdict and overall rejection."
+    },
+    "pcs/receipt_contract_v06.py": {
+      "mode": "100644",
+      "new_sha256": "a5a9882dcd4b9cff872287c422ca2bd8fb00cb11c01f80afc6f0fe9b8c0dfeb1",
+      "old_sha256": "35d7e8b53b7fe009b58812fc9f1abd2ec03645e7cabee9044a9e7a716522019e",
+      "reason": "Reviewed receiving-veto receipt repair; preserves actual Lean verdict and overall rejection."
+    },
+    "pcs/transport_trace_kernel_v1.py": {
+      "mode": "100644",
+      "new_sha256": "b158a573c428e27b7008a335cdf9cf5daf654a9f1283a3023a8ec3195ea5b605",
+      "old_sha256": "f1b994bb9152a3622e8475d58ae6d96f0f6b94a4bb1c64f01dd1743a1e5ed0ae",
+      "reason": "Exact bounded equality fragments with common post-check source-tamper diagnostic; original rejection assertion retained and forced fallback test added; theorem/resource/axiom gates unchanged."
+    },
+    "research/integration_v1/source_gate.py": {
+      "mode": "100644",
+      "new_sha256": "08ccfa111b890610c3388050c04e9621c41927dd4d0cff964b8fbd1cfa7ccb46",
+      "old_sha256": "63b60bcec9538195f43506fed3102c37e960bb36654c57ee07e3d2452df6e625",
+      "reason": "Explicit predecessor-preserving exact-byte successor; no broad source override."
+    },
+    "tests/test_intake_verify_v06.py": {
+      "mode": "100644",
+      "new_sha256": "923b6e345eff82ffdadceba06e0f7edb3215850bf12fe683d59b1839eeb5d31b",
+      "old_sha256": "6b034c6324d127ccf35664108ed134dd3b1e1eade19c6963bf2f05d834bc797b",
+      "reason": "Receiving-veto receipt regressions with real receiver resolution, including isolated environment-selected authority and signed CLI rejection replay."
+    }
+  },
+  "format": "pcs-receipt-source-successor-v1",
+  "predecessor_commit": "b916eec1b9d0d5c02c9cc19b070f7a47df5e5d87",
+  "predecessor_profile_sha256": "0610914446b24a6b2e7fb70cd385155531c42d65a95ec04b896d37c29f9d7297",
+  "review_status": "pending_independent_review",
+  "scope": "SOURCE_IDENTITY_ONLY_NO_ACCEPTANCE_AUTHORITY"
+}

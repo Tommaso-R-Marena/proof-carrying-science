@@ -1,0 +1,89 @@
+{
+  "format": "pgsi-affine-theorem-inventory-v1",
+  "audited_theorem_count": 37,
+  "modules": [
+    {
+      "file": "IntegerAffine.lean",
+      "namespace": "PCS.Research.IntegerAffine",
+      "theorems": [
+        "nonneg_sound",
+        "plus_eval",
+        "minus_eval",
+        "neg_eval",
+        "termForm_sound",
+        "termsForm_sound",
+        "form_sound",
+        "coverFrom_sound",
+        "zeroOn_sound",
+        "preservesAffine_sound",
+        "acceptEqual_sound",
+        "acceptPreserves_sound",
+        "clip_contains",
+        "acceptBound_sound",
+        "natAbs_bound",
+        "acceptMaximum_sound",
+        "acceptNonvacuous_sound",
+        "refutesEqual_sound",
+        "refutesPreserves_sound",
+        "shift_predict",
+        "acceptNoCorrect_sound"
+      ],
+      "count": 21
+    },
+    {
+      "file": "CertificateClaims.lean",
+      "namespace": "PCS.Research.IntegerAffine",
+      "theorems": [
+        "checkClaim_sound",
+        "checkBatch_sound"
+      ],
+      "count": 2
+    },
+    {
+      "file": "PGSI1Bridge.lean",
+      "namespace": "PCS.Research.PGSI1Bridge",
+      "theorems": [
+        "embed_predict",
+        "target_predict",
+        "guardAccept_sound",
+        "checkGuardCase_sound",
+        "checkGuardBatch_sound"
+      ],
+      "count": 5
+    },
+    {
+      "file": "Controls.lean",
+      "namespace": "PCS.Research.KernelControls",
+      "theorems": [
+        "first_guard",
+        "second_guard",
+        "first_universal_preservation",
+        "second_universal_preservation",
+        "far_nonvacuous",
+        "far_perfect_window",
+        "far_preserves_all_integers",
+        "far_correct_witness",
+        "far_error_worsens"
+      ],
+      "count": 9
+    }
+  ],
+  "additional_posthoc_counterexample_theorems": {
+    "namespace": "PCS.Research.SupportedTailCounterexample",
+    "file": "results/supported-tail-v1/SupportedTail.lean",
+    "theorems": [
+      "concrete_errors",
+      "every_tail_input_worsens"
+    ],
+    "audited_separately": true
+  },
+  "total_authored_library_control_and_counterexample_declarations": 40,
+  "additional_posthoc_family_theorem": {
+    "namespace": "PCS.Research.SupportedCounterexampleFamily",
+    "file": "results/supported-family-v1/FamilyTail.lean",
+    "theorems": [
+      "every_tail_input_worsens"
+    ],
+    "audited_separately": true
+  }
+}

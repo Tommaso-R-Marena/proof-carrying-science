@@ -69,13 +69,18 @@ from .external_validator_v06 import (
     external_validator_evidence_kind_v06,
     normalize_external_validator_check_spec_v06,
 )
+from .intake import (
+    INTAKE_LOCK_PACKAGE_MEMBER_V06,
+    PilotIntakeError,
+    assert_lock_matches_certificate,
+    load_lock,
+)
 from .lean_authority_v06 import V06LeanAuthorityError
 from .numeric_contract_v06 import (
     V06NumericContractError,
     canonical_nonnegative_number_text_v06,
     normalize_certificate_metadata_scalar_v06,
 )
-
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 _SUPPORTED_CHECK_TYPES = set(CERTIFIED_BUILTIN_CHECK_TYPES_V06)
@@ -332,6 +337,7 @@ def build_attestation_directory_v06(
     *,
     expected_fingerprint: str | None = None,
     generated_at: str | None = None,
+    intake_lock: str | Path | None = None,
     lean_authority_path: str | Path | None = None,
     sbom_path: str | Path | None = None,
     build_provenance_path: str | Path | None = None,
@@ -602,10 +608,32 @@ def build_attestation_directory_v06(
     except V06CertificateError as exc:
         raise V06AttestationError(str(exc)) from exc
 
+    intake_lock_bound = False
+    if intake_lock is not None:
+        try:
+            lock = load_lock(intake_lock)
+            assert_lock_matches_certificate(lock, certificate)
+        except (OSError, PilotIntakeError, StrictJSONError) as exc:
+            raise V06AttestationError(
+                f"frozen pilot intake lock does not match attested certificate: {exc}"
+            ) from exc
+        lock_bytes = canonicalize_jcs_bytes(lock)
+        lock_path = out / INTAKE_LOCK_PACKAGE_MEMBER_V06
+        if lock_path.exists():
+            raise V06AttestationError(
+                f"refusing to overwrite existing {INTAKE_LOCK_PACKAGE_MEMBER_V06}"
+            )
+        lock_path.write_bytes(lock_bytes)
+        intake_lock_bound = True
+
     package_files: dict[str, bytes] = {
         "certificate.json": (out / "certificate.json").read_bytes(),
         **artifact_bytes,
     }
+    if intake_lock_bound:
+        package_files[INTAKE_LOCK_PACKAGE_MEMBER_V06] = (
+            out / INTAKE_LOCK_PACKAGE_MEMBER_V06
+        ).read_bytes()
 
     try:
         normalized = build_normalized_set_v06(certificate, package_files)
@@ -693,6 +721,9 @@ def build_attestation_directory_v06(
         "claims": final["claims"],
         "provenance": final.get("provenance", {"mode": "none", "entries": []}),
         "package_root": str(out),
+        "pilot_intake_lock": (
+            str(out / INTAKE_LOCK_PACKAGE_MEMBER_V06) if intake_lock_bound else None
+        ),
     }
 
 
@@ -704,6 +735,8 @@ def attest_v06(
     *,
     expected_fingerprint: str | None = None,
     overwrite: bool = False,
+    generated_at: str | None = None,
+    intake_lock: str | Path | None = None,
     lean_authority_path: str | Path | None = None,
     sbom_path: str | Path | None = None,
     build_provenance_path: str | Path | None = None,
@@ -736,6 +769,8 @@ def attest_v06(
             private_key_path,
             public_key_path,
             expected_fingerprint=expected_fingerprint,
+            generated_at=generated_at,
+            intake_lock=intake_lock,
             lean_authority_path=lean_authority_path,
             sbom_path=sbom_path,
             build_provenance_path=build_provenance_path,
@@ -774,4 +809,5 @@ def attest_v06(
         "public_key_fingerprint": built["public_key_fingerprint"],
         "claims": built["claims"],
         "provenance": built.get("provenance", {"mode": "none", "entries": []}),
+        "pilot_intake_lock_bound": built.get("pilot_intake_lock") is not None,
     }

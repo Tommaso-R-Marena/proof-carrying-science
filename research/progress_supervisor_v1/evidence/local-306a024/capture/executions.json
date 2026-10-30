@@ -1,0 +1,144 @@
+[
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "-o",
+      "PCSActionShield.olean",
+      "-c",
+      "PCSActionShield.c",
+      "PCSActionShield.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "-o",
+      "Progress.olean",
+      "-c",
+      "Progress.c",
+      "Progress.lean"
+    ],
+    "returncode": 0,
+    "stdout": "Progress.lean:159:11: warning: Try `simp at h` instead of `simpa using h`\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n'PCSProgress.check_iff' depends on axioms: [propext, Quot.sound]\n'PCSProgress.force_succ' does not depend on any axioms\n'PCSProgress.force_mono' does not depend on any axioms\n'PCSProgress.winning_can_force' depends on axioms: [propext, Quot.sound]\n'PCSProgress.force_implies_winning' depends on axioms: [propext, Quot.sound]\n'PCSProgress.losing_no_finite_bound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.pick_sound' depends on axioms: [propext]\n'PCSProgress.pick_exists' depends on axioms: [propext, Quot.sound]\n'PCSProgress.choose_sound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.choose_available' depends on axioms: [propext, Quot.sound]\n'PCSProgress.chosen_step_progresses' depends on axioms: [propext, Quot.sound]\n'PCSProgress.path_bound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.completion_at_bound' depends on axioms: [propext, Quot.sound]\n'PCSProgress.preserves_existing_safety' depends on axioms: [propext, Quot.sound]\n'PCSProgress.goals_halt' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "-o",
+      "Wire.olean",
+      "-c",
+      "Wire.c",
+      "Wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressWire.selected_from_choose' depends on axioms: [propext, Quot.sound]\n'PCSProgressWire.selected_all_outcomes' depends on axioms: [propext, Quot.sound]\n'PCSProgressWire.halt_is_goal' depends on axioms: [propext, Quot.sound]\n'PCSProgressWire.malformed_refuses' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "-o",
+      "Data.olean",
+      "-c",
+      "Data.c",
+      "Data.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSProgressData.certificate_checked' depends on axioms: [propext, Quot.sound]\n'PCSProgressData.winning' depends on axioms: [propext, Quot.sound]\n'PCSProgressData.losing' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "-o",
+      "Main.olean",
+      "-c",
+      "Main.c",
+      "Main.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/leanchecker",
+      "--fresh",
+      "Main"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/leanc",
+      "-O2",
+      "-o",
+      "supervisor",
+      "Main.c",
+      "Data.c",
+      "Wire.c",
+      "Progress.c",
+      "PCSActionShield.c"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxHeartbeats=8000000",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority/Capture-workflow-wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'Capture.actual' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "--root=/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority",
+      "/tmp/pytest-of-agent/pytest-2/test_actual_capture_and_fresh_0/capture/authority/Path-workflow.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'CapturedPath.path' depends on axioms: [propext, Quot.sound]\n'CapturedPath.bounded' depends on axioms: [propext, Quot.sound]\n'CapturedPath.completed' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  }
+]

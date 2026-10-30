@@ -1,0 +1,26 @@
+{
+  "format": "pcs-mass-action-contract-v1",
+  "question": "Does this synthetic branched biochemical concentration table preserve elemental amounts and match its declared finite Euler computation?",
+  "species": [
+    {"id": "glucose", "formula": "C6H12O6"},
+    {"id": "lactate", "formula": "C3H6O3"},
+    {"id": "isomer", "formula": "C3H6O3"}
+  ],
+  "reactions": [
+    {"id": "cleavage", "reactants": [{"species": "glucose", "coefficient": 1}], "products": [{"species": "lactate", "coefficient": 2}], "rate_constant": "1/10", "rate_unit": "s^-1"},
+    {"id": "isomerization", "reactants": [{"species": "lactate", "coefficient": 1}], "products": [{"species": "isomer", "coefficient": 1}], "rate_constant": "1/20", "rate_unit": "s^-1"}
+  ],
+  "initial": {"glucose": "1", "lactate": "0", "isomer": "0"},
+  "concentration_unit": "mol/L",
+  "time_unit": "s",
+  "time_step": "1/4",
+  "steps": 12,
+  "absolute_tolerance": "0",
+  "relative_tolerance": "0",
+  "assumptions": [
+    {"id": "closed_volume", "statement": "The synthetic compartment has fixed volume; there is no inflow, outflow or unmodeled reaction."},
+    {"id": "declared_kinetics", "statement": "The authored rate law is the specified deterministic mass-action model, not an empirically validated biological mechanism."},
+    {"id": "finite_method", "statement": "Only the 13 specified rational Euler observations are claimed; no continuous-time integration accuracy or safety is inferred."}
+  ],
+  "license": "CC0-1.0"
+}

@@ -1,0 +1,36 @@
+name: PCS Owner Hosted Qualification
+run-name: PCS fixed owner qualification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixed-qualification:
+    if: ${{ github.event.repository.private == false && github.ref == 'refs/heads/main' && github.actor == 'Tommaso-R-Marena' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        case: [hybrid-natural, hybrid-logic, learned-chain, human-actions, counterexample, ambiguous, unsupported, forged-proof, goal-tampering, budget-exhaustion]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install hash-pinned CPU environment
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock -r requirements-prover.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Execute fixed diagnostic with actual Lean and independent final replay
+        env:
+          PCS_FIXED_CASE: ${{ matrix.case }}
+        run: timeout --kill-after=10s 600s python -u -m pcs.experimental.prover.hosted_qualification --case "$PCS_FIXED_CASE"
+      # Small public stdout receipts only. No production secrets, artifact
+      # uploads, paid runners, submitted code or public-rate-limit bypass.

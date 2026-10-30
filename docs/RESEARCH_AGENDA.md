@@ -41,6 +41,10 @@ Automate falsification checks for leakage, self-matching, duplicate structures/s
 
 After biopharma, test whether the same core semantics can support AI agent authority, medical-device modeling, aerospace simulations, chemistry, and other critical domains through domain packs rather than kernel forks.
 
+## Program G — Epistemic Obligation Lattices
+
+Make Popperian falsifiability machine-obligatory: empirical and computational claims must carry explicit falsifiers; evidence classes cannot silently promote; upstream refutation reopens dependents; support is defeasible under new observations. See `docs/PCS_EPISTEMIC_OBLIGATION_LATTICE_V1.md` and `research/epistemic-lattice-v1/`. Experimental only — no package authority.
+
 ## First paper target
 
 **Proof-Carrying Scientific Workflows: A Formal Architecture for Verifiable Computational Science**

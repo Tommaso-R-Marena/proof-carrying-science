@@ -1,0 +1,268 @@
+PCSCompose.Audit.audit_target_count : Eq.{1} (List.length.{0} PCSCompose.Audit.auditTargets) 49
+'PCSCompose.Audit.audit_target_count' does not depend on any axioms
+PCSCompose.Compose.leavesOk_member : ∀ (atoms : List.{0} PCSCompose.Compose.EvidenceAtom)
+  (c : PCSCompose.Compose.CompositeClaim),
+  Eq.{1} (PCSCompose.Compose.leavesOk atoms c) Bool.true →
+    ∀ (id : Nat),
+      Membership.mem.{0, 0} (PCSCompose.Compose.CompositeClaim.leafIds c) id →
+        Exists.{1} fun a =>
+          And (Eq.{1} (PCSCompose.Compose.findAtom atoms id) (Option.some.{0} a))
+            (And (Eq.{1} (PCSCompose.Compose.EvidenceAtom.supported a) Bool.true)
+              (PCSCompose.Levels.Level.le (PCSCompose.Compose.CompositeClaim.requiredLevel c)
+                (PCSCompose.Compose.EvidenceAtom.level a)))
+'PCSCompose.Compose.leavesOk_member' depends on axioms: [propext, Quot.sound]
+PCSCompose.Compose.empty_rejects : ∀ (atoms : List.{0} PCSCompose.Compose.EvidenceAtom)
+  (c : PCSCompose.Compose.CompositeClaim),
+  Eq.{1} (PCSCompose.Compose.CompositeClaim.leafIds c) List.nil.{0} →
+    Eq.{1} (PCSCompose.Compose.accept atoms c) Bool.false
+'PCSCompose.Compose.empty_rejects' depends on axioms: [propext]
+PCSCompose.Compose.achieved_singleton_formal : ∀ (atoms : List.{0} PCSCompose.Compose.EvidenceAtom)
+  (c : PCSCompose.Compose.CompositeClaim) (a : PCSCompose.Compose.EvidenceAtom),
+  Eq.{1} (PCSCompose.Compose.CompositeClaim.leafIds c)
+      (List.cons.{0} (PCSCompose.Compose.EvidenceAtom.id a) List.nil.{0}) →
+    Eq.{1} (PCSCompose.Compose.findAtom atoms (PCSCompose.Compose.EvidenceAtom.id a)) (Option.some.{0} a) →
+      Eq.{1} (PCSCompose.Compose.EvidenceAtom.level a) PCSCompose.Levels.Level.formal →
+        Eq.{1} (PCSCompose.Compose.achievedLevel atoms c) PCSCompose.Levels.Level.formal
+'PCSCompose.Compose.achieved_singleton_formal' depends on axioms: [propext]
+PCSCompose.Compose.heterogeneous_level_law : Eq.{1}
+  (PCSCompose.Levels.Level.meetList
+    (List.cons.{0} PCSCompose.Levels.Level.empirical (List.cons.{0} PCSCompose.Levels.Level.formal List.nil.{0})))
+  PCSCompose.Levels.Level.empirical
+'PCSCompose.Compose.heterogeneous_level_law' does not depend on any axioms
+PCSCompose.Compose.formal_required_empirical_achieved_rejects : ∀ (atoms : List.{0} PCSCompose.Compose.EvidenceAtom)
+  (c : PCSCompose.Compose.CompositeClaim),
+  Eq.{1} (PCSCompose.Compose.CompositeClaim.requiredLevel c) PCSCompose.Levels.Level.formal →
+    Not (Eq.{1} (List.isEmpty.{0} (PCSCompose.Compose.CompositeClaim.leafIds c)) Bool.true) →
+      Eq.{1} (PCSCompose.Compose.achievedLevel atoms c) PCSCompose.Levels.Level.empirical →
+        Eq.{1} (PCSCompose.Compose.accept atoms c) Bool.false
+'PCSCompose.Compose.formal_required_empirical_achieved_rejects' depends on axioms: [propext]
+PCSCompose.Compose.computational_atom_not_formal_accept : have a :=
+  { id := 1, level := PCSCompose.Levels.Level.computational, supported := Bool.true, claimId := 0 };
+have atoms := List.cons.{0} a List.nil.{0};
+have c := { id := 0, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 1 List.nil.{0} };
+Eq.{1} (PCSCompose.Compose.accept atoms c) Bool.false
+'PCSCompose.Compose.computational_atom_not_formal_accept' does not depend on any axioms
+PCSCompose.Compose.unsupported_formal_rejects : have a :=
+  { id := 1, level := PCSCompose.Levels.Level.formal, supported := Bool.false, claimId := 0 };
+Eq.{1}
+  (PCSCompose.Compose.accept (List.cons.{0} a List.nil.{0})
+    { id := 0, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 1 List.nil.{0} })
+  Bool.false
+'PCSCompose.Compose.unsupported_formal_rejects' does not depend on any axioms
+PCSCompose.Compose.underleveled_empirical_rejects : have a :=
+  { id := 1, level := PCSCompose.Levels.Level.empirical, supported := Bool.true, claimId := 0 };
+Eq.{1}
+  (PCSCompose.Compose.accept (List.cons.{0} a List.nil.{0})
+    { id := 0, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 1 List.nil.{0} })
+  Bool.false
+'PCSCompose.Compose.underleveled_empirical_rejects' does not depend on any axioms
+PCSCompose.Compose.heterogeneous_pair_law : have f :=
+  { id := 1, level := PCSCompose.Levels.Level.formal, supported := Bool.true, claimId := 0 };
+have e := { id := 2, level := PCSCompose.Levels.Level.empirical, supported := Bool.true, claimId := 1 };
+have atoms := List.cons.{0} f (List.cons.{0} e List.nil.{0});
+And
+  (Eq.{1}
+    (PCSCompose.Compose.accept atoms
+      { id := 0, requiredLevel := PCSCompose.Levels.Level.empirical,
+        leafIds := List.cons.{0} 1 (List.cons.{0} 2 List.nil.{0}) })
+    Bool.true)
+  (And
+    (Eq.{1}
+      (PCSCompose.Compose.accept atoms
+        { id := 1, requiredLevel := PCSCompose.Levels.Level.formal,
+          leafIds := List.cons.{0} 1 (List.cons.{0} 2 List.nil.{0}) })
+      Bool.false)
+    (Eq.{1}
+      (PCSCompose.Compose.achievedLevel atoms
+        { id := 2, requiredLevel := PCSCompose.Levels.Level.empirical,
+          leafIds := List.cons.{0} 1 (List.cons.{0} 2 List.nil.{0}) })
+      PCSCompose.Levels.Level.empirical))
+'PCSCompose.Compose.heterogeneous_pair_law' does not depend on any axioms
+PCSCompose.Controls.good_formal_singleton : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 100, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 1 List.nil.{0} })
+  Bool.true
+'PCSCompose.Controls.good_formal_singleton' does not depend on any axioms
+PCSCompose.Controls.good_empirical_singleton : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 101, requiredLevel := PCSCompose.Levels.Level.empirical, leafIds := List.cons.{0} 2 List.nil.{0} })
+  Bool.true
+'PCSCompose.Controls.good_empirical_singleton' does not depend on any axioms
+PCSCompose.Controls.good_heterogeneous_empirical_req : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 102, requiredLevel := PCSCompose.Levels.Level.empirical,
+      leafIds := List.cons.{0} 1 (List.cons.{0} 2 List.nil.{0}) })
+  Bool.true
+'PCSCompose.Controls.good_heterogeneous_empirical_req' does not depend on any axioms
+PCSCompose.Controls.reject_heterogeneous_formal_req : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 103, requiredLevel := PCSCompose.Levels.Level.formal,
+      leafIds := List.cons.{0} 1 (List.cons.{0} 2 List.nil.{0}) })
+  Bool.false
+'PCSCompose.Controls.reject_heterogeneous_formal_req' does not depend on any axioms
+PCSCompose.Controls.reject_unsupported : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 104, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 3 List.nil.{0} })
+  Bool.false
+'PCSCompose.Controls.reject_unsupported' does not depend on any axioms
+PCSCompose.Controls.reject_missing : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 105, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 99 List.nil.{0} })
+  Bool.false
+'PCSCompose.Controls.reject_missing' does not depend on any axioms
+PCSCompose.Controls.reject_empty : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 106, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.nil.{0} })
+  Bool.false
+'PCSCompose.Controls.reject_empty' does not depend on any axioms
+PCSCompose.Controls.reject_empirical_as_formal : Eq.{1}
+  (PCSCompose.Compose.accept PCSCompose.Controls.atoms
+    { id := 107, requiredLevel := PCSCompose.Levels.Level.formal, leafIds := List.cons.{0} 2 List.nil.{0} })
+  Bool.false
+'PCSCompose.Controls.reject_empirical_as_formal' does not depend on any axioms
+PCSCompose.Controls.achieved_heterogeneous_is_empirical : Eq.{1}
+  (PCSCompose.Compose.achievedLevel PCSCompose.Controls.atoms
+    { id := 108, requiredLevel := PCSCompose.Levels.Level.empirical,
+      leafIds := List.cons.{0} 1 (List.cons.{0} 2 List.nil.{0}) })
+  PCSCompose.Levels.Level.empirical
+'PCSCompose.Controls.achieved_heterogeneous_is_empirical' does not depend on any axioms
+PCSCompose.Controls.predictive_match_supports : Eq.{1}
+  (PCSCompose.Predictive.isSupport
+    (PCSCompose.Predictive.discharge PCSCompose.Controls.obl (PCSCompose.Predictive.Observation.match_ 42)))
+  Bool.true
+'PCSCompose.Controls.predictive_match_supports' does not depend on any axioms
+PCSCompose.Controls.predictive_contradict_falsifies : Eq.{1}
+  (PCSCompose.Predictive.PredictiveObligation.status
+    (PCSCompose.Predictive.discharge PCSCompose.Controls.obl (PCSCompose.Predictive.Observation.contradict 42)))
+  PCSCompose.Predictive.PredStatus.falsified
+'PCSCompose.Controls.predictive_contradict_falsifies' does not depend on any axioms
+PCSCompose.Controls.predictive_match_not_formal : Ne.{1}
+  (PCSCompose.Predictive.PredStatus.toLevel
+    (PCSCompose.Predictive.PredictiveObligation.status
+      (PCSCompose.Predictive.discharge PCSCompose.Controls.obl (PCSCompose.Predictive.Observation.match_ 42))))
+  PCSCompose.Levels.Level.formal
+'PCSCompose.Controls.predictive_match_not_formal' does not depend on any axioms
+PCSCompose.Controls.predictive_sticky_falsified : have f :=
+  PCSCompose.Predictive.discharge PCSCompose.Controls.obl (PCSCompose.Predictive.Observation.contradict 42);
+Eq.{1} (PCSCompose.Predictive.dischargeSticky f (PCSCompose.Predictive.Observation.match_ 42)) f
+'PCSCompose.Controls.predictive_sticky_falsified' depends on axioms: [propext]
+PCSCompose.Controls.level_meet_laws : And
+  (Eq.{1} (PCSCompose.Levels.Level.meet PCSCompose.Levels.Level.empirical PCSCompose.Levels.Level.formal)
+    PCSCompose.Levels.Level.empirical)
+  (And
+    (Eq.{1} (PCSCompose.Levels.Level.meet PCSCompose.Levels.Level.computational PCSCompose.Levels.Level.empirical)
+      PCSCompose.Levels.Level.empirical)
+    (Eq.{1} (PCSCompose.Levels.Level.meet PCSCompose.Levels.Level.provenance PCSCompose.Levels.Level.formal)
+      PCSCompose.Levels.Level.provenance))
+'PCSCompose.Controls.level_meet_laws' does not depend on any axioms
+PCSCompose.Levels.Level.le_refl : ∀ (a : PCSCompose.Levels.Level), PCSCompose.Levels.Level.le a a
+'PCSCompose.Levels.Level.le_refl' does not depend on any axioms
+@PCSCompose.Levels.Level.le_trans : ∀ {a b c : PCSCompose.Levels.Level},
+  PCSCompose.Levels.Level.le a b → PCSCompose.Levels.Level.le b c → PCSCompose.Levels.Level.le a c
+'PCSCompose.Levels.Level.le_trans' does not depend on any axioms
+@PCSCompose.Levels.Level.rank_inj : ∀ {a b : PCSCompose.Levels.Level},
+  Eq.{1} (PCSCompose.Levels.Level.rank a) (PCSCompose.Levels.Level.rank b) → Eq.{1} a b
+'PCSCompose.Levels.Level.rank_inj' depends on axioms: [propext]
+@PCSCompose.Levels.Level.le_antisymm : ∀ {a b : PCSCompose.Levels.Level},
+  PCSCompose.Levels.Level.le a b → PCSCompose.Levels.Level.le b a → Eq.{1} a b
+'PCSCompose.Levels.Level.le_antisymm' depends on axioms: [propext]
+PCSCompose.Levels.Level.meet_comm : ∀ (a b : PCSCompose.Levels.Level),
+  Eq.{1} (PCSCompose.Levels.Level.meet a b) (PCSCompose.Levels.Level.meet b a)
+'PCSCompose.Levels.Level.meet_comm' does not depend on any axioms
+PCSCompose.Levels.Level.meet_idempotent : ∀ (a : PCSCompose.Levels.Level), Eq.{1} (PCSCompose.Levels.Level.meet a a) a
+'PCSCompose.Levels.Level.meet_idempotent' does not depend on any axioms
+PCSCompose.Levels.Level.meet_assoc : ∀ (a b c : PCSCompose.Levels.Level),
+  Eq.{1} (PCSCompose.Levels.Level.meet (PCSCompose.Levels.Level.meet a b) c)
+    (PCSCompose.Levels.Level.meet a (PCSCompose.Levels.Level.meet b c))
+'PCSCompose.Levels.Level.meet_assoc' does not depend on any axioms
+PCSCompose.Levels.Level.meet_le_left : ∀ (a b : PCSCompose.Levels.Level),
+  PCSCompose.Levels.Level.le (PCSCompose.Levels.Level.meet a b) a
+'PCSCompose.Levels.Level.meet_le_left' does not depend on any axioms
+PCSCompose.Levels.Level.meet_le_right : ∀ (a b : PCSCompose.Levels.Level),
+  PCSCompose.Levels.Level.le (PCSCompose.Levels.Level.meet a b) b
+'PCSCompose.Levels.Level.meet_le_right' does not depend on any axioms
+PCSCompose.Levels.empirical_meet_formal : Eq.{1}
+  (PCSCompose.Levels.Level.meet PCSCompose.Levels.Level.empirical PCSCompose.Levels.Level.formal)
+  PCSCompose.Levels.Level.empirical
+'PCSCompose.Levels.empirical_meet_formal' does not depend on any axioms
+PCSCompose.Levels.empirical_ne_formal : Ne.{1} PCSCompose.Levels.Level.empirical PCSCompose.Levels.Level.formal
+'PCSCompose.Levels.empirical_ne_formal' does not depend on any axioms
+PCSCompose.Levels.computational_meet_empirical : Eq.{1}
+  (PCSCompose.Levels.Level.meet PCSCompose.Levels.Level.computational PCSCompose.Levels.Level.empirical)
+  PCSCompose.Levels.Level.empirical
+'PCSCompose.Levels.computational_meet_empirical' does not depend on any axioms
+PCSCompose.Levels.provenance_meet_formal : Eq.{1}
+  (PCSCompose.Levels.Level.meet PCSCompose.Levels.Level.provenance PCSCompose.Levels.Level.formal)
+  PCSCompose.Levels.Level.provenance
+'PCSCompose.Levels.provenance_meet_formal' does not depend on any axioms
+PCSCompose.Levels.meetList_singleton : ∀ (a : PCSCompose.Levels.Level),
+  Eq.{1} (PCSCompose.Levels.Level.meetList (List.cons.{0} a List.nil.{0})) a
+'PCSCompose.Levels.meetList_singleton' does not depend on any axioms
+PCSCompose.Levels.meetList_cons_le : ∀ (a : PCSCompose.Levels.Level) (as : List.{0} PCSCompose.Levels.Level),
+  PCSCompose.Levels.Level.le (PCSCompose.Levels.Level.meetList (List.cons.{0} a as)) a
+'PCSCompose.Levels.meetList_cons_le' does not depend on any axioms
+@PCSCompose.Levels.atMostEmpirical_rank : ∀ {a : PCSCompose.Levels.Level},
+  Eq.{1} (PCSCompose.Levels.Level.atMostEmpirical a) Bool.true → LE.le.{0} (PCSCompose.Levels.Level.rank a) 2
+'PCSCompose.Levels.atMostEmpirical_rank' depends on axioms: [propext]
+PCSCompose.Levels.meetList_head_bound : ∀ (a : PCSCompose.Levels.Level) (t : List.{0} PCSCompose.Levels.Level),
+  LE.le.{0} (PCSCompose.Levels.Level.rank (PCSCompose.Levels.Level.meetList (List.cons.{0} a t)))
+    (PCSCompose.Levels.Level.rank a)
+'PCSCompose.Levels.meetList_head_bound' does not depend on any axioms
+PCSCompose.Levels.meet_of_atMostEmpirical_ne_formal : ∀ (as : List.{0} PCSCompose.Levels.Level),
+  (∀ (a : PCSCompose.Levels.Level),
+      Membership.mem.{0, 0} as a → Eq.{1} (PCSCompose.Levels.Level.atMostEmpirical a) Bool.true) →
+    Ne.{1} as List.nil.{0} → Ne.{1} (PCSCompose.Levels.Level.meetList as) PCSCompose.Levels.Level.formal
+'PCSCompose.Levels.meet_of_atMostEmpirical_ne_formal' depends on axioms: [propext]
+PCSCompose.Predictive.match_is_empirical : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1}
+    (PCSCompose.Predictive.PredictiveObligation.status
+      (PCSCompose.Predictive.discharge o
+        (PCSCompose.Predictive.Observation.match_ (PCSCompose.Predictive.PredictiveObligation.predictionKey o))))
+    PCSCompose.Predictive.PredStatus.empiricallySupported
+'PCSCompose.Predictive.match_is_empirical' depends on axioms: [propext]
+PCSCompose.Predictive.contradict_falsifies : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1}
+    (PCSCompose.Predictive.PredictiveObligation.status
+      (PCSCompose.Predictive.discharge o
+        (PCSCompose.Predictive.Observation.contradict (PCSCompose.Predictive.PredictiveObligation.predictionKey o))))
+    PCSCompose.Predictive.PredStatus.falsified
+'PCSCompose.Predictive.contradict_falsifies' depends on axioms: [propext]
+PCSCompose.Predictive.unrelated_preserves : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1} (PCSCompose.Predictive.discharge o PCSCompose.Predictive.Observation.unrelated) o
+'PCSCompose.Predictive.unrelated_preserves' depends on axioms: [propext]
+PCSCompose.Predictive.wrong_key_match_preserves : ∀ (o : PCSCompose.Predictive.PredictiveObligation) (k : Nat),
+  Ne.{1} k (PCSCompose.Predictive.PredictiveObligation.predictionKey o) →
+    Eq.{1} (PCSCompose.Predictive.discharge o (PCSCompose.Predictive.Observation.match_ k)) o
+'PCSCompose.Predictive.wrong_key_match_preserves' depends on axioms: [propext]
+PCSCompose.Predictive.wrong_key_contradict_preserves : ∀ (o : PCSCompose.Predictive.PredictiveObligation) (k : Nat),
+  Ne.{1} k (PCSCompose.Predictive.PredictiveObligation.predictionKey o) →
+    Eq.{1} (PCSCompose.Predictive.discharge o (PCSCompose.Predictive.Observation.contradict k)) o
+'PCSCompose.Predictive.wrong_key_contradict_preserves' depends on axioms: [propext]
+PCSCompose.Predictive.falsified_not_support : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1} (PCSCompose.Predictive.PredictiveObligation.status o) PCSCompose.Predictive.PredStatus.falsified →
+    Eq.{1} (PCSCompose.Predictive.isSupport o) Bool.false
+'PCSCompose.Predictive.falsified_not_support' depends on axioms: [propext]
+PCSCompose.Predictive.open_not_support : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1} (PCSCompose.Predictive.PredictiveObligation.status o) PCSCompose.Predictive.PredStatus.open_ →
+    Eq.{1} (PCSCompose.Predictive.isSupport o) Bool.false
+'PCSCompose.Predictive.open_not_support' depends on axioms: [propext]
+PCSCompose.Predictive.empirical_is_support : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1} (PCSCompose.Predictive.PredictiveObligation.status o) PCSCompose.Predictive.PredStatus.empiricallySupported →
+    Eq.{1} (PCSCompose.Predictive.isSupport o) Bool.true
+'PCSCompose.Predictive.empirical_is_support' depends on axioms: [propext]
+PCSCompose.Predictive.sticky_preserves_falsified : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1} (PCSCompose.Predictive.PredictiveObligation.status o) PCSCompose.Predictive.PredStatus.falsified →
+    ∀ (obs : PCSCompose.Predictive.Observation), Eq.{1} (PCSCompose.Predictive.dischargeSticky o obs) o
+'PCSCompose.Predictive.sticky_preserves_falsified' depends on axioms: [propext]
+PCSCompose.Predictive.discharged_match_level_empirical : ∀ (o : PCSCompose.Predictive.PredictiveObligation),
+  Eq.{1}
+    (PCSCompose.Predictive.PredStatus.toLevel
+      (PCSCompose.Predictive.PredictiveObligation.status
+        (PCSCompose.Predictive.discharge o
+          (PCSCompose.Predictive.Observation.match_ (PCSCompose.Predictive.PredictiveObligation.predictionKey o)))))
+    PCSCompose.Levels.Level.empirical
+'PCSCompose.Predictive.discharged_match_level_empirical' depends on axioms: [propext]
+PCSCompose.Predictive.empirical_level_ne_formal : Ne.{1}
+  (PCSCompose.Predictive.PredStatus.toLevel PCSCompose.Predictive.PredStatus.empiricallySupported)
+  PCSCompose.Levels.Level.formal
+'PCSCompose.Predictive.empirical_level_ne_formal' does not depend on any axioms

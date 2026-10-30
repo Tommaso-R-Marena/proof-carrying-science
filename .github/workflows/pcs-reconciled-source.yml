@@ -1,0 +1,87 @@
+name: PCS Explicit Combined Source Qualification
+on:
+  pull_request:
+    paths:
+      - 'research/integration_v2/**'
+      - 'docs/integration/2026-10-28/**'
+      - 'pcs/transport_trace_kernel_v1.py'
+      - 'tests/test_transport_proof_construction_v11.py'
+      - '.github/workflows/pcs-reconciled-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pcs-reconciled-source-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Fixed complete source census and unchanged predecessor profile
+        run: |
+          python -m research.integration_v2.reconcile --require-committed
+          python -m research.integration_v1.source_gate
+          python scripts/audit_current_readmes.py --check docs/integration/2026-10-29/README_AUDIT.json
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pytest -q research/integration_v2/test_reconcile.py tests/test_integration_source_successor.py
+          python -m pytest -p research.integration_v2.pytest_phase_context -q research/local_weights_v1/test_local.py::test_predecessor_sources_and_modes_are_unchanged research/causal_firewall_v1/test_capture.py::test_predecessor_sources_and_modes_are_preserved research/relational_release_v1/test_release.py::test_predecessor_blobs_preserved research/compositional_disclosure_v1/test_ledger.py::test_predecessor_blobs_preserved
+  golden-and-transport:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Fixed source, exact toolchain and fresh actual authorities
+        run: |
+          set -euo pipefail
+          python -m research.integration_v2.reconcile --require-committed
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          source scripts/activate_lean_428.sh
+          LEAN_NUM_THREADS=1 lake -d formal build PCS pcs-lean-authority pcs-semantic-check
+          lake exe cache get
+      - name: Real literal replay, genuine negative controls and proof substitution refusal
+        env:
+          PCS_REQUIRE_LEAN_AUTHORITY: '1'
+          PCS_REQUIRE_TRANSPORT_TRACE_KERNEL: '1'
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q tests/test_transport_trace_kernel_v1.py tests/test_transport_proof_construction_v11.py --junitxml="$RUNNER_TEMP/transport.xml"
+          python - <<'PY'
+          import os, xml.etree.ElementTree as E
+          from pathlib import Path
+          suites=list(E.parse(Path(os.environ['RUNNER_TEMP'])/'transport.xml').getroot().iter('testsuite'))
+          assert suites and sum(int(s.get('tests','0')) for s in suites) == 45
+          assert all(s.get(k)=='0' for s in suites for k in ('errors','failures','skipped'))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: reconciled-transport-results
+          path: ${{ runner.temp }}/transport.xml
+          if-no-files-found: error
+  required:
+    if: always()
+    needs: [source, golden-and-transport]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require both complete checks
+        env:
+          SOURCE: ${{ needs.source.result }}
+          REPLAY: ${{ needs.golden-and-transport.result }}
+        run: |
+          test "$SOURCE" = success
+          test "$REPLAY" = success
