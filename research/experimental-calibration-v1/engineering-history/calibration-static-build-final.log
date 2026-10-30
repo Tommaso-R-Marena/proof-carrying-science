@@ -1,0 +1,20 @@
+✔ [980/982] Built PCSReal.Calibration (3.1s)
+✖ [981/982] Building PCSReal.CalibrationControls (2.4s)
+trace: .> LEAN_PATH=/workspace/proof-carrying-science/.lake/packages/Cli/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/batteries/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/Qq/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/aesop/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/plausible/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/worktrees/pcs-real-calibration/formal/.lake/build/lib/lean:/workspace/worktrees/pcs-real-calibration/.lake/build/lib/lean /workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean /workspace/worktrees/pcs-real-calibration/formal/real/PCSReal/CalibrationControls.lean -o /workspace/worktrees/pcs-real-calibration/.lake/build/lib/lean/PCSReal/CalibrationControls.olean -i /workspace/worktrees/pcs-real-calibration/.lake/build/lib/lean/PCSReal/CalibrationControls.ilean -c /workspace/worktrees/pcs-real-calibration/.lake/build/ir/PCSReal/CalibrationControls.c --setup /workspace/worktrees/pcs-real-calibration/.lake/build/ir/PCSReal/CalibrationControls.setup.json --json
+error: formal/real/PCSReal/CalibrationControls.lean:47:16: Unknown constant `Fin.sum_univ_succ`
+error: formal/real/PCSReal/CalibrationControls.lean:41:70: unsolved goals
+he :
+  ∃ estimator,
+    ∀ (truth : Fin 2 → ℝ) (observed : Fin 3 → ℝ),
+      (∀ (i : Fin 3), |observed i - prediction (fun i j => ↑(x i j)) truth i| ≤ 1) →
+        |estimator observed - dot (fun j => ↑(q j)) truth| ≤ 2
+hc :
+  (Reproduces (fun i j => ↑(x i j)) (fun i => ↑(mw i)) fun j => ↑(q j)) ∧
+    (∀ (i : Fin 3), |prediction (fun i j => ↑(x i j)) (fun j => ↑(ma j)) i| ≤ 1) ∧
+      (dot (fun j => ↑(q j)) fun j => ↑(ma j)) = ∑ i, |↑(mw i)|
+hi : ∑ x, |↑[-1, 0, 2][↑x]| ≤ 2
+⊢ False
+error: Lean exited with code 1
+Some required targets logged failures:
+- PCSReal.CalibrationControls
+error: build failed

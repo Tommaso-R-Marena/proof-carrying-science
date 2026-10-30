@@ -1,0 +1,145 @@
+name: PCS Checked Model Execution
+on:
+  pull_request:
+    paths:
+      - 'research/real_model_execution_v2/**'
+      - '.github/workflows/pcs-model-execution.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: model-execution-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  matrix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.census.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Strict parent preservation and unchanged complete regression census
+        id: census
+        run: |
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
+          python -m research.progress_supervisor_v1.ci matrix >> "$GITHUB_OUTPUT"
+  regressions:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    name: existing-${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen dependencies and complete parent preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
+      - name: Pinned independent Lean toolchain
+        if: ${{ matrix.shard != 'intake' }}
+        run: source scripts/activate_lean_428.sh
+      - name: Unchanged required regression shard
+        run: python -m research.progress_supervisor_v1.ci test '${{ matrix.shard }}' "$RUNNER_TEMP/progress-tests"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: progress-supervisor-tests-${{ matrix.shard }}
+          path: ${{ runner.temp }}/progress-tests/tests.xml
+  accounting:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen test dependencies and preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
+      - name: Accounting, model channel and negative controls
+        run: |
+          python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
+          python -m research.real_model_execution_v2 fetch "$RUNNER_TEMP/tokenizer"
+          PCS_TOKENIZER_DIR="$RUNNER_TEMP/tokenizer" python -m pytest -q research/real_model_safety_v1 research/real_model_execution_v2 --junitxml="$RUNNER_TEMP/real-model-unit.xml"
+          python -m research.real_model_execution_v2 audit "$RUNNER_TEMP/tokenizer" --run research/real_model_execution_v2/observations/run.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: model-execution-accounting
+          path: ${{ runner.temp }}/real-model-unit.xml
+  receiving-replay:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Independent dependencies, source and Lean toolchain
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.real_model_execution_v2.preservation
+          source scripts/activate_lean_428.sh
+      - name: Replay every real-model and control episode through actual Lean and SQL
+        run: |
+          python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
+          python -m research.real_model_execution_v2 fetch "$RUNNER_TEMP/tokenizer"
+          python -m research.real_model_execution_v2 audit "$RUNNER_TEMP/tokenizer" --run research/real_model_execution_v2/observations/run.json --replay "$RUNNER_TEMP/model-execution-receiving"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: model-execution-receiving
+          path: |
+            ${{ runner.temp }}/model-execution-receiving/**/*.json
+            ${{ runner.temp }}/model-execution-receiving/**/*.lean
+  checked-real-model-evidence:
+    needs: [matrix, regressions, accounting, receiving-replay]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: All regression, accounting and actual receiving jobs required
+        env:
+          MATRIX_RESULT: ${{ needs.matrix.result }}
+          REGRESSION_RESULT: ${{ needs.regressions.result }}
+          ACCOUNTING_RESULT: ${{ needs.accounting.result }}
+          RECEIVING_RESULT: ${{ needs.receiving-replay.result }}
+        run: |
+          test "$MATRIX_RESULT" = success
+          test "$REGRESSION_RESULT" = success
+          test "$ACCOUNTING_RESULT" = success
+          test "$RECEIVING_RESULT" = success
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: progress-supervisor-tests-*
+          path: ${{ runner.temp }}/regression-reports
+      - name: Unchanged unique, complete, zero-skip regression aggregation
+        run: python -m research.progress_supervisor_v1.ci aggregate "$RUNNER_TEMP/regression-reports" "$RUNNER_TEMP/regression-qualification"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: model-execution-regression-qualification
+          path: ${{ runner.temp }}/regression-qualification/

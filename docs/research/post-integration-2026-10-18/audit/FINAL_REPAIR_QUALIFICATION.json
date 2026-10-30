@@ -1,0 +1,41 @@
+{
+  "final_candidate_commit": "45c22c90994c72ee9da8ef4f75f8ec9081ad0697",
+  "code_candidate_commit": "a7e2b5009ad4f03e9d57574b4cbb9bb7e37b37c3",
+  "semantic_sources_identical": true,
+  "identities": {
+    "pcs/intake_verify_v06.py": "19763deafefee9179af0cc4b7d67fbd7355f33177c122657a9480a87ee2ddf20",
+    "pcs/receipt_contract_v06.py": "a5a9882dcd4b9cff872287c422ca2bd8fb00cb11c01f80afc6f0fe9b8c0dfeb1",
+    "tests/test_intake_verify_v06.py": "b947ccd40ca67d85ef825af23fbe70890cccd3cbbe01cd7b21a42b82c4df2437",
+    "research/integration_v1/source_gate.py": "eecfc527b926e7df493a60fed44f7d0eec943ea5efd6383e51e8b967c3bc4285",
+    "docs/research/post-integration-2026-10-18/receipt-source-profile-successor.json": "4ec1e9282d0ba4f4c8744da85be6aa3a931e89b07c9c03b467a0f2c847371531"
+  },
+  "predecessor_profile_unchanged": true,
+  "source_gate": {
+    "format": "pcs-consolidated-source-gate-v1",
+    "passed": true,
+    "files_checked": 1992,
+    "V7_modules": 38,
+    "additional_files_checked": 1,
+    "successor_sha256": "4ec1e9282d0ba4f4c8744da85be6aa3a931e89b07c9c03b467a0f2c847371531",
+    "failures": [],
+    "production_authority": false,
+    "admission_scope": "new research Lean; unchanged main authority separately requires scripts/verify_lean.sh"
+  },
+  "actual_lean_cases": 28,
+  "receipt_tamper_rejections": 176,
+  "source_successor_cases": 12,
+  "source_successor_unexpected_accepts": 0,
+  "review_status": "INDEPENDENT_BOUNDED_VALIDATION_PASS_NOT_MERGE_APPROVAL",
+  "tcb": "Reviewed Git HEAD, gate source, original profile, current manifest, OS/toolchain and receiver-owned native executable remain trusted; no immutable root is established.",
+  "independently_executed_candidate_pytest": {
+    "passed": 42,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 28.7,
+    "files": [
+      "tests/test_intake_verify_v06.py",
+      "tests/test_integration_source_successor.py"
+    ],
+    "includes": "Actual CLI negative-receipt signing and real Lean intake cases; source controls use actual temporary Git snapshots."
+  }
+}

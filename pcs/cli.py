@@ -241,6 +241,8 @@ def cmd_verify_v06(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
             lean_authority_path=args.lean_authority,
+            require_intake_lock=args.require_intake_lock,
+            expected_intake_semantic_hash=args.expected_intake_semantic_hash,
             expected_build_provenance_fingerprint=(
                 args.expected_build_provenance_fingerprint
             ),
@@ -298,6 +300,8 @@ def cmd_verify_v06_bundle(args):
             expected_fingerprint=args.expected_signer_fingerprint,
             policy_path=args.policy,
             lean_authority_path=args.lean_authority,
+            require_intake_lock=args.require_intake_lock,
+            expected_intake_semantic_hash=args.expected_intake_semantic_hash,
             expected_build_provenance_fingerprint=(
                 args.expected_build_provenance_fingerprint
             ),
@@ -438,6 +442,7 @@ def cmd_attest_v06(args):
             args.public_key,
             expected_fingerprint=args.expected_signer_fingerprint,
             overwrite=args.force,
+            intake_lock=args.intake_lock,
             lean_authority_path=args.lean_authority,
             sbom_path=args.sbom,
             build_provenance_path=args.build_provenance,
@@ -1458,6 +1463,120 @@ def cmd_freeze_intake(args):
     return 0
 
 
+def cmd_independent_pilot_v1(args):
+    from .independent_pilot_v1 import IndependentPilotError, run_independent_pilot_v1
+
+    try:
+        evidence = run_independent_pilot_v1(
+            args.output,
+            lean_authority_path=args.lean_authority,
+            overwrite=args.overwrite,
+            apply_closeout=args.apply_closeout,
+            deterministic_fixture=args.deterministic_fixture,
+        )
+    except IndependentPilotError as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(evidence, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_cleanroom_independent_pilot_v1(args):
+    from .independent_pilot_v1 import (
+        IndependentPilotError,
+        run_cleanroom_independent_pilot_v1,
+    )
+
+    try:
+        summary = run_cleanroom_independent_pilot_v1(
+            args.output,
+            python_executable=args.python,
+            lean_authority_path=args.lean_authority,
+            overwrite=args.overwrite,
+            rebuild_lean_authority=not args.no_rebuild_lean_authority,
+        )
+    except IndependentPilotError as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0 if summary.get("pass") else 1
+
+
+def cmd_closeout_plan(args):
+    from .pilot_closeout import (
+        PilotCloseoutError,
+        build_closeout_plan,
+        write_closeout_plan,
+    )
+
+    try:
+        plan = build_closeout_plan(
+            args.workspace,
+            pilot_id=args.pilot_id,
+            retain_paths=args.retain or [],
+            delete_paths=args.delete or [],
+        )
+        written = write_closeout_plan(args.output, plan, overwrite=args.force)
+    except (OSError, PilotCloseoutError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {
+                "plan": str(written),
+                "pilot_id": plan["pilot_id"],
+                "plan_sha256": plan["plan_sha256"],
+                "retain_count": sum(
+                    entry["action"] == "RETAIN" for entry in plan["entries"]
+                ),
+                "delete_count": sum(
+                    entry["action"] == "DELETE" for entry in plan["entries"]
+                ),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def cmd_closeout_apply(args):
+    from .pilot_closeout import (
+        PilotCloseoutError,
+        apply_closeout_plan,
+        load_closeout_plan,
+        write_closeout_receipt,
+    )
+
+    try:
+        plan = load_closeout_plan(args.plan)
+        receipt = apply_closeout_plan(
+            args.workspace,
+            plan,
+            confirm_plan_sha256=args.confirm_plan_sha256,
+            applied_at=args.applied_at,
+        )
+        written = write_closeout_receipt(
+            args.receipt, receipt, overwrite=args.force
+        )
+    except (OSError, PilotCloseoutError) as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {
+                "receipt": str(written),
+                "pilot_id": receipt["pilot_id"],
+                "receipt_sha256": receipt["receipt_sha256"],
+                "plan_sha256": receipt["plan_sha256"],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def cmd_snapshot_env(args):
     try:
         result = write_environment(args.output)
@@ -1955,6 +2074,18 @@ def build_parser():
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
     )
     v6.add_argument(
+        "--require-intake-lock",
+        action="store_true",
+        help="require signed pilot-intake-lock.json and fail closed if missing/mismatched",
+    )
+    v6.add_argument(
+        "--expected-intake-semantic-hash",
+        help=(
+            "reviewer-owned expected intake semantic hash (64-hex), supplied out of band; "
+            "frozen_at alone is not preregistration evidence"
+        ),
+    )
+    v6.add_argument(
         "--expected-build-provenance-fingerprint",
         help="require external build provenance signed by this Ed25519 key fingerprint",
     )
@@ -2036,6 +2167,18 @@ def build_parser():
     v6b.add_argument(
         "--policy",
         help="external reviewer acceptance-policy JSON; does not change PCS validity",
+    )
+    v6b.add_argument(
+        "--require-intake-lock",
+        action="store_true",
+        help="require signed pilot-intake-lock.json and fail closed if missing/mismatched",
+    )
+    v6b.add_argument(
+        "--expected-intake-semantic-hash",
+        help=(
+            "reviewer-owned expected intake semantic hash (64-hex), supplied out of band; "
+            "frozen_at alone is not preregistration evidence"
+        ),
     )
     v6b.add_argument(
         "--expected-build-provenance-fingerprint",
@@ -2248,6 +2391,14 @@ def build_parser():
         ),
     )
     a6.add_argument(
+        "--intake-lock",
+        help=(
+            "frozen pcs-pilot-intake-lock-v1; claim/assumption IDs and statements "
+            "must exactly match the attested certificate, and the lock is bound "
+            "into the signed package as pilot-intake-lock.json"
+        ),
+    )
+    a6.add_argument(
         "--force",
         action="store_true",
         help="explicitly replace an existing output ZIP after the replacement self-verifies",
@@ -2367,6 +2518,77 @@ def build_parser():
     fi.add_argument("--force", action="store_true", help="explicitly replace an existing intake lock")
     fi.set_defaults(func=cmd_freeze_intake)
 
+    isp = sub.add_parser(
+        "independent-pilot-v1",
+        help=(
+            "run the bounded independent scientific pilot (synthetic PK/PD): "
+            "intake→discover→confirm→attest→second-env verify→adversarial→closeout"
+        ),
+    )
+    isp.add_argument("-o", "--output", required=True, help="new output directory for pilot evidence")
+    isp.add_argument("--lean-authority", default=None, help="receiver-owned pcs-lean-authority path")
+    isp.add_argument("--overwrite", action="store_true", help="replace an existing output directory")
+    isp.add_argument(
+        "--apply-closeout",
+        action="store_true",
+        help="apply demo producer-key closeout after archival packaging",
+    )
+    isp.add_argument(
+        "--deterministic-fixture",
+        action="store_true",
+        help=(
+            "fixture-only: pin frozen_at/generated_at for byte-comparable regenerations; "
+            "not a production reproducibility claim"
+        ),
+    )
+    isp.set_defaults(func=cmd_independent_pilot_v1)
+
+    crp = sub.add_parser(
+        "cleanroom-independent-pilot-v1",
+        help=(
+            "reconstruct the independent pilot inside a fresh hash-pinned virtualenv "
+            "and rebuild pcs-lean-authority from a fresh formal checkout"
+        ),
+    )
+    crp.add_argument("-o", "--output", required=True, help="new clean-room output directory")
+    crp.add_argument(
+        "--lean-authority",
+        default=None,
+        help="explicit authority override (recorded as non-independent; default rebuilds Lean)",
+    )
+    crp.add_argument("--python", default=None, help="Python executable used to create the venv")
+    crp.add_argument("--overwrite", action="store_true")
+    crp.add_argument(
+        "--no-rebuild-lean-authority",
+        action="store_true",
+        help="require --lean-authority; refuse inherited PCS_LEAN_AUTHORITY_BIN",
+    )
+    crp.set_defaults(func=cmd_cleanroom_independent_pilot_v1)
+
+    cp = sub.add_parser(
+        "closeout-plan",
+        help="build a hash-bound pilot retention/deletion closeout plan",
+    )
+    cp.add_argument("--workspace", required=True, help="pilot workspace directory")
+    cp.add_argument("--pilot-id", required=True)
+    cp.add_argument("--retain", action="append", default=[], help="relative path to RETAIN")
+    cp.add_argument("--delete", action="append", default=[], help="relative path to DELETE")
+    cp.add_argument("-o", "--output", required=True, help="closeout plan JSON")
+    cp.add_argument("--force", action="store_true", help="replace an existing plan")
+    cp.set_defaults(func=cmd_closeout_plan)
+
+    ca = sub.add_parser(
+        "closeout-apply",
+        help="apply a previously confirmed hash-bound pilot closeout plan",
+    )
+    ca.add_argument("--workspace", required=True)
+    ca.add_argument("--plan", required=True)
+    ca.add_argument("--confirm-plan-sha256", required=True)
+    ca.add_argument("-o", "--receipt", required=True, help="closeout receipt JSON")
+    ca.add_argument("--applied-at", help="optional ISO-8601 timestamp override")
+    ca.add_argument("--force", action="store_true", help="replace an existing receipt")
+    ca.set_defaults(func=cmd_closeout_apply)
+
     se = sub.add_parser("snapshot-env", help="write a deterministic, secrets-free runtime provenance snapshot")
     se.add_argument("-o", "--output", required=True)
     se.set_defaults(func=cmd_snapshot_env)
@@ -2418,6 +2640,18 @@ def build_parser():
 
     from pcs.transport_trace_kernel_v1 import register as register_transport_trace
     register_transport_trace(sub)
+
+    from pcs.calibration_kernel_v1 import register as register_calibration
+    register_calibration(sub)
+
+    from pcs.epistemic_kernel_v1 import register as register_epistemic_kernel
+    register_epistemic_kernel(sub)
+
+    from pcs.assurance_lattice_v1 import register as register_assurance_lattice
+    register_assurance_lattice(sub)
+
+    from pcs.epistemic_lattice_v1 import register as register_epistemic_lattice
+    register_epistemic_lattice(sub)
 
     return p
 

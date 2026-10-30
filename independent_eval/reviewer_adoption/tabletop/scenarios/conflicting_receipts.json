@@ -1,0 +1,48 @@
+{
+  "scenario_id": "TT-RECEIPT-001",
+  "title": "Conflicting verification receipts",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "Two receipts disagree for the same semantic_hash.",
+  "signals": [
+    "Divergent decisions"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Summarize conflict.",
+      "acceptable_keywords": [
+        "conflict",
+        "disagree",
+        "supported",
+        "rejected"
+      ]
+    },
+    {
+      "id": "E2",
+      "prompt": "Investigate offline.",
+      "acceptable_keywords": [
+        "diff",
+        "verifier",
+        "pin",
+        "input"
+      ]
+    },
+    {
+      "id": "E3",
+      "prompt": "Provisional status.",
+      "acceptable_keywords": [
+        "hold",
+        "accept",
+        "authority",
+        "pass"
+      ]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Conflict summarized",
+    "Provisional HOLD without local ACCEPT/PASS",
+    "Verifier divergence risk noted"
+  ]
+}

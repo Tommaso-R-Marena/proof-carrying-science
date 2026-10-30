@@ -1,0 +1,13 @@
+✔ [980/982] Built PCSReal.Calibration (3.4s)
+✖ [981/982] Building PCSReal.CalibrationControls (2.2s)
+trace: .> LEAN_PATH=/workspace/proof-carrying-science/.lake/packages/Cli/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/batteries/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/Qq/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/aesop/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/plausible/.lake/build/lib/lean:/workspace/proof-carrying-science/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/worktrees/pcs-real-calibration/formal/.lake/build/lib/lean:/workspace/worktrees/pcs-real-calibration/.lake/build/lib/lean /workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean /workspace/worktrees/pcs-real-calibration/formal/real/PCSReal/CalibrationControls.lean -o /workspace/worktrees/pcs-real-calibration/.lake/build/lib/lean/PCSReal/CalibrationControls.olean -i /workspace/worktrees/pcs-real-calibration/.lake/build/lib/lean/PCSReal/CalibrationControls.ilean -c /workspace/worktrees/pcs-real-calibration/.lake/build/ir/PCSReal/CalibrationControls.c --setup /workspace/worktrees/pcs-real-calibration/.lake/build/ir/PCSReal/CalibrationControls.setup.json --json
+error: formal/real/PCSReal/CalibrationControls.lean:62:8: Type mismatch: After simplification, term
+  congrArg (fun a => ↑a) exact_nonzero_residual
+ has type
+  ↑(loss x y b) = ↑1 / 6
+but is expected to have type
+  ↑(loss x y b) = 1 / 6
+error: Lean exited with code 1
+Some required targets logged failures:
+- PCSReal.CalibrationControls
+error: build failed

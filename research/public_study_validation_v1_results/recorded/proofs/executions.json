@@ -1,0 +1,174 @@
+[
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "PCSActionShield.olean",
+      "PCSActionShield.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "Progress.olean",
+      "Progress.lean"
+    ],
+    "returncode": 0,
+    "stdout": "Progress.lean:159:11: warning: Try `simp at h` instead of `simpa using h`\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "Wire.olean",
+      "Wire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "Codec.olean",
+      "Codec.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "Adapter.olean",
+      "Adapter.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "RowWire.olean",
+      "RowWire.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "Data.olean",
+      "Data.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "Main.olean",
+      "Main.lean"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+      "-j1",
+      "-M2048",
+      "-D",
+      "maxRecDepth=4096",
+      "-D",
+      "Elab.async=false",
+      "--root=/tmp/pcs-public-study-proof-fresh-v1",
+      "-o",
+      "OutputBoundary.olean",
+      "OutputBoundary.lean"
+    ],
+    "returncode": 0,
+    "stdout": "'PCSPublicStudy.choose_proposal_independent' depends on axioms: [propext, Quot.sound]\n'PCSPublicStudy.adaptive_tool_trace_independent' depends on axioms: [propext, Quot.sound]\n'PCSPublicStudy.projected_tool_trace_independent' depends on axioms: [propext, Quot.sound]\n'PCSPublicStudy.actual_spec_unique' depends on axioms: [propext, Quot.sound]\n'PCSPublicStudy.actual_adaptive_trace_independent' depends on axioms: [propext, Quot.sound]\n'PCSPublicStudy.raw_reply_channel_countermodel' depends on axioms: [propext, Quot.sound]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/leanchecker",
+      "--fresh",
+      "OutputBoundary"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

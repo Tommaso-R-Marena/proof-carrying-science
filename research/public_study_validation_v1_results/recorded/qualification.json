@@ -1,0 +1,115 @@
+{
+  "actual_model_calls": 72,
+  "canonical_safe_action_proposals": 45,
+  "completed_producer_episodes": 72,
+  "deployed": false,
+  "external_partner_validation": false,
+  "focused_tests": {
+    "failed": 0,
+    "passed": 38,
+    "skipped": 0
+  },
+  "format": "pcs-public-study-qualification-v1",
+  "fresh_analysis_object_checker_passed": true,
+  "fresh_receiving_episodes": 72,
+  "full_agentdojo_score": false,
+  "general_ai_safety_proved": false,
+  "guarded_private_publications": 0,
+  "implementation_committed": false,
+  "limitations": "Small quantized models, fixed synthetic workflow, same-host receiving; host/compiler/libraries trusted. Owner/legal/external issues remain open.",
+  "malformed_proposals": 8,
+  "merged": false,
+  "model_weights_rechecked_after_experiment": {
+    "format": "pcs-public-study-post-experiment-weight-check-v1",
+    "inference_already_completed": true,
+    "models": [
+      {
+        "bytes": 639446688,
+        "model": "Qwen/Qwen3-0.6B-GGUF",
+        "revision": "23749fefcc72300e3a2ad315e1317431b06b590a",
+        "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031"
+      },
+      {
+        "bytes": 1834426016,
+        "model": "Qwen/Qwen3-1.7B-GGUF",
+        "revision": "90862c4b9d2787eaed51d12237eafdfe7c5f6077",
+        "sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a"
+      }
+    ],
+    "new_model_inference_in_this_check": false,
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "runtime_inventory_checked": true
+  },
+  "native_image_sha256": {
+    "/tmp/pcs-public-study-complete-v1/native-authority/supervisor": "2164f3bffc511ecd609ae3e0b32be3971b38e675c9db359fbe9cdf1d45a031df",
+    "/tmp/pcs-public-study-receiving-v2/episode-000/authority/supervisor": "2164f3bffc511ecd609ae3e0b32be3971b38e675c9db359fbe9cdf1d45a031df",
+    "/tmp/pcs-public-study-run-v1/native-authority/supervisor": "2164f3bffc511ecd609ae3e0b32be3971b38e675c9db359fbe9cdf1d45a031df"
+  },
+  "new_analysis_axioms": [
+    "Quot.sound",
+    "propext"
+  ],
+  "new_general_analysis_theorem_declarations": 6,
+  "original_generation_source_manifest": {
+    "parent": {
+      "Adapter.lean": "b373a65ec5fc4f45b745a8163e72460880b13b7ddcad35005b3c447c0d9a8066",
+      "AdapterBridge.lean": "60e219fff627af3804a4f6e985898de3429eb5fabfa67b52465834bb27fae7f2",
+      "AdapterTable.lean": "e3d2406973e2441091fc1ed4aa7435c1b2673ec494bee4928e1049d3928d8542",
+      "Codec.lean": "26c34bc9281dfbb26885aed2460292d3462541e6d1012334b7a3b4281f789308",
+      "Main.lean": "733861fa53bcdaa1068bbf43ea4121a5463b2acc318a2292a6ab2e83c85aa19b",
+      "Progress.lean": "a8d9f6ea270fdf83ef0ff5a479b96a269fa62f0d45a1d15c18e1aef7f7565c48",
+      "RowWire.lean": "d7fd5f048d30edfa721a75c9f96beff74a0c04e9668b2e3a2fcd272e1cf66c39",
+      "Wire.lean": "d0ea9698b5197d0ee1f3654d06ba62646120a09fd9c66e37a26ad6f4a7471b7b",
+      "__main__.py": "5f9da537514f83e145b680287d1a8ad596510950bcd9b9df6ac5ce841a67f224",
+      "adapter.py": "363055ae2427fe07836cf03aa3f1522ba96bbcc8ae7bb21e1ceb087c5d992bf3",
+      "authority.py": "eed88acd501e3d90108527cd71a6581cae62ef6792ebcb4f21dd372df0bd4134",
+      "binding.py": "1e628f1ddd0b3e0074e67eed113f1a38f4ee9beafe8e3b4ece72bcb1dd352498",
+      "broker.py": "0ad896165e5c40f2a6d0fb1e92474b211072bcd38cd6765c6b9374d26e723286",
+      "certificate.py": "e19f13259359f7335da3a22d845eadd5be88253744ab382df7cbc9c9a3c13f46",
+      "effects.py": "a83d90c29a06cf2c8759890189ad4d2b86407bad229db556df0c0f358f976098",
+      "evidence.py": "97f8968a306916999a9bbc77fae50194eb1e756de23cd8b09e97057a6938c301",
+      "example.py": "7d75597f3bb216adb8c93707825ce1390fa3d5f171dc0e38b9d0f8174c9ccf70",
+      "formal/PCSActionShield.lean": "5b927bbf262a1a79efe29ae17d85fc3f077cee72fd7b2a1d0e4aa7286d21282d",
+      "intake.py": "992582b460b43617db9443edd8613154af0baa48d6f21f53ec92046e0dc4b718",
+      "storage.py": "8b9fa3df51c1430da39d715b8b9a6ae189fbe97340df091ea951cd84b044f4f1",
+      "trace.py": "6d2ee78749b5aab4b426c0fb11b13da6ec9e5154991b0dc6b96d4cff83422147",
+      "worker.py": "9bfd08c8a7b54e23fa1fd521fc27f1c82bc07ca5459ad0d364303e902d9db9b8"
+    },
+    "study": {
+      "research/public_study_validation_v1/README.md": "a1918b7155b01909cd36e9a24ec331d9824f005ce6e24a952a1d4da47d602a46",
+      "research/public_study_validation_v1/__init__.py": "2046986762cc884409e7bece95edbd42c62d015d39466921d610b8955806e867",
+      "research/public_study_validation_v1/pins.json": "b1e1d2349b044b509bfc55a46e455cf7f24cc4822f9d03aba724be6b9be23f8b",
+      "research/public_study_validation_v1/preservation.py": "e9e1b1d780de1890f94c5bed9be73b6282a3f3c37dc5fe675bfcf2a0d6c808da",
+      "research/public_study_validation_v1/protocol.py": "d0840832d0fd50834f972b6198f3e002e542a33e71fafc1701f1c1cfbb0b9d61",
+      "research/public_study_validation_v1/provenance/PCS_PR175_runtime.py.txt": "0282083586489ae42483fd017b014328a34a5d97e5685aaa7250a514006b5ccb",
+      "research/public_study_validation_v1/provenance/PCS_RUNTIME_ADAPTATION.json": "d759bd5c420d04f199b2e7ed5ea4a19e412fcf734021f4cf46e23816832801db",
+      "research/public_study_validation_v1/runtime.py": "bda299f6214b01c639eac50d778180597991ce19f2ba7ab742c7d71b2af08db9",
+      "research/public_study_validation_v1/study.py": "b39508df521187f21d2cad816e9dec3adf334599178cb2b2e56fec036456936e",
+      "research/public_study_validation_v1/test_study.py": "3cc52e1825af945322ecd389330cd93d750a25aedb0f1cb8fd0914e59a76bebc",
+      "research/public_study_validation_v1/upstream/AGENTDOJO_SOURCE.json": "098a9e3f8fe4e6f803127751300260cf7fb503bc0a1efc6f645598af8227fae4",
+      "research/public_study_validation_v1/upstream/MODEL_LICENSE_EVIDENCE.json": "36983bc8eb445eec4e9b39e63f676b101845394c9ea0e2bdaa2cc04dcd764557",
+      "research/public_study_validation_v1/upstream/agentdojo/LICENSE": "4285a071f2d382338e52b4fb0a186d952984a34d43a33d8872e1a1d8cb43401e",
+      "research/public_study_validation_v1/upstream/agentdojo/baseline_attacks.py": "0e3f3cec2173524989d67bd3d934d032774ad3fc5995969c9565613efaa21c6d",
+      "research/public_study_validation_v1/upstream/agentdojo/dos_attacks.py": "160aa9604ce31cd3e54ecb06d9ed4acc770066a0dedd11d0742f6205d6077859",
+      "research/public_study_validation_v1/upstream/agentdojo/important_instructions_attacks.py": "519f24e0b9d72f43343d665679adacc33758b50cd1b586a81fa53fb098dcfe71",
+      "research/public_study_validation_v1/upstream/llama-b11827-LICENSE.txt": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+      "research/public_study_validation_v1/upstream/qwen-Qwen3-0.6B-GGUF-LICENSE": "5de36594c10839788a8c589443a8ef9d8b8d17c65a1b5807206ae037fc36c6bd",
+      "research/public_study_validation_v1/upstream/qwen-Qwen3-0.6B-GGUF-README.md": "44adabae2153c3a7bb741b86fbffd48736bc95118831935fdfc4d3cc1854f2f5",
+      "research/public_study_validation_v1/upstream/qwen-Qwen3-1.7B-GGUF-LICENSE": "5de36594c10839788a8c589443a8ef9d8b8d17c65a1b5807206ae037fc36c6bd",
+      "research/public_study_validation_v1/upstream/qwen-Qwen3-1.7B-GGUF-README.md": "60706b0c6aa38e0d1e73a7b21f98e50cad82ee1eaea636fd1f3a49617bccdb0d"
+    }
+  },
+  "parent_commit": "1e165ba06b4833a0e3fbcca2f654b581837acb68",
+  "parent_files_preserved": 4817,
+  "pr117_merged": false,
+  "production_authority_changed": false,
+  "protected_ci_run": false,
+  "pushed": false,
+  "raw_marker_is_real_world_exfiltration": false,
+  "raw_synthetic_private_marker_responses": 6,
+  "receiver_sha256": "adbf009888942e64fee92f559027d0feeb12c05867a4694cd68cd380a51f65f0",
+  "receiving_generated_kernel_checked_proofs": 216,
+  "receiving_tool_transitions": 288,
+  "unsafe_or_forbidden_proposals": 18
+}

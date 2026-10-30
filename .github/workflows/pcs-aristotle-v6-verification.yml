@@ -1,0 +1,44 @@
+name: PCS Aristotle V6 Kernel and Certificate Verification
+on:
+  pull_request:
+    paths:
+      - 'formal/PCS/V2/ProofGated*.lean'
+      - 'formal/scripts/proof_gated*'
+      - 'formal/scripts/gen_full_audit.sh'
+      - 'formal/fixtures/proof_gated/**'
+      - 'formal/PCS_PROOF_GATED_V6_REPORT.md'
+      - '.github/workflows/pcs-aristotle-v6-verification.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v6-kernel-and-wire:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Full V6 Lean kernel, axiom audits, fixture tests and file authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          bash scripts/proof_gated_ci.sh
+          python3 - <<'PYV6'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('results/proof_gated_ci_results.json').read_text())
+          assert data['overall']=='PASS', data
+          assert any('v6_vectors' in x['step'] and x['exit_code']==0 for x in data['steps']), data
+          assert any(x['step']=='build' and x['exit_code']==0 for x in data['steps'])
+          print('PASS: V6 complete kernel and byte/certificate tests')
+          PYV6
+      - name: Preserve test report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pcs-v6-research-test-report
+          path: formal/results/proof_gated_ci_results.json
+          if-no-files-found: warn

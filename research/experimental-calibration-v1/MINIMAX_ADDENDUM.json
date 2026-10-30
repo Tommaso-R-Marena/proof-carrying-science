@@ -1,0 +1,12 @@
+{
+  "format": "pcs-calibration-minimax-addendum-v1",
+  "created_utc": "2026-10-17T00:15:29.240115+00:00",
+  "original_protocol_sha256": "2e3ce351f9f6b28749d4c4608208d9c587630570fc40b9f78b54cd3aec5fb794",
+  "timing": "Added during engineering pilot development, before a successful pilot and before any complete 22-hull analysis. Earlier failed proof-generation runs remain separate. This is not a blind or external preregistration.",
+  "additional_question": "Can exact dual polynomial witnesses certify globally minimum worst-case response sensitivity among all polynomial-reproducing linear estimators, and how does that compare with least squares on held-out physical measurements?",
+  "candidate_search": "Enumerate all supports of size degree+1 among the seven training abscissas; solve exact interpolation equations; minimize sum of absolute weights; require a separate bounded dual polynomial that certifies global optimality. Search completeness is not trusted.",
+  "comparisons": "For every declared held-out and extrapolation query, report least-squares and minimax gains; report held-out SSE of both estimators. Include every degree and hull, regardless of outcome.",
+  "bound_scope": "Worst-case bound over all coordinatewise bounded response perturbations, conditional on exact predictor values and the declared polynomial model. No stochastic coverage or physical model acceptance.",
+  "scientific_acceptance": false,
+  "spend": 0
+}

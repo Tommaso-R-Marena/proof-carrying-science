@@ -1,0 +1,37 @@
+{
+  "format": "pcs-assurance-lattice-v1",
+  "claims": [
+    {
+      "id": 0,
+      "required": "formal",
+      "artifact_deps": [1],
+      "premise_claims": []
+    }
+  ],
+  "evidence": [
+    {
+      "claim_id": 0,
+      "stratum": "computational",
+      "accepted": true
+    }
+  ],
+  "bridges": [],
+  "changed_artifacts": [],
+  "assumptions": [
+    {
+      "id": "bridge_soundness",
+      "statement": "No bridge is supplied; computational evidence must not discharge formal requirements.",
+      "status": "OPEN"
+    },
+    {
+      "id": "dependency_completeness",
+      "statement": "Artifact 1 is declared.",
+      "status": "OPEN"
+    },
+    {
+      "id": "empirical_correspondence",
+      "statement": "This negative example contains no empirical strata.",
+      "status": "OPEN"
+    }
+  ]
+}

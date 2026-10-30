@@ -1,0 +1,130 @@
+{
+  "format": "pcs-progress-supervisor-build-v1",
+  "model_sha256": "58ed24d8a71cec93b873276c8fe1359ea15ad5535e94054bc159049cef65f7cf",
+  "certificate_sha256": "496a416eae5910befb328088abff629462d1cab7f6f00bbad8d42e90d84b015d",
+  "sources": {
+    "PCSActionShield.lean": "5b927bbf262a1a79efe29ae17d85fc3f077cee72fd7b2a1d0e4aa7286d21282d",
+    "Progress.lean": "a8d9f6ea270fdf83ef0ff5a479b96a269fa62f0d45a1d15c18e1aef7f7565c48",
+    "Wire.lean": "d0ea9698b5197d0ee1f3654d06ba62646120a09fd9c66e37a26ad6f4a7471b7b",
+    "Main.lean": "06b4797d7212ea425734a359f09991ac6d8cefc7877a79d1ff1a33b716273606",
+    "Data.lean": "aff2b3014e200f9f50e70c7fc27c30e92e240cf48d225bd2ffca868e3f50838e"
+  },
+  "host_sources": {
+    "authority.py": "fa2ccaffe96e7185881715382e04ba80e06051086fe89ca8b0ec2d544d5e88ef",
+    "certificate.py": "44b9a9c5c2ca529536c7008265d429109e0d0aa01743dc6a38a370d06bfd1933",
+    "broker.py": "13e87d62053cea198bbdc8c6abbc4409a4131a0bdde372a479fbb11e4f89a5b7",
+    "example.py": "7d75597f3bb216adb8c93707825ce1390fa3d5f171dc0e38b9d0f8174c9ccf70"
+  },
+  "tools": {
+    "lean": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+    "leanchecker": "cb6cee24e93aa1d72ad0314906c51918f7c96947e18790a0273c837c25e79025",
+    "leanc": "871b10499518fd713bb1088dd98ca2833efdc0c6342cf972b056ef2224b4057d"
+  },
+  "artifacts": {
+    "supervisor": "578cdcc2492b757268e2447e46a03518e1e94cc0c0dc9fa145bac5af2e9f10d7",
+    "Main.c": "06cc9133ff29b4bd1d7854b15f7787b1f5548352ffbe7c50ed5afd930646953b",
+    "Main.olean": "be44b52717dd5190322caa4d00497aa4d0da887ac04f3dcdce4ba75f618acc4f",
+    "Main.lean": "23d60a773a8d48e90852952e7c67529cd4de3958d79d7dcaf461f3c31be9d27b",
+    "Data.c": "d68370cde3b6e8991603561e38045c75d54a4b683bc87077b0598d07af14f30f",
+    "Data.olean": "46bdb0b96a3ba97c871c84606a123567fbc08bab2f2346fa04978c1029bec43d",
+    "Data.lean": "8cb86d311d8dbe7059c1ed47e2d5fcabe857371bd544106ae8938897f2d0b989",
+    "Wire.c": "2b63dcfa9a6ef38b03131ea5bb19d8f8299af5111dd98ab30c88225ff67541cb",
+    "Wire.olean": "6e307defb3ad6e0132892d0b403e89c38c8be6fd49209c6d4a80e65419ab07cc",
+    "Wire.lean": "1ab13aaaa12799999b918a6d38ce144ca708a53dd0b0455f0307ed4b0eb8316c",
+    "Progress.c": "fa05999ea972c60b87142c1d4f2149e0de4df33ed26f81fe584e9355baf3cc70",
+    "Progress.olean": "fe2c7956edcc65cff0f0c10e7e2b0823d4e44e2d71de30bef685f84376d47dd6",
+    "Progress.lean": "b732d09936ca1bae14d4630df310a5beeef8b92375d8daa9f53248aa0ae268f8",
+    "PCSActionShield.c": "ab2d845d7826d2b8c16870aa8595f8948e22d572f687351be5ffeac80e87de58",
+    "PCSActionShield.olean": "17cb26603e7e52ce6ebe4ab35dee1f5c60a58e9b9b20d8b10dda64a0e08d8c38",
+    "PCSActionShield.lean": "2b5d93ab8322d978d5583970961a24c7997a08550c89dc3b9039d7b3b012392c"
+  },
+  "axiom_closures": {
+    "PCSProgress.check_iff": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.force_succ": [],
+    "PCSProgress.force_mono": [],
+    "PCSProgress.winning_can_force": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.force_implies_winning": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.losing_no_finite_bound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.pick_sound": [
+      "propext"
+    ],
+    "PCSProgress.pick_exists": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.choose_sound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.choose_available": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.chosen_step_progresses": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.path_bound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.completion_at_bound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.preserves_existing_safety": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgress.goals_halt": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressWire.selected_from_choose": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressWire.selected_all_outcomes": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressWire.halt_is_goal": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressWire.malformed_refuses": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressData.certificate_checked": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressData.winning": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSProgressData.losing": [
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "fresh_objects_checked": true,
+  "kernel_checked": true,
+  "compiled_implementation_correspondence": "TRUSTED_NOT_PROVED",
+  "executable_image": "Linux sealed memfd; host/shared libraries/compiler remain trusted",
+  "pcs_authority": false,
+  "build_seconds": 117.642606
+}

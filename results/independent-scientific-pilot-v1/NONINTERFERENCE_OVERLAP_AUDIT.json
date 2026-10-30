@@ -1,0 +1,91 @@
+{
+  "format": "pcs-noninterference-overlap-audit-v1",
+  "main": "fabc704efdbda4c8822881366e4db3d3e31f066a",
+  "pr120": {
+    "branch": "feature/independent-scientific-pilot-c8bb",
+    "head": "a93c116f7f5e3501d6012facc2d6b2135867a5d4",
+    "files_changed": [
+      ".github/workflows/pcs-ci.yml",
+      ".github/workflows/pcs-public-full-verification.yml",
+      "docs/INDEPENDENT_SCIENTIFIC_PILOT_V1.md",
+      "docs/PUBLIC_REVIEWER_QUICKSTART.md",
+      "docs/SECURITY_AND_TRUST.md",
+      "docs/TRUST_BOUNDARY_ASSESSMENT_INDEPENDENT_PILOT_V1.md",
+      "examples/independent_scientific_pilot/README.md",
+      "pcs/attest_v06.py",
+      "pcs/cli.py",
+      "pcs/independent_pilot_v1.py",
+      "pcs/intake.py",
+      "pcs/intake_verify_v06.py",
+      "pcs/limitations.py",
+      "pcs/verifier_io_v06.py",
+      "pcs/verifier_zip_v06.py",
+      "results/independent-scientific-pilot-v1/ADVERSARIAL_RESULTS.json",
+      "results/independent-scientific-pilot-v1/BASELINE_ENVIRONMENT.json",
+      "results/independent-scientific-pilot-v1/CLEANROOM_AUTHORITY_PROVENANCE.json",
+      "results/independent-scientific-pilot-v1/CLEANROOM_SUMMARY.json",
+      "results/independent-scientific-pilot-v1/EVIDENCE_LEDGER.json",
+      "results/independent-scientific-pilot-v1/IMPLEMENTATION_REPORT.md",
+      "results/independent-scientific-pilot-v1/INDEPENDENT_PILOT_REPORT.md",
+      "results/independent-scientific-pilot-v1/REPRO_AUDIT.json",
+      "results/independent-scientific-pilot-v1/REVIEWER_REPORT.md",
+      "results/independent-scientific-pilot-v1/TRUST_BOUNDARY_ASSESSMENT.json",
+      "scripts/core_ci_cloudflare.sh",
+      "scripts/run_cleanroom_independent_pilot_v1.py",
+      "scripts/run_independent_scientific_pilot_v1.py",
+      "tests/test_attest_v06_intake_lock.py",
+      "tests/test_independent_pilot_v1.py",
+      "tests/test_intake_verify_v06.py",
+      "tests/test_python_lean_archive_boundary_v06.py"
+    ],
+    "file_count": 32
+  },
+  "pr117": {
+    "branch": "research/proof-gated-self-improvement-v1-20261016",
+    "head": "db1cacf5c750ee108c9d946f5ee0839a53be25f6",
+    "files_changed": [
+      ".github/workflows/pcs-proof-gated-research.yml",
+      "formal/ARISTOTLE_SELF_CONTAINED_MULTILAYER_V4.md",
+      "formal/PCS/V2/ProofGatedArtifacts.lean",
+      "formal/PCS/V2/ProofGatedAudit.lean",
+      "formal/PCS/V2/ProofGatedInference.lean",
+      "formal/PCS/V2/ProofGatedMultilayer.lean",
+      "formal/PCS/V2/ProofGatedPromotion.lean",
+      "formal/PCS/V2/ProofGatedSelfImprovement.lean",
+      "formal/PCS/V2/ProofGatedSymbolic.lean",
+      "research/proof-gated-self-improvement-v1/ARISTOTLE_CHALLENGE_V3.md",
+      "research/proof-gated-self-improvement-v1/EXACT_INTEGER_DOMAIN_REPORT.md",
+      "research/proof-gated-self-improvement-v1/README.md",
+      "research/proof-gated-self-improvement-v1/global_falsification.py",
+      "research/proof-gated-self-improvement-v1/layered_guard.py",
+      "research/proof-gated-self-improvement-v1/ood_falsification.py",
+      "research/proof-gated-self-improvement-v1/promotion_v2.py",
+      "research/proof-gated-self-improvement-v1/proof_gate.py",
+      "research/proof-gated-self-improvement-v1/sealed_inference.py",
+      "research/proof-gated-self-improvement-v1/tests/test_global_falsification.py",
+      "research/proof-gated-self-improvement-v1/tests/test_layered_guard.py",
+      "research/proof-gated-self-improvement-v1/tests/test_promotion_v2.py",
+      "research/proof-gated-self-improvement-v1/tests/test_proof_gate.py",
+      "research/proof-gated-self-improvement-v1/tests/test_sealed_inference.py",
+      "research/proof-gated-self-improvement-v1/tests/test_universal_relu.py",
+      "research/proof-gated-self-improvement-v1/universal_relu.py"
+    ],
+    "file_count": 25
+  },
+  "overlap_paths": [],
+  "overlap_count": 0,
+  "reserved_path_touches_by_pr120": {
+    "formal": [],
+    "research": [],
+    "site": []
+  },
+  "exclusive_agent_for_pr120": true,
+  "other_open_prs": [
+    117
+  ],
+  "notes": [
+    "PR #117 is research/proof-gated and must remain untouched.",
+    "This agent owns PR #120 and may fix the cleanroom CI failure narrowly.",
+    "New independent_eval workstreams must use disjoint paths under independent_eval/."
+  ]
+}

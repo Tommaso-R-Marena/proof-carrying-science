@@ -1,0 +1,28 @@
+{
+  "format": "pcs-epistemic-certificate-v1",
+  "assumptions": [
+    {
+      "id": "A_model",
+      "statement": "bounded finite transport model assumptions are explicit"
+    }
+  ],
+  "claim": {
+    "id": "C_world",
+    "stratum": "empirical",
+    "predicate": "amount-conserved",
+    "required_evidence": ["E_matrix"],
+    "assumptions": ["A_model"]
+  },
+  "evidence": [
+    {
+      "id": "E_matrix",
+      "stratum": "computational",
+      "outcome": "PASS",
+      "predicate": "amount-conserved",
+      "artifact_ids": ["matrix.json"]
+    }
+  ],
+  "stratum": "empirical",
+  "residuals": [],
+  "scientific_acceptance": false
+}

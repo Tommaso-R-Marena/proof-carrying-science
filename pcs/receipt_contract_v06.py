@@ -13,6 +13,7 @@ from .formal_coverage_v06 import (
     FORMAL_COVERAGE_FORMAT_V06,
 )
 from .jsonio import StrictJSONError, strict_json_load
+from .intake_verify_v06 import INTAKE_VERIFY_FORMAT_V06
 
 
 RECEIPT_FORMAT_V06 = "pcs-end-to-end-verifier-v06-v1"
@@ -168,10 +169,72 @@ def _audit_provenance_summary(
                 )
 
 
+def _intake_receiving_veto_is_consistent(receipt: Mapping[str, Any]) -> bool:
+    """Recognize an internally coherent receiving veto, never a Lean verdict.
+
+    Like the rest of this receipt contract, this checks the signer's recorded
+    observations. It does not replay the package or authenticate a historical
+    verifier execution. Package verification remains a separate operation.
+    """
+    intake = receipt.get("intake_lock")
+    stages = receipt.get("stages")
+    if not isinstance(intake, Mapping) or not isinstance(stages, Mapping):
+        return False
+    detail = intake.get("stages")
+    if not isinstance(detail, Mapping):
+        return False
+    names = (
+        "member_present", "lock_valid", "certificate_consistent", "expected_hash_bound"
+    )
+    if not all(isinstance(detail.get(name), bool) for name in names):
+        return False
+    required, present = intake.get("required"), intake.get("present")
+    if not isinstance(required, bool) or not isinstance(present, bool):
+        return False
+    if detail["member_present"] is not present:
+        return False
+    if detail["lock_valid"] and not present:
+        return False
+    if detail["certificate_consistent"] and not detail["lock_valid"]:
+        return False
+    expected = intake.get("expected_intake_semantic_hash")
+    if expected is not None and (not _is_hex64(expected) or not required):
+        return False
+    if not detail["expected_hash_bound"] and expected is None:
+        return False
+    if present and not _is_hex64(intake.get("member_sha256")):
+        return False
+    if detail["lock_valid"]:
+        actual = intake.get("intake_semantic_hash")
+        if not _is_hex64(actual):
+            return False
+        matches = expected is None or actual.lower() == expected.lower()
+        if detail["expected_hash_bound"] is not matches:
+            return False
+    errors = intake.get("errors")
+    package_errors = receipt.get("errors")
+    return (
+        intake.get("format") == INTAKE_VERIFY_FORMAT_V06
+        and intake.get("valid") is False
+        and (required or present)
+        and not all(detail[name] for name in names)
+        and isinstance(errors, list)
+        and bool(errors)
+        and all(isinstance(error, str) and bool(error) for error in errors)
+        and isinstance(package_errors, list)
+        and all(error in package_errors for error in errors)
+        and stages.get("intake_lock") is False
+        and receipt.get("failed_stage") == "intake_lock"
+        and all(
+            receipt.get(name) is False
+            for name in ("valid", "authoritative", "accepted")
+        )
+    )
+
+
 def _audit_formal_coverage(
     coverage: Mapping[str, Any],
     *,
-    authoritative: bool,
     lean_accepted: bool,
     errors: list[str],
     checks: dict[str, bool],
@@ -196,11 +259,9 @@ def _audit_formal_coverage(
     if not checks["formal_coverage_scopes"]:
         errors.append("formal_coverage scope declaration mismatch")
 
-    expected_package_authority = (
-        "LEAN_AUTHORITATIVE_ACCEPT"
-        if authoritative and lean_accepted
-        else None
-    )
+    # Coverage records the actual Lean replay, even if the receiver subsequently
+    # rejects the package for intake binding. It never reports receiver approval.
+    expected_package_authority = "LEAN_AUTHORITATIVE_ACCEPT" if lean_accepted else None
     actual_package_authority = coverage.get("package_authority")
     if expected_package_authority is not None:
         checks["formal_coverage_package_authority"] = (
@@ -250,7 +311,7 @@ def _audit_formal_coverage(
         if row.get("checker_semantics") != expected_semantics:
             row_semantics_ok = False
 
-        if in_certified_set and authoritative and lean_accepted:
+        if in_certified_set and lean_accepted:
             expected_execution = "AUTHORITATIVELY_REPLAYED_BY_LEAN"
         elif in_certified_set:
             expected_execution = "CHECKER_TYPE_PROVED_PACKAGE_NOT_LEAN_ACCEPTED"
@@ -315,6 +376,12 @@ def audit_verification_receipt_v06(
     accepted = receipt.get("accepted") is True
     authoritative = receipt.get("authoritative") is True
     authority_required = receipt.get("authority_required") is True
+    intake_veto = _intake_receiving_veto_is_consistent(receipt)
+    intake = receipt.get("intake_lock")
+    if isinstance(intake, Mapping) and intake.get("valid") is False:
+        checks["invalid_intake_cannot_accept"] = not (valid or authoritative or accepted)
+        if not checks["invalid_intake_cannot_accept"]:
+            errors.append("invalid intake lock contradicts package acceptance")
 
     checks["authority_required"] = authority_required
     if not authority_required:
@@ -353,7 +420,7 @@ def audit_verification_receipt_v06(
             errors.append("lean_authority.accepted must be boolean")
 
         checks["lean_acceptance_matches_authoritative"] = (
-            lean_accepted == authoritative
+            lean_accepted == authoritative or (lean_accepted and intake_veto)
         )
         if not checks["lean_acceptance_matches_authoritative"]:
             errors.append("lean_authority.accepted contradicts authoritative")
@@ -402,9 +469,9 @@ def audit_verification_receipt_v06(
 
     stages = receipt.get("stages")
     if isinstance(stages, Mapping) and "lean_authority" in stages:
-        checks["lean_authority_stage"] = stages.get("lean_authority") is authoritative
+        checks["lean_authority_stage"] = stages.get("lean_authority") is lean_accepted
         if not checks["lean_authority_stage"]:
-            errors.append("stages.lean_authority contradicts authoritative")
+            errors.append("stages.lean_authority contradicts Lean verdict")
 
     if valid:
         for field in (
@@ -460,7 +527,6 @@ def audit_verification_receipt_v06(
         checks["formal_coverage_shape"] = True
         _audit_formal_coverage(
             coverage,
-            authoritative=authoritative,
             lean_accepted=lean_accepted,
             errors=errors,
             checks=checks,

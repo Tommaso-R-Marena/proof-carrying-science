@@ -1,0 +1,185 @@
+{
+  "commit": "efaf3d0b8b373338284f4ae3ca42ff66ce576a68",
+  "records": [
+    {
+      "label": "v7_crosspolicy_native",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--run",
+        "../research/proof-gated-self-improvement-v1/v7_independent/v7_cross_policy_native.lean"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/formal",
+      "exit_code": 0,
+      "duration_seconds": 1.691,
+      "log_sha256": "68cbfb3e5b4374554bd89413fd26a69faf8668ec16fbb990192db030685f222e",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/v7_crosspolicy_native.log",
+      "kind": "actual_Lean_authorization",
+      "output_tail": "PASS: independent Python 250-byte PGSC6 replayed by real Lean V7 (changed policy accepted, original policy rejected; stale/forged/corrupt inputs rejected)\n"
+    },
+    {
+      "label": "pgsi2_wide_differential",
+      "command": [
+        "python",
+        "pgsi2_wide_differential.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 82.796,
+      "log_sha256": "c167500c32ac0abb6b454410fede85fb70a3c952682b9951ecbcd59a2dd00fa3",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/pgsi2_wide_differential.log",
+      "kind": "actual_Lean_authorization",
+      "result": {
+        "authority": "actual Lean 4.28.0 CLI, not mock",
+        "golden_canonical": 8,
+        "lean_kernel_proof_of_host_refinement": false,
+        "malformed_and_missing_cases": 15,
+        "model_input_prediction_pairs": 760,
+        "production_trusted_root": false,
+        "result": "PASS",
+        "seeded_canonical": 32,
+        "strong_gate_and_bound_cases": 4
+      }
+    },
+    {
+      "label": "pgsc6_lean_differential",
+      "command": [
+        "python",
+        "pgsc6_lean_differential.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 38.839,
+      "log_sha256": "4542368cd00622d361ef11084abb98aef810f2189e89e47133528ba2617393f0",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/pgsc6_lean_differential.log",
+      "kind": "actual_Lean_authorization",
+      "result": {
+        "checked": 40,
+        "lean": "actual Lean 4.28.0 V6 checkCertBytes, not a mock",
+        "negative": 37,
+        "policy": "specWide fixed on Lean checker side",
+        "positive": 3,
+        "result": "PASS",
+        "trusted_monotonic_generation_store": false,
+        "verified_external_io_security": false,
+        "verified_external_python_equivalence_theorem": false
+      }
+    },
+    {
+      "label": "pgsc6_pinned_store_live",
+      "command": [
+        "python",
+        "pgsc6_pinned_store_live.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 3.002,
+      "log_sha256": "eedcc7bdbaca3470c46bea9405e69a47cb3de3af119a4c04d8237e48ff210d0b",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/pgsc6_pinned_store_live.log",
+      "kind": "actual_Lean_authorization",
+      "result": {
+        "candidate_snapshot_checked": true,
+        "compiled_policy_overridden_by_proposer": false,
+        "full_rollback_detection": false,
+        "generations": [
+          {
+            "active_digest": "e7bca94ab647df3dc86d7b627de21939cf9faa742254289eca2225828776c53a",
+            "generation": 1,
+            "receipt": "d7f1da5cbf31ef7ddc66bac026c5084cf38dd2ef3d197553bba7c25256050666"
+          },
+          {
+            "active_digest": "fad095b6c82e3f6c88d43b41b9aa97fcacb23f98c34e1e3bbf40acfcd5b0a171",
+            "generation": 2,
+            "receipt": "9f77be7d7c204363c407da41f5b553c8e10fe889bcf84d8b842be8598ed1eff9"
+          },
+          {
+            "active_digest": "8cff8e938dc07e8707c3573df764d479e671906d19f6c65b1bc886b1c4dfedc8",
+            "generation": 3,
+            "receipt": "749c865e9d84dab849d3b2c05d1450f26bdd0ffd8a099e341fa5a95f322ea5ae"
+          }
+        ],
+        "negative_mutated_certificates_rejected": 3,
+        "production_security": false,
+        "real_lean_checker_promotions": 3,
+        "result": "PASS",
+        "same_privilege_adversary_resistance": false,
+        "stale_replays_rejected": 2
+      }
+    },
+    {
+      "label": "pgsc6_external_anchor_live",
+      "command": [
+        "python",
+        "pgsc6_external_anchor_live.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 2.994,
+      "log_sha256": "2b8fb780a6c13a2074b35ee86d0f826cfa29f7dfabde287d52d5714d05934c6b",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/pgsc6_external_anchor_live.log",
+      "kind": "actual_Lean_authorization",
+      "result": {
+        "actual_lean_certificates_accepted": 3,
+        "external_anchor_rejected_rollback_on": [
+          "audit",
+          "promote",
+          "serve"
+        ],
+        "generations_reached": [
+          1,
+          2,
+          3
+        ],
+        "independent_privilege_isolation": false,
+        "last_generation_before_replay": 3,
+        "model_store_accepts_complete_old_history": true,
+        "production_root_of_trust": false,
+        "proof_of_OS_semantics": false,
+        "result": "PASS"
+      }
+    },
+    {
+      "label": "pgsc6_journaled_recovery_live",
+      "command": [
+        "python",
+        "pgsc6_journaled_recovery_live.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1",
+      "exit_code": 0,
+      "duration_seconds": 4.952,
+      "log_sha256": "df870a2d56317c69d16806c7390ebfa603ce053f9dee2fdf6e429e4c96789e3d",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/pgsc6_journaled_recovery_live.log",
+      "kind": "actual_Lean_authorization",
+      "result": {
+        "actual_lean_authorized_generations": [
+          1,
+          2,
+          3
+        ],
+        "atomic_cross_store_transaction": false,
+        "final_served_bytes_match_V6_candidate": true,
+        "machine_checked_host_refinement": false,
+        "post_anchor_commit_rechecked_by_actual_lean": true,
+        "post_store_commit_rechecked_by_actual_lean": true,
+        "precommit_intent_aborted": true,
+        "result": "PASS",
+        "same_privilege_attacker_protection": false
+      }
+    },
+    {
+      "label": "pgsc6_two_uid_probe",
+      "command": [
+        "python",
+        "pgsc6_two_uid_probe.py"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1",
+      "exit_code": 1,
+      "duration_seconds": 0.114,
+      "log_sha256": "a71abb053321d475c7732e29b435d08f94abd44ba24d10c685776bb8a33907b1",
+      "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/pgsc6_two_uid_probe.log",
+      "kind": "real_two_UID_OS_ACL_test_with_mocked_Lean_fixture_setup",
+      "output_tail": "Traceback (most recent call last):\n  File \"/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1/pgsc6_two_uid_probe.py\", line 118, in <module>\n    main()\n  File \"/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/research/proof-gated-self-improvement-v1/pgsc6_two_uid_probe.py\", line 60, in main\n    raise RuntimeError(\"requires Linux runner and sudo permission\")\nRuntimeError: requires Linux runner and sudo permission\n"
+    }
+  ]
+}

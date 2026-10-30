@@ -1,0 +1,71 @@
+{
+  "format": "pcs-post-integration-handoff-snapshot-v1",
+  "snapshot_commit": "e0f8878079c32e8f968e823a0c3bb8d214f998b9",
+  "exact_final_head_and_time_dependent_ci": "Resolve draft PR156 head and description; this committed record precedes final hosted verification and cannot contain its own commit hash.",
+  "new_theorems": {
+    "authored": 54,
+    "all_namespace_declarations_including_generated": 190,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "inventory": "RECEIVER_THEOREM_INVENTORY.json"
+  },
+  "local_tests": {
+    "receiver": {
+      "status": "EXECUTED_PASS",
+      "passed": 160,
+      "failed": 0,
+      "skipped": 0,
+      "log": "research/scientific_receiver_v1/reports/receiver-tests-20261019.log"
+    },
+    "receipt_fix": {
+      "status": "EXECUTED_PASS",
+      "passed": 124,
+      "failed": 0,
+      "skipped": 0,
+      "head": "ba07e16a8f63fa031e9823b08a41f837a7a8531a"
+    },
+    "history": {
+      "status": "EXECUTED_PASS",
+      "passed": 32,
+      "failed": 0,
+      "skipped": 0,
+      "head": "044f9c67263f57f722ddc078df2016d2284fa78e"
+    }
+  },
+  "experiments": {
+    "differential": {
+      "cases": 10774,
+      "accepts": 778,
+      "issues": 0
+    },
+    "resource_stress": {
+      "cases": 13,
+      "accepts": 11,
+      "issues": 0,
+      "largest_intermediate_denominator_digits": 576
+    },
+    "pilot": {
+      "cases": 3,
+      "empirical_validation": "UNVERIFIED"
+    },
+    "full_profile": {
+      "modules": 4983,
+      "dependency_pins": 19878,
+      "source_pins": 18,
+      "cases": 2,
+      "status": "EXECUTED_PASS"
+    }
+  },
+  "hosted_ci_at_snapshot": {
+    "receiver_predecessor": "39155028357 SUCCESS at6d7a2a9; final head requalification pending",
+    "history": "39191133912 SUCCESS at044f9c6",
+    "receipt_previous_failure": "39154782008 FAIL at45c22c9; reproduced and repaired test path integration",
+    "receipt_final_run": "39190686652 running atba07e16; consult live status"
+  },
+  "readiness": "Restricted research reproduction and independent review; no production activation or external empirical adoption claimed.",
+  "next_milestone": "Separately administered pinned receiving execution and independently protected monotonic history anchor, followed by external reproduction.",
+  "no_merge_or_deployment": true
+}

@@ -1,0 +1,33 @@
+{
+  "format": "pcs-receipt-source-successor-v1",
+  "predecessor_commit": "b916eec1b9d0d5c02c9cc19b070f7a47df5e5d87",
+  "predecessor_profile_sha256": "0610914446b24a6b2e7fb70cd385155531c42d65a95ec04b896d37c29f9d7297",
+  "scope": "SOURCE_IDENTITY_ONLY_NO_ACCEPTANCE_AUTHORITY",
+  "review_status": "pending_independent_review",
+  "files": {
+    "pcs/intake_verify_v06.py": {
+      "old_sha256": "af80a68f9f3a91f530a909a4db6cb3708a8f767299837d76c94780d8854eebec",
+      "new_sha256": "19763deafefee9179af0cc4b7d67fbd7355f33177c122657a9480a87ee2ddf20",
+      "mode": "100644",
+      "reason": "Reviewed receiving-veto receipt repair; preserves actual Lean verdict and overall rejection."
+    },
+    "tests/test_intake_verify_v06.py": {
+      "old_sha256": "6b034c6324d127ccf35664108ed134dd3b1e1eade19c6963bf2f05d834bc797b",
+      "new_sha256": "923b6e345eff82ffdadceba06e0f7edb3215850bf12fe683d59b1839eeb5d31b",
+      "mode": "100644",
+      "reason": "Receiving-veto receipt regressions with real receiver resolution, including isolated environment-selected authority and signed CLI rejection replay."
+    },
+    "pcs/receipt_contract_v06.py": {
+      "old_sha256": "35d7e8b53b7fe009b58812fc9f1abd2ec03645e7cabee9044a9e7a716522019e",
+      "new_sha256": "a5a9882dcd4b9cff872287c422ca2bd8fb00cb11c01f80afc6f0fe9b8c0dfeb1",
+      "mode": "100644",
+      "reason": "Reviewed receiving-veto receipt repair; preserves actual Lean verdict and overall rejection."
+    },
+    "research/integration_v1/source_gate.py": {
+      "old_sha256": "63b60bcec9538195f43506fed3102c37e960bb36654c57ee07e3d2452df6e625",
+      "new_sha256": "bb695da6fb228302a2669f8de7bb5f2fa01b8124898c8a071842172c2d5d0312",
+      "mode": "100644",
+      "reason": "Explicit predecessor-preserving exact-byte successor; no broad source override."
+    }
+  }
+}

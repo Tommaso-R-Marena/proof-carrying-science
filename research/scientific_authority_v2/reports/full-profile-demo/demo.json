@@ -1,0 +1,54 @@
+{
+  "format": "pcs-scientific-authority-v2-demo",
+  "profile": "A:same-host-separate-processes",
+  "independently_administered_witness": false,
+  "witness_process_pid": 8458,
+  "coordinator_pid": 8450,
+  "accepted": [
+    {
+      "fixture": "one-step",
+      "generation": 1,
+      "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+      "result": {
+        "final_a": "7/2",
+        "final_b": "7/2",
+        "total": "7",
+        "lower_a": "7/2",
+        "upper_a": "7/2",
+        "lower_b": "7/2",
+        "upper_b": "7/2",
+        "step_count": 1,
+        "unit_code": true,
+        "physical": true
+      },
+      "wall_seconds": 35.11368144500011
+    },
+    {
+      "fixture": "multi-step-nonsingleton",
+      "generation": 2,
+      "raw_sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+      "result": {
+        "final_a": "13/2",
+        "final_b": "7/2",
+        "total": "10",
+        "lower_a": "5",
+        "upper_a": "8",
+        "lower_b": "2",
+        "upper_b": "5",
+        "step_count": 3,
+        "unit_code": false,
+        "physical": true
+      },
+      "wall_seconds": 48.48485423400416
+    }
+  ],
+  "false_scientific_candidate_rejected": true,
+  "whole_producer_store_rollback_detected": true,
+  "recovery_materialized_witnessed_events": 2,
+  "retrospective_history_math": "EXECUTED_PASS",
+  "historical_occurrence": "Authenticated witness assertions; honest witness/key/storage continuity required",
+  "scientific_acceptance": false,
+  "production_authority": false,
+  "empirical_validity": "UNVERIFIED",
+  "operator_config_sha256": "ab155c9ebd2400b7709e335a69e9f2e85735a310ba93a0e6cb78ac44fe84b4f6"
+}

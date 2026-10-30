@@ -1,0 +1,3411 @@
+{
+  "commit": "efaf3d0b8b373338284f4ae3ca42ff66ce576a68",
+  "declarations": 818,
+  "actual_Lake_build_trace_sha256": "3d797a633da61e9a9b5f958cbbd9b44e663d2eef3765dfc9c679fbaa09b04f77",
+  "source_sha256": "5930330eabf15fee793a1118d656265a7204a01de7adb578799b08929ee0097c",
+  "axiom_closure_counts": {
+    "propext": 122,
+    "propext,Quot.sound": 193,
+    "NONE": 64,
+    "propext,Classical.choice,Quot.sound": 439
+  },
+  "theorems": {
+    "PCS.V2.ProofGatedSelfImprovement.accept_sound": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.accepted_preserves": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.accepted_expands": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.accepted_strict_loss": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.two_accepted_steps": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.trace_preserves": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.trace_length_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.trace_steps_bounded": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.gatedStep_preserves": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.gatedStep_loss": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.arbitrary_strategies_preserve": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.arbitrary_strategies_nonincrease": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.perfect_cannot_advance": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSelfImprovement.optimum_perfect": [],
+    "PCS.V2.ProofGatedSelfImprovement.same_target_ood_regression": [],
+    "PCS.V2.ProofGatedSelfImprovement.optimum_terminal": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSymbolic.add_zero_rewrite": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSymbolic.multiply_one_rewrite": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSymbolic.rewrites_compose": [],
+    "PCS.V2.ProofGatedArtifacts.decode_canonical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.decode_bounded": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.acceptWire_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.activationChars_pipe_free": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedArtifacts.parseActivation_activationChars": [],
+    "PCS.V2.ProofGatedArtifacts.splitFields_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.parseComponents_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.decode_encode_of_bounded": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.encode_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.decode_eq_some_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.decode_eq_none_of_invalid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.encode_examples": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.decode_rejection_examples": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedArtifacts.decode_acceptance_examples": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPromotion.commit_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPromotion.commit_requires_genuine_improvement": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPromotion.stale_generation_cannot_commit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPromotion.substituted_active_cannot_commit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPromotion.gatedCommit_monotone_generation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInference.infer_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInference.infer_canonical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInference.committed_inference_preserves_correct_cases": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInference.committed_inference_exact_artifact": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInference.infer_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInference.infer_eq_some_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedMultilayer.accept_sound": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.accepted_preserves": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.accepted_expands": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.accepted_strict_loss": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.accepted_candidate_bounded": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.trace_preserves": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.trace_length_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedMultilayer.gatedStep_preserves": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.gatedStep_loss": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.arbitrary_proposers_preserve": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.arbitrary_proposers_nonincrease": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.swapHidden_semantics": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedMultilayer.two_neuron_improvement_first": [],
+    "PCS.V2.ProofGatedMultilayer.two_neuron_improvement_second": [],
+    "PCS.V2.ProofGatedMultilayer.completed_model_loss_zero": [],
+    "PCS.V2.ProofGatedMultilayer.original_model_loss": [],
+    "PCS.V2.ProofGatedMultilayer.intermediate_model_loss": [],
+    "PCS.V2.ProofGatedMultilayer.two_generations_certified": [],
+    "PCS.V2.ProofGatedMultilayer.complete_perfect": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.perfect_cannot_advance": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedMultilayer.complete_terminal": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedGeneric.preservesB_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.gainsB_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accept_iff_admissible": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accept_sound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accept_complete": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accepted_preserves": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accepted_gains": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accepted_strict_loss": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accepted_valid": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accepted_incumbent_valid": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accept_irrefl": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.accept_trans": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.loss_eq_zero_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.perfect_cannot_advance": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.perfect_valid_always_accepted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.trace_preserves": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.trace_length_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.trace_steps_bounded": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.trace_valid": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.trace_strict_gain": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.no_long_trace": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.gatedStep_reject": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedGeneric.gatedStep_accept": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedGeneric.gatedStep_preserves": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.gatedStep_valid": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.gatedStep_count": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_preserves": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_valid": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_count_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_loss_nonincrease": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_accepted_le_loss": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_frozen_of_perfect": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedGeneric.runSched_certified": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedGeneric.gatedStep_changed": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.hiddenSum_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.hiddenSum_perm": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.predict_perm": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.predict_insert_dead": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.hiddenSum_filter_live": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.predict_prune_dead": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.predict_merge": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.relu_mul_nonneg": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.unitOut_rescale": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.predict_rescale": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.unitsOK_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.unitsOK_perm": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.valid_perm": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.loss_congr": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.correct_congr": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.accept_congr_candidate": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.accept_congr_incumbent": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.accept_perm_invariant": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.predict_ofTiny": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.valid_ofTiny": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.tiny_preservesB": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.tiny_gainsB": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.tiny_accept_eq": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.accept_ofTiny": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.neuron_preservesB": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.neuron_expandsB": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.neuron_accept_eq": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.predict_ofNeuron": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.wide_step1": [],
+    "PCS.V2.ProofGatedWide.wide_step2": [],
+    "PCS.V2.ProofGatedWide.wide_step3": [],
+    "PCS.V2.ProofGatedWide.wide_losses": [],
+    "PCS.V2.ProofGatedWide.wide_three_generations": [],
+    "PCS.V2.ProofGatedWide.gen3_exact": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.gen3_terminal": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedWide.regressive_lower_loss": [],
+    "PCS.V2.ProofGatedWide.regressive_blocked": [],
+    "PCS.V2.ProofGatedWide.outOfRange_semantics": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedWide.outOfRange_blocked": [],
+    "PCS.V2.ProofGatedWide.overWidth_blocked": [],
+    "PCS.V2.ProofGatedWide.permuted_gen3_accepted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.dot_ofWide": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.predict_ofWide": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.dot_unit": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.range_map_getD": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.layerEval_idLayer": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.layerEval_nonneg": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.layerEval_length": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.hiddenEval_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.predict_deepen": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.predict_deepen_ofWide": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.deep_step1": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.deep_step2": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.deep_losses": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.deep_two_generations": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.dFull_exact": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.dIllShaped_semantics": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeep.dIllShaped_blocked": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.dTooDeep_blocked": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeep.deepened_full_accepted": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCodec.toDigitsCore_acc": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.toDigitsCore_fuel": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.renderNat_step": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.renderNat_ne_nil": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.digitVal_digitChar": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCodec.parseNatAux_append": [],
+    "PCS.V2.ProofGatedCodec.parseNatAux_renderNat": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.parseNat_renderNat": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.renderNat_head_ne_minus": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.parseIntRaw_renderInt": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.parseInt_renderInt": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.parseInt_eq_some_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.parseInt_canonical": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.renderInt_injective": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.noncanonical_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.canonical_examples": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.digitVal_ne_pipe": [],
+    "PCS.V2.ProofGatedCodec.pipe_not_mem_renderNat": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.pipe_not_mem_renderInt": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.toString_ofNat_toList": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.toString_negSucc_def": [],
+    "PCS.V2.ProofGatedCodec.toString_toList_of_append_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.splitFields_ne_nil": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCodec.splitFields_pipe_free_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCodec.splitFields_joinFields": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCodec.joinFields_cons_cons": [],
+    "PCS.V2.ProofGatedCodec.joinFields_splitFields": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCodec.mapM_parseInt_render": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.mapM_parseInt_canonical": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.decodeInts_encodeInts": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.decodeInts_canonical": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCodec.encodeInts_injective": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.bsz_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.utf8ByteSize_ofList": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.utf8GetAux_at": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.extract_go\u2082": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.extract_go\u2081": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.extract_mid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.splitOnAux_pipe": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.prefixField_nil": [],
+    "PCS.V2.ProofGatedV1Analysis.splitOn_pipe_ofList": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.splitOn_pipe": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_toList": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.actChars_pipe_free": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_splitOn": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.parseComponentsLegacy_encodeLegacy": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.decode_encode_of_bounded_of_core": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_injective_of_bounded_of_core": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.toString_eq_ofList_render_of_append_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.coreIntContract_of": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.toString_toList_of_nonneg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.pipe_free_toString_of_nonneg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.decode_encode_of_bounded_nonneg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.actChars_injective": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_injective_nonneg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.decode_sound_unconditional": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_toList_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_eq_encodeLegacy_of_nonneg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.encode_eq_encodeLegacy_of_append_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV1Analysis.decode_encodeLegacy_of_append_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.tag_pipe_free": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.unitsOfInts_flatMap": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.ofInts_toInts": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.unitsOfInts_inv": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.toInts_of_ofInts": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.parseModel_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.parseModel_canonical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.decode_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.decode_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.decode_canonical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.decode_valid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.encode_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.decode_rejects": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.infer_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.infer_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.infer_congr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.acceptWire_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.acceptWire_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.commit_refines": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.commit_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.stale_generation_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.substituted_active_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.runCommits_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.gen3_wire": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.cfg3_spec": [],
+    "PCS.V2.ProofGatedNetArtifacts.three_commits": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.served_after_three_commits": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.replay_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNetArtifacts.boundary_fixtures": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.runSched_succ": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.nat_antitone_stabilizes": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.gated_run_stabilizes": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.frozen_of_all_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedLimits.predict_addUnit": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.unitOut_blind": [],
+    "PCS.V2.ProofGatedLimits.unitOut_blind_le": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.unitOut_blind_gt": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.blind_extension_accepted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.multilayer_ood_regression": [],
+    "PCS.V2.ProofGatedLimits.gate_cannot_separate": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.blind_extensions_of_gen3": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.trapM_semantics": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedLimits.trap_all_neighbors_rejected": [],
+    "PCS.V2.ProofGatedLimits.local_trap": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedLimits.local_proposer_frozen": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.affine_up": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.affine_down": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.affine_of_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.secondDiff_sub": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.relu_linear_nonneg": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.relu_linear_nonpos": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedNoForget.relu_secondDiff_of_not_kink": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.unitOut_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.hiddenSum_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.predict_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.forgets_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.forget_on_piece": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.exists_min_above": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.exists_max_below": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.gap_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.not_mem_kinks_of_not_mem_anchors": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedNoForget.mem_candidates": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.exists_candidate_of_forgets": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.findForgetting_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.noForgetting_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.noForgetting_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.findForgetting_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.acceptNF_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.nfTrace_preserves": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.nfTrace_loss": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.target3_net": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.spec3_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedNoForget.blindForget_corpus_accepted": [],
+    "PCS.V2.ProofGatedNoForget.blindForget_caught": [],
+    "PCS.V2.ProofGatedNoForget.blindForget_forgets_at_minus_12": [],
+    "PCS.V2.ProofGatedNoForget.blindForget_rejected": [],
+    "PCS.V2.ProofGatedNoForget.gen3_acceptNF": [],
+    "PCS.V2.ProofGatedNoForget.growth_chain": [],
+    "PCS.V2.ProofGatedNoForget.ood_not_forgetting": [],
+    "PCS.V2.ProofGatedRobust.abs_le_endpoints": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.inIv_iff": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedRobust.probes_in_interval": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.probes_length": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.probe_dominates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.le_maxOver": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.maxOver_attained": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.maxOver_le_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.errProbes_length": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.errAt_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.errAt_le_probe": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.errAt_le_maxAbsErr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.maxAbsErr_attained": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.maxAbsErr_isMax": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.maxAbsErr_le_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.checkErrBound_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.findErrViolation_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.findErrViolation_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.findErrViolation_none_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.robustB_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.robustB_iff_pointwise": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.findRobustViolation_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.findRobustViolation_none_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.maxAbsErr_congr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRobust.robustB_trans": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_acceptNF": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_maxAbsErr": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_irrefl": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_congr_candidate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_congr_incumbent": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.acceptStrong_perm_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_noForget": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_robust": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_maxAbsErr": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_loss": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_length_le_loss": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_valid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_corpus": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.no_long_strongTrace": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.strongTrace_append": [],
+    "PCS.V2.ProofGatedStrongGate.runStrong_trace": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedStrongGate.countStrong_le_loss": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.runStrong_guarantees": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.specNarrow_corpusSpec": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.growth_chain_errors": [],
+    "PCS.V2.ProofGatedStrongGate.growth_chain_narrow": [],
+    "PCS.V2.ProofGatedStrongGate.growth_step1_rejected_mid": [],
+    "PCS.V2.ProofGatedStrongGate.robust_chain_wide": [],
+    "PCS.V2.ProofGatedStrongGate.robust_chain_wide_values": [],
+    "PCS.V2.ProofGatedStrongGate.robust_chain_wide_guarantee": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongGate.blindForget_only_B": [],
+    "PCS.V2.ProofGatedStrongGate.ood_only_C": [],
+    "PCS.V2.ProofGatedStrongGate.noProgress_only_A": [],
+    "PCS.V2.ProofGatedStrongGate.gen3_strong_terminal": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.dot_affv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.affv_zero": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.between_of_affine": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.neuronStep_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.neuronStep_one": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.layerStep_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.layerStep_one": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.hiddenStep_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.hiddenStep_one": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.cellCoeffs_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.cellOK_affine": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.cellOK_succ": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.affine_abs_le": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.affine_secondDiff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.chainOK_cons": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.chain_in_range": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.cell_dominates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.chain_dominates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.certMaxErr_isMax": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.certErrBound_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.enumCert_ok": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.cert_exists": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.cert_must_contain": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.deepRobustCert_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.deepRobustCert_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.acceptDeepCert_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCert.dFull_cert": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.dFull_bad_cert": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.sawtooth_all_kinks": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCert.saw6_cert_contains_all": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.strongAdmissible_valid": [],
+    "PCS.V2.ProofGatedStrongArtifacts.acceptStrongWire_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.acceptStrongWire_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.acceptStrongWire_noncanonical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.commitS_refines": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.commitS_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.staleS_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.substitutedS_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.runCommitsS_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.served_error_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.served_noForget": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.chain_wires": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.three_strong_commits": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedStrongArtifacts.ood_wire_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.byteToChar_charToByte": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.charToByte_byteToChar": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.digitChar_ascii": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedBytes.renderNat_ascii": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.renderInt_ascii": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.joinFields_ascii": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedBytes.tag_ascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.asciiChars_encodeInts": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.asciiChars_encodeChars": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.map_byteToChar_charToByte": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.all_ascii_map_charToByte": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.encodeBytes_map_byteToChar": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.encodeBytes_ascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_encodeBytes": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.bytes_of_ascii": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_canonical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_valid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.encodeBytes_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_rejects": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_nonascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_unique": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.valid_mono": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_arch_mono": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.inferBytes_encodeBytes": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.inferBytes_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.inferBytes_none": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.decodeBytes_text": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.gen3_bytes": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.gen3_bytes_decode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.malformed_fixtures": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.bom_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.high_byte_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBytes.arch_mismatch_fixture": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.witnessOK_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.findGain_spec": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.findErrArgmax_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.genCert_artifacts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_iff_gate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_header": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_version_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_predicate_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_config_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_stale_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_substituted_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_malformed_candidate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.checkCert_candidate_swap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.gen3_gen0_not_admissible": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.verdict_only_unsound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertificate.witness_rejects_verdict_example": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.certTag_pipe_free": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.certTag_ascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.takeNat_nat": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCertCodec.takeBlock_block": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCertCodec.takeBlock_block_nil": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCertCodec.byteOfInt_byteI": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.bytesOfInts_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.parseCert_certToInts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.parseCertBytes_encodeCert": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.decodeCert_encodeCert": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.decodeCert_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.encodeCert_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.checkCertBytes_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.checkCertBytes_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.checkCertBytes_malformed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_accepted": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_bytes_accepted": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_witness": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_text": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_size": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_replay_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_forged_level_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_forged_gain_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCertCodec.cert1_config_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_decision": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_reject": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_rejected_of_check": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_accept_refines": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_malformed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_config_mismatch": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_stale": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.step_substituted": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.run_fst_nil": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.run_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.serve_run": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.serve_noForget": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.serve_error_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.run_log_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.run_log_chain": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.run_log_generations": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.run_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.hash_identity_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.hash_identity_step": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.colliding_hash_breaks_gate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.wide_chain_adm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.wide_chain_run": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedProtocol.adversarial_run": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.reluI_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.tripleSum_spec": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.all_flatMap_units": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedInterpreter.length_flatMap_units": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.length_toInts": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.intsOK_toInts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.interpBytes_eq_inferBytes": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.interp_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.wrap_id": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.natAbs_reluI_le": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.unitOut_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.unitK_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.sumK_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.predictK_eq_predict": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.int64_safe": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.int64_mismatch": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedInterpreter.vectors_count": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.vectors_interp": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.vectors_infer": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedInterpreter.perm_agrees": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.chainOK_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.lastPt_append": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.genCell_ok": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.genDeepCert_ok": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.genDeepCert_isMax": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.minimizeCert_ok": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.minimizeCert_length": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.cert_length_le": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.cert_length_of_full": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.saw6_eq": [],
+    "PCS.V2.ProofGatedDeepCertGen.absI_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.hidden_folds": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.sawtooth_predict": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.foldAbs_sawCs": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.sawNet_predict": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.sawNet_all_kinks": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.sawNet_cert_length": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.sawNet_paramCount": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.dFull_gen_length": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.dFull_gen": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.dFull_gen_checked": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedDeepCertGen.saw3_gen_length": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV6Limits.outside_accepted": [],
+    "PCS.V2.ProofGatedV6Limits.outside_unbounded": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6Limits.coordinated_move_accepted": [],
+    "PCS.V2.ProofGatedV6Limits.toInts_deadUnit": [],
+    "PCS.V2.ProofGatedV6Limits.rejected_of_same_on_corpus": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6Limits.all_single_coordinate_moves_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6Limits.mem_params1": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6Limits.mem_allNets11": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6Limits.dead_end_entry": [],
+    "PCS.V2.ProofGatedV6Limits.dead_end_loss": [],
+    "PCS.V2.ProofGatedV6Limits.dead_end_finite": [],
+    "PCS.V2.ProofGatedV6Limits.dead_end": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6Limits.dead_end_escaped_by_width": [],
+    "PCS.V2.ProofGatedV6Limits.interval_mismatch": [],
+    "PCS.V2.ProofGatedV6EndToEnd.v6_end_to_end": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV6EndToEnd.v6_end_to_end_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.unitOut_eq_ite": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.act_iff_pos": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.act_iff_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evF_add": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evG_add": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evF_neg": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evG_neg": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evF_zero": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evG_zero": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.contribF_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.contribG_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.corr_const": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.corr_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.corr_gt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumBy_append": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumBy_perm": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumBy_congr": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumBy_zero": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumBy_filter": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evF_sumCo": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.evG_sumCo": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumBy_map_hidden": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.gapF_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.gapG_eq": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nonconst_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.gapF_decomp": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.gapG_decomp": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.loB_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.hiB_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.root_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.affine_zero_two": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.localOK_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sumCorr_zero_below": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.below_all": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweepWith_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweepWith_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.localOK_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweep_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweep_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.affine_between": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.localErr_spec": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.localBoth_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sortedB_pairwise": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sortedB_of_pairwise": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.insertSplit_perm": [],
+    "PCS.V2.ProofGatedSweepCert.sortSplit_perm": [],
+    "PCS.V2.ProofGatedSweepCert.insertSplit_sorted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sortSplit_sorted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.mem_sweepUnits": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.genNF_perm": [],
+    "PCS.V2.ProofGatedSweepCert.genNF_sorted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_iff_noForgetting": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_not_perm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_unsorted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_wrong_length": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkNF_forgetting_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweep_steps": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.genNF_length": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.kinks_length": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweepUnits_length": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.v6_candidates_length_ge": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweepWith_gap_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.sweepWith_gap_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkBoth_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkBoth_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkBoth_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkBoth_not_perm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.checkBoth_unsorted": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_gen2_gen3_splits": [],
+    "PCS.V2.ProofGatedSweepCert.nf_gen2_gen3_accepted": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_blindForget_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_blindForget_all_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_incomplete_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_reordered_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_duplicated_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_forged_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.nf_foreign_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.both_gen2_gen3_accepted": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedSweepCert.both_level_rejected": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedCert7.witnessOK7_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_iff_gate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checker_substitution_equiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_header": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_stale_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_substituted_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_config_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7_version6_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7Tag_pipe_free": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7Tag_ascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.tusOfInts_orderInts": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.parseCert7_cert7ToInts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.decodeCert7_encodeCert7": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.decodeCert7_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.encodeCert7_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.encodeCert_prefix": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.encodeCert7_prefix": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.pgsc6_not_pgsc7": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.decodeCert7_of_pgsc6": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.decodeCert_of_pgsc7": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.checkCert7Bytes_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7_1_accepted": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7_1_bytes_accepted": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7_1_order_length": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7_1_forged_order_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert7_1_forged_level_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedCert7.cert1_not_pgsc7": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.policyTag_pipe_free": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.policyTag_ascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.parsePolicy_policyToInts": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.decodePolicy_encodePolicy": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.decodePolicy_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.encodePolicy_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.encodePolicy_binds": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_accepts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_unique_cert": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_unsupported": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_binds_config": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.safePolicyUsed_eq": [],
+    "PCS.V2.ProofGatedPolicy.safeDecide_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.safe_policy_independent": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.safe_ignores_requested": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.safeDecide_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.strict_exact": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.strict_rejects_other_policy": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.naiveDecide_encode": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_pgsc6": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_pgsc6_accept": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.runChecker_pgsc6_config": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.pinned0_spec": [],
+    "PCS.V2.ProofGatedPolicy.pinned0_supported": [],
+    "PCS.V2.ProofGatedPolicy.malTarget_admissible": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.pinned_rejects_regression": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.naive_target_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.naive_interval_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.naive_corpus_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.naive_arch_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.blindForget_not_admissible": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.naive_checker_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.pinned0_accepts_cert1": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.stale_generation_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.digest_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.digest_sound_accept": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.digest_collision_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.unsupported_version_rejects": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedPolicy.unsupported_predicate_rejects": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runEvents_proposals": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.proposals_no_governance": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_policy_frame": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_cases": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_reject_frame": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_accept_unique": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_accept_generation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_accept_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_policy": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.authorized_predict": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_receipt_ok": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.propose_receipt_states": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_log_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_log_chain": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.log_generation_explained": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.chain_replay": [],
+    "PCS.V2.ProofGatedBoundary.replay_log": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.chain_gen_mono": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.accepted_same_cert_same_gen": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_acceptedGens": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.accepted_cert_at_most_once": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.policy_change_needs_governance": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.govern_safe": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.joinFields_ne_nil": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedBoundary.encodeCert_ne_nil": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.encodeCert7_ne_nil": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.adversary_can_stall": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.honest_progress": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.race_one_winner": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.progress_bounded": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.deadPolicy_spec": [],
+    "PCS.V2.ProofGatedBoundary.dead_end_stuck": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_snoc": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.absDisk_append_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.chain_last": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedBoundary.runAdv_last": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.absDisk_logConsistent": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.crash_recover_consistent": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.crash_recover_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.replay_after_commit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedBoundary.adversarial_trace": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.receiptOKB_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkReceipt_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkReceipt_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkReceipt_accepted": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkReceipt_wrong_policy": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.receiptTag_pipe_free": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.receiptTag_ascii": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.takeBytes_block": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.takeBytes_block_nil": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.takeBool_boolI": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedReceipt.parseReceipt_receiptToInts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.decodeReceipt_encodeReceipt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.decodeReceipt_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.encodeReceipt_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkReceiptBytes_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkReceiptBytes_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.chainB_iff": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.chain_realised": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkChain_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkChain_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.chain_generation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkChain_receipts": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.checkChain_invariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.chain_take": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedReceipt.prefix_valid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.wideReceipts_valid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.prefix_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.fork_attack": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.anchored_sound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.anchored_rejects_prefix": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.anchored_unique_state": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.anchored_prefix_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.rollback_without_monotonic_anchor": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedReceipt.wideReceipts_bytes_ok": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.rtStep_refines": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.rtRun_refines": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.runtime_end_to_end": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.refRuntime_contract": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.int64_runtime_end_to_end": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.stale_cache_runtime": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.rollback_breaks_no_forgetting": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.rollback_enables_replay": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.overflow_runtime": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.truncating_parser_runtime": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedRuntimeContract.pinned0_contract": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.propose_inert": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.runAdv_request_inert": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.v7_end_to_end": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.v7_honest_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.v7_audit_end_to_end": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.v7_runtime_audit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7EndToEnd.v7_policy_substitution_rejected": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.predict_zeroNet": [],
+    "PCS.V2.ProofGatedV7Limits.relu_eq_self_of_nonneg": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.relu_eq_zero_of_nonpos": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.predict_bump": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.bump_valid": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.zeroNet_valid": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV7Limits.vals_bump": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.bump_forgets": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.probe_checker_needs_all_points": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.length_le_of_nodup_subset": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.window_nodup": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.window_length": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV7Limits.mem_window": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.probe_checker_length": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.no_finite_probe_checker": [
+      "propext",
+      "Quot.sound"
+    ],
+    "PCS.V2.ProofGatedV7Limits.sweep_cert_size": [
+      "propext"
+    ],
+    "PCS.V2.ProofGatedV7Limits.objective_relative": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

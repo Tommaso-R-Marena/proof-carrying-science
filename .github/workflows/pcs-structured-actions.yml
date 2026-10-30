@@ -1,0 +1,314 @@
+name: PCS Structured Action Lab
+on:
+  pull_request:
+    paths:
+      - 'research/structured_action_lab_v4/**'
+      - '.github/workflows/pcs-structured-actions.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: structured-action-lab-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  matrix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.census.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Strict parent preservation and unchanged complete regression census
+        id: census
+        run: |
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          python -c "from research.live_agent_lab_v3.qualification import census; census(); from research.structured_action_lab_v4.qualification import census; census()"
+          python -m research.progress_supervisor_v1.ci matrix >> "$GITHUB_OUTPUT"
+  regressions:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    name: existing-${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen dependencies and complete parent preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+      - name: Pinned independent Lean toolchain
+        if: ${{ matrix.shard != 'intake' }}
+        run: source scripts/activate_lean_428.sh
+      - name: Unchanged required regression shard
+        run: python -m research.progress_supervisor_v1.ci test '${{ matrix.shard }}' "$RUNNER_TEMP/progress-tests"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: progress-supervisor-tests-${{ matrix.shard }}
+          path: ${{ runner.temp }}/progress-tests/tests.xml
+  accounting:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen test dependencies and preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+      - name: Accounting, model channel and negative controls
+        run: |
+          python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
+          python -m research.real_model_execution_v2 fetch "$RUNNER_TEMP/tokenizer"
+          PCS_TOKENIZER_DIR="$RUNNER_TEMP/tokenizer" python -m pytest -q research/real_model_safety_v1 research/real_model_execution_v2 research/live_agent_lab_v3/test_lab.py --junitxml="$RUNNER_TEMP/real-model-unit.xml"
+          python -m research.live_agent_lab_v3 view research/live_agent_lab_v3/demo "$RUNNER_TEMP/loaded-report.html" --tokenizer "$RUNNER_TEMP/tokenizer"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-lab-tests-focused
+          path: ${{ runner.temp }}/real-model-unit.xml
+  receiving-replay:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Independent dependencies, source and Lean toolchain
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          source scripts/activate_lean_428.sh
+      - name: Replay every real-model and control episode through actual Lean and SQL
+        run: |
+          python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
+          python -m research.real_model_execution_v2 fetch "$RUNNER_TEMP/tokenizer"
+          python -m research.live_agent_lab_v3 demo "$RUNNER_TEMP/live-lab-receiving" --tokenizer "$RUNNER_TEMP/tokenizer"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-lab-receiving
+          path: |
+            ${{ runner.temp }}/live-lab-receiving/**/*.json
+            ${{ runner.temp }}/live-lab-receiving/**/*.lean
+            ${{ runner.temp }}/live-lab-receiving/report.html
+  control-live:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen dependencies and exact native toolchain
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          source scripts/activate_lean_428.sh
+      - name: Real live bridge and post-preflight file replacement with actual authority
+        run: python -m pytest -q research/live_agent_lab_v3/test_integration.py --basetemp="$RUNNER_TEMP/lab-control" --junitxml="$RUNNER_TEMP/control-tests.xml"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-lab-tests-control
+          path: ${{ runner.temp }}/control-tests.xml
+  checked-real-model-evidence:
+    needs: [matrix, regressions, accounting, receiving-replay, control-live, action-unit, action-native, codec-formal, paired-receiving]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: All regression, accounting and actual receiving jobs required
+        env:
+          MATRIX_RESULT: ${{ needs.matrix.result }}
+          REGRESSION_RESULT: ${{ needs.regressions.result }}
+          ACCOUNTING_RESULT: ${{ needs.accounting.result }}
+          RECEIVING_RESULT: ${{ needs.receiving-replay.result }}
+          CONTROL_RESULT: ${{ needs.control-live.result }}
+          UNIT_RESULT: ${{ needs.action-unit.result }}
+          NATIVE_RESULT: ${{ needs.action-native.result }}
+          CODEC_RESULT: ${{ needs.codec-formal.result }}
+          PAIRED_RESULT: ${{ needs.paired-receiving.result }}
+        run: |
+          test "$MATRIX_RESULT" = success
+          test "$REGRESSION_RESULT" = success
+          test "$ACCOUNTING_RESULT" = success
+          test "$RECEIVING_RESULT" = success
+          test "$CONTROL_RESULT" = success
+          test "$UNIT_RESULT" = success
+          test "$NATIVE_RESULT" = success
+          test "$CODEC_RESULT" = success
+          test "$PAIRED_RESULT" = success
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: progress-supervisor-tests-*
+          path: ${{ runner.temp }}/regression-reports
+      - name: Unchanged unique, complete, zero-skip regression aggregation
+        run: python -m research.progress_supervisor_v1.ci aggregate "$RUNNER_TEMP/regression-reports" "$RUNNER_TEMP/regression-qualification"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: live-lab-tests-*
+          path: ${{ runner.temp }}/lab-reports
+      - name: Require complete unique zero-skip focused and native control tests too
+        run: python -m research.live_agent_lab_v3.qualification "$RUNNER_TEMP/regression-qualification" "$RUNNER_TEMP/lab-reports" "$RUNNER_TEMP/lab-qualification"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: structured-tests-*
+          path: ${{ runner.temp }}/action-reports
+      - name: Complete unique zero-skip structured action tests
+        run: python -m research.structured_action_lab_v4.qualification "$RUNNER_TEMP/lab-qualification" "$RUNNER_TEMP/action-reports" "$RUNNER_TEMP/structured-qualification"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: structured-qualification
+          path: ${{ runner.temp }}/structured-qualification/
+
+  action-unit:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen setup and source preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
+          python -m research.real_model_execution_v2 fetch "$RUNNER_TEMP/tokenizer"
+      - name: Canonical grammar and adversarial intake
+        run: PCS_TOKENIZER_DIR="$RUNNER_TEMP/tokenizer" python -m pytest -q research/structured_action_lab_v4/test_actions.py --junitxml="$RUNNER_TEMP/unit-tests.xml"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: structured-tests-unit
+          path: ${{ runner.temp }}/unit-tests.xml
+  action-native:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen setup and source preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          source scripts/activate_lean_428.sh
+      - name: Actual gated execution and replacement after preflight
+        run: python -m pytest -q research/structured_action_lab_v4/test_native.py --junitxml="$RUNNER_TEMP/native-tests.xml"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: structured-tests-native
+          path: ${{ runner.temp }}/native-tests.xml
+  codec-formal:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen setup and source preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          source scripts/activate_lean_428.sh
+      - name: Fresh kernel checks, axiom audit and exhaustive byte differential
+        run: python -m research.structured_action_lab_v4 qualify-codec "$RUNNER_TEMP/codec"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: structured-codec-audit
+          path: |
+            ${{ runner.temp }}/codec/*.json
+            ${{ runner.temp }}/codec/*.lean
+  paired-receiving:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen setup and source preservation
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.integration_v2.boundary research.structured_action_lab_v4.preservation
+          source scripts/activate_lean_428.sh
+          python -m pip install --no-deps --require-hashes -r research/real_model_execution_v2/requirements-tokenizer.lock
+          python -m research.real_model_execution_v2 fetch "$RUNNER_TEMP/tokenizer"
+      - name: Independently replay both profiles through actual Lean and SQL
+        run: |
+          python - <<'PYCODE'
+          import os
+          from pathlib import Path
+          from research.structured_action_lab_v4.codec import ActionOracle
+          from research.structured_action_lab_v4.protocol import HERE
+          from research.structured_action_lab_v4.experiment import replay
+          from research.structured_action_lab_v4.report import write_report,write_index
+          counts={}
+          for profile in ('raw','trie'):
+              target=Path(os.environ['RUNNER_TEMP'])/'paired'/profile
+              oracle=ActionOracle(Path(os.environ['RUNNER_TEMP'])/'tokenizer',mode=profile)
+              frozen=replay(HERE/'demo'/profile,oracle,target)
+              counts[profile]=write_report(frozen,target/'report.html','replay')
+          write_index(counts,Path(os.environ['RUNNER_TEMP'])/'paired/index.html',replayed=True)
+          PYCODE
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: structured-paired-receiving
+          path: |
+            ${{ runner.temp }}/paired/**/*.json
+            ${{ runner.temp }}/paired/**/*.lean
+            ${{ runner.temp }}/paired/**/report.html
+            ${{ runner.temp }}/paired/index.html

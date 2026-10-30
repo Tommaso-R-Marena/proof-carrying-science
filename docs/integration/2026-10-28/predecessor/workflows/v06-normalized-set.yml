@@ -1,0 +1,53 @@
+name: PCS v0.6 normalized-set production gate
+
+on:
+  push:
+    branches:
+      - v06/replay-normalized-wire-v2
+  pull_request:
+    branches:
+      - v06/typed-certificate-internals
+    paths:
+      - 'pcs/**'
+      - 'schemas/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - '.github/workflows/v06-normalized-set.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-gate:
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+          cache: pip
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '22.23.3'
+
+      - name: Install PCS and development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Run frozen v0.6 production gate
+        run: python scripts/run_v06_contract_gate.py
+
+      - name: Upload immutable gate evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: pcs-v06-normalized-set-production-gate
+          path: results/v06-contract-runs/
+          if-no-files-found: warn
+          retention-days: 30

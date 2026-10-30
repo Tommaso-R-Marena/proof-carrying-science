@@ -1,0 +1,1309 @@
+{
+  "format": "pcs-scientific-receiver-theorem-inventory-v1",
+  "status": "PROVED",
+  "qualified_source_commit": "429c81c9afd2a436655b5185191ea1ac4003b7a8",
+  "authored_theorem_count": 54,
+  "actual_environment_declarations_including_generated": 190,
+  "authored_theorems": [
+    {
+      "name": "PCSScientificReceiver.parseBool_boolInt",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 103,
+      "statement_source": "theorem parseBool_boolInt (b : Bool) : parseBool (boolInt b) = some b",
+      "axioms": []
+    },
+    {
+      "name": "PCSScientificReceiver.parseNatural_nat",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 106,
+      "statement_source": "theorem parseNatural_nat (n : Nat) : parseNatural (n : Int) = some n",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.parseRational_num_den",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 109,
+      "statement_source": "theorem parseRational_num_den (q : \u211a) :\n    parseRational q.num (q.den : Int) = some q",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.parseRationals_rationalsInts",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 113,
+      "statement_source": "theorem parseRationals_rationalsInts (qs : List \u211a) :\n    parseRationals (rationalsInts qs) = some qs",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.ofInts_toInts",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 123,
+      "statement_source": "theorem ofInts_toInts (c : Contract) : ofInts (toInts c) = some c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.protocolTag_pipe_free",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 131,
+      "statement_source": "theorem protocolTag_pipe_free : '|' \u2209 protocolTag",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.protocolTag_ascii",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 133,
+      "statement_source": "theorem protocolTag_ascii : AsciiChars protocolTag",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.encodeChars_ascii",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 136,
+      "statement_source": "theorem encodeChars_ascii (c : Contract) : AsciiChars (encodeChars c)",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.encodeBytes_ascii",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 139,
+      "statement_source": "theorem encodeBytes_ascii (c : Contract) : (encodeBytes c).all isAsciiByte = true",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.encodeBytes_chars",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 142,
+      "statement_source": "theorem encodeBytes_chars (c : Contract) :\n    (encodeBytes c).map byteToChar = encodeChars c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.wireWithinLimits_encode",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 146,
+      "statement_source": "theorem wireWithinLimits_encode (c : Contract) (h : OperationallySupported c) :\n    wireWithinLimits (encodeBytes c) = true",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_encodeBytes",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 160,
+      "statement_source": "theorem decode_encodeBytes (c : Contract) (h : OperationallySupported c) :\n    decode (encodeBytes c) = some c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_canonical",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 167,
+      "statement_source": "theorem decode_canonical {raw : List UInt8} {c : Contract}\n    (h : decode raw = some c) : encodeBytes c = raw",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_bounded",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 182,
+      "statement_source": "theorem decode_bounded {raw : List UInt8} {c : Contract}\n    (h : decode raw = some c) : bounded c = true",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_unique",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 198,
+      "statement_source": "theorem decode_unique {raw raw' : List UInt8} {c : Contract}\n    (h : decode raw = some c) (h' : decode raw' = some c) : raw = raw'",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.splitFields_encodeChars",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 203,
+      "statement_source": "theorem splitFields_encodeChars (c : Contract) :\n    splitFields (encodeChars c) = protocolTag :: (toInts c).map renderInt",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_wireWithinLimits",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 213,
+      "statement_source": "theorem decode_wireWithinLimits {raw : List UInt8} {c : Contract}\n    (h : decode raw = some c) : wireWithinLimits raw = true",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_supported",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 221,
+      "statement_source": "theorem decode_supported {raw : List UInt8} {c : Contract}\n    (h : decode raw = some c) : OperationallySupported c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_iff",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 230,
+      "statement_source": "theorem decode_iff (raw : List UInt8) (c : Contract) :\n    decode raw = some c \u2194 OperationallySupported c \u2227 encodeBytes c = raw",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.encodeBytes_injective",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 240,
+      "statement_source": "theorem encodeBytes_injective {c c' : Contract}\n    (h : encodeBytes c = encodeBytes c') : c = c'",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_rejects",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 250,
+      "statement_source": "theorem decode_rejects (raw : List UInt8)\n    (h : \u2200 c, OperationallySupported c \u2192 encodeBytes c \u2260 raw) :\n    decode raw = none",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.codecSample_supported",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 272,
+      "statement_source": "theorem codecSample_supported : OperationallySupported codecSample",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.codecSample_roundtrip",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 275,
+      "statement_source": "theorem codecSample_roundtrip : decode (encodeBytes codecSample) = some codecSample",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.codecSample_bytes",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 279,
+      "statement_source": "theorem codecSample_bytes : encodeBytes codecSample =\n    PCS.V2.ProofGatedBytes.ascii\n      \"PCS-SCI-BOUND-V1|1|1|0|1|-1|1|1|1|0|1|1|1|1|1|1|1|0|1|2|3|3|5|7|10|1|2|3|4|1|1|1|1|3\"",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.codecSample_literal_decodes",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 284,
+      "statement_source": "theorem codecSample_literal_decodes :\n    decode (PCS.V2.ProofGatedBytes.ascii\n      \"PCS-SCI-BOUND-V1|1|1|0|1|-1|1|1|1|0|1|1|1|1|1|1|1|0|1|2|3|3|5|7|10|1|2|3|4|1|1|1|1|3\") =\n      some codecSample",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.rational_rejection_controls",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 292,
+      "statement_source": "theorem rational_rejection_controls :\n    parseRational 2 4 = none \u2227 parseRational 0 2 = none \u2227\n    parseRational 1 0 = none \u2227 parseRational (-1) (-2) = none",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.malformed_examples",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+      "line": 299,
+      "statement_source": "theorem malformed_examples :\n    decode [] = none \u2227\n    decode (PCS.V2.ProofGatedBytes.ascii \"PCS-SCI-BOUND-V1|00\") = none \u2227\n    decode (PCS.V2.ProofGatedBytes.ascii \"PCS-SCI-BOUND-V1|-0\") = none \u2227\n    decode (PCS.V2.ProofGatedBytes.ascii \"PCS-SCI-BOUND-V1|+1\") = none \u2227\n    decode (PCS.V2.ProofGatedBytes.ascii \"PCS-SCI-BOUND-V2|1\") = none \u2227\n    decode (PCS.V2.ProofGatedBytes.ascii \"PCS-SCI-BOUND-V1|1|\") = none",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.renderNat_length_le_decimal",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 12,
+      "statement_source": "theorem renderNat_length_le_decimal (digits n : Nat) (positive : 0 < digits)\n    (small : n < 10 ^ digits) : (renderNat n).length \u2264 digits",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.renderNat_length_bounded",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 33,
+      "statement_source": "theorem renderNat_length_bounded (n : Nat) (small : n \u2264 maxOperand) :\n    (renderNat n).length \u2264 19",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.renderInt_length_bounded",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 39,
+      "statement_source": "theorem renderInt_length_bounded (z : Int) (small : z.natAbs \u2264 maxOperand) :\n    (renderInt z).length \u2264 maxFieldChars",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.rationalsInts_length",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 51,
+      "statement_source": "theorem rationalsInts_length (qs : List \u211a) :\n    (rationalsInts qs).length = 2 * qs.length",
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.toInts_length",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 60,
+      "statement_source": "theorem toInts_length (c : Contract) : (toInts c).length = 31 + 2 * c.firings.length",
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.joinFields_length_le",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 64,
+      "statement_source": "theorem joinFields_length_le (fs : List (List Char)) (limit : Nat)\n    (boundedFields : \u2200 f \u2208 fs, f.length \u2264 limit) :\n    (joinFields fs).length \u2264 (limit + 1) * fs.length",
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.rationalsInts_operands",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 80,
+      "statement_source": "theorem rationalsInts_operands (qs : List \u211a)\n    (hq : \u2200 q \u2208 qs, q.num.natAbs \u2264 maxOperand \u2227 q.den \u2264 maxOperand)\n    (z : Int) (hz : z \u2208 rationalsInts qs) : z.natAbs \u2264 maxOperand",
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.toInts_operands",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 91,
+      "statement_source": "theorem toInts_operands (c : Contract) (hc : bounded c = true)\n    (z : Int) (hz : z \u2208 toInts c) : z.natAbs \u2264 maxOperand",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.bounded_field_lengths",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 125,
+      "statement_source": "theorem bounded_field_lengths (c : Contract) (hc : bounded c = true) :\n    \u2200 f \u2208 protocolTag :: (toInts c).map renderInt, f.length \u2264 maxFieldChars",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.bounded_encodeBytes_length",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 135,
+      "statement_source": "theorem bounded_encodeBytes_length (c : Contract) (hc : bounded c = true) :\n    (encodeBytes c).length \u2264 3360",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.bounded_operationallySupported",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 153,
+      "statement_source": "theorem bounded_operationallySupported (c : Contract) (hc : bounded c = true) :\n    OperationallySupported c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_encodeBytes_bounded",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 159,
+      "statement_source": "theorem decode_encodeBytes_bounded (c : Contract) (hc : bounded c = true) :\n    decode (encodeBytes c) = some c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.decode_iff_bounded",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+      "line": 164,
+      "statement_source": "theorem decode_iff_bounded (raw : List UInt8) (c : Contract) :\n    decode raw = some c \u2194 bounded c = true \u2227 encodeBytes c = raw",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.verifiedWireSound",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+      "line": 18,
+      "statement_source": "theorem verifiedWireSound (raw : List UInt8) (r : Result)\n    (accepted : receive raw = some r) : ScopedScientificClaimHolds raw r",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.malformed_rejects",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+      "line": 32,
+      "statement_source": "theorem malformed_rejects (raw : List UInt8) (h : decode raw = none) :\n    receive raw = none",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.canonical_accepts",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+      "line": 35,
+      "statement_source": "theorem canonical_accepts (c : Contract) (supported : OperationallySupported c)\n    (accepted : checkContract c = true) :\n    receive (encodeBytes c) = some (resultOfContract c)",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.expression_state_of_binding",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 101,
+      "statement_source": "theorem expression_state_of_binding (c : Contract)\n    (binding : c.envValue = finalState c 0) :\n    (certificate c).expr.eval (environment c) = some (finalState c 0)",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.environment_in_box",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 106,
+      "statement_source": "theorem environment_in_box (c : Contract)\n    (lower : c.boxLo \u2264 c.envValue) (upper : c.envValue \u2264 c.boxHi) :\n    EnvInBox (environment c) (toBox (certificate c).box)",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.checkContract_sound",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 120,
+      "statement_source": "theorem checkContract_sound (c : Contract) (accepted : checkContract c = true) :\n    ContractSound c",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.physical_state_nonnegative",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 146,
+      "statement_source": "theorem physical_state_nonnegative (c : Contract)\n    (accepted : checkContract c = true) (physical : c.physical = true)\n    (k : Nat) (within : k \u2264 c.firings.length) :\n    0 \u2264 state c k 0 \u2227 0 \u2264 state c k 1",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.physical_firing_nonnegative",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 152,
+      "statement_source": "theorem physical_firing_nonnegative (c : Contract)\n    (accepted : checkContract c = true) (physical : c.physical = true)\n    (k : Fin c.firings.length) : 0 \u2264 c.firings[k.val]",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.resultOfContract_sound",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 169,
+      "statement_source": "theorem resultOfContract_sound (c : Contract) (accepted : checkContract c = true) :\n    ResultSound c (resultOfContract c)",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.sample_accepts",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 191,
+      "statement_source": "theorem sample_accepts : checkContract sampleContract = true",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.sample_scientific_claim",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 199,
+      "statement_source": "theorem sample_scientific_claim :\n    ResultSound sampleContract (resultOfContract sampleContract)",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.sample_wrong_environment_rejects",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 204,
+      "statement_source": "theorem sample_wrong_environment_rejects :\n    checkContract { sampleContract with envValue",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.sample_false_total_rejects",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 214,
+      "statement_source": "theorem sample_false_total_rejects :\n    checkContract { sampleContract with declaredTotal",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "name": "PCSScientificReceiver.sample_reversed_box_rejects",
+      "source": "research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+      "line": 224,
+      "statement_source": "theorem sample_reversed_box_rejects :\n    checkContract { sampleContract with boxLo",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    }
+  ],
+  "complete_axiom_closures": {
+    "PCSScientificReceiver.Contract.mk.inj": [],
+    "PCSScientificReceiver.Contract.mk.injEq": [
+      "propext"
+    ],
+    "PCSScientificReceiver.Contract.mk.sizeOf_spec": [],
+    "PCSScientificReceiver.ContractSound.aEnclosed": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.actualInBox": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.bEnclosed": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.boxValid": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.certificateAccepted": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.claimValid": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.conservation": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.environmentBinding": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.expressionState": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.physical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.reference": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ContractSound.totalBinding": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.OperationallySupported.bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.OperationallySupported.byteLength": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.OperationallySupported.fieldLengths": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.PhysicalAdmissible._proof_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.PhysicalAdmissible._proof_2": [
+      "propext"
+    ],
+    "PCSScientificReceiver.PhysicalAdmissible._proof_3": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.PhysicalAdmissible.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.Result.mk.inj": [],
+    "PCSScientificReceiver.Result.mk.injEq": [
+      "propext"
+    ],
+    "PCSScientificReceiver.Result.mk.sizeOf_spec": [],
+    "PCSScientificReceiver.ResultSound.conserved": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.contract": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.enclosedA": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.enclosedB": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.physical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.source": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.stateA": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.stateB": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ResultSound.stepBinding": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.bindingChecks.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.boolInt.eq_1": [],
+    "PCSScientificReceiver.bounded.eq_1": [],
+    "PCSScientificReceiver.bounded_encodeBytes_length": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.bounded_encodeBytes_length._proof_1_2": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.bounded_encodeBytes_length._proof_1_4": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.bounded_field_lengths": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.bounded_field_lengths._simp_1_1": [
+      "propext"
+    ],
+    "PCSScientificReceiver.bounded_field_lengths._simp_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.bounded_operationallySupported": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.canonical_accepts": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.certificate.eq_1": [],
+    "PCSScientificReceiver.checkContract.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.checkContract_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_bytes": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_bytes._proof_1_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_literal_decodes": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_roundtrip": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_supported": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_supported._proof_1_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_supported._proof_1_2": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.codecSample_supported._proof_1_3": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.coordinateName.eq_1": [],
+    "PCSScientificReceiver.decode.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_canonical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_encodeBytes": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_encodeBytes_bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_iff": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_iff_bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_rejects": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_supported": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_supported._simp_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_unique": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.decode_wireWithinLimits": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.encodeBytes.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.encodeBytes_ascii": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.encodeBytes_chars": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.encodeBytes_injective": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.encodeChars.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.encodeChars_ascii": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.environment.eq_1": [],
+    "PCSScientificReceiver.environment_in_box": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.expression_state_of_binding": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.finalState.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.initial._proof_1": [
+      "propext"
+    ],
+    "PCSScientificReceiver.initial.eq_1": [
+      "propext"
+    ],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_1": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_10": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_11": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_12": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_13": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_2": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_3": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_4": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_5": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_6": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_7": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_8": [],
+    "PCSScientificReceiver.instDecidableEqContract.decEq._proof_9": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_1": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_10": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_11": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_2": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_3": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_4": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_5": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_6": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_7": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_8": [],
+    "PCSScientificReceiver.instDecidableEqResult.decEq._proof_9": [],
+    "PCSScientificReceiver.joinFields_length_le": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.joinFields_length_le._proof_1_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.joinFields_length_le._proof_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.malformed_examples": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.malformed_examples._proof_1_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.malformed_rejects": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.maxFieldChars.eq_1": [],
+    "PCSScientificReceiver.maxOperand.eq_1": [],
+    "PCSScientificReceiver.maxSteps.eq_1": [],
+    "PCSScientificReceiver.ofInts.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ofInts.eq_2": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.ofInts_toInts": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseBool_boolInt": [],
+    "PCSScientificReceiver.parseNatural.eq_1": [],
+    "PCSScientificReceiver.parseNatural_nat": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRational.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRational_num_den": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRationals._sparseCasesOn_1.else_eq": [
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRationals.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRationals.eq_2": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRationals.eq_3": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRationals.eq_def": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.parseRationals_rationalsInts": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.physicalChecks.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.physical_firing_nonnegative": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.physical_state_nonnegative": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.physical_state_nonnegative._proof_1_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.protocolTag_ascii": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.protocolTag_pipe_free": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.rationalBounded.eq_1": [],
+    "PCSScientificReceiver.rationalInts.eq_1": [],
+    "PCSScientificReceiver.rational_rejection_controls": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.rational_rejection_controls._proof_1_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.rationals.eq_1": [],
+    "PCSScientificReceiver.rationalsInts.eq_1": [],
+    "PCSScientificReceiver.rationalsInts_length": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.rationalsInts_length._proof_1_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.rationalsInts_operands": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.rationalsInts_operands._simp_1_1": [
+      "propext"
+    ],
+    "PCSScientificReceiver.rationalsInts_operands._simp_1_2": [
+      "propext"
+    ],
+    "PCSScientificReceiver.receive.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderInt_length_bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderInt_length_bounded._proof_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_bounded._proof_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_le_decimal": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_le_decimal._proof_1_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_le_decimal._proof_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_le_decimal._proof_1_3": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_le_decimal._proof_1_4": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.renderNat_length_le_decimal._proof_1_5": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.resultOfContract_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sampleContract.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_accepts": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_accepts._simp_1_20": [
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_false_total_rejects": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_false_total_rejects._simp_1_20": [
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_reversed_box_rejects": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_reversed_box_rejects._simp_1_20": [
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_scientific_claim": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_wrong_environment_rejects": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.sample_wrong_environment_rejects._simp_1_20": [
+      "propext"
+    ],
+    "PCSScientificReceiver.schedule.eq_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.splitFields_encodeChars": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.splitFields_encodeChars._simp_1_1": [
+      "propext"
+    ],
+    "PCSScientificReceiver.splitFields_encodeChars._simp_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.state.eq_1": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts.eq_1": [],
+    "PCSScientificReceiver.toInts_length": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_length._proof_1_1": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._proof_1_12": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._proof_1_6": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._simp_1_11": [
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._simp_1_2": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._simp_1_7": [
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._simp_1_8": [
+      "propext"
+    ],
+    "PCSScientificReceiver.toInts_operands._simp_1_9": [
+      "propext"
+    ],
+    "PCSScientificReceiver.verifiedWireSound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.wireWithinLimits.eq_1": [],
+    "PCSScientificReceiver.wireWithinLimits_encode": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.wireWithinLimits_encode._simp_1_4": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSScientificReceiver.wireWithinLimits_encode._simp_1_5": [
+      "propext"
+    ],
+    "PCSScientificReceiver.wireWithinLimits_encode._simp_1_6": [
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "full_statements_log": "research/scientific_receiver_v1/reports/qualification-20261019/statements-and-axioms.log",
+  "qualification": "research/scientific_receiver_v1/reports/qualification-20261019/qualification.json",
+  "domain_and_assumptions": "docs/research/post-integration-2026-10-18/RECEIVER_FORMAL_SOUNDNESS.md"
+}

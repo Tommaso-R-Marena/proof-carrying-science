@@ -1,0 +1,690 @@
+{
+  "actual_host_receipts": [
+    {
+      "envelope": {
+        "public_key_hex": "6469f2fdfa1bee18b5347ab8ee3356d26359e3d56af3f17ba20a13e0770a8d75",
+        "receipt": {
+          "accepted": true,
+          "checks": {
+            "pins_after": true,
+            "pins_before": true,
+            "response_checked": true
+          },
+          "errors": [],
+          "format": "pcs-scientific-receiver-host-receipt-v1",
+          "operator_config_sha256": "a6ce738093140b1206519cf9ef6c21cdf39bb12d720d768ddefc2c12181f2077",
+          "operator_identity": {
+            "command": [
+              "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+              "--run",
+              "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+            ],
+            "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+            "environment_value_sha256": {
+              "LEAN_PATH": "c05f91e4ce3dbaa4de63ea4438f15b48e6fbc951bba33fe0d4fc5b4f4d415323"
+            },
+            "executable_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+            "pins": [
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/receiver.py",
+                "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/host.py",
+                "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/reference.py",
+                "sha256": "bcba6bd4dedeaa6620bda11db42c2cd0fe3727c01802db40062d646aa52f0f77"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+                "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+                "sha256": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+                "sha256": "16d34055a6ce790b5baa8254145388cf3cc79729c7d7e5cd9992f95f3efc2cd3"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+                "sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+                "sha256": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Types.lean",
+                "sha256": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Codec.olean",
+                "sha256": "8581ea09ca9a4aba0854e8c6582a6494f75e95016a8b0c928ccf160cb11a1f90"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/CodecBounds.olean",
+                "sha256": "0febe1b8f74f2d63bb231a622ea33ba7c31a7557a2d955dc2616b9ed3d19a2ad"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Receiver.olean",
+                "sha256": "af6b48900b60b829bcb17c8dccce5b41ba0e0e6bb06b04377ee03baedb692a52"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Semantics.olean",
+                "sha256": "b2c1a3a87bcd0ca1460bcc3cd23775181c1d41bcf0226d8c383d468fef768e97"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Types.olean",
+                "sha256": "146321d5bc9e260178ffcee035369dba432ab6f7ca437446a544c63ef767ea04"
+              }
+            ],
+            "stderr_limit": 8192,
+            "stdout_limit": 32768,
+            "timeout_seconds": 60,
+            "toolchain_operator_declared": "Lean 4.28.0; partial research fixture source/import inventory, not full root attestation"
+          },
+          "policy": 1,
+          "production_authority": false,
+          "protocol": "PCS-SCI-BOUND-V1",
+          "raw_bytes": 83,
+          "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c317c317c317c317c317c357c317c327c317c377c327c377c327c377c327c377c327c377c327c377c317c317c337c32",
+          "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+          "scientific_acceptance": false,
+          "signing_scope": "ephemeral service key; requires independent public-key pinning; no protected credential or historical occurrence attestation",
+          "trust_scope": "operator/host/OS/compiler/storage/key handling trusted; dependency closure completeness operator-asserted; hashes do not exclude transient substitution",
+          "verifier_response": {
+            "accepted": true,
+            "error": "",
+            "policy": 1,
+            "production_authority": false,
+            "protocol": "PCS-SCI-BOUND-V1",
+            "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c317c317c317c317c317c357c317c327c317c377c327c377c327c377c327c377c327c377c327c377c317c317c337c32",
+            "result": {
+              "finalA": "7/2",
+              "finalB": "7/2",
+              "lowerA": "7/2",
+              "lowerB": "7/2",
+              "physical": true,
+              "stepCount": 1,
+              "total": "7/1",
+              "unitCode": true,
+              "upperA": "7/2",
+              "upperB": "7/2"
+            },
+            "scientific_acceptance": false
+          }
+        },
+        "signature_hex": "b2fdf283d5c31cd39ff70803ce3898a5c7c12796cdbc5d6f86f22230253f0a35c4bb683394d4771c7e1d12ac9db7d91438180b030988523e8f3b5fc0e67e980e"
+      },
+      "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+      "wall_seconds": 2.5445541109997976
+    },
+    {
+      "envelope": {
+        "public_key_hex": "6469f2fdfa1bee18b5347ab8ee3356d26359e3d56af3f17ba20a13e0770a8d75",
+        "receipt": {
+          "accepted": false,
+          "checks": {
+            "pins_after": true,
+            "pins_before": true,
+            "response_checked": true
+          },
+          "errors": [],
+          "format": "pcs-scientific-receiver-host-receipt-v1",
+          "operator_config_sha256": "a6ce738093140b1206519cf9ef6c21cdf39bb12d720d768ddefc2c12181f2077",
+          "operator_identity": {
+            "command": [
+              "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+              "--run",
+              "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+            ],
+            "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+            "environment_value_sha256": {
+              "LEAN_PATH": "c05f91e4ce3dbaa4de63ea4438f15b48e6fbc951bba33fe0d4fc5b4f4d415323"
+            },
+            "executable_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+            "pins": [
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/receiver.py",
+                "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/host.py",
+                "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/reference.py",
+                "sha256": "bcba6bd4dedeaa6620bda11db42c2cd0fe3727c01802db40062d646aa52f0f77"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+                "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+                "sha256": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+                "sha256": "16d34055a6ce790b5baa8254145388cf3cc79729c7d7e5cd9992f95f3efc2cd3"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+                "sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+                "sha256": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Types.lean",
+                "sha256": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Codec.olean",
+                "sha256": "8581ea09ca9a4aba0854e8c6582a6494f75e95016a8b0c928ccf160cb11a1f90"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/CodecBounds.olean",
+                "sha256": "0febe1b8f74f2d63bb231a622ea33ba7c31a7557a2d955dc2616b9ed3d19a2ad"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Receiver.olean",
+                "sha256": "af6b48900b60b829bcb17c8dccce5b41ba0e0e6bb06b04377ee03baedb692a52"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Semantics.olean",
+                "sha256": "b2c1a3a87bcd0ca1460bcc3cd23775181c1d41bcf0226d8c383d468fef768e97"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Types.olean",
+                "sha256": "146321d5bc9e260178ffcee035369dba432ab6f7ca437446a544c63ef767ea04"
+              }
+            ],
+            "stderr_limit": 8192,
+            "stdout_limit": 32768,
+            "timeout_seconds": 60,
+            "toolchain_operator_declared": "Lean 4.28.0; partial research fixture source/import inventory, not full root attestation"
+          },
+          "policy": 1,
+          "production_authority": false,
+          "protocol": "PCS-SCI-BOUND-V1",
+          "raw_bytes": 93,
+          "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c307c317c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+          "raw_sha256": "adb9918e86e4ed3567c78a7da2ae15ba1540afda487a8397fe3352f41b1da49f",
+          "scientific_acceptance": false,
+          "signing_scope": "ephemeral service key; requires independent public-key pinning; no protected credential or historical occurrence attestation",
+          "trust_scope": "operator/host/OS/compiler/storage/key handling trusted; dependency closure completeness operator-asserted; hashes do not exclude transient substitution",
+          "verifier_response": {
+            "accepted": false,
+            "error": "decode_or_contract_rejection",
+            "policy": 1,
+            "production_authority": false,
+            "protocol": "PCS-SCI-BOUND-V1",
+            "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c337c307c317c317c317c31307c317c307c317c307c317c367c317c377c317c357c317c387c317c31307c317c337c317c317c327c317c317c32",
+            "result": null,
+            "scientific_acceptance": false
+          }
+        },
+        "signature_hex": "372eefe209b10ebe685788c71913da7c370327eea7d5b99461ff752bf10113118851df59165a54076ad56074d42342904b504e50cb5522cc09fb4f04fa0a530f"
+      },
+      "raw_sha256": "adb9918e86e4ed3567c78a7da2ae15ba1540afda487a8397fe3352f41b1da49f",
+      "wall_seconds": 2.543997193999985
+    },
+    {
+      "envelope": {
+        "public_key_hex": "6469f2fdfa1bee18b5347ab8ee3356d26359e3d56af3f17ba20a13e0770a8d75",
+        "receipt": {
+          "accepted": true,
+          "checks": {
+            "pins_after": true,
+            "pins_before": true,
+            "response_checked": true
+          },
+          "errors": [],
+          "format": "pcs-scientific-receiver-host-receipt-v1",
+          "operator_config_sha256": "a6ce738093140b1206519cf9ef6c21cdf39bb12d720d768ddefc2c12181f2077",
+          "operator_identity": {
+            "command": [
+              "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+              "--run",
+              "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+            ],
+            "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+            "environment_value_sha256": {
+              "LEAN_PATH": "c05f91e4ce3dbaa4de63ea4438f15b48e6fbc951bba33fe0d4fc5b4f4d415323"
+            },
+            "executable_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+            "pins": [
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/receiver.py",
+                "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/host.py",
+                "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/reference.py",
+                "sha256": "bcba6bd4dedeaa6620bda11db42c2cd0fe3727c01802db40062d646aa52f0f77"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+                "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+                "sha256": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+                "sha256": "16d34055a6ce790b5baa8254145388cf3cc79729c7d7e5cd9992f95f3efc2cd3"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+                "sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+                "sha256": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Types.lean",
+                "sha256": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Codec.olean",
+                "sha256": "8581ea09ca9a4aba0854e8c6582a6494f75e95016a8b0c928ccf160cb11a1f90"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/CodecBounds.olean",
+                "sha256": "0febe1b8f74f2d63bb231a622ea33ba7c31a7557a2d955dc2616b9ed3d19a2ad"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Receiver.olean",
+                "sha256": "af6b48900b60b829bcb17c8dccce5b41ba0e0e6bb06b04377ee03baedb692a52"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Semantics.olean",
+                "sha256": "b2c1a3a87bcd0ca1460bcc3cd23775181c1d41bcf0226d8c383d468fef768e97"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Types.olean",
+                "sha256": "146321d5bc9e260178ffcee035369dba432ab6f7ca437446a544c63ef767ea04"
+              }
+            ],
+            "stderr_limit": 8192,
+            "stdout_limit": 32768,
+            "timeout_seconds": 60,
+            "toolchain_operator_declared": "Lean 4.28.0; partial research fixture source/import inventory, not full root attestation"
+          },
+          "policy": 1,
+          "production_authority": false,
+          "protocol": "PCS-SCI-BOUND-V1",
+          "raw_bytes": 83,
+          "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c317c317c317c317c317c357c317c327c317c377c327c377c327c377c327c377c327c377c327c377c317c317c337c32",
+          "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+          "scientific_acceptance": false,
+          "signing_scope": "ephemeral service key; requires independent public-key pinning; no protected credential or historical occurrence attestation",
+          "trust_scope": "operator/host/OS/compiler/storage/key handling trusted; dependency closure completeness operator-asserted; hashes do not exclude transient substitution",
+          "verifier_response": {
+            "accepted": true,
+            "error": "",
+            "policy": 1,
+            "production_authority": false,
+            "protocol": "PCS-SCI-BOUND-V1",
+            "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c317c317c317c317c317c357c317c327c317c377c327c377c327c377c327c377c327c377c327c377c317c317c337c32",
+            "result": {
+              "finalA": "7/2",
+              "finalB": "7/2",
+              "lowerA": "7/2",
+              "lowerB": "7/2",
+              "physical": true,
+              "stepCount": 1,
+              "total": "7/1",
+              "unitCode": true,
+              "upperA": "7/2",
+              "upperB": "7/2"
+            },
+            "scientific_acceptance": false
+          }
+        },
+        "signature_hex": "b2fdf283d5c31cd39ff70803ce3898a5c7c12796cdbc5d6f86f22230253f0a35c4bb683394d4771c7e1d12ac9db7d91438180b030988523e8f3b5fc0e67e980e"
+      },
+      "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+      "wall_seconds": 2.4135393040000963
+    },
+    {
+      "envelope": {
+        "public_key_hex": "6469f2fdfa1bee18b5347ab8ee3356d26359e3d56af3f17ba20a13e0770a8d75",
+        "receipt": {
+          "accepted": true,
+          "checks": {
+            "pins_after": true,
+            "pins_before": true,
+            "response_checked": true
+          },
+          "errors": [],
+          "format": "pcs-scientific-receiver-host-receipt-v1",
+          "operator_config_sha256": "a6ce738093140b1206519cf9ef6c21cdf39bb12d720d768ddefc2c12181f2077",
+          "operator_identity": {
+            "command": [
+              "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+              "--run",
+              "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean"
+            ],
+            "cwd": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal",
+            "environment_value_sha256": {
+              "LEAN_PATH": "c05f91e4ce3dbaa4de63ea4438f15b48e6fbc951bba33fe0d4fc5b4f4d415323"
+            },
+            "executable_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+            "pins": [
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/receiver.py",
+                "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/host.py",
+                "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/reference.py",
+                "sha256": "bcba6bd4dedeaa6620bda11db42c2cd0fe3727c01802db40062d646aa52f0f77"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/Main.lean",
+                "sha256": "427f046da8101b3e1b29c28caaf40c72ddb3da49c2ba5d5012dacb02c579ca99"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Codec.lean",
+                "sha256": "8308e819aad6960321e9beb1d3296a2d63cc284cecbe31ed71ac23a0bbbcc7a1"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/CodecBounds.lean",
+                "sha256": "16d34055a6ce790b5baa8254145388cf3cc79729c7d7e5cd9992f95f3efc2cd3"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Receiver.lean",
+                "sha256": "4f62b5beb240e857daf94f8997eaf7e1a00d5b72f1316c48f32473ca3d427e8a"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Semantics.lean",
+                "sha256": "5c76b8a566e480d8c3b9b331420e1f0c75b3e9e406633fedcffa4efe3c039320"
+              },
+              {
+                "kind": "source",
+                "path": "/workspace/pcs-scientific-receiver-v1/research/scientific_receiver_v1/formal/PCSScientificReceiver/Types.lean",
+                "sha256": "d3434660df4ca9512e663e98f6125c13dd429cdda3df35cad2041dfd472c2704"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Codec.olean",
+                "sha256": "8581ea09ca9a4aba0854e8c6582a6494f75e95016a8b0c928ccf160cb11a1f90"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/CodecBounds.olean",
+                "sha256": "0febe1b8f74f2d63bb231a622ea33ba7c31a7557a2d955dc2616b9ed3d19a2ad"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Receiver.olean",
+                "sha256": "af6b48900b60b829bcb17c8dccce5b41ba0e0e6bb06b04377ee03baedb692a52"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Semantics.olean",
+                "sha256": "b2c1a3a87bcd0ca1460bcc3cd23775181c1d41bcf0226d8c383d468fef768e97"
+              },
+              {
+                "kind": "dependency",
+                "path": "/workspace/.onboarding/receiver-final-qualified-profile-v3/fresh-lean/PCSScientificReceiver/Types.olean",
+                "sha256": "146321d5bc9e260178ffcee035369dba432ab6f7ca437446a544c63ef767ea04"
+              }
+            ],
+            "stderr_limit": 8192,
+            "stdout_limit": 32768,
+            "timeout_seconds": 60,
+            "toolchain_operator_declared": "Lean 4.28.0; partial research fixture source/import inventory, not full root attestation"
+          },
+          "policy": 1,
+          "production_authority": false,
+          "protocol": "PCS-SCI-BOUND-V1",
+          "raw_bytes": 83,
+          "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c317c317c317c317c317c357c317c327c317c377c327c377c327c377c327c377c327c377c327c377c317c317c337c32",
+          "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+          "scientific_acceptance": false,
+          "signing_scope": "ephemeral service key; requires independent public-key pinning; no protected credential or historical occurrence attestation",
+          "trust_scope": "operator/host/OS/compiler/storage/key handling trusted; dependency closure completeness operator-asserted; hashes do not exclude transient substitution",
+          "verifier_response": {
+            "accepted": true,
+            "error": "",
+            "policy": 1,
+            "production_authority": false,
+            "protocol": "PCS-SCI-BOUND-V1",
+            "raw_hex": "5043532d5343492d424f554e442d56317c317c317c307c317c2d317c317c317c317c307c317c317c317c317c317c357c317c327c317c377c327c377c327c377c327c377c327c377c327c377c317c317c337c32",
+            "result": {
+              "finalA": "7/2",
+              "finalB": "7/2",
+              "lowerA": "7/2",
+              "lowerB": "7/2",
+              "physical": true,
+              "stepCount": 1,
+              "total": "7/1",
+              "unitCode": true,
+              "upperA": "7/2",
+              "upperB": "7/2"
+            },
+            "scientific_acceptance": false
+          }
+        },
+        "signature_hex": "b2fdf283d5c31cd39ff70803ce3898a5c7c12796cdbc5d6f86f22230253f0a35c4bb683394d4771c7e1d12ac9db7d91438180b030988523e8f3b5fc0e67e980e"
+      },
+      "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+      "wall_seconds": 2.2803972649999196
+    }
+  ],
+  "findings": [],
+  "finished_utc": "2026-10-19T03:20:18.387146+00:00",
+  "no_positive_mocks": true,
+  "scope": "Read-only implementation review and finite actual-process fault reproductions; no full-history scientific audit or protected root established.",
+  "source_after": [
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/receiver.py",
+      "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+    },
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/test_receiver.py",
+      "sha256": "44bf3a8c6d66ee658f80c5b27808ecde37f097575e89e88e08b953e5b9498c63"
+    },
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/authorization_history_v1/history.py",
+      "sha256": "9d95533958806e3526167aa489b1530abf0c6b23accc2e1c33e3955db304e735"
+    },
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/host.py",
+      "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+    }
+  ],
+  "source_before": [
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/receiver.py",
+      "sha256": "048bc1027eb3b81983cfc5f4684401d06067bd6ce1a0d830489a2bc3f883e34d"
+    },
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_history_v1/test_receiver.py",
+      "sha256": "44bf3a8c6d66ee658f80c5b27808ecde37f097575e89e88e08b953e5b9498c63"
+    },
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/authorization_history_v1/history.py",
+      "sha256": "9d95533958806e3526167aa489b1530abf0c6b23accc2e1c33e3955db304e735"
+    },
+    {
+      "path": "/workspace/pcs-scientific-history-runtime-v1/research/scientific_receiver_v1/host.py",
+      "sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd"
+    }
+  ],
+  "sources_stable": true,
+  "started_utc": "2026-10-19T03:20:03.838840+00:00",
+  "tests": [
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "invalid_signatures_reject_before_science",
+      "outcome": "Rejected: Invalid Ed25519 signature",
+      "passed": true,
+      "wall_seconds": 0.0008402859998568601
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "reserved_auxiliary_certificate_rejects",
+      "outcome": "IntakeRejected: Wrong scope or nonempty reserved auxiliary certificate",
+      "passed": true,
+      "wall_seconds": 0.0003257509997638408
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "malformed_envelope_rejects",
+      "outcome": "Rejected: Invalid canonical object",
+      "passed": true,
+      "wall_seconds": 0.0001976480002667813
+    },
+    {
+      "id": "actual_valid_candidate_admitted",
+      "passed": true,
+      "raw_sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+      "wall_seconds": 2.548650159999852
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "stale_generation_rejects_before_science",
+      "outcome": "Rejected: Stale or conflicting generation/incumbent/predecessor",
+      "passed": true,
+      "wall_seconds": 0.004117362999750185
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "replayed_exact_envelope_rejects_before_science",
+      "outcome": "Rejected: Stale or conflicting generation/incumbent/predecessor",
+      "passed": true,
+      "wall_seconds": 0.0017422939999960363
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "reused_event_id_rejects_before_science",
+      "outcome": "Rejected: Replayed event ID",
+      "passed": true,
+      "wall_seconds": 0.0014987680001468107
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 0,
+      "fresh_verifications": 0,
+      "id": "signed_candidate_tampering_rejects_before_science",
+      "outcome": "Rejected: Invalid Ed25519 signature",
+      "passed": true,
+      "wall_seconds": 0.0015724080003565177
+    },
+    {
+      "cache_unchanged": true,
+      "db_unchanged": true,
+      "expected_fresh_verifications": 1,
+      "fresh_verifications": 1,
+      "id": "validly_cosigned_false_math_cannot_enter",
+      "outcome": "IntakeRejected: Fresh mathematical verification/byte/profile binding failed",
+      "passed": true,
+      "wall_seconds": 2.5459690040001988
+    },
+    {
+      "id": "actual_verified_then_negative_write_fault",
+      "outcome": "OperationalError: independent negative write fault",
+      "passed": true
+    },
+    {
+      "current_outcome": "IntakeRejected: Cached checked artifact differs from authenticated current state",
+      "id": "postcommit_exception_fails_closed_until_explicit_recovery",
+      "passed": true,
+      "recovered_generation": 2,
+      "submit_outcome": "OperationalError: independent negative fault after real commit"
+    },
+    {
+      "id": "real_lean_timeout_constructor_fails_without_admission",
+      "outcome": "IntakeRejected: Fresh mathematical verification/byte/profile binding failed",
+      "passed": true,
+      "wall_seconds": 0.023400466999646596
+    }
+  ],
+  "wall_seconds": 14.548177096000018
+}
