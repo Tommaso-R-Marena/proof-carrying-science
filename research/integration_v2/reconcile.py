@@ -31,6 +31,12 @@ PR117_CONFLICT_PATHS = frozenset({
     "formal/PCS/V2/ProofGatedAudit.lean",
     "formal/PCS/V2/ProofGatedInference.lean",
 })
+# One exact test-only successor: Linux /proc may raise ESRCH after child exit.
+# The original V20 manifest/evidence stays frozen. Neither authority code nor
+# arbitrary replacements are admitted by this narrowly pinned repair.
+RECEIVER_CLEANUP_TEST = "research/scientific_receiver_v1/tests/test_host.py"
+RECEIVER_CLEANUP_OLD = "46916b52b9bfa2443a71ea106fd8fe891c626a1df5318eb347a65b6e1aa25a8a"
+RECEIVER_CLEANUP_NEW = "1952bd78f5f9a787a5fd1617e45dd2c75fe9d4188e87535e017e2e72317b4aba"
 
 WORKFLOW_PREDECESSOR_TREE = "1fdf12112394c1ad7438e2add4460fba8fd34da0"
 
@@ -69,6 +75,15 @@ def _identity(root, name):
         raise ValueError("regular source required")
     return {"sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "mode": "100755" if info.st_mode & 0o111 else "100644"}
+
+
+def _current_expected(name, recorded):
+    """Bind the reviewed test repair without changing historical classifications."""
+    if name != RECEIVER_CLEANUP_TEST:
+        return recorded
+    if recorded != {"sha256": RECEIVER_CLEANUP_OLD, "mode": "100644"}:
+        raise ValueError("receiver cleanup repair predecessor identity differs")
+    return {"sha256": RECEIVER_CLEANUP_NEW, "mode": "100644"}
 
 
 def _historical_identities(root, prs):
@@ -141,7 +156,7 @@ def _verify(root, manifest):
             source, target = _path(item["path"]), _path(item["location"])
             if historical_identities[pr["head"], source] != item["historical"]:
                 raise ValueError("historical source identity differs")
-            if target not in tracked or _identity(root, target) != item["candidate"]:
+            if target not in tracked or _identity(root, target) != _current_expected(target, item["candidate"]):
                 raise ValueError(f"reviewed source identity differs: {target}")
             equal = item["historical"] == item["candidate"]
             if equal != (item["relation"] == "EXACT"):
@@ -174,7 +189,7 @@ def _snapshot(root, manifest):
     if tracked != set(manifest["snapshot"]) | controls:
         raise ValueError("combined tracked file census differs")
     for name, identity in manifest["snapshot"].items():
-        if _identity(root, name) != identity:
+        if _identity(root, name) != _current_expected(name, identity):
             raise ValueError("combined source bytes or mode differ: " + name)
     for name in controls:
         _identity(root, name)
@@ -315,7 +330,12 @@ def check(*, require_committed=False, live=False):
             raise ValueError("live PR census changed; a new explicit review is required")
     return dict(result, committed_source_required=require_committed, live_heads_checked=live,
                 manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
-                pr117_integration=pr117)
+                pr117_integration=pr117,
+                relations_scope="FROZEN_V20_REVIEW_BEFORE_EXPLICIT_TEST_SUCCESSOR",
+                reviewed_test_successor=dict(path=RECEIVER_CLEANUP_TEST,
+                    old_sha256=RECEIVER_CLEANUP_OLD, new_sha256=RECEIVER_CLEANUP_NEW,
+                    mode="100644", authority_code_changed=False,
+                    reason="Accept ENOENT or ESRCH when a real child exits during /proc read"))
 
 
 def main():

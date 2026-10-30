@@ -111,6 +111,61 @@ def test_duplicate_json_keys_refused():
         gate._json('{"prs":[],"prs":[117]}')
 
 
+def test_receiver_cleanup_successor_changes_only_the_observed_proc_exit_race():
+    name = gate.RECEIVER_CLEANUP_TEST
+    original = gate._git(gate.ROOT, "show", gate.PR117_PROTECTED_HEAD + ":" + name)
+    needle = b"            except FileNotFoundError:\n                return\n"
+    replacement = (b"            except (FileNotFoundError, ProcessLookupError):\n"
+                   b"                # Linux reports ENOENT or ESRCH if the child exits during the read.\n"
+                   b"                return\n")
+    assert original.count(needle) == 1
+    current = (gate.ROOT / name).read_bytes()
+    assert current == original.replace(needle, replacement)
+    assert hashlib.sha256(original).hexdigest() == gate.RECEIVER_CLEANUP_OLD
+    assert hashlib.sha256(current).hexdigest() == gate.RECEIVER_CLEANUP_NEW
+
+
+@pytest.mark.parametrize("attack", ["old_bytes", "different_bytes", "executable", "symlink"])
+def test_receiver_test_successor_rejects_stale_or_substituted_sources(tmp_path, attack):
+    name = gate.RECEIVER_CLEANUP_TEST
+    path = tmp_path / name
+    path.parent.mkdir(parents=True)
+    raw = (gate.ROOT / name).read_bytes()
+    path.write_bytes(raw)
+    expected = gate._current_expected(name, {"sha256": gate.RECEIVER_CLEANUP_OLD, "mode": "100644"})
+    assert gate._identity(tmp_path, name) == expected
+    if attack == "old_bytes":
+        path.write_bytes(gate._git(gate.ROOT, "show", gate.PR117_PROTECTED_HEAD + ":" + name))
+    elif attack == "different_bytes":
+        path.write_bytes(raw + b"\n# Unreviewed change\n")
+    elif attack == "executable":
+        path.chmod(0o755)
+    elif attack == "symlink":
+        other = tmp_path / "other.py"
+        other.write_bytes(raw)
+        path.unlink()
+        path.symlink_to(other)
+        with pytest.raises(ValueError, match="symlink"):
+            gate._identity(tmp_path, name)
+        return
+    assert gate._identity(tmp_path, name) != expected
+
+
+@pytest.mark.parametrize("recorded", [
+    {"sha256": "0" * 64, "mode": "100644"},
+    {"sha256": gate.RECEIVER_CLEANUP_OLD, "mode": "100755"},
+])
+def test_receiver_test_successor_requires_exact_original_identity(recorded):
+    with pytest.raises(ValueError, match="predecessor"):
+        gate._current_expected(gate.RECEIVER_CLEANUP_TEST, recorded)
+
+
+def test_test_only_successor_does_not_rebind_authority_or_other_source():
+    recorded = {"sha256": "0" * 64, "mode": "100644"}
+    for name in ("research/scientific_receiver_v1/host.py", "formal/PCS/V2/ProofGatedArtifacts.lean"):
+        assert gate._current_expected(name, recorded) == recorded
+
+
 def test_workflow_transformation_preserves_commands_and_job_bodies():
     old = (b"jobs:\n  actual:\n    run: |\n"
            b"      python -m research.progress_supervisor_v1.preservation\n"
