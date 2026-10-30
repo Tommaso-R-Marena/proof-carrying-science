@@ -13,6 +13,17 @@ scoped semantic correspondence checks. Follow [the kernel status](../docs/LEAN_K
 for the exact current authority and remaining assumptions. Do not replace actual
 Lean execution with a Python verdict or a caller-provided verifier.
 
+Transport and real-analysis research also require the root project's pinned
+Mathlib dependencies. Prepare them from the repository root before those tests:
+
+```sh
+source scripts/activate_lean_428.sh
+lake exe cache get
+```
+
+The public full gate prepares this dependency and requires actual transport kernel
+execution. Missing dependencies must fail the required lane, rather than skip it.
+
 Research projects with their own lakefiles and namespaces are built separately.
 The [research guide](../research/README.md) identifies isolated PGSI, epistemic,
 numerical and experimental authority projects. Their mathematical specifications

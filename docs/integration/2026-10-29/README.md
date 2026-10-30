@@ -10,11 +10,11 @@ This candidate combines the reviewed research sources from PR189 and PR179 with
 the V12 reconciliation repairs and the additive actual-weight public-study
 implementation. The historical source census is 70 PRs, including held #117.
 Every path, original identity, adaptation reason and executable mode remains
-reviewable; V19 additionally pins the new source/results and documentation.
+reviewable; V20 additionally pins the new source/results and documentation.
 Source adaptation does not assert semantic equivalence or Git merge ancestry.
 
 The V12 metadata, reports and control bytes remain preserved. The current source
-checker selects a new fixed V19 manifest rather than rewriting old evidence or
+checker selects a new fixed V20 manifest rather than rewriting old evidence or
 accepting arbitrary new hashes. It retains the original profile and explicit
 old/new pairs for the root README and CI check. The production authority's formal
 specification, Aristotle theorem statements and model-capture tests are unchanged.
@@ -173,3 +173,31 @@ A separate hosted probe publishes fresh proof exports and JUnit evidence while
 the existing diagnostic job retains all original commands byte for byte. Current
 hosted qualification must still pass before merge. Previous sources and failure
 evidence are preserved; no historical record is overwritten.
+
+
+## Complete hosted gate corrections
+
+The V19 current-head run passed 130 checks, including the complete real-analysis
+workflow, but its focused full replay suite reported 43 passes and one failure.
+The tamper test correctly obtained refusal after an actual successful fragment
+compile; its unchanged assertion expected the common generated-proof error text.
+V20 gives fragment-source substitution that same diagnostic, preserving refusal.
+The test now also forces the negative compact-failure path explicitly, so both
+local and hosted environments exercise post-successful-compile tampering of
+fragments. Both actual checks passed locally in 68.83 seconds.
+
+The full core job completed its formal build and axiom work but reported 1,972
+passing tests, 51 skips and five failures because its checkout lacked root Mathlib
+dependencies required by the new real-proof tests. V20 prepares the existing
+pinned Lean/Mathlib dependency in that job and makes both transport kernel flags
+mandatory. No test is skipped or given an invented verdict. The exact workflow
+successor admits only that fixed insertion; six new source-guard tests retain
+every original command and reject missing/duplicate insertion points, dropped
+core execution, fake verdict commands and removed required flags. These passed
+locally. Original workflow/source bytes and failure evidence remain preserved.
+
+The required trace suite now has 45 cases, including both tamper paths. The
+focused hosted probe also exercises both actual tamper checks. The entire current
+protected gate must still pass before merge. Production mathematical statements,
+proof-construction statements, limits, source-integrity gates and prior evidence
+remain intact. The current formal guide documents Mathlib preparation.

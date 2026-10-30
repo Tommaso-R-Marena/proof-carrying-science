@@ -64,7 +64,7 @@ jobs:
           import os, xml.etree.ElementTree as E
           from pathlib import Path
           suites=list(E.parse(Path(os.environ['RUNNER_TEMP'])/'transport.xml').getroot().iter('testsuite'))
-          assert suites and sum(int(s.get('tests','0')) for s in suites) == 44
+          assert suites and sum(int(s.get('tests','0')) for s in suites) == 45
           assert all(s.get(k)=='0' for s in suites for k in ('errors','failures','skipped'))
           PY
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

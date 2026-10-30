@@ -1,5 +1,6 @@
 """Real fallback proof checks; only a negative initial error is fault injected."""
 import subprocess
+import pytest
 from pathlib import Path
 from pcs import transport_trace_kernel_v1 as trace,transport_kernel_v1 as model
 
@@ -44,9 +45,14 @@ def test_negative_first_attempt_has_genuinely_checked_normalized_fallback(monkey
     assert (tmp_path/'evidence/TraceReplayKernelAttempt.lean').read_bytes()==trace.render(result['trace_certificate'])
 
 
-def test_real_positive_compile_does_not_authorize_changed_proof_bytes(monkeypatch):
-    real_run=subprocess.run;changed=[]
+@pytest.mark.parametrize('force_fragments',[False,True])
+def test_real_positive_compile_does_not_authorize_changed_proof_bytes(monkeypatch,force_fragments):
+    real_run=subprocess.run;changed=[];forced=[]
     def replace_after_real_compile(command,*args,**kwargs):
+        if (force_fragments and command and Path(str(command[-1])).name=='TraceReplay.lean'
+                and not forced):
+            forced.append(True)
+            return subprocess.CompletedProcess(command,1,stdout='did not reduce to `isTrue` or `isFalse`',stderr='')
         result=real_run(command,*args,**kwargs)
         if command and Path(str(command[-1])).name in {'TraceReplay.lean','TraceReplayPartitioned.lean','TraceReplayNormalized.lean','TraceReplayFragments.lean'} and result.returncode==0:
             path=Path(command[-1]);path.write_bytes(path.read_bytes()+b'\n-- replaced after checking\n')
@@ -54,6 +60,7 @@ def test_real_positive_compile_does_not_authorize_changed_proof_bytes(monkeypatc
         return result
     monkeypatch.setattr(subprocess,'run',replace_after_real_compile)
     result=trace.replay(CONTRACT,CSV,timeout=180)
+    assert bool(forced)==force_fragments
     assert changed and not result['accepted'] and not result['kernel']['kernel_checked']
     assert result['kernel']['status']=='UNAVAILABLE_OR_EXHAUSTED'
     assert 'generated proof source changed' in result['kernel']['error']

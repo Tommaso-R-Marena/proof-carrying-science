@@ -32,7 +32,7 @@ jobs:
         run: |
           set -euo pipefail
           source scripts/activate_lean_428.sh
-          python -m pytest -q tests/test_transport_proof_construction_v11.py::test_negative_first_attempt_has_genuinely_checked_normalized_fallback tests/test_transport_proof_construction_v11.py::test_64_step_real_fallback_fits_the_original_single_deadline --basetemp="$RUNNER_TEMP/fragment-probe" --junitxml="$RUNNER_TEMP/fragment-probe.xml"
+          python -m pytest -q tests/test_transport_proof_construction_v11.py::test_negative_first_attempt_has_genuinely_checked_normalized_fallback tests/test_transport_proof_construction_v11.py::test_64_step_real_fallback_fits_the_original_single_deadline tests/test_transport_proof_construction_v11.py::test_real_positive_compile_does_not_authorize_changed_proof_bytes --basetemp="$RUNNER_TEMP/fragment-probe" --junitxml="$RUNNER_TEMP/fragment-probe.xml"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:

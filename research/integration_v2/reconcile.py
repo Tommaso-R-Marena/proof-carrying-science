@@ -18,8 +18,8 @@ import subprocess
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFEST = "docs/integration/2026-10-29/RECONCILIATION_V19.json"
-MANIFEST_SHA256 = 'f6c36381071cda0e6a018e7cb8b6622b3a955e35e85b8bf70cb0cf21429f388e'
+MANIFEST = "docs/integration/2026-10-29/RECONCILIATION_V20.json"
+MANIFEST_SHA256 = '30d74b87c9bedb598af2cd6ab0c5d9014a99fe50cd6382bc6baf76663c380833'
 API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
 WORKFLOW_PREDECESSOR_TREE = "1fdf12112394c1ad7438e2add4460fba8fd34da0"
 
@@ -102,7 +102,7 @@ def _historical_identities(root, prs):
 
 def _verify(root, manifest):
     """Internal checker; the CLI accepts only the compiled-in manifest digest."""
-    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19"}:
+    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20"}:
         raise ValueError("unsupported reconciliation")
     prs = manifest["prs"]
     numbers = [p["number"] for p in prs]
@@ -138,7 +138,7 @@ def _verify(root, manifest):
             if not equal and pr["disposition"] not in {"REVIEWED_ADAPTATION", "HELD"}:
                 raise ValueError("unreviewed adaptation")
             counts[item["relation"]] += 1
-    return {"format": "pcs-source-reconciliation-check-v19", "source_review_complete": True,
+    return {"format": "pcs-source-reconciliation-check-v20", "source_review_complete": True,
             "prs_checked": len(prs), "source_bindings_checked": sum(counts.values()),
             "relations": dict(counts), "dispositions": dict(Counter(p["disposition"] for p in prs)),
             "held_prs": [117], "release_ready": False, "pcs_authority": False,
@@ -169,8 +169,8 @@ def _snapshot(root, manifest):
         _identity(root, name)
 
 
-def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_context=False, combined_source=False):
-    """Only fixed dependency pins and named source-contract selection may vary."""
+def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_context=False, combined_source=False, transport_dependencies=False):
+    """Only fixed dependency, source-contract and bootstrap transformations may vary."""
     from .boundary import PROFILES
     text = raw.decode("utf-8")
     if update_python:
@@ -191,6 +191,13 @@ def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_
         if text.count(needle) != 1:
             raise ValueError("exact public CI source-step insertion point required")
         text = text.replace(needle, "      - name: Exact reviewed combined-source contract\n        run: python -m research.integration_v2.reconcile --require-committed\n" + needle)
+    if transport_dependencies:
+        needle = "          bash scripts/core_ci_cloudflare.sh\n"
+        if text.count(needle) != 1:
+            raise ValueError("exact full-core dependency insertion point required")
+        text = text.replace(needle, "          source scripts/activate_lean_428.sh\n"
+                            "          lake exe cache get\n"
+                            "          PCS_REQUIRE_TRANSPORT_KERNEL=1 PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 bash scripts/core_ci_cloudflare.sh\n")
     return text.encode()
 
 
@@ -206,10 +213,11 @@ def _workflows(root, manifest):
             raise ValueError("preserved predecessor workflow differs")
         contextual = name in {".github/workflows/pcs-" + profile + "-v1.yml" for profile in
                               ("local-weights", "causal-firewall", "relational-release", "compositional-disclosure")}
-        allowed = {workflow_successor(old, update_python=p, update_codeql=c, pytest_context=t, combined_source=extra)
+        allowed = {workflow_successor(old, update_python=p, update_codeql=c, pytest_context=t, combined_source=extra, transport_dependencies=deps)
                    for p in (False, True) for c in (False, True)
                    for t in ((False, True) if contextual else (False,))
-                   for extra in ((False, True) if name == ".github/workflows/pcs-public-full-verification.yml" else (False,))}
+                   for extra in ((False, True) if name == ".github/workflows/pcs-public-full-verification.yml" else (False,))
+                   for deps in ((False, True) if name == ".github/workflows/pcs-public-full-verification.yml" else (False,))}
         if (root / _path(name)).read_bytes() not in allowed:
             raise ValueError("workflow changes outside explicit source/pin replacements: " + name)
 
@@ -219,8 +227,8 @@ def check(*, require_committed=False, live=False):
     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
         raise ValueError("reconciliation manifest differs from fixed reviewed digest")
     manifest = _json(raw)
-    if manifest["format"] != "pcs-source-reconciliation-v19":
-        raise ValueError("current combined admission requires explicit V19 format")
+    if manifest["format"] != "pcs-source-reconciliation-v20":
+        raise ValueError("current combined admission requires explicit V20 format")
     result = _verify(ROOT, manifest)
     _snapshot(ROOT, manifest)
     _workflows(ROOT, manifest)

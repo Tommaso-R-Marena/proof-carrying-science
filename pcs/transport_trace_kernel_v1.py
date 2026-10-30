@@ -320,7 +320,7 @@ def kernel_replay(data, *, timeout=120):
                     p=subprocess.run(fragment_cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
                     result['executions'].append({'command':fragment_cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
                     if any((private/n).read_bytes()!=b for n,b in fragments.items() if (private/n).exists()):
-                        raise ValueError('fragment proof source changed during checking')
+                        raise ValueError('generated proof source changed during checking (fragment)')
                     if any(model_kernel.sha((private/n).read_bytes())!=h for n,h in objects.items()):
                         raise ValueError('compiled fragment changed during checking')
                     if p.returncode:break

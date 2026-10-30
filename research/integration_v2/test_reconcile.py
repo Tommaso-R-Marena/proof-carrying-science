@@ -187,6 +187,40 @@ def test_workflow_successor_cannot_hide_other_job_changes(tmp_path, attack):
         gate._workflows(tmp_path, manifest)
 
 
+def test_full_core_dependency_bootstrap_retains_every_original_command():
+    old=(gate.ROOT/'docs/integration/2026-10-28/predecessor/workflows/pcs-public-full-verification.yml').read_bytes()
+    current=gate.workflow_successor(old,transport_dependencies=True)
+    bootstrap=(b'          source scripts/activate_lean_428.sh\n'
+               b'          lake exe cache get\n'
+               b'          PCS_REQUIRE_TRANSPORT_KERNEL=1 PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 bash scripts/core_ci_cloudflare.sh\n')
+    assert current.count(bootstrap)==1
+    assert current.replace(bootstrap,b'          bash scripts/core_ci_cloudflare.sh\n')==old
+
+
+@pytest.mark.parametrize('copies',[0,2])
+def test_full_core_dependency_bootstrap_refuses_ambiguous_insertion(copies):
+    old=b'          bash scripts/core_ci_cloudflare.sh\n'*copies
+    with pytest.raises(ValueError,match='exact full-core dependency'):
+        gate.workflow_successor(old,transport_dependencies=True)
+
+
+@pytest.mark.parametrize('attack',['drop_core','fake_verdict','remove_required_flag'])
+def test_dependency_bootstrap_cannot_authorize_other_full_gate_changes(tmp_path,attack):
+    name='.github/workflows/pcs-public-full-verification.yml'
+    old=(gate.ROOT/'docs/integration/2026-10-28/predecessor/workflows/pcs-public-full-verification.yml').read_bytes()
+    current=gate.workflow_successor(old,transport_dependencies=True)
+    altered={'drop_core':current.replace(b'bash scripts/core_ci_cloudflare.sh',b'true'),
+             'fake_verdict':current+b'run: echo ACCEPT\n',
+             'remove_required_flag':current.replace(b'PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 ',b'')}[attack]
+    preserved=tmp_path/'docs/integration/2026-10-28/predecessor/workflows/pcs-public-full-verification.yml'
+    preserved.parent.mkdir(parents=True);preserved.write_bytes(old)
+    target=tmp_path/name;target.parent.mkdir(parents=True);target.write_bytes(altered)
+    manifest=dict(workflow_predecessor_tree=gate.WORKFLOW_PREDECESSOR_TREE,
+                  workflow_adaptations={name:hashlib.sha256(old).hexdigest()})
+    with pytest.raises(ValueError,match='outside explicit'):
+        gate._workflows(tmp_path,manifest)
+
+
 @pytest.mark.parametrize("path", ["/absolute", "../escape", "src//file", "src/./file", "a\\b", "a\0b"])
 def test_ambiguous_paths_refused(path):
     with pytest.raises(ValueError):

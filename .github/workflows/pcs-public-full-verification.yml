@@ -261,7 +261,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          bash scripts/core_ci_cloudflare.sh
+          source scripts/activate_lean_428.sh
+          lake exe cache get
+          PCS_REQUIRE_TRANSPORT_KERNEL=1 PCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 bash scripts/core_ci_cloudflare.sh
       - name: Independently replay universal shield and signed safety-case attacks
         shell: bash
         run: |
