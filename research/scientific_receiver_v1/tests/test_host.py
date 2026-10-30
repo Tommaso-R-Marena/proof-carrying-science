@@ -167,7 +167,8 @@ def test_exited_leader_does_not_leave_same_group_child_running(tmp_path):
         while time.monotonic() < deadline:
             try:
                 state = Path(f'/proc/{descendant}/stat').read_text().split()[2]
-            except FileNotFoundError:
+            except (FileNotFoundError, ProcessLookupError):
+                # Linux reports ENOENT or ESRCH if the child exits during the read.
                 return
             if state == 'Z':
                 return
