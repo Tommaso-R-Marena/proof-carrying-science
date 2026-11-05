@@ -26,11 +26,15 @@ def test_unknown_proof_construction_is_not_silently_adopted():
     with pytest.raises(ValueError):trace.successful_proof(trace.prepare(CONTRACT,CSV),{'proof_construction':'producer_verifier'})
 
 
-def test_negative_first_attempt_has_genuinely_checked_normalized_fallback(monkeypatch,tmp_path):
+@pytest.mark.parametrize("failure", ["tactic", "memory"])
+def test_negative_first_attempt_has_genuinely_checked_normalized_fallback(monkeypatch,tmp_path,failure):
     real_run=subprocess.run;injected=[]
     def negative_first(command,*args,**kwargs):
         if command and Path(str(command[-1])).name=='TraceReplay.lean' and not injected:
             injected.append(True)
+            if failure == 'memory':
+                return subprocess.CompletedProcess(command,-6,stdout='',stderr=
+                    "libc++abi: lean::memory_exception: excessive memory consumption detected at 'interpreter'")
             return subprocess.CompletedProcess(command,1,stdout='did not reduce to `isTrue` or `isFalse`',stderr='')
         return real_run(command,*args,**kwargs)
     monkeypatch.setattr(subprocess,'run',negative_first)
@@ -158,3 +162,21 @@ def test_64_step_real_fallback_fits_the_original_single_deadline(monkeypatch,tmp
     for name,digest in kernel['proof_fragment_sha256'].items():
         exported='TraceReplay.lean' if name=='TraceReplayFragments.lean' else name
         assert model.sha((tmp_path/'evidence'/exported).read_bytes())==digest
+
+
+def test_memory_exhaustion_never_authorizes_an_incorrect_trace(monkeypatch):
+    real_run=subprocess.run;injected=[]
+    def exhausted_initial(command,*args,**kwargs):
+        if command and Path(str(command[-1])).name=='TraceReplay.lean' and not injected:
+            injected.append(True)
+            return subprocess.CompletedProcess(command,-6,stdout='',stderr=
+                "lean::memory_exception: excessive memory consumption")
+        return real_run(command,*args,**kwargs)
+    monkeypatch.setattr(subprocess,'run',exhausted_initial)
+    lines=CSV.decode().splitlines();row=lines[1].split(',');row[1]='0';lines[1]=','.join(row)
+    raw=('\n'.join(lines)+'\n').encode()
+    result=trace.replay(CONTRACT,raw,timeout=180)
+    assert injected and result['accepted'] is False
+    assert result['kernel']['kernel_checked'] is False
+    assert result['kernel']['negative_kernel_checked'] is True
+    assert result['kernel']['status']=='TRACE_FALSIFIED'

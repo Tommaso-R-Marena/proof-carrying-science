@@ -118,14 +118,14 @@ Sealed snapshots, hashes and same-host child processes are not an immutable root
 
 ## Integration and readiness
 
-The [current integration status](docs/integration/2026-10-29/README.md) separates
+The [current integration status](docs/integration/2026-11-05/RECONCILIATION.md) separates
 local qualification, hosted CI and protected merge evidence. Historical reports
 and source-bound READMEs retain their original bytes and dates. The
-[README audit](docs/integration/2026-10-29/README_AUDIT.json) identifies current
+[README audit](docs/integration/2026-11-05/README_AUDIT.json) identifies current
 entry points and preserved versioned/source evidence. The earlier founding README
 is retained [verbatim](docs/integration/2026-10-29/predecessor/v12/ROOT_README.md).
 
-PR #117 remains under its explicit no-merge hold. Unavailable final Aristotle V8
+The historical PR #117 hold remains recorded separately from the protected theorem successors. Unavailable final Aristotle V8
 outputs are not assumed present. No untrusted proof-generation trace is used as
 model-training data. Experimental self-modification is not deployed to production.
 
