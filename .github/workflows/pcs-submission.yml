@@ -31,7 +31,7 @@ jobs:
           python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
           python -m pip install --no-deps --no-build-isolation -e .
       - name: Build formal PCS kernel
-        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6
+        uses: leanprover/lean-action@fe408643ea7367d8c0404a8be3975bb145f5fb64
         with:
           lake-package-directory: formal
           build: true
