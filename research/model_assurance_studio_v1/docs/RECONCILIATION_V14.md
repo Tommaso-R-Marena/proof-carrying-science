@@ -6,7 +6,7 @@ This integrates the actual v0.13 head of draft PR #196, preserving its model sam
 
 The local studio accepts supported model/scientific files and reports scoped PASS, FAIL or OPEN findings. The exact-rational and binary32 certificate routes, independent protobuf comparison and reviewer-pinned operating regions remain separate from production PCS certificates. An unknown or unsupported case abstains.
 
-The current local suite passed **329 tests and 397 nested subtests, with zero skips**, using NumPy 2.2.6, CPU PyTorch 2.7.1, protobuf 6.33.6, cryptography 47.0.0 and genuine official ONNX Runtime 1.31.1. The exact validation packages are recorded in `requirements-validation.lock`; CPU dependencies reuse the protected repository's `requirements-prover.lock`.
+The initial qualified local suite passed **329 tests and 397 nested subtests, with zero skips**, using NumPy 2.2.6, CPU PyTorch 2.7.1, protobuf 6.33.6, cryptography 47.0.0 and genuine official ONNX Runtime 1.31.1. The exact validation packages are recorded in `requirements-validation.lock`; CPU dependencies reuse the protected repository's `requirements-prover.lock`.
 
 ## Confirmed defects and repairs
 
@@ -59,3 +59,5 @@ python -m studio.checked_export_v14 relation samples/demo_trained_iris_mlp.onnx 
 ```
 
 Without `--check`, the result explicitly remains `SOURCE_EXPORTED_NOT_KERNEL_CHECKED`. Invalid certificates cannot generate source, and existing source files cannot be overwritten.
+
+The transport/source-integrity successor adds a real Git-fixture guard test: the expanded local studio suite passes **330 tests and 397 subtests**. The same source commit passes 94 source tests and 13 actual-Lean proof-construction tests, including the new negative memory-error/real positive proof path and genuine incorrect-trace refutation. These results and exact logs are recorded separately in `validation/reconciliation_v14/transport-successor-test-results.json`; the original qualification records stay unchanged. Final hosted CI is separate evidence.
