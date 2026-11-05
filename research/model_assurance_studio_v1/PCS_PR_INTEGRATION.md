@@ -1,0 +1,45 @@
+# PCS Model Assurance Studio — additive incubation proposal (v0.8)
+
+**Classification: experimental research. NOT a PCS v0.6 certified package.**
+
+This folder is a separately runnable, local-first drag-and-drop inspection and proof-experiment prototype brought into PCS for review. It intentionally does **not** alter `pcs/`, `formal/`, CI authority scripts, signed receipts, deployment policy, or production package entrypoints. The existing PCS authority does not validate any of the certificates produced here.
+
+## What is genuinely implemented
+
+- Local browser intake: ONNX, safetensors, protein structures (PDB/mmCIF), SBML, FASTA and synthetic agent traces. Inspection is narrowly scoped and declines unsupported constructs.
+- Experimental exact-rational Farkas/activation-case proofs over a screened dense ONNX subset, solver-guided candidate search, exact-real model-update drift proofs and independently rechecked witnesses.
+- A conditional binary32 finite-rounding/error-budget lift for selected screened models; **not** official runtime execution equivalence.
+- A local synthetic in-memory agent tool gate; not an isolation boundary against a malicious runtime.
+- Ed25519 signed local publisher receipts with separately pinned keys. Signing does not establish scientific validity.
+- NEW v0.8: `studio/reviewer_gate_v08.py` demands an *independently supplied* reviewer policy that pins BOTH model hashes, the full domain, the relational property, exact and float32 thresholds. It rejects rewritten claims or missing proofs and never returns a general safety verdict.
+
+The v0.7 source export under `studio/lean_export_v07.py` is **not** a compiled Lean proof of the ONNX parser, LP relaxation, or float32 interpreter. It exports arithmetic consequences under explicit inequality hypotheses. Lean 4.28/Mathlib compilation and the semantic bridge remain outstanding. Official ONNX Runtime is not present in the original prototype's test environment and its optional native execution adapter must only be run with appropriate isolation.
+
+## Focused reviewer gate (stdlib-only)
+
+From this folder:
+
+```sh
+python -S -m unittest tests.test_reviewer_gate_v08 -v
+python -S -m studio.reviewer_gate_v08 \
+  samples/demo_trained_iris_mlp.onnx samples/demo_trained_iris_updated.onnx \
+  validation/v06_iris_property_1_certificate.json \
+  validation/v06_update_drift_certificate.json \
+  validation/v08_iris_independent_reviewer_policy.json
+```
+
+The included policy is a **public demonstration fixture**. A real reviewer MUST obtain/approve the policy and model hashes independently of the submitter. Merely storing a policy in the same ZIP or accepting a browser-generated policy confers no independent authority.
+
+## Full local UI
+
+Set up a virtual environment and install this folder's `requirements.txt`. From this folder run `python -m uvicorn studio.server:app --host 127.0.0.1 --port 8765`, or use the provided Windows or macOS/Linux launcher. **Do not expose to the internet.** The parsers and optional native inference execution are not hardened against arbitrary malicious inputs. Avoid uploading sensitive/proprietary materials on an untrusted workstation.
+
+## Release blockers before production promotion
+
+1. Independent verification of parser/graph semantics and exact certificate checker in the pinned Lean kernel, without weakening PCS's current authoritative guard.
+2. Test against official ONNX Runtime and an explicitly specified rounding/ordering contract; crosschecks over finite samples are not universal proofs.
+3. Isolate untrusted files/native runtime execution at the OS/VM level and capture reproducible environmental evidence.
+4. Full PCS integration gate and protected CI qualification on the exact proposed commit, plus independent code/security/rights review.
+5. Real external-partner evaluation on legally cleared workflows; no biological validity or generalized AI safety claims.
+
+**Merge posture:** draft until scoped source inspection, exact-commit CI, rights audit, and trust-boundary review are complete. This incubator is deliberately not promoted as `pcs verify-v06` authority.

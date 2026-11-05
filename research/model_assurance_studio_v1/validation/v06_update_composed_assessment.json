@@ -1,0 +1,349 @@
+{
+  "baseline": {
+    "certificate": {
+      "certificate_sha256": "3a1f95adc1907b5ce34773e239d08e3e85b9733705adb197cb114cf1a5d45919",
+      "input_box": [
+        [
+          "-3157079315185547/2000000000000000",
+          "-7392698287963867/5000000000000000"
+        ],
+        [
+          "11672449827194213/10000000000000000",
+          "6336224913597107/5000000000000000"
+        ],
+        [
+          "-809796416759491/500000000000000",
+          "-759796416759491/500000000000000"
+        ],
+        [
+          "-112511/81920",
+          "-104319/81920"
+        ]
+      ],
+      "model_sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+      "multipliers": [
+        [
+          0,
+          "2329800452498053301607853/554618852138940073246720"
+        ],
+        [
+          2,
+          "4990037456543133/66102871838388228937492725760"
+        ],
+        [
+          3,
+          "1841514/953489"
+        ],
+        [
+          4,
+          "2522514/811589"
+        ],
+        [
+          5,
+          "8139615345558171/4246439241401794670813511680"
+        ],
+        [
+          6,
+          "1178189/687588"
+        ],
+        [
+          7,
+          "13021750201706999/9533731682612738177089142784"
+        ],
+        [
+          24,
+          "241429/319697"
+        ],
+        [
+          34,
+          "1429392/767705"
+        ],
+        [
+          37,
+          "902271/336730"
+        ],
+        [
+          41,
+          "5/10727251247104"
+        ],
+        [
+          42,
+          "38047979/16777216"
+        ],
+        [
+          44,
+          "95433/215255"
+        ],
+        [
+          45,
+          "3/3611379630080"
+        ],
+        [
+          46,
+          "1/3563740725248"
+        ],
+        [
+          47,
+          "389865/849662"
+        ],
+        [
+          48,
+          "1039596/693785"
+        ],
+        [
+          49,
+          "1/11639780802560"
+        ],
+        [
+          51,
+          "9/25759905218560"
+        ],
+        [
+          53,
+          "1/1412347985920"
+        ],
+        [
+          54,
+          "1/758053339136"
+        ],
+        [
+          55,
+          "277819/361468"
+        ],
+        [
+          56,
+          "241429/319697"
+        ],
+        [
+          66,
+          "1429392/767705"
+        ],
+        [
+          69,
+          "902271/336730"
+        ],
+        [
+          79,
+          "1"
+        ],
+        [
+          80,
+          "1"
+        ]
+      ],
+      "relation": {
+        "output_coefficients": [
+          "-1",
+          "1",
+          "0"
+        ],
+        "upper_limit": "-1/2"
+      },
+      "schema": "pcs-relational-farkas-real-v0.6",
+      "scope": "exact-real-screened-onnx-outer-polytope"
+    },
+    "optimizer_objective": -12.311845848681585,
+    "scope": "Exact-real screened ONNX semantics; no arbitrary ONNX/float32/Lean certification",
+    "status": "PROVED_CONDITIONALLY",
+    "verification": {
+      "linear_constraints": 84,
+      "nonzero_multipliers": 27,
+      "required_upper_limit": "-1/2",
+      "status": "PROVED_CONDITIONALLY",
+      "trust_boundary": "Python/Fraction + ONNX subset decoder + exact-relaxation constructor; not Lean or IEEE float32",
+      "variables": 23,
+      "verified_upper_bound": "-5750584050541737185617378692734818754616900986508822251534359261/467077327089644795177857668941514309790964121600000000000000000"
+    }
+  },
+  "baseline_reviewer_policy": {
+    "input_box": [
+      [
+        "-1.5785396575927735",
+        "-1.4785396575927734"
+      ],
+      [
+        "1.1672449827194213",
+        "1.2672449827194214"
+      ],
+      [
+        "-1.619592833518982",
+        "-1.519592833518982"
+      ],
+      [
+        "-1.37342529296875",
+        "-1.27342529296875"
+      ]
+    ],
+    "output_coefficients": [
+      "-1",
+      "1",
+      "0"
+    ],
+    "schema": "pcs-relational-reviewer-policy-v0.6",
+    "upper_limit": "-1/2"
+  },
+  "composition": {
+    "derived_new_model_upper_bound": "-3/8",
+    "mechanism": "old model verified universal bound + same-input verified update drift",
+    "required_updated_upper_limit": "-3/8",
+    "scope": "idealized exact-real screened ONNX; no IEEE-754/ONNX Runtime/Lean/deployment guarantee",
+    "status": "PROVED_CONDITIONALLY",
+    "updated_model_sha256": "bebf58135a1abef2f6e24032c2de0650b5eb1be5c1870d07bf1e98320c6c69e8"
+  },
+  "limits": [
+    "Only screened ONNX real-arithmetic grammar is considered; not full ONNX, IEEE-754 or official runtime",
+    "Generated review policy is a suggestion: obtain and pin trusted expectations independently before acceptance",
+    "A scoped model relation is not a claim of model alignment, generalized safety, or clinical validity"
+  ],
+  "new_model_sha256": "bebf58135a1abef2f6e24032c2de0650b5eb1be5c1870d07bf1e98320c6c69e8",
+  "old_model_sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+  "requested_new_upper_limit": "-3/8",
+  "schema": "pcs-model-update-assessment-v0.6",
+  "status": "PROVED_CONDITIONALLY",
+  "update": {
+    "certificate": {
+      "certificate_sha256": "2f9634e4e316b2c5704d50356104646ba15b26f00e4b9bb79546833b1ad4a9f2",
+      "input_box": [
+        [
+          "-3157079315185547/2000000000000000",
+          "-7392698287963867/5000000000000000"
+        ],
+        [
+          "11672449827194213/10000000000000000",
+          "6336224913597107/5000000000000000"
+        ],
+        [
+          "-809796416759491/500000000000000",
+          "-759796416759491/500000000000000"
+        ],
+        [
+          "-112511/81920",
+          "-104319/81920"
+        ]
+      ],
+      "multipliers": [
+        [
+          43,
+          "38047979/16777216"
+        ],
+        [
+          45,
+          "7438155/16777216"
+        ],
+        [
+          46,
+          "3849089/8388608"
+        ],
+        [
+          49,
+          "25139671/16777216"
+        ],
+        [
+          54,
+          "6447361/8388608"
+        ],
+        [
+          78,
+          "1"
+        ],
+        [
+          81,
+          "1"
+        ],
+        [
+          126,
+          "38047979/16777216"
+        ],
+        [
+          128,
+          "7438155/16777216"
+        ],
+        [
+          131,
+          "3849089/8388608"
+        ],
+        [
+          132,
+          "25139671/16777216"
+        ],
+        [
+          139,
+          "6447361/8388608"
+        ],
+        [
+          163,
+          "1"
+        ],
+        [
+          164,
+          "1"
+        ],
+        [
+          193,
+          "25339659/33554432"
+        ],
+        [
+          203,
+          "62475087/33554432"
+        ],
+        [
+          204,
+          "22477349/8388608"
+        ]
+      ],
+      "new_sha256": "bebf58135a1abef2f6e24032c2de0650b5eb1be5c1870d07bf1e98320c6c69e8",
+      "old_sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+      "relation": {
+        "output_coefficients": [
+          "-1",
+          "1",
+          "0"
+        ],
+        "upper_limit": "1/8"
+      },
+      "schema": "pcs-proof-gated-update-real-v0.6",
+      "scope": "same-input-exact-real-screened-onnx-model-update"
+    },
+    "limitation": "Exact-real screened ONNX equivalence, NOT runtime/floating point/overall safety",
+    "status": "PROVED_CONDITIONALLY",
+    "verification": {
+      "linear_constraints": 208,
+      "multipliers": 17,
+      "required_update_upper_bound": "1/8",
+      "scope": "same input, screened exact-real neural semantics; not ONNX Runtime/IEEE/Lean",
+      "semantically_matched_nodes": 2,
+      "status": "PROVED_CONDITIONALLY",
+      "variables": 46,
+      "verified_update_upper_bound": "1/8"
+    }
+  },
+  "update_reviewer_policy": {
+    "input_box": [
+      [
+        "-1.5785396575927735",
+        "-1.4785396575927734"
+      ],
+      [
+        "1.1672449827194213",
+        "1.2672449827194214"
+      ],
+      [
+        "-1.619592833518982",
+        "-1.519592833518982"
+      ],
+      [
+        "-1.37342529296875",
+        "-1.27342529296875"
+      ]
+    ],
+    "new_model_sha256": "bebf58135a1abef2f6e24032c2de0650b5eb1be5c1870d07bf1e98320c6c69e8",
+    "old_model_sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+    "output_coefficients": [
+      "-1",
+      "1",
+      "0"
+    ],
+    "schema": "pcs-model-update-reviewer-policy-v0.6",
+    "upper_limit": "1/8"
+  }
+}

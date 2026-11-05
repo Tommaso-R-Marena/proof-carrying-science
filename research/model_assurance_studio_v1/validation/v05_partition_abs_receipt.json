@@ -1,0 +1,643 @@
+{
+  "bytes": 164,
+  "checks": [
+    {
+      "evidence": "SHA-256: dd3504cd703049e465bd34c8b15af40ca133baa73a55e1b2996c8b6dc8cca2bb",
+      "id": "INTEGRITY_SHA256",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Exact artifact fingerprint"
+    },
+    {
+      "evidence": "3 nodes in serialized order; nested graphs not fully validated",
+      "id": "ONNX_DATAFLOW",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Top-level graph references are consistent"
+    },
+    {
+      "evidence": "Top-level initializers are embedded in this file",
+      "id": "ONNX_EXTERNAL",
+      "scope": "static",
+      "status": "PASS",
+      "title": "No external initializer data detected"
+    },
+    {
+      "evidence": "3 nodes <= cap 100000",
+      "id": "NODE_BUDGET",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Graph within configured node cap"
+    },
+    {
+      "evidence": "Top-level nodes inspected",
+      "id": "CUSTOM_DOMAINS",
+      "scope": "static",
+      "status": "PASS",
+      "title": "No custom operator domains detected"
+    },
+    {
+      "evidence": "Only known top-level op names checked",
+      "id": "STOCHASTIC_OPS",
+      "scope": "static",
+      "status": "PASS",
+      "title": "No targeted stochastic operations found"
+    },
+    {
+      "evidence": "Install optional onnx package; protobuf inspection alone is insufficient",
+      "id": "ONNX_CHECKER",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Official ONNX checker not installed"
+    },
+    {
+      "evidence": "Unsupported operator or arity: MatMul",
+      "id": "ONNX_INTERVAL",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Exact real-arithmetic enclosure unavailable"
+    },
+    {
+      "evidence": "Enable conditional bounds and scalar witness search to try candidate inputs",
+      "id": "ONNX_WITNESS",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Scalar witness search not requested"
+    },
+    {
+      "evidence": "NOT_PROVED_WITHIN_ASSUMED_BOX; input width 1, output width 1; floating-point runtime assurance NOT established",
+      "id": "ONNX_DENSE_REAL_BOX",
+      "scope": "untrusted bounded exact rational arithmetic",
+      "status": "OPEN",
+      "title": "Exact conditional real-number bounds for a screened dense network"
+    },
+    {
+      "evidence": "2 exact rational leaves recomputed; input box exhaustively covered. Not an IEEE-754, Lean or ONNX Runtime proof.",
+      "id": "ONNX_DENSE_PARTITION",
+      "scope": "bounded exact rational certificate",
+      "status": "PASS",
+      "title": "Finite partition proves conditional real-number output bounds"
+    },
+    {
+      "evidence": "A bounded search cannot establish absence of a counterexample; exact enclosure is separate",
+      "id": "ONNX_DENSE_WITNESS",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "No counterexample observed in bounded search"
+    },
+    {
+      "evidence": "Optional NumPy scalar replay does not run the actual ONNX Runtime engine; robustness, harmful outputs and deployment threat models require explicit test suites",
+      "id": "ONNX_BEHAVIOR",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Full ONNX model behavior is not established"
+    }
+  ],
+  "decision": "OPEN",
+  "decision_meaning": "Static inspection alone cannot establish deployment safety",
+  "details": {
+    "dense_network": {
+      "assumptions": "Exact rational interpretation of embedded FLOAT32 weights and box inputs; IBP overapproximation; not float32 runtime guarantees.",
+      "conditional_real_range": "NOT_PROVED_WITHIN_ASSUMED_BOX",
+      "enclosure_exact": [
+        [
+          "0",
+          "2"
+        ]
+      ],
+      "initializers": 2,
+      "input_width": 1,
+      "operator_count": 3,
+      "output_width": 1,
+      "probes_tested": 0,
+      "supported": true
+    },
+    "input_names": [
+      "x"
+    ],
+    "io_singleton_shape_confirmed": {
+      "x": false,
+      "y": false
+    },
+    "io_tensor_types": {
+      "x": 1,
+      "y": 1
+    },
+    "missing_inputs_sample": [],
+    "output_names": [
+      "y"
+    ],
+    "partition_proof": {
+      "budget": 16,
+      "certificate": {
+        "certificate_sha256": "6755134b014fc05dcaacb6257a5dc5be4e11580e5f18ab6ae7deebfe675328a3",
+        "input_box": [
+          [
+            "-1",
+            "1"
+          ]
+        ],
+        "leaves": 2,
+        "schema": "pcs-dense-real-partition-certificate-v0.5",
+        "scope": "Exact-real screened operator semantics only; not floating-point runtime guarantee",
+        "screened_model_sha256": "b4870d84a506c567a57da563c7fe7b8558d140cc8a19b026a88274fa3b42a7fb",
+        "target": [
+          "0",
+          "1"
+        ],
+        "tree": {
+          "at": "0",
+          "axis": 0,
+          "kind": "split",
+          "left": {
+            "bounds": [
+              [
+                "0",
+                "1"
+              ]
+            ],
+            "kind": "leaf"
+          },
+          "right": {
+            "bounds": [
+              [
+                "0",
+                "1"
+              ]
+            ],
+            "kind": "leaf"
+          }
+        }
+      },
+      "leaves": 2,
+      "split_nodes": 1,
+      "status": "PROVED_CONDITIONALLY"
+    },
+    "stochastic_ops": {}
+  },
+  "family": "onnx",
+  "filename": "demo_partition_abs.onnx",
+  "limitations": [
+    "Static analysis is non-executing; optional replay evaluates screened scalar or small dense ONNX operations in a separate NumPy process, NOT ONNX Runtime or Lean-kernel verification.",
+    "No full ONNX model-runtime equivalence, general AI safety, biological validity, misuse resistance, or clinical safety is certified.",
+    "The JSON receipt is SHA-256 bound but is not signed, trusted, or PCS v0.6 certified."
+  ],
+  "metrics": {
+    "custom_domains": [],
+    "external_tensors": 0,
+    "initializers": 2,
+    "inputs": 1,
+    "ir_version": 8,
+    "nested_graph_attributes": 0,
+    "node_attributes": 0,
+    "nodes": 3,
+    "operators": {
+      "MatMul": 2,
+      "Relu": 1
+    },
+    "opsets": [
+      {
+        "domain": "",
+        "version": 13
+      }
+    ],
+    "outputs": 1,
+    "sparse_initializers": 0
+  },
+  "pcs_claim_inventory": {
+    "artifacts": [
+      {
+        "id": "artifact-001",
+        "media_type": "application/octet-stream",
+        "metadata": {
+          "bytes": 164,
+          "family": "onnx"
+        },
+        "path": "demo_partition_abs.onnx",
+        "role": "untrusted model input",
+        "sha256": "dd3504cd703049e465bd34c8b15af40ca133baa73a55e1b2996c8b6dc8cca2bb"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "static-inspection-boundary",
+        "rationale": "Explicit boundary for external inspection findings",
+        "scope": [
+          "artifact-001"
+        ],
+        "statement": "The untrusted artifact was not executed; tool/parser correctness and source custody are not independently verified."
+      },
+      {
+        "id": "conditional-real-arithmetic-input-range",
+        "rationale": "Assumption underlying analytic interval enclosure",
+        "scope": [
+          "artifact-001"
+        ],
+        "statement": "All graph inputs are in [-1, 1]; supported operators are interpreted with real-number semantics, not validated floating-point runtime semantics."
+      }
+    ],
+    "claims": [
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-001",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-001"
+        ],
+        "statement": "Exact artifact fingerprint"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-002",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-002"
+        ],
+        "statement": "Top-level graph references are consistent"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-003",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-003"
+        ],
+        "statement": "No external initializer data detected"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-004",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-004"
+        ],
+        "statement": "Graph within configured node cap"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-005",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-005"
+        ],
+        "statement": "No custom operator domains detected"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-006",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-006"
+        ],
+        "statement": "No targeted stochastic operations found"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-007",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-007"
+        ],
+        "statement": "Official ONNX checker not installed"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary",
+          "conditional-real-arithmetic-input-range"
+        ],
+        "id": "claim-008",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-008"
+        ],
+        "statement": "Exact real-arithmetic enclosure unavailable"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-009",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-009"
+        ],
+        "statement": "Scalar witness search not requested"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary",
+          "conditional-real-arithmetic-input-range"
+        ],
+        "id": "claim-010",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-010"
+        ],
+        "statement": "Exact conditional real-number bounds for a screened dense network"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary",
+          "conditional-real-arithmetic-input-range"
+        ],
+        "id": "claim-011",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-011"
+        ],
+        "statement": "Finite partition proves conditional real-number output bounds"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary",
+          "conditional-real-arithmetic-input-range"
+        ],
+        "id": "claim-012",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-012"
+        ],
+        "statement": "No counterexample observed in bounded search"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-013",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-013"
+        ],
+        "statement": "Full ONNX model behavior is not established"
+      }
+    ],
+    "evidence": [
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-001"
+        ],
+        "details": {
+          "check_id": "INTEGRITY_SHA256",
+          "evidence": "SHA-256: dd3504cd703049e465bd34c8b15af40ca133baa73a55e1b2996c8b6dc8cca2bb",
+          "scope": "static"
+        },
+        "id": "evidence-001",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-002"
+        ],
+        "details": {
+          "check_id": "ONNX_DATAFLOW",
+          "evidence": "3 nodes in serialized order; nested graphs not fully validated",
+          "scope": "static"
+        },
+        "id": "evidence-002",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-003"
+        ],
+        "details": {
+          "check_id": "ONNX_EXTERNAL",
+          "evidence": "Top-level initializers are embedded in this file",
+          "scope": "static"
+        },
+        "id": "evidence-003",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-004"
+        ],
+        "details": {
+          "check_id": "NODE_BUDGET",
+          "evidence": "3 nodes <= cap 100000",
+          "scope": "static"
+        },
+        "id": "evidence-004",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-005"
+        ],
+        "details": {
+          "check_id": "CUSTOM_DOMAINS",
+          "evidence": "Top-level nodes inspected",
+          "scope": "static"
+        },
+        "id": "evidence-005",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-006"
+        ],
+        "details": {
+          "check_id": "STOCHASTIC_OPS",
+          "evidence": "Only known top-level op names checked",
+          "scope": "static"
+        },
+        "id": "evidence-006",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-007"
+        ],
+        "details": {
+          "check_id": "ONNX_CHECKER",
+          "evidence": "Install optional onnx package; protobuf inspection alone is insufficient",
+          "scope": "static"
+        },
+        "id": "evidence-007",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-008"
+        ],
+        "details": {
+          "check_id": "ONNX_INTERVAL",
+          "evidence": "Unsupported operator or arity: MatMul",
+          "scope": "static"
+        },
+        "id": "evidence-008",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-009"
+        ],
+        "details": {
+          "check_id": "ONNX_WITNESS",
+          "evidence": "Enable conditional bounds and scalar witness search to try candidate inputs",
+          "scope": "static"
+        },
+        "id": "evidence-009",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-010"
+        ],
+        "details": {
+          "check_id": "ONNX_DENSE_REAL_BOX",
+          "evidence": "NOT_PROVED_WITHIN_ASSUMED_BOX; input width 1, output width 1; floating-point runtime assurance NOT established",
+          "scope": "untrusted bounded exact rational arithmetic"
+        },
+        "id": "evidence-010",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-011"
+        ],
+        "details": {
+          "check_id": "ONNX_DENSE_PARTITION",
+          "evidence": "2 exact rational leaves recomputed; input box exhaustively covered. Not an IEEE-754, Lean or ONNX Runtime proof.",
+          "scope": "bounded exact rational certificate"
+        },
+        "id": "evidence-011",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-012"
+        ],
+        "details": {
+          "check_id": "ONNX_DENSE_WITNESS",
+          "evidence": "A bounded search cannot establish absence of a counterexample; exact enclosure is separate",
+          "scope": "static"
+        },
+        "id": "evidence-012",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.5.0",
+        "claim_ids": [
+          "claim-013"
+        ],
+        "details": {
+          "check_id": "ONNX_BEHAVIOR",
+          "evidence": "Optional NumPy scalar replay does not run the actual ONNX Runtime engine; robustness, harmful outputs and deployment threat models require explicit test suites",
+          "scope": "static"
+        },
+        "id": "evidence-013",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      }
+    ],
+    "schema": "pcs-candidate-claim-inventory-v0.5",
+    "source_assessment_schema": "pcs-model-intake-receipt-v0.5",
+    "trusted_authority": false,
+    "warnings": [
+      "Candidate PCS-shaped data only; requires separate reviewer acceptance, independent replay, and Lean-authoritative verification."
+    ]
+  },
+  "policy": {
+    "check_output_bounds": true,
+    "enable_milp_challenger": false,
+    "enable_partition_proof": true,
+    "enable_reference_replay": false,
+    "enable_torch_crosscheck": false,
+    "forbid_custom_onnx_domains": false,
+    "forbid_stochastic_onnx_ops": false,
+    "input_max": 1,
+    "input_min": -1,
+    "max_onnx_nodes": 100000,
+    "max_partition_leaves": 16,
+    "max_pdb_clashes": 0,
+    "milp_timeout_seconds": 6,
+    "output_max": 1,
+    "output_min": 0,
+    "require_onnx_official_checker": false,
+    "require_self_contained_onnx": true,
+    "search_scalar_witness": false
+  },
+  "policy_sha256": "dfa26881de9e9a1aacab53960dd430acddaf2ca3e82bf0aa9ccdf73925df8d33",
+  "receipt_sha256": "441635e12c214fbd48e71149b9d56cae5354555d157f27d96411dd395e673b68",
+  "schema": "pcs-model-intake-receipt-v0.5",
+  "sha256": "dd3504cd703049e465bd34c8b15af40ca133baa73a55e1b2996c8b6dc8cca2bb",
+  "version": "0.5.0"
+}

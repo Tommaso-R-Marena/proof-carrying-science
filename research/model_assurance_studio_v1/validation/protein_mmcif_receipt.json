@@ -1,0 +1,207 @@
+{
+  "bytes": 567,
+  "checks": [
+    {
+      "evidence": "SHA-256: e749939539df3d6894960d6321e14a1953050ee77b77779dd167a64cce49deea",
+      "id": "INTEGRITY_SHA256",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Exact artifact fingerprint"
+    },
+    {
+      "evidence": "2 atoms in 1 model(s); 0 invalid geometry/occupancy records; 0 duplicate atom labels.",
+      "id": "MMCIF_PARSER",
+      "scope": "static",
+      "status": "PASS",
+      "title": "mmCIF atomic-coordinate parsing"
+    },
+    {
+      "evidence": "0 pairs closer than 1.7 \u00c5 outside same/adjacent residues; threshold 0. This is not force-field or stereochemical validation.",
+      "id": "MMCIF_CLOSE_CONTACTS",
+      "scope": "static",
+      "status": "PASS",
+      "title": "mmCIF heavy-atom proximity heuristic"
+    },
+    {
+      "evidence": "No ensemble confidence, experimental fit, physical stability, binding activity or clinical significance asserted",
+      "id": "MMCIF_SCIENTIFIC_VALIDITY",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Structure validity and function not established"
+    }
+  ],
+  "decision": "OPEN",
+  "decision_meaning": "Static inspection alone cannot establish deployment safety",
+  "details": {
+    "clash_pair_indices_sample": [],
+    "parser": "gemmi 0.7.4"
+  },
+  "family": "mmcif",
+  "filename": "demo_protein.cif",
+  "limitations": [
+    "This is a non-executing static inspection, not Lean-kernel verification.",
+    "No runtime behavior, biological validity, misuse resistance, or clinical safety is certified.",
+    "The JSON receipt is SHA-256 bound but is not signed, trusted, or PCS v0.6 certified."
+  ],
+  "metrics": {
+    "atoms": 2,
+    "chains": 1,
+    "duplicate_atom_ids": 0,
+    "invalid_or_nonfinite_atom_records": 0,
+    "models": 1,
+    "residues": 2,
+    "severe_close_pairs_heuristic": 0
+  },
+  "pcs_claim_inventory": {
+    "artifacts": [
+      {
+        "id": "artifact-001",
+        "media_type": "application/octet-stream",
+        "metadata": {
+          "bytes": 567,
+          "family": "mmcif"
+        },
+        "path": "demo_protein.cif",
+        "role": "untrusted model input",
+        "sha256": "e749939539df3d6894960d6321e14a1953050ee77b77779dd167a64cce49deea"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "static-inspection-boundary",
+        "rationale": "Explicit boundary for external inspection findings",
+        "scope": [
+          "artifact-001"
+        ],
+        "statement": "The untrusted artifact was not executed; tool/parser correctness and source custody are not independently verified."
+      }
+    ],
+    "claims": [
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-001",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-001"
+        ],
+        "statement": "Exact artifact fingerprint"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-002",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-002"
+        ],
+        "statement": "mmCIF atomic-coordinate parsing"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-003",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-003"
+        ],
+        "statement": "mmCIF heavy-atom proximity heuristic"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-004",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-004"
+        ],
+        "statement": "Structure validity and function not established"
+      }
+    ],
+    "evidence": [
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-001"
+        ],
+        "details": {
+          "check_id": "INTEGRITY_SHA256",
+          "evidence": "SHA-256: e749939539df3d6894960d6321e14a1953050ee77b77779dd167a64cce49deea",
+          "scope": "static"
+        },
+        "id": "evidence-001",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-002"
+        ],
+        "details": {
+          "check_id": "MMCIF_PARSER",
+          "evidence": "2 atoms in 1 model(s); 0 invalid geometry/occupancy records; 0 duplicate atom labels.",
+          "scope": "static"
+        },
+        "id": "evidence-002",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-003"
+        ],
+        "details": {
+          "check_id": "MMCIF_CLOSE_CONTACTS",
+          "evidence": "0 pairs closer than 1.7 \u00c5 outside same/adjacent residues; threshold 0. This is not force-field or stereochemical validation.",
+          "scope": "static"
+        },
+        "id": "evidence-003",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-004"
+        ],
+        "details": {
+          "check_id": "MMCIF_SCIENTIFIC_VALIDITY",
+          "evidence": "No ensemble confidence, experimental fit, physical stability, binding activity or clinical significance asserted",
+          "scope": "static"
+        },
+        "id": "evidence-004",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      }
+    ],
+    "schema": "pcs-candidate-claim-inventory-v0.2",
+    "source_assessment_schema": "pcs-model-intake-receipt-v0.2",
+    "trusted_authority": false,
+    "warnings": [
+      "Candidate PCS-shaped data only; requires separate reviewer acceptance, independent replay, and Lean-authoritative verification."
+    ]
+  },
+  "policy_sha256": "351129073a2f7d83e239658d79851a433334e829fc56baf951fd3c58b181d154",
+  "receipt_sha256": "919e82962c78f315094181b56bbd3efd3335fc1a1ff51097c4ff12e40ed7c682",
+  "schema": "pcs-model-intake-receipt-v0.2",
+  "sha256": "e749939539df3d6894960d6321e14a1953050ee77b77779dd167a64cce49deea",
+  "version": "0.2.0"
+}
