@@ -1,5 +1,8 @@
 """Real Git tests for protected squash integration; no verifier verdict is mocked."""
 import importlib.util
+import json
+import os
+import sys
 from pathlib import Path
 import subprocess
 import tempfile
@@ -93,6 +96,42 @@ class LinearSourceTests(unittest.TestCase):
         self.git('checkout','--orphan','alien');self.git('rm','-rf','.')
         self.write('controller.py','alien\n');self.commit('unrelated root')
         with self.assertRaises(subprocess.CalledProcessError):self.check()
+
+
+class CurrentRepositorySquash(unittest.TestCase):
+    def test_entire_current_source_tree_passes_under_a_real_one_parent_squash(self):
+        root=Path(__file__).resolve().parents[1]
+        name='proof-carrying-science' if (root/'formal/PCS.lean').exists() else 'proof-carrying-science-site'
+        registry=json.loads((root/'docs/reconciliation/OPEN_PRS.json').read_text())
+        entry=next(e for e in registry['repositories'] if e['repository'].split('/')[-1]==name)
+        baseline=entry['protected']['main'];intake,tag=checker.INTAKES[name]
+        def original(*args):return subprocess.check_output(['git','-C',str(root),*args],text=True).strip()
+        objects=Path(original('rev-parse','--git-path','objects'))
+        if not objects.is_absolute():objects=(root/objects).resolve()
+        tree=original('rev-parse','HEAD^{tree}');tag_object=original('rev-parse','refs/tags/'+tag)
+        exclude=Path(original('rev-parse','--git-path','info/exclude'))
+        if not exclude.is_absolute():exclude=root/exclude
+        with tempfile.TemporaryDirectory(prefix='pcs-squash-source-') as folder:
+            private=Path(folder)/'repo.git'
+            subprocess.run(['git','init','--bare','-q',str(private)],check=True)
+            (private/'objects/info/alternates').write_text(str(objects)+'\n')
+            if exclude.is_file():(private/'info/exclude').write_bytes(exclude.read_bytes())
+            env={**os.environ,'GIT_DIR':str(private),'GIT_WORK_TREE':str(root),'GIT_INDEX_FILE':str(private/'index'),
+                 'GIT_AUTHOR_NAME':'PCS squash fixture','GIT_AUTHOR_EMAIL':'fixture@example.invalid',
+                 'GIT_COMMITTER_NAME':'PCS squash fixture','GIT_COMMITTER_EMAIL':'fixture@example.invalid'}
+            def isolated(*args):return subprocess.check_output(['git','-c','core.bare=false',*args],cwd=root,env=env,text=True).strip()
+            squash=isolated('commit-tree',tree,'-p',baseline,'-m','Isolated linear integration fixture; no protected ref mutation')
+            isolated('update-ref','HEAD',squash);isolated('update-ref','refs/tags/'+tag,tag_object);isolated('read-tree','HEAD')
+            self.assertEqual(isolated('rev-parse','HEAD^{tree}'),tree)
+            self.assertEqual(len(isolated('rev-list','--parents','-n','1','HEAD').split()),2)
+            scope='--core' if name=='proof-carrying-science' else '--site'
+            run=subprocess.run([sys.executable,str(root/'scripts/check_reconciled_prs.py'),scope,str(root)],cwd=root,env=env,capture_output=True,text=True)
+            self.assertEqual(run.returncode,0,run.stdout+run.stderr)
+            self.assertTrue(json.loads(run.stdout)['passed'])
+            if name=='proof-carrying-science':
+                run=subprocess.run([sys.executable,'-m','research.integration_v2.reconcile','--require-committed'],cwd=root,env=env,capture_output=True,text=True)
+                self.assertEqual(run.returncode,0,run.stdout+run.stderr)
+                self.assertEqual(json.loads(run.stdout)['prs_checked'],72)
 
 
 if __name__=='__main__':unittest.main(verbosity=2)
