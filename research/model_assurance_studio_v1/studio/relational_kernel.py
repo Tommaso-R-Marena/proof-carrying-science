@@ -27,6 +27,18 @@ def rational(value):
     if isinstance(value, str):
         if not value or len(value) > 200 or any(c not in '-+0123456789/.eE' for c in value):
             raise Unsupported('invalid rational encoding')
+        # Resource preflight: Fraction("1e100000000") attempts to materialize
+        # an enormous power of ten *before* we can apply MAX_RATIONAL_BITS.
+        # Reject excessive exponents without allocating the giant integer.
+        # This applies to every reviewer/certificate rational parsed by PCS.
+        if 'e' in value.lower():
+            parts=value.lower().split('e')
+            if len(parts)!=2:
+                raise Unsupported('invalid rational exponent')
+            exponent=parts[1]
+            digits=exponent.lstrip('+-')
+            if not digits.isdigit() or len(digits)>4 or abs(int(exponent))>MAX_RATIONAL_BITS:
+                raise Unsupported('rational exponent resource limit')
         q = Fraction(value)
     elif isinstance(value, float):
         if not math.isfinite(value): raise Unsupported('nonfinite rational')

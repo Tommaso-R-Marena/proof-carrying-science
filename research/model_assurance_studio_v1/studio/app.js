@@ -421,6 +421,23 @@ el('envelope-demo').onclick=async()=>{
   p.append(save);host.append(p);setNotice('Conditional operating-envelope demo finished. Outside-region inputs did not reach inference.');
  }catch(e){setNotice('Operating-envelope demo failed: '+String(e))}
 };
+el('dual-envelope-demo').onclick=async()=>{
+ const host=el('envelope-results');host.replaceChildren();
+ try{
+  const res=await fetch('/api/dual-envelope-demo');if(!res.ok)throw Error('Dual proof demo unavailable');
+  const d=await res.json(),p=make('section','evidencebox');
+  p.append(make('h3','',d.review.status==='PROVED_CONDITIONALLY'?'Dual mathematical proof gate: CONDITIONAL CHECK':'Dual proof gate: OPEN'));
+  p.append(make('p','',`Checked ${d.review.real_certificate_comparisons||0} real/update comparisons and ${d.review.direct_float32_comparisons||0} direct binary32 comparisons across ${d.review.checked_fp32_partition_leaves||0} recomputed partition leaves.`));
+  for(const item of d.examples||[]){
+   p.append(make('p','',`Iris #${item.sample_index}: ${item.decision.status}; reference run ${item.reference_execution.status}; class ${item.decision.class_index??'none'}; dual proof ${item.decision.dual_fp32_evidence||'absent'}.`));
+  }
+  p.append(make('p','',`Out-of-region input: ${d.outside_example.decision.status}; reference inference ${d.outside_example.reference_execution.status}.`));
+  p.append(make('p','hint',d.limitations));
+  const save=make('button','btn secondary','Download dual-proof research report');
+  save.onclick=()=>download('pcs-dual-fp32-envelope-v10.json',d);
+  p.append(save);host.append(p);setNotice('Direct binary32 and exact-real proof families rechecked. Out-of-region execution abstained.');
+ }catch(err){setNotice('Dual proof demo failed: '+String(err))}
+};
 el('guarded-live').onclick=async()=>{
  const host=el('guarded-results');host.replaceChildren();
  try{
