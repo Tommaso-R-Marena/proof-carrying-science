@@ -10,6 +10,9 @@ import json
 import random
 import struct
 import unittest
+import subprocess
+import sys
+import os
 from fractions import Fraction
 from pathlib import Path
 from unittest.mock import patch
@@ -135,6 +138,22 @@ class CorrelatedFP32V13(unittest.TestCase):
                     for y,(a,b) in zip(actual,enclosures):
                         self.assertLessEqual(a,y)
                         self.assertLessEqual(y,b)
+
+    def test_stdlib_replay_abstains_when_protobuf_unavailable(self):
+        # Exercise the *real* dependency-disabled path, not a mocked crosscheck.
+        # Mathematical replay succeeds, while model admission cannot silently
+        # inherit authority from the handwritten parser alone.
+        env=os.environ.copy()
+        env['PYTHONPATH']=str(ROOT)
+        result=subprocess.run(
+            [sys.executable,'-S','scripts/reproduce_v13_affine.py'],
+            cwd=ROOT,env=env,capture_output=True,text=True,timeout=20,check=False,
+        )
+        self.assertEqual(result.returncode,0,result.stderr)
+        observation=json.loads(result.stdout)
+        self.assertEqual(observation['math_comparisons_checked'],6)
+        self.assertTrue(observation['correlation_affine_bound_below_required_limit'])
+        self.assertEqual(observation['complete_gate_review']['status'],'NOT_ESTABLISHED')
 
     def test_proposer_never_grants_independent_policy_authority(self):
         r=propose(self.model,self.cp)

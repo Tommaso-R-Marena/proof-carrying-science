@@ -98,9 +98,12 @@ From this folder, with Python 3.12+:
 ```bash
 # Independent mathematical replay, no external libraries, no optimizer:
 PYTHONPATH=. python -S scripts/reproduce_v13_affine.py
-PYTHONPATH=. python -S -m unittest tests.test_affine_fp32_v13 tests.test_affine_random_v13 -v
+PYTHONPATH=. python -S -m unittest tests.test_affine_random_v13 -v
 
-# Additional pinned-policy + two-decoder + screened inference demonstration:
+# Full v0.13 verifier/integration tests require Google protobuf:
+PYTHONPATH=. python -m unittest tests.test_affine_fp32_v13 tests.test_affine_http_v13 tests.test_affine_random_v13 -v
+
+# Pinned-policy + two-decoder + screened inference demonstration:
 PYTHONPATH=. python scripts/reproduce_v13_affine.py
 
 # Optional untrusted candidate producer (does NOT establish reviewer authority):
@@ -114,6 +117,18 @@ PYTHONPATH=. python -S -m studio.affine_fp32_v13 \
   validation/v13_correlated_margin_candidate.json \
   --trusted-policy-sha256 POLICY_DIGEST_FROM_SEPARATE_REVIEWER_CHANNEL
 ```
+
+
+**Dependency boundary:** `-S` disables third-party site packages, including
+Google protobuf. The `test_all_six_trained_iris_margin_certificates` and
+`test_caller_mutation_after_gate_creation_does_not_change_admission` tests
+intentionally require the independent decoder and will *not* pass if the
+entire `tests.test_affine_fp32_v13` suite is run with `-S`. That is a
+missing-dependency/abstention outcome, not an invalid mathematical
+certificate. The standard-library mathematical replay still checks all six
+Iris claims plus the correlation challenge, and reports the combined gate
+as `NOT_ESTABLISHED`. Never interpret successful math-only replay as
+full model admission or two-decoder verification.
 
 The local drag-and-drop interface adds **Prove a correlated float32 margin**
 and **Check selected model correlation**. The upload API returns a *suggested*
