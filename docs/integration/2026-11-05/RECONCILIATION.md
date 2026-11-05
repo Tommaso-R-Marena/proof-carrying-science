@@ -23,3 +23,5 @@ The website's 51-proof CSV/intent/conversion work remains a separate assurance p
 ## Integration status
 
 These are review-only integration candidates. No main branch, existing PR head, production authority, signing root, model weights or deployment is changed. Protected CI must complete on each exact candidate. Research replay, kernel compilation, finite numerical observations, scientific assumptions and host custody remain separate facts. Owner-held key custody and an independently administered trusted root are not established here.
+
+The supplemental legacy source guard uses a new exact V21 receipt profile; its old profile is preserved. The README workflow checks a new versioned inventory, retaining the historical inventory. Reproduction scripts receive their local studio package path explicitly. These repairs preserve the source, dependency and verification checks rather than bypassing them.

@@ -31,6 +31,8 @@ jobs:
         run: python -m pytest -q tests --durations=10
       - name: Preserved evidence and stronger Python verifier replay
         working-directory: research/model_assurance_studio_v1
+        env:
+          PYTHONPATH: .
         run: |
           set -euo pipefail
           python -S scripts/verify_v07_release.py
