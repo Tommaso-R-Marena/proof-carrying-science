@@ -37,46 +37,91 @@ def _budget(v):
         raise Unsupported('Exact rational arithmetic budget exceeded')
     return v
 
-def _parse_shape(vi,wire_fields):
-    dtype=None; shape=None; name=None
-    for f,w,v in wire_fields(vi,2):
-        if f==1 and w==2:
+# This is a *strict* serialization subset, not a general ONNX loader.  In
+# protobuf a repeated singular message is MERGED, while oneof alternatives
+# obey last-member-wins. Ignoring those distinctions can prove a claim about
+# a different graph from the one parsed by ONNX. Reject ambiguities before
+# interpreting numerical semantics.
+MAX_SCREENED_MODEL_BYTES = 8 * 1024 * 1024
+
+
+def _exact_fields(raw, wire_fields, *, level, allowed, context):
+    """Reject unexpected field numbers and wire types within accepted grammar."""
+    for number, wire, value in wire_fields(raw, level):
+        if number not in allowed or wire not in allowed[number]:
+            raise Unsupported(f'{context}: unknown/mistyped semantic field {number}/{wire}')
+        yield number, wire, value
+
+
+def _parse_shape(vi, wire_fields):
+    name = None
+    typ = None
+    for f,w,v in _exact_fields(vi,wire_fields,level=2,
+                             allowed={1:{2},2:{2},3:{2}},context='ValueInfoProto'):
+        if f == 1:
+            if name is not None:raise Unsupported('Duplicate ValueInfoProto name')
             name=bytes(v).decode('utf8','strict')
-        if f==2 and w==2:
-            for tf,tw,tv in wire_fields(v,3):
-                if tf==1 and tw==2:
-                    for ef,ew,ev in wire_fields(tv,4):
-                        if ef==1 and ew==0:dtype=ev
-                        if ef==2 and ew==2:
-                            dims=[]
-                            for df,dw,dv in wire_fields(ev,5):
-                                if df==1 and dw==2:
-                                    n=None
-                                    for xf,xw,xv in wire_fields(dv,6):
-                                        if xf==1 and xw==0:n=xv
-                                    if n is None or n<1 or n>MAX_WIDTH:raise Unsupported('Unknown, symbolic, or oversized model dimension')
-                                    dims.append(int(n))
-                            shape=dims
-    if not name or dtype!=1 or shape is None: raise Unsupported('Require explicitly typed FLOAT32 tensor dimensions')
+        elif f == 2:
+            if typ is not None:raise Unsupported('Repeated TypeProto merges ambiguously')
+            typ=v
+    if not name or typ is None:raise Unsupported('Missing explicitly typed ONNX graph input/output')
+    tensor = None
+    for f,w,v in _exact_fields(typ,wire_fields,level=3,
+                             allowed={1:{2}},context='TypeProto tensor oneof'):
+        if tensor is not None:raise Unsupported('Repeated tensor_type merges ambiguously')
+        tensor=v
+    if tensor is None:raise Unsupported('Only plain tensor_type is accepted')
+    dtype=None;shape=None
+    for f,w,v in _exact_fields(tensor,wire_fields,level=4,
+                             allowed={1:{0},2:{2}},context='TypeProto.Tensor'):
+        if f==1:
+            if dtype is not None:raise Unsupported('Duplicate element_type')
+            dtype=v
+        elif f==2:
+            if shape is not None:raise Unsupported('Repeated TensorShapeProto merges ambiguously')
+            dims=[]
+            for sf,sw,sv in _exact_fields(v,wire_fields,level=5,
+                                         allowed={1:{2}},context='TensorShapeProto'):
+                n=None
+                for df,dw,dv in _exact_fields(sv,wire_fields,level=6,
+                                              allowed={1:{0},3:{2}},context='TensorShapeProto.Dimension'):
+                    if df==1:
+                        if n is not None:raise Unsupported('Duplicate shape dimension')
+                        n=dv
+                if n is None or not 1<=n<=MAX_WIDTH:
+                    raise Unsupported('Unknown, symbolic, or oversized model dimension')
+                dims.append(int(n))
+            shape=dims
+    if dtype!=1 or shape is None:raise Unsupported('Require explicitly typed FLOAT32 tensor dimensions')
     return name,shape
 
+
 def _tensor(raw,wire_fields,read_varint):
-    name=None;dtype=None;dims=[];raw_data=None;packed=[];values=[];external=False
-    for f,w,v in wire_fields(raw,2):
+    name=None;dtype=None;dims=[];raw_data=None;packed=[];values=[]
+    # segment (3), other typed data (5,6,7,10,11), external_data (13)
+    # and data_location (14) are NOT valid for this narrow grammar.
+    for f,w,v in _exact_fields(raw,wire_fields,level=2,
+                            allowed={1:{0,2},2:{0},4:{2,5},8:{2},9:{2},12:{2}},
+                            context='TensorProto'):
         if f==1:
             if w==0:dims.append(int(v))
-            elif w==2:
+            else:
                 pos=0
                 while pos<len(v):
-                    num,pos=read_varint(v,pos);dims.append(int(num))
-        elif f==2 and w==0:dtype=v
-        elif f==8 and w==2:name=bytes(v).decode('utf8','strict')
-        elif f==9 and w==2:raw_data=bytes(v)
+                    num,pos=read_varint(v,pos)
+                    dims.append(int(num))
+        elif f==2:
+            if dtype is not None:raise Unsupported('Duplicate TensorProto data_type')
+            dtype=v
+        elif f==8:
+            if name is not None:raise Unsupported('Duplicate TensorProto name')
+            name=bytes(v).decode('utf8','strict')
+        elif f==9:
+            if raw_data is not None:raise Unsupported('Duplicate singular TensorProto raw_data')
+            raw_data=bytes(v)
         elif f==4 and w==5:values.append(struct.unpack('<f',v)[0])
         elif f==4 and w==2:packed.append(bytes(v))
-        elif f in (13,14):external=True
-        elif f in (7,10,11):raise Unsupported('Ambiguous or unsupported initializer encoding')
-    if not name or external or dtype!=1 or not 1<=len(dims)<=2 or any(n<1 or n>MAX_WIDTH for n in dims):
+    if not name or dtype!=1 or not 1<=len(dims)<=2 or any(n<1 or n>MAX_WIDTH for n in dims):
         raise Unsupported('Only inline one/two-dimensional FLOAT32 initializer tensors are supported')
     count=math.prod(dims)
     if count>MAX_INITIALIZER_VALUES or (raw_data is not None and (packed or values)) or (packed and values):
@@ -93,41 +138,65 @@ def _tensor(raw,wire_fields,read_varint):
     for v in vals:_finite_fraction(v)
     return name, dims, vals
 
+
 def screen_onnx(raw):
     from .engine import wire_fields,read_varint
+    if type(raw) is not bytes or not 1<=len(raw)<=MAX_SCREENED_MODEL_BYTES:
+        raise Unsupported('Require bounded immutable serialized ONNX model bytes')
     graph=None;opsets=[];ir=None
-    for f,w,v in wire_fields(memoryview(raw)):
-        if f==7 and w==2:graph=v
-        elif f==1 and w==0:ir=v
-        elif f==8 and w==2:
-            d='';ver=None
-            for a,b,c in wire_fields(v,2):
-                if a==1 and b==2:d=bytes(c).decode('utf8','strict')
-                if a==2 and b==0:ver=int(c)
+    for f,w,v in _exact_fields(memoryview(raw),wire_fields,level=0,
+                             allowed={1:{0},2:{2},3:{2},4:{2},5:{0},6:{2},7:{2},8:{2},14:{2}},
+                             context='ModelProto'):
+        if f==7:
+            if graph is not None:raise Unsupported('Repeated singular GraphProto: protobuf merge ambiguity')
+            graph=v
+        elif f==1:
+            if ir is not None:raise Unsupported('Duplicate ir_version')
+            ir=v
+        elif f==8:
+            d='';ver=None;seen=set()
+            for a,b,c in _exact_fields(v,wire_fields,level=2,
+                                       allowed={1:{2},2:{0}},context='OperatorSetIdProto'):
+                if a in seen:raise Unsupported('Duplicate opset import field')
+                seen.add(a)
+                if a==1:d=bytes(c).decode('utf8','strict')
+                if a==2:ver=int(c)
             opsets.append((d,ver))
-    if graph is None or not (6<=ir<=10) or len(opsets)!=1 or opsets[0][0] not in ('','ai.onnx') or not (13<=opsets[0][1]<=19):
+    if graph is None or ir is None or not (6<=ir<=10) or len(opsets)!=1 or opsets[0][0] not in ('','ai.onnx') or opsets[0][1] is None or not (13<=opsets[0][1]<=19):
         raise Unsupported('Requires a single standard ONNX opset 13–19 and supported IR version')
     weights={};nodes=[];inputs=[];outputs=[]
-    for f,w,v in wire_fields(graph,1):
-        if w!=2:continue
+    for f,w,v in _exact_fields(graph,wire_fields,level=1,
+                             allowed={1:{2},2:{2},5:{2},10:{2},11:{2},12:{2},13:{2},16:{2}},
+                             context='GraphProto'):
         if f==11:inputs.append(_parse_shape(v,wire_fields))
         elif f==12:outputs.append(_parse_shape(v,wire_fields))
+        elif f==13:
+            # Extra ValueInfo is only annotation in ONNX but can be false or
+            # ambiguous. Refuse it until the parser checks consistency.
+            raise Unsupported('Intermediate value_info is outside the reviewed grammar')
         elif f==5:
             name,shape,values=_tensor(v,wire_fields,read_varint)
             if name in weights:raise Unsupported('Duplicate initializer names')
             weights[name]={'shape':shape,'values':values}
-        elif f==15:raise Unsupported('Sparse initializer not supported')
         elif f==1:
-            inp=[];out=[];op='';domain='';attrs=0
-            for a,b,c in wire_fields(v,2):
-                if a==1 and b==2:inp.append(bytes(c).decode('utf8','strict'))
-                if a==2 and b==2:out.append(bytes(c).decode('utf8','strict'))
-                if a==4 and b==2:op=bytes(c).decode('utf8','strict')
-                if a==7 and b==2:domain=bytes(c).decode('utf8','strict')
-                if a==5:attrs+=1
-            if attrs or domain not in ('','ai.onnx') or op not in ('MatMul','Gemm','Add','Relu','Identity'):
-                raise Unsupported('Unsupported operator, domain, or graph attribute')
-            if not out or len(out)!=1 or not out[0] or any(not x for x in inp):raise Unsupported('Ambiguous node input or output')
+            inp=[];out=[];op=None;domain=None;seen=set()
+            for a,b,c in _exact_fields(v,wire_fields,level=2,
+                                  allowed={1:{2},2:{2},3:{2},4:{2},5:{2},6:{2},7:{2},8:{2}},
+                                  context='NodeProto'):
+                if a==1:inp.append(bytes(c).decode('utf8','strict'))
+                elif a==2:out.append(bytes(c).decode('utf8','strict'))
+                elif a in (4,7):
+                    if a in seen:raise Unsupported('Repeated semantic node field')
+                    seen.add(a)
+                    if a==4:op=bytes(c).decode('utf8','strict')
+                    else:domain=bytes(c).decode('utf8','strict')
+                elif a==5:raise Unsupported('Node attributes are outside the screened grammar')
+                elif a==8:raise Unsupported('Node overloads are outside the screened grammar')
+            if (domain not in (None,'','ai.onnx') or
+                    op not in ('MatMul','Gemm','Add','Relu','Identity')):
+                raise Unsupported('Unsupported operator or operator domain')
+            if len(out)!=1 or not out[0] or any(not x for x in inp):
+                raise Unsupported('Ambiguous node input or output')
             nodes.append({'op':op,'inputs':inp,'out':out[0]})
     if len(inputs)!=1 or len(outputs)!=1 or len(nodes)>MAX_NODES or not nodes or sum(len(w['values']) for w in weights.values())>MAX_INITIALIZER_VALUES:
         raise Unsupported('Only one-input/one-output models with <=64 nodes and <=1024 weight values')

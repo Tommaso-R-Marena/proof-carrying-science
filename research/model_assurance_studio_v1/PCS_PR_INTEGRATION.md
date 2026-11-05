@@ -71,3 +71,14 @@ PYTHONPATH=. python -S -m unittest tests.test_direct_fp32_v10 -q
 ```
 
 The shared exact rational parser also rejects catastrophic decimal exponents *before* calling Fraction (e.g. `1e100000000`), instead of attempting enormous allocations before its bit-budget check. The local browser has a **Run dual-certified FP32 gate** demonstration using only bundled screened model bytes. This research-only result does not alter formal or production PCS authority, and is not yet Lean/ONNX Runtime verified. The two checking routes share Python and ONNX parser TCB rather than being independently implemented runtimes. Keep the PR in draft.
+
+
+## v0.11 addendum — bind proofs to a strict, unambiguous ONNX wire grammar
+
+The previous hand-written ONNX parser accepted malformed protobuf variants with duplicate singular `graph` messages or conflicting TypeProto `oneof` branches. The v0.11 parser now rejects those and other unsupported semantic constructs **before** any proof can be accepted; a recomputed model hash or certificate hash does not bypass this gate. The accompanying standard-library-only regression suite recreates and rejects the malicious encodings.
+
+An optional **fixed C binary32 CPU evaluator** provides a distinct numerical execution implementation for the screened graph subset. The 150-point public Iris campaign yielded exact numeric-value agreement against the Python rational sequential binary32 interpreter; see `validation/v11_native_cpu_observation.json`. This is finite, non-held-out evidence, not official ONNX Runtime, compiler verification, or Lean assurance. The development FastAPI server also now rejects ambiguous Host/Origin and policy headers. See [v0.11 details](docs/STRICT_ONNX_AND_NATIVE_REFERENCE_V11.md).
+
+`python -S -m unittest tests.test_strict_onnx_v11 tests.test_native_fp32_v11 -v`
+
+The reviewed C is optional and must be compiled/executed only in a host-controlled local research environment. All code remains in the incubator; `pcs/` and `formal/` are unchanged, and PR #196 remains draft.

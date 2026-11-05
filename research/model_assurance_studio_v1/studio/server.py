@@ -18,6 +18,11 @@ app = FastAPI(title='PCS Model Assurance Studio', version=VERSION, docs_url=None
 async def local_origin_only(request: Request, call_next):
     # Reject DNS-rebinding Host names. TestClient uses 'testserver'. The launchers
     # bind the service to 127.0.0.1:8765, never to a public interface.
+    # Duplicate security-sensitive headers can be interpreted differently by
+    # downstream proxies/frameworks. Refuse ambiguous requests.
+    raw_names=[bytes(k).lower() for k,v in request.scope.get('headers',[])]
+    if raw_names.count(b'host')!=1 or raw_names.count(b'origin')>1:
+        return JSONResponse({'detail':'Ambiguous Host/Origin headers'},status_code=403)
     allowed = ('127.0.0.1:8765','localhost:8765','127.0.0.1','localhost','testserver')
     if request.headers.get('host','').lower() not in allowed:
         return JSONResponse({'detail':'Only local Host headers allowed'},status_code=403)
@@ -42,7 +47,7 @@ async def js():
 async def status():
     try: import onnx; onnx_version = onnx.__version__
     except ImportError: onnx_version = None
-    return {'ok':True,'version':VERSION,'extension_version':'0.10.0','onnx_checker_version':onnx_version,
+    return {'ok':True,'version':VERSION,'extension_version':'0.11.0','onnx_checker_version':onnx_version,
             'max_file_bytes':MAX_FILE,'storage':'RAM; no upload persistence','model_execution':'screened NumPy reference; optional PyTorch CPU crosscheck; optional SciPy MILP challenger; conditional real partition checks (NOT ONNX Runtime)' 
             ,'numpy_reference_worker_available':__import__('importlib').util.find_spec('numpy') is not None,
             'pytorch_reference_worker_available':__import__('importlib').util.find_spec('torch') is not None,
@@ -66,10 +71,15 @@ async def iris_demo_profile():
 @app.post('/api/analyze')
 async def submit(request: Request):
     try:
+        from .verify_relational import strict_pairs
         filename=unquote(request.headers.get('x-pcs-filename', 'unnamed'))
         if len(filename)>300:raise IntakeError('Filename too long')
-        p = parse_policy(json.loads(unquote(request.headers.get('x-pcs-policy', '{}'))))
-    except (json.JSONDecodeError, IntakeError) as exc:
+        encoded=request.headers.get('x-pcs-policy','{}')
+        if len(encoded)>8192:raise IntakeError('Policy header exceeds 8192 bytes')
+        policy=json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+            parse_constant=lambda _:(_ for _ in ()).throw(ValueError('Invalid JSON constant')))
+        p = parse_policy(policy)
+    except (json.JSONDecodeError, IntakeError, ValueError, TypeError) as exc:
         raise HTTPException(400, f'Invalid metadata/policy: {exc}')
     content=bytearray()
     async for part in request.stream():
