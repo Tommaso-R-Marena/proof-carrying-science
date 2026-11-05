@@ -47,7 +47,7 @@ async def js():
 async def status():
     try: import onnx; onnx_version = onnx.__version__
     except ImportError: onnx_version = None
-    return {'ok':True,'version':VERSION,'extension_version':'0.12.0','onnx_checker_version':onnx_version,
+    return {'ok':True,'version':VERSION,'extension_version':'0.13.0','onnx_checker_version':onnx_version,
             'max_file_bytes':MAX_FILE,'storage':'RAM; no upload persistence','model_execution':'screened NumPy reference; optional PyTorch CPU crosscheck; optional SciPy MILP challenger; conditional real partition checks (NOT ONNX Runtime)' 
             ,'numpy_reference_worker_available':__import__('importlib').util.find_spec('numpy') is not None,
             'pytorch_reference_worker_available':__import__('importlib').util.find_spec('torch') is not None,
@@ -58,6 +58,7 @@ async def status():
             'direct_fp32_partition_verifier_available':True,
             'independent_protobuf_decoder_available':(__import__('importlib').util.find_spec('google') is not None and __import__('importlib').util.find_spec('google.protobuf') is not None),
             'protobuf_dual_gate_available':True,
+            'correlated_binary32_affine_proof_available':True,
             'dual_proof_gated_envelope_available':True,
             'fp32_model_update_error_lifting_available':True,
             'onnxruntime_cpu_available':__import__('importlib').util.find_spec('onnxruntime') is not None,
@@ -255,6 +256,88 @@ async def operating_envelope_demo():
         'measured_data_coverage':{'admitted':27,'tested':150,
             'note':'Same Iris dataset used to choose demonstration regions; NOT a holdout generalization estimate'},
         'limitations':'Reference execution uses screened deterministic software operations; no Lean or official ONNX Runtime equivalence. This demo fingerprint is checked into source and is NOT an independently administered trust anchor.'},
+        headers={'Cache-Control':'no-store'})
+
+
+@app.post('/api/affine-fp32')
+async def affine_fp32_selected(request: Request):
+    """Propose, then locally recheck, a correlated binary32 model claim.
+
+    An uploaded policy is never an independently administered trust root.
+    The proposed certificate MUST be replayed separately with a reviewer-owned
+    policy hash; no kernel/runtime/deployment verdict is returned.
+    """
+    from .affine_fp32_v13 import POLICY_SCHEMA, propose
+    from .dense_nn import screen_onnx
+    from .verify_relational import strict_pairs
+    from hashlib import sha256
+    try:
+        encoded=request.headers.get('x-pcs-affine-claim','')
+        if len(encoded)>8192:raise ValueError('affine claim header budget exceeded')
+        claim=json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+            parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite JSON')))
+        if type(claim) is not dict or set(claim)!={'input_box','input_min','input_max','output_coefficients','upper_limit'}:
+            raise ValueError('affine claim schema')
+        data=bytearray()
+        async for chunk in request.stream():
+            if len(data)+len(chunk)>8*1024*1024:
+                raise ValueError('screened model size limit exceeded')
+            data.extend(chunk)
+        raw=bytes(data)
+        spec=screen_onnx(raw)
+        box=claim['input_box'] or [[claim['input_min'],claim['input_max']]]*spec['input_width']
+        proposed_policy={'schema':POLICY_SCHEMA,'model_sha256':sha256(raw).hexdigest(),
+                         'input_box':box,'output_coefficients':claim['output_coefficients'],
+                         'upper_limit':claim['upper_limit']}
+        candidate=propose(raw,proposed_policy)
+        return JSONResponse({'schema':'pcs-affine-fp32-upload-v0.13',
+            'candidate':candidate,'suggested_reviewer_policy':proposed_policy,
+            'independent_reviewer_acceptance':'NOT_ESTABLISHED',
+            'lean_kernel_verification':'NOT_ESTABLISHED',
+            'official_runtime_equivalence':'NOT_ESTABLISHED',
+            'note':'Candidate is not reviewer authorization. Pin exact model and policy bytes independently and replay the complete certificate.'},headers={'Cache-Control':'no-store'})
+    except (ValueError,TypeError,KeyError,MemoryError,OverflowError) as exc:
+        raise HTTPException(400,'Unsupported correlated binary32 claim: '+type(exc).__name__)
+    except Exception as exc:
+        raise HTTPException(400,'Unsupported correlated binary32 model: '+type(exc).__name__)
+
+
+@app.get('/api/affine-demo')
+async def affine_fp32_demo():
+    """Fixed, public, replayable synthetic plus trained-model research demo."""
+    from .affine_envelope_v13 import AffineEnvelopeGate
+    from .affine_fp32_v13 import POLICY_SCHEMA,verify as check
+    from .fp32_assurance import intervals,relation_upper
+    from .relational_kernel import canonical
+    from .dense_nn import screen_onnx
+    from fractions import Fraction
+    from hashlib import sha256
+    fixture=ROOT.parent
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    correlated=(fixture/'samples/demo_correlated_fp32_margin_v13.onnx').read_bytes()
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    real=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    affine=json.loads((fixture/'validation/v13_affine_iris_candidate.json').read_text())
+    trusted=sha256(canonical(policy)).hexdigest() # demo fingerprint is NOT independent custody
+    gate=AffineEnvelopeGate(old,new,real,affine,policy,trusted)
+    input_words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    correlated_policy={'schema':POLICY_SCHEMA,'model_sha256':sha256(correlated).hexdigest(),
+        'input_box':[['-1000','1000']]*2,'output_coefficients':['1','-1'],'upper_limit':'-1/2'}
+    correlation=check(correlated,correlated_policy,
+        json.loads((fixture/'validation/v13_correlated_margin_candidate.json').read_text()),
+        sha256(canonical(correlated_policy)).hexdigest())
+    old_upper=relation_upper(intervals(screen_onnx(correlated),[(Fraction(-1000),Fraction(1000))]*2),
+                             [Fraction(1),Fraction(-1)])
+    return JSONResponse({'schema':'pcs-correlated-binary32-demo-v0.13',
+        'review':gate.review(),
+        'comparison':{'old_interval_upper':str(old_upper),'affine':correlation,
+                      'required_upper_limit':'-1/2'},
+        'examples':[{'sample_index':key,'decision':gate.admit(words),
+                     'reference_execution':gate.reference_infer(words)}
+                   for key,words in sorted(input_words.items(),key=lambda z:int(z[0]))],
+        'outside_region':gate.reference_infer(['00000000']*4),
+        'limitations':'All results are restricted research checks. Correlated bounds use a shared Python model semantics TCB; no Lean kernel, official ONNX Runtime, security sandbox, independently held trust roots, or held-out population validation.'},
         headers={'Cache-Control':'no-store'})
 
 

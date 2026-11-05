@@ -91,3 +91,20 @@ regression tests. The earlier custom parser's GraphProto field 16 (ignored
 `sparse_initializer`) is now rejected. No changes are requested to production
 PCS authority; do not merge until the security/model-semantics boundary is
 independently reviewed. See `docs/DUAL_PROTOBUF_SEMANTICS_V12.md`.
+
+
+## v0.13 addendum — correlation-aware conditional FP32 certificate
+
+The optional new `studio/affine_fp32_v13.py` reconstructs affine forms with
+shared input symbols and conservative independent RN-even error symbols to
+prove binary32 output relations that lose output correlation under ordinary
+interval arithmetic. The completely optional `AffineEnvelopeGate` crosschecks
+both model files with the independent protobuf decoder, rechecks all earlier
+v0.9 per-class baseline/update/error-lift evidence, and independently
+recomputes an affine certificate per reviewer-required class and region. An
+incomplete claim never enables reference inference. The old v0.10 partition
+and v0.12 dual-decoder gates are unchanged. This is a Python research proof
+route, **not Lean-verified** and **not official ONNX Runtime equivalence**.
+See `docs/CORRELATED_BINARY32_ASSURANCE_V13.md` for the mathematical scope,
+exact reproductions and adversarial controls. Keep this PR draft until
+independent security/reproducibility, official runtime and Lean checks finish.

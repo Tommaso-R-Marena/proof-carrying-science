@@ -457,6 +457,42 @@ el('dual-decoder-demo').onclick=async()=>{
   setNotice(accepted?'Independent protobuf decoder and both proof routes checked.':'Independent verification unavailable; gate abstained.');
  }catch(err){setNotice('Independent decoder demo unavailable: '+String(err))}
 };
+el('affine-demo').onclick=async()=>{
+ const host=el('envelope-results');host.replaceChildren();
+ try{
+  const resp=await fetch('/api/affine-demo');if(!resp.ok)throw Error('Correlated float32 demo unavailable');
+  const d=await resp.json(),panel=make('section','evidencebox');
+  const ok=d.review.status==='PROVED_CONDITIONALLY';
+  panel.append(make('h3','',ok?'Correlation-preserving binary32 proof: CONDITIONALLY VERIFIED':'Correlation-aware gate: OPEN / ABSTAIN'));
+  panel.append(make('p','',`Shared-input example: ordinary float32 intervals give upper ${d.comparison.old_interval_upper}, while the affine proof rechecks an upper bound ${readableFraction(d.comparison.affine.proven_upper_bound)||'unavailable'} against the required ${d.comparison.required_upper_limit}.`));
+  panel.append(make('p','',`Trained Iris update: ${d.review.affine_class_comparisons||0} independently replayed affine class comparisons across ${d.review.verified_regions||0} preselected input regions; outcome ${d.review.status}.`));
+  for(const item of d.examples||[]){panel.append(make('p','',`Iris #${item.sample_index}: ${item.decision.status}; screened reference execution ${item.reference_execution.status}.`))}
+  panel.append(make('p','',`Outside reviewer-defined region: ${d.outside_region.status}.`));
+  panel.append(make('p','hint',d.limitations));
+  const save=make('button','btn secondary','Download correlated binary32 replay');save.onclick=()=>download('pcs-correlated-fp32-v013.json',d);panel.append(save);
+  host.append(panel);setNotice(ok?'Correlated fp32 and trained-model proof gates replayed.':'Incomplete evidence: no model admission.');
+ }catch(e){setNotice('Correlation demo unavailable: '+String(e))}
+};
+el('affine-selected').onclick=async()=>{
+ const host=el('fp32-results');host.replaceChildren();
+ const file=state.files.find(f=>f.name.toLowerCase().endsWith('.onnx'));
+ if(!file){setNotice('Drop an ONNX model first, then choose Check selected model correlation.');return}
+ try{
+  const claim={input_box:JSON.parse(el('per-feature-box').value.trim()||'[]'),
+   input_min:el('inmin').value.trim(),input_max:el('inmax').value.trim(),
+   output_coefficients:el('relation-coeffs').value.split(',').map(x=>x.trim()).filter(Boolean),
+   upper_limit:el('relation-limit').value.trim()};
+  const resp=await fetch('/api/affine-fp32',{method:'POST',body:file,headers:{'Content-Type':'application/octet-stream',
+   'X-PCS-Affine-Claim':encodeURIComponent(JSON.stringify(claim))}});
+  const d=await resp.json();if(!resp.ok)throw Error(d.detail||('HTTP '+resp.status));
+  const r=d.candidate,panel=make('section','evidencebox');
+  panel.append(make('h3','',r.status==='CANDIDATE_REPLAYED'?'Correlation-aware binary32 relation: CONDITIONAL PROOF CANDIDATE':'Correlation-aware bound: OPEN'));
+  panel.append(make('p','',`Recomputed result: ${r.review?.status||'OPEN'}. Bound: ${readableFraction(r.review?.proven_upper_bound)||'not established'}. The browser-proposed policy is NOT reviewer authority.`));
+  panel.append(make('p','hint',d.note));
+  const save=make('button','btn secondary','Download model claim and certificate');save.onclick=()=>download('pcs-affine-upload-v013.json',d);panel.append(save);
+  host.append(panel);setNotice('Correlated floating-point analysis completed. External reviewer approval remains outstanding.');
+ }catch(e){setNotice('Correlation-aware model analysis: '+String(e))}
+};
 el('guarded-live').onclick=async()=>{
  const host=el('guarded-results');host.replaceChildren();
  try{
