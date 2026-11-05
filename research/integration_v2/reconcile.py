@@ -18,8 +18,8 @@ import subprocess
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFEST = "docs/integration/2026-10-29/RECONCILIATION_V20.json"
-MANIFEST_SHA256 = '30d74b87c9bedb598af2cd6ab0c5d9014a99fe50cd6382bc6baf76663c380833'
+MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V22.json"
+MANIFEST_SHA256 = '28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83'
 API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
 # Exact reviewed source references for reconciling the held research branch.
 # This adds a source rollback check; it does not release PR117 or grant authority.
@@ -128,11 +128,12 @@ def _historical_identities(root, prs):
 
 def _verify(root, manifest):
     """Internal checker; the CLI accepts only the compiled-in manifest digest."""
-    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20"}:
+    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"}:
         raise ValueError("unsupported reconciliation")
     prs = manifest["prs"]
     numbers = [p["number"] for p in prs]
-    if len(numbers) != len(set(numbers)) or len(prs) != 70:
+    expected_count = 72 if manifest["format"] in {"pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"} else 70
+    if len(numbers) != len(set(numbers)) or len(prs) != expected_count:
         raise ValueError("incomplete or duplicate PR census")
     if [p["number"] for p in prs if p["disposition"] == "HELD"] != [117]:
         raise ValueError("explicit PR117 hold must remain")
@@ -164,7 +165,7 @@ def _verify(root, manifest):
             if not equal and pr["disposition"] not in {"REVIEWED_ADAPTATION", "HELD"}:
                 raise ValueError("unreviewed adaptation")
             counts[item["relation"]] += 1
-    return {"format": "pcs-source-reconciliation-check-v20", "source_review_complete": True,
+    return {"format": "pcs-source-reconciliation-check-v22", "source_review_complete": True,
             "prs_checked": len(prs), "source_bindings_checked": sum(counts.values()),
             "relations": dict(counts), "dispositions": dict(Counter(p["disposition"] for p in prs)),
             "held_prs": [117], "release_ready": False, "pcs_authority": False,
@@ -195,7 +196,7 @@ def _snapshot(root, manifest):
         _identity(root, name)
 
 
-def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_context=False, combined_source=False, transport_dependencies=False):
+def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_context=False, combined_source=False, transport_dependencies=False, update_lean_action=False):
     """Only fixed dependency, source-contract and bootstrap transformations may vary."""
     from .boundary import PROFILES
     text = raw.decode("utf-8")
@@ -205,6 +206,9 @@ def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_
     if update_codeql:
         text = text.replace("6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee",
                         "9b3254085494b55a0f7c4c2b3d2d52cc712ce370")
+    if update_lean_action:
+        text = text.replace("leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6",
+                            "leanprover/lean-action@fe408643ea7367d8c0404a8be3975bb145f5fb64")
     def boundary(match):
         if match[1] not in PROFILES:
             raise ValueError("unknown predecessor preservation profile")
@@ -239,7 +243,8 @@ def _workflows(root, manifest):
             raise ValueError("preserved predecessor workflow differs")
         contextual = name in {".github/workflows/pcs-" + profile + "-v1.yml" for profile in
                               ("local-weights", "causal-firewall", "relational-release", "compositional-disclosure")}
-        allowed = {workflow_successor(old, update_python=p, update_codeql=c, pytest_context=t, combined_source=extra, transport_dependencies=deps)
+        allowed = {workflow_successor(old, update_python=p, update_codeql=c, pytest_context=t, combined_source=extra, transport_dependencies=deps, update_lean_action=lean_update)
+                   for lean_update in (False, True)
                    for p in (False, True) for c in (False, True)
                    for t in ((False, True) if contextual else (False,))
                    for extra in ((False, True) if name == ".github/workflows/pcs-public-full-verification.yml" else (False,))
@@ -306,8 +311,8 @@ def check(*, require_committed=False, live=False):
     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
         raise ValueError("reconciliation manifest differs from fixed reviewed digest")
     manifest = _json(raw)
-    if manifest["format"] != "pcs-source-reconciliation-v20":
-        raise ValueError("current combined admission requires explicit V20 format")
+    if manifest["format"] != "pcs-source-reconciliation-v22":
+        raise ValueError("current combined admission requires explicit V22 format")
     result = _verify(ROOT, manifest)
     _snapshot(ROOT, manifest)
     _workflows(ROOT, manifest)
@@ -326,12 +331,12 @@ def check(*, require_committed=False, live=False):
             actual = _json(response.read(8 * 1024 * 1024 + 1))
             if response.headers.get("Link") and 'rel="next"' in response.headers["Link"]:
                 raise ValueError("PR pagination exceeds frozen census")
-        if {p["number"]: p["head"]["sha"] for p in actual} != {p["number"]: p["head"] for p in manifest["prs"]}:
+        if {p["number"]: p["head"]["sha"] for p in actual} != {p["number"]: p["head"] for p in manifest["prs"] if p["number"] in {196, 197}}:
             raise ValueError("live PR census changed; a new explicit review is required")
     return dict(result, committed_source_required=require_committed, live_heads_checked=live,
                 manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
                 pr117_integration=pr117,
-                relations_scope="FROZEN_V20_REVIEW_BEFORE_EXPLICIT_TEST_SUCCESSOR",
+                relations_scope="V22_LINEAR_INTEGRATION_WITH_IMMUTABLE_V21_AND_V20_PREDECESSORS",
                 reviewed_test_successor=dict(path=RECEIVER_CLEANUP_TEST,
                     old_sha256=RECEIVER_CLEANUP_OLD, new_sha256=RECEIVER_CLEANUP_NEW,
                     mode="100644", authority_code_changed=False,

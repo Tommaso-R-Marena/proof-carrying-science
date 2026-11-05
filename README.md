@@ -118,14 +118,14 @@ Sealed snapshots, hashes and same-host child processes are not an immutable root
 
 ## Integration and readiness
 
-The [current integration status](docs/integration/2026-10-29/README.md) separates
+The [current integration status](docs/integration/2026-11-05/RECONCILIATION.md) separates
 local qualification, hosted CI and protected merge evidence. Historical reports
 and source-bound READMEs retain their original bytes and dates. The
-[README audit](docs/integration/2026-10-29/README_AUDIT.json) identifies current
+[README audit](docs/integration/2026-11-05/README_AUDIT.json) identifies current
 entry points and preserved versioned/source evidence. The earlier founding README
 is retained [verbatim](docs/integration/2026-10-29/predecessor/v12/ROOT_README.md).
 
-PR #117 remains under its explicit no-merge hold. Unavailable final Aristotle V8
+The historical PR #117 hold remains recorded separately from the protected theorem successors. Unavailable final Aristotle V8
 outputs are not assumed present. No untrusted proof-generation trace is used as
 model-training data. Experimental self-modification is not deployed to production.
 
@@ -146,3 +146,8 @@ authorization does not establish independent clearance of the complete history.
 Aristotle-assisted formal artifacts retain their source provenance. See
 [Aristotle](https://aristotle.harmonic.fun); applicable commits retain the
 `Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>` co-author attribution.
+
+
+### Experimental model assurance studio
+
+The [local research studio](research/model_assurance_studio_v1/README.md) inspects bounded scientific/model files, checks exact-rational and specified binary32 certificates, and supports reviewer-pinned input admission. It is separate from PCS production authority. [Current integration evidence and limitations](research/model_assurance_studio_v1/docs/RECONCILIATION_V14.md) distinguish compiled abstract Lean implications, Python checker assumptions, finite official-runtime observations and scientific assumptions. A conditional certificate is not a general model-safety or deployment approval.

@@ -1,0 +1,73 @@
+{
+  "schema": "pcs-host-guard-demo-receipt-v0.4",
+  "policy_sha256": "7ed413e1c2a1bf6c5e8744aa4ac08aa47938ef6b3c02721eac733db9bde9e4cc",
+  "audit_records": [
+    {
+      "record": {
+        "sequence": 1,
+        "previous_mac": "0000000000000000000000000000000000000000000000000000000000000000",
+        "policy_sha256": "7ed413e1c2a1bf6c5e8744aa4ac08aa47938ef6b3c02721eac733db9bde9e4cc",
+        "action_id": "a1",
+        "proposal_sha256": "85606f5361c71db5c6bed9b3f224fb3bb0fbdef8e13c8f04827243c6b2fe0f1f",
+        "decision": "AUTHORIZED",
+        "reason": "Matches independently supplied exact publication policy"
+      },
+      "mac": "2e03c257ed5e2a2213811bc6c29911095f961932f65e5f94b1251e9d2832733f"
+    },
+    {
+      "record": {
+        "sequence": 2,
+        "previous_mac": "2e03c257ed5e2a2213811bc6c29911095f961932f65e5f94b1251e9d2832733f",
+        "policy_sha256": "7ed413e1c2a1bf6c5e8744aa4ac08aa47938ef6b3c02721eac733db9bde9e4cc",
+        "action_id": "a1",
+        "proposal_sha256": "85606f5361c71db5c6bed9b3f224fb3bb0fbdef8e13c8f04827243c6b2fe0f1f",
+        "decision": "EXECUTED",
+        "result_sha256": "c8ab8dfe8ff0ecc14a36b05fdbbb55f28743816bf4d97345c7b7d61db213ae10"
+      },
+      "mac": "21f6177c23d74175d84b51a95d14686ac48715b9e9445b5e9434e58f7d7f2afe"
+    },
+    {
+      "record": {
+        "sequence": 3,
+        "previous_mac": "21f6177c23d74175d84b51a95d14686ac48715b9e9445b5e9434e58f7d7f2afe",
+        "policy_sha256": "7ed413e1c2a1bf6c5e8744aa4ac08aa47938ef6b3c02721eac733db9bde9e4cc",
+        "action_id": "a2",
+        "proposal_sha256": "43ce539582de692c42565294b7acc7704b42f79bb75bafb0e77b53419d54b9b8",
+        "decision": "DENY",
+        "reason": "Unknown or prohibited tool (fail closed)"
+      },
+      "mac": "6b7e17e49efa6049f0356822cac61c0b01eced52de868290b780981922509868"
+    },
+    {
+      "record": {
+        "sequence": 4,
+        "previous_mac": "6b7e17e49efa6049f0356822cac61c0b01eced52de868290b780981922509868",
+        "policy_sha256": "7ed413e1c2a1bf6c5e8744aa4ac08aa47938ef6b3c02721eac733db9bde9e4cc",
+        "action_id": "a3",
+        "proposal_sha256": "79c33bd27beb251c0a958050201e89cf4b05ae17e3ec1f50b47d5c5866d4e884",
+        "decision": "DENY",
+        "reason": "Destination or exact approved body differs"
+      },
+      "mac": "924b8c27982a3d58edbddebb6fdcb6536516595651c23b5008a1c56d24f617cb"
+    }
+  ],
+  "audit_chain_verified_inside_host": true,
+  "actions_authorized": 1,
+  "publications": [
+    {
+      "channel": "public-research",
+      "body": "The simulated study contains 12 approved, non-sensitive results."
+    }
+  ],
+  "limitations": [
+    "All effects are on a local in-memory synthetic backend; no network or real agent tools",
+    "HMAC key is retained by this temporary host instance, not exported to the client",
+    "The host can fabricate, suppress or omit records; root-of-trust, completeness and external authentication not established",
+    "Guard must be the exclusive dispatcher in any real integration; not a general prompt-injection defense"
+  ],
+  "requests": 3,
+  "denied": 2,
+  "executions": 1,
+  "reported_executions_ignored": "Uploaded executed entries were NOT trusted or executed; only proposals entered the guarded demo dispatcher.",
+  "policy_scope": "Host-owned exact synthetic publication and public-dataset reads"
+}

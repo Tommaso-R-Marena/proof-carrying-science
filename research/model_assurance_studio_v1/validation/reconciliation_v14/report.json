@@ -1,0 +1,224 @@
+{
+  "format": "pcs-studio-reconciliation-v14",
+  "proofs": [
+    {
+      "historical_file": "validation/v07_iris_baseline_uncompiled.lean",
+      "historical_sha256": "5e291d0e4a6a428116cf27c746b32b98111afeaef7a09287f6909a22ea15939d",
+      "successor_sha256": "3a3931963fe2aaccd22a14337dcafd0d568b00b6b68fe9215f047c70b234a161",
+      "transformation": "Move the single Mathlib import before module documentation; mathematical statements and proof bodies unchanged.",
+      "verdict": {
+        "schema": "pcs-lean-kernel-check-v0.14",
+        "source_file": "/tmp/pcs-studio-qualified-v14-02/v07_iris_baseline_import_first.lean",
+        "status": "KERNEL_CHECKED",
+        "kernel_checked": true,
+        "pcs_authority": false,
+        "onnx_semantics_verified": false,
+        "runtime_conformance_established": false,
+        "scope": "Abstract polytope hypotheses entail the named inequality. CSV/ONNX binding, inference and scientific truth are not proved.",
+        "source_sha256": "3a3931963fe2aaccd22a14337dcafd0d568b00b6b68fe9215f047c70b234a161",
+        "exit_code": 0,
+        "compiler_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+        "lake_sha256": "a608ff084d7e2af228b92a29d7c2fd083ba0580e46889175ec74a81678c98359",
+        "mathlib_revision": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+        "version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+        "axiom_audits": {
+          "certified_relation": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "bounded_update_composition": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        "host_and_compiled_libraries_trusted": true
+      }
+    },
+    {
+      "historical_file": "validation/v07_iris_drift_uncompiled.lean",
+      "historical_sha256": "416818f9419e0831ac65cf13d4ec0462c71589d195c2cadc3db42a1d715ae95d",
+      "successor_sha256": "db161d7984eefd2f288b4621a04d6150df89e20a7854edb0c117f460c8741e3a",
+      "transformation": "Move the single Mathlib import before module documentation; mathematical statements and proof bodies unchanged.",
+      "verdict": {
+        "schema": "pcs-lean-kernel-check-v0.14",
+        "source_file": "/tmp/pcs-studio-qualified-v14-02/v07_iris_drift_import_first.lean",
+        "status": "KERNEL_CHECKED",
+        "kernel_checked": true,
+        "pcs_authority": false,
+        "onnx_semantics_verified": false,
+        "runtime_conformance_established": false,
+        "scope": "Abstract polytope hypotheses entail the named inequality. CSV/ONNX binding, inference and scientific truth are not proved.",
+        "source_sha256": "db161d7984eefd2f288b4621a04d6150df89e20a7854edb0c117f460c8741e3a",
+        "exit_code": 0,
+        "compiler_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+        "lake_sha256": "a608ff084d7e2af228b92a29d7c2fd083ba0580e46889175ec74a81678c98359",
+        "mathlib_revision": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+        "version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+        "axiom_audits": {
+          "certified_update_drift": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "bounded_update_composition": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        "host_and_compiled_libraries_trusted": true
+      }
+    }
+  ],
+  "official_runtime_observations": [
+    {
+      "model": "demo_dense_neural_violation.onnx",
+      "result": {
+        "schema": "pcs-official-onnxruntime-cpu-crosscheck-v0.7",
+        "model_sha256": "05b6f4337a2a9fa4ab0310de35b0b7f329e193973fb4091edc1d9b6e6fd0bd65",
+        "scope": "finite observed CPU vectors only; sequential software reference; NOT universal equivalence",
+        "status": "OBSERVED_MATCH",
+        "official_runtime_version": "1.31.1",
+        "execution_provider": "CPUExecutionProvider",
+        "tested_vectors": 64,
+        "tested_scalar_outputs": 128,
+        "nonidentical_scalar_outputs": 0,
+        "max_ulp_difference": 0,
+        "worst_case": null,
+        "universal_equivalence_established": false
+      }
+    },
+    {
+      "model": "demo_trained_iris_mlp.onnx",
+      "result": {
+        "schema": "pcs-official-onnxruntime-cpu-crosscheck-v0.7",
+        "model_sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+        "scope": "finite observed CPU vectors only; sequential software reference; NOT universal equivalence",
+        "status": "OBSERVED_DIFFERENCES",
+        "official_runtime_version": "1.31.1",
+        "execution_provider": "CPUExecutionProvider",
+        "tested_vectors": 64,
+        "tested_scalar_outputs": 192,
+        "nonidentical_scalar_outputs": 83,
+        "max_ulp_difference": 44,
+        "worst_case": {
+          "case": 53,
+          "output": 1,
+          "reference": "91621/1048576",
+          "onnxruntime": "0x1.65e5580000000p-4",
+          "reference_bits": "3db2f280",
+          "onnxruntime_bits": "3db2f2ac",
+          "ulp_difference": 44
+        },
+        "universal_equivalence_established": false
+      }
+    },
+    {
+      "model": "demo_trained_iris_updated.onnx",
+      "result": {
+        "schema": "pcs-official-onnxruntime-cpu-crosscheck-v0.7",
+        "model_sha256": "bebf58135a1abef2f6e24032c2de0650b5eb1be5c1870d07bf1e98320c6c69e8",
+        "scope": "finite observed CPU vectors only; sequential software reference; NOT universal equivalence",
+        "status": "OBSERVED_DIFFERENCES",
+        "official_runtime_version": "1.31.1",
+        "execution_provider": "CPUExecutionProvider",
+        "tested_vectors": 64,
+        "tested_scalar_outputs": 192,
+        "nonidentical_scalar_outputs": 84,
+        "max_ulp_difference": 44,
+        "worst_case": {
+          "case": 53,
+          "output": 1,
+          "reference": "91621/1048576",
+          "onnxruntime": "0x1.65e5580000000p-4",
+          "reference_bits": "3db2f280",
+          "onnxruntime_bits": "3db2f2ac",
+          "ulp_difference": 44
+        },
+        "universal_equivalence_established": false
+      }
+    },
+    {
+      "model": "demo_correlated_fp32_margin_v13.onnx",
+      "result": {
+        "schema": "pcs-official-onnxruntime-cpu-crosscheck-v0.7",
+        "model_sha256": "33d146bd9db1c25552cb0941f4b30dd184d3918249326c13f1b38353753a2e5f",
+        "scope": "finite observed CPU vectors only; sequential software reference; NOT universal equivalence",
+        "status": "OBSERVED_MATCH",
+        "official_runtime_version": "1.31.1",
+        "execution_provider": "CPUExecutionProvider",
+        "tested_vectors": 64,
+        "tested_scalar_outputs": 128,
+        "nonidentical_scalar_outputs": 0,
+        "max_ulp_difference": 0,
+        "worst_case": null,
+        "universal_equivalence_established": false
+      }
+    }
+  ],
+  "dependency_versions": {
+    "onnxruntime": "1.31.1",
+    "onnx": "1.23.2",
+    "numpy": "2.2.6",
+    "protobuf": "6.33.6",
+    "torch": "2.7.1+cpu",
+    "cryptography": "47.0.0"
+  },
+  "source_sha256": {
+    "studio/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "studio/activation_proof.py": "ee059861f0255dd7ea58f772b1ad47c928369c9088c11663410f91df49b101b6",
+    "studio/adversarial_campaign.py": "a239856d3b51d3453e058cfdb7f15359f50cfa0d2d939601979fbc62c281f0d9",
+    "studio/affine_envelope_v13.py": "83d850916543fbb7086f6a7173f2178e66c8df2a746d5881d347e9ac56aef10a",
+    "studio/affine_fp32_v13.py": "973023a6c99e9f79e4c859dcc326f7f221b38d2347e69444c510217a3542c3d6",
+    "studio/agent_gate.py": "15e12c83bd88926319701ed8e28f3decd10469c1ab0144a280293383391ce81d",
+    "studio/checked_export_v14.py": "39a89aaef45e51a16689974a68edecfab1469f1c3a2ce59de655193b44887165",
+    "studio/dense_nn.py": "363d7b5c12dc23d4da99bc3ef5343e531646bce6c2203a5f36cd748692a645ae",
+    "studio/dense_worker.py": "8d5087f086d6302f7397146d1d8130cb5bdca381f1b00978cdbb5cb784c1e1d8",
+    "studio/direct_fp32_proposer_v10.py": "d585226596f682e662f7c300763bd3c996a0b9c3739fe3f0319ddefa8fe14a3c",
+    "studio/direct_fp32_v10.py": "0145bc904e3273e0cdd8295d8b6243dd82e12b49e573e6c11a32be7d18575a3a",
+    "studio/dual_envelope_v10.py": "04522b595158d28de5eb73a70b2b192a26c92a9745960a138bc8c3419ffd737c",
+    "studio/engine.py": "b6ac5f83c8eb58d8ac54e3a05d1273aa07d5ac81e0218c9118e0b6fb75caa813",
+    "studio/envelope_proposer_v09.py": "cea23b3aac0293c00e09973ff95f9af5570821274eeaf12a55168b1183d5cd52",
+    "studio/exact_dual_recovery.py": "491ddd051cd443a77731711d4503fe4066d39ef60974da0c40e41a3e441568a1",
+    "studio/exact_interval.py": "b5bb47895a35d85a6be0e52d9d14656fd78e14c13bce26f129b51befc3af1216",
+    "studio/fp32_assurance.py": "d4cf13029f1d2e7e950600aebdd83b203e44c2dcf5495b615383442c1c9c9b51",
+    "studio/fp32_lift_v07.py": "4909651167653c3fc2ad1fb0e90e5ff07f9169b5bef51b15cfee411bfe1effd1",
+    "studio/guard_runtime.py": "929629836d465b87b42b255774457bd71fa5f42308986612a9be098e44662796",
+    "studio/guarded_reference_infer_v09.py": "5aeb757c0d89bc9c0924512a27e3421228042792391e335bd6bc8a8f25590fc3",
+    "studio/ieee754.py": "2711838f5c6dddd6ec38b87ba06ff3b93824cc944ea2d30837ab7dd5a7947892",
+    "studio/lean_export_v07.py": "a1522ec9d0930e258bf55450bca7d6d2804433bca59a35e66b6b04321ff4969f",
+    "studio/lean_status_v07.py": "a76cb60a0b8095c0a89346b58944bb1450fdc10352553dc0ef690e2fd175548a",
+    "studio/milp_challenge.py": "82ad17c5088ace74a1f92d6600544bb5fc58a4a1a26f853a666a40f213662b05",
+    "studio/model_update.py": "a18120ce87f1fd550e7bdb5af67bb8ac3142d63eec27a55d695dbd97ec51e745",
+    "studio/multiruntime.py": "f2a617384356da2bcbabf98420078589ce1beb1aa25edf2c42e11c5a71666c33",
+    "studio/native_fp32_crosscheck_v11.py": "c7a6dcb76a19eab6061728d7e903167f5550d64827325b1958a0e9d99aad0907",
+    "studio/onnxruntime_crosscheck_v07.py": "f11e5567c8266310fd63fa53fb549748e4a934b25516992951656343be059fca",
+    "studio/operating_envelope_v09.py": "0e8b907274c8942337420068b5d18d18f25f2dca106e0fba179ddcdb9ac608bf",
+    "studio/partition_proof.py": "84925ba41a3d9a6372e64ff1adbf507f84c06e5e0553b9252ac0c366675b9832",
+    "studio/protobuf_dual_decoder_v12.py": "d6eb4e0052b73928ba881e77e1e85f038b317b13449b3368ab0d8e12ce14b2cf",
+    "studio/relational_kernel.py": "b65803b7619fef9a052252e775ea7c1c822d99f02443bb3f3ccdee55de8394f5",
+    "studio/relational_prover.py": "90264bcbbe03b8d0cb79f0ea19c44dc998a67d98036b71d82f515402912ec21d",
+    "studio/replay.py": "2d2c2ce14aa4b64550b526e7eef1acd933adb3444446111b9fd2056d0f9594a8",
+    "studio/research.py": "4fbb4ee9a5ced40b2d50f3656bdae20c0c099e2f95d769dd073020db78d595b0",
+    "studio/reviewer_gate_v08.py": "c8eff424110087b7680867022fd9da02fed76a67aeac7462b9fbc80772d27429",
+    "studio/scalar_worker.py": "64cc5644a9e3957e79c563afe9426796fabc0e88a332c2449efc098496d33782",
+    "studio/server.py": "d25b37a75e29fbee2f5b16d6c6d86b010dcb2de35581820cd0c2e02d10811009",
+    "studio/signature.py": "b95b02aa544255cc6e858dfe8e4cfbe50d3547c724efcfe978d9ceff8a931f3b",
+    "studio/structural.py": "e36b8d3d28aba8c30981ebc6e8ebb2cfbc55dc423393eb346a67a4795323b24e",
+    "studio/torch_worker.py": "d4220256652022a77b4fe302ecccc600f194ebb01fee15ccc3a88864d53f0fcd",
+    "studio/update_kernel.py": "ed24878b4628a967f5dd9ce2bd2231f5d516f88b6b66f7909fa80f3be37e462d",
+    "studio/update_prover.py": "ea5587d8bb57b6013002535462c4d3ac088c4313630ba0f83010246b80784275",
+    "studio/verify_partition.py": "0a7b7780d601f4f6f72c7422979e1386a618ce9f4918f6cbffa6c43b4e3a65db",
+    "studio/verify_receipt.py": "f6f9c6a1359e3d5eecacf07b01761d7713030c874fb63dbfd4dda9d60dd3bb7d",
+    "studio/verify_relational.py": "8631e5cea36b33278c14873ee638be5bdfc5d1f544a4437252deb2f304a0fa82",
+    "studio/verify_update.py": "6d90a40db3417eec591bdd5c47d439279284244e8c20b55049e675b38634cd74"
+  },
+  "pcs_authority": false,
+  "onnx_parser_kernel_verified": false,
+  "abstract_interpreter_kernel_verified": false,
+  "runtime_universal_equivalence": false,
+  "external_independent_validation": false,
+  "scope": "Two abstract inequality implications checked by qualified Lean; finite observations using four screened curated ONNX fixtures and CPUExecutionProvider. Not a model deployment certificate or general AI safety result."
+}

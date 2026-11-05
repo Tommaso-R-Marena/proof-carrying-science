@@ -307,8 +307,13 @@ def kernel_replay(data, *, timeout=120):
             p=subprocess.run(cmd,cwd=private,env=env,capture_output=True,text=True,timeout=remaining())
             result['executions'].append({'command':cmd,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr})
             if driver.read_bytes()!=proof:raise ValueError('generated proof source changed during checking')
-            if p.returncode and 'did not reduce to `isTrue` or `isFalse`' in p.stdout:
-                # Retain the original rejected proof/diagnostic. The alternative
+            if p.returncode and (
+                    'did not reduce to `isTrue` or `isFalse`' in p.stdout
+                    or ('lean::memory_exception' in p.stderr
+                        and 'excessive memory consumption' in p.stderr)):
+                # Retain the original rejected proof/diagnostic, including bounded
+                # evaluator exhaustion. Fragments keep the same 2 GB limit and
+                # single deadline; no failed attempt grants acceptance. The alternative
                 # proves exactly the same check and must independently elaborate.
                 fragments=render_fragments(data);objects={};fragment_log=''
                 for name,raw in fragments.items():

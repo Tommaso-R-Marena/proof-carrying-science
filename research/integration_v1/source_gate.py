@@ -7,7 +7,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "docs/integration/2026-10-18"
-SUCCESSOR_PATH = "docs/research/post-integration-2026-10-18/receipt-source-profile-successor.json"
+SUCCESSOR_PATH = "docs/integration/2026-11-05/receipt-source-profile-successor-v21-transport.json"
 PREDECESSOR_COMMIT = "b916eec1b9d0d5c02c9cc19b070f7a47df5e5d87"
 PREDECESSOR_PROFILE_SHA256 = "0610914446b24a6b2e7fb70cd385155531c42d65a95ec04b896d37c29f9d7297"
 # These exact repair bytes require source review; the manifest cannot authorize
@@ -44,6 +44,14 @@ RECEIPT_REPAIR_IDENTITIES["README.md"] = ('0dcc965c85fb78f4e2521f6255b0010fc3212
 RECEIPT_REPAIR_IDENTITIES[".github/workflows/pcs-public-full-verification.yml"] = ("40e3cc3befb080f73439f80a2587e03324644c610f875d3c4bce1685319c9bf9", 'bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf')
 
 RECEIPT_REPAIR_IDENTITIES["pcs/transport_trace_kernel_v1.py"] = ("f1b994bb9152a3622e8475d58ae6d96f0f6b94a4bb1c64f01dd1743a1e5ed0ae", 'b158a573c428e27b7008a335cdf9cf5daf654a9f1283a3023a8ec3195ea5b605')
+
+# V21 exact reviewed dependency/documentation successor. Previous manifests remain frozen.
+RECEIPT_REPAIR_IDENTITIES['.github/workflows/pcs-ci.yml'] = (RECEIPT_REPAIR_IDENTITIES['.github/workflows/pcs-ci.yml'][0], '1cd4b0a2b2672c75e36451545d5f9daa71a1e58f0b895eac6376aef639734f40')
+RECEIPT_REPAIR_IDENTITIES['README.md'] = (RECEIPT_REPAIR_IDENTITIES['README.md'][0], 'f89f58024a34ded5f62f93e5aac445cd66164b82ca0dfd31761a64bcb58dc8d4')
+
+RECEIPT_REPAIR_IDENTITIES['README.md'] = (RECEIPT_REPAIR_IDENTITIES['README.md'][0], '57741c2a3bb217e1cb7fdfff3953127124f799a1ce808ad159015ca095e16ac8')
+
+RECEIPT_REPAIR_IDENTITIES['pcs/transport_trace_kernel_v1.py'] = (RECEIPT_REPAIR_IDENTITIES['pcs/transport_trace_kernel_v1.py'][0], 'ff409b9a4a1c062c51761afc2c05f459d95f56eb3ca689c2a3a59b4d0e20e4eb')
 
 GATE_PATH = "research/integration_v1/source_gate.py"
 PREDECESSOR_GATE_SHA256 = "63b60bcec9538195f43506fed3102c37e960bb36654c57ee07e3d2452df6e625"
