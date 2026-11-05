@@ -1,0 +1,15 @@
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+defusedxml>=0.7,<1
+# Optional for official independent ONNX graph validation:
+# onnx>=1.17,<2
+httpx>=0.27,<1
+gemmi>=0.7,<1  # mmCIF parser; no uploaded code is executed
+numpy>=1.26,<3  # opt-in float32 replay of screened scalar operations (not ONNX Runtime)
+
+cryptography>=44,<48 # optional publisher-owned Ed25519 receipt signatures (not PCS Lean certificates)
+# Optional heavyweight second numerical oracle (not installed by default): torch >=2.2,<3
+
+scipy>=1.11,<2 # optional solver-guided candidate search (never proof of safety)
+
+protobuf>=5,<7  # Independent ONNX wire-format crosscheck; NOT the official ONNX checker

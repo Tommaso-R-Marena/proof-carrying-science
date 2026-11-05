@@ -1,0 +1,314 @@
+{
+  "bytes": 621,
+  "checks": [
+    {
+      "evidence": "SHA-256: c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032",
+      "id": "INTEGRITY_SHA256",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Exact artifact fingerprint"
+    },
+    {
+      "evidence": "3 species and 1 reactions inspected",
+      "id": "SBML_REFERENCES",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Selected SBML species references are consistent"
+    },
+    {
+      "evidence": "1 of 1 reactions lack kineticLaw (may be valid SBML but not directly simulatable)",
+      "id": "SBML_KINETICS",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Reaction kinetic laws absent"
+    },
+    {
+      "evidence": "Rank 1 and 2 linear invariants computed with rational row reduction. This does NOT establish mass conservation or full SBML dynamics.",
+      "id": "SBML_STOICHIOMETRY",
+      "scope": "bounded rational linear algebra",
+      "status": "PASS",
+      "title": "Exact reaction-only stoichiometric invariants"
+    },
+    {
+      "evidence": "0 balanced, 1 demonstrably imbalanced, 0 unresolved reactions. Charges, formula correctness, and chemical mechanism unverified.",
+      "id": "SBML_ELEMENT_BALANCE",
+      "scope": "formula-tagged stoichiometric check",
+      "status": "FAIL",
+      "title": "Elemental balance from explicit species formulas"
+    },
+    {
+      "evidence": "libSBML validation, simulation stability, parameter identifiability and experimental validity are outside this prototype",
+      "id": "SBML_FULL_VALIDATION",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Complete SBML schema/units validation not performed"
+    }
+  ],
+  "decision": "FAIL",
+  "decision_meaning": "One or more scoped checks failed",
+  "details": {
+    "elemental_balance": {
+      "balanced_reactions": 0,
+      "imbalanced_reactions_at_least": 1,
+      "imbalanced_reactions_sample": [
+        {
+          "element_imbalance": {
+            "H": "-2",
+            "O": "-1"
+          },
+          "reaction": "water_synthesis"
+        }
+      ],
+      "reaction_count": 1,
+      "scope": "Formal stoichiometric consistency of explicitly annotated elemental formulas; charge, chemistry, reactions and kinetics not otherwise certified",
+      "unresolved_reactions": 0
+    },
+    "model_id": "water",
+    "reaction_only_invariants": {
+      "conservation_basis": [
+        {
+          "H2": 1,
+          "O2": -2
+        },
+        {
+          "H2": 1,
+          "H2O": 2
+        }
+      ],
+      "linear_invariant_count": 2,
+      "matrix_shape": [
+        3,
+        1
+      ],
+      "meaning": "Exact left-nullspace of the reaction-only stoichiometric matrix; assumes d(amount)/dt = N\u00b7v with no additional species-changing effects.",
+      "not_established": "Physical mass conservation, full SBML semantics, kinetic stability, or biological realism",
+      "stoichiometric_rank": 1
+    },
+    "unknown_species_sample": []
+  },
+  "family": "sbml",
+  "filename": "demo_water_imbalanced.sbml",
+  "limitations": [
+    "This is a non-executing static inspection, not Lean-kernel verification.",
+    "No runtime behavior, biological validity, misuse resistance, or clinical safety is certified.",
+    "The JSON receipt is SHA-256 bound but is not signed, trusted, or PCS v0.6 certified."
+  ],
+  "metrics": {
+    "broken_species_references": 0,
+    "level": "3",
+    "linear_conserved_quantities_reaction_only": 2,
+    "parameters": 0,
+    "reactions": 1,
+    "reactions_without_kinetic_law": 1,
+    "species": 3,
+    "version": "2"
+  },
+  "pcs_claim_inventory": {
+    "artifacts": [
+      {
+        "id": "artifact-001",
+        "media_type": "application/octet-stream",
+        "metadata": {
+          "bytes": 621,
+          "family": "sbml"
+        },
+        "path": "demo_water_imbalanced.sbml",
+        "role": "untrusted model input",
+        "sha256": "c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "static-inspection-boundary",
+        "rationale": "Explicit boundary for external inspection findings",
+        "scope": [
+          "artifact-001"
+        ],
+        "statement": "The untrusted artifact was not executed; tool/parser correctness and source custody are not independently verified."
+      }
+    ],
+    "claims": [
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-001",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-001"
+        ],
+        "statement": "Exact artifact fingerprint"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-002",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-002"
+        ],
+        "statement": "Selected SBML species references are consistent"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-003",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-003"
+        ],
+        "statement": "Reaction kinetic laws absent"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-004",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-004"
+        ],
+        "statement": "Exact reaction-only stoichiometric invariants"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-005",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-005"
+        ],
+        "statement": "Elemental balance from explicit species formulas"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-006",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-006"
+        ],
+        "statement": "Complete SBML schema/units validation not performed"
+      }
+    ],
+    "evidence": [
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-001"
+        ],
+        "details": {
+          "check_id": "INTEGRITY_SHA256",
+          "evidence": "SHA-256: c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032",
+          "scope": "static"
+        },
+        "id": "evidence-001",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-002"
+        ],
+        "details": {
+          "check_id": "SBML_REFERENCES",
+          "evidence": "3 species and 1 reactions inspected",
+          "scope": "static"
+        },
+        "id": "evidence-002",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-003"
+        ],
+        "details": {
+          "check_id": "SBML_KINETICS",
+          "evidence": "1 of 1 reactions lack kineticLaw (may be valid SBML but not directly simulatable)",
+          "scope": "static"
+        },
+        "id": "evidence-003",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-004"
+        ],
+        "details": {
+          "check_id": "SBML_STOICHIOMETRY",
+          "evidence": "Rank 1 and 2 linear invariants computed with rational row reduction. This does NOT establish mass conservation or full SBML dynamics.",
+          "scope": "bounded rational linear algebra"
+        },
+        "id": "evidence-004",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-005"
+        ],
+        "details": {
+          "check_id": "SBML_ELEMENT_BALANCE",
+          "evidence": "0 balanced, 1 demonstrably imbalanced, 0 unresolved reactions. Charges, formula correctness, and chemical mechanism unverified.",
+          "scope": "formula-tagged stoichiometric check"
+        },
+        "id": "evidence-005",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "FAIL"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.2.0",
+        "claim_ids": [
+          "claim-006"
+        ],
+        "details": {
+          "check_id": "SBML_FULL_VALIDATION",
+          "evidence": "libSBML validation, simulation stability, parameter identifiability and experimental validity are outside this prototype",
+          "scope": "static"
+        },
+        "id": "evidence-006",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      }
+    ],
+    "schema": "pcs-candidate-claim-inventory-v0.2",
+    "source_assessment_schema": "pcs-model-intake-receipt-v0.2",
+    "trusted_authority": false,
+    "warnings": [
+      "Candidate PCS-shaped data only; requires separate reviewer acceptance, independent replay, and Lean-authoritative verification."
+    ]
+  },
+  "policy_sha256": "351129073a2f7d83e239658d79851a433334e829fc56baf951fd3c58b181d154",
+  "receipt_sha256": "c0968270bf3e4c02c2da431ce563f4eab1e7a7f3c20238ba686c84bac95cb40b",
+  "schema": "pcs-model-intake-receipt-v0.2",
+  "sha256": "c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032",
+  "version": "0.2.0"
+}

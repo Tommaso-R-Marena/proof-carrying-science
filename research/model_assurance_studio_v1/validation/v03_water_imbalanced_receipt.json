@@ -1,0 +1,364 @@
+{
+  "schema": "pcs-model-intake-receipt-v0.3",
+  "version": "0.3.0",
+  "policy": {
+    "forbid_stochastic_onnx_ops": false,
+    "forbid_custom_onnx_domains": false,
+    "max_onnx_nodes": 100000,
+    "max_pdb_clashes": 0,
+    "require_self_contained_onnx": true,
+    "require_onnx_official_checker": false,
+    "check_output_bounds": false,
+    "search_scalar_witness": true,
+    "enable_reference_replay": false,
+    "input_min": -1.0,
+    "input_max": 1.0,
+    "output_min": -10.0,
+    "output_max": 10.0
+  },
+  "filename": "demo_water_imbalanced.sbml",
+  "bytes": 621,
+  "sha256": "c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032",
+  "family": "sbml",
+  "decision": "FAIL",
+  "decision_meaning": "One or more scoped checks failed",
+  "metrics": {
+    "level": "3",
+    "version": "2",
+    "species": 3,
+    "reactions": 1,
+    "parameters": 0,
+    "reactions_without_kinetic_law": 1,
+    "broken_species_references": 0,
+    "linear_conserved_quantities_reaction_only": 2
+  },
+  "details": {
+    "unknown_species_sample": [],
+    "model_id": "water",
+    "reaction_only_invariants": {
+      "stoichiometric_rank": 1,
+      "linear_invariant_count": 2,
+      "conservation_basis": [
+        {
+          "H2": 1,
+          "O2": -2
+        },
+        {
+          "H2": 1,
+          "H2O": 2
+        }
+      ],
+      "matrix_shape": [
+        3,
+        1
+      ],
+      "meaning": "Exact left-nullspace of the reaction-only stoichiometric matrix; assumes d(amount)/dt = N\u00b7v with no additional species-changing effects.",
+      "not_established": "Physical mass conservation, full SBML semantics, kinetic stability, or biological realism"
+    },
+    "elemental_balance": {
+      "reaction_count": 1,
+      "balanced_reactions": 0,
+      "unresolved_reactions": 0,
+      "imbalanced_reactions_sample": [
+        {
+          "reaction": "water_synthesis",
+          "element_imbalance": {
+            "H": "-2",
+            "O": "-1"
+          }
+        }
+      ],
+      "imbalanced_reactions_at_least": 1,
+      "scope": "Formal stoichiometric consistency of explicitly annotated elemental formulas; charge, chemistry, reactions and kinetics not otherwise certified"
+    }
+  },
+  "checks": [
+    {
+      "id": "INTEGRITY_SHA256",
+      "status": "PASS",
+      "title": "Exact artifact fingerprint",
+      "evidence": "SHA-256: c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032",
+      "scope": "static"
+    },
+    {
+      "id": "SBML_REFERENCES",
+      "status": "PASS",
+      "title": "Selected SBML species references are consistent",
+      "evidence": "3 species and 1 reactions inspected",
+      "scope": "static"
+    },
+    {
+      "id": "SBML_KINETICS",
+      "status": "OPEN",
+      "title": "Reaction kinetic laws absent",
+      "evidence": "1 of 1 reactions lack kineticLaw (may be valid SBML but not directly simulatable)",
+      "scope": "static"
+    },
+    {
+      "id": "SBML_STOICHIOMETRY",
+      "status": "PASS",
+      "title": "Exact reaction-only stoichiometric invariants",
+      "evidence": "Rank 1 and 2 linear invariants computed with rational row reduction. This does NOT establish mass conservation or full SBML dynamics.",
+      "scope": "bounded rational linear algebra"
+    },
+    {
+      "id": "SBML_ELEMENT_BALANCE",
+      "status": "FAIL",
+      "title": "Elemental balance from explicit species formulas",
+      "evidence": "0 balanced, 1 demonstrably imbalanced, 0 unresolved reactions. Charges, formula correctness, and chemical mechanism unverified.",
+      "scope": "formula-tagged stoichiometric check"
+    },
+    {
+      "id": "SBML_CHARGE_BALANCE",
+      "status": "OPEN",
+      "title": "Explicit charge balance not established",
+      "evidence": "No explicitly annotated fbc:charge values; charges are never guessed from species names",
+      "scope": "static"
+    },
+    {
+      "id": "SBML_FULL_VALIDATION",
+      "status": "OPEN",
+      "title": "Complete SBML schema/units validation not performed",
+      "evidence": "libSBML validation, simulation stability, parameter identifiability and experimental validity are outside this prototype",
+      "scope": "static"
+    }
+  ],
+  "limitations": [
+    "Static analysis is non-executing; optional explicitly requested replay evaluates only screened scalar operators in a separate NumPy process. No ONNX Runtime or Lean-kernel verification.",
+    "No full ONNX model-runtime equivalence, general AI safety, biological validity, misuse resistance, or clinical safety is certified.",
+    "The JSON receipt is SHA-256 bound but is not signed, trusted, or PCS v0.6 certified."
+  ],
+  "pcs_claim_inventory": {
+    "schema": "pcs-candidate-claim-inventory-v0.3",
+    "trusted_authority": false,
+    "source_assessment_schema": "pcs-model-intake-receipt-v0.3",
+    "artifacts": [
+      {
+        "id": "artifact-001",
+        "path": "demo_water_imbalanced.sbml",
+        "role": "untrusted model input",
+        "sha256": "c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032",
+        "media_type": "application/octet-stream",
+        "metadata": {
+          "family": "sbml",
+          "bytes": 621
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "static-inspection-boundary",
+        "statement": "The untrusted artifact was not executed; tool/parser correctness and source custody are not independently verified.",
+        "rationale": "Explicit boundary for external inspection findings",
+        "scope": [
+          "artifact-001"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "claim-001",
+        "statement": "Exact artifact fingerprint",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-001"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      },
+      {
+        "id": "claim-002",
+        "statement": "Selected SBML species references are consistent",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-002"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      },
+      {
+        "id": "claim-003",
+        "statement": "Reaction kinetic laws absent",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-003"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      },
+      {
+        "id": "claim-004",
+        "statement": "Exact reaction-only stoichiometric invariants",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-004"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      },
+      {
+        "id": "claim-005",
+        "statement": "Elemental balance from explicit species formulas",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-005"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      },
+      {
+        "id": "claim-006",
+        "statement": "Explicit charge balance not established",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-006"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      },
+      {
+        "id": "claim-007",
+        "statement": "Complete SBML schema/units validation not performed",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-007"
+        ],
+        "assumptions": [
+          "static-inspection-boundary"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "evidence-001",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-001"
+        ],
+        "outcome": "PASS",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "INTEGRITY_SHA256",
+          "scope": "static",
+          "evidence": "SHA-256: c6b98b902caeb3f19b5b66ccec692db3bfcd57849a0cdb0cc29b134349f20032"
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      },
+      {
+        "id": "evidence-002",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-002"
+        ],
+        "outcome": "PASS",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "SBML_REFERENCES",
+          "scope": "static",
+          "evidence": "3 species and 1 reactions inspected"
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      },
+      {
+        "id": "evidence-003",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-003"
+        ],
+        "outcome": "UNVERIFIED",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "SBML_KINETICS",
+          "scope": "static",
+          "evidence": "1 of 1 reactions lack kineticLaw (may be valid SBML but not directly simulatable)"
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      },
+      {
+        "id": "evidence-004",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-004"
+        ],
+        "outcome": "PASS",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "SBML_STOICHIOMETRY",
+          "scope": "bounded rational linear algebra",
+          "evidence": "Rank 1 and 2 linear invariants computed with rational row reduction. This does NOT establish mass conservation or full SBML dynamics."
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      },
+      {
+        "id": "evidence-005",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-005"
+        ],
+        "outcome": "FAIL",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "SBML_ELEMENT_BALANCE",
+          "scope": "formula-tagged stoichiometric check",
+          "evidence": "0 balanced, 1 demonstrably imbalanced, 0 unresolved reactions. Charges, formula correctness, and chemical mechanism unverified."
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      },
+      {
+        "id": "evidence-006",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-006"
+        ],
+        "outcome": "UNVERIFIED",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "SBML_CHARGE_BALANCE",
+          "scope": "static",
+          "evidence": "No explicitly annotated fbc:charge values; charges are never guessed from species names"
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      },
+      {
+        "id": "evidence-007",
+        "kind": "untrusted-external-static-inspection",
+        "claim_ids": [
+          "claim-007"
+        ],
+        "outcome": "UNVERIFIED",
+        "checker": "model-assurance-studio/0.3.0",
+        "details": {
+          "check_id": "SBML_FULL_VALIDATION",
+          "scope": "static",
+          "evidence": "libSBML validation, simulation stability, parameter identifiability and experimental validity are outside this prototype"
+        },
+        "artifact_ids": [
+          "artifact-001"
+        ]
+      }
+    ],
+    "warnings": [
+      "Candidate PCS-shaped data only; requires separate reviewer acceptance, independent replay, and Lean-authoritative verification."
+    ]
+  },
+  "policy_sha256": "0924af1c86a03b59cf050cdd0840c7d4b404b869b9d9bd770c64051f2cf9d485",
+  "receipt_sha256": "14e2280f166674c28b05a80014b9bb092e7e7129b39fe2ef542a0781dd7161e0"
+}

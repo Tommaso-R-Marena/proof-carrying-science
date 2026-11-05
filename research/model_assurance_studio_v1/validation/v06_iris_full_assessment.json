@@ -1,0 +1,682 @@
+{
+  "bytes": 491,
+  "checks": [
+    {
+      "evidence": "SHA-256: 1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+      "id": "INTEGRITY_SHA256",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Exact artifact fingerprint"
+    },
+    {
+      "evidence": "3 nodes in serialized order; nested graphs not fully validated",
+      "id": "ONNX_DATAFLOW",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Top-level graph references are consistent"
+    },
+    {
+      "evidence": "Top-level initializers are embedded in this file",
+      "id": "ONNX_EXTERNAL",
+      "scope": "static",
+      "status": "PASS",
+      "title": "No external initializer data detected"
+    },
+    {
+      "evidence": "3 nodes <= cap 100000",
+      "id": "NODE_BUDGET",
+      "scope": "static",
+      "status": "PASS",
+      "title": "Graph within configured node cap"
+    },
+    {
+      "evidence": "Top-level nodes inspected",
+      "id": "CUSTOM_DOMAINS",
+      "scope": "static",
+      "status": "PASS",
+      "title": "No custom operator domains detected"
+    },
+    {
+      "evidence": "Only known top-level op names checked",
+      "id": "STOCHASTIC_OPS",
+      "scope": "static",
+      "status": "PASS",
+      "title": "No targeted stochastic operations found"
+    },
+    {
+      "evidence": "Install optional onnx package; protobuf inspection alone is insufficient",
+      "id": "ONNX_CHECKER",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Official ONNX checker not installed"
+    },
+    {
+      "evidence": "Enable interval analysis and state both input assumptions and desired output bounds",
+      "id": "ONNX_INTERVAL",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Bounded output claim not requested"
+    },
+    {
+      "evidence": "Enable conditional bounds and scalar witness search to try candidate inputs",
+      "id": "ONNX_WITNESS",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Scalar witness search not requested"
+    },
+    {
+      "evidence": "An independent exact-rational checker verified an explicit LP-dual identity for all inputs in the assumed box. Not float32, full ONNX, Lean, or generalized AI safety.",
+      "id": "ONNX_RELATIONAL_FARKAS",
+      "scope": "exact rational Farkas witness; strictly scoped",
+      "status": "PASS",
+      "title": "Conditional real-number neural invariant proven by rational dual witness"
+    },
+    {
+      "evidence": "Optional NumPy scalar replay does not run the actual ONNX Runtime engine; robustness, harmful outputs and deployment threat models require explicit test suites",
+      "id": "ONNX_BEHAVIOR",
+      "scope": "static",
+      "status": "OPEN",
+      "title": "Full ONNX model behavior is not established"
+    }
+  ],
+  "decision": "OPEN",
+  "decision_meaning": "Static inspection alone cannot establish deployment safety",
+  "details": {
+    "input_names": [
+      "features"
+    ],
+    "io_singleton_shape_confirmed": {
+      "features": false,
+      "logits": false
+    },
+    "io_tensor_types": {
+      "features": 1,
+      "logits": 1
+    },
+    "missing_inputs_sample": [],
+    "output_names": [
+      "logits"
+    ],
+    "relational_proof": {
+      "certificate": {
+        "certificate_sha256": "3a1f95adc1907b5ce34773e239d08e3e85b9733705adb197cb114cf1a5d45919",
+        "input_box": [
+          [
+            "-3157079315185547/2000000000000000",
+            "-7392698287963867/5000000000000000"
+          ],
+          [
+            "11672449827194213/10000000000000000",
+            "6336224913597107/5000000000000000"
+          ],
+          [
+            "-809796416759491/500000000000000",
+            "-759796416759491/500000000000000"
+          ],
+          [
+            "-112511/81920",
+            "-104319/81920"
+          ]
+        ],
+        "model_sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+        "multipliers": [
+          [
+            0,
+            "2329800452498053301607853/554618852138940073246720"
+          ],
+          [
+            2,
+            "4990037456543133/66102871838388228937492725760"
+          ],
+          [
+            3,
+            "1841514/953489"
+          ],
+          [
+            4,
+            "2522514/811589"
+          ],
+          [
+            5,
+            "8139615345558171/4246439241401794670813511680"
+          ],
+          [
+            6,
+            "1178189/687588"
+          ],
+          [
+            7,
+            "13021750201706999/9533731682612738177089142784"
+          ],
+          [
+            24,
+            "241429/319697"
+          ],
+          [
+            34,
+            "1429392/767705"
+          ],
+          [
+            37,
+            "902271/336730"
+          ],
+          [
+            41,
+            "5/10727251247104"
+          ],
+          [
+            42,
+            "38047979/16777216"
+          ],
+          [
+            44,
+            "95433/215255"
+          ],
+          [
+            45,
+            "3/3611379630080"
+          ],
+          [
+            46,
+            "1/3563740725248"
+          ],
+          [
+            47,
+            "389865/849662"
+          ],
+          [
+            48,
+            "1039596/693785"
+          ],
+          [
+            49,
+            "1/11639780802560"
+          ],
+          [
+            51,
+            "9/25759905218560"
+          ],
+          [
+            53,
+            "1/1412347985920"
+          ],
+          [
+            54,
+            "1/758053339136"
+          ],
+          [
+            55,
+            "277819/361468"
+          ],
+          [
+            56,
+            "241429/319697"
+          ],
+          [
+            66,
+            "1429392/767705"
+          ],
+          [
+            69,
+            "902271/336730"
+          ],
+          [
+            79,
+            "1"
+          ],
+          [
+            80,
+            "1"
+          ]
+        ],
+        "relation": {
+          "output_coefficients": [
+            "-1",
+            "1",
+            "0"
+          ],
+          "upper_limit": "-1/2"
+        },
+        "schema": "pcs-relational-farkas-real-v0.6",
+        "scope": "exact-real-screened-onnx-outer-polytope"
+      },
+      "optimizer_objective": -12.311845848681585,
+      "scope": "Exact-real screened ONNX semantics; no arbitrary ONNX/float32/Lean certification",
+      "status": "PROVED_CONDITIONALLY",
+      "verification": {
+        "linear_constraints": 84,
+        "nonzero_multipliers": 27,
+        "required_upper_limit": "-1/2",
+        "status": "PROVED_CONDITIONALLY",
+        "trust_boundary": "Python/Fraction + ONNX subset decoder + exact-relaxation constructor; not Lean or IEEE float32",
+        "variables": 23,
+        "verified_upper_bound": "-5750584050541737185617378692734818754616900986508822251534359261/467077327089644795177857668941514309790964121600000000000000000"
+      }
+    },
+    "stochastic_ops": {}
+  },
+  "family": "onnx",
+  "filename": "demo_trained_iris_mlp.onnx",
+  "limitations": [
+    "Static analysis is non-executing; optional replay evaluates screened scalar or small dense ONNX operations in a separate NumPy process, NOT ONNX Runtime or Lean-kernel verification.",
+    "No full ONNX model-runtime equivalence, general AI safety, biological validity, misuse resistance, or clinical safety is certified.",
+    "The JSON receipt is SHA-256 bound but is not signed, trusted, or PCS v0.6 certified."
+  ],
+  "metrics": {
+    "custom_domains": [],
+    "external_tensors": 0,
+    "initializers": 4,
+    "inputs": 1,
+    "ir_version": 8,
+    "nested_graph_attributes": 0,
+    "node_attributes": 0,
+    "nodes": 3,
+    "operators": {
+      "Gemm": 2,
+      "Relu": 1
+    },
+    "opsets": [
+      {
+        "domain": "",
+        "version": 13
+      }
+    ],
+    "outputs": 1,
+    "sparse_initializers": 0
+  },
+  "pcs_claim_inventory": {
+    "artifacts": [
+      {
+        "id": "artifact-001",
+        "media_type": "application/octet-stream",
+        "metadata": {
+          "bytes": 491,
+          "family": "onnx"
+        },
+        "path": "demo_trained_iris_mlp.onnx",
+        "role": "untrusted model input",
+        "sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "static-inspection-boundary",
+        "rationale": "Explicit boundary for external inspection findings",
+        "scope": [
+          "artifact-001"
+        ],
+        "statement": "The untrusted artifact was not executed; tool/parser correctness and source custody are not independently verified."
+      }
+    ],
+    "claims": [
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-001",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-001"
+        ],
+        "statement": "Exact artifact fingerprint"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-002",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-002"
+        ],
+        "statement": "Top-level graph references are consistent"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-003",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-003"
+        ],
+        "statement": "No external initializer data detected"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-004",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-004"
+        ],
+        "statement": "Graph within configured node cap"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-005",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-005"
+        ],
+        "statement": "No custom operator domains detected"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-006",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-006"
+        ],
+        "statement": "No targeted stochastic operations found"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-007",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-007"
+        ],
+        "statement": "Official ONNX checker not installed"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-008",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-008"
+        ],
+        "statement": "Bounded output claim not requested"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-009",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-009"
+        ],
+        "statement": "Scalar witness search not requested"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-010",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-010"
+        ],
+        "statement": "Conditional real-number neural invariant proven by rational dual witness"
+      },
+      {
+        "assumptions": [
+          "static-inspection-boundary"
+        ],
+        "id": "claim-011",
+        "kind": "computational",
+        "required_evidence": [
+          "evidence-011"
+        ],
+        "statement": "Full ONNX model behavior is not established"
+      }
+    ],
+    "evidence": [
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-001"
+        ],
+        "details": {
+          "check_id": "INTEGRITY_SHA256",
+          "evidence": "SHA-256: 1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+          "scope": "static"
+        },
+        "id": "evidence-001",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-002"
+        ],
+        "details": {
+          "check_id": "ONNX_DATAFLOW",
+          "evidence": "3 nodes in serialized order; nested graphs not fully validated",
+          "scope": "static"
+        },
+        "id": "evidence-002",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-003"
+        ],
+        "details": {
+          "check_id": "ONNX_EXTERNAL",
+          "evidence": "Top-level initializers are embedded in this file",
+          "scope": "static"
+        },
+        "id": "evidence-003",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-004"
+        ],
+        "details": {
+          "check_id": "NODE_BUDGET",
+          "evidence": "3 nodes <= cap 100000",
+          "scope": "static"
+        },
+        "id": "evidence-004",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-005"
+        ],
+        "details": {
+          "check_id": "CUSTOM_DOMAINS",
+          "evidence": "Top-level nodes inspected",
+          "scope": "static"
+        },
+        "id": "evidence-005",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-006"
+        ],
+        "details": {
+          "check_id": "STOCHASTIC_OPS",
+          "evidence": "Only known top-level op names checked",
+          "scope": "static"
+        },
+        "id": "evidence-006",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-007"
+        ],
+        "details": {
+          "check_id": "ONNX_CHECKER",
+          "evidence": "Install optional onnx package; protobuf inspection alone is insufficient",
+          "scope": "static"
+        },
+        "id": "evidence-007",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-008"
+        ],
+        "details": {
+          "check_id": "ONNX_INTERVAL",
+          "evidence": "Enable interval analysis and state both input assumptions and desired output bounds",
+          "scope": "static"
+        },
+        "id": "evidence-008",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-009"
+        ],
+        "details": {
+          "check_id": "ONNX_WITNESS",
+          "evidence": "Enable conditional bounds and scalar witness search to try candidate inputs",
+          "scope": "static"
+        },
+        "id": "evidence-009",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-010"
+        ],
+        "details": {
+          "check_id": "ONNX_RELATIONAL_FARKAS",
+          "evidence": "An independent exact-rational checker verified an explicit LP-dual identity for all inputs in the assumed box. Not float32, full ONNX, Lean, or generalized AI safety.",
+          "scope": "exact rational Farkas witness; strictly scoped"
+        },
+        "id": "evidence-010",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "PASS"
+      },
+      {
+        "artifact_ids": [
+          "artifact-001"
+        ],
+        "checker": "model-assurance-studio/0.6.0",
+        "claim_ids": [
+          "claim-011"
+        ],
+        "details": {
+          "check_id": "ONNX_BEHAVIOR",
+          "evidence": "Optional NumPy scalar replay does not run the actual ONNX Runtime engine; robustness, harmful outputs and deployment threat models require explicit test suites",
+          "scope": "static"
+        },
+        "id": "evidence-011",
+        "kind": "untrusted-external-static-inspection",
+        "outcome": "UNVERIFIED"
+      }
+    ],
+    "schema": "pcs-candidate-claim-inventory-v0.5",
+    "source_assessment_schema": "pcs-model-intake-receipt-v0.5",
+    "trusted_authority": false,
+    "warnings": [
+      "Candidate PCS-shaped data only; requires separate reviewer acceptance, independent replay, and Lean-authoritative verification."
+    ]
+  },
+  "policy": {
+    "check_output_bounds": false,
+    "enable_activation_case_cover": false,
+    "enable_milp_challenger": false,
+    "enable_partition_proof": false,
+    "enable_reference_replay": false,
+    "enable_relational_certificate": true,
+    "enable_torch_crosscheck": false,
+    "forbid_custom_onnx_domains": false,
+    "forbid_stochastic_onnx_ops": false,
+    "input_max": 1.0,
+    "input_min": -1.0,
+    "max_activation_leaves": 16,
+    "max_onnx_nodes": 100000,
+    "max_partition_leaves": 64,
+    "max_pdb_clashes": 0,
+    "milp_timeout_seconds": 6,
+    "output_max": 10.0,
+    "output_min": -10.0,
+    "relational_coefficients": [
+      "-1",
+      "1",
+      "0"
+    ],
+    "relational_input_box": [
+      [
+        "-1.5785396575927735",
+        "-1.4785396575927734"
+      ],
+      [
+        "1.1672449827194213",
+        "1.2672449827194214"
+      ],
+      [
+        "-1.619592833518982",
+        "-1.519592833518982"
+      ],
+      [
+        "-1.37342529296875",
+        "-1.27342529296875"
+      ]
+    ],
+    "relational_upper_limit": "-1/2",
+    "require_onnx_official_checker": false,
+    "require_self_contained_onnx": true,
+    "search_scalar_witness": true
+  },
+  "policy_sha256": "70053380c528ef46134856a2c3a0396fb9db9d3086896b8eb2d4918255d8cd78",
+  "receipt_sha256": "238a079967180e5e5d967f801267eded6aa6d691ddb945503f30f77e8e184c45",
+  "schema": "pcs-model-intake-receipt-v0.6",
+  "sha256": "1356291eb4f16f3492e476798dca4690b5696ddb1d9f278d0c328022fe1a86da",
+  "version": "0.6.0"
+}

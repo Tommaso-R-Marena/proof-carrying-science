@@ -1,0 +1,64 @@
+{
+  "source": "scikit-learn Iris (published real flower measurements)",
+  "train_count": 105,
+  "test_count": 45,
+  "test_accuracy": 0.9111111111111111,
+  "selected_heldout_index": 22,
+  "selected_true_class": 0,
+  "input_space": "training-set standardized Iris measurements",
+  "standard_scaler_mean": [
+    5.801904764629546,
+    3.042857149669102,
+    3.754285709063212,
+    1.208571420538993
+  ],
+  "standard_scaler_scale": [
+    0.7863091533895683,
+    0.45770798606522384,
+    1.7547773426863333,
+    0.7620916362249689
+  ],
+  "selected_input": [
+    -1.5285396575927734,
+    1.2172449827194214,
+    -1.569592833518982,
+    -1.32342529296875
+  ],
+  "reviewer_box": [
+    [
+      "-1.5785396575927735",
+      "-1.4785396575927734"
+    ],
+    [
+      "1.1672449827194213",
+      "1.2672449827194214"
+    ],
+    [
+      "-1.619592833518982",
+      "-1.519592833518982"
+    ],
+    [
+      "-1.37342529296875",
+      "-1.27342529296875"
+    ]
+  ],
+  "properties": [
+    {
+      "output_coefficients": [
+        "-1",
+        "1",
+        "0"
+      ],
+      "upper_limit": "-1/2"
+    },
+    {
+      "output_coefficients": [
+        "-1",
+        "0",
+        "1"
+      ],
+      "upper_limit": "-1/2"
+    }
+  ],
+  "reproducibility": "torch.manual_seed(1991), train_test_split random_state=9, 240 Adam epochs; inference-only weights exported as ONNX protobuf"
+}

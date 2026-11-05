@@ -1,0 +1,395 @@
+"""Local-only FastAPI upload surface. Raw upload bodies are processed in memory.
+
+No multipart temp spooling, archive extraction, model deserialization, or code execution.
+Use only on a trusted local machine. Never bind this development server publicly.
+"""
+from __future__ import annotations
+import json
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse
+from .engine import analyze, parse_policy, IntakeError, MAX_FILE, VERSION
+
+ROOT = Path(__file__).resolve().parent
+app = FastAPI(title='PCS Model Assurance Studio', version=VERSION, docs_url=None, redoc_url=None)
+
+@app.middleware('http')
+async def local_origin_only(request: Request, call_next):
+    # Reject DNS-rebinding Host names. TestClient uses 'testserver'. The launchers
+    # bind the service to 127.0.0.1:8765, never to a public interface.
+    # Duplicate security-sensitive headers can be interpreted differently by
+    # downstream proxies/frameworks. Refuse ambiguous requests.
+    raw_names=[bytes(k).lower() for k,v in request.scope.get('headers',[])]
+    if raw_names.count(b'host')!=1 or raw_names.count(b'origin')>1:
+        return JSONResponse({'detail':'Ambiguous Host/Origin headers'},status_code=403)
+    allowed = ('127.0.0.1:8765','localhost:8765','127.0.0.1','localhost','testserver')
+    if request.headers.get('host','').lower() not in allowed:
+        return JSONResponse({'detail':'Only local Host headers allowed'},status_code=403)
+    origin=request.headers.get('origin')
+    if origin:
+        expected = f'{request.url.scheme}://{request.url.netloc}'
+        if origin != expected or request.url.hostname not in ('127.0.0.1','localhost'):
+            return JSONResponse({'detail':'Only same-origin local requests allowed'},status_code=403)
+    return await call_next(request)
+
+@app.get('/')
+async def index():
+    return FileResponse(ROOT / 'index.html', headers={'Cache-Control':'no-store',
+             'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'"})
+
+@app.get('/app.js')
+async def js():
+    return FileResponse(ROOT/'app.js', media_type='application/javascript',
+                       headers={'Cache-Control':'no-store'})
+
+@app.get('/api/status')
+async def status():
+    try: import onnx; onnx_version = onnx.__version__
+    except ImportError: onnx_version = None
+    return {'ok':True,'version':VERSION,'extension_version':'0.13.0','onnx_checker_version':onnx_version,
+            'max_file_bytes':MAX_FILE,'storage':'RAM; no upload persistence','model_execution':'screened NumPy reference; optional PyTorch CPU crosscheck; optional SciPy MILP challenger; conditional real partition checks (NOT ONNX Runtime)' 
+            ,'numpy_reference_worker_available':__import__('importlib').util.find_spec('numpy') is not None,
+            'pytorch_reference_worker_available':__import__('importlib').util.find_spec('torch') is not None,
+            'exact_partition_proof_available':True,
+            'exact_relational_dual_checker_available':True,
+            'proof_gated_model_update_available':True,
+            'fp32_exact_rounding_intervals_available':True,
+            'direct_fp32_partition_verifier_available':True,
+            'independent_protobuf_decoder_available':(__import__('importlib').util.find_spec('google') is not None and __import__('importlib').util.find_spec('google.protobuf') is not None),
+            'protobuf_dual_gate_available':True,
+            'correlated_binary32_affine_proof_available':True,
+            'dual_proof_gated_envelope_available':True,
+            'fp32_model_update_error_lifting_available':True,
+            'onnxruntime_cpu_available':__import__('importlib').util.find_spec('onnxruntime') is not None,
+            'lean_executable_available':__import__('shutil').which('lean') is not None,
+            'milp_solver_available':__import__('importlib').util.find_spec('scipy') is not None}
+
+@app.get('/api/iris-demo-profile')
+async def iris_demo_profile():
+    # This is a fixed local published-dataset demonstration, not uploaded data.
+    return JSONResponse(json.loads((ROOT.parent/'validation/v06_iris_profile.json').read_text()),
+                        headers={'Cache-Control':'no-store'})
+
+@app.post('/api/analyze')
+async def submit(request: Request):
+    try:
+        from .verify_relational import strict_pairs
+        filename=unquote(request.headers.get('x-pcs-filename', 'unnamed'))
+        if len(filename)>300:raise IntakeError('Filename too long')
+        encoded=request.headers.get('x-pcs-policy','{}')
+        if len(encoded)>8192:raise IntakeError('Policy header exceeds 8192 bytes')
+        policy=json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+            parse_constant=lambda _:(_ for _ in ()).throw(ValueError('Invalid JSON constant')))
+        p = parse_policy(policy)
+    except (json.JSONDecodeError, IntakeError, ValueError, TypeError) as exc:
+        raise HTTPException(400, f'Invalid metadata/policy: {exc}')
+    content=bytearray()
+    async for part in request.stream():
+        if len(content)+len(part)>MAX_FILE:raise HTTPException(413,'File too large (128 MiB limit)')
+        content.extend(part)
+    if not content:raise HTTPException(400,'Empty file')
+    return JSONResponse(analyze(filename,bytes(content),p),
+                        headers={'Cache-Control':'no-store'})
+
+@app.post('/api/compare-update')
+async def compare_update(request: Request):
+    """Two uploaded models, length-prefixed and screened; no model code executed.
+
+    Body: unsigned little-endian 32-bit old model length, then old/new bytes.
+    Caller controls the proposed policy; actual trust requires separate reviewer
+    verification with independently pinned source hashes and thresholds.
+    """
+    from .model_update import compare,parse_update_policy,MAX_PAIR_BYTES,ModelUpdateError
+    from .verify_relational import strict_pairs
+    try:
+        encoded=request.headers.get('x-pcs-update-policy','')
+        if len(encoded)>8000:raise ModelUpdateError('policy header length budget')
+        policy=parse_update_policy(json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+               parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite JSON'))))
+        content=bytearray()
+        async for part in request.stream():
+            if len(content)+len(part)>MAX_PAIR_BYTES+4:raise ModelUpdateError('combined models exceed 8 MiB')
+            content.extend(part)
+        if len(content)<6:raise ModelUpdateError('truncated update envelope')
+        oldlen=int.from_bytes(content[:4],'little')
+        if not 0<oldlen<len(content)-4:raise ModelUpdateError('invalid model boundaries')
+        result=compare(bytes(content[4:4+oldlen]),bytes(content[4+oldlen:]),policy)
+        return JSONResponse(result,headers={'Cache-Control':'no-store'})
+    except (ValueError,KeyError,TypeError,ModelUpdateError) as exc:
+        raise HTTPException(400,'Invalid update request: '+str(exc)[:180])
+
+@app.post('/api/compare-update-fp32')
+async def compare_update_fp32(request: Request):
+    """Same-input model-update real certificate + conditional binary32 rounding lift.
+
+    An auto-generated proposed policy is NOT reviewer authority, and the app
+    never sends model bytes into the native ONNX Runtime execution engine.
+    """
+    from .model_update import compare,parse_update_policy,MAX_PAIR_BYTES
+    from .fp32_lift_v07 import lift_update
+    from .verify_relational import strict_pairs
+    try:
+        encoded=request.headers.get('x-pcs-fp32-update-policy','')
+        if len(encoded)>8000:raise ValueError('claim length budget')
+        request_policy=json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+            parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite JSON')))
+        if not isinstance(request_policy,dict) or set(request_policy)!={'input_box','output_coefficients',
+                'baseline_upper_limit','drift_upper_limit','required_new_upper_limit','fp32_required_new_upper_limit'}:
+            raise ValueError('update claim fields')
+        float_limit=request_policy.pop('fp32_required_new_upper_limit')
+        p=parse_update_policy(request_policy)
+        data=bytearray()
+        async for chunk in request.stream():
+            if len(data)+len(chunk)>MAX_PAIR_BYTES+4:raise ValueError('model length budget')
+            data.extend(chunk)
+        if len(data)<6:raise ValueError('truncated model envelope')
+        n=int.from_bytes(data[:4],'little')
+        if not 0<n<len(data)-4:raise ValueError('model envelope lengths')
+        old=bytes(data[4:4+n]);new=bytes(data[4+n:])
+        exact=compare(old,new,p)
+        lift={'status':'OPEN','reason':'No two-model independently checkable exact-real certificates'}
+        if exact['status']=='PROVED_CONDITIONALLY':
+            lift=lift_update(old,new,exact['baseline']['certificate'],exact['baseline_reviewer_policy'],
+                  exact['update']['certificate'],exact['update_reviewer_policy'],float_limit)
+        return JSONResponse({'schema':'pcs-fp32-model-update-intake-v0.7',
+            'exact_real':exact,'binary32_lift':lift,
+            'reviewer_authority':'NOT_ESTABLISHED; independent policy/model SHA256 pins required',
+            'runtime_equivalence':'NOT_ESTABLISHED',
+            'lean_kernel_verification':'NOT_ESTABLISHED'},headers={'Cache-Control':'no-store'})
+    except (ValueError,KeyError,TypeError,OverflowError) as exc:
+        raise HTTPException(400,'Invalid binary32 update request: '+str(exc)[:180])
+
+@app.post('/api/fp32-assure')
+async def fp32_assure(request: Request):
+    """Drag/drop restricted IEEE-754 interval claim; no uploaded execution.
+
+    The browser's claim is a *suggestion*. A separate reviewer must pin model
+    SHA-256 and the true acceptance policy before considering the result.
+    """
+    from .fp32_assurance import issue, POLICY_SCHEMA, digest
+    from .dense_nn import screen_onnx
+    from .verify_relational import strict_pairs
+    try:
+        encoded=request.headers.get('x-pcs-fp32-claim','')
+        if len(encoded)>8000:raise ValueError('claim header budget')
+        claim=json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+                         parse_constant=lambda _:(_ for _ in ()).throw(ValueError('invalid JSON constant')))
+        if not isinstance(claim,dict) or set(claim)!={'input_box','input_min','input_max','output_coefficients','upper_limit'}:
+            raise ValueError('claim fields')
+        content=bytearray()
+        async for part in request.stream():
+            if len(content)+len(part)>8*1024*1024:raise ValueError('8 MiB model size budget')
+            content.extend(part)
+        if not content:raise ValueError('empty model')
+        data=bytes(content)
+        spec=screen_onnx(data)
+        box=claim['input_box'] or [[claim['input_min'],claim['input_max']]]*spec['input_width']
+        suggested={'schema':POLICY_SCHEMA,'model_sha256':digest(data),'input_box':box,
+                   'output_coefficients':claim['output_coefficients'],'upper_limit':claim['upper_limit']}
+        result=issue(data,suggested)
+        return JSONResponse({'assessment':result,'suggested_reviewer_policy':suggested,
+             'independent_reviewer_acceptance':'NOT_ESTABLISHED',
+             'note':'The upload itself cannot establish reviewer authority; pin this policy independently.'},
+             headers={'Cache-Control':'no-store'})
+    except (ValueError,TypeError,KeyError) as exc:
+        raise HTTPException(400,'Invalid FP32 request: '+str(exc)[:180])
+    except Exception as exc:
+        raise HTTPException(400,'Unsupported FP32 model/claim: '+type(exc).__name__)
+
+@app.get('/api/samples')
+async def samples():
+    samples_dir=ROOT.parent / 'samples'
+    return sorted(p.name for p in samples_dir.iterdir() if p.is_file() and not p.name.startswith('.'))
+
+@app.get('/api/sample/{sample_name}')
+async def sample(sample_name: str):
+    available=(ROOT.parent/'samples'/sample_name).resolve()
+    if available.parent != (ROOT.parent/'samples').resolve() or not available.is_file():
+        raise HTTPException(404,'Sample not found')
+    return FileResponse(available,headers={'Cache-Control':'no-store'})
+
+@app.post('/api/guarded-demo')
+async def guarded_demo(request: Request):
+    """Run model proposals ONLY against an isolated in-memory synthetic backend."""
+    from .guard_runtime import evaluate_demo_trace,GuardError
+    content=bytearray()
+    async for part in request.stream():
+        if len(content)+len(part)>2*1024*1024:raise HTTPException(413,'Agent demo trace too large')
+        content.extend(part)
+    try:return JSONResponse(evaluate_demo_trace(bytes(content)),headers={'Cache-Control':'no-store'})
+    except GuardError as exc:raise HTTPException(400,str(exc))
+
+@app.post('/api/attack-campaign')
+async def attack_campaign():
+    """Run bounded local synthetic metamorphic attacks. No user input or tools."""
+    from .adversarial_campaign import run_campaign
+    return JSONResponse(run_campaign(),headers={'Cache-Control':'no-store'})
+
+
+@app.get('/api/operating-envelope-demo')
+async def operating_envelope_demo():
+    """Bundled research fixture ONLY; no uploaded/native model is executed.
+
+    This fingerprint is frozen in source for demonstration. Production trust
+    requires an independently administered reviewer policy trust anchor.
+    """
+    from .operating_envelope_v09 import OperatingEnvelopeGate
+    from .guarded_reference_infer_v09 import reference_infer
+    fixture=ROOT.parent
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    bundle=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    pinned='aec03cc456c9f6c77e548cffa1dc1503d795c1934d97d114afe4b4a0d7418c6d'
+    gate=OperatingEnvelopeGate(old,new,bundle,policy,pinned)
+    review=gate.review()
+    cases=[{'sample_index':index,'decision':gate.admit(vector),
+            'reference_execution':reference_infer(gate,new,vector)}
+           for index,vector in sorted(words.items(),key=lambda kv:int(kv[0]))]
+    outsider=['00000000']*4
+    return JSONResponse({'schema':'pcs-operating-envelope-demo-v0.9','review':review,
+        'examples':cases,'outside_example':{'input_bits':outsider,
+            'decision':gate.admit(outsider),
+            'reference_execution':reference_infer(gate,new,outsider)},
+        'measured_data_coverage':{'admitted':27,'tested':150,
+            'note':'Same Iris dataset used to choose demonstration regions; NOT a holdout generalization estimate'},
+        'limitations':'Reference execution uses screened deterministic software operations; no Lean or official ONNX Runtime equivalence. This demo fingerprint is checked into source and is NOT an independently administered trust anchor.'},
+        headers={'Cache-Control':'no-store'})
+
+
+@app.post('/api/affine-fp32')
+async def affine_fp32_selected(request: Request):
+    """Propose, then locally recheck, a correlated binary32 model claim.
+
+    An uploaded policy is never an independently administered trust root.
+    The proposed certificate MUST be replayed separately with a reviewer-owned
+    policy hash; no kernel/runtime/deployment verdict is returned.
+    """
+    from .affine_fp32_v13 import POLICY_SCHEMA, propose
+    from .dense_nn import screen_onnx
+    from .verify_relational import strict_pairs
+    from hashlib import sha256
+    try:
+        encoded=request.headers.get('x-pcs-affine-claim','')
+        if len(encoded)>8192:raise ValueError('affine claim header budget exceeded')
+        claim=json.loads(unquote(encoded),object_pairs_hook=strict_pairs,
+            parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite JSON')))
+        if type(claim) is not dict or set(claim)!={'input_box','input_min','input_max','output_coefficients','upper_limit'}:
+            raise ValueError('affine claim schema')
+        data=bytearray()
+        async for chunk in request.stream():
+            if len(data)+len(chunk)>8*1024*1024:
+                raise ValueError('screened model size limit exceeded')
+            data.extend(chunk)
+        raw=bytes(data)
+        spec=screen_onnx(raw)
+        box=claim['input_box'] or [[claim['input_min'],claim['input_max']]]*spec['input_width']
+        proposed_policy={'schema':POLICY_SCHEMA,'model_sha256':sha256(raw).hexdigest(),
+                         'input_box':box,'output_coefficients':claim['output_coefficients'],
+                         'upper_limit':claim['upper_limit']}
+        candidate=propose(raw,proposed_policy)
+        return JSONResponse({'schema':'pcs-affine-fp32-upload-v0.13',
+            'candidate':candidate,'suggested_reviewer_policy':proposed_policy,
+            'independent_reviewer_acceptance':'NOT_ESTABLISHED',
+            'lean_kernel_verification':'NOT_ESTABLISHED',
+            'official_runtime_equivalence':'NOT_ESTABLISHED',
+            'note':'Candidate is not reviewer authorization. Pin exact model and policy bytes independently and replay the complete certificate.'},headers={'Cache-Control':'no-store'})
+    except (ValueError,TypeError,KeyError,MemoryError,OverflowError) as exc:
+        raise HTTPException(400,'Unsupported correlated binary32 claim: '+type(exc).__name__)
+    except Exception as exc:
+        raise HTTPException(400,'Unsupported correlated binary32 model: '+type(exc).__name__)
+
+
+@app.get('/api/affine-demo')
+async def affine_fp32_demo():
+    """Fixed, public, replayable synthetic plus trained-model research demo."""
+    from .affine_envelope_v13 import AffineEnvelopeGate
+    from .affine_fp32_v13 import POLICY_SCHEMA,verify as check
+    from .fp32_assurance import intervals,relation_upper
+    from .relational_kernel import canonical
+    from .dense_nn import screen_onnx
+    from fractions import Fraction
+    from hashlib import sha256
+    fixture=ROOT.parent
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    correlated=(fixture/'samples/demo_correlated_fp32_margin_v13.onnx').read_bytes()
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    real=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    affine=json.loads((fixture/'validation/v13_affine_iris_candidate.json').read_text())
+    trusted=sha256(canonical(policy)).hexdigest() # demo fingerprint is NOT independent custody
+    gate=AffineEnvelopeGate(old,new,real,affine,policy,trusted)
+    input_words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    correlated_policy={'schema':POLICY_SCHEMA,'model_sha256':sha256(correlated).hexdigest(),
+        'input_box':[['-1000','1000']]*2,'output_coefficients':['1','-1'],'upper_limit':'-1/2'}
+    correlation=check(correlated,correlated_policy,
+        json.loads((fixture/'validation/v13_correlated_margin_candidate.json').read_text()),
+        sha256(canonical(correlated_policy)).hexdigest())
+    old_upper=relation_upper(intervals(screen_onnx(correlated),[(Fraction(-1000),Fraction(1000))]*2),
+                             [Fraction(1),Fraction(-1)])
+    return JSONResponse({'schema':'pcs-correlated-binary32-demo-v0.13',
+        'review':gate.review(),
+        'comparison':{'old_interval_upper':str(old_upper),'affine':correlation,
+                      'required_upper_limit':'-1/2'},
+        'examples':[{'sample_index':key,'decision':gate.admit(words),
+                     'reference_execution':gate.reference_infer(words)}
+                   for key,words in sorted(input_words.items(),key=lambda z:int(z[0]))],
+        'outside_region':gate.reference_infer(['00000000']*4),
+        'limitations':'All results are restricted research checks. Correlated bounds use a shared Python model semantics TCB; no Lean kernel, official ONNX Runtime, security sandbox, independently held trust roots, or held-out population validation.'},
+        headers={'Cache-Control':'no-store'})
+
+
+@app.get('/api/dual-decoder-demo')
+async def dual_decoder_demo():
+    """Two independent wire decoders and both proof routes, no uploaded code."""
+    from .protobuf_dual_decoder_v12 import DualDecoderAssuranceGate,crosscheck
+    fixture=ROOT.parent
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    real=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    direct=json.loads((fixture/'validation/v10_direct_fp32_partition_evidence.json').read_text())
+    words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    # A reproducible fixture fingerprint is NOT an independent trust root.
+    pin='aec03cc456c9f6c77e548cffa1dc1503d795c1934d97d114afe4b4a0d7418c6d'
+    gate=DualDecoderAssuranceGate(old,new,real,direct,policy,pin)
+    outside=['00000000']*4
+    return JSONResponse({'schema':'pcs-protobuf-dual-decoder-demo-v0.12',
+        'review':gate.review(),
+        'old_parser':crosscheck(old),'new_parser':crosscheck(new),
+        'examples':[{'sample_index':key,'decision':gate.admit(vector),
+                     'reference_execution':gate.reference_infer(vector)}
+                    for key,vector in sorted(words.items(),key=lambda kv:int(kv[0]))],
+        'outside_example':{'decision':gate.admit(outside),
+                           'reference_execution':gate.reference_infer(outside)},
+        'limitations':'Google protobuf independently decodes the numerical ONNX subset, but this is NOT official onnx.checker, Lean verification, production-runtime equivalence, secure isolation or external policy custody. Missing protobuf causes OPEN/ABSTAIN. Demo regions use non-held-out Iris data.'},
+        headers={'Cache-Control':'no-store'})
+
+@app.get('/api/dual-envelope-demo')
+async def dual_envelope_demo():
+    """Recheck bundled research fixtures; no uploaded/native code is executed."""
+    from .dual_envelope_v10 import DualAssuranceGate
+    from .relational_kernel import canonical
+    from hashlib import sha256
+    fixture=ROOT.parent
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    real=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    direct=json.loads((fixture/'validation/v10_direct_fp32_partition_evidence.json').read_text())
+    words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    # Checked-in digest is only a pinned DEMO fingerprint, not external custody.
+    pinned='aec03cc456c9f6c77e548cffa1dc1503d795c1934d97d114afe4b4a0d7418c6d'
+    gate=DualAssuranceGate(old,new,real,direct,policy,pinned)
+    outside=['00000000']*4
+    return JSONResponse({'schema':'pcs-dual-proof-gated-inference-demo-v0.10',
+        'review':gate.review(),
+        'examples':[{'sample_index':key,'decision':gate.admit(vector),
+                      'reference_execution':gate.reference_infer(vector)}
+                    for key,vector in sorted(words.items(),key=lambda kv:int(kv[0]))],
+        'outside_example':{'decision':gate.admit(outside),
+                           'reference_execution':gate.reference_infer(outside)},
+        'limitations':'Two methods share Python/ONNX parsing; no Lean kernel, official runtime conformance, or OS security boundary. Demo policy hash is not independently administered. Dataset used for region selection is not a held-out evaluation.'},
+        headers={'Cache-Control':'no-store'})
