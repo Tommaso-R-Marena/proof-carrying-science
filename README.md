@@ -146,3 +146,8 @@ authorization does not establish independent clearance of the complete history.
 Aristotle-assisted formal artifacts retain their source provenance. See
 [Aristotle](https://aristotle.harmonic.fun); applicable commits retain the
 `Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>` co-author attribution.
+
+
+### Experimental model assurance studio
+
+The [local research studio](research/model_assurance_studio_v1/README.md) inspects bounded scientific/model files, checks exact-rational and specified binary32 certificates, and supports reviewer-pinned input admission. It is separate from PCS production authority. [Current integration evidence and limitations](research/model_assurance_studio_v1/docs/RECONCILIATION_V14.md) distinguish compiled abstract Lean implications, Python checker assumptions, finite official-runtime observations and scientific assumptions. A conditional certificate is not a general model-safety or deployment approval.

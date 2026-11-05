@@ -127,7 +127,8 @@ class DualDecoderV12(unittest.TestCase):
                 "from pathlib import Path;"
                 "print(crosscheck(Path('samples/demo_trained_iris_mlp.onnx').read_bytes())['status'])")
         p=subprocess.run([sys.executable,'-S','-c',script],cwd=str(ROOT),
-                         capture_output=True,text=True,timeout=15)
+                         capture_output=True,text=True,timeout=15,
+                         env={**__import__('os').environ, 'PYTHONPATH': ''})
         self.assertEqual(p.returncode,0,p.stderr)
         self.assertEqual(p.stdout.strip(),'NOT_RUN')
 

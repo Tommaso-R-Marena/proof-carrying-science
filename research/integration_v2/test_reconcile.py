@@ -393,12 +393,34 @@ def test_actual_pr117_source_family_retains_the_protected_versions():
     assert r["release_ready"] is r["pcs_authority"] is False
 
 
-def test_conflict_repair_does_not_rewrite_the_frozen_manifest_or_workflows():
-    manifest = gate._json((gate.ROOT / gate.MANIFEST).read_bytes())
-    assert hashlib.sha256((gate.ROOT / gate.MANIFEST).read_bytes()).hexdigest() == gate.MANIFEST_SHA256
-    for name in [gate.MANIFEST, *manifest["workflow_adaptations"],
+def test_v21_preserves_frozen_v20_and_protected_proofs_with_exact_dependency_successor():
+    old_path="docs/integration/2026-10-29/RECONCILIATION_V20.json"
+    old=(gate.ROOT/old_path).read_bytes()
+    assert hashlib.sha256(old).hexdigest()=="30d74b87c9bedb598af2cd6ab0c5d9014a99fe50cd6382bc6baf76663c380833"
+    assert old==gate._git(gate.ROOT,"show",gate.PR117_PROTECTED_HEAD+":"+old_path)
+    manifest=gate._json((gate.ROOT/gate.MANIFEST).read_bytes())
+    assert hashlib.sha256((gate.ROOT/gate.MANIFEST).read_bytes()).hexdigest()==gate.MANIFEST_SHA256
+    assert len(manifest["prs"])==72 and {p["number"] for p in manifest["prs"] if p["number"]>=196}=={196,197}
+    for name in [*manifest["workflow_adaptations"],
                  "formal/PCS/V2/ProofGatedArtifacts.lean",
                  "formal/PCS/V2/ProofGatedAudit.lean",
                  "formal/PCS/V2/ProofGatedInference.lean"]:
-        assert (gate.ROOT / name).read_bytes() == gate._git(
-            gate.ROOT, "show", gate.PR117_PROTECTED_HEAD + ":" + name)
+        previous=gate._git(gate.ROOT,"show",gate.PR117_PROTECTED_HEAD+":"+name)
+        expected=previous.replace(b"leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6",b"leanprover/lean-action@fe408643ea7367d8c0404a8be3975bb145f5fb64") if name.startswith(".github/") else previous
+        assert (gate.ROOT/name).read_bytes()==expected
+
+
+def test_lean_action_successor_retains_required_workflow_commands():
+    raw=b"uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6\nrun: PCS_REQUIRE_PROVER=1 python -m pytest -q tests\n"
+    current=gate.workflow_successor(raw,update_lean_action=True)
+    assert current==raw.replace(b"24581d74d674803a25a81b10b059c5c0cdd344c6",b"fe408643ea7367d8c0404a8be3975bb145f5fb64")
+
+
+def test_v21_unknown_added_source_is_not_admitted(fixture):
+    root,m=fixture
+    m["format"]="pcs-source-reconciliation-v21"
+    for number in [196,197]:
+        pr=copy.deepcopy(m["prs"][0]);pr["number"]=number;m["prs"].append(pr)
+    assert gate._verify(root,m)["prs_checked"]==72
+    m["prs"][-1]["files"][0]["historical"]["sha256"]="0"*64
+    with pytest.raises(ValueError):gate._verify(root,m)

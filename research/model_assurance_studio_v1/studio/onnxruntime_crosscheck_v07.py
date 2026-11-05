@@ -25,7 +25,7 @@ def _word(x):
 def ulp_distance(a,b):
     x=_word(a);y=_word(b)
     # Monotone integer encoding across negative and positive numbers.
-    def key(bits):return (0x80000000-bits) if bits>>31 else bits+0x80000000
+    def key(bits):return (0x80000000-(bits & 0x7fffffff)) if bits>>31 else bits+0x80000000
     return abs(key(x)-key(y))
 
 
