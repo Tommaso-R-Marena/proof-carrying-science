@@ -1,0 +1,515 @@
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+import pytest
+
+from pcs.attest_v06 import attest_v06
+from pcs.canonical_json import canonicalize_jcs
+from pcs.discover_v06 import confirm_manifest_draft_v06, discover_project_v06, write_discovery_outputs_v06
+from pcs.environment_execute_v06 import REALIZED_ENVIRONMENT_FORMAT_V06, SANDBOX_REPLAY_RECEIPT_FORMAT_V06, V06SandboxReplayError, build_sandbox_replay_plan_v06, compare_realized_environment_v06, execute_prepared_replay_workspace_v06
+from pcs.environment_workspace_v06 import prepare_verified_environment_workspace_v06
+from pcs.scaffold import init_project
+from pcs.signing import generate_keypair
+
+
+def _workspace(tmp_path: Path) -> tuple[Path, Path, str]:
+    project = tmp_path / "study"
+    init_project(project, template="pkpd", subject="sandbox-replay")
+    (project / "input.txt").write_text("hello\n", encoding="utf-8")
+    (project / "replayed.txt").write_text("HELLO\n", encoding="utf-8")
+    (project / "analysis.py").write_text(
+        "from pathlib import Path\n"
+        "value = Path('input.txt').read_text(encoding='utf-8')\n"
+        "Path('replayed.txt').write_text(value.upper(), encoding='utf-8')\n",
+        encoding="utf-8",
+    )
+    (project / "requirements.txt").write_text("demo==1.0\n", encoding="utf-8")
+    (project / ".python-version").write_text("3.12.2\n", encoding="utf-8")
+    report = discover_project_v06(project)
+    draft = project / "pcs-manifest.draft.json"
+    write_discovery_outputs_v06(report, manifest_output=draft, report_output=project / "pcs-discovery.json")
+    manifest = project / "manifest.json"
+    confirm_manifest_draft_v06(draft, manifest, project_root=project, overwrite=True)
+    private = tmp_path / "private.pem"; public = tmp_path / "public.pem"
+    fingerprint = generate_keypair(private, public)["fingerprint"]
+    bundle = tmp_path / "study.pcs.zip"
+    assert attest_v06(manifest, bundle, private, public, expected_fingerprint=fingerprint)["valid"] is True
+    workspace = tmp_path / "workspace"
+    prepared = prepare_verified_environment_workspace_v06(bundle, workspace, public, expected_fingerprint=fingerprint)
+    assert prepared["valid"] is True
+    meta = json.loads((workspace / "pcs-environment-workspace.json").read_text(encoding="utf-8"))
+    assert meta["sandbox_execution_available"] is True
+    return workspace, public, fingerprint
+
+
+class _FakeBackend:
+    write_mode = "correct"
+    package_version = "1.0"
+    mutate_input = False
+
+    def __init__(self, *, runtime, sandbox_root, signed_environment, image, timeout_seconds, memory, cpus):
+        self.runtime_name = "fake-oci"
+        self.root = sandbox_root
+        self.built_image = False
+        self.image_meta = {"image_id":"sha256:"+"f"*64,"repo_digests":[],"os":"linux","architecture":"amd64"}
+
+    def prepare_image(self, plan):
+        return self.image_meta
+
+    def execute_node(self, node):
+        if self.mutate_input:
+            (self.root / "input.txt").write_text("mutated\n", encoding="utf-8")
+        if self.write_mode != "missing":
+            value = "HELLO\n" if self.write_mode == "correct" else "WRONG\n"
+            for output in node["outputs"]:
+                p = self.root / output["source_path"]; p.parent.mkdir(parents=True, exist_ok=True)
+                p.write_text(value, encoding="utf-8")
+        empty = hashlib.sha256(b"").hexdigest()
+        return {"command":["fake",node["source_path"]],"exit_code":0,"stdout":"","stderr":"",
+                "stdout_sha256":empty,"stderr_sha256":empty,"stdout_truncated":False,"stderr_truncated":False}
+
+    def capture_environment(self):
+        tree = {"python":[{"name":"demo","version":self.package_version,"requires":[]}],"r":[],"conda":[]}
+        value = {"format":REALIZED_ENVIRONMENT_FORMAT_V06,
+                 "python":{"implementation":"CPython","version":"3.12.2","executable":"/usr/bin/python",
+                           "executable_sha256":"a"*64,"packages":tree["python"],"packages_truncated":False},
+                 "r":{"version":None,"packages":[],"executable_sha256":None},
+                 "conda":{"packages":[]},"platform":{"probe":"Linux test","image_os":"linux","image_architecture":"amd64"},
+                 "container_image":self.image_meta,
+                 "container_image_digest":self.image_meta["image_id"],
+                 "container_image_digest_kind":"oci_image_id",
+                 "dependency_tree_sha256":hashlib.sha256(canonicalize_jcs(tree).encode()).hexdigest()}
+        value["semantic_sha256"] = hashlib.sha256(canonicalize_jcs(value).encode()).hexdigest()
+        return value
+
+    def close(self):
+        pass
+
+
+def _execute(tmp_path: Path, backend):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    out = tmp_path / "result"
+    result = execute_prepared_replay_workspace_v06(
+        workspace, out, public, expected_fingerprint=fingerprint, _backend_factory=backend
+    )
+    receipt = json.loads((out / "pcs-replay-execution.json").read_text(encoding="utf-8"))
+    realized = json.loads((out / "pcs-realized-environment.json").read_text(encoding="utf-8"))
+    return workspace, out, result, receipt, realized
+
+
+def test_replay_removes_stale_output_recreates_exact_bytes_and_captures_realized_state(tmp_path):
+    class Backend(_FakeBackend): pass
+    workspace, out, result, receipt, realized = _execute(tmp_path, Backend)
+    assert result["valid"] is True
+    assert receipt["format"] == SANDBOX_REPLAY_RECEIPT_FORMAT_V06
+    assert receipt["preexisting_outputs"][0]["preexisting_signed_output_removed"] is True
+    assert receipt["workflow_outputs"][0]["status"] == "match"
+    assert receipt["environment_comparison"]["enforceable_contract_match"] is True
+    assert (
+        receipt["environment_comparison"][
+            "signed_dependency_projection_fingerprint"
+        ]["match"]
+        is True
+    )
+    assert receipt["determinism"]["runs_requested"] == 2
+    assert receipt["determinism"]["runs_completed"] == 2
+    assert receipt["determinism"]["confirmed"] is True
+    assert receipt["verdict"]["deterministic_replay_confirmed"] is True
+    assert result["determinism_confirmed"] is True
+    assert receipt["environment_comparison"]["interpreter_binary_hash"]["python_sha256"] == "a"*64
+    assert realized["platform"]["image_architecture"] == "amd64"
+    assert realized["container_image_digest"] == "sha256:" + "f" * 64
+    assert realized["container_image_digest_kind"] == "oci_image_id"
+    assert len(realized["dependency_tree_sha256"]) == 64
+    assert (out / "outputs" / "replayed.txt").read_text(encoding="utf-8") == "HELLO\n"
+    assert (workspace / "replayed.txt").read_text(encoding="utf-8") == "HELLO\n"
+
+
+def test_independent_repeat_detects_realized_environment_divergence(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            self.instance_number = type(self).instances
+
+        def capture_environment(self):
+            value = super().capture_environment()
+            if self.instance_number >= 2:
+                value["python"]["executable_sha256"] = "b" * 64
+                value["semantic_sha256"] = hashlib.sha256(
+                    canonicalize_jcs(value).encode()
+                ).hexdigest()
+            return value
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert result["determinism_confirmed"] is False
+    assert receipt["determinism"]["status"] == "divergence_detected"
+    assert receipt["determinism"]["runs_completed"] == 2
+    assert receipt["determinism"]["runs"][1]["valid"] is True
+    assert (
+        receipt["determinism"]["runs"][1]["matches_primary_projection"]
+        is False
+    )
+    assert receipt["verdict"]["deterministic_replay_confirmed"] is False
+
+
+def test_repeat_operational_failure_is_recorded_and_fails_closed(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            self.instance_number = type(self).instances
+
+        def prepare_image(self, plan):
+            if self.instance_number >= 2:
+                raise V06SandboxReplayError("simulated repeat sandbox failure")
+            return super().prepare_image(plan)
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert result["determinism_confirmed"] is False
+    assert result["determinism_runs_attempted"] == 2
+    assert result["determinism_runs_completed"] == 1
+    assert receipt["determinism"]["status"] == "divergence_detected"
+    assert receipt["determinism"]["runs"][1]["status"] == "operational_failure"
+    assert "simulated repeat sandbox failure" in receipt["determinism"]["runs"][1]["error"]
+
+
+def test_public_replay_requires_at_least_two_runs(tmp_path):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    with pytest.raises(
+        V06SandboxReplayError,
+        match="requires between 2 and 5 independent runs",
+    ):
+        execute_prepared_replay_workspace_v06(
+            workspace,
+            tmp_path / "result",
+            public,
+            expected_fingerprint=fingerprint,
+            determinism_runs=1,
+            _backend_factory=_FakeBackend,
+        )
+
+
+def test_stale_signed_output_cannot_mask_missing_reexecution_output(tmp_path):
+    class Backend(_FakeBackend): write_mode = "missing"
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert receipt["workflow_outputs"][0]["status"] == "missing"
+
+
+def test_replayed_output_byte_divergence_fails_closed(tmp_path):
+    class Backend(_FakeBackend): write_mode = "wrong"
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert receipt["workflow_outputs"][0]["status"] == "mismatch"
+
+
+def test_signed_input_mutation_fails_closed(tmp_path):
+    class Backend(_FakeBackend): mutate_input = True
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert receipt["non_output_artifact_mutations"]
+
+
+def test_realized_dependency_version_drift_fails_contract_comparison(tmp_path):
+    class Backend(_FakeBackend): package_version = "2.0"
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    row = next(x for x in receipt["environment_comparison"]["signed_exact_packages"] if x["name"] == "demo")
+    assert row["expected"] == "1.0"
+    assert row["realized"] == "2.0"
+    assert row["status"] == "version_mismatch"
+    assert (
+        receipt["environment_comparison"][
+            "signed_dependency_projection_fingerprint"
+        ]["match"]
+        is False
+    )
+
+
+def test_workspace_control_path_escape_is_rejected(tmp_path):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    meta_path = workspace / "pcs-environment-workspace.json"
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    meta["signed_certificate"] = "../outside.json"
+    meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(V06SandboxReplayError, match="unsafe project-relative path"):
+        execute_prepared_replay_workspace_v06(
+            workspace,
+            tmp_path / "result",
+            public,
+            expected_fingerprint=fingerprint,
+            _backend_factory=_FakeBackend,
+        )
+
+
+def test_tampered_execution_plan_is_rederived_from_signed_certificate(tmp_path):
+    workspace, public, fingerprint = _workspace(tmp_path)
+    meta_path = workspace / "pcs-environment-workspace.json"
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    plan_path = workspace / meta["sandbox_execution_plan"]
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan["sandbox_policy"]["network"] = "host"
+    plan_path.write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    meta["sandbox_execution_plan_sha256"] = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+    meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(V06SandboxReplayError, match="differs from signed certificate"):
+        execute_prepared_replay_workspace_v06(
+            workspace,
+            tmp_path / "result",
+            public,
+            expected_fingerprint=fingerprint,
+            _backend_factory=_FakeBackend,
+        )
+
+
+def test_replay_created_symlink_output_is_rejected_without_following_it(tmp_path):
+    class Backend(_FakeBackend):
+        def execute_node(self, node):
+            for output in node["outputs"]:
+                p = self.root / output["source_path"]
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.symlink_to("input.txt")
+            empty = hashlib.sha256(b"").hexdigest()
+            return {
+                "command": ["fake", node["source_path"]],
+                "exit_code": 0,
+                "stdout": "",
+                "stderr": "",
+                "stdout_sha256": empty,
+                "stderr_sha256": empty,
+                "stdout_truncated": False,
+                "stderr_truncated": False,
+            }
+
+    _, out, result, receipt, _ = _execute(tmp_path, Backend)
+    assert result["valid"] is False
+    assert receipt["workflow_outputs"][0]["status"] == "unsafe_symlink"
+    assert receipt["unsafe_symlinks"] == ["replayed.txt"]
+    assert receipt["verdict"]["filesystem_contains_no_symlinks"] is False
+    assert not (out / "outputs" / "replayed.txt").exists()
+
+
+def test_realized_range_constraint_is_enforced():
+    environment = {
+        "python": {
+            "dependencies": [
+                {
+                    "name": "demo",
+                    "raw": "demo>=1.0,<2.0",
+                    "exact_pin": False,
+                    "version": None,
+                }
+            ],
+            "interpreter_constraints": [{"value": ">=3.11,<3.13"}],
+        },
+        "r": {"dependencies": [], "interpreter_constraints": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    realized = {
+        "python": {
+            "version": "3.12.2",
+            "executable_sha256": "a" * 64,
+            "packages": [{"name": "demo", "version": "1.7.0"}],
+        },
+        "r": {"version": None, "executable_sha256": None, "packages": []},
+        "conda": {"packages": []},
+        "platform": {"probe": "linux"},
+        "container_image": {},
+        "dependency_tree_sha256": "b" * 64,
+    }
+    comparison = compare_realized_environment_v06(
+        environment,
+        realized,
+        container_status={"status": "not_declared"},
+    )
+    assert comparison["enforceable_contract_match"] is True
+    assert comparison["signed_non_exact_dependencies"][0]["status"] == "constraint_match"
+
+    realized["python"]["packages"][0]["version"] = "2.0.0"
+    comparison = compare_realized_environment_v06(
+        environment,
+        realized,
+        container_status={"status": "not_declared"},
+    )
+    assert comparison["enforceable_contract_match"] is False
+    assert comparison["signed_non_exact_dependencies"][0]["status"] == "constraint_mismatch"
+
+
+def test_conditional_exact_dependency_is_not_misapplied_as_unconditional():
+    environment = {
+        "python": {
+            "dependencies": [
+                {
+                    "name": "win-only",
+                    "raw": 'win-only==1.0; sys_platform == "win32"',
+                    "exact_pin": True,
+                    "version": "1.0",
+                }
+            ],
+            "interpreter_constraints": [],
+        },
+        "r": {"dependencies": [], "interpreter_constraints": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    realized = {
+        "python": {
+            "version": "3.12.2",
+            "executable_sha256": "a" * 64,
+            "packages": [],
+        },
+        "r": {"version": None, "executable_sha256": None, "packages": []},
+        "conda": {"packages": []},
+        "platform": {"probe": "linux"},
+        "container_image": {},
+        "dependency_tree_sha256": "b" * 64,
+    }
+    comparison = compare_realized_environment_v06(
+        environment,
+        realized,
+        container_status={"status": "not_declared"},
+    )
+    assert comparison["enforceable_contract_match"] is True
+    assert comparison["signed_non_exact_dependencies"][0]["status"] == (
+        "conditional_marker_not_evaluated"
+    )
+
+
+def test_semantic_workflow_contract_is_not_misclassified_as_executable():
+    semantic = {
+        "equations": ["C(t)=C0*exp(-kt)"],
+        "validation_scope": "computational replay only",
+    }
+    certificate = {
+        "artifacts": [],
+        "workflow": {
+            "nodes": [
+                {
+                    "id": "N_SEMANTIC",
+                    "inputs": [],
+                    "outputs": [],
+                    "contract": {
+                        "type": "external",
+                        "namespace": "pcs-manifest-workflow-contract-v1",
+                        "proposition": canonicalize_jcs(semantic),
+                    },
+                }
+            ]
+        },
+    }
+    environment = {
+        "semantic_sha256": "a" * 64,
+        "python": {"dependencies": []},
+        "r": {"dependencies": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    assert build_sandbox_replay_plan_v06(certificate, environment) is None
+
+
+def test_static_workflow_contract_without_confirmation_still_fails_closed():
+    static_claim = {
+        "inference_format": "pcs-static-workflow-map-v1",
+        "inference_id": "W_STATIC_A",
+        "static_only": True,
+        "user_code_executed": False,
+        "source_path": "analysis.py",
+        "source_kind": "python",
+        "dependency_claim_mode": "claimed_subset",
+    }
+    certificate = {
+        "artifacts": [],
+        "workflow": {
+            "nodes": [
+                {
+                    "id": "N_STATIC_A",
+                    "inputs": [],
+                    "outputs": [],
+                    "contract": {
+                        "type": "external",
+                        "namespace": "pcs-manifest-workflow-contract-v1",
+                        "proposition": canonicalize_jcs(static_claim),
+                    },
+                }
+            ]
+        },
+    }
+    environment = {
+        "semantic_sha256": "a" * 64,
+        "python": {"dependencies": []},
+        "r": {"dependencies": []},
+        "conda": {"dependencies": []},
+        "containers": [],
+    }
+    with pytest.raises(V06SandboxReplayError, match="not confirmed static analysis"):
+        build_sandbox_replay_plan_v06(certificate, environment)
+
+
+def test_repeat_records_but_tolerates_unsigned_local_image_identity_drift(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            suffix = format(type(self).instances, "064x")
+            self.image_meta = {
+                "image_id": "sha256:" + suffix,
+                "repo_digests": [],
+                "os": "linux",
+                "architecture": "amd64",
+            }
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+
+    assert result["valid"] is True
+    assert result["determinism_confirmed"] is True
+    assert receipt["determinism"]["confirmed"] is True
+    assert receipt["determinism"]["runs"][1]["matches_primary_projection"] is True
+    observations = receipt["determinism"]["unsigned_observations"]
+    assert observations["container_image_digest_stable"] is False
+    assert observations["full_realized_environment_hash_stable"] is False
+    assert (
+        observations[
+            "container_image_identity_drift_does_not_by_itself_invalidate"
+        ]
+        is True
+    )
+
+
+def test_repeat_dependency_tree_drift_still_fails_determinism(tmp_path):
+    class Backend(_FakeBackend):
+        instances = 0
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            type(self).instances += 1
+            self.instance_number = type(self).instances
+
+        def capture_environment(self):
+            value = super().capture_environment()
+            if self.instance_number >= 2:
+                value["dependency_tree_sha256"] = "b" * 64
+                value["semantic_sha256"] = hashlib.sha256(
+                    canonicalize_jcs(value).encode()
+                ).hexdigest()
+            return value
+
+    _, _, result, receipt, _ = _execute(tmp_path, Backend)
+
+    assert result["valid"] is False
+    assert result["determinism_confirmed"] is False
+    assert receipt["determinism"]["status"] == "divergence_detected"
+    assert receipt["determinism"]["runs"][1]["valid"] is True
+    assert receipt["determinism"]["runs"][1]["matches_primary_projection"] is False

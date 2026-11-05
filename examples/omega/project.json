@@ -1,0 +1,56 @@
+{
+  "format": "pcs-omega-project-v1",
+  "source": {
+    "name": "protocol.md",
+    "revision": "1",
+    "license": "Apache-2.0",
+    "text": "Release is permitted only with review and tests."
+  },
+  "claims": [
+    {
+      "id": "release",
+      "statement": "Release is permitted only with review and tests.",
+      "source_lines": [
+        1,
+        1
+      ],
+      "scope": "Review and tests are externally interpreted Boolean predicates.",
+      "assumptions": [
+        "Review and tests are assessed independently."
+      ],
+      "depends_on": [],
+      "task": {
+        "variables": [
+          "P",
+          "Q"
+        ],
+        "source": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "P",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "Q",
+            "args": []
+          }
+        },
+        "candidate": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "P",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "Q",
+            "args": []
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+name: PCS Product Hardening
+
+on:
+  push:
+    branches:
+      - product/p0-p1-demo-hardening
+  pull_request:
+    paths:
+      - 'pcs/**'
+      - 'formal/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - '.github/workflows/product-hardening.yml'
+
+jobs:
+  p0-p1:
+    if: ${{ github.event.repository.private == true && github.ref_protected == true && github.event_name != 'pull_request' && vars.PCS_SELF_HOSTED_CI_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: [self-hosted, linux, x64, pcs-lean-ci]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install PCS test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+      - name: Install Lean toolchain
+        shell: bash
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build mandatory Lean authority
+        shell: bash
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd formal
+          lake build pcs-lean-authority
+      - name: Focused P0/P1 tests
+        run: python -m pytest -q tests/test_golden_examples_v06.py tests/test_adversarial_v06_hardening.py tests/test_local_verify_v06.py tests/test_lean_authority_v06.py tests/test_numeric_contract_v06.py tests/test_formal_coverage_v06.py tests/test_zip_verify_v06.py tests/test_receipt_contract_v06.py tests/test_receipt_signature_v06.py tests/test_quorum_v06.py tests/test_crypto_domains_v06.py tests/test_v06_crypto_schemas.py tests/test_external_validator_v06.py tests/test_external_validator_attestation_v06.py tests/test_proof_translation_v06.py tests/test_proof_repair_v06.py tests/test_proof_search_v06.py tests/test_pkpd_translation_benchmark_v06.py tests/test_pkpd_peak_threshold_v06.py
+      - name: Golden examples
+        run: python scripts/run_golden_examples_v06.py -o golden-demo-gha
+      - name: Realistic PK/PD translation benchmark
+        run: python scripts/run_pkpd_translation_benchmark_v06.py -o pkpd-translation-benchmark-gha
+      - name: Adversarial hardening campaign
+        run: python scripts/adversarial_v06_hardening.py

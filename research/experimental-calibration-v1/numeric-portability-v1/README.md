@@ -1,0 +1,9 @@
+# Bounded numerical-proof portability
+
+The first protected run `38989099111` at candidate `32a752c` passed the 31-name static calibration audit, but the monolithic numerical-comparison source hit its 2,048 MiB Lean interpreter cap before the new CI experiment steps ran. The original source and local qualification remain unchanged, and the failed job log and artifact are retained here. It is a resource-portability failure, not a refuted mathematical or empirical statement.
+
+`proof/` copies every numeric data definition byte-for-byte, proves the row calculations in 22 separate fresh kernel processes, and assembles the **identical nine primary theorem types**. Forty-four supporting row lemmas are implementation certificates, not new experiments or new numerical findings. The compiler memory cap remains 2,048 MiB per process and the total kernel wall budget remains 180 seconds. The complete 53-name primary/support inventory is audited. The successful local portability run took 63.065093 seconds. Final protected CI must independently qualify the eventual integration tree.
+
+`PCSCalibrationNumericData.lean` retains the exact original numeric prefix. Its SHA and the original primary-statement SHA are recorded in `REPORT.json`, alongside every module source hash. The public verification script checks those identities, the archived case-source handoff, admitted imports, all declarations, a fresh private module build and the complete approved axiom inventory. No unsafe proof escape, source obligation, data row or experimental conclusion was removed.
+
+The data are derived from Gerritsma, Onnink and Versluis (1981), Yacht Hydrodynamics, UCI, https://doi.org/10.24432/C5XG7R, CC BY 4.0. The full upstream license and original-data attribution accompany the earlier source-qualified evidence. Scientific acceptance remains false; physical/model/noise assumptions and external domain review remain open.

@@ -1,0 +1,40 @@
+import CertificateClaims
+import Controls
+
+#print axioms PCS.Research.IntegerAffine.nonneg_sound
+#print axioms PCS.Research.IntegerAffine.plus_eval
+#print axioms PCS.Research.IntegerAffine.minus_eval
+#print axioms PCS.Research.IntegerAffine.neg_eval
+#print axioms PCS.Research.IntegerAffine.termForm_sound
+#print axioms PCS.Research.IntegerAffine.termsForm_sound
+#print axioms PCS.Research.IntegerAffine.form_sound
+#print axioms PCS.Research.IntegerAffine.coverFrom_sound
+#print axioms PCS.Research.IntegerAffine.zeroOn_sound
+#print axioms PCS.Research.IntegerAffine.preservesAffine_sound
+#print axioms PCS.Research.IntegerAffine.acceptEqual_sound
+#print axioms PCS.Research.IntegerAffine.acceptPreserves_sound
+#print axioms PCS.Research.IntegerAffine.clip_contains
+#print axioms PCS.Research.IntegerAffine.acceptBound_sound
+#print axioms PCS.Research.IntegerAffine.natAbs_bound
+#print axioms PCS.Research.IntegerAffine.acceptMaximum_sound
+#print axioms PCS.Research.IntegerAffine.acceptNonvacuous_sound
+#print axioms PCS.Research.IntegerAffine.refutesEqual_sound
+#print axioms PCS.Research.IntegerAffine.refutesPreserves_sound
+#print axioms PCS.Research.IntegerAffine.shift_predict
+#print axioms PCS.Research.IntegerAffine.acceptNoCorrect_sound
+#print axioms PCS.Research.IntegerAffine.checkClaim_sound
+#print axioms PCS.Research.IntegerAffine.checkBatch_sound
+#print axioms PCS.Research.PGSI1Bridge.embed_predict
+#print axioms PCS.Research.PGSI1Bridge.target_predict
+#print axioms PCS.Research.PGSI1Bridge.guardAccept_sound
+#print axioms PCS.Research.PGSI1Bridge.checkGuardCase_sound
+#print axioms PCS.Research.PGSI1Bridge.checkGuardBatch_sound
+#print axioms PCS.Research.KernelControls.first_guard
+#print axioms PCS.Research.KernelControls.second_guard
+#print axioms PCS.Research.KernelControls.first_universal_preservation
+#print axioms PCS.Research.KernelControls.second_universal_preservation
+#print axioms PCS.Research.KernelControls.far_nonvacuous
+#print axioms PCS.Research.KernelControls.far_perfect_window
+#print axioms PCS.Research.KernelControls.far_preserves_all_integers
+#print axioms PCS.Research.KernelControls.far_correct_witness
+#print axioms PCS.Research.KernelControls.far_error_worsens

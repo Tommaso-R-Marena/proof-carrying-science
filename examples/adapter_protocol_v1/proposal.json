@@ -1,0 +1,33 @@
+{
+  "format": "pcs-adapter-proposal-v1",
+  "source": {
+    "project": "synthetic_certiforge_bridge",
+    "commit": "0000000000000000000000000000000000000000",
+    "disclosure": "synthetic"
+  },
+  "claim": {
+    "id": "C_BYTES",
+    "kind": "computational",
+    "statement": "Two explicitly pinned synthetic byte arrays are identical."
+  },
+  "artifacts": [
+    {
+      "id": "before",
+      "path": "before.txt",
+      "sha256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    },
+    {
+      "id": "after",
+      "path": "after.txt",
+      "sha256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    }
+  ],
+  "check": {
+    "type": "pcs.reference.identical_bytes.v1",
+    "left_artifact": "before",
+    "right_artifact": "after"
+  },
+  "assumptions": [
+    "These are synthetic fixture bytes, not a proof of optimizer semantic preservation."
+  ]
+}

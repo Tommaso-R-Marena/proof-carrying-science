@@ -1,0 +1,4374 @@
+{
+  "format": "pcs-lean-learning-loop-v1",
+  "formalization": {
+    "status": "supported",
+    "source": "For all propositions U and V, if (U and V) then (U and (U and V)).",
+    "source_sha256": "7a97312512d3f6a50dfe1912f803c37e7266f3a8b95d651d8980f23e0d638780",
+    "candidates": [
+      {
+        "ir": {
+          "format": "pcs-math-ir-v1",
+          "binders": [
+            {
+              "name": "U",
+              "type": "Prop"
+            },
+            {
+              "name": "V",
+              "type": "Prop"
+            }
+          ],
+          "body": {
+            "op": "implies",
+            "left": {
+              "op": "and",
+              "left": {
+                "op": "var",
+                "name": "U"
+              },
+              "right": {
+                "op": "var",
+                "name": "V"
+              }
+            },
+            "right": {
+              "op": "and",
+              "left": {
+                "op": "var",
+                "name": "U"
+              },
+              "right": {
+                "op": "and",
+                "left": {
+                  "op": "var",
+                  "name": "U"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "V"
+                }
+              }
+            }
+          }
+        },
+        "lean": "\u2200 (U : Prop) (V : Prop), ((U \u2227 V) \u2192 (U \u2227 (U \u2227 V)))",
+        "interpretation_sha256": "32c482536b13b79702b18fef42e3fa75bfca338471b8b78dce897830eefab0d0",
+        "score": 0.653387188911438
+      }
+    ],
+    "semantic_authorization": false,
+    "fidelity_boundary": "Controlled grammar interpretation; user intent and unrestricted English equivalence unproved."
+  },
+  "model": "graph-17",
+  "pcs_authority": false,
+  "training_feedback": {
+    "format": "pcs-intelligence-data-v1",
+    "goal": {
+      "format": "pcs-math-ir-v1",
+      "binders": [
+        {
+          "name": "U",
+          "type": "Prop"
+        },
+        {
+          "name": "V",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "var",
+            "name": "U"
+          },
+          "right": {
+            "op": "var",
+            "name": "V"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "var",
+            "name": "U"
+          },
+          "right": {
+            "op": "and",
+            "left": {
+              "op": "var",
+              "name": "U"
+            },
+            "right": {
+              "op": "var",
+              "name": "V"
+            }
+          }
+        }
+      }
+    },
+    "goal_sha256": "32c482536b13b79702b18fef42e3fa75bfca338471b8b78dce897830eefab0d0",
+    "original_statement": "For all propositions U and V, if (U and V) then (U and (U and V)).",
+    "formal_statement": "\u2200 (U : Prop) (V : Prop), ((U \u2227 V) \u2192 (U \u2227 (U \u2227 V)))",
+    "receipt": {
+      "format": "pcs-prover-proof-v1",
+      "goal_sha256": "32c482536b13b79702b18fef42e3fa75bfca338471b8b78dce897830eefab0d0",
+      "statement": "\u2200 (U : Prop) (V : Prop), ((U \u2227 V) \u2192 (U \u2227 (U \u2227 V)))",
+      "actions": [
+        {
+          "kind": "intro",
+          "argument": "h0"
+        },
+        {
+          "kind": "intro",
+          "argument": "h1"
+        },
+        {
+          "kind": "intro",
+          "argument": "h2"
+        },
+        {
+          "kind": "constructor",
+          "argument": null
+        },
+        {
+          "kind": "exact",
+          "argument": "h2.1"
+        },
+        {
+          "kind": "exact",
+          "argument": "h2"
+        }
+      ],
+      "proof": "  intro h0\n  intro h1\n  intro h2\n  constructor\n  exact h2.1\n  exact h2",
+      "kernel": {
+        "axioms": [],
+        "expression": {
+          "children": [
+            {
+              "children": [],
+              "kind": "sort",
+              "value": "0"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "0"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "2"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "V"
+            }
+          ],
+          "kind": "forall",
+          "value": "U"
+        },
+        "format": "pcs-lean-kernel-v1"
+      },
+      "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+      "adapter_sha256": "08a16c0625aad86952b87760235baa004bf6699095935e3b9f86a4c489e8d74c",
+      "pcs_scientific_authority": false
+    },
+    "states": [
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "sort",
+                      "value": "0"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "1"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "0"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "And:[]"
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "bound",
+                                      "value": "2"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "1"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "forall",
+                      "value": "a._@._internal._hyg.0"
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "V"
+                }
+              ],
+              "kind": "forall",
+              "value": "U"
+            },
+            "locals": [],
+            "target": "\u2200 (U V : Prop), U \u2227 V \u2192 U \u2227 U \u2227 V"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "local",
+                              "value": "_uniq.11"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "0"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "local",
+                              "value": "_uniq.11"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "local",
+                                  "value": "_uniq.11"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "V"
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              }
+            ],
+            "target": "\u2200 (V : Prop), h0 \u2227 V \u2192 h0 \u2227 h0 \u2227 V"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "local",
+                              "value": "_uniq.11"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.15"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                }
+              ],
+              "kind": "forall",
+              "value": "a._@._internal._hyg.0"
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              }
+            ],
+            "target": "h0 \u2227 h1 \u2192 h0 \u2227 h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "And:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.11"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                }
+              ],
+              "kind": "application",
+              "value": ""
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0 \u2227 h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [],
+              "kind": "local",
+              "value": "_uniq.11"
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0"
+          },
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "And:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.11"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [],
+                  "kind": "local",
+                  "value": "_uniq.15"
+                }
+              ],
+              "kind": "application",
+              "value": ""
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "And:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.11"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [],
+                  "kind": "local",
+                  "value": "_uniq.15"
+                }
+              ],
+              "kind": "application",
+              "value": ""
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": []
+      }
+    ],
+    "model": "graph-17",
+    "split": "unassigned",
+    "hint_exposure": "model proposals",
+    "automatic_training_authorization": false,
+    "human_consent": false,
+    "source_license": "unspecified",
+    "checker": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+  },
+  "elaboration": {
+    "goals": [
+      {
+        "expression": {
+          "children": [
+            {
+              "children": [],
+              "kind": "sort",
+              "value": "0"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "0"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "2"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "V"
+            }
+          ],
+          "kind": "forall",
+          "value": "U"
+        },
+        "locals": [],
+        "target": "\u2200 (U V : Prop), U \u2227 V \u2192 U \u2227 U \u2227 V"
+      }
+    ]
+  },
+  "search": {
+    "status": "verified",
+    "receipt": {
+      "format": "pcs-prover-proof-v1",
+      "goal_sha256": "32c482536b13b79702b18fef42e3fa75bfca338471b8b78dce897830eefab0d0",
+      "statement": "\u2200 (U : Prop) (V : Prop), ((U \u2227 V) \u2192 (U \u2227 (U \u2227 V)))",
+      "actions": [
+        {
+          "kind": "intro",
+          "argument": "h0"
+        },
+        {
+          "kind": "intro",
+          "argument": "h1"
+        },
+        {
+          "kind": "intro",
+          "argument": "h2"
+        },
+        {
+          "kind": "constructor",
+          "argument": null
+        },
+        {
+          "kind": "exact",
+          "argument": "h2.1"
+        },
+        {
+          "kind": "exact",
+          "argument": "h2"
+        }
+      ],
+      "proof": "  intro h0\n  intro h1\n  intro h2\n  constructor\n  exact h2.1\n  exact h2",
+      "kernel": {
+        "axioms": [],
+        "expression": {
+          "children": [
+            {
+              "children": [],
+              "kind": "sort",
+              "value": "0"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "0"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "2"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "V"
+            }
+          ],
+          "kind": "forall",
+          "value": "U"
+        },
+        "format": "pcs-lean-kernel-v1"
+      },
+      "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+      "adapter_sha256": "08a16c0625aad86952b87760235baa004bf6699095935e3b9f86a4c489e8d74c",
+      "pcs_scientific_authority": false
+    },
+    "states": [
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "sort",
+                      "value": "0"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "1"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "0"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "2"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [],
+                                      "kind": "constant",
+                                      "value": "And:[]"
+                                    },
+                                    {
+                                      "children": [],
+                                      "kind": "bound",
+                                      "value": "2"
+                                    }
+                                  ],
+                                  "kind": "application",
+                                  "value": ""
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "bound",
+                                  "value": "1"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "forall",
+                      "value": "a._@._internal._hyg.0"
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "V"
+                }
+              ],
+              "kind": "forall",
+              "value": "U"
+            },
+            "locals": [],
+            "target": "\u2200 (U V : Prop), U \u2227 V \u2192 U \u2227 U \u2227 V"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "local",
+                              "value": "_uniq.11"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "bound",
+                          "value": "0"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "local",
+                              "value": "_uniq.11"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [],
+                                  "kind": "constant",
+                                  "value": "And:[]"
+                                },
+                                {
+                                  "children": [],
+                                  "kind": "local",
+                                  "value": "_uniq.11"
+                                }
+                              ],
+                              "kind": "application",
+                              "value": ""
+                            },
+                            {
+                              "children": [],
+                              "kind": "bound",
+                              "value": "1"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "forall",
+                  "value": "a._@._internal._hyg.0"
+                }
+              ],
+              "kind": "forall",
+              "value": "V"
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              }
+            ],
+            "target": "\u2200 (V : Prop), h0 \u2227 V \u2192 h0 \u2227 h0 \u2227 V"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "kind": "constant",
+                              "value": "And:[]"
+                            },
+                            {
+                              "children": [],
+                              "kind": "local",
+                              "value": "_uniq.11"
+                            }
+                          ],
+                          "kind": "application",
+                          "value": ""
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.15"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                }
+              ],
+              "kind": "forall",
+              "value": "a._@._internal._hyg.0"
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              }
+            ],
+            "target": "h0 \u2227 h1 \u2192 h0 \u2227 h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "And:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.11"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                }
+              ],
+              "kind": "application",
+              "value": ""
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0 \u2227 h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [],
+              "kind": "local",
+              "value": "_uniq.11"
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0"
+          },
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "And:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.11"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [],
+                  "kind": "local",
+                  "value": "_uniq.15"
+                }
+              ],
+              "kind": "application",
+              "value": ""
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": [
+          {
+            "expression": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "kind": "constant",
+                      "value": "And:[]"
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.11"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                {
+                  "children": [],
+                  "kind": "local",
+                  "value": "_uniq.15"
+                }
+              ],
+              "kind": "application",
+              "value": ""
+            },
+            "locals": [
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.11",
+                "name": "h0",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [],
+                  "kind": "sort",
+                  "value": "0"
+                },
+                "id": "_uniq.15",
+                "name": "h1",
+                "type": "Prop"
+              },
+              {
+                "expression": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "kind": "constant",
+                          "value": "And:[]"
+                        },
+                        {
+                          "children": [],
+                          "kind": "local",
+                          "value": "_uniq.11"
+                        }
+                      ],
+                      "kind": "application",
+                      "value": ""
+                    },
+                    {
+                      "children": [],
+                      "kind": "local",
+                      "value": "_uniq.15"
+                    }
+                  ],
+                  "kind": "application",
+                  "value": ""
+                },
+                "id": "_uniq.19",
+                "name": "h2",
+                "type": "h0 \u2227 h1"
+              }
+            ],
+            "target": "h0 \u2227 h1"
+          }
+        ]
+      },
+      {
+        "goals": []
+      }
+    ],
+    "attempts": [
+      {
+        "path": [],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "sort",
+                        "value": "0"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "0"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "2"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "And:[]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "2"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "forall",
+                        "value": "a._@._internal._hyg.0"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "V"
+                  }
+                ],
+                "kind": "forall",
+                "value": "U"
+              },
+              "locals": [],
+              "target": "\u2200 (U V : Prop), U \u2227 V \u2192 U \u2227 U \u2227 V"
+            }
+          ]
+        },
+        "action": {
+          "kind": "intro",
+          "argument": "h0"
+        },
+        "status": "open"
+      },
+      {
+        "path": [],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "sort",
+                        "value": "0"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "0"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "2"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [],
+                                        "kind": "constant",
+                                        "value": "And:[]"
+                                      },
+                                      {
+                                        "children": [],
+                                        "kind": "bound",
+                                        "value": "2"
+                                      }
+                                    ],
+                                    "kind": "application",
+                                    "value": ""
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "bound",
+                                    "value": "1"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "forall",
+                        "value": "a._@._internal._hyg.0"
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "V"
+                  }
+                ],
+                "kind": "forall",
+                "value": "U"
+              },
+              "locals": [],
+              "target": "\u2200 (U V : Prop), U \u2227 V \u2192 U \u2227 U \u2227 V"
+            }
+          ]
+        },
+        "action": {
+          "kind": "assumption",
+          "argument": null
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "local",
+                                "value": "_uniq.11"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "0"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "local",
+                                "value": "_uniq.11"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "local",
+                                    "value": "_uniq.11"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "1"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "a._@._internal._hyg.0"
+                  }
+                ],
+                "kind": "forall",
+                "value": "V"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                }
+              ],
+              "target": "\u2200 (V : Prop), h0 \u2227 V \u2192 h0 \u2227 h0 \u2227 V"
+            }
+          ]
+        },
+        "action": {
+          "kind": "intro",
+          "argument": "h1"
+        },
+        "status": "open"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "local",
+                                "value": "_uniq.11"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "bound",
+                            "value": "0"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "local",
+                                "value": "_uniq.11"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "children": [],
+                                    "kind": "constant",
+                                    "value": "And:[]"
+                                  },
+                                  {
+                                    "children": [],
+                                    "kind": "local",
+                                    "value": "_uniq.11"
+                                  }
+                                ],
+                                "kind": "application",
+                                "value": ""
+                              },
+                              {
+                                "children": [],
+                                "kind": "bound",
+                                "value": "1"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "forall",
+                    "value": "a._@._internal._hyg.0"
+                  }
+                ],
+                "kind": "forall",
+                "value": "V"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                }
+              ],
+              "target": "\u2200 (V : Prop), h0 \u2227 V \u2192 h0 \u2227 h0 \u2227 V"
+            }
+          ]
+        },
+        "action": {
+          "kind": "assumption",
+          "argument": null
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "local",
+                                "value": "_uniq.11"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.15"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                }
+              ],
+              "target": "h0 \u2227 h1 \u2192 h0 \u2227 h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "intro",
+          "argument": "h2"
+        },
+        "status": "open"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [],
+                                "kind": "constant",
+                                "value": "And:[]"
+                              },
+                              {
+                                "children": [],
+                                "kind": "local",
+                                "value": "_uniq.11"
+                              }
+                            ],
+                            "kind": "application",
+                            "value": ""
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.15"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "forall",
+                "value": "a._@._internal._hyg.0"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                }
+              ],
+              "target": "h0 \u2227 h1 \u2192 h0 \u2227 h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "assumption",
+          "argument": null
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "constructor",
+          "argument": null
+        },
+        "status": "open"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2.2"
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2.1"
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2"
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          },
+          {
+            "kind": "constructor",
+            "argument": null
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [],
+                "kind": "local",
+                "value": "_uniq.11"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0"
+            },
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "local",
+                    "value": "_uniq.15"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2.1"
+        },
+        "status": "open"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          },
+          {
+            "kind": "constructor",
+            "argument": null
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [],
+                "kind": "local",
+                "value": "_uniq.11"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0"
+            },
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "local",
+                    "value": "_uniq.15"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2.2"
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          },
+          {
+            "kind": "constructor",
+            "argument": null
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [],
+                "kind": "local",
+                "value": "_uniq.11"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0"
+            },
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "local",
+                    "value": "_uniq.15"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2"
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          },
+          {
+            "kind": "constructor",
+            "argument": null
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [],
+                "kind": "local",
+                "value": "_uniq.11"
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0"
+            },
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "local",
+                    "value": "_uniq.15"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "assumption",
+          "argument": null
+        },
+        "status": "invalid"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          },
+          {
+            "kind": "constructor",
+            "argument": null
+          },
+          {
+            "kind": "exact",
+            "argument": "h2.1"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "local",
+                    "value": "_uniq.15"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "constructor",
+          "argument": null
+        },
+        "status": "open"
+      },
+      {
+        "path": [
+          {
+            "kind": "intro",
+            "argument": "h0"
+          },
+          {
+            "kind": "intro",
+            "argument": "h1"
+          },
+          {
+            "kind": "intro",
+            "argument": "h2"
+          },
+          {
+            "kind": "constructor",
+            "argument": null
+          },
+          {
+            "kind": "exact",
+            "argument": "h2.1"
+          }
+        ],
+        "state": {
+          "goals": [
+            {
+              "expression": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "kind": "constant",
+                        "value": "And:[]"
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.11"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  {
+                    "children": [],
+                    "kind": "local",
+                    "value": "_uniq.15"
+                  }
+                ],
+                "kind": "application",
+                "value": ""
+              },
+              "locals": [
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.11",
+                  "name": "h0",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [],
+                    "kind": "sort",
+                    "value": "0"
+                  },
+                  "id": "_uniq.15",
+                  "name": "h1",
+                  "type": "Prop"
+                },
+                {
+                  "expression": {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [],
+                            "kind": "constant",
+                            "value": "And:[]"
+                          },
+                          {
+                            "children": [],
+                            "kind": "local",
+                            "value": "_uniq.11"
+                          }
+                        ],
+                        "kind": "application",
+                        "value": ""
+                      },
+                      {
+                        "children": [],
+                        "kind": "local",
+                        "value": "_uniq.15"
+                      }
+                    ],
+                    "kind": "application",
+                    "value": ""
+                  },
+                  "id": "_uniq.19",
+                  "name": "h2",
+                  "type": "h0 \u2227 h1"
+                }
+              ],
+              "target": "h0 \u2227 h1"
+            }
+          ]
+        },
+        "action": {
+          "kind": "exact",
+          "argument": "h2"
+        },
+        "status": "closed"
+      }
+    ],
+    "expansions": 16,
+    "lean_invocations": 17,
+    "wall_seconds": 1.6479858189995866
+  },
+  "status": "verified",
+  "explanation": {
+    "statement": "For all propositions U; For all propositions V, ((U and V) implies (U and (U and V))).",
+    "variables": [
+      {
+        "name": "U",
+        "type": "Prop"
+      },
+      {
+        "name": "V",
+        "type": "Prop"
+      }
+    ],
+    "assumptions": [
+      "(U and V)"
+    ],
+    "conclusion": "(U and (U and V))",
+    "source_correspondence": {
+      "ir_sha256": "32c482536b13b79702b18fef42e3fa75bfca338471b8b78dce897830eefab0d0",
+      "lean": "\u2200 (U : Prop) (V : Prop), ((U \u2227 V) \u2192 (U \u2227 (U \u2227 V)))"
+    },
+    "limits": "Statement explanation only. Proof explanation is not kernel-certified English; no empirical or external grounding."
+  },
+  "pcs_claim_graph": {
+    "claim_ir": {
+      "format": "pcs-claim-ir-v1",
+      "claims": [
+        {
+          "claim_id": "lean-32c482536b13b797",
+          "proposal_id": "lean-32c482536b13b797",
+          "statement": "For all propositions U and V, if (U and V) then (U and (U and V)).",
+          "kind": "formal",
+          "predicate": {
+            "format": "pcs-math-ir-v1",
+            "interpretation": {
+              "format": "pcs-math-ir-v1",
+              "binders": [
+                {
+                  "name": "U",
+                  "type": "Prop"
+                },
+                {
+                  "name": "V",
+                  "type": "Prop"
+                }
+              ],
+              "body": {
+                "op": "implies",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "var",
+                    "name": "U"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "V"
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "var",
+                    "name": "U"
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "var",
+                      "name": "U"
+                    },
+                    "right": {
+                      "op": "var",
+                      "name": "V"
+                    }
+                  }
+                }
+              }
+            },
+            "kernel_receipt_sha256": "bc7dd4a3dc27b7bc7f52144ff35dbd7b50b1759969e39fd3a2e84a1208b9e25f"
+          },
+          "closure_state": "BLOCKED",
+          "candidate_status": "EXPERIMENTAL_LEAN_CHECKED",
+          "selected": false,
+          "formalizable": false,
+          "decomposition": null,
+          "authority": {
+            "children_can_set_parent_authority": false,
+            "composition_semantics_certified": false,
+            "human_review_required_for_uncertified_composition": true
+          }
+        }
+      ],
+      "relations": [],
+      "roots": [],
+      "summary": {
+        "claims": 1,
+        "decomposed_claims": 0,
+        "decomposition_roots": 0,
+        "decomposition_relations": 0,
+        "dependency_relations": 0,
+        "max_decomposition_depth": 0
+      },
+      "claim_ir_sha256": "1dd62c74d462d16c4af37a75b4accade72019c78251cbfd435279f65038e10a5"
+    },
+    "obligation_graph": {
+      "format": "pcs-proof-obligation-graph-v1",
+      "claim_ir_sha256": "1dd62c74d462d16c4af37a75b4accade72019c78251cbfd435279f65038e10a5",
+      "roots": [
+        "proposal:lean-32c482536b13b797"
+      ],
+      "nodes": [
+        {
+          "id": "artifact:statement",
+          "type": "artifact",
+          "status": "BOUND_TO_INVENTORY",
+          "artifact_id": "statement",
+          "path": "statement.txt",
+          "sha256": "3c315064d6973cdb9d5c315162ccf478f5b12eed6529ae3a358164120a21e9ad",
+          "size": 66,
+          "media_type": null
+        },
+        {
+          "id": "claim:lean-32c482536b13b797",
+          "type": "typed_claim",
+          "status": "PROPOSED",
+          "claim_id": "lean-32c482536b13b797",
+          "kind": "formal",
+          "statement": "For all propositions U and V, if (U and V) then (U and (U and V)).",
+          "predicate": {
+            "format": "pcs-math-ir-v1",
+            "interpretation": {
+              "format": "pcs-math-ir-v1",
+              "binders": [
+                {
+                  "name": "U",
+                  "type": "Prop"
+                },
+                {
+                  "name": "V",
+                  "type": "Prop"
+                }
+              ],
+              "body": {
+                "op": "implies",
+                "left": {
+                  "op": "and",
+                  "left": {
+                    "op": "var",
+                    "name": "U"
+                  },
+                  "right": {
+                    "op": "var",
+                    "name": "V"
+                  }
+                },
+                "right": {
+                  "op": "and",
+                  "left": {
+                    "op": "var",
+                    "name": "U"
+                  },
+                  "right": {
+                    "op": "and",
+                    "left": {
+                      "op": "var",
+                      "name": "U"
+                    },
+                    "right": {
+                      "op": "var",
+                      "name": "V"
+                    }
+                  }
+                }
+              }
+            },
+            "kernel_receipt_sha256": "bc7dd4a3dc27b7bc7f52144ff35dbd7b50b1759969e39fd3a2e84a1208b9e25f"
+          },
+          "decomposition": null
+        },
+        {
+          "id": "obligation:O_lean-32c482536b13b797_be5961d74900",
+          "type": "obligation",
+          "status": "OPEN_BLOCKING",
+          "obligation_id": "O_lean-32c482536b13b797_be5961d74900",
+          "proposal_id": "lean-32c482536b13b797",
+          "kind": "REGISTERED_SCIENTIFIC_AUTHORITY",
+          "blocking": true,
+          "message": "Experimental Lean mathematics is not a registered PCS scientific acceptance adapter.",
+          "details": null,
+          "repair": null
+        },
+        {
+          "id": "obligation:O_lean-32c482536b13b797_f0d2e8d51de6",
+          "type": "obligation",
+          "status": "OPEN_BLOCKING",
+          "obligation_id": "O_lean-32c482536b13b797_f0d2e8d51de6",
+          "proposal_id": "lean-32c482536b13b797",
+          "kind": "ENGLISH_INTENT_GROUNDING",
+          "blocking": true,
+          "message": "The controlled grammar and kernel do not certify the researcher's intended English meaning.",
+          "details": null,
+          "repair": null
+        },
+        {
+          "id": "proposal:lean-32c482536b13b797",
+          "type": "proposal",
+          "status": "BLOCKED",
+          "proposal_id": "lean-32c482536b13b797",
+          "candidate_status": "EXPERIMENTAL_LEAN_CHECKED",
+          "selected": false,
+          "formalizable": false,
+          "confidence": null,
+          "source": {
+            "name": "English statement",
+            "source_sha256": "3c315064d6973cdb9d5c315162ccf478f5b12eed6529ae3a358164120a21e9ad"
+          },
+          "finding": null
+        }
+      ],
+      "edges": [
+        {
+          "from": "proposal:lean-32c482536b13b797",
+          "to": "artifact:statement",
+          "relation": "references_artifact",
+          "blocking": false
+        },
+        {
+          "from": "proposal:lean-32c482536b13b797",
+          "to": "claim:lean-32c482536b13b797",
+          "relation": "interprets_as_claim",
+          "blocking": false
+        },
+        {
+          "from": "proposal:lean-32c482536b13b797",
+          "to": "obligation:O_lean-32c482536b13b797_be5961d74900",
+          "relation": "has_blocking_obligation",
+          "blocking": true
+        },
+        {
+          "from": "proposal:lean-32c482536b13b797",
+          "to": "obligation:O_lean-32c482536b13b797_f0d2e8d51de6",
+          "relation": "has_blocking_obligation",
+          "blocking": true
+        }
+      ],
+      "repair_queue": [],
+      "summary": {
+        "nodes": 5,
+        "edges": 4,
+        "blocking_obligations": 2,
+        "repair_actions": 0,
+        "node_type_counts": {
+          "artifact": 1,
+          "typed_claim": 1,
+          "obligation": 2,
+          "proposal": 1
+        },
+        "closure_state_counts": {
+          "BLOCKED": 1
+        }
+      },
+      "graph_sha256": "749a2928a8d23696c4b2a53bdef7b99bc4a411f3617150d0883dfbad479b8e98"
+    },
+    "pcs_authority": false
+  }
+}

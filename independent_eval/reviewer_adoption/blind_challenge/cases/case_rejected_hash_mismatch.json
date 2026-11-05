@@ -1,0 +1,41 @@
+{
+  "case_id": "RAW-REJECT-HASH-001",
+  "ground_truth_label": "invalid",
+  "distinction_tags": [
+    "outright_rejected",
+    "cryptographic_validity"
+  ],
+  "title": "Rejected hash mismatch despite outer signature",
+  "summary": "Outer signature verifies; content digests fail; receipt REJECTED.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Predictions match model.",
+        "kind": "computational",
+        "assessment": {
+          "status": "REJECTED"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "id": "E_SIG",
+        "type": "signature",
+        "result": "pass"
+      },
+      {
+        "id": "E_HASH",
+        "type": "artifact_digest",
+        "result": "fail"
+      }
+    ],
+    "integrity_alerts": [
+      "outright rejected"
+    ],
+    "limitations": [
+      "Artifact-layer integrity failure."
+    ]
+  },
+  "reviewer_prompt": "Reject as invalid."
+}

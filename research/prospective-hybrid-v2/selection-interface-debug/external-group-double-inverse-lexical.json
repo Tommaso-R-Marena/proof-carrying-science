@@ -1,0 +1,138 @@
+{
+  "task": {
+    "id": "external-group-double-inverse",
+    "split": "selection",
+    "statement": "∀ (G : Type) [Group G] (a : G), (a⁻¹)⁻¹ = a",
+    "license": "CC0-1.0",
+    "source": "PCS developer-authored statement; mathematics may already exist in Mathlib",
+    "kind": "mathlib"
+  },
+  "mode": "lexical",
+  "result": {
+    "status": "unknown",
+    "receipt": null,
+    "mode": "lexical",
+    "retrieved": [
+      {
+        "name": "inv_mul_cancel",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_cancel_left",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_cancel_right",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_eq_iff_eq_mul",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_eq_of_eq_mul",
+        "score": 5
+      },
+      {
+        "name": "inv_mul_eq_one",
+        "score": 5
+      },
+      {
+        "name": "mul_inv_cancel",
+        "score": 5
+      },
+      {
+        "name": "mul_inv_cancel_left",
+        "score": 5
+      }
+    ],
+    "attempts": [
+      {
+        "action": "inv_mul_cancel:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-98qlwjce.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_cancel:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-swcz70sk.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_cancel_left:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-8vv1pplz.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_cancel_left:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-xkxlp7jy.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_cancel_right:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-nw3w54yq.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_cancel_right:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-0tw3arog.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_eq_iff_eq_mul:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-wl3ix42u.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_eq_iff_eq_mul:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-f0lsp95_.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_eq_of_eq_mul:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-7oxfjqts.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_eq_of_eq_mul:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-3eojongg.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_eq_one:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-u9rk9o6f.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "inv_mul_eq_one:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-z0exzh8q.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "mul_inv_cancel:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-g_0s8wh9.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "mul_inv_cancel:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-21cg52df.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "mul_inv_cancel_left:apply",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-9zuykvi6.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      },
+      {
+        "action": "mul_inv_cancel_left:rewrite",
+        "status": "failed",
+        "error": "\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"DivisionMonoid.toDivInvOneMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[{\"children\":[{\"children\":[],\"kind\":\"constant\",\"value\":\"Group.toDivisionMonoid:[0]\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"2\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"1\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"application\",\"value\":\"\"},{\"children\":[],\"kind\":\"bound\",\"value\":\"0\"}],\"kind\":\"application\",\"value\":\"\"}],\"kind\":\"forall\",\"value\":\"a\"}],\"kind\":\"forall\",\"value\":\"inst._@..lake.pcs-prover.mathlib-request-w7l7emgz.Request.1698107366._hygCtx._hyg.5\"}],\"kind\":\"forall\",\"value\":\"G\"},\"format\":\"pcs-lean-kernel-v1\"}\n"
+      }
+    ],
+    "cost": {
+      "physical_lean_calls": 17,
+      "retrieval_seconds": 0.010897110999849247,
+      "wall_seconds": 77.94323733500005
+    },
+    "pcs_scientific_authority": false
+  }
+}

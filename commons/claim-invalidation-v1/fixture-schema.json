@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Claim Invalidation Corpus Case",
+  "type": "object",
+  "required": [
+    "id",
+    "dependency_complete",
+    "certificate",
+    "changed_artifacts",
+    "expected_impact",
+    "explanation"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "dependency_complete": {
+      "type": "boolean"
+    },
+    "certificate": {
+      "type": "object",
+      "required": [
+        "workflow",
+        "evidence",
+        "claims"
+      ],
+      "properties": {
+        "workflow": {
+          "type": "object",
+          "required": [
+            "nodes"
+          ],
+          "properties": {
+            "nodes": {
+              "type": "array"
+            }
+          }
+        },
+        "evidence": {
+          "type": "array"
+        },
+        "claims": {
+          "type": "array"
+        }
+      }
+    },
+    "changed_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "expected_impact": {
+      "type": "object",
+      "required": [
+        "changed_artifacts",
+        "affected_artifacts",
+        "affected_workflow_nodes",
+        "affected_evidence",
+        "affected_claims"
+      ]
+    },
+    "hidden_dependency": {
+      "type": "object"
+    },
+    "explanation": {
+      "type": "string",
+      "minLength": 40
+    }
+  }
+}

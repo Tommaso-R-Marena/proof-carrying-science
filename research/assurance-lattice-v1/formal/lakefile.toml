@@ -1,0 +1,10 @@
+name = "PCSAssuranceLatticeResearch"
+version = "0.1.0"
+defaultTargets = ["PCSAssuranceLattice"]
+
+[[lean_lib]]
+name = "PCSAssuranceLattice"
+srcDir = "../../../formal"
+roots = ["PCSAssuranceLattice", "PCSAssuranceLatticeControls"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]

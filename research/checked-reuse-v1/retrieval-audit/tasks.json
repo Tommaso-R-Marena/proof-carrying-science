@@ -1,0 +1,884 @@
+[
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        },
+        {
+          "name": "c",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "c",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "le",
+          "right": {
+            "name": "c",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_order_transitivity",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a, b and c, if ((a is less than or equal to b) and (b is less than or equal to c)) then (a is less than or equal to c).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "x",
+          "type": "Int"
+        },
+        {
+          "name": "y",
+          "type": "Int"
+        },
+        {
+          "name": "z",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "x",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "y",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "y",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "z",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "x",
+            "op": "var"
+          },
+          "op": "le",
+          "right": {
+            "name": "z",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "int_order_transitivity",
+    "license": "Apache-2.0",
+    "original_statement": "For all integers x, y and z, if ((x is less than or equal to y) and (y is less than or equal to z)) then (x is less than or equal to z).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "a",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "b",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "b",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "a",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_order_antisymmetry",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a and b, if ((a is less than or equal to b) and (b is less than or equal to a)) then (a equals b).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "x",
+          "type": "Int"
+        },
+        {
+          "name": "y",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "x",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "y",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "y",
+              "op": "var"
+            },
+            "op": "le",
+            "right": {
+              "name": "x",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "x",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "y",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "int_order_antisymmetry",
+    "license": "Apache-2.0",
+    "original_statement": "For all integers x and y, if ((x is less than or equal to y) and (y is less than or equal to x)) then (x equals y).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "body": {
+          "left": {
+            "left": {
+              "name": "m",
+              "op": "var"
+            },
+            "op": "eq",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "left": {
+                  "name": "m",
+                  "op": "var"
+                },
+                "op": "mul",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 1
+                }
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Nat",
+                "value": 0
+              }
+            },
+            "op": "eq",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          }
+        },
+        "name": "m",
+        "op": "exists",
+        "type": "Nat"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_composite_witness",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers n, there exists a natural number m such that (m equals n and (m * 1) + 0 equals n).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "z",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "body": {
+          "left": {
+            "name": "w",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "z",
+            "op": "var"
+          }
+        },
+        "name": "w",
+        "op": "exists",
+        "type": "Int"
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "int_identity_witness",
+    "license": "Apache-2.0",
+    "original_statement": "For all integers z, there exists an integer w such that w equals z.",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "x",
+          "type": "Int"
+        },
+        {
+          "name": "y",
+          "type": "Int"
+        },
+        {
+          "name": "z",
+          "type": "Int"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "x",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Int",
+                "value": 0
+              }
+            },
+            "op": "eq",
+            "right": {
+              "name": "y",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "name": "y",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Int",
+                "value": 0
+              }
+            },
+            "op": "eq",
+            "right": {
+              "name": "z",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "y",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Int",
+                "value": 0
+              }
+            },
+            "op": "eq",
+            "right": {
+              "name": "z",
+              "op": "var"
+            }
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "left": {
+                "name": "x",
+                "op": "var"
+              },
+              "op": "add",
+              "right": {
+                "op": "number",
+                "type": "Int",
+                "value": 0
+              }
+            },
+            "op": "eq",
+            "right": {
+              "name": "y",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "integer_arithmetic_exchange",
+    "license": "Apache-2.0",
+    "original_statement": "For all integers x, y and z, if ((x + 0 equals y) and (y + 0 equals z)) then ((y + 0 equals z) and (x + 0 equals y)).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "a",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "g",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "function_composition_congruence",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f and g, if (\u2200 (a : Nat), f(a) equals g(a)) then (\u2200 (b : Nat), f(f(b)) equals g(g(b))).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "a",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "g",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "g",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "function_argument_congruence",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f and g, if (\u2200 (a : Nat), f(a) equals g(a)) then (\u2200 (b : Nat), f(g(b)) equals g(g(b))).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "NatPred"
+        },
+        {
+          "name": "Q",
+          "type": "NatPred"
+        },
+        {
+          "name": "R",
+          "type": "NatPred"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "P",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "implies",
+              "right": {
+                "arg": {
+                  "name": "a",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "Q",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "name": "a",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "op": "and",
+          "right": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "Q",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "implies",
+              "right": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "R",
+                  "op": "var"
+                },
+                "op": "apply"
+              }
+            },
+            "name": "b",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "c",
+                "op": "var"
+              },
+              "fn": {
+                "name": "P",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "implies",
+            "right": {
+              "arg": {
+                "name": "c",
+                "op": "var"
+              },
+              "fn": {
+                "name": "Q",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "c",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "predicate_rule_retention",
+    "license": "Apache-2.0",
+    "original_statement": "For all predicates on natural numbers P, Q and R, if ((\u2200 (a : Nat), P(a) implies Q(a)) and (\u2200 (b : Nat), Q(b) implies R(b))) then (\u2200 (c : Nat), P(c) implies Q(c)).",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "a",
+          "type": "Nat"
+        },
+        {
+          "name": "b",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "a",
+          "op": "var"
+        },
+        "op": "le",
+        "right": {
+          "name": "b",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "missing_order_assumption",
+    "license": "Apache-2.0",
+    "original_statement": "For all natural numbers a and b, a is less than or equal to b.",
+    "source": "PCS authored",
+    "split": "prospective"
+  },
+  {
+    "goal": {
+      "binders": [
+        {
+          "name": "f",
+          "type": "NatFn"
+        },
+        {
+          "name": "g",
+          "type": "NatFn"
+        }
+      ],
+      "body": {
+        "left": {
+          "body": {
+            "left": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "a",
+                "op": "var"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "a",
+          "op": "forall",
+          "type": "Nat"
+        },
+        "op": "implies",
+        "right": {
+          "body": {
+            "left": {
+              "arg": {
+                "arg": {
+                  "name": "b",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "f",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "fn": {
+                "name": "f",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "eq",
+            "right": {
+              "arg": {
+                "name": "b",
+                "op": "var"
+              },
+              "fn": {
+                "name": "g",
+                "op": "var"
+              },
+              "op": "apply"
+            }
+          },
+          "name": "b",
+          "op": "forall",
+          "type": "Nat"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "invalid_function_equivalence",
+    "license": "Apache-2.0",
+    "original_statement": "For all functions from natural numbers to natural numbers f and g, if (\u2200 (a : Nat), f(a) equals g(a)) then (\u2200 (b : Nat), f(f(b)) equals g(b)).",
+    "source": "PCS authored",
+    "split": "prospective"
+  }
+]

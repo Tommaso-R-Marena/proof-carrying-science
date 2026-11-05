@@ -1,0 +1,11 @@
+{
+  "subject": "synthetic-one-compartment-iv-bolus-pk-direct-emax-pd",
+  "assumptions": [{"id":"A_PK_MODEL","statement":"The restricted one-compartment IV-bolus equation is the declared computational model; no claim of biological adequacy is made.","rationale":"Separates computational verification from empirical PK model validation.","scope":["C_PK_CONTRACT","C_PK_REPLAY"]}],
+  "claims": [
+    {"id":"C_PK_CONTRACT","statement":"The PK model artifact satisfies the restricted positivity and dimensional contract.","kind":"computational","required_evidence":["E_PK_CONTRACT"],"assumptions":["A_PK_MODEL"],"predicate":{"type":"pkpd_contract","model_artifact":"pk_model"}},
+    {"id":"C_PK_REPLAY","statement":"The prediction artifact matches the declared analytic one-compartment IV-bolus PK and direct Emax PD model within the stated numeric tolerance.","kind":"computational","required_evidence":["E_PK_REPLAY"],"assumptions":["A_PK_MODEL"],"predicate":{"type":"pkpd_reference_match","model_artifact":"pk_model","output_artifact":"pk_predictions","time_column":"time","concentration_column":"concentration","effect_column":"effect","rel_tol":1e-09,"abs_tol":1e-12}}
+  ],
+  "artifacts":[{"id":"pk_model","path":"pk_model.json","role":"restricted-pk-model","media_type":"application/json"},{"id":"pk_predictions","path":"predictions.csv","role":"pk-predictions","media_type":"text/csv"}],
+  "checks":[{"id":"E_PK_CONTRACT","type":"pkpd_contract","claim_ids":["C_PK_CONTRACT"],"model_artifact":"pk_model"},{"id":"E_PK_REPLAY","type":"pkpd_reference_match","claim_ids":["C_PK_REPLAY"],"model_artifact":"pk_model","output_artifact":"pk_predictions","time_column":"time","concentration_column":"concentration","effect_column":"effect","rel_tol":1e-09,"abs_tol":1e-12}],
+  "workflow":{"nodes":[{"id":"N_PK","operation":"restricted_one_compartment_iv_bolus","inputs":["pk_model"],"outputs":["pk_predictions"],"contract":{"equation":"C(t)=(Dose/V)*exp(-(CL/V)*t); E(C)=E0+Emax*C/(EC50+C)","validation_scope":"computational replay only"}}]}
+}

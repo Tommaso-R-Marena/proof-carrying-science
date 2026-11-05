@@ -1,0 +1,727 @@
+{
+  "format": "pcs-model-registry-v1",
+  "models": [
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "untrained-17.json",
+      "id": "untrained-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "8d54eb68fdefc5b21b1f80064c4adddaa3e9a4ee5407065f451085daf75b5e28",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 9,
+          "expansions": 85,
+          "tasks": 6,
+          "verified": 1,
+          "wall_seconds": 1.1393894260036177
+        },
+        "validation": {
+          "actual_lean_requests": 4,
+          "expansions": 24,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 4.503587464001612
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "graph-17.json",
+      "id": "graph-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "3c8252a55fe3944a8e7113b9a6f365686f1ed30eb9c1c57a453ce0d1b5cc2f1e",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 14,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 4,
+          "wall_seconds": 5.308978282002499
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 4.5227466949945665
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "bag",
+      "checkpoint": "bag-17.json",
+      "id": "bag-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "aa5ed5198c4e49703cd88ad446d67c6f7cdd980d6e9de7b7e66d0734b184f8f4",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 6,
+          "expansions": 118,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 6.771123856007762
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 5.3533491880007205
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl1-17.json",
+      "id": "rl1-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "94405da060dd72cdc1abe0a3f28a865bdf815e65a7a449991ec181766f16c28e",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 4,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 4,
+          "wall_seconds": 5.242614071001299
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 5.126147060000221
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl2-17.json",
+      "id": "rl2-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "cc983374540d3a0b5fbb0f872adf3864c6a6b2a0fd237b1f1057415fcbb16e92",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 4,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 4,
+          "wall_seconds": 4.940649609001412
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 4.220250034995843
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "untrained-31.json",
+      "id": "untrained-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "0c2d3712cec179e7839e8c542983ede2a8895f4ac1258c96c708fd1f6c7d7006",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 11,
+          "expansions": 102,
+          "tasks": 6,
+          "verified": 3,
+          "wall_seconds": 4.238132216007216
+        },
+        "validation": {
+          "actual_lean_requests": 4,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 4.320105140999658
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "graph-31.json",
+      "id": "graph-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "c027efa5776742ffa058a69b9d115d6f2e80b2e343621aaf0e83b7c79957ebd0",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 7,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 7.215628611993452
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.3656129680020967
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "bag",
+      "checkpoint": "bag-31.json",
+      "id": "bag-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "3380a492b250a1735ab819e258407453c5037ab6800b73b11359e101b5f7090f",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 5,
+          "expansions": 116,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 6.074716905990499
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 4.06987329301046
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl1-31.json",
+      "id": "rl1-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "56af645143aa71e0c961efea37f87e622f1e19a851162edfa928a770631d9724",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 5,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 7.01299078601005
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.771491546991456
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl2-31.json",
+      "id": "rl2-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "2baa003344795c40e0587eac7a045550ac6712ebd7292b3d8a4da8daf6d0d724",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 5,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 4.767458544993133
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.9090535340001225
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "untrained-47.json",
+      "id": "untrained-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "6fa432aa6f5e7e2ec82851c2903d0ad2389306921a903e2f55ff4ada032992f0",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 1,
+          "expansions": 91,
+          "tasks": 6,
+          "verified": 1,
+          "wall_seconds": 1.1133375859935768
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.8012016270004096
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "graph-47.json",
+      "id": "graph-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "03b805a3c7ec5b49b798c322380c7a1db5912892c9a0673360f198ccf297c360",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 6,
+          "expansions": 116,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 5.3974391230003675
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.450123791990336
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "bag",
+      "checkpoint": "bag-47.json",
+      "id": "bag-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "cd674239d0cbe81938b4cdbc9fe09131e3dda857281027cbde4e8592b6f48ad3",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 5,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 4.391673580998031
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.593036571990524
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl1-47.json",
+      "id": "rl1-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "e2de40abe99a207b6ef66014b0813f58aded53d95353782b8571d9fc57ac1648",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 5,
+          "expansions": 116,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 4.3171659219951835
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.6847085609988426
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl2-47.json",
+      "id": "rl2-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "1ebf009d3d9776d8b4527318d84f8b87fad6bba5aad17667b5dd5ecf018c1618",
+      "supported_domain": "Closed typed core propositions, Nat arithmetic, Nat\u2192Nat functions and Nat\u2192Prop predicates; experimental",
+      "training_source_sha256": "5d6bfe2890340a84c8ceb6707dcda478488ed6469ff89f83a4ed1caf9c27f20f",
+      "dataset_manifest_sha256": "b8939a63213861b8fc5ee03171f615fcfaf8b9a8df68ecbda3a5d5c40ab0743c",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 5,
+          "expansions": 115,
+          "tasks": 6,
+          "verified": 5,
+          "wall_seconds": 5.837090352011728
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 4.426963126999908
+        }
+      }
+    }
+  ],
+  "production_authority": false,
+  "selected_local_experiment": "graph-17"
+}

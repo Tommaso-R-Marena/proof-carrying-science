@@ -1,0 +1,46 @@
+{
+  "case_id": "RAW-EMP-001",
+  "ground_truth_label": "empirically_and_computationally_supported",
+  "distinction_tags": [
+    "formally_justified_computational",
+    "empirically_validated"
+  ],
+  "title": "Computational plus scoped empirical support",
+  "summary": "Formal computational support and declared empirical metrics under protocol P.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_REPLAY",
+        "statement": "Predictions match model.",
+        "kind": "computational",
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
+      },
+      {
+        "id": "C_EMP",
+        "statement": "Error \u2264 \u03c4 on cohort H under protocol P.",
+        "kind": "empirical",
+        "assessment": {
+          "status": "EMPIRICALLY_SUPPORTED"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "id": "E_REPLAY",
+        "type": "reference_match",
+        "result": "pass"
+      },
+      {
+        "id": "E_EMP",
+        "type": "held_out_metrics",
+        "result": "pass"
+      }
+    ],
+    "limitations": [
+      "Scoped to cohort H / protocol P."
+    ]
+  },
+  "reviewer_prompt": "Accept as valid within declared empirical scope."
+}

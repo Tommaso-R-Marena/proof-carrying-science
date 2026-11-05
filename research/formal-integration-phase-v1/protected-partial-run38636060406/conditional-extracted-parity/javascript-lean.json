@@ -1,0 +1,6981 @@
+[
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 2,
+      "candidate": 2,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 4,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 2,
+      "candidate": 2,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 4,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 2,
+      "candidate": 3,
+      "context": 1,
+      "difference": 1
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 2,
+      "candidate": 3,
+      "context": 1,
+      "difference": 1
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0,
+      1
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "A": false,
+          "B": false
+        }
+      },
+      {
+        "removed_assumption": 1,
+        "assignment": {
+          "A": true,
+          "B": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 15,
+      "ast_visits": 3,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0,
+      1
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "A": false,
+          "B": false
+        }
+      },
+      {
+        "removed_assumption": 1,
+        "assignment": {
+          "A": true,
+          "B": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 15,
+      "ast_visits": 3,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "A": false,
+      "B": true
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          5
+        ]
+      ],
+      "source": 4,
+      "candidate": 3,
+      "context": 2,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 5,
+      "apply_calls": 18,
+      "ast_visits": 5,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 8,
+      "ast_visits": 4,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "A": false,
+      "B": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          3,
+          1
+        ]
+      ],
+      "source": 4,
+      "candidate": 4,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 3,
+      "apply_calls": 14,
+      "ast_visits": 6,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "B": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false,
+        "B": true
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          3
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          6
+        ],
+        [
+          0,
+          3,
+          0
+        ]
+      ],
+      "source": 2,
+      "candidate": 3,
+      "context": 5,
+      "difference": 8
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 7,
+      "apply_calls": 27,
+      "ast_visits": 5,
+      "witness_steps": 3
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 3,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 0,
+      "candidate": 3,
+      "context": 1,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 9,
+      "ast_visits": 3,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 0,
+      "candidate": 3,
+      "context": 1,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 9,
+      "ast_visits": 3,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "or",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "and",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "false"
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "B": false,
+      "C": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "source": 0,
+      "candidate": 0,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 13,
+      "ast_visits": 9,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "or",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "and",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "false"
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "B": false,
+      "C": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "source": 0,
+      "candidate": 0,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 13,
+      "ast_visits": 9,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "or",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "and",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "false"
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 4,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "false"
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "right": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "true"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "B": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 1,
+      "candidate": 1,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 13,
+      "ast_visits": 9,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "false"
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "right": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "true"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "B": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 1,
+      "candidate": 1,
+      "context": 1,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 13,
+      "ast_visits": 9,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "false"
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        },
+        "right": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "true"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 1,
+      "ast_visits": 4,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": true,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          3
+        ]
+      ],
+      "source": 5,
+      "candidate": 1,
+      "context": 3,
+      "difference": 6
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 5,
+      "apply_calls": 21,
+      "ast_visits": 7,
+      "witness_steps": 3
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 6,
+      "ast_visits": 6,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "right": {
+          "op": "false"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 4,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "right": {
+          "op": "false"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 4,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "right": {
+          "op": "false"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        },
+        {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "A": false,
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 2,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        },
+        {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "A": false,
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 2,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "true"
+          }
+        },
+        {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "true"
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        {
+          "op": "false"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      1
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 1,
+        "assignment": {
+          "A": false,
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          3
+        ]
+      ],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 3,
+      "apply_calls": 14,
+      "ast_visits": 4,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "true"
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        {
+          "op": "false"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "true"
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "A",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        {
+          "op": "false"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "B": false,
+      "C": true
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false,
+        "B": false,
+        "C": true
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ],
+      "source": 3,
+      "candidate": 1,
+      "context": 2,
+      "difference": 6
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 5,
+      "apply_calls": 17,
+      "ast_visits": 7,
+      "witness_steps": 3
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 3,
+      "ast_visits": 5,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "B": false
+    },
+    "counterexample": {
+      "assignment": {
+        "B": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 2,
+      "candidate": 1,
+      "context": 1,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 6,
+      "ast_visits": 2,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "B": false
+    },
+    "counterexample": {
+      "assignment": {
+        "B": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 2,
+      "candidate": 1,
+      "context": 1,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 6,
+      "ast_visits": 2,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "true"
+        }
+      },
+      "candidate": {
+        "op": "false"
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "B": true
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 0,
+      "candidate": 0,
+      "context": 2,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 8,
+      "ast_visits": 4,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "true"
+        }
+      },
+      "candidate": {
+        "op": "false"
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "B": true
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 0,
+      "candidate": 0,
+      "context": 2,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 8,
+      "ast_visits": 4,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "true"
+        }
+      },
+      "candidate": {
+        "op": "false"
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "or",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          5,
+          2
+        ]
+      ],
+      "source": 2,
+      "candidate": 4,
+      "context": 1,
+      "difference": 6
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 5,
+      "apply_calls": 22,
+      "ast_visits": 7,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "or",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 8,
+      "ast_visits": 7,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "or",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "implies",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "B": true,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": true,
+        "B": true,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          4
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          5
+        ],
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          1,
+          8,
+          0
+        ],
+        [
+          1,
+          4,
+          8
+        ],
+        [
+          0,
+          10,
+          11
+        ],
+        [
+          1,
+          0,
+          8
+        ],
+        [
+          0,
+          0,
+          13
+        ]
+      ],
+      "source": 7,
+      "candidate": 9,
+      "context": 2,
+      "difference": 14
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 13,
+      "apply_calls": 56,
+      "ast_visits": 12,
+      "witness_steps": 4
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "implies",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 6,
+      "ast_visits": 8,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "implies",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "atom",
+          "symbol": "B",
+          "args": []
+        }
+      },
+      "assumptions": [
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false,
+        "C": false
+      },
+      "source_true": true,
+      "candidate_true": false,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          1,
+          4
+        ]
+      ],
+      "source": 6,
+      "candidate": 4,
+      "context": 1,
+      "difference": 7
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 6,
+      "apply_calls": 25,
+      "ast_visits": 6,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 3,
+      "ast_visits": 5,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "or",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "B": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "B": false,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 0,
+      "candidate": 1,
+      "context": 1,
+      "difference": 1
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 3,
+      "apply_calls": 13,
+      "ast_visits": 10,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "or",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 10,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "and",
+        "left": {
+          "op": "or",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 6,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "or",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "false"
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": true,
+      "C": true
+    },
+    "counterexample": {
+      "assignment": {
+        "A": true,
+        "C": true
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true,
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          2
+        ]
+      ],
+      "source": 0,
+      "candidate": 1,
+      "context": 4,
+      "difference": 4
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 3,
+      "apply_calls": 20,
+      "ast_visits": 10,
+      "witness_steps": 4
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "or",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "false"
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 8,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "or",
+          "left": {
+            "op": "true"
+          },
+          "right": {
+            "op": "false"
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          4,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          6,
+          0
+        ]
+      ],
+      "source": 4,
+      "candidate": 1,
+      "context": 3,
+      "difference": 7
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 6,
+      "apply_calls": 30,
+      "ast_visits": 10,
+      "witness_steps": 3
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 6,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "B": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "B": false,
+        "C": true
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          4
+        ]
+      ],
+      "source": 2,
+      "candidate": 3,
+      "context": 1,
+      "difference": 5
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 4,
+      "apply_calls": 14,
+      "ast_visits": 2,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        {
+          "op": "true"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true,
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 0,
+      "candidate": 1,
+      "context": 3,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 9,
+      "ast_visits": 5,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        {
+          "op": "true"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true,
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 0,
+      "candidate": 1,
+      "context": 3,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 9,
+      "ast_visits": 5,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "true"
+      },
+      "assumptions": [
+        {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        },
+        {
+          "op": "true"
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        }
+      },
+      "candidate": {
+        "op": "implies",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": true,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": true,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true,
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "source": 4,
+      "candidate": 3,
+      "context": 3,
+      "difference": 3
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 3,
+      "apply_calls": 25,
+      "ast_visits": 15,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        }
+      },
+      "candidate": {
+        "op": "implies",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 12,
+      "ast_visits": 8,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "C"
+      ],
+      "source": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        }
+      },
+      "candidate": {
+        "op": "implies",
+        "left": {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "false"
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        },
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": true,
+      "B": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": true,
+        "B": false,
+        "C": false
+      },
+      "source_true": false,
+      "candidate_true": true,
+      "assumptions_true": [
+        true,
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          5
+        ]
+      ],
+      "source": 0,
+      "candidate": 5,
+      "context": 2,
+      "difference": 6
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 5,
+      "apply_calls": 23,
+      "ast_visits": 9,
+      "witness_steps": 3
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 7,
+      "ast_visits": 8,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "false"
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "atom",
+          "symbol": "A",
+          "args": []
+        },
+        {
+          "op": "or",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "true"
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "false"
+        },
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "true"
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "false"
+        },
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "or",
+        "left": {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        },
+        "right": {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "or",
+        "left": {
+          "op": "true"
+        },
+        "right": {
+          "op": "true"
+        }
+      },
+      "assumptions": [
+        {
+          "op": "false"
+        },
+        {
+          "op": "and",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "inconsistent_assumptions",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": [
+      0
+    ],
+    "core_necessity_witnesses": [
+      {
+        "removed_assumption": 0,
+        "assignment": {
+          "B": false,
+          "C": false
+        }
+      }
+    ],
+    "diagram": {
+      "nodes": [],
+      "source": null,
+      "candidate": null,
+      "context": 0,
+      "difference": null
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 0,
+      "apply_calls": 1,
+      "ast_visits": 1,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        },
+        {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "A": false,
+      "B": false,
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "A": false,
+        "B": false,
+        "C": false
+      },
+      "source_true": true,
+      "candidate_true": false,
+      "assumptions_true": [
+        true,
+        true
+      ]
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          3
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          3,
+          2
+        ],
+        [
+          0,
+          8,
+          9
+        ]
+      ],
+      "source": 6,
+      "candidate": 7,
+      "context": 1,
+      "difference": 10
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 9,
+      "apply_calls": 47,
+      "ast_visits": 13,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        },
+        {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 9,
+      "ast_visits": 9,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "C",
+          "args": []
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      },
+      "candidate": {
+        "op": "not",
+        "body": {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "B",
+            "args": []
+          },
+          "right": {
+            "op": "false"
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "true"
+          }
+        },
+        {
+          "op": "not",
+          "body": {
+            "op": "false"
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "equivalent_under_assumptions",
+    "context_example": {
+      "A": false,
+      "B": false,
+      "C": false
+    },
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          0,
+          4,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "source": 6,
+      "candidate": 6,
+      "context": 5,
+      "difference": 0
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 5,
+      "apply_calls": 23,
+      "ast_visits": 5,
+      "witness_steps": 2
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "nodes",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 3,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "candidate": {
+        "op": "atom",
+        "symbol": "B",
+        "args": []
+      },
+      "assumptions": [
+        {
+          "op": "implies",
+          "left": {
+            "op": "atom",
+            "symbol": "C",
+            "args": []
+          },
+          "right": {
+            "op": "atom",
+            "symbol": "A",
+            "args": []
+          }
+        }
+      ]
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 2,
+      "apply_calls": 1,
+      "ast_visits": 3,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "false"
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "C": true
+      },
+      "source_true": true,
+      "candidate_true": false,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 2,
+      "candidate": 0,
+      "context": 1,
+      "difference": 2
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 6,
+      "ast_visits": 2,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "false"
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 2,
+      "operations": 100000
+    },
+    "decision": "counterexample",
+    "context_example": {
+      "C": false
+    },
+    "counterexample": {
+      "assignment": {
+        "C": true
+      },
+      "source_true": true,
+      "candidate_true": false,
+      "assumptions_true": []
+    },
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": {
+      "nodes": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": 2,
+      "candidate": 0,
+      "context": 1,
+      "difference": 2
+    },
+    "limit_reached": null,
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 6,
+      "ast_visits": 2,
+      "witness_steps": 1
+    },
+    "receipt_sha256": "DIGEST"
+  },
+  {
+    "format": "pcs-conditional-boolean-receipt-v1",
+    "checker": "pcs-conditional-bdd/1",
+    "original_task": {
+      "format": "pcs-conditional-boolean-task-v1",
+      "variables": [
+        "C"
+      ],
+      "source": {
+        "op": "atom",
+        "symbol": "C",
+        "args": []
+      },
+      "candidate": {
+        "op": "false"
+      },
+      "assumptions": []
+    },
+    "task_sha256": "DIGEST",
+    "limits": {
+      "nodes": 4096,
+      "operations": 1
+    },
+    "decision": "resource_limit",
+    "context_example": null,
+    "counterexample": null,
+    "unsat_core": null,
+    "core_necessity_witnesses": null,
+    "diagram": null,
+    "limit_reached": "operations",
+    "scope": "Declared Boolean interpretations and explicit assumptions only",
+    "pcs_authority": false,
+    "lean_kernel_checked": false,
+    "work": {
+      "bdd_nodes": 1,
+      "apply_calls": 1,
+      "ast_visits": 2,
+      "witness_steps": 0
+    },
+    "receipt_sha256": "DIGEST"
+  }
+]

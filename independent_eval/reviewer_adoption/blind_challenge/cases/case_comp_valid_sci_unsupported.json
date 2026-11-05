@@ -1,0 +1,41 @@
+{
+  "case_id": "RAW-CVSU-001",
+  "ground_truth_label": "computationally_valid_scientifically_unsupported",
+  "distinction_tags": [
+    "formally_justified_computational",
+    "unsupported_interpretation"
+  ],
+  "title": "Computationally valid, scientifically unsupported",
+  "summary": "Replay passes but clinical adequacy is overclaimed.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C_REPLAY",
+        "statement": "Predictions match model.",
+        "kind": "computational",
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
+      },
+      {
+        "id": "C_CLIN",
+        "statement": "Clinically adequate for dosing.",
+        "kind": "scientific",
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "id": "E_REPLAY",
+        "type": "reference_match",
+        "result": "pass"
+      }
+    ],
+    "limitations": [
+      "No clinical adequacy established."
+    ]
+  },
+  "reviewer_prompt": "Accept computational only."
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Package Manifest v1",
+  "type": "object",
+  "required": ["package_format","certificate_semantic_hash","certificate_integrity_hash","files"],
+  "properties": {
+    "package_format": {"const":"pcs-package-v1"},
+    "certificate_semantic_hash": {"type":"string","pattern":"^[a-f0-9]{64}$"},
+    "certificate_integrity_hash": {"type":"string","pattern":"^[a-f0-9]{64}$"},
+    "files": {
+      "type":"object",
+      "additionalProperties":{
+        "type":"object",
+        "required":["sha256","size"],
+        "properties":{
+          "sha256":{"type":"string","pattern":"^[a-f0-9]{64}$"},
+          "size":{"type":"integer","minimum":0}
+        },
+        "additionalProperties":false
+      }
+    }
+  },
+  "additionalProperties":false
+}

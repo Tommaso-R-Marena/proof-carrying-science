@@ -1,0 +1,73 @@
+........................................................................ [  4%]
+........................................................................ [  8%]
+........................................................................ [ 12%]
+........................................................................ [ 16%]
+........................................................................ [ 20%]
+........................................................................ [ 24%]
+........................................................................ [ 28%]
+........................................................................ [ 32%]
+........................................................................ [ 36%]
+........................................................................ [ 40%]
+........................................................................ [ 44%]
+........................................................................ [ 48%]
+........................................................................ [ 52%]
+........................................................................ [ 56%]
+........................................................................ [ 60%]
+........................................................................ [ 64%]
+...............................................F....FF.................. [ 68%]
+......................................................................s. [ 72%]
+........................................................................ [ 76%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 96%]
+.............................................................            [100%]
+=================================== FAILURES ===================================
+_ ContributionGateTests.test_normal_change_does_not_require_a_nonexistent_archive _
+
+self = <test_pr_contribution_gate.ContributionGateTests testMethod=test_normal_change_does_not_require_a_nonexistent_archive>
+
+    def test_normal_change_does_not_require_a_nonexistent_archive(self):
+        self.write("docs/ordinary.md", "Reviewed source change\n")
+        self.commit()
+        r = self.gate()
+>       self.assertEqual(r.returncode, 0, r.stderr)
+E       AssertionError: 1 != 0 : Protected contribution gate FAIL: Expected an owner repository and exact PR base SHA
+
+tests/test_pr_contribution_gate.py:77: AssertionError
+___ ContributionGateTests.test_valid_archive_runs_the_actual_digest_checker ____
+
+self = <test_pr_contribution_gate.ContributionGateTests testMethod=test_valid_archive_runs_the_actual_digest_checker>
+
+    def test_valid_archive_runs_the_actual_digest_checker(self):
+        self.archive()
+        self.commit()
+        r = self.gate()
+>       self.assertEqual(r.returncode, 0, r.stderr)
+E       AssertionError: 1 != 0 : Protected contribution gate FAIL: Expected an owner repository and exact PR base SHA
+
+tests/test_pr_contribution_gate.py:84: AssertionError
+_ ContributionGateTests.test_valid_promotion_runs_exact_archive_to_source_checker _
+
+self = <test_pr_contribution_gate.ContributionGateTests testMethod=test_valid_promotion_runs_exact_archive_to_source_checker>
+
+    def test_valid_promotion_runs_exact_archive_to_source_checker(self):
+        self.promotion()
+        self.commit()
+        r = self.gate()
+>       self.assertEqual(r.returncode, 0, r.stderr)
+E       AssertionError: 1 != 0 : Protected contribution gate FAIL: Expected an owner repository and exact PR base SHA
+
+tests/test_pr_contribution_gate.py:105: AssertionError
+=============================== warnings summary ===============================
+tests/test_zip_verify_v06.py::test_v06_zip_rejects_duplicate_member
+  /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/zipfile/__init__.py:1625: UserWarning: Duplicate name: 'certificate.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_pr_contribution_gate.py::ContributionGateTests::test_normal_change_does_not_require_a_nonexistent_archive
+FAILED tests/test_pr_contribution_gate.py::ContributionGateTests::test_valid_archive_runs_the_actual_digest_checker
+FAILED tests/test_pr_contribution_gate.py::ContributionGateTests::test_valid_promotion_runs_exact_archive_to_source_checker
+3 failed, 1785 passed, 1 skipped, 1 warning in 411.52s (0:06:51)

@@ -1,0 +1,185 @@
+PCSAuthorityV2IndependentReview.pendingSecond.eq_1 :
+  PCSAuthorityV2IndependentReview.pendingSecond =
+    { committed := PCSAuthorityV2IndependentReview.s0,
+      pending :=
+        some
+          { before := PCSAuthorityV2IndependentReview.s0, envelope := PCSAuthorityV2IndependentReview.second,
+            result := PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample } }
+'PCSAuthorityV2IndependentReview.pendingSecond.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.forged_pending_result_invalid._proof_1_1 : PCSScientificReceiver.decode [] = none
+'PCSAuthorityV2IndependentReview.forged_pending_result_invalid._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.second_checked._proof_1_1 :
+  (PCSAuthorizationHistoryV1.transition PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+        PCSAuthorityV2IndependentReview.s0 PCSAuthorityV2IndependentReview.second).2 =
+    true
+'PCSAuthorityV2IndependentReview.second_checked._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.successful_prefix_does_not_hide_bad_suffix._proof_1_1 :
+  PCSScientificReceiver.decode PCSAuthorityV2IndependentReview.badEnvelope.payload.candidate = none
+'PCSAuthorityV2IndependentReview.successful_prefix_does_not_hide_bad_suffix._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.cloned_witnesses_can_diverge :
+  (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.pendingFirst
+          PCSAuthorityV2IndependentReview.first).2 =
+      true ∧
+    (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.pendingSecond
+            PCSAuthorityV2IndependentReview.second).2 =
+        true ∧
+      (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.pendingFirst
+              PCSAuthorityV2IndependentReview.first).1.committed ≠
+        (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.pendingSecond
+              PCSAuthorityV2IndependentReview.second).1.committed
+'PCSAuthorityV2IndependentReview.cloned_witnesses_can_diverge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.successful_prefix_does_not_hide_bad_suffix :
+  PCSScientificAuthorityV2.audit PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+      [PCSAuthorityV2IndependentReview.first, PCSAuthorityV2IndependentReview.badEnvelope] =
+    none
+'PCSAuthorityV2IndependentReview.successful_prefix_does_not_hide_bad_suffix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.uninitialized_served_artifact_is_invalid._proof_1_1 :
+  PCSScientificReceiver.decode PCSAuthorityV2IndependentReview.fakeState.incumbent = none
+'PCSAuthorityV2IndependentReview.uninitialized_served_artifact_is_invalid._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.uninitialized_equal_state_serves :
+  PCSScientificAuthorityV2.serve
+      { witness := { committed := PCSAuthorityV2IndependentReview.fakeState, pending := none },
+        localState := PCSAuthorityV2IndependentReview.fakeState } =
+    some PCSAuthorityV2IndependentReview.fakeState
+'PCSAuthorityV2IndependentReview.uninitialized_equal_state_serves' depends on axioms: [propext]
+PCSAuthorityV2IndependentReview.oracle_initializes :
+  PCSScientificAuthorityV2.initializeWitness PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle =
+    some PCSScientificAuthorityV2.sampleInitialWitness
+'PCSAuthorityV2IndependentReview.oracle_initializes' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.badEnvelope.eq_1 :
+  PCSAuthorityV2IndependentReview.badEnvelope =
+    {
+      payload :=
+        have __src := PCSAuthorityV2IndependentReview.first.payload;
+        { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+          previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,
+          nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent, candidate := [],
+          certificate := __src.certificate },
+      authoritySignature := PCSAuthorityV2IndependentReview.first.authoritySignature,
+      witnessSignature := PCSAuthorityV2IndependentReview.first.witnessSignature }
+'PCSAuthorityV2IndependentReview.badEnvelope.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.first.eq_1 :
+  PCSAuthorityV2IndependentReview.first =
+    {
+      payload :=
+        have __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+        { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+          previousId := __src.previousId, eventId := [200], expectedGeneration := __src.expectedGeneration,
+          nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent,
+          candidate := __src.candidate, certificate := __src.certificate },
+      authoritySignature := PCSScientificHistoryV1.sampleEnvelope.authoritySignature,
+      witnessSignature := PCSScientificHistoryV1.sampleEnvelope.witnessSignature }
+'PCSAuthorityV2IndependentReview.first.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.second.eq_1 :
+  PCSAuthorityV2IndependentReview.second =
+    {
+      payload :=
+        have __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+        { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+          previousId := __src.previousId, eventId := [201], expectedGeneration := __src.expectedGeneration,
+          nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent,
+          candidate := __src.candidate, certificate := __src.certificate },
+      authoritySignature := PCSScientificHistoryV1.sampleEnvelope.authoritySignature,
+      witnessSignature := PCSScientificHistoryV1.sampleEnvelope.witnessSignature }
+'PCSAuthorityV2IndependentReview.second.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.recovery_refuses_invalid_archive (w : PCSScientificAuthorityV2.Witness) :
+  PCSScientificAuthorityV2.recover PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle w
+      [PCSAuthorityV2IndependentReview.badEnvelope] =
+    none
+'PCSAuthorityV2IndependentReview.recovery_refuses_invalid_archive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.recovery_refuses_invalid_archive._proof_1_1 :
+  PCSScientificReceiver.decode PCSAuthorityV2IndependentReview.badEnvelope.payload.candidate = none
+'PCSAuthorityV2IndependentReview.recovery_refuses_invalid_archive._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.first_checked._proof_1_1 :
+  (PCSAuthorizationHistoryV1.transition PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+        PCSAuthorityV2IndependentReview.s0 PCSAuthorityV2IndependentReview.first).2 =
+    true
+'PCSAuthorityV2IndependentReview.first_checked._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.honest_prepare_first :
+  PCSScientificAuthorityV2.prepare PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+      PCSScientificAuthorityV2.sampleInitialWitness PCSAuthorityV2IndependentReview.first =
+    (PCSAuthorityV2IndependentReview.pendingFirst, true)
+'PCSAuthorityV2IndependentReview.honest_prepare_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.uninitialized_served_artifact_is_invalid :
+  PCSScientificReceiver.receive PCSAuthorityV2IndependentReview.fakeState.incumbent = none
+'PCSAuthorityV2IndependentReview.uninitialized_served_artifact_is_invalid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.forged_pending_can_finalize :
+  (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.forgedPending
+        PCSAuthorityV2IndependentReview.badEnvelope).2 =
+    true
+'PCSAuthorityV2IndependentReview.forged_pending_can_finalize' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.pending_blocks_old_checked_state :
+  PCSScientificAuthorityV2.serve
+      { witness := PCSAuthorityV2IndependentReview.pendingFirst, localState := PCSAuthorityV2IndependentReview.s0 } =
+    none
+'PCSAuthorityV2IndependentReview.pending_blocks_old_checked_state' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.forged_pending_result_invalid :
+  PCSScientificReceiver.receive
+      (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.forgedPending
+              PCSAuthorityV2IndependentReview.badEnvelope).1.committed.incumbent =
+    none
+'PCSAuthorityV2IndependentReview.forged_pending_result_invalid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.honest_prepare_second :
+  PCSScientificAuthorityV2.prepare PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+      PCSScientificAuthorityV2.sampleInitialWitness PCSAuthorityV2IndependentReview.second =
+    (PCSAuthorityV2IndependentReview.pendingSecond, true)
+'PCSAuthorityV2IndependentReview.honest_prepare_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.forgedPending.eq_1 :
+  PCSAuthorityV2IndependentReview.forgedPending =
+    { committed := PCSAuthorityV2IndependentReview.s0,
+      pending :=
+        some
+          { before := PCSAuthorityV2IndependentReview.s0, envelope := PCSAuthorityV2IndependentReview.badEnvelope,
+            result := PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample } }
+'PCSAuthorityV2IndependentReview.forgedPending.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.first_checked :
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+      PCSAuthorityV2IndependentReview.s0 PCSAuthorityV2IndependentReview.first =
+    (PCSAuthorizationHistoryV1.commit PCSAuthorityV2IndependentReview.s0 PCSAuthorityV2IndependentReview.first,
+      some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample))
+'PCSAuthorityV2IndependentReview.first_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.pendingFirst.eq_1 :
+  PCSAuthorityV2IndependentReview.pendingFirst =
+    { committed := PCSAuthorityV2IndependentReview.s0,
+      pending :=
+        some
+          { before := PCSAuthorityV2IndependentReview.s0, envelope := PCSAuthorityV2IndependentReview.first,
+            result := PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample } }
+'PCSAuthorityV2IndependentReview.pendingFirst.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSAuthorityV2IndependentReview.retained_witness_rejects_conflict :
+  PCSScientificAuthorityV2.finalize
+      (PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.pendingFirst
+          PCSAuthorityV2IndependentReview.first).1
+      PCSAuthorityV2IndependentReview.second =
+    ((PCSScientificAuthorityV2.finalize PCSAuthorityV2IndependentReview.pendingFirst
+          PCSAuthorityV2IndependentReview.first).1,
+      false)
+'PCSAuthorityV2IndependentReview.retained_witness_rejects_conflict' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSAuthorityV2IndependentReview.second_checked :
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSAuthorityV2IndependentReview.oracle
+      PCSAuthorityV2IndependentReview.s0 PCSAuthorityV2IndependentReview.second =
+    (PCSAuthorizationHistoryV1.commit PCSAuthorityV2IndependentReview.s0 PCSAuthorityV2IndependentReview.second,
+      some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample))
+'PCSAuthorityV2IndependentReview.second_checked' depends on axioms: [propext, Classical.choice, Quot.sound]

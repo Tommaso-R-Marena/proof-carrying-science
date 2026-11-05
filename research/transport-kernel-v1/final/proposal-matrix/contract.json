@@ -1,0 +1,29 @@
+{
+  "format": "pcs-finite-volume-transport-contract-v3",
+  "question": "Reproduce conservative diffusion across five irregular compartments and check the finite trajectory's amount conservation, positivity, maximum principle and decreasing volume-weighted squared concentration.",
+  "cells": [
+    {"id": "CellA", "volume": "1", "initial_concentration": "1"},
+    {"id": "CellB", "volume": "2", "initial_concentration": "0"},
+    {"id": "CellC", "volume": "3/2", "initial_concentration": "1/4"},
+    {"id": "CellD", "volume": "1/2", "initial_concentration": "0"},
+    {"id": "CellE", "volume": "3", "initial_concentration": "1/8"}
+  ],
+  "edges": [
+    {"left": "CellA", "right": "CellB", "conductance": "1/2"},
+    {"left": "CellB", "right": "CellC", "conductance": "1/3"},
+    {"left": "CellC", "right": "CellD", "conductance": "2/5"},
+    {"left": "CellD", "right": "CellE", "conductance": "1/4"},
+    {"left": "CellE", "right": "CellA", "conductance": "1/5"},
+    {"left": "CellB", "right": "CellE", "conductance": "1/6"}
+  ],
+  "time_step": "1/4",
+  "steps": 16,
+  "units": {"volume": "m^3", "concentration": "mol/m^3", "conductance": "m^3/s", "time": "s"},
+  "data_path": "trajectory.csv",
+  "data_origin": "synthetic_numerical_computation_not_empirical",
+  "license": "CC0-1.0",
+  "assumptions": [
+    {"id": "A_CLOSED", "statement": "Only the declared symmetric internal conductances act; no external source, sink, reaction or boundary flux is modeled."},
+    {"id": "A_DISCRETE", "statement": "The explicit finite-volume time step is the calculation under study; continuum accuracy and the applicability of conductances to real geometry are not asserted."}
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "artifacts": [
+    {
+      "id": "train",
+      "media_type": "text/csv",
+      "path": "train.csv",
+      "role": "split-table"
+    },
+    {
+      "id": "test",
+      "media_type": "text/csv",
+      "path": "test.csv",
+      "role": "split-table"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A_SPLIT",
+      "statement": "csv_disjoint only claims opaque subject_id set disjointness. It does not claim sampling validity, population coverage, or representativeness. Rows are synthetic labels only."
+    }
+  ],
+  "checks": [
+    {
+      "claim_ids": [
+        "C_DISJOINT"
+      ],
+      "id": "E_DISJOINT",
+      "key": "subject_id",
+      "left_artifact": "train",
+      "right_artifact": "test",
+      "type": "csv_disjoint"
+    }
+  ],
+  "claims": [
+    {
+      "assumptions": [
+        "A_SPLIT"
+      ],
+      "id": "C_DISJOINT",
+      "kind": "computational",
+      "predicate": {
+        "key": "subject_id",
+        "left_artifact": "train",
+        "right_artifact": "test",
+        "type": "csv_disjoint"
+      },
+      "required_evidence": [
+        "E_DISJOINT"
+      ],
+      "statement": "Train and test subject_id sets are disjoint."
+    }
+  ],
+  "subject": "independent-eval-disjoint-but-biased-cohorts",
+  "workflow": {
+    "nodes": []
+  }
+}

@@ -1,0 +1,32 @@
+:root{
+  --bg:#102019;
+  --bg2:#1c3228;
+  --ink:#e7f2ea;
+  --muted:#9bb5a6;
+  --accent:#c4a35a;
+  --line:rgba(255,255,255,.1);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);color:var(--ink);
+background:
+radial-gradient(900px 480px at 80% -10%,rgba(196,163,90,.18),transparent),
+linear-gradient(165deg,var(--bg),var(--bg2));min-height:100vh}
+.skip{position:absolute;left:-999px;top:auto}
+.skip:focus{left:1rem;top:1rem;background:#000;padding:.5rem;z-index:10}
+.brand-bar{padding:1.25rem 1.5rem;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--serif);font-size:1.6rem;letter-spacing:.01em}
+.sub{color:var(--muted);font-size:.9rem;margin-top:.2rem}
+main{max-width:880px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.15;margin:0 0 .75rem}
+.hero p{color:var(--muted);max-width:38rem;line-height:1.55}
+.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.25rem}
+.filebtn,button{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.04);
+color:var(--ink);padding:.7rem 1rem;font:inherit;cursor:pointer}
+.filebtn:hover,button:hover{border-color:var(--accent)}
+.filebtn input{display:none}
+.panel{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line)}
+pre{background:rgba(0,0,0,.25);padding:1rem;overflow:auto;border:1px solid var(--line);line-height:1.45}
+.footnote{margin-top:2rem;color:var(--muted);font-size:.9rem}
+@media (max-width:600px){.brand{font-size:1.3rem}}

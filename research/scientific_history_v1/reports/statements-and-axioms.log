@@ -1,0 +1,354 @@
+PCSScientificHistoryV1.AcceptedFacts.reservedEmpty {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) : e.payload.certificate = []
+'PCSScientificHistoryV1.AcceptedFacts.reservedEmpty' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_missing_witness_rejected :
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+      (have __src := PCSScientificHistoryV1.sampleEnvelope;
+      { payload := __src.payload, authoritySignature := __src.authoritySignature, witnessSignature := [] }) =
+    (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot, Option.none)
+'PCSScientificHistoryV1.sample_missing_witness_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_false_science_unchanged :
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+      (have __src := PCSScientificHistoryV1.sampleEnvelope;
+      {
+        payload :=
+          have __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+          { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+            previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,
+            nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent, candidate := [],
+            certificate := __src.certificate },
+        authoritySignature := __src.authoritySignature, witnessSignature := __src.witnessSignature }) =
+    (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot, Option.none)
+'PCSScientificHistoryV1.sample_false_science_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.accepted_authenticated (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature)
+  (Authenticated : PCSAuthorizationHistoryV1.Bytes → PCSAuthorizationHistoryV1.Payload → Prop)
+  (signatureSound :
+    ∀ (key : PCSAuthorizationHistoryV1.Bytes) (payload : PCSAuthorizationHistoryV1.Payload)
+      (signature : PCSAuthorizationHistoryV1.Bytes),
+      verify key payload signature = Bool.true → Authenticated key payload)
+  (s : PCSAuthorizationHistoryV1.State) (e : PCSAuthorizationHistoryV1.Envelope) (r : PCSScientificReceiver.Result)
+  (h : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.some r) :
+  Authenticated root.authority e.payload ∧ Authenticated root.witness e.payload
+'PCSScientificHistoryV1.accepted_authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.run_scientific (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (es : List PCSAuthorizationHistoryV1.Envelope) (history : PCSScientificHistoryV1.ScientificHistory s)
+  (incumbent : PCSScientificHistoryV1.Checked s.incumbent) :
+  PCSScientificHistoryV1.ScientificHistory (PCSScientificHistoryV1.run root verify s es) ∧
+    PCSScientificHistoryV1.Checked (PCSScientificHistoryV1.run root verify s es).incumbent
+'PCSScientificHistoryV1.run_scientific' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_science_accepts :
+  PCSScientificReceiver.receive PCSScientificHistoryV1.sampleEnvelope.payload.candidate =
+    Option.some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample)
+'PCSScientificHistoryV1.sample_science_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_auxiliary_rejected._proof_1_1 :
+  (let __src := PCSScientificHistoryV1.sampleEnvelope;
+        {
+          payload :=
+            let __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+            { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+              previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,
+              nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent,
+              candidate := __src.candidate, certificate := [1] },
+          authoritySignature := __src.authoritySignature,
+          witnessSignature := __src.witnessSignature }).payload.certificate ≠
+    []
+'PCSScientificHistoryV1.sample_auxiliary_rejected._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.history {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  (PCSScientificHistoryV1.scientificTransition root verify s e).1.history = s.history ++ [e]
+'PCSScientificHistoryV1.AcceptedFacts.history' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.state {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (PCSAuthorizationHistoryV1.commit s e, Option.some r)
+'PCSScientificHistoryV1.AcceptedFacts.state' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.run_generation_monotone (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (es : List PCSAuthorizationHistoryV1.Envelope) :
+  s.generation ≤ (PCSScientificHistoryV1.run root verify s es).generation
+'PCSScientificHistoryV1.run_generation_monotone' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_false_total_unchanged._proof_1_1 :
+  PCSScientificReceiver.bounded
+      { referenceStep := PCSScientificReceiver.codecSample.referenceStep,
+        unitCode := PCSScientificReceiver.codecSample.unitCode, physical := PCSScientificReceiver.codecSample.physical,
+        initialA := PCSScientificReceiver.codecSample.initialA, initialB := PCSScientificReceiver.codecSample.initialB,
+        envValue := PCSScientificReceiver.codecSample.envValue, boxLo := PCSScientificReceiver.codecSample.boxLo,
+        boxHi := PCSScientificReceiver.codecSample.boxHi, lower := PCSScientificReceiver.codecSample.lower,
+        upper := PCSScientificReceiver.codecSample.upper, declaredTotal := 2,
+        firings := PCSScientificReceiver.codecSample.firings } =
+    Bool.true
+'PCSScientificHistoryV1.sample_false_total_unchanged._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.incumbent {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  (PCSScientificHistoryV1.scientificTransition root verify s e).1.incumbent = e.payload.candidate
+'PCSScientificHistoryV1.AcceptedFacts.incumbent' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.science {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  PCSScientificReceiver.ScopedScientificClaimHolds e.payload.candidate r
+'PCSScientificHistoryV1.AcceptedFacts.science' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.malformed_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : PCSScientificReceiver.decode e.payload.candidate = Option.none) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.malformed_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.generation {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  (PCSScientificHistoryV1.scientificTransition root verify s e).1.generation = s.generation + 1
+'PCSScientificHistoryV1.AcceptedFacts.generation' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.auxiliary_certificate_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : e.payload.certificate ≠ []) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.auxiliary_certificate_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.accepted_sound (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (r : PCSScientificReceiver.Result)
+  (h : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.some r) :
+  PCSScientificHistoryV1.AcceptedFacts root verify s e r
+'PCSScientificHistoryV1.accepted_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.policy {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) : root.policy = PCSScientificHistoryV1.policyBytes
+'PCSScientificHistoryV1.AcceptedFacts.policy' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_false_total_unchanged :
+  have bad :=
+    have __src := PCSScientificReceiver.codecSample;
+    { referenceStep := __src.referenceStep, unitCode := __src.unitCode, physical := __src.physical,
+      initialA := __src.initialA, initialB := __src.initialB, envValue := __src.envValue, boxLo := __src.boxLo,
+      boxHi := __src.boxHi, lower := __src.lower, upper := __src.upper, declaredTotal := 2, firings := __src.firings };
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+      (have __src := PCSScientificHistoryV1.sampleEnvelope;
+      {
+        payload :=
+          have __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+          { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+            previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,
+            nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent,
+            candidate := PCSScientificReceiver.encodeBytes bad, certificate := __src.certificate },
+        authoritySignature := __src.authoritySignature, witnessSignature := __src.witnessSignature }) =
+    (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot, Option.none)
+'PCSScientificHistoryV1.sample_false_total_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.history_failure_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : (PCSAuthorizationHistoryV1.transition root verify s e).2 = Bool.false) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.history_failure_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.initial_run_scientific (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (es : List PCSAuthorizationHistoryV1.Envelope)
+  (genesis : PCSScientificHistoryV1.Checked root.genesisIncumbent) :
+  PCSScientificHistoryV1.ScientificHistory
+      (PCSScientificHistoryV1.run root verify (PCSAuthorizationHistoryV1.initial root) es) ∧
+    PCSScientificHistoryV1.Checked
+      (PCSScientificHistoryV1.run root verify (PCSAuthorizationHistoryV1.initial root) es).incumbent
+'PCSScientificHistoryV1.initial_run_scientific' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_false_science_unchanged._proof_1_1 :
+  PCSScientificReceiver.decode
+      (let __src := PCSScientificHistoryV1.sampleEnvelope;
+          {
+            payload :=
+              let __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+              { authority := __src.authority, witness := __src.witness, policy := __src.policy,
+                checker := __src.checker, previousId := __src.previousId, eventId := __src.eventId,
+                expectedGeneration := __src.expectedGeneration, nextGeneration := __src.nextGeneration,
+                expectedIncumbent := __src.expectedIncumbent, candidate := [], certificate := __src.certificate },
+            authoritySignature := __src.authoritySignature,
+            witnessSignature := __src.witnessSignature }).payload.candidate =
+    Option.none
+'PCSScientificHistoryV1.sample_false_science_unchanged._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificHistoryV1.run_generation_monotone._proof_1_1 (s : PCSAuthorizationHistoryV1.State) :
+  ¬s.generation ≤ s.generation + 1 → False
+'PCSScientificHistoryV1.run_generation_monotone._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificHistoryV1.sample_commits_checked_science._proof_1_1 :
+  (PCSAuthorizationHistoryV1.transition PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+        (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot) PCSScientificHistoryV1.sampleEnvelope).2 =
+    Bool.true
+'PCSScientificHistoryV1.sample_commits_checked_science._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificHistoryV1.preserves_incumbent_science (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : PCSScientificHistoryV1.Checked s.incumbent) :
+  PCSScientificHistoryV1.Checked (PCSScientificHistoryV1.scientificTransition root verify s e).1.incumbent
+'PCSScientificHistoryV1.preserves_incumbent_science' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_missing_witness_rejected._proof_1_1 :
+  PCSScientificHistoryV1.sampleVerify PCSScientificHistoryV1.sampleRoot.witness
+      (let __src := PCSScientificHistoryV1.sampleEnvelope;
+        { payload := __src.payload, authoritySignature := __src.authoritySignature, witnessSignature := [] }).payload
+      (let __src := PCSScientificHistoryV1.sampleEnvelope;
+        { payload := __src.payload, authoritySignature := __src.authoritySignature,
+          witnessSignature := [] }).witnessSignature =
+    Bool.false
+'PCSScientificHistoryV1.sample_missing_witness_rejected._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificHistoryV1.preserves_history_invariants (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (auth : PCSAuthorizationHistoryV1.AuthenticatedHistory root verify s)
+  (links : PCSAuthorizationHistoryV1.LinkedHistory root.genesisId s.history s.tip) :
+  PCSAuthorizationHistoryV1.AuthenticatedHistory root verify
+      (PCSScientificHistoryV1.scientificTransition root verify s e).1 ∧
+    PCSAuthorizationHistoryV1.LinkedHistory root.genesisId
+      (PCSScientificHistoryV1.scientificTransition root verify s e).1.history
+      (PCSScientificHistoryV1.scientificTransition root verify s e).1.tip
+'PCSScientificHistoryV1.preserves_history_invariants' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.preserves_scientific_history (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : PCSScientificHistoryV1.ScientificHistory s) :
+  PCSScientificHistoryV1.ScientificHistory (PCSScientificHistoryV1.scientificTransition root verify s e).1
+'PCSScientificHistoryV1.preserves_scientific_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.accepted_checks (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (r : PCSScientificReceiver.Result)
+  (h : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.some r) :
+  root.policy = PCSScientificHistoryV1.policyBytes ∧
+    e.payload.certificate = [] ∧
+      PCSScientificReceiver.receive e.payload.candidate = Option.some r ∧
+        (PCSAuthorizationHistoryV1.transition root verify s e).2 = Bool.true
+'PCSScientificHistoryV1.accepted_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_commits_checked_science :
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot) PCSScientificHistoryV1.sampleEnvelope =
+    (PCSAuthorizationHistoryV1.commit (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+        PCSScientificHistoryV1.sampleEnvelope,
+      Option.some (PCSScientificReceiver.resultOfContract PCSScientificReceiver.codecSample))
+'PCSScientificHistoryV1.sample_commits_checked_science' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.scientificTransition.eq_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) :
+  PCSScientificHistoryV1.scientificTransition root verify s e =
+    if root.policy = PCSScientificHistoryV1.policyBytes ∧ e.payload.certificate = [] then
+      match PCSScientificReceiver.receive e.payload.candidate with
+      | Option.none => (s, Option.none)
+      | Option.some r =>
+        if (PCSAuthorizationHistoryV1.transition root verify s e).2 = Bool.true then
+          ((PCSAuthorizationHistoryV1.transition root verify s e).1, Option.some r)
+        else (s, Option.none)
+    else (s, Option.none)
+'PCSScientificHistoryV1.scientificTransition.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_auxiliary_rejected :
+  PCSScientificHistoryV1.scientificTransition PCSScientificHistoryV1.sampleRoot PCSScientificHistoryV1.sampleVerify
+      (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot)
+      (have __src := PCSScientificHistoryV1.sampleEnvelope;
+      {
+        payload :=
+          have __src := PCSScientificHistoryV1.sampleEnvelope.payload;
+          { authority := __src.authority, witness := __src.witness, policy := __src.policy, checker := __src.checker,
+            previousId := __src.previousId, eventId := __src.eventId, expectedGeneration := __src.expectedGeneration,
+            nextGeneration := __src.nextGeneration, expectedIncumbent := __src.expectedIncumbent,
+            candidate := __src.candidate, certificate := [1] },
+        authoritySignature := __src.authoritySignature, witnessSignature := __src.witnessSignature }) =
+    (PCSAuthorizationHistoryV1.initial PCSScientificHistoryV1.sampleRoot, Option.none)
+'PCSScientificHistoryV1.sample_auxiliary_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.signature_failure_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope)
+  (h :
+    verify root.authority e.payload e.authoritySignature = Bool.false ∨
+      verify root.witness e.payload e.witnessSignature = Bool.false) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.signature_failure_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.historyAccepted {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  (PCSAuthorizationHistoryV1.transition root verify s e).2 = Bool.true
+'PCSScientificHistoryV1.AcceptedFacts.historyAccepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_false_total_unchanged._proof_1_3 (f : List Char) :
+  f ∈
+      PCSScientificReceiver.protocolTag ::
+        List.map PCS.V2.ProofGatedCodec.renderInt
+          (PCSScientificReceiver.toInts
+            { referenceStep := PCSScientificReceiver.codecSample.referenceStep,
+              unitCode := PCSScientificReceiver.codecSample.unitCode,
+              physical := PCSScientificReceiver.codecSample.physical,
+              initialA := PCSScientificReceiver.codecSample.initialA,
+              initialB := PCSScientificReceiver.codecSample.initialB,
+              envValue := PCSScientificReceiver.codecSample.envValue, boxLo := PCSScientificReceiver.codecSample.boxLo,
+              boxHi := PCSScientificReceiver.codecSample.boxHi, lower := PCSScientificReceiver.codecSample.lower,
+              upper := PCSScientificReceiver.codecSample.upper, declaredTotal := 2,
+              firings := PCSScientificReceiver.codecSample.firings }) →
+    f.length ≤ PCSScientificReceiver.maxFieldChars
+'PCSScientificHistoryV1.sample_false_total_unchanged._proof_1_3' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificHistoryV1.rejected_unchanged (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope)
+  (h : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.none) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.rejected_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.AcceptedFacts.scope {root : PCSAuthorizationHistoryV1.Root}
+  {verify : PCSAuthorizationHistoryV1.VerifySignature} {s : PCSAuthorizationHistoryV1.State}
+  {e : PCSAuthorizationHistoryV1.Envelope} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificHistoryV1.AcceptedFacts root verify s e r) :
+  e.payload.authority = root.authority ∧
+    e.payload.witness = root.witness ∧ e.payload.policy = root.policy ∧ e.payload.checker = root.checker
+'PCSScientificHistoryV1.AcceptedFacts.scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.accepted_never_replayed._proof_1_1 (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (later : List PCSAuthorizationHistoryV1.Envelope)
+  (hg : e.payload.expectedGeneration = s.generation)
+  (hm :
+    s.generation + 1 ≤
+      (PCSScientificHistoryV1.run root verify (PCSScientificHistoryV1.scientificTransition root verify s e).1
+          later).generation) :
+  e.payload.expectedGeneration =
+      (PCSScientificHistoryV1.run root verify (PCSScientificHistoryV1.scientificTransition root verify s e).1
+          later).generation →
+    False
+'PCSScientificHistoryV1.accepted_never_replayed._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.sample_false_total_unchanged._proof_1_2 :
+  (PCSScientificReceiver.encodeBytes
+        { referenceStep := PCSScientificReceiver.codecSample.referenceStep,
+          unitCode := PCSScientificReceiver.codecSample.unitCode,
+          physical := PCSScientificReceiver.codecSample.physical,
+          initialA := PCSScientificReceiver.codecSample.initialA,
+          initialB := PCSScientificReceiver.codecSample.initialB,
+          envValue := PCSScientificReceiver.codecSample.envValue, boxLo := PCSScientificReceiver.codecSample.boxLo,
+          boxHi := PCSScientificReceiver.codecSample.boxHi, lower := PCSScientificReceiver.codecSample.lower,
+          upper := PCSScientificReceiver.codecSample.upper, declaredTotal := 2,
+          firings := PCSScientificReceiver.codecSample.firings }).length ≤
+    PCSScientificReceiver.maxBytes
+'PCSScientificHistoryV1.sample_false_total_unchanged._proof_1_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificHistoryV1.false_science_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : PCSScientificReceiver.receive e.payload.candidate = Option.none) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.false_science_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.accepted_never_replayed (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (r : PCSScientificReceiver.Result)
+  (h : (PCSScientificHistoryV1.scientificTransition root verify s e).2 = Option.some r)
+  (later : List PCSAuthorizationHistoryV1.Envelope) :
+  have after :=
+    PCSScientificHistoryV1.run root verify (PCSScientificHistoryV1.scientificTransition root verify s e).1 later;
+  PCSScientificHistoryV1.scientificTransition root verify after e = (after, Option.none)
+'PCSScientificHistoryV1.accepted_never_replayed' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificHistoryV1.wrong_policy_rejects (root : PCSAuthorizationHistoryV1.Root)
+  (verify : PCSAuthorizationHistoryV1.VerifySignature) (s : PCSAuthorizationHistoryV1.State)
+  (e : PCSAuthorizationHistoryV1.Envelope) (h : root.policy ≠ PCSScientificHistoryV1.policyBytes) :
+  PCSScientificHistoryV1.scientificTransition root verify s e = (s, Option.none)
+'PCSScientificHistoryV1.wrong_policy_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]

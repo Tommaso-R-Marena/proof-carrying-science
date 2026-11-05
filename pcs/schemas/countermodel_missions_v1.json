@@ -1,0 +1,257 @@
+[
+  {
+    "id": "quantifier-switch",
+    "kind": "unary",
+    "left": "∀ x : Agent, P x → Q x",
+    "right": "∃ x : Agent, P x → Q x",
+    "a": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    },
+    "b": {
+      "op": "exists",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    }
+  },
+  {
+    "id": "negation-drop",
+    "kind": "unary",
+    "left": "∀ x : Agent, P x → ¬ Q x",
+    "right": "∀ x : Agent, P x → Q x",
+    "a": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "not",
+          "f": {
+            "op": "pred",
+            "p": "Q",
+            "x": "x"
+          }
+        }
+      }
+    },
+    "b": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    }
+  },
+  {
+    "id": "implication-flip",
+    "kind": "unary",
+    "left": "∀ x : Agent, P x → Q x",
+    "right": "∀ x : Agent, Q x → P x",
+    "a": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    },
+    "b": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        }
+      }
+    }
+  },
+  {
+    "id": "connective-swap",
+    "kind": "unary",
+    "left": "∃ x : Agent, P x ∧ Q x",
+    "right": "∃ x : Agent, P x ∨ Q x",
+    "a": {
+      "op": "exists",
+      "x": "x",
+      "f": {
+        "op": "and",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    },
+    "b": {
+      "op": "exists",
+      "x": "x",
+      "f": {
+        "op": "or",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    }
+  },
+  {
+    "id": "assumption-loss",
+    "kind": "unary",
+    "left": "∀ x : Agent, P x → Q x",
+    "right": "∀ x : Agent, Q x",
+    "a": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "imp",
+        "a": {
+          "op": "pred",
+          "p": "P",
+          "x": "x"
+        },
+        "b": {
+          "op": "pred",
+          "p": "Q",
+          "x": "x"
+        }
+      }
+    },
+    "b": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "pred",
+        "p": "Q",
+        "x": "x"
+      }
+    }
+  },
+  {
+    "id": "quantifier-scope",
+    "kind": "relation",
+    "left": "∀ x : Agent, ∃ y : Agent, R x y",
+    "right": "∃ y : Agent, ∀ x : Agent, R x y",
+    "a": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "exists",
+        "x": "y",
+        "f": {
+          "op": "rel",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "b": {
+      "op": "exists",
+      "x": "y",
+      "f": {
+        "op": "forall",
+        "x": "x",
+        "f": {
+          "op": "rel",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    }
+  },
+  {
+    "id": "variable-capture",
+    "kind": "relation",
+    "left": "∀ x : Agent, ∃ y : Agent, R x y",
+    "right": "∀ x : Agent, R x x",
+    "a": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "exists",
+        "x": "y",
+        "f": {
+          "op": "rel",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "b": {
+      "op": "forall",
+      "x": "x",
+      "f": {
+        "op": "rel",
+        "x": "x",
+        "y": "x"
+      }
+    }
+  }
+]

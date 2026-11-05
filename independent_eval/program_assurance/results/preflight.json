@@ -1,0 +1,35 @@
+{
+  "conclusive": true,
+  "disclaimer": "Local harness gate only. Does not modify CI workflows. Wiring into required GitHub checks remains a separate proposal.",
+  "format": "pcs-independent-program-preflight-v1",
+  "gates": {
+    "branch_nonoverlap": {
+      "error_count": 0,
+      "has_overlaps": false,
+      "id": "branch_nonoverlap",
+      "missing_branches": [],
+      "pair_count": 15,
+      "pass": true
+    },
+    "path_collision": {
+      "collision_group_count": 0,
+      "file_count": 34,
+      "id": "path_collision",
+      "pass": true
+    },
+    "residual_trust": {
+      "assumption_id_count": 75,
+      "id": "residual_trust",
+      "pass": true,
+      "sources_missing": 0,
+      "sources_present": 4,
+      "tcb_closed": false
+    }
+  },
+  "hard_failures": [],
+  "pass": true,
+  "repo_head": "dc88bae4184bfbf5459d67f7d09fd8950a72db1d",
+  "soft_notes": [
+    "residual-trust rollup is informational and does not claim TCB closure"
+  ]
+}

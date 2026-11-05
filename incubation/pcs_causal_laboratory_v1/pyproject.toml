@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pcs-causal-laboratory"
+version = "0.1.0"
+description = "Independent proof-carrying causal inference laboratory (finite SCMs, exact identification, non-identifiability certificates)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Proof-Carrying Causality Laboratory" }]
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "networkx>=3.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+ui = ["flask>=3.0"]
+all = ["pcs-causal-laboratory[dev,ui]"]
+
+[project.scripts]
+pcs-causal = "pcs_causal.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.pcs_causal]
+isolation_namespace = "incubation/pcs_causal_laboratory_v1"
+preferred_repo = "Tommaso-R-Marena/proof-carrying-causality"
+fallback_branch = "feature/pcs-causal-laboratory-v1-4972"

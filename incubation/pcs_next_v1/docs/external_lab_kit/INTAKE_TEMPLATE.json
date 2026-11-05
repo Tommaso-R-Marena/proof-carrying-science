@@ -1,0 +1,97 @@
+{
+  "format": "pcs-next-intake-v1",
+  "project_id": "synth-pkpd-001",
+  "scientific_domain": "pharmacokinetics",
+  "workflow_purpose": "Demonstrate bounded independent scientific assurance on synthetic IV-bolus PK",
+  "artifacts": [
+    {
+      "id": "model",
+      "path": "model.json",
+      "role": "model",
+      "media_type": "application/json"
+    },
+    {
+      "id": "preds",
+      "path": "predictions.csv",
+      "role": "output",
+      "media_type": "text/csv"
+    },
+    {
+      "id": "code",
+      "path": "analyze.py",
+      "role": "code",
+      "media_type": "text/x-python"
+    }
+  ],
+  "claimed_conclusions": [
+    {
+      "id": "c1",
+      "text": "Predicted concentrations match one-compartment IV bolus decay under stated parameters.",
+      "kind": "computational"
+    },
+    {
+      "id": "c2",
+      "text": "for all t in Time, concentration >= 0",
+      "kind": "mathematical"
+    }
+  ],
+  "computational_assertions": [
+    {
+      "id": "a1",
+      "statement": "CSV rows match C(t)=(dose/V)*exp(-(CL/V)*t) within tolerance",
+      "method": "pkpd_adapter"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "s1",
+      "text": "One-compartment linear kinetics with constant CL and V",
+      "discharged": false
+    },
+    {
+      "id": "s2",
+      "text": "Synthetic data; not clinical observations",
+      "discharged": true
+    }
+  ],
+  "models": [
+    {
+      "id": "m1",
+      "class": "one_compartment_iv_bolus"
+    }
+  ],
+  "software_dependencies": [
+    {
+      "name": "python",
+      "version": ">=3.11"
+    }
+  ],
+  "numerical_methods": [
+    {
+      "name": "closed_form_exponential"
+    }
+  ],
+  "verification_boundaries": [
+    "Computational match to declared model",
+    "No claim of biological or clinical validity",
+    "External lab validation remains OPEN"
+  ],
+  "expected_outputs": [
+    {
+      "id": "o1",
+      "path": "predictions.csv"
+    }
+  ],
+  "reviewer_identities": [
+    {
+      "id": "synthetic-reviewer",
+      "role": "demo"
+    }
+  ],
+  "data_handling_classification": "synthetic",
+  "publication_permissions": "synthetic fixtures may be published with the repository",
+  "unresolved_questions": [
+    "Would an independent laboratory accept this workflow on real PK data?",
+    "What institutional approvals are required for non-synthetic pilots?"
+  ]
+}

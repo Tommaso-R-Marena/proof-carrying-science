@@ -1,0 +1,18 @@
+{
+  "format": "pcs-mathlib-sequential-recovery-v4",
+  "episodes_per_seed": 8,
+  "seeds": [
+    71,
+    79
+  ],
+  "sampling_seed_offset": 100,
+  "learning_rate": 0.0005,
+  "gamma": 0.97,
+  "entropy": 0.002,
+  "max_steps": 16,
+  "selection": "all seeds kept; no final benchmark read or checkpoint promotion",
+  "supervised_protocol_sha256": "38bfd025679a84b2276a2a1402fd4d2796926c266dc293bfe134ba2cdae6e0b8",
+  "source_sha256": "7c928d8a89fe45dd943128f089bafc9a326d7ad02e1cd5ac1d9df878b75df93f",
+  "failure_handling": "kernel/replay failures yield nonpositive terminal reward before gradients; every completed episode saves exact model, Adam and RNG checkpoint",
+  "previous_failure": "original extra kernel replay timeout retained under supervised experiment logs; no final evaluation outcomes used"
+}

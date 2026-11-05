@@ -1,0 +1,926 @@
+$ cd formal && lake build
+ℹ [16/269] Replayed PCS.Audit
+info: PCS/Audit.lean:24:0: 'PCS.formal_assurance_has_checked_formal_proof' does not depend on any axioms
+info: PCS/Audit.lean:25:0: 'PCS.computational_assurance_is_predicate_bound' does not depend on any axioms
+info: PCS/Audit.lean:26:0: 'PCS.computational_assurance_has_correctness_evidence' does not depend on any axioms
+info: PCS/Audit.lean:27:0: 'PCS.computational_assurance_cannot_use_unverified' does not depend on any axioms
+info: PCS/Audit.lean:28:0: 'PCS.empirical_assurance_requires_empirical_class' does not depend on any axioms
+info: PCS/Audit.lean:29:0: 'PCS.mixed_assurance_requires_both_classes' does not depend on any axioms
+info: PCS/Audit.lean:30:0: 'PCS.assurance_context_is_explicit' does not depend on any axioms
+info: PCS/Audit.lean:32:0: 'PCS.Decision.computationalEvidenceAccepts_sound' depends on axioms: [propext]
+info: PCS/Audit.lean:33:0: 'PCS.Decision.formalEvidenceAccepts_sound' depends on axioms: [propext]
+info: PCS/Audit.lean:35:0: 'PCS.Refinement.mem_requiredEvidenceFor_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:36:0: 'PCS.Refinement.boundTo_of_required' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:37:0: 'PCS.Refinement.computational_witness_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:38:0: 'PCS.Refinement.formal_witness_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:39:0: 'PCS.Refinement.empirical_witness_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:40:0: 'PCS.Refinement.mixed_witness_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:41:0: 'PCS.Refinement.computational_claim_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:42:0: 'PCS.Refinement.formal_claim_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:43:0: 'PCS.Refinement.empirical_claim_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:44:0: 'PCS.Refinement.mixed_claim_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:46:0: 'PCS.Normalized.context_available' does not depend on any axioms
+info: PCS/Audit.lean:47:0: 'PCS.Normalized.binding_available' does not depend on any axioms
+info: PCS/Audit.lean:48:0: 'PCS.Normalized.evidence_ids_unique' does not depend on any axioms
+info: PCS/Audit.lean:50:0: 'PCS.Normalization.uniqueEvidenceIds_implies_required_unambiguous' does not depend on any axioms
+info: PCS/Audit.lean:51:0: 'PCS.Normalization.selected_evidence_id_required' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:52:0: 'PCS.Normalization.selected_evidence_in_source' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:53:0: 'PCS.Normalization.no_missingRequiredEvidence_has_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:55:0: 'PCS.DecisionExtraction.decideClaim_computational_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:56:0: 'PCS.DecisionExtraction.decideClaim_formal_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:57:0: 'PCS.DecisionExtraction.decideClaim_empirical_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:58:0: 'PCS.DecisionExtraction.decideClaim_mixed_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:59:0: 'PCS.DecisionExtraction.decideClaim_computational_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:60:0: 'PCS.DecisionExtraction.decideClaim_formal_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:61:0: 'PCS.DecisionExtraction.decideClaim_empirical_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:62:0: 'PCS.DecisionExtraction.decideClaim_mixed_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:64:0: 'PCS.SerializedBridge.normalized_computational_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:65:0: 'PCS.SerializedBridge.normalized_formal_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:66:0: 'PCS.SerializedBridge.normalized_empirical_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:67:0: 'PCS.SerializedBridge.normalized_mixed_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:69:0: 'PCS.PKPD.canonical_pk_units_valid' does not depend on any axioms
+info: PCS/Audit.lean:70:0: 'PCS.PKPD.canonical_pd_units_valid' does not depend on any axioms
+info: PCS/Audit.lean:73:0: 'PCS.Wire.source_claim_identity' does not depend on any axioms
+info: PCS/Audit.lean:74:0: 'PCS.Wire.exact_context_scope_preserved' does not depend on any axioms
+info: PCS/Audit.lean:75:0: 'PCS.Wire.decoded_decision_matches_recorded' does not depend on any axioms
+info: PCS/Audit.lean:76:0: 'PCS.Wire.predicate_commitment_eq_preserved' does not depend on any axioms
+info: PCS/Audit.lean:77:0: 'PCS.Wire.wire_computational_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:78:0: 'PCS.Wire.wire_formal_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:79:0: 'PCS.Wire.wire_empirical_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:80:0: 'PCS.Wire.wire_mixed_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:83:0: 'PCS.WireCodec.decodeClaimKind_computational' does not depend on any axioms
+info: PCS/Audit.lean:84:0: 'PCS.WireCodec.decodeEvidenceKind_computationalTest' does not depend on any axioms
+info: PCS/Audit.lean:85:0: 'PCS.WireCodec.decodeOutcome_pass' does not depend on any axioms
+info: PCS/Audit.lean:86:0: 'PCS.WireCodec.decodeDecisionStatus_computational' does not depend on any axioms
+info: PCS/Audit.lean:87:0: 'PCS.WireCodec.unknown_claim_kind_rejected' does not depend on any axioms
+info: PCS/Audit.lean:88:0: 'PCS.WireCodec.unknown_evidence_kind_rejected' does not depend on any axioms
+info: PCS/Audit.lean:89:0: 'PCS.WireCodec.unknown_outcome_rejected' does not depend on any axioms
+info: PCS/Audit.lean:90:0: 'PCS.WireCodec.unknown_decision_rejected' does not depend on any axioms
+info: PCS/Audit.lean:93:0: 'PCS.WireCheck.decodedEvidence_unique_of_wire_ids_nodup' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:94:0: 'PCS.WireCheck.contextCovers_of_exact_context_scope' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:95:0: 'PCS.WireCheck.requiredEvidenceBound_of_commitments' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:96:0: 'PCS.WireCheck.wireCheck_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/Audit.lean:97:0: 'PCS.WireCheck.wireCheck_computational_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:98:0: 'PCS.WireCheck.wireCheck_formal_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:99:0: 'PCS.WireCheck.wireCheck_empirical_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/Audit.lean:100:0: 'PCS.WireCheck.wireCheck_mixed_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+⚠ [20/269] Replayed PCS.V2.SHA256
+warning: PCS/V2/SHA256.lean:137:17: unused variable `hs`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ℹ [145/291] Replayed PCS.V2.Audit
+info: PCS/V2/Audit.lean:18:0: 'PCS.V2.Json.parse_ser' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:19:0: 'PCS.V2.Json.jcsBytes_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:20:0: 'PCS.V2.Canonical.parseCanonicalBytes_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:21:0: 'PCS.V2.Canonical.parseCanonicalBytes_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:22:0: 'PCS.V2.Canonical.parseCanonicalBytes_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:24:0: 'PCS.V2.Domains.hash_domain_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:25:0: 'PCS.V2.Domains.hash_sig_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:26:0: 'PCS.V2.Domains.digest_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:27:0: 'PCS.V2.Domains.cross_domain_digest_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:29:0: 'PCS.V2.NormalizedWire.verifyWireBytes_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:30:0: 'PCS.V2.NormalizedWire.verifyWireBytes_assures' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:31:0: 'PCS.V2.NormalizedWire.verifyWireBytes_computational_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:32:0: 'PCS.V2.NormalizedWire.verifyWireBytes_formal_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:33:0: 'PCS.V2.NormalizedWire.verifyWireBytes_empirical_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:34:0: 'PCS.V2.NormalizedWire.verifyWireBytes_mixed_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:35:0: 'PCS.V2.Binding.wire_hash_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:36:0: 'PCS.V2.Binding.predicate_commitment_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:37:0: 'PCS.V2.Binding.evidence_bound_to_claim_predicate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:39:0: 'PCS.V2.Index.verifyNormalizedSet_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:40:0: 'PCS.V2.Index.verifyNormalizedSet_assures' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:42:0: 'PCS.V2.Base64.decodeCanonical_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:43:0: 'PCS.V2.Signature.verifySigRecordBytes_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:44:0: 'PCS.V2.Signature.verifySigRecordBytes_nonmalleable' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:45:0: 'PCS.V2.Signature.verifySigRecordBytes_domain_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:46:0: 'PCS.V2.Signature.verifySigRecordBytes_authentic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:47:0: 'PCS.V2.Signature.verifySigRecordBytes_intended' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:48:0: 'PCS.V2.Ed25519.ed25519ImplCorrect_self' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:50:0: 'PCS.V2.Package.namespace_no_traversal' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:51:0: 'PCS.V2.Package.namespace_no_alias' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:52:0: 'PCS.V2.Package.namespace_no_parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:53:0: 'PCS.V2.Package.verifyPackage_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:54:0: 'PCS.V2.Package.fileMap_exact_names' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:55:0: 'PCS.V2.Package.member_bytes_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:56:0: 'PCS.V2.Package.package_authentic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:58:0: 'PCS.V2.EndToEnd.acceptPCS_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:59:0: 'PCS.V2.Flagship.pcs_claims_assured' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:60:0: 'PCS.V2.Flagship.pcs_authentic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:61:0: 'PCS.V2.Flagship.pcs_environment_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:62:0: 'PCS.V2.Flagship.pcs_evidence_holds' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:63:0: 'PCS.V2.Flagship.pcs_accept_implies_scientific_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:64:0: 'PCS.V2.Flagship.pcs_archive_accept_implies_scientific_assurance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/Audit.lean:65:0: 'PCS.V2.Reproducibility.same_commitment_same_requests' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:66:0: 'PCS.V2.Reproducibility.acceptance_reproducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:67:0: 'PCS.V2.Reproducibility.wire_reuse_same_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:68:0: 'PCS.V2.TCB.production_accept_implies_scientific_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:69:0: 'PCS.V2.Authority.acceptPCSWithTranscript_implies_acceptPCS' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:70:0: 'PCS.V2.Authority.gatedProduction_refinesLean' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:72:0: 'PCS.V2.SHA256.be64_injective' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:73:0: 'PCS.V2.SHA256.pad_injective' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:74:0: 'PCS.V2.SHA256.chunks_pad_injective' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:75:0: 'PCS.V2.SHA256.schedule_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:76:0: 'PCS.V2.SHA256.pad_schedule_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:78:0: 'PCS.V2.Archive.fromArchiveEntries_sound' depends on axioms: [propext]
+info: PCS/V2/Audit.lean:79:0: 'PCS.V2.Archive.archive_no_duplicate_members' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:80:0: 'PCS.V2.Archive.archive_members_signed' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:81:0: 'PCS.V2.Archive.archive_manifest_members_present' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:82:0: 'PCS.V2.Archive.archive_certificate_member' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:83:0: 'PCS.V2.Archive.pcs_archive_scientific_assurance_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:84:0: 'PCS.V2.Archive.pcs_raw_archive_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:85:0: 'PCS.V2.Archive.production_raw_archive_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:87:0: 'PCS.V2.Chemistry.tokenize_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:88:0: 'PCS.V2.Chemistry.tokenize_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:89:0: 'PCS.V2.Chemistry.tokens_functional' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:90:0: 'PCS.V2.Chemistry.balancedB_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:91:0: 'PCS.V2.Chemistry.chemExecWith_faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:92:0: 'PCS.V2.Chemistry.chemExec_faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:93:0: 'PCS.V2.Chemistry.pcs_reaction_evidence_balanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:95:0: 'PCS.V2.SHA256Spec.sha256_eq_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:96:0: 'PCS.V2.SHA256Spec.sha256_eq_fips1804' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:97:0: 'PCS.V2.FIPS1804Spec.K_roots' depends on axioms: [propext]
+info: PCS/V2/Audit.lean:98:0: 'PCS.V2.FIPS1804Spec.H0_roots' depends on axioms: [propext]
+info: PCS/V2/Audit.lean:99:0: 'PCS.V2.FIPS1804Spec.padK_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:101:0: 'PCS.V2.Units.parseUnit_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:102:0: 'PCS.V2.Units.exprDenotes_unique' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/Audit.lean:103:0: 'PCS.V2.Units.unitCompatibleB_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:104:0: 'PCS.V2.Units.unitRun_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:106:0: 'PCS.V2.Csv.parseCsv_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:107:0: 'PCS.V2.Csv.csvTable_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:108:0: 'PCS.V2.Csv.csvDisjointB_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:109:0: 'PCS.V2.Csv.csvRun_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:111:0: 'PCS.V2.PKPDCheck.decodeModel_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:112:0: 'PCS.V2.PKPDCheck.rowB_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:113:0: 'PCS.V2.PKPDCheck.pkpdContractRun_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:114:0: 'PCS.V2.PKPDCheck.pkpdMatchRun_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:115:0: 'PCS.V2.PKPDCheck.pkpdPeakRun_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:117:0: 'PCS.V2.Checkers.dispatch_faithful' depends on axioms: [propext]
+info: PCS/V2/Audit.lean:118:0: 'PCS.V2.Checkers.builtinExecWith_faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:119:0: 'PCS.V2.Checkers.builtinHolds_semantics' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:120:0: 'PCS.V2.Checkers.builtinExecWith_pass_semantics' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:122:0: 'PCS.V2.Workflow.workflowCheckB_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:123:0: 'PCS.V2.Workflow.workflowDescribes_semantics' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:124:0: 'PCS.V2.EnvFacts.envFactsB_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:126:0: 'PCS.V2.Zip.decodeZip_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:127:0: 'PCS.V2.Zip.leanZip_faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:128:0: 'PCS.V2.Zip.canonicalZip_names_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:130:0: 'PCS.V2.HighAssurance.pcs_verified_builtin_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:131:0: 'PCS.V2.HighAssurance.pcs_high_assurance_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:132:0: 'PCS.V2.HighAssurance.pcs_authority_binary_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:133:0: 'PCS.V2.HighAssurance.pcs_authority_binary_builtin_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:134:0: 'PCS.V2.HighAssurance.pcs_workflow_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:135:0: 'PCS.V2.HighAssurance.pcs_no_environment_authentic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:136:0: 'PCS.V2.HighAssurance.authority_capture_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:137:0: 'PCS.V2.CanonicalArchive.pcs_canonical_archive_builtin_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:138:0: 'PCS.V2.CanonicalArchive.pcs_canonical_archive_acceptance_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/Audit.lean:139:0: 'PCS.V2.CanonicalArchive.acceptArchiveWithTranscript_refines' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:140:0: 'PCS.V2.CanonicalArchive.pcs_authority_archive_binary_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:141:0: 'PCS.V2.CanonicalArchive.pcs_authority_archive_binary_builtin_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/Audit.lean:143:0: 'PCS.V2.Frontier.pcs_frontier_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:144:0: 'PCS.V2.Frontier.pcs_frontier_archive_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:145:0: 'PCS.V2.Frontier.pcs_frontier_authority_binary_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:146:0: 'PCS.V2.Frontier.pcs_frontier_environment' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Audit.lean:147:0: 'PCS.V2.Frontier.pcs_unsigned_acceptance_yields_forgery' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [158/291] Replayed PCS.V2.GenericAudit
+info: PCS/V2/GenericAudit.lean:10:0: 'PCS.V2.ClaimGraph.root_assurance_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:11:0: 'PCS.V2.ClaimGraph.accepted_graph_facts' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:12:0: 'PCS.V2.ClaimGraph.cycle_rejected' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:13:0: 'PCS.V2.ClaimGraph.missing_child_rejected' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:14:0: 'PCS.V2.ClaimGraph.duplicate_ids_rejected' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:15:0: 'PCS.V2.ClaimGraph.unsupported_rejected' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:16:0: 'PCS.V2.ClaimGraph.Checker.sumLeaf_sound' does not depend on any axioms
+info: PCS/V2/GenericAudit.lean:18:0: 'PCS.V2.DomainAdapter.pcsChecker_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:19:0: 'PCS.V2.DomainAdapter.domain_adapter_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:21:0: 'PCS.V2.DomainAuthority.pcs_generic_domain_archive_acceptance_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/GenericAudit.lean:22:0: 'PCS.V2.DomainAuthority.pcs_generic_domain_archive_acceptance_sound_builtin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/GenericAudit.lean:23:0: 'PCS.V2.DomainAuthority.acceptArchiveWithCheckers_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:24:0: 'PCS.V2.DomainAuthority.authorityValid_builtin' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:25:0: 'PCS.V2.DomainAuthority.pcs_extended_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:26:0: 'PCS.V2.DomainAuthority.pcs_generic_domain_archive_acceptance_sound_with' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/GenericAudit.lean:27:0: 'PCS.V2.DomainAuthority.pcs_generic_domain_archive_acceptance_sound_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/GenericAudit.lean:29:0: 'PCS.V2.Proposer.loop_output_checked' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:30:0: 'PCS.V2.Proposer.untrusted_proposer_cannot_forge_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:31:0: 'PCS.V2.Proposer.no_strategy_forges' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:32:0: 'PCS.V2.Proposer.stochastic_proposer_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:33:0: 'PCS.V2.Proposer.untrusted_proposer_archive_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:35:0: 'PCS.V2.WorkflowRefinement.pipeline_refines' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:36:0: 'PCS.V2.WorkflowRefinement.pipeline_total' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:37:0: 'PCS.V2.Witnesses.WorkflowWitness.evaluator_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/GenericAudit.lean:39:0: 'PCS.V2.Witnesses.registry_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:40:0: 'PCS.V2.Witnesses.Biology.bioAdapter_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:41:0: 'PCS.V2.Witnesses.Biology.bio_archive_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:42:0: 'PCS.V2.Witnesses.AISafety.aiAdapter_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:43:0: 'PCS.V2.Witnesses.AISafety.ai_archive_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:44:0: 'PCS.V2.Witnesses.MLEval.mlAdapter_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:45:0: 'PCS.V2.Witnesses.MLEval.ml_archive_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:46:0: 'PCS.V2.Witnesses.Instances.bio_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:47:0: 'PCS.V2.Witnesses.Instances.ai_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:48:0: 'PCS.V2.Witnesses.Instances.bioGraph_accepted' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:49:0: 'PCS.V2.Witnesses.Instances.aiGraph_accepted' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:50:0: 'PCS.V2.Witnesses.Instances.mlGraph_accepted' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:52:0: 'PCS.V2.GenericCounterexamples.cyclic_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:53:0: 'PCS.V2.GenericCounterexamples.missing_leaf_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:54:0: 'PCS.V2.GenericCounterexamples.duplicate_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:55:0: 'PCS.V2.GenericCounterexamples.unsupported_node_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:56:0: 'PCS.V2.GenericCounterexamples.wrong_root_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:57:0: 'PCS.V2.GenericCounterexamples.swapped_artifact_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:58:0: 'PCS.V2.GenericCounterexamples.failed_evidence_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:59:0: 'PCS.V2.GenericCounterexamples.unrequired_evidence_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:60:0: 'PCS.V2.GenericCounterexamples.weaker_leaf_rejected' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:61:0: 'PCS.V2.GenericCounterexamples.adversary_gets_nothing' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:62:0: 'PCS.V2.GenericCounterexamples.rule_soundness_necessary' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:63:0: 'PCS.V2.GenericCounterexamples.leaf_soundness_necessary' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:64:0: 'PCS.V2.GenericCounterexamples.trusting_reports_unsound' depends on axioms: [propext]
+info: PCS/V2/GenericAudit.lean:65:0: 'PCS.V2.GenericCounterexamples.lossy_compile_unsound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/GenericAudit.lean:66:0: 'PCS.V2.GenericCounterexamples.duplicate_tag_shadowing' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [167/291] Replayed PCS.V2.ExecutableAudit
+info: PCS/V2/ExecutableAudit.lean:16:0: 'PCS.V2.DomainAuthority.executableAuthority_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:17:0: 'PCS.V2.DomainAuthority.executableAuthority_refines_certifiedAuthority' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:18:0: 'PCS.V2.DomainAuthority.executableAuthorityEntries_refines_certifiedAuthority' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:19:0: 'PCS.V2.DomainAuthority.executableAuthorityWith_dup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:20:0: 'PCS.V2.DomainAuthority.executableAuthorityWith_builtin' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:21:0: 'PCS.V2.DomainAuthority.executableAuthorityWith_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:22:0: 'PCS.V2.DomainAuthority.buildRegistry_dup_none' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:23:0: 'PCS.V2.DomainAuthority.buildRegistry_builtin_none' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:24:0: 'PCS.V2.DomainAuthority.executor_builtin_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:25:0: 'PCS.V2.DomainAuthority.executor_unhandled_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:26:0: 'PCS.V2.DomainAuthority.executor_unknown_fail_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:27:0: 'PCS.V2.DomainAuthority.executableAuthority_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:28:0: 'PCS.V2.DomainAuthority.executableAuthority_domain_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:30:0: 'PCS.V2.Witnesses.AISafetyCampaign.golden_claim_decodes' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:31:0: 'PCS.V2.Witnesses.AISafetyCampaign.golden_trace_safe' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:32:0: 'PCS.V2.Witnesses.AISafetyCampaign.golden_checker_passes' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:33:0: 'PCS.V2.Witnesses.AISafetyCampaign.golden_graph_accepted' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:34:0: 'PCS.V2.Witnesses.AISafetyCampaign.aiSafetyGoldenArchive_domain_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:35:0: 'PCS.V2.Witnesses.AISafetyCampaign.aiSafetyGoldenArchive_deployed_safe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:36:0: 'PCS.V2.Witnesses.AISafetyCampaign.replay_mismatch_rejects' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:37:0: 'PCS.V2.Witnesses.AISafetyCampaign.unknown_tag_no_leaf' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:38:0: 'PCS.V2.Witnesses.AISafetyCampaign.duplicate_registry_fails_closed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:39:0: 'PCS.V2.Witnesses.AISafetyCampaign.forbidden_trace_checker_fails' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:40:0: 'PCS.V2.Witnesses.AISafetyCampaign.over_budget_checker_fails' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:41:0: 'PCS.V2.Witnesses.AISafetyCampaign.graph_attacks_rejected' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:42:0: 'PCS.V2.Witnesses.AISafetyCampaign.wrong_decoder_rejected' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:43:0: 'PCS.V2.Witnesses.AISafetyCampaign.golden_distributed_protocol' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:45:0: 'PCS.V2.DistributedContributors.run_invariant' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:46:0: 'PCS.V2.DistributedContributors.unverified_leaf_rejected' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:47:0: 'PCS.V2.DistributedContributors.no_overwrite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:48:0: 'PCS.V2.DistributedContributors.committed_persistent' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:49:0: 'PCS.V2.DistributedContributors.committed_provenance' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:50:0: 'PCS.V2.DistributedContributors.committed_ids_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:51:0: 'PCS.V2.DistributedContributors.committed_children_earlier' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:52:0: 'PCS.V2.DistributedContributors.run_accepts_sound' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:53:0: 'PCS.V2.DistributedContributors.accepted_root_claim_fixed' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:54:0: 'PCS.V2.DistributedContributors.accepted_contributions_cannot_forge_assurance' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:55:0: 'PCS.V2.DistributedContributors.accepted_conclusion_order_independent' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:56:0: 'PCS.V2.DistributedContributors.coalition_is_submission_list' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:57:0: 'PCS.V2.DistributedContributors.execution_provenance' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:58:0: 'PCS.V2.DistributedContributors.squatting_blocks_liveness' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:59:0: 'PCS.V2.DistributedContributors.pcs_distributed_domain_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:60:0: 'PCS.V2.DistributedContributors.protocol_graph_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:62:0: 'PCS.V2.DomainAdapter.external_world_transfer_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:63:0: 'PCS.V2.DomainAdapter.false_external_world_not_corresponding' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:64:0: 'PCS.V2.DomainAuthority.archive_external_world_transfer_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:65:0: 'PCS.V2.Witnesses.AISafety.committed_safe_deployed_unsafe' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:67:0: 'PCS.V2.ClaimGraph.checkGraph_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:68:0: 'PCS.V2.ClaimGraph.checkGraphMemo_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:69:0: 'PCS.V2.ClaimGraph.root_assurance_sound_memo' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableAudit.lean:70:0: 'PCS.V2.ClaimGraph.memo_rejects_id_collision' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:71:0: 'PCS.V2.ClaimGraph.memo_rejects_cycle' depends on axioms: [propext]
+info: PCS/V2/ExecutableAudit.lean:72:0: 'PCS.V2.ClaimGraph.memo_rejects_missing' depends on axioms: [propext]
+ℹ [180/291] Replayed PCS.V2.Golden.Audit
+info: PCS/V2/Golden/Audit.lean:10:0: 'PCS.V2.Golden.certSig_verifies' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:11:0: 'PCS.V2.Golden.pkgSig_verifies' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:12:0: 'PCS.V2.Golden.verifyPackage_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:13:0: 'PCS.V2.Golden.acceptPCSWithCheckers_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:14:0: 'PCS.V2.Golden.decodeZip_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:15:0: 'PCS.V2.Golden.certifiedAuthority_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:16:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:17:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_entries_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:18:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_committed_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:19:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_deployed_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:20:0: 'PCS.V2.Golden.archiveBytes_eq_goldenRaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:21:0: 'PCS.V2.Golden.decodeAuthorityTranscriptBytes_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:22:0: 'PCS.V2.Golden.cliAnchor_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:23:0: 'PCS.V2.Golden.pcsLeanAuthority_golden_zip_output' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/Golden/Audit.lean:24:0: 'PCS.V2.Golden.pcsLeanAuthority_golden_dir_output' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [195/291] Replayed PCS.V2.ExecutableGeneralAudit
+info: PCS/V2/ExecutableGeneralAudit.lean:15:0: 'PCS.V2.ExecutableGeneral.executableAuthority_registered_evidence_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:16:0: 'PCS.V2.ExecutableGeneral.executableAuthority_trace_evidence_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:17:0: 'PCS.V2.ExecutableGeneral.executableAuthorityEntries_trace_evidence_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:18:0: 'PCS.V2.ExecutableGeneral.zipModeOutput_trace_evidence_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:19:0: 'PCS.V2.ExecutableGeneral.executableAuthority_trace_claim_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:20:0: 'PCS.V2.ExecutableGeneral.executableAuthority_deployed_trace_safe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:21:0: 'PCS.V2.ExecutableGeneral.executableAuthority_rejects_unsafe_trace_evidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:22:0: 'PCS.V2.ExecutableGeneral.executableAuthorityEntries_rejects_unsafe_trace_evidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:24:0: 'PCS.V2.Golden.tamperedRaw_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:25:0: 'PCS.V2.Golden.tamperedEntries_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:26:0: 'PCS.V2.Golden.golden_vs_tampered' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:27:0: 'PCS.V2.Golden.Insider.insider_rejected_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:28:0: 'PCS.V2.Golden.Insider.insider_rejected_zip' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:30:0: 'PCS.V2.ExecutableLimits.uncertifiedTag_passes_unsafe' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:31:0: 'PCS.V2.ExecutableLimits.certifiedTag_fails_unsafe' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:32:0: 'PCS.V2.GoldenCx.legacyAuthority_cx' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:33:0: 'PCS.V2.GoldenCx.legacy_no_unconditional_claim_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:34:0: 'PCS.V2.GoldenCx.cx_package_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:35:0: 'PCS.V2.GoldenCx.cx_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:36:0: 'PCS.V2.GoldenCx.cx_entries_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:37:0: 'PCS.V2.GoldenCx.cx_cli_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/ExecutableGeneralAudit.lean:38:0: 'PCS.V2.GoldenCx.cx_signed_but_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [197/291] Replayed PCS.V2.FailClosedAudit
+info: PCS/V2/FailClosedAudit.lean:14:0: 'PCS.V2.FailClosed.acceptPCSStrictWith_fallback_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:15:0: 'PCS.V2.FailClosed.acceptArchiveStrictWith_fallback_irrelevant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:16:0: 'PCS.V2.FailClosed.diagnosePCSStrictWith_accept_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:17:0: 'PCS.V2.FailClosed.diagnoseArchiveStrictWith_accept_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:18:0: 'PCS.V2.FailClosed.strict_evidence_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:19:0: 'PCS.V2.FailClosed.strict_supported_claim_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:20:0: 'PCS.V2.FailClosed.strict_rejects_unregistered_type' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:22:0: 'PCS.V2.DomainAuthority.executableAuthority_refines_certifiedAuthority' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:23:0: 'PCS.V2.DomainAuthority.executableAuthorityEntries_refines_certifiedAuthority' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:24:0: 'PCS.V2.DomainAuthority.executableAuthorityWith_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:25:0: 'PCS.V2.ExecutableFailClosed.executableAuthority_rejects_unregistered_type' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:26:0: 'PCS.V2.ExecutableFailClosed.executableAuthorityEntries_rejects_unregistered_type' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:27:0: 'PCS.V2.ExecutableFailClosed.zipModeOutput_rejects_unregistered_type' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:28:0: 'PCS.V2.ExecutableFailClosed.dirModeOutput_rejects_unregistered_type' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:29:0: 'PCS.V2.ExecutableFailClosed.executableAuthority_evidence_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:30:0: 'PCS.V2.ExecutableFailClosed.executableAuthority_supported_claims_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:31:0: 'PCS.V2.ExecutableFailClosed.executableAuthority_rejects_false_supported_ai_claim' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:32:0: 'PCS.V2.ExecutableFailClosed.executableAuthorityEntries_rejects_false_supported_ai_claim' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:34:0: 'PCS.V2.Golden.supportedEvidence_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:35:0: 'PCS.V2.Golden.claimsBound_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:36:0: 'PCS.V2.Golden.certifiedAuthority_golden' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:37:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:38:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_entries_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:39:0: 'PCS.V2.Golden.aiSafetyGoldenArchive_committed_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:41:0: 'PCS.V2.GoldenCx.cx_signed_but_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:42:0: 'PCS.V2.GoldenCx.cx_cli_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:43:0: 'PCS.V2.Golden.FailClosedFixtures.m7_rejected_zip' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:44:0: 'PCS.V2.Golden.FailClosedFixtures.m7_rejected_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:45:0: 'PCS.V2.Golden.FailClosedFixtures.m7b_rejected_zip' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:46:0: 'PCS.V2.Golden.FailClosedFixtures.m7b_rejected_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:47:0: 'PCS.V2.Golden.FailClosedFixtures.m7c_rejected_zip' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:48:0: 'PCS.V2.Golden.FailClosedFixtures.m7c_rejected_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:49:0: 'PCS.V2.Golden.FailClosedFixtures.m15_rejected_zip' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/FailClosedAudit.lean:50:0: 'PCS.V2.Golden.FailClosedFixtures.m15_rejected_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [200/291] Replayed PCS.V2.TranslationAudit
+info: PCS/V2/TranslationAudit.lean:11:0: 'PCS.V2.Semantic.Term.denote_hasSort' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:12:0: 'PCS.V2.Semantic.Formula.toDB_denote' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:13:0: 'PCS.V2.Semantic.SemanticClaim.normalize_denote' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:14:0: 'PCS.V2.Semantic.alphaEquiv_denote_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:16:0: 'PCS.V2.Semantic.explanation_roundtrip' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:17:0: 'PCS.V2.Semantic.explanationIR_preserves_semantics' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:18:0: 'PCS.V2.Semantic.explanation_references_grounded' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:19:0: 'PCS.V2.Semantic.explanation_references_complete' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:21:0: 'PCS.V2.Semantic.translationAccepts_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:22:0: 'PCS.V2.Semantic.translation_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:23:0: 'PCS.V2.Semantic.accepted_translation_preserves_meaning' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:24:0: 'PCS.V2.Semantic.accepted_translation_preserves_meaning_typed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/TranslationAudit.lean:25:0: 'PCS.V2.Semantic.accepted_explanation_means_interpretation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:26:0: 'PCS.V2.Semantic.accepted_translation_uses_only_grounded_symbols' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/TranslationAudit.lean:27:0: 'PCS.V2.Semantic.accepted_translation_has_no_unresolved_ambiguity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/TranslationAudit.lean:28:0: 'PCS.V2.Semantic.accepted_translation_preserves_quantifiers' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:29:0: 'PCS.V2.Semantic.accepted_translation_preserves_negation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:30:0: 'PCS.V2.Semantic.accepted_translation_preserves_assumptions' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:31:0: 'PCS.V2.Semantic.accepted_translation_has_no_unexpected_free_variables' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/TranslationAudit.lean:32:0: 'PCS.V2.Semantic.accepted_translation_roundtrips' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:34:0: 'PCS.V2.Semantic.semantically_inequivalent_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:35:0: 'PCS.V2.Semantic.unknown_symbol_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:36:0: 'PCS.V2.Semantic.unresolved_ambiguity_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:37:0: 'PCS.V2.Semantic.dropped_assumption_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:38:0: 'PCS.V2.Semantic.added_assumption_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:39:0: 'PCS.V2.Semantic.quantifier_change_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:40:0: 'PCS.V2.Semantic.polarity_change_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:41:0: 'PCS.V2.Semantic.shadowed_or_duplicate_grounding_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:42:0: 'PCS.V2.Semantic.incorrect_symbol_identity_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:43:0: 'PCS.V2.Semantic.forged_confirmation_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:44:0: 'PCS.V2.Semantic.disallowed_axiom_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:45:0: 'PCS.V2.Semantic.decision_ignores_model_metadata' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:47:0: 'PCS.V2.Semantic.translation_authority_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:48:0: 'PCS.V2.Semantic.semanticChecker_sound' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:49:0: 'PCS.V2.Semantic.translated_claim_graph_sound_memo' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:50:0: 'PCS.V2.Semantic.untrusted_proposer_cannot_bypass_translation_authority' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/TranslationAudit.lean:51:0: 'PCS.V2.Semantic.no_strategy_forges_translation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:53:0: 'PCS.V2.Semantic.decRequest_encRequest' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:54:0: 'PCS.V2.Semantic.semanticCheck_accepted_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:55:0: 'PCS.V2.Semantic.semanticCheck_encRequest' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:57:0: 'PCS.V2.Semantic.Fixtures.safety_accepted' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:58:0: 'PCS.V2.Semantic.Fixtures.arith_interpretation_holds' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/TranslationAudit.lean:59:0: 'PCS.V2.Semantic.Fixtures.qOrder_rejected' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:60:0: 'PCS.V2.Semantic.Fixtures.capture_codes' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:61:0: 'PCS.V2.Semantic.Fixtures.explanationMismatch_code' depends on axioms: [propext]
+info: PCS/V2/TranslationAudit.lean:62:0: 'PCS.V2.Semantic.Fixtures.confidence_never_matters' depends on axioms: [propext, Quot.sound]
+ℹ [208/291] Replayed PCS.V2.SemanticV2Audit
+info: PCS/V2/SemanticV2Audit.lean:20:0: 'PCS.V2.Semantic.NFormula.SemEquiv.refl' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:21:0: 'PCS.V2.Semantic.NFormula.SemEquiv.symm' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:22:0: 'PCS.V2.Semantic.NFormula.SemEquiv.trans' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:23:0: 'PCS.V2.Semantic.NTerm.swapBV_denote' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:24:0: 'PCS.V2.Semantic.NTerm.swapBVList_denote' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:25:0: 'PCS.V2.Semantic.consEnv_swapIdx' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:26:0: 'PCS.V2.Semantic.NFormula.swapBV_denote' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:27:0: 'PCS.V2.Semantic.consEnv_swap0' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:28:0: 'PCS.V2.Semantic.quantSwap_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:29:0: 'PCS.V2.Semantic.Rule.apply_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:30:0: 'PCS.V2.Semantic.option_map_eq_some' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:31:0: 'PCS.V2.Semantic.rewriteAt_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:32:0: 'PCS.V2.Semantic.NClaim.SemEquiv.refl' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:33:0: 'PCS.V2.Semantic.NClaim.SemEquiv.symm' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:34:0: 'PCS.V2.Semantic.NClaim.SemEquiv.trans' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:35:0: 'PCS.V2.Semantic.forall_mem_set_iff' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:36:0: 'PCS.V2.Semantic.NClaim.applyStep_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:37:0: 'PCS.V2.Semantic.NClaim.applySteps_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:38:0: 'PCS.V2.Semantic.checkCert_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:39:0: 'PCS.V2.Semantic.translation_certificate_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:40:0: 'PCS.V2.Semantic.certificate_acceptance_implies_semantic_preservation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:41:0: 'PCS.V2.Semantic.certificate_checker_rejects_invalid_derivations' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:42:0: 'PCS.V2.Semantic.inequivalent_claims_admit_no_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:43:0: 'PCS.V2.Semantic.untrusted_translation_search_cannot_forge_certified_equivalence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:44:0: 'PCS.V2.Semantic.checkCert_empty' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:46:0: 'PCS.V2.Semantic.NTerm.evalF_eq' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:47:0: 'PCS.V2.Semantic.NTerm.evalFList_eq' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:48:0: 'PCS.V2.Semantic.NFormula.evalF_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:49:0: 'PCS.V2.Semantic.evalParams_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:50:0: 'PCS.V2.Semantic.NClaim.evalF_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:51:0: 'PCS.V2.Semantic.finite_evaluator_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:52:0: 'PCS.V2.Semantic.finite_evaluator_complete_for_supported_finite_models' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:53:0: 'PCS.V2.Semantic.FinModel.mem_tuples' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:54:0: 'PCS.V2.Semantic.Registry.resolve_mem' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:55:0: 'PCS.V2.Semantic.conformsB_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:56:0: 'PCS.V2.Semantic.inhabitedB_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:57:0: 'PCS.V2.Semantic.claim_evalF_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:58:0: 'PCS.V2.Semantic.countermodel_witness_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:59:0: 'PCS.V2.Semantic.countermodel_demonstrates_semantic_difference' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:60:0: 'PCS.V2.Semantic.countermodel_witness_inhabited' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:61:0: 'PCS.V2.Semantic.countermodel_refutes_inhabited_equivalence' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:62:0: 'PCS.V2.Semantic.countermodel_excludes_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:63:0: 'PCS.V2.Semantic.mkCarriers_size' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:64:0: 'PCS.V2.Semantic.mem_vecsSum' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:65:0: 'PCS.V2.Semantic.searchLoop_found' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:66:0: 'PCS.V2.Semantic.searchLoop_exhausted' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:67:0: 'PCS.V2.Semantic.orderedSizeVectors_pairwise' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:68:0: 'PCS.V2.Semantic.modelsFor_domainSize' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:69:0: 'PCS.V2.Semantic.orderedSizeVectors_length' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:70:0: 'PCS.V2.Semantic.mem_vecsSum_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:71:0: 'PCS.V2.Semantic.mkCarriers_find' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:72:0: 'PCS.V2.Semantic.searchClass_inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:73:0: 'PCS.V2.Semantic.search_found_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:74:0: 'PCS.V2.Semantic.search_found_minimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:75:0: 'PCS.V2.Semantic.search_exhausted_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:77:0: 'PCS.V2.Semantic.findCheckedCert_checked' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:79:0: 'PCS.V2.Semantic.accepted_translation_preserves_denotation_v2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:80:0: 'PCS.V2.Semantic.accepted_explanation_means_interpretation_v2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:81:0: 'PCS.V2.Semantic.v1_acceptance_implies_v2_contract' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:82:0: 'PCS.V2.Semantic.countermodel_refutes_contract_v2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:83:0: 'PCS.V2.Semantic.countermodel_v1_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:84:0: 'PCS.V2.Semantic.countermodel_and_certificate_exclusive' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:85:0: 'PCS.V2.Semantic.checkExplanationV2_nil' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:86:0: 'PCS.V2.Semantic.gateDiagnostics_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:87:0: 'PCS.V2.Semantic.countermodelPhase_not_linked' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:88:0: 'PCS.V2.Semantic.semanticAnalysis_linked' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:89:0: 'PCS.V2.Semantic.decideV2_certified_gates' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:90:0: 'PCS.V2.Semantic.decideV2_certified_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:91:0: 'PCS.V2.Semantic.decideV2_certified_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:92:0: 'PCS.V2.Semantic.executable_semantic_checker_refines_specification' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:93:0: 'PCS.V2.Semantic.decideV2_certified_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:94:0: 'PCS.V2.Semantic.decideV2_certified_preserves_denotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:95:0: 'PCS.V2.Semantic.countermodelPhase_sound' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:96:0: 'PCS.V2.Semantic.semanticAnalysis_counterexample_sound' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:97:0: 'PCS.V2.Semantic.decideV2_counterexample_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:98:0: 'PCS.V2.Semantic.decideV2_ambiguity_not_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:99:0: 'PCS.V2.Semantic.decideV2_unconfirmed_not_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:100:0: 'PCS.V2.Semantic.decideV2_ungrounded_not_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:101:0: 'PCS.V2.Semantic.decideV2_unsupported_not_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:102:0: 'PCS.V2.Semantic.decideV2_missing_proof_not_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:103:0: 'PCS.V2.Semantic.decideV2_inequivalent_not_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:104:0: 'PCS.V2.Semantic.semantic_authority_does_not_trust_proposer_metadata' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:105:0: 'PCS.V2.Semantic.pcs_proof_carrying_translation_sound_v2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:107:0: 'PCS.V2.Semantic.decNat_encNat' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:108:0: 'PCS.V2.Semantic.decNats_encNats' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:109:0: 'PCS.V2.Semantic.decRule_encRule' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:110:0: 'PCS.V2.Semantic.decTarget_encTarget' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:111:0: 'PCS.V2.Semantic.decStep_encStep' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:112:0: 'PCS.V2.Semantic.decSteps_encSteps' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:113:0: 'PCS.V2.Semantic.decCert_encCert' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:114:0: 'PCS.V2.Semantic.decFinModel_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:115:0: 'PCS.V2.Semantic.decCountermodel_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:116:0: 'PCS.V2.Semantic.decBounds_encBounds' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:117:0: 'PCS.V2.Semantic.semantic_wire_roundtrip' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:118:0: 'PCS.V2.Semantic.decRequestV2_encRequestV2' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:119:0: 'PCS.V2.Semantic.semanticCheckV2_decision' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:120:0: 'PCS.V2.Semantic.semanticCheckV2_encRequestV2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:121:0: 'PCS.V2.Semantic.semanticCheckV2_certified_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:122:0: 'PCS.V2.Semantic.accepted_wire_translation_preserves_semantics' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:123:0: 'PCS.V2.Semantic.malformed_wire_request_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:124:0: 'PCS.V2.Semantic.semantic_authority_cannot_be_bypassed_by_unsigned_receipts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:125:0: 'PCS.V2.Semantic.decCountermodelBundle_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:126:0: 'PCS.V2.Semantic.countermodel_bundle_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:128:0: 'PCS.V2.Semantic.human_obligations_not_mechanical' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:129:0: 'PCS.V2.Semantic.labelOf_positive' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:130:0: 'PCS.V2.Semantic.labelOf_negative' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:131:0: 'PCS.V2.Semantic.label_positive_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:132:0: 'PCS.V2.Semantic.label_negative_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:134:0: 'PCS.V2.Semantic.Limits.search_exhausted_at_two' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:135:0: 'PCS.V2.Semantic.Limits.three_element_countermodel' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:136:0: 'PCS.V2.Semantic.Limits.no_countermodel_found_within_bound_is_not_equivalence_proof' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:137:0: 'PCS.V2.Semantic.Limits.conjCert_checks' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:138:0: 'PCS.V2.Semantic.Limits.structural_rejection_is_not_semantic_inequivalence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:139:0: 'PCS.V2.Semantic.Limits.intent_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:140:0: 'PCS.V2.Semantic.Limits.registry_name_does_not_fix_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:142:0: 'PCS.V2.Semantic.FixturesV2.revCert_checks' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:143:0: 'PCS.V2.Semantic.FixturesV2.reproCert_checks' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:144:0: 'PCS.V2.Semantic.FixturesV2.bioCert_checks' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:145:0: 'PCS.V2.Semantic.FixturesV2.rev_certified' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:146:0: 'PCS.V2.Semantic.FixturesV2.repro_certified' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:147:0: 'PCS.V2.Semantic.FixturesV2.bio_certified' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:148:0: 'PCS.V2.Semantic.FixturesV2.rev_v1_rejects' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:149:0: 'PCS.V2.Semantic.FixturesV2.repro_v1_rejects' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:150:0: 'PCS.V2.Semantic.FixturesV2.bio_v1_rejects' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:151:0: 'PCS.V2.Semantic.FixturesV2.rev_preserves_denotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:152:0: 'PCS.V2.Semantic.FixturesV2.revExists_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:153:0: 'PCS.V2.Semantic.FixturesV2.revTime_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:154:0: 'PCS.V2.Semantic.FixturesV2.revDropped_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:155:0: 'PCS.V2.Semantic.FixturesV2.revOr_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:156:0: 'PCS.V2.Semantic.FixturesV2.revNeg_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:157:0: 'PCS.V2.Semantic.FixturesV2.reproConverse_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:158:0: 'PCS.V2.Semantic.FixturesV2.heldOut_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:159:0: 'PCS.V2.Semantic.FixturesV2.bioOr_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:160:0: 'PCS.V2.Semantic.FixturesV2.bioLegacy_countermodel' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:161:0: 'PCS.V2.Semantic.FixturesV2.never_certified_of_countermodel' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:162:0: 'PCS.V2.Semantic.FixturesV2.revExists_never_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:163:0: 'PCS.V2.Semantic.FixturesV2.revTime_never_certified' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:164:0: 'PCS.V2.Semantic.FixturesV2.forged_certificate_rejected' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:165:0: 'PCS.V2.Semantic.FixturesV2.ambiguous_needs_clarification' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:166:0: 'PCS.V2.Semantic.FixturesV2.forged_confirmation_invalid' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:167:0: 'PCS.V2.Semantic.FixturesV2.missing_proof_unresolved' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:168:0: 'PCS.V2.Semantic.FixturesV2.unsupported_fragment' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:170:0: 'PCS.V2.Semantic.SemEquiv.not_congr' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:171:0: 'PCS.V2.Semantic.SemEquiv.and_congr' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:172:0: 'PCS.V2.Semantic.SemEquiv.or_congr' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:173:0: 'PCS.V2.Semantic.SemEquiv.imp_congr' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:174:0: 'PCS.V2.Semantic.SemEquiv.quant_congr' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:175:0: 'PCS.V2.Semantic.ndenoteParams_and' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:176:0: 'PCS.V2.Semantic.NClaim.conj_denote' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:177:0: 'PCS.V2.Semantic.compositional_translation_sound' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:178:0: 'PCS.V2.Semantic.compositional_certificates_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:179:0: 'PCS.V2.Semantic.certified_repair_preserves_meaning' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:180:0: 'PCS.V2.Semantic.certified_rewriting_cannot_repair_mistranslation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:181:0: 'PCS.V2.Semantic.cachedCheck_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:182:0: 'PCS.V2.Semantic.stale_cache_cannot_be_reused' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:183:0: 'PCS.V2.Semantic.semantic_obligation_graph_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:184:0: 'PCS.V2.Semantic.wire_obligation_graph_acceptance_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:186:0: 'PCS.V2.Semantic.Ledger.ReceiptRole.name_injective' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:187:0: 'PCS.V2.Semantic.Ledger.utf8_flatMap_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:188:0: 'PCS.V2.Semantic.Ledger.envelopeBytes_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:189:0: 'PCS.V2.Semantic.Ledger.acceptEnvelope_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:190:0: 'PCS.V2.Semantic.Ledger.replay_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:191:0: 'PCS.V2.Semantic.Ledger.expired_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:192:0: 'PCS.V2.Semantic.Ledger.revoked_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:193:0: 'PCS.V2.Semantic.Ledger.role_mismatch_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:194:0: 'PCS.V2.Semantic.Ledger.unknown_version_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:195:0: 'PCS.V2.Semantic.Ledger.statement_substitution_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:196:0: 'PCS.V2.Semantic.Ledger.role_confusion_and_substitution_impossible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:198:0: 'PCS.V2.Semantic.CNL.Term.toks_head' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:199:0: 'PCS.V2.Semantic.CNL.parseTerm_toks' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:200:0: 'PCS.V2.Semantic.CNL.parseTerms_toks' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:201:0: 'PCS.V2.Semantic.CNL.parseFormula_toks' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:202:0: 'PCS.V2.Semantic.CNL.parseTerm_inv' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:203:0: 'PCS.V2.Semantic.CNL.parseTerms_inv' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:204:0: 'PCS.V2.Semantic.CNL.brk_inv' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:205:0: 'PCS.V2.Semantic.CNL.parseFormula_inv' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:206:0: 'PCS.V2.Semantic.CNL.Term.size_le_toks' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:207:0: 'PCS.V2.Semantic.CNL.Term.sizeList_le_toks' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:208:0: 'PCS.V2.Semantic.CNL.Formula.size_le_toks' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:209:0: 'PCS.V2.Semantic.CNL.Formula.toks_ne_nil' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:210:0: 'PCS.V2.Semantic.CNL.Kw.wordTok_word' does not depend on any axioms
+info: PCS/V2/SemanticV2Audit.lean:211:0: 'PCS.V2.Semantic.CNL.Kw.word_no_space' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:212:0: 'PCS.V2.Semantic.CNL.Kw.mem_all' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:213:0: 'PCS.V2.Semantic.CNL.word_wordTok' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:214:0: 'PCS.V2.Semantic.CNL.wordTok_word_of_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:215:0: 'PCS.V2.Semantic.CNL.word_no_space_of_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:216:0: 'PCS.V2.Semantic.CNL.parseWords_renderWords' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:217:0: 'PCS.V2.Semantic.CNL.renderWords_parseWords' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:218:0: 'PCS.V2.Semantic.CNL.controlled_language_print_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:219:0: 'PCS.V2.Semantic.CNL.controlled_language_parse_print' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:220:0: 'PCS.V2.Semantic.CNL.controlled_language_render_preserves_semantics' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:221:0: 'PCS.V2.Semantic.CNL.renderCNL_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:222:0: 'PCS.V2.Semantic.CNL.explanation_preserves_quantifier_scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:223:0: 'PCS.V2.Semantic.CNL.explanation_preserves_assumptions' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:224:0: 'PCS.V2.Semantic.CNL.explanation_preserves_grounded_definitions' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:225:0: 'PCS.V2.Semantic.CNL.explanation_preserves_proof_limitations' depends on axioms: [propext]
+info: PCS/V2/SemanticV2Audit.lean:227:0: 'PCS.V2.Semantic.LeanModel.forall_time' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:228:0: 'PCS.V2.Semantic.LeanModel.forall_action' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:229:0: 'PCS.V2.Semantic.LeanModel.forall_run' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:230:0: 'PCS.V2.Semantic.LeanModel.forall_residue' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:231:0: 'PCS.V2.Semantic.LeanModel.leanModel_conforms' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:232:0: 'PCS.V2.Semantic.LeanModel.rev_interpretation_lean_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:233:0: 'PCS.V2.Semantic.LeanModel.rev_candidate_lean_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:234:0: 'PCS.V2.Semantic.LeanModel.repro_interpretation_lean_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:235:0: 'PCS.V2.Semantic.LeanModel.repro_candidate_lean_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:236:0: 'PCS.V2.Semantic.LeanModel.bio_interpretation_lean_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:237:0: 'PCS.V2.Semantic.LeanModel.bio_candidate_lean_meaning' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:238:0: 'PCS.V2.Semantic.LeanModel.rev_certified_lean_statements_equivalent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:239:0: 'PCS.V2.Semantic.LeanModel.repro_certified_lean_statements_equivalent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV2Audit.lean:240:0: 'PCS.V2.Semantic.LeanModel.bio_certified_lean_statements_equivalent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [216/291] Replayed PCS.V2.SemanticV3Audit
+info: PCS/V2/SemanticV3Audit.lean:17:0: 'PCS.V2.Semantic.V3.coreDiagnostics_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:18:0: 'PCS.V2.Semantic.V3.mem_dedup' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:19:0: 'PCS.V2.Semantic.V3.dedup_nodup' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:20:0: 'PCS.V2.Semantic.V3.mem_issuersOf' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:21:0: 'PCS.V2.Semantic.V3.acceptEnvelope_ok_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:22:0: 'PCS.V2.Semantic.V3.acceptEnvelope_error_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:23:0: 'PCS.V2.Semantic.V3.acceptAllV3_ok_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:24:0: 'PCS.V2.Semantic.V3.acceptAllV3_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:25:0: 'PCS.V2.Semantic.V3.quorumFailure_none_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:26:0: 'PCS.V2.Semantic.V3.receiptPhase_ok_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:27:0: 'PCS.V2.Semantic.V3.receiptPhase_ok_nonces' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:28:0: 'PCS.V2.Semantic.V3.receiptPhase_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:29:0: 'PCS.V2.Semantic.V3.receiptPhase_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:30:0: 'PCS.V2.Semantic.V3.receiptPhase_consumed_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:32:0: 'PCS.V2.Semantic.V3.legacyDiagnostics_nil' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:33:0: 'PCS.V2.Semantic.V3.classifyV3_certified' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:34:0: 'PCS.V2.Semantic.V3.classifyV3_of' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:35:0: 'PCS.V2.Semantic.V3.decideV3_outcome' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:36:0: 'PCS.V2.Semantic.V3.decideV3_certified_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:37:0: 'PCS.V2.Semantic.V3.semanticAnalysis_linked_of' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:38:0: 'PCS.V2.Semantic.V3.decideV3_certified_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:39:0: 'PCS.V2.Semantic.V3.decideV3_certified_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:40:0: 'PCS.V2.Semantic.V3.stateful_authority_refines_specification' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:41:0: 'PCS.V2.Semantic.V3.decideV3_certified_preserves_denotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:42:0: 'PCS.V2.Semantic.V3.decideV3_consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:43:0: 'PCS.V2.Semantic.V3.stepV3_ledger' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:44:0: 'PCS.V2.Semantic.V3.stepV3_rejected_no_consumption' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:45:0: 'PCS.V2.Semantic.V3.stepV3_monotone' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:46:0: 'PCS.V2.Semantic.V3.stepV3_replay_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:47:0: 'PCS.V2.Semantic.V3.stepV3_consumed_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:48:0: 'PCS.V2.Semantic.V3.runV3_consumed_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:49:0: 'PCS.V2.Semantic.V3.runV3_consumed_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:50:0: 'PCS.V2.Semantic.V3.runV3_ledger' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:51:0: 'PCS.V2.Semantic.V3.runV3_no_double_consumption' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:53:0: 'PCS.V2.Semantic.V3.decideV3_consumed_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:54:0: 'PCS.V2.Semantic.V3.decideV3_restrict' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:55:0: 'PCS.V2.Semantic.V3.replayed_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:56:0: 'PCS.V2.Semantic.V3.expired_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:57:0: 'PCS.V2.Semantic.V3.future_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:58:0: 'PCS.V2.Semantic.V3.revoked_key_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:59:0: 'PCS.V2.Semantic.V3.inactive_key_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:60:0: 'PCS.V2.Semantic.V3.pre_genesis_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:61:0: 'PCS.V2.Semantic.V3.unknown_version_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:62:0: 'PCS.V2.Semantic.V3.forged_signature_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:63:0: 'PCS.V2.Semantic.V3.duplicate_nonce_in_request_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:64:0: 'PCS.V2.Semantic.V3.role_substitution_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:65:0: 'PCS.V2.Semantic.V3.encContext_inj' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:66:0: 'PCS.V2.Semantic.V3.proofStatement_inj' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:67:0: 'PCS.V2.Semantic.V3.elaborationStatement_inj' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:68:0: 'PCS.V2.Semantic.V3.confirmationStatement_inj' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:69:0: 'PCS.V2.Semantic.V3.statements_domain_separated' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:70:0: 'PCS.V2.Semantic.V3.cross_context_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:71:0: 'PCS.V2.Semantic.V3.statement_replacement_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:72:0: 'PCS.V2.Semantic.V3.legacy_receipt_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:73:0: 'PCS.V2.Semantic.V3.quorum_not_met_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:74:0: 'PCS.V2.Semantic.V3.missing_confirmation_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:75:0: 'PCS.V2.Semantic.V3.missing_proof_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:76:0: 'PCS.V2.Semantic.V3.decideV3_ignores_proposer_metadata' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:77:0: 'PCS.V2.Semantic.V3.certified_receipt_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:78:0: 'PCS.V2.Semantic.V3.certified_receipt_quorum_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:79:0: 'PCS.V2.Semantic.V3.certified_kernel_check_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:81:0: 'PCS.V2.Semantic.V3.decRole_name' does not depend on any axioms
+info: PCS/V2/SemanticV3Audit.lean:82:0: 'PCS.V2.Semantic.V3.decEnvelope_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:83:0: 'PCS.V2.Semantic.V3.decRequestV3_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:84:0: 'PCS.V2.Semantic.V3.decKeyEntry_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:85:0: 'PCS.V2.Semantic.V3.decRegistry_encRegistry' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:86:0: 'PCS.V2.Semantic.V3.decAuthorityConfigV3_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:87:0: 'PCS.V2.Semantic.V3.decLedgerSnapshot_enc' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:88:0: 'PCS.V2.Semantic.V3.semanticCheckV3_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:89:0: 'PCS.V2.Semantic.V3.semanticCheckV3_encRequestV3' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:90:0: 'PCS.V2.Semantic.V3.semanticCheckV3_malformed_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:91:0: 'PCS.V2.Semantic.V3.semanticCheckV3_certified_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:92:0: 'PCS.V2.Semantic.V3.semanticCheckV3_ledger_delta' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:94:0: 'PCS.V2.Semantic.LeanSyntax.print_readTerm' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:95:0: 'PCS.V2.Semantic.LeanSyntax.printArgs_readTerms' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:96:0: 'PCS.V2.Semantic.LeanSyntax.print_readFormula' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:97:0: 'PCS.V2.Semantic.LeanSyntax.renderClaimLean_eq_print' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:98:0: 'PCS.V2.Semantic.LeanSyntax.notMem_of_protected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:99:0: 'PCS.V2.Semantic.LeanSyntax.globalIn_of_protected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:100:0: 'PCS.V2.Semantic.LeanSyntax.contains_of_freeVars_nil' does not depend on any axioms
+info: PCS/V2/SemanticV3Audit.lean:101:0: 'PCS.V2.Semantic.LeanSyntax.res_readTerm' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:102:0: 'PCS.V2.Semantic.LeanSyntax.resList_readTerms' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:103:0: 'PCS.V2.Semantic.LeanSyntax.update_ne' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:104:0: 'PCS.V2.Semantic.LeanSyntax.denote_readFormula' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:105:0: 'PCS.V2.Semantic.LeanSyntax.foldr_imp_iff' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:106:0: 'PCS.V2.Semantic.LeanSyntax.Term.freeVars_mono' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:107:0: 'PCS.V2.Semantic.LeanSyntax.Term.freeVarsList_mono' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:108:0: 'PCS.V2.Semantic.LeanSyntax.Formula.freeVars_mono' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:109:0: 'PCS.V2.Semantic.LeanSyntax.denoteBinders_readClaim' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:110:0: 'PCS.V2.Semantic.LeanSyntax.lean_reading_correspondence_N' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:111:0: 'PCS.V2.Semantic.LeanSyntax.Registry.resolve_mem' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:112:0: 'PCS.V2.Semantic.LeanSyntax.Registry.resolveSort_mem' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:113:0: 'PCS.V2.Semantic.LeanSyntax.protected_of_registry_name' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:114:0: 'PCS.V2.Semantic.LeanSyntax.lean_reading_correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:115:0: 'PCS.V2.Semantic.LeanSyntax.gate_rejects_reserved_binder' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:116:0: 'PCS.V2.Semantic.LeanSyntax.capture_breaks_correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:118:0: 'PCS.V2.Semantic.V3.encClaim_injective' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:119:0: 'PCS.V2.Semantic.V3.encAmbiguities_injective' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:120:0: 'PCS.V2.Semantic.V3.confirmationStatement_identifies' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:121:0: 'PCS.V2.Semantic.V3.elaboration_record_is_not_proof' does not depend on any axioms
+info: PCS/V2/SemanticV3Audit.lean:122:0: 'PCS.V2.Semantic.V3.certified_translation_holds_in_environment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:123:0: 'PCS.V2.Semantic.V3.pcs_v3_certified_wire_assurance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:125:0: 'PCS.V2.Semantic.Formula.iff_denote' does not depend on any axioms
+info: PCS/V2/SemanticV3Audit.lean:126:0: 'PCS.V2.Semantic.entailsF_sound' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:127:0: 'PCS.V2.Semantic.entails_sound' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:128:0: 'PCS.V2.Semantic.conjAll_denote' does not depend on any axioms
+info: PCS/V2/SemanticV3Audit.lean:129:0: 'PCS.V2.Semantic.ndenoteParams_mono' does not depend on any axioms
+info: PCS/V2/SemanticV3Audit.lean:130:0: 'PCS.V2.Semantic.NClaim.strengthens_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:131:0: 'PCS.V2.Semantic.strengthens_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:132:0: 'PCS.V2.Semantic.V3.strengthening_statement_ne_confirmation' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:133:0: 'PCS.V2.Semantic.V3.decideStrengtheningV3_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:134:0: 'PCS.V2.Semantic.V3.stepStrengtheningV3_rejected_no_consumption' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:135:0: 'PCS.V2.Semantic.V3.ordinary_confirmation_cannot_authorize_strengthening' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:136:0: 'PCS.V2.Semantic.V3.strengthenCheckV3_certified_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:137:0: 'PCS.V2.Semantic.V3.strengthening_is_not_equivalence' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:139:0: 'PCS.V2.CertiForge.ProgEquiv.refl' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:140:0: 'PCS.V2.CertiForge.ProgEquiv.symm' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:141:0: 'PCS.V2.CertiForge.ProgEquiv.trans' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:142:0: 'PCS.V2.CertiForge.progEquiv_property_transfer' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:143:0: 'PCS.V2.CertiForge.chain_equiv' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:144:0: 'PCS.V2.CertiForge.cost_not_invariant' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:145:0: 'PCS.V2.CertiForge.mem_allBV' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:146:0: 'PCS.V2.CertiForge.mem_allInputs' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:147:0: 'PCS.V2.CertiForge.exhaustiveEquivB_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:148:0: 'PCS.V2.CertiForge.refutesB_sound' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:149:0: 'PCS.V2.CertiForge.cfStatement_ne_proofStatement' depends on axioms: [propext]
+info: PCS/V2/SemanticV3Audit.lean:150:0: 'PCS.V2.CertiForge.unsupported_semantics_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:151:0: 'PCS.V2.CertiForge.decideCF_pcsChecked_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:152:0: 'PCS.V2.CertiForge.decideCF_attested_receipts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:153:0: 'PCS.V2.CertiForge.decideCF_attested_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:154:0: 'PCS.V2.CertiForge.counterexample_overrides_receipts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:155:0: 'PCS.V2.CertiForge.decideCF_ignores_improvement' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:156:0: 'PCS.V2.CertiForge.certified_chain_property_transfer' depends on axioms: [propext, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:157:0: 'PCS.V2.CertiForge.Examples.mulTwo_shlOne_pcs_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:158:0: 'PCS.V2.CertiForge.Examples.mulTwo_equiv_shlOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:159:0: 'PCS.V2.CertiForge.Examples.mulTwo_addOne_refuted' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:160:0: 'PCS.V2.CertiForge.Examples.effectful_claim_unsupported' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCS/V2/SemanticV3Audit.lean:161:0: 'PCS.V2.CertiForge.Examples.no_improvement_claimed_correctly' depends on axioms: [propext]
+ℹ [261/291] Replayed PCSCountermodel.Audit
+info: PCSCountermodel/Audit.lean:13:0: 'PCSCountermodel.evalBool_iff_holds' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:15:0: 'PCSCountermodel.checker_iff' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:17:0: 'PCSCountermodel.allWorlds_complete' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:18:0: 'PCSCountermodel.enumeration_covers' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:19:0: 'PCSCountermodel.searchAt_none_iff' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:20:0: 'PCSCountermodel.search_sound' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:21:0: 'PCSCountermodel.search_minimal' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:22:0: 'PCSCountermodel.search_none' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:23:0: 'PCSCountermodel.search_none_not_unbounded' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:25:0: 'PCSCountermodel.lower_sound' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:26:0: 'PCSCountermodel.lower_closed_sound' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:27:0: 'PCSCountermodel.lower_isSome_iff' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:28:0: 'PCSCountermodel.namedChecker_sound' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:29:0: 'PCSCountermodel.namedChecker_isSome_iff' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:31:0: 'PCSCountermodel.Fixtures.implicationFlip_lowering' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:32:0: 'PCSCountermodel.Fixtures.implicationFlip_checker_accepts' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:33:0: 'PCSCountermodel.Fixtures.implicationFlip_counterexample' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:34:0: 'PCSCountermodel.Fixtures.implicationFlip_named_counterexample' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Audit.lean:35:0: 'PCSCountermodel.Fixtures.implicationFlip_search_size' depends on axioms: [propext]
+info: PCSCountermodel/Audit.lean:36:0: 'PCSCountermodel.Fixtures.capture_search_size' depends on axioms: [propext]
+ℹ [262/291] Replayed PCSCountermodel.Missions
+info: PCSCountermodel/Missions.lean:114:0: 'PCSCountermodel.Missions.lowering0' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:115:0: 'PCSCountermodel.Missions.witness0' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:116:0: 'PCSCountermodel.Missions.disagreement0' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:117:0: 'PCSCountermodel.Missions.minimum0' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:118:0: 'PCSCountermodel.Missions.lowering1' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:119:0: 'PCSCountermodel.Missions.witness1' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:120:0: 'PCSCountermodel.Missions.disagreement1' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:121:0: 'PCSCountermodel.Missions.minimum1' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:122:0: 'PCSCountermodel.Missions.lowering2' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:123:0: 'PCSCountermodel.Missions.witness2' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:124:0: 'PCSCountermodel.Missions.disagreement2' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:125:0: 'PCSCountermodel.Missions.minimum2' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:126:0: 'PCSCountermodel.Missions.lowering3' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:127:0: 'PCSCountermodel.Missions.witness3' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:128:0: 'PCSCountermodel.Missions.disagreement3' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:129:0: 'PCSCountermodel.Missions.minimum3' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:130:0: 'PCSCountermodel.Missions.lowering4' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:131:0: 'PCSCountermodel.Missions.witness4' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:132:0: 'PCSCountermodel.Missions.disagreement4' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:133:0: 'PCSCountermodel.Missions.minimum4' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:134:0: 'PCSCountermodel.Missions.lowering5' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:135:0: 'PCSCountermodel.Missions.witness5' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:136:0: 'PCSCountermodel.Missions.disagreement5' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:137:0: 'PCSCountermodel.Missions.minimum5' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:138:0: 'PCSCountermodel.Missions.lowering6' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:139:0: 'PCSCountermodel.Missions.witness6' depends on axioms: [propext]
+info: PCSCountermodel/Missions.lean:140:0: 'PCSCountermodel.Missions.disagreement6' depends on axioms: [propext, Quot.sound]
+info: PCSCountermodel/Missions.lean:141:0: 'PCSCountermodel.Missions.minimum6' depends on axioms: [propext]
+✔ [289/291] Built PCSOmega.Controls (1.5s)
+✔ [290/291] Built PCSDecisionDiagram.Controls (559s)
+Build completed successfully (291 jobs).
+
+real	9m19.967s
+user	8m32.960s
+sys	0m30.490s
+lake build exit: 0

@@ -1,0 +1,27 @@
+{
+  "format": "pcs-next-acceptance-policy-v1",
+  "policy_id": "pcs-next-receiver-strict",
+  "policy_version": "1.0.0",
+  "protocol_version": "pcs-next-v1",
+  "required_checks": [
+    "hash_integrity",
+    "policy_pin",
+    "producer_verdict_ignore",
+    "artifact_binding"
+  ],
+  "allowed_claim_statuses": [
+    "COMPUTATIONALLY_TESTED",
+    "INDEPENDENTLY_REPRODUCED",
+    "FORMALLY_VERIFIED",
+    "CONDITIONAL",
+    "OPEN",
+    "REFUTED",
+    "UNSUPPORTED",
+    "SKIPPED",
+    "BLOCKED"
+  ],
+  "max_artifact_bytes": 5000000,
+  "fail_closed_unknown_versions": true,
+  "pinned_signer_fingerprints": [],
+  "notes": "Receiver-controlled policy. Producer-embedded policies cannot authorize themselves."
+}

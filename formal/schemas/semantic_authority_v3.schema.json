@@ -1,0 +1,523 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcs.example/schemas/semantic_authority_v3.schema.json",
+  "title": "PCS Proof-Carrying Semantic Intelligence v3 — stateful receipt authority",
+  "description": "Wire formats of pcs-semantic-check --v3 / --v3-strengthen and of the reference persistent receipt store. All inputs are canonical JSON (sorted keys, no whitespace, integers only, no duplicate keys); the Lean decoders (decAuthorityConfigV3, decRequestV3, decLedgerSnapshot) are the authority and reject anything else. The inner 'request' object of a v3 request is the v2 request of schemas/semantic_intelligence_v2.schema.json with its legacy stateless receipt fields (confirmation/elaboration/proof) set to null; non-null legacy receipts are rejected.",
+  "$defs": {
+    "role": {
+      "enum": [
+        "confirmation",
+        "elaboration",
+        "proof"
+      ]
+    },
+    "keyEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "not_after",
+        "not_before",
+        "role"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "base64 Ed25519 public key"
+        },
+        "role": {
+          "$ref": "#/$defs/role"
+        },
+        "not_before": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "not_after": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "exclusive"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "env_fingerprint",
+        "scope",
+        "toolchain"
+      ],
+      "properties": {
+        "env_fingerprint": {
+          "type": "string",
+          "description": "sha256:<hex> printed by tools/CheckElaborationV3.lean fingerprint"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "authority scope within which nonces are unique"
+        },
+        "toolchain": {
+          "type": "string"
+        }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expires_at",
+        "issued_at",
+        "issuer",
+        "nonce",
+        "role",
+        "signature",
+        "statement",
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "const": "pcs-receipt-v2"
+        },
+        "role": {
+          "$ref": "#/$defs/role"
+        },
+        "statement": {
+          "type": "object",
+          "description": "must equal (byte-for-byte after canonical serialization) the statement expected for this role: confirmation {ambiguities, context, purpose:'confirmation', selected, source_text}; elaboration {context, decl_name, lean_source, purpose:'elaboration'}; proof {axioms, checker:'lean4-kernel-check', context, decl_name, lean_source, purpose:'kernel-proof-check'}; in --v3-strengthen the confirmation role attests {ambiguities, candidate, context, purpose:'strengthening-authorization', selected, source_text}. 'context' is {env_fingerprint, registry, scope, toolchain}."
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "issued_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expires_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string",
+          "description": "base64 Ed25519 signature over 'pcs-semantic-receipt-v2\\n' followed by the canonical JSON of all other envelope fields"
+        }
+      }
+    },
+    "authorityV3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_axioms",
+        "confirmation_quorum",
+        "context",
+        "elaboration_quorum",
+        "keys",
+        "proof_quorum",
+        "registry",
+        "require_elaboration",
+        "require_proof",
+        "revoked",
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "const": "pcs-semantic-authority-v3"
+        },
+        "registry": {
+          "type": "object",
+          "required": [
+            "sorts",
+            "symbols"
+          ],
+          "description": "approved symbol registry, same format as the v1/v2 authority 'registry' (schemas/semantic_translation_v1.schema.json)"
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/keyEntry"
+          },
+          "description": "a key may be registered for only one role (INVALID_AUTHORITY otherwise)"
+        },
+        "revoked": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_axioms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "require_elaboration": {
+          "type": "boolean"
+        },
+        "require_proof": {
+          "type": "boolean"
+        },
+        "confirmation_quorum": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "elaboration_quorum": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "proof_quorum": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "requestV3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proof_axioms",
+        "receipts",
+        "request",
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "const": "pcs-semantic-translation-v3"
+        },
+        "request": {
+          "type": "object",
+          "description": "the v2 request (schemas/semantic_intelligence_v2.schema.json) with legacy confirmation/elaboration/proof fields null"
+        },
+        "proof_axioms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/envelope"
+          }
+        }
+      }
+    },
+    "ledgerState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consumed",
+        "genesis",
+        "now",
+        "revoked",
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "const": "pcs-receipt-ledger-state-v3"
+        },
+        "consumed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "revoked": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "genesis": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "now": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "trusted clock supplied by the persistent store"
+        }
+      }
+    },
+    "decisionV3": {
+      "type": "object",
+      "description": "output of --v3 (schema 'pcs-semantic-decision-v3')",
+      "required": [
+        "certificate",
+        "consumed_nonces",
+        "diagnostics",
+        "expected_lean_source",
+        "explanation",
+        "new_ledger_consumed",
+        "outcome",
+        "receipt_phase",
+        "schema",
+        "semantic_status"
+      ],
+      "properties": {
+        "schema": {
+          "const": "pcs-semantic-decision-v3"
+        },
+        "outcome": {
+          "enum": [
+            "CERTIFIED_TRANSLATION",
+            "VERIFIED_COUNTEREXAMPLE",
+            "NEEDS_HUMAN_CLARIFICATION",
+            "UNRESOLVED_PROOF_OBLIGATION",
+            "UNSUPPORTED_FRAGMENT",
+            "SEARCH_EXHAUSTED",
+            "INVALID_PROPOSAL",
+            "RECEIPT_REJECTED",
+            "INVALID_AUTHORITY"
+          ]
+        },
+        "consumed_nonces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "new_ledger_consumed": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_phase": {
+          "type": "object"
+        }
+      }
+    },
+    "strengtheningDecisionV3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failure",
+        "new_ledger_consumed",
+        "note",
+        "outcome",
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "const": "pcs-semantic-strengthening-decision-v3"
+        },
+        "outcome": {
+          "enum": [
+            "CERTIFIED_STRENGTHENING",
+            "NOT_A_STRENGTHENING",
+            "INVALID_PROPOSAL",
+            "RECEIPT_REJECTED",
+            "INVALID_AUTHORITY"
+          ]
+        },
+        "failure": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "new_ledger_consumed": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "certiforgeClaimV1": {
+      "type": "object",
+      "description": "Lean structure PCS.V2.CertiForge.CFClaim (no wire codec yet; integration item). Semantics 'pcs-slbv-v1' only; any other semantics is UNSUPPORTED_SEMANTICS.",
+      "properties": {
+        "semantics": {
+          "enum": [
+            "pcs-slbv-v1",
+            "effectful",
+            "native",
+            "undefined-behavior",
+            "other"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/slProgram"
+        },
+        "target": {
+          "$ref": "#/$defs/slProgram"
+        },
+        "checker": {
+          "type": "string"
+        },
+        "counterexample": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "improvement": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "after",
+                "before",
+                "metric"
+              ],
+              "properties": {
+                "metric": {
+                  "type": "string"
+                },
+                "before": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "after": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/envelope"
+          }
+        }
+      }
+    },
+    "slProgram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arity",
+        "body",
+        "outputs",
+        "width"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "arity": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "const"
+                ],
+                "properties": {
+                  "const": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "a",
+                  "b",
+                  "op"
+                ],
+                "properties": {
+                  "op": {
+                    "enum": [
+                      "add",
+                      "sub",
+                      "mul",
+                      "and",
+                      "or",
+                      "xor",
+                      "shl",
+                      "lshr"
+                    ]
+                  },
+                  "a": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "b": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/authorityV3"
+    },
+    {
+      "$ref": "#/$defs/requestV3"
+    },
+    {
+      "$ref": "#/$defs/ledgerState"
+    },
+    {
+      "$ref": "#/$defs/decisionV3"
+    },
+    {
+      "$ref": "#/$defs/strengtheningDecisionV3"
+    }
+  ]
+}

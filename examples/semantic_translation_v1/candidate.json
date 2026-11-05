@@ -1,0 +1,88 @@
+{
+  "format": "pcs-semantic-translation-candidate-v1",
+  "claim_id": "C_SAFE",
+  "formula": {
+    "op": "forall",
+    "var": "t",
+    "sort": "Trace",
+    "body": {
+      "op": "forall",
+      "var": "i",
+      "sort": "Time",
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "safety.revoked",
+          "args": [
+            {
+              "var": "t"
+            },
+            {
+              "var": "i"
+            }
+          ]
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "safety.unsafe",
+            "args": [
+              {
+                "var": "t"
+              },
+              {
+                "var": "i"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "op": "forall",
+      "var": "t",
+      "sort": "Trace",
+      "body": {
+        "op": "forall",
+        "var": "i",
+        "sort": "Time",
+        "body": {
+          "op": "atom",
+          "symbol": "safety.allowed",
+          "args": [
+            {
+              "var": "t"
+            },
+            {
+              "var": "i"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "free_variables": [],
+  "scope": {
+    "context_id": "world.v1",
+    "description": "Trace/time world v1"
+  },
+  "grounding": [
+    {
+      "symbol": "safety.revoked",
+      "definition_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    },
+    {
+      "symbol": "safety.unsafe",
+      "definition_sha256": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
+    },
+    {
+      "symbol": "safety.allowed",
+      "definition_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  ],
+  "model_confidence": 0.99
+}

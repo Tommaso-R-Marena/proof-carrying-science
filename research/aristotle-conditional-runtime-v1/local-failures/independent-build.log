@@ -1,0 +1,22 @@
+✔ [8/76] Built PCSConditionalRuntime.Semantics (3.4s)
+✔ [9/76] Built PCSConditionalRuntime.Mono (2.5s)
+✔ [10/76] Built PCSConditionalRuntime.PyFront (3.5s)
+✔ [11/76] Built PCSConditionalRuntime.JsFront (6.4s)
+✔ [12/76] Built PCSConditionalRuntime.JsLower (4.1s)
+✔ [13/76] Built PCSConditionalRuntime.CoreBEq (11s)
+✖ [14/76] Building PCSConditionalRuntime.PyConditional (30s)
+trace: .> LEAN_PATH=/workspace/worktrees/pcs-aristotle/formal/.lake/build/lib/lean /workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean -j1 -M4000 -D Elab.async=false /workspace/worktrees/pcs-aristotle/formal/PCSConditionalRuntime/PyConditional.lean -o /workspace/worktrees/pcs-aristotle/formal/.lake/build/lib/lean/PCSConditionalRuntime/PyConditional.olean -i /workspace/worktrees/pcs-aristotle/formal/.lake/build/lib/lean/PCSConditionalRuntime/PyConditional.ilean -c /workspace/worktrees/pcs-aristotle/formal/.lake/build/ir/PCSConditionalRuntime/PyConditional.c --setup /workspace/worktrees/pcs-aristotle/formal/.lake/build/ir/PCSConditionalRuntime/PyConditional.setup.json --json
+error: PCSConditionalRuntime/PyConditional.lean:267:2: [Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+error: Lean exited with code 1
+✖ [48/76] Building PCSConditionalRuntime.JsConditional (24s)
+trace: .> LEAN_PATH=/workspace/worktrees/pcs-aristotle/formal/.lake/build/lib/lean /workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean -j1 -M4000 -D Elab.async=false /workspace/worktrees/pcs-aristotle/formal/PCSConditionalRuntime/JsConditional.lean -o /workspace/worktrees/pcs-aristotle/formal/.lake/build/lib/lean/PCSConditionalRuntime/JsConditional.olean -i /workspace/worktrees/pcs-aristotle/formal/.lake/build/lib/lean/PCSConditionalRuntime/JsConditional.ilean -c /workspace/worktrees/pcs-aristotle/formal/.lake/build/ir/PCSConditionalRuntime/JsConditional.c --setup /workspace/worktrees/pcs-aristotle/formal/.lake/build/ir/PCSConditionalRuntime/JsConditional.setup.json --json
+error: PCSConditionalRuntime/JsConditional.lean:240:2: [Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+error: Lean exited with code 1
+Some required targets logged failures:
+- PCSConditionalRuntime.PyConditional
+- PCSConditionalRuntime.JsConditional
+error: build failed

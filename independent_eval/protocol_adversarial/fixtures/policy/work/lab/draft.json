@@ -1,0 +1,187 @@
+{
+  "artifacts": [
+    {
+      "id": "artifact_pk_model",
+      "media_type": "application/json",
+      "metadata": {
+        "pcs_discovery_sha256": "e76ca5164c0ab92b5839410eb146f951cfeb514cbd4b7ab68e03be13bd132ce4",
+        "pcs_discovery_size": 426
+      },
+      "path": "pk_model.json",
+      "role": "model-specification"
+    },
+    {
+      "id": "artifact_predictions",
+      "media_type": "text/csv",
+      "metadata": {
+        "pcs_discovery_sha256": "47a616e774f42e851f2e6ef07d8d1a80bb17a00d3267def5e07ba331f83c20f9",
+        "pcs_discovery_size": 302
+      },
+      "path": "predictions.csv",
+      "role": "tabular-output"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A_PKPD_artifact_pk_model",
+      "rationale": "Separates computational replay from empirical model validity.",
+      "scope": [
+        "C_PKPD_CONTRACT_artifact_pk_model",
+        "C_PKPD_REPLAY_artifact_pk_model"
+      ],
+      "statement": "The restricted one-compartment IV-bolus PK plus direct Emax PD equations are the declared computational model; this is not a claim of biological or clinical adequacy."
+    }
+  ],
+  "checks": [
+    {
+      "claim_ids": [
+        "C_PKPD_CONTRACT_artifact_pk_model"
+      ],
+      "id": "E_PKPD_CONTRACT_artifact_pk_model",
+      "model_artifact": "artifact_pk_model",
+      "type": "pkpd_contract"
+    },
+    {
+      "abs_tol": 1e-12,
+      "claim_ids": [
+        "C_PKPD_REPLAY_artifact_pk_model"
+      ],
+      "concentration_column": "concentration",
+      "effect_column": "effect",
+      "id": "E_PKPD_REPLAY_artifact_pk_model",
+      "model_artifact": "artifact_pk_model",
+      "output_artifact": "artifact_predictions",
+      "rel_tol": 1e-09,
+      "time_column": "time",
+      "type": "pkpd_reference_match"
+    }
+  ],
+  "claims": [
+    {
+      "assumptions": [
+        "A_PKPD_artifact_pk_model"
+      ],
+      "id": "C_PKPD_CONTRACT_artifact_pk_model",
+      "kind": "computational",
+      "predicate": {
+        "model_artifact": "artifact_pk_model",
+        "type": "pkpd_contract"
+      },
+      "required_evidence": [
+        "E_PKPD_CONTRACT_artifact_pk_model"
+      ],
+      "statement": "The discovered PK/PD model satisfies the restricted PCS positivity and dimensional contract."
+    },
+    {
+      "assumptions": [
+        "A_PKPD_artifact_pk_model"
+      ],
+      "id": "C_PKPD_REPLAY_artifact_pk_model",
+      "kind": "computational",
+      "predicate": {
+        "abs_tol": 1e-12,
+        "concentration_column": "concentration",
+        "effect_column": "effect",
+        "model_artifact": "artifact_pk_model",
+        "output_artifact": "artifact_predictions",
+        "rel_tol": 1e-09,
+        "time_column": "time",
+        "type": "pkpd_reference_match"
+      },
+      "required_evidence": [
+        "E_PKPD_REPLAY_artifact_pk_model"
+      ],
+      "statement": "The discovered prediction table matches the declared restricted PK/PD equations within the PCS numeric tolerance."
+    }
+  ],
+  "environment": {
+    "conda": {
+      "dependencies": []
+    },
+    "confirmation_scope": "Environment capture is a static declaration and reconstruction plan; it does not prove package availability, installer correctness, ABI compatibility, or successful environment reconstruction.",
+    "containers": [],
+    "format": "pcs-environment-capture-v1",
+    "hermeticity": "environment_unspecified",
+    "human_confirmed": false,
+    "network_accessed": false,
+    "python": {
+      "dependencies": [],
+      "interpreter_constraints": []
+    },
+    "r": {
+      "dependencies": [],
+      "interpreter_constraints": []
+    },
+    "replay_plan": {
+      "automatic_execution_permitted_by_pcs": false,
+      "format": "pcs-environment-replay-plan-v1",
+      "hermeticity": "environment_unspecified",
+      "reason": "PCS emits a reconstruction plan but does not execute environment or project installation/build commands during verification.",
+      "required_tools": [],
+      "steps": []
+    },
+    "restoration_artifacts": [],
+    "semantic_sha256": "7165a34d0e6d20b0b0983dd7c1d4256a7c8e50c0ba1b023c93f76c380e2845b8",
+    "source_artifact_ids": [],
+    "sources": [],
+    "static_only": true,
+    "summary": {
+      "conda_dependency_records": 0,
+      "container_specs": 0,
+      "dependency_records": 0,
+      "dependency_records_observed": 0,
+      "dependency_records_truncated": false,
+      "python_dependency_records": 0,
+      "r_dependency_records": 0,
+      "restoration_artifacts": 0,
+      "source_files": 0,
+      "unresolved_items": 0
+    },
+    "unresolved": [],
+    "user_code_executed": false
+  },
+  "pcs_intake": {
+    "environment_capture_format": "pcs-environment-capture-v1",
+    "environment_hermeticity": "environment_unspecified",
+    "environment_source_artifacts": [],
+    "format": "pcs-manifest-draft-v1",
+    "inventory_commitment_sha256": "0bef5c9b97c20a329deeb224fd68f37a8f996a9a68c376d408b7b7128fd0c9b5",
+    "minimum_selected_confidence": 0.95,
+    "minimum_workflow_confidence": 0.95,
+    "project_root_name": "lab",
+    "recommendation_count": 2,
+    "requires_confirmation": true,
+    "selected_recommendation_count": 2,
+    "selected_recommendations": [
+      "R_PKPD_CONTRACT_artifact_pk_model",
+      "R_PKPD_REPLAY_artifact_pk_model_artifact_predictions"
+    ],
+    "selected_workflow_inference_count": 0,
+    "selected_workflow_inferences": [],
+    "status": "draft",
+    "workflow_discovery_format": "pcs-static-workflow-map-v1",
+    "workflow_inference_count": 0
+  },
+  "subject": "lab",
+  "workflow": {
+    "nodes": [
+      {
+        "contract": {
+          "equations": [
+            "C(t)=(Dose/V)*exp(-(CL/V)*t)",
+            "E(C)=E0+Emax*C/(EC50+C)"
+          ],
+          "validation_scope": "computational replay only; not empirical adequacy"
+        },
+        "id": "N_PKPD_artifact_pk_model",
+        "inputs": [
+          "artifact_pk_model"
+        ],
+        "operation": "restricted_one_compartment_iv_bolus_direct_emax",
+        "outputs": [
+          "artifact_predictions"
+        ]
+      }
+    ]
+  }
+}

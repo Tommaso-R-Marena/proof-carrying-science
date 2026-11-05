@@ -1,0 +1,154 @@
+{
+  "format": "pcs-external-mathlib-benchmark-v4",
+  "created_utc": "2026-10-13T08:08:12.915930+00:00",
+  "core_start_sha": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+  "mathlib_revision": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+  "lean_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "evaluation_tasks": 22,
+  "tasks_sha256": "deb01244b601b372cd9b5133f345033931e2b3a9eaf930eb030e1d0f75643b75",
+  "frozen_before_training": true,
+  "classification": "external-source public statement benchmark; developer-exposed; not privateblind",
+  "selection_rule": "Five source modules/families disjoint from v4 Set.Function/logic training; selected before model fitting/evaluation; source-authentic theorem signatures; no result-driven reselection.",
+  "training_modules": [
+    "Mathlib.Data.Set.Function",
+    "Mathlib.Logic.Function.Basic"
+  ],
+  "training_families": [
+    "set_function",
+    "logic"
+  ],
+  "evaluation_modules": [
+    "Mathlib.Algebra.Group.Basic",
+    "Mathlib.Data.Finset.Card",
+    "Mathlib.Data.List.Basic",
+    "Mathlib.Data.Nat.Factorial.Basic",
+    "Mathlib.Data.Real.Basic"
+  ],
+  "evaluation_families": [
+    "factorial",
+    "finset",
+    "group",
+    "list",
+    "real"
+  ],
+  "imports": [
+    "Mathlib.Data.Set.Function",
+    "Mathlib.Algebra.Group.Basic",
+    "Mathlib.Data.Nat.Factorial.Basic",
+    "Mathlib.Data.List.Basic",
+    "Mathlib.Data.Finset.Card",
+    "Mathlib.Data.Real.Basic"
+  ],
+  "universe_header": "universe u v w u_1 u_2 u_3 u_4 u_5",
+  "search": {
+    "primitive_attempt_budget": 48,
+    "depth": 18,
+    "beam": 4,
+    "premise_limit": 6,
+    "per_action_timeout_seconds": 12,
+    "per_task_timeout_seconds": 90
+  },
+  "strong_baseline": {
+    "portfolio": [
+      "simp_all",
+      "omega",
+      "aesop",
+      "grind",
+      "first | ring | linarith"
+    ],
+    "per_tactic_timeout_seconds": 12,
+    "whole_goal_invocations_counted_separately": true,
+    "limits": "A whole-goal automation call is not equivalent deductive work to one primitive action."
+  },
+  "comparisons": [
+    "structural symbolic search",
+    "lexical retrieval search",
+    "untrained policy",
+    "supervised DAG policy",
+    "bag/sequence ablation where trained",
+    "sequential RL checkpoint if actually produced",
+    "fixed strong tactic portfolio"
+  ],
+  "selection": "Final tasks never used for fitting/checkpoint selection; final outcomes informational, no automatic promotion; preserve stronger baseline on negative learning results.",
+  "premise_policy": {
+    "excluded_names": [
+      "List.mem_pair",
+      "List.mem_map_of_injective",
+      "List.length_eq_two",
+      "List.insert_neg",
+      "List.foldl_fixed",
+      "Finset.card_le_card",
+      "Finset.card_insert_of_notMem",
+      "Finset.card_erase_add_one",
+      "Finset.card_image_of_injective",
+      "Finset.card_union_add_card_inter",
+      "Nat.factorial_dvd_factorial",
+      "Nat.dvd_factorial",
+      "Nat.factorial_eq_one",
+      "Nat.factorial_inj",
+      "inv_unique",
+      "mul_eq_left",
+      "inv_eq_iff_eq_inv",
+      "mul_div_assoc'",
+      "eq_of_inv_mul_eq_one",
+      "Real.ratCast_lt",
+      "Real.mul_add_one_le_add_one_pow",
+      "Real.mk_le_of_forall_le"
+    ],
+    "excluded_alpha_signatures": [
+      "a8786ab6f8d65a3972ad1e614727cc29f79fbdc41dc8ece9ecfe4db4fdb41c8b",
+      "73f4b0ef3686ff9d09657ebfe00e6503a8de6c2f349b5a847aa95741ac882e77",
+      "e2d134c3bad3dacd3c256b4fd72331882cc83c7d2ba7f85635c1b528145951e8",
+      "9c3c0ca8771872ddbb2a1c89d937f49f0facbe8d0c3b8edf9c6f420ec9ae5377",
+      "02327b80c0bd9ce380e2d385fa912283a3061ca239d34cd41695f43e8c26f3c8",
+      "d834f672aa99629d7a4e22dafeb8bed27109600c57a612bf4992be1b0f0b0758",
+      "fe9a33a2f01c3ead5a781dd47cc8df773fa3c402917dc67b22abae04c08d5427",
+      "b48f977802a09c24d38b0814466798e86d197cdeb0de72b1130f18d7527ae57d",
+      "d29e2b8767be642dd2d6bcec6085801ed262285520164a0dd9b8c41b331e0a5e",
+      "5fe07746da701cda15fdbe0608126262d146a23147889a63cd2cf8ebb21a093b",
+      "5092bf9be68ddcac81f308a01b69007347e2ef0842e224d8bc50d1978ea8313d",
+      "a4d7809349832daecc73a6e113b9dbfee61124a500286d4eb481ad3730c2e9af",
+      "fcc9940682d466e3c3af89b41d121020ba3820454632c4f5f6fd4479b7e6bed7",
+      "64795792451519e9505af1c195dde17cbb5a06ff6e73f2e4065d9eeb81e58d9c",
+      "d8b55de3306facf0c1e1e37e77034bf998c99aa726dfe5c7b056b00250bce798",
+      "8f3b908454257c2b4844dd2fb6df8bd576fd0a96b060e32a0c54cec6453a47c6",
+      "39a54e547d0b275324eeee16581b282adee847c955b473df9936e962f3b2e86c",
+      "477968d7f6b04f5b9554a3e24b02a6c79f8715765c4d91f8fbeebecafc7aa3fe",
+      "2588df75d226c71eb98e5117ba3fd709f010706a078e76943518d757e2e0a8d5",
+      "0edc949a6710bc2953790759af02d83fa74382112e3fcf192c2bf15629cce36f",
+      "9c76a0b1d4a86ed57c935c61f7830828bebd54d10d389998e9ace7380497809a",
+      "e167aca43c51399fa08c0f7b39f9148471d3c0780d66234e782644f14430119b"
+    ],
+    "primary_training_module_premises_allowed": true,
+    "optional_sensitivity_excluded_modules": [
+      "Mathlib.Data.Set.Function",
+      "Mathlib.Logic.Function.Basic"
+    ],
+    "limits": "Exact/alpha-type aliases excluded. Full theorem equivalence or all transitive proof dependencies not decided. Mathlib automation/imports may use targets internally."
+  },
+  "integrity": {
+    "alpha": "De Bruijn binder structure + first-occurrence universe renaming; binder presentation metadata retained separately",
+    "near_duplicate": "Literal-abstracted structural hash is a review warning, not semantic equivalence",
+    "source_module_family_disjointness": "Required for explicit training/validation rows",
+    "proof_body_dependency_graph": "Not extracted; no evaluation proof bodies copied into training or benchmark"
+  },
+  "metrics": [
+    "kernel-verified solve rate",
+    "multi-step proof length and independently reconstructed original goal",
+    "primitive attempts",
+    "physical Lean invocations",
+    "whole-goal tactic invocations",
+    "wall time",
+    "available child CPU/RSS with measurement scope",
+    "unknown/resource-exhaustion/invalid outcomes",
+    "training and source/checkpoint fingerprints"
+  ],
+  "exposure_ledger": "exposure-ledger.json",
+  "limitations": [
+    "All tasks are public Mathlib declarations; the imported library and foundation model/developers may know the mathematics.",
+    "Signature extraction never reads theorem bodies; developer source selection inspected nearby source, including some existing proof snippets. Those bodies are not training inputs.",
+    "This benchmark is external-source, not independently externally administered or a previously unseen repository.",
+    "Any later design change informed by final outcomes must classify affected tasks as development for that later generation.",
+    "Single small finite set cannot establish broad mathematical intelligence or scientific discovery."
+  ]
+}

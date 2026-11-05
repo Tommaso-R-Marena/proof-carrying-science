@@ -1,0 +1,12 @@
+name	lo	hi	incumbent	candidate	A_progress	B_noForget	C_robust	accept	forget_witness	robust_witness
+growth1-narrow	-4	4	PGSI2-WIDE|0	PGSI2-WIDE|0|2|1|1	true	true	true	true	none	none
+growth2-narrow	-4	4	PGSI2-WIDE|0|2|1|1	PGSI2-WIDE|0|2|1|1|-1|1|1	true	true	true	true	none	none
+growth3-narrow	-4	4	PGSI2-WIDE|0|2|1|1|-1|1|1	PGSI2-WIDE|0|2|1|1|-1|1|1|1|-2|-2	true	true	true	true	none	none
+growth1-mid	-50	50	PGSI2-WIDE|0	PGSI2-WIDE|0|2|1|1	true	true	false	false	none	50
+robust1-wide	-1000000000	1000000000	PGSI2-WIDE|0	PGSI2-WIDE|0|-2|0|1	true	true	true	true	none	none
+robust2-wide	-1000000000	1000000000	PGSI2-WIDE|0|-2|0|1	PGSI2-WIDE|0|-1|1|1	true	true	true	true	none	none
+robust3-wide	-1000000000	1000000000	PGSI2-WIDE|0|-1|1|1	PGSI2-WIDE|0|2|1|1|-1|1|1|1|-2|-2	true	true	true	true	none	none
+blindForget-narrow	-4	4	PGSI2-WIDE|0|2|1|1|-1|1|1	PGSI2-WIDE|0|2|1|1|-1|1|1|1|-2|-2|-1|-10|5	true	false	true	false	-12	none
+ood-mid	-50	50	PGSI2-WIDE|0|2|1|1|-1|1|1	PGSI2-WIDE|0|2|1|1|-1|1|1|1|-2|-2|1|-5|32	true	true	false	false	none	50
+ood-narrow	-4	4	PGSI2-WIDE|0|2|1|1|-1|1|1	PGSI2-WIDE|0|2|1|1|-1|1|1|1|-2|-2|1|-5|32	true	true	true	true	none	none
+noProgress-mid	-50	50	PGSI2-WIDE|0|2|1|1|-1|1|1	PGSI2-WIDE|0|-1|1|1|2|1|1	false	true	true	false	none	none

@@ -1,0 +1,35 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/proof-carrying-science/research/real_model_safety_v1/audit.py", line 129, in <module>
+    main()
+  File "/workspace/proof-carrying-science/research/real_model_safety_v1/audit.py", line 122, in main
+    replay(args.input, args.replay)
+  File "/workspace/proof-carrying-science/research/real_model_safety_v1/audit.py", line 107, in replay
+    results.append(execute(target, capture=capture))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/research/progress_supervisor_v1/__main__.py", line 26, in execute
+    with Broker(out/'effects.sqlite',out/'authority',pre_sanitized=pre_sanitized) as b:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/research/progress_supervisor_v1/broker.py", line 48, in __init__
+    self._authority=_fixed_authority(self.model_raw,self.cert_raw,build_dir)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/research/progress_supervisor_v1/broker.py", line 23, in _fixed_authority
+    if _FIXED_AUTHORITY is None:_FIXED_AUTHORITY=Authority(raw,cert,build_dir)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/research/progress_supervisor_v1/authority.py", line 52, in __init__
+    self._run([self.tools['leanchecker'],'--fresh','Main'],180)
+  File "/workspace/proof-carrying-science/research/progress_supervisor_v1/authority.py", line 79, in _run
+    p=subprocess.run(list(map(str,cmd)),cwd=self.out,env=self.env,capture_output=True,text=True,timeout=timeout)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1209, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 2116, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1253, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['/workspace/.onboarding/tools/lean-4.28.0-linux/bin/leanchecker', '--fresh', 'Main']' timed out after 180 seconds

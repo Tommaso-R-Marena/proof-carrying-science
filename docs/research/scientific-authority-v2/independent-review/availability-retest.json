@@ -1,0 +1,23 @@
+{
+  "source_sha256": "1846717e6edddaba467e73681dfd382c17a4fab02c9e19442926b4eada1ea927",
+  "source_after_sha256": "1846717e6edddaba467e73681dfd382c17a4fab02c9e19442926b4eada1ea927",
+  "configured_acquisition_seconds": 5,
+  "scope": "Real unauthenticated parser/TLS negative controls only. No positive scientific verifier or store is substituted. TLS certificate is local ephemeral test material.",
+  "observations": [
+    {
+      "id": "continuous_header_trickle_absolute_deadline",
+      "wall_seconds": 4.950792528994498,
+      "trickle_bytes": 49,
+      "http_status": "HTTP/1.0 501 Unsupported method ('GET')",
+      "passed": true
+    },
+    {
+      "id": "stalled_tls_handshake_absolute_deadline",
+      "wall_seconds": 4.959315883003001,
+      "tls_certificate_verified": true,
+      "http_status": "HTTP/1.0 501 Unsupported method ('GET')",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

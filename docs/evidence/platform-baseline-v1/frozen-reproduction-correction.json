@@ -1,0 +1,30 @@
+{
+  "format": "pcs-frozen-baseline-reproduction-correction-v1",
+  "source_sha": "e1067e406a1a1991497e7130e1f209239e5607cc",
+  "original_full_run": {
+    "passed": 1409,
+    "failed": 10,
+    "wall_seconds": 1267.26,
+    "exit_code": 1
+  },
+  "original_failures": "Three checkout-basename owner-identity mismatches and seven correctly rejected symlink-cache binary paths; not source defects.",
+  "correction": "Canonical checkout basename proof-carrying-science; actual reflink/copy .lake cache (no symlink, no hardlink). No tracked source edits.",
+  "corrected_modules": [
+    "tests/test_pr_contribution_gate.py",
+    "tests/test_semantic_authority_v3.py"
+  ],
+  "corrected_targeted_run": {
+    "passed": 17,
+    "failed": 0,
+    "wall_seconds": 1.93,
+    "exit_code": 0,
+    "log_sha256": "82aa3b0c5a61045dea68cf2efb438a167efcd5c61e03dcaa796902763613788b"
+  },
+  "tracked_source_unchanged": true,
+  "source_files_sha256": "d773e340f02f039abbdf2b8e46192a6a9e40656d008220a9555d63e487f1e810",
+  "compiled_checker_sha256": "626bb01b37a62c47278ac651cc36ccc37aa3813b76b6bd72352423f82c6c1126",
+  "combined_interpretation": "All 1419 original test outcomes covered after staggered setup correction; not a fresh single full green run.",
+  "provider_ci": "not_evaluated",
+  "deployment": "not_observed",
+  "financial_spend": 0
+}

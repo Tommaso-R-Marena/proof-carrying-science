@@ -1,0 +1,104 @@
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:23:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 7)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:23:30: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 4)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:25:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 7)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:25:30: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 7)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:26:85: error: Tactic `decide` failed for proposition
+  ∀ (h : Fin 22) (d : Fin 3), lsLoss h d = lsSSE h d
+because its `Decidable` instance
+  Nat.decidableForallFin fun h => ∀ (d : Fin 3), lsLoss h d = lsSSE h d
+did not reduce to `isTrue` or `isFalse`.
+
+Reduction got stuck at the `Decidable` instance
+  match
+    (Quot.lift (fun l => List.foldr (fun x1 x2 => x1 + x2) 0 l) ⋯
+        (Multiset.map (fun i => (testY ⟨0, ⋯⟩ i - ∑ j ∈ sorry, testX i ^ ↑j * coeff ⟨0, ⋯⟩ ⟨0, ⋯⟩ j) ^ 2)
+          sorry.val)).num,
+    (Rat.mul 3607274369 (Rat.inv 4480000)).num with
+  | Int.ofNat a, Int.ofNat b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+  | Int.ofNat a, Int.negSucc a_1 => isFalse ⋯
+  | Int.negSucc a, Int.ofNat a_1 => isFalse ⋯
+  | Int.negSucc a, Int.negSucc b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:27:79: error: Tactic `decide` failed for proposition
+  ∀ (h : Fin 22) (d : Fin 3), mmLoss h d = mmSSE h d
+because its `Decidable` instance
+  Nat.decidableForallFin fun h => ∀ (d : Fin 3), mmLoss h d = mmSSE h d
+did not reduce to `isTrue` or `isFalse`.
+
+Reduction got stuck at the `Decidable` instance
+  match
+    (Quot.lift (fun l => List.foldr (fun x1 x2 => x1 + x2) 0 l) ⋯
+        (Multiset.map (fun i => (testY ⟨0, ⋯⟩ i - ∑ j ∈ sorry, mmWeight ⟨0, ⋯⟩ i j * trainY ⟨0, ⋯⟩ j) ^ 2)
+          sorry.val)).num,
+    (Rat.mul 11101762009 (Rat.inv 36000000)).num with
+  | Int.ofNat a, Int.ofNat b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+  | Int.ofNat a, Int.negSucc a_1 => isFalse ⋯
+  | Int.negSucc a, Int.ofNat a_1 => isFalse ⋯
+  | Int.negSucc a, Int.negSucc b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:28:52: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 22)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:28:85: error: Expected type must not contain metavariables
+  ∀ (d : Fin 3), ∑ h, lsSSE h d = lsPooled d
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:29:46: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 22)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:29:79: error: Expected type must not contain metavariables
+  ∀ (d : Fin 3), ∑ h, mmSSE h d = mmPooled d
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:31:46: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 22)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:32:46: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Fin 22)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'PCSExperimentalCalibration.all_heldout_least_squares_scores_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'PCSExperimentalCalibration.all_heldout_minimax_scores_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:37:14: error(lean.unknownIdentifier): Unknown constant `PCSExperimentalCalibration.pooled_least_squares_scores_exact`
+/workspace/.onboarding/calibration-numeric-proof/NumericComparisons.lean:38:14: error(lean.unknownIdentifier): Unknown constant `PCSExperimentalCalibration.pooled_minimax_scores_exact`
+'PCSExperimentalCalibration.all_minimax_gains_bounded_by_least_squares' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PCSExperimentalCalibration.degree_2_heldout_win_count_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'PCSExperimentalCalibration.degree_3_heldout_win_count_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'PCSExperimentalCalibration.every_full_data_class_exceeds_epsilon_0_01_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

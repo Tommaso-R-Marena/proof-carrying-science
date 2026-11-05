@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PCS Next Reviewer Workbench</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="brand-bar">
+  <div class="brand">Proof-Carrying Science</div>
+  <div class="sub">Next Reviewer Workbench — offline demo</div>
+</header>
+<main id="main">
+  <section class="hero">
+    <h1>Inspect claims without trusting producer PASS</h1>
+    <p>Import a local evidence package, examine assumptions and obligations, and export an assurance card. The CLI remains the verification authority.</p>
+    <div class="cta">
+      <label class="filebtn">Import package JSON<input id="file" type="file" accept="application/json,.json" /></label>
+      <button id="demo" type="button">Load demo card</button>
+    </div>
+  </section>
+  <section id="panel" class="panel" hidden>
+    <h2>Project</h2>
+    <p id="project"></p>
+    <h2>Technical verification</h2>
+    <pre id="tech" tabindex="0"></pre>
+    <h2>Scientific validation</h2>
+    <pre id="sci" tabindex="0"></pre>
+    <h2>Unresolved questions</h2>
+    <ul id="questions"></ul>
+    <button id="export" type="button">Download assurance card JSON</button>
+  </section>
+  <p class="footnote">No ornamental green PASS implies clinical or external-lab approval.</p>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

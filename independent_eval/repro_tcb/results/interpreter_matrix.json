@@ -1,0 +1,62 @@
+{
+  "absences": [
+    {
+      "name": "python3.11",
+      "note": "Not treated as pass; not measured on this host.",
+      "status": "ABSENT"
+    },
+    {
+      "name": "python3.13",
+      "note": "Not treated as pass; not measured on this host.",
+      "status": "ABSENT"
+    },
+    {
+      "name": "python3.10",
+      "note": "Not treated as pass; not measured on this host.",
+      "status": "ABSENT"
+    }
+  ],
+  "disclaimer": "Missing interpreters are recorded as ABSENT, never as PASS. Agreement is byte-identity of SHA-256 over the same archive file.",
+  "expected_archive_sha256": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+  "format": "pcs-independent-eval-interpreter-matrix-v1",
+  "interpreters_agree": 2,
+  "interpreters_disagree": 0,
+  "interpreters_ok": 2,
+  "interpreters_probed": 2,
+  "member_digests": {
+    "README.txt": "e9752875015cdcd746deacbca66b0ad9245ccffb10e8de6e656ef1aa4e9c914d",
+    "certificate.json": "02608dd0e654657855052ad96ef0f6afcee383ddd53e6905afb87a07b24bd36a",
+    "policy.json": "9bfbb51b2dd618eb30726600f09790eab9e7b2a5ac65bec0163f30327c542ba8",
+    "transcript.json": "ff577dc38c14b2e4352a6c309e1e221185c0dcd1702d6037ceb2c91ae8efbee1"
+  },
+  "pass": true,
+  "rows": [
+    {
+      "archive_sha256": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+      "error": null,
+      "interpreter": {
+        "executable": "/usr/bin/python3",
+        "implementation": "CPython",
+        "path": "/usr/bin/python3",
+        "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+        "version": "3.12.3"
+      },
+      "matches_expected": true,
+      "probe_ok": true
+    },
+    {
+      "archive_sha256": "a595480c605e89bac45fb359f34988e1325718d5d190705feb242707de98c522",
+      "error": null,
+      "interpreter": {
+        "executable": "/usr/bin/python3.12",
+        "implementation": "CPython",
+        "path": "/usr/bin/python3.12",
+        "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+        "version": "3.12.3"
+      },
+      "matches_expected": true,
+      "probe_ok": true
+    }
+  ],
+  "task": "12/E-P08"
+}

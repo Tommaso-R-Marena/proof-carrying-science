@@ -1,0 +1,163 @@
+{
+  "format": "pcs-post-integration-formal-obligation-graph-v1",
+  "nodes": [
+    {
+      "id": "codec",
+      "status": "PROVED",
+      "claim": "Full bounded-domain canonical byte roundtrip and exact decode characterization",
+      "evidence": "PCSScientificReceiver.decode_iff_bounded",
+      "depends_on": []
+    },
+    {
+      "id": "resource_shape",
+      "status": "PROVED",
+      "claim": "Every bounded contract encodes in at most3360bytes",
+      "evidence": "PCSScientificReceiver.bounded_encodeBytes_length",
+      "depends_on": [
+        "codec"
+      ]
+    },
+    {
+      "id": "state_binding",
+      "status": "PROVED",
+      "claim": "Checked fixed expression/environment denotes the computed final A coordinate",
+      "evidence": "PCSScientificReceiver.expression_state_of_binding",
+      "depends_on": []
+    },
+    {
+      "id": "typed_science",
+      "status": "PROVED",
+      "claim": "Accepted contract implies conservation, A/B enclosure and optional finite physical validity",
+      "evidence": "PCSScientificReceiver.checkContract_sound",
+      "depends_on": [
+        "state_binding"
+      ]
+    },
+    {
+      "id": "wire_sound",
+      "status": "PROVED",
+      "claim": "Every accepted byte/result pair has canonical decoded data and ResultSound",
+      "evidence": "PCSScientificReceiver.verifiedWireSound",
+      "depends_on": [
+        "codec",
+        "typed_science"
+      ]
+    },
+    {
+      "id": "lean_runtime",
+      "status": "EXECUTED_PASS",
+      "claim": "Actual same-byte Lean compiled-IR replay; not compiler/IO/OS refinement",
+      "evidence": "research/scientific_receiver_v1/reports/differential-20261018/differential.json",
+      "depends_on": [
+        "wire_sound"
+      ]
+    },
+    {
+      "id": "finite_refinement",
+      "status": "EXECUTED_PASS",
+      "claim": "10774cases agree with independent reference;778accepts;0issues",
+      "evidence": "research/scientific_receiver_v1/reports/differential-20261018/differential.json",
+      "depends_on": [
+        "lean_runtime"
+      ]
+    },
+    {
+      "id": "large_rationals",
+      "status": "EXECUTED_PASS",
+      "claim": "13actual cases;64step physical valid with576digit intermediate denominator",
+      "evidence": "research/scientific_receiver_v1/reports/resource-stress-20261019/stress.json",
+      "depends_on": [
+        "lean_runtime"
+      ]
+    },
+    {
+      "id": "full_pin_profile",
+      "status": "EXECUTED_PASS",
+      "claim": "Actual positive/negative receiving with every inventoried module artifact pinned",
+      "evidence": "research/scientific_receiver_v1/reports/full-profile-20261019/full-profile.json",
+      "depends_on": [
+        "lean_runtime"
+      ]
+    },
+    {
+      "id": "synthetic_falsification",
+      "status": "FALSIFIED",
+      "claim": "Synthetic scientific premise contradicted; dependency support reopens without invalidating conditional theorem",
+      "evidence": "research/scientific_receiver_v1/reports/scoped-falsification-example.json",
+      "depends_on": [
+        "wire_sound"
+      ]
+    },
+    {
+      "id": "history_core",
+      "status": "PROVED",
+      "claim": "Separate serial CAS/link/authentication invariants conditional on signature-verifier soundness",
+      "evidence": "PR157:research/authorization_history_v1/formal/PCSAuthorizationHistoryV1/History.lean",
+      "depends_on": []
+    },
+    {
+      "id": "history_runtime",
+      "status": "EXECUTED_PASS",
+      "claim": "Separate32tests of actual signatures, SQLite CAS/crashes/rollback/resources",
+      "evidence": "PR157:research/authorization_history_v1/reports/hardened-runtime-tests.txt",
+      "depends_on": [
+        "history_core"
+      ]
+    },
+    {
+      "id": "compiler_io_refinement",
+      "status": "UNVERIFIED",
+      "claim": "No general source/compiler/IO/OS implementation refinement theorem",
+      "evidence": "OPEN_ASSUMPTIONS_AND_BLOCKERS.md",
+      "depends_on": []
+    },
+    {
+      "id": "python_lean_general_refinement",
+      "status": "UNVERIFIED",
+      "claim": "Finite agreement is not a universal Python-to-Lean theorem",
+      "evidence": "OPEN_ASSUMPTIONS_AND_BLOCKERS.md",
+      "depends_on": [
+        "finite_refinement"
+      ]
+    },
+    {
+      "id": "protected_root",
+      "status": "BLOCKED_EXTERNAL",
+      "claim": "Independent verifier administration, protected credentials/storage/checkpoints unavailable",
+      "evidence": "TRUST_BOUNDARY_AND_TCB.md",
+      "depends_on": []
+    },
+    {
+      "id": "scientific_history_connection",
+      "status": "UNVERIFIED",
+      "claim": "No proved/runtime integration of signed history with scientific checking or serving",
+      "evidence": "OPEN_ASSUMPTIONS_AND_BLOCKERS.md",
+      "depends_on": [
+        "history_core",
+        "wire_sound"
+      ]
+    },
+    {
+      "id": "empirical_validity",
+      "status": "UNVERIFIED",
+      "claim": "All three pilot cases use synthetic inputs; model-to-world adequacy unestablished",
+      "evidence": "research/scientific_receiver_v1/reports/pilot-20261019/pilot.json",
+      "depends_on": []
+    },
+    {
+      "id": "external_reproduction",
+      "status": "BLOCKED_EXTERNAL",
+      "claim": "No external participant independently reproduced the artifact",
+      "evidence": "EXTERNAL_REVIEWER_GUIDE.md",
+      "depends_on": []
+    },
+    {
+      "id": "v8",
+      "status": "BLOCKED_EXTERNAL",
+      "claim": "Authoritative V8 archive with expected SHA remains unavailable",
+      "evidence": "OPEN_ASSUMPTIONS_AND_BLOCKERS.md",
+      "depends_on": []
+    }
+  ],
+  "scope": "Statuses describe distinct mathematical, executable, synthetic and external obligations; no rank or PASS automatically promotes another class."
+}

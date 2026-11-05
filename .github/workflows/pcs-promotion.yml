@@ -1,0 +1,52 @@
+name: PCS production promotion verification
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'contributions/pcs-promotions/**'
+permissions:
+  contents: read
+jobs:
+  promotion:
+    name: PCS Promotion Verification
+    # Public PRs run on disposable hosted runners without production secrets.
+    if: ${{ github.repository_owner == 'Tommaso-R-Marena' && github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Check exact archive-to-source mapping and PR diff
+        env:
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python scripts/check_promotion_bundle.py
+      - name: Verify repository integrity, file modes and governance
+        run: python scripts/check_repository_integrity.py
+      - name: Install test dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Build Lean 4 authority with project-source hygiene
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6
+        with:
+          lake-package-directory: formal
+          build: true
+          test: false
+      - name: Run full PCS regression tests
+        run: python -m pytest -q
+      - name: Run adversarial campaign
+        run: python scripts/adversarial_campaign.py
+      - name: Elaborate every promoted Lean source
+        run: |
+          find formal/PCS -name '*.lean' -print0 | while IFS= read -r -d '' file; do
+            case "$file" in *.lean) true;; *) exit 1;; esac
+          done
+          bash scripts/verify_lean.sh
+      - name: Interpret result scope
+        run: echo 'CI proves only that selected executable checks completed for this exact PR; scientific claims still require independent review.'

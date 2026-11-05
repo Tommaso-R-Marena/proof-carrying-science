@@ -1,0 +1,78 @@
+{
+  "format": "pcs-human-interpretation-v1",
+  "claim_id": "C_SAFE",
+  "statement": "All actions are safe when permission is revoked.",
+  "formula": {
+    "op": "forall",
+    "var": "t",
+    "sort": "Trace",
+    "body": {
+      "op": "forall",
+      "var": "i",
+      "sort": "Time",
+      "body": {
+        "op": "implies",
+        "left": {
+          "op": "atom",
+          "symbol": "safety.revoked",
+          "args": [
+            {
+              "var": "t"
+            },
+            {
+              "var": "i"
+            }
+          ]
+        },
+        "right": {
+          "op": "not",
+          "body": {
+            "op": "atom",
+            "symbol": "safety.unsafe",
+            "args": [
+              {
+                "var": "t"
+              },
+              {
+                "var": "i"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "op": "forall",
+      "var": "t",
+      "sort": "Trace",
+      "body": {
+        "op": "forall",
+        "var": "i",
+        "sort": "Time",
+        "body": {
+          "op": "atom",
+          "symbol": "safety.allowed",
+          "args": [
+            {
+              "var": "t"
+            },
+            {
+              "var": "i"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "free_variables": [],
+  "scope": {
+    "context_id": "world.v1",
+    "description": "Trace/time world v1"
+  },
+  "ambiguities": [],
+  "provenance": {
+    "origin": "human-selected interpretation"
+  }
+}

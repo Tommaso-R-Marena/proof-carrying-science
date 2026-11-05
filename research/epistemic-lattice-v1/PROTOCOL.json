@@ -1,0 +1,20 @@
+{
+  "format": "pcs-epistemic-lattice-protocol-v1",
+  "name": "epistemic-obligation-lattice-v1",
+  "frozen": true,
+  "authority": false,
+  "scientific_acceptance": false,
+  "controls": [
+    {"id": "01_good_empirical", "intent": "exact-class empirical support with unmet falsifier"},
+    {"id": "02_falsified", "intent": "falsifier dominates passing evidence"},
+    {"id": "03_class_promotion_attack", "intent": "formal evidence cannot discharge empirical claim"},
+    {"id": "04_unfalsifiable_rejected", "intent": "empirical claim without falsifier is rejected"},
+    {"id": "05_composition_supported", "intent": "empirical→computational→formal composition when sound"},
+    {"id": "06_composition_reopens", "intent": "upstream refutation reopens dependents"}
+  ],
+  "non_claims": [
+    "No biological or clinical adequacy.",
+    "No package or Lean-authority verdict.",
+    "Observation atoms are declared Booleans, not sensors."
+  ]
+}

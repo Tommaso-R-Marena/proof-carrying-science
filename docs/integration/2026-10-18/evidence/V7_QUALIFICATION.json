@@ -1,0 +1,73 @@
+{
+  "commit": "efaf3d0b8b373338284f4ae3ca42ff66ce576a68",
+  "command": "PG_RESULTS=/workspace/.onboarding/pcs-integration-efaf3d0-formal/V7_RESULTS.json bash scripts/proof_gated_ci.sh",
+  "cwd": "/workspace/.onboarding/pcs-pr-baselines/integration-efaf3d0/formal",
+  "exit_code": 0,
+  "log": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/V7_CI.log",
+  "log_sha256": "02022c9507b4f035a3a0e01c9e57e17ea0f6dc880df2b44158014aa6e29803d9",
+  "tracked_source_diff": [],
+  "result": {
+    "lean_toolchain": "leanprover/lean4:v4.28.0",
+    "overall": "PASS",
+    "steps": [
+      {
+        "step": "build",
+        "exit_code": 0,
+        "detail": "38 modules built; 3 warning(s)"
+      },
+      {
+        "step": "forbidden_tokens",
+        "exit_code": 0,
+        "detail": "42 files scanned: no sorry/admit/native_decide/unsafe/implemented_by/extern/axiom"
+      },
+      {
+        "step": "axiom_audit:PCS/V2/ProofGatedAudit.lean",
+        "exit_code": 0,
+        "detail": "125 declarations; axioms used: Classical.choice Quot.sound propext "
+      },
+      {
+        "step": "axiom_audit:PCS/V2/ProofGatedNoForgetAudit.lean",
+        "exit_code": 0,
+        "detail": "19 declarations; axioms used: Classical.choice Quot.sound propext "
+      },
+      {
+        "step": "axiom_audit:PCS/V2/ProofGatedStrongAudit.lean",
+        "exit_code": 0,
+        "detail": "101 declarations; axioms used: Classical.choice Quot.sound propext "
+      },
+      {
+        "step": "axiom_audit:PCS/V2/ProofGatedFullAudit.lean",
+        "exit_code": 0,
+        "detail": "818 declarations; axioms used: Classical.choice Quot.sound propext "
+      },
+      {
+        "step": "codec_vectors",
+        "exit_code": 0,
+        "detail": "OK: 8502 vector checks passed"
+      },
+      {
+        "step": "checker_vectors",
+        "exit_code": 0,
+        "detail": "OK: 754 checker vector checks passed (311 interval cases, 400 no-forgetting pairs, 40 deep cases, 11 strong-gate cases)"
+      },
+      {
+        "step": "v6_vectors",
+        "exit_code": 0,
+        "detail": "OK: 19199 V6 checks passed (35 interpreter vectors, 15 certificate decision cases, 18000 interpreter cross-checks, 1192 certificate byte mutations of which 0 accepted and re-verified)"
+      },
+      {
+        "step": "v7_vectors",
+        "exit_code": 0,
+        "detail": "OK: 12776 V7 checks passed (18 fixture files, 6 policy/generation attacks, 556 policy mutations of which 162 decode, 1737 PGSC7 mutations of which 0 accepted and re-verified, 7997 receipt mutations of which 0 accepted and re-verified, 800 sweep-certificate cross-checks with 774 rejected reversed orders)"
+      },
+      {
+        "step": "authority_cli",
+        "exit_code": 0,
+        "detail": "14 file-based authority cases"
+      }
+    ]
+  },
+  "axiom_map_file": "/workspace/.onboarding/pcs-integration-efaf3d0-formal/V7_FULL_AXIOM_MAP.json",
+  "wall_seconds_log_creation_to_final_write": 388,
+  "timing_caveat": "Whole gate, concurrent unrelated main verification; integer timestamp estimate, not controlled standalone benchmark."
+}

@@ -1,0 +1,38 @@
+# Reference CI workflow for this incubation package.
+# Kept inside the isolation namespace (root .github is out of write scope).
+# To enable in a standalone repo, copy to `.github/workflows/pcs-causal.yml`.
+
+name: pcs-causal-laboratory
+
+on:
+  push:
+    paths:
+      - "incubation/pcs_causal_laboratory_v1/**"
+  pull_request:
+    paths:
+      - "incubation/pcs_causal_laboratory_v1/**"
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: incubation/pcs_causal_laboratory_v1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -e ".[dev]"
+      - name: Noninterference audit
+        run: bash scripts/noninterference_audit.sh
+      - name: Tests
+        run: python -m pytest -q
+      - name: CLI demos
+        run: |
+          pcs-causal backdoor-demo
+          pcs-causal adversarial
+          pcs-causal demo-drug

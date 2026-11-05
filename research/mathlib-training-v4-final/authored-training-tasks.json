@@ -1,0 +1,278 @@
+[
+  {
+    "id": "train-Set.preimage_inter",
+    "statement": "\u2200 (f : Nat \u2192 Nat) (s t : Set Nat), f \u207b\u00b9' (s \u2229 t) = (f \u207b\u00b9' s) \u2229 (f \u207b\u00b9' t)",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Set.preimage_inter"
+      }
+    ],
+    "family": "set_function",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Data.Set.Function"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-Set.preimage_union",
+    "statement": "\u2200 (f : Nat \u2192 Nat) (s t : Set Nat), f \u207b\u00b9' (s \u222a t) = (f \u207b\u00b9' s) \u222a (f \u207b\u00b9' t)",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Set.preimage_union"
+      }
+    ],
+    "family": "set_function",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Data.Set.Function"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-Set.preimage_diff",
+    "statement": "\u2200 (f : Nat \u2192 Nat) (s t : Set Nat), f \u207b\u00b9' (s \\ t) = (f \u207b\u00b9' s) \\ (f \u207b\u00b9' t)",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Set.preimage_diff"
+      }
+    ],
+    "family": "set_function",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Data.Set.Function"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-Set.preimage_compl",
+    "statement": "\u2200 (f : Nat \u2192 Nat) (s : Set Nat), f \u207b\u00b9' s\u1d9c = (f \u207b\u00b9' s)\u1d9c",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Set.preimage_compl"
+      }
+    ],
+    "family": "set_function",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Data.Set.Function"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-Set.preimage_empty",
+    "statement": "\u2200 (f : Nat \u2192 Nat), f \u207b\u00b9' (\u2205 : Set Nat) = \u2205",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Set.preimage_empty"
+      }
+    ],
+    "family": "set_function",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Data.Set.Function"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-Set.preimage_univ",
+    "statement": "\u2200 (f : Nat \u2192 Nat), f \u207b\u00b9' (Set.univ : Set Nat) = Set.univ",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "apply_lemma",
+        "argument": "Set.preimage_univ"
+      }
+    ],
+    "family": "set_function",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Data.Set.Function"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-logic-projection",
+    "statement": "\u2200 (P Q R : Prop), (P \u2227 Q) \u2227 R \u2192 Q \u2227 P",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "constructor",
+        "argument": null
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h3.1.2"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h3.1.1"
+      }
+    ],
+    "family": "logic",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Logic.Function.Basic"
+    },
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "train-logic-composition",
+    "statement": "\u2200 (P Q R : Prop), (P \u2192 Q) \u2192 (Q \u2192 R) \u2192 P \u2192 R",
+    "actions": [
+      {
+        "kind": "intro",
+        "argument": "h0"
+      },
+      {
+        "kind": "intro",
+        "argument": "h1"
+      },
+      {
+        "kind": "intro",
+        "argument": "h2"
+      },
+      {
+        "kind": "intro",
+        "argument": "h3"
+      },
+      {
+        "kind": "intro",
+        "argument": "h4"
+      },
+      {
+        "kind": "intro",
+        "argument": "h5"
+      },
+      {
+        "kind": "apply_local",
+        "argument": "h4"
+      },
+      {
+        "kind": "apply_local",
+        "argument": "h3"
+      },
+      {
+        "kind": "exact_local",
+        "argument": "h5"
+      }
+    ],
+    "family": "logic",
+    "split": "train",
+    "source": {
+      "repository": "Tommaso-R-Marena/proof-carrying-science",
+      "base_revision": "b59badd68cedba3dcc9c72a6d5148e7986545ebd",
+      "source_file": "scripts/collect_mathlib_training_v4.py",
+      "source_sha256": "72ee98233851d7b010c65b214e902e427718b971fa3d43cf003ef1c1de02ed98",
+      "authorship": "New PCS-authored supervised labels for existing mathematical facts; uncommitted source overlay",
+      "module": "Mathlib.Logic.Function.Basic"
+    },
+    "license": "CC0-1.0"
+  }
+]

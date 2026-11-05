@@ -1,0 +1,26 @@
+{
+  "subject": "computational-biopharma-v0.1-demo",
+  "assumptions": [
+    {"id": "A1", "statement": "subject_id uniquely identifies a biological subject within each dataset", "rationale": "Required for the disjointness check to represent subject-level leakage.", "scope": ["C1"]},
+    {"id": "A2", "statement": "molecular formula strings in the reaction check use the limited v0.1 grammar", "rationale": "The parser does not yet cover charges, hydrates, isotopes, or parentheses.", "scope": ["C2"]}
+  ],
+  "claims": [
+    {"id": "C1", "statement": "Training and evaluation datasets contain no overlapping subject_id values.", "kind": "computational", "required_evidence": ["E1"], "assumptions": ["A1"], "predicate": {"type": "csv_disjoint", "left_artifact": "train", "right_artifact": "test", "key": "subject_id"}},
+    {"id": "C2", "statement": "The illustrative water-formation reaction is atom-balanced under the v0.1 formula grammar.", "kind": "computational", "required_evidence": ["E2"], "assumptions": ["A2"], "predicate": {"type": "reaction_balance", "reactants": [{"formula": "H2", "coefficient": 2}, {"formula": "O2", "coefficient": 1}], "products": [{"formula": "H2O", "coefficient": 2}]}},
+    {"id": "C3", "statement": "mg/L and g/L are dimensionally compatible concentration units.", "kind": "computational", "required_evidence": ["E3"], "assumptions": [], "predicate": {"type": "unit_compatible", "left_unit": "mg/L", "right_unit": "g/L"}}
+  ],
+  "artifacts": [
+    {"id": "train", "path": "train.csv", "role": "training-data", "media_type": "text/csv"},
+    {"id": "test", "path": "test.csv", "role": "evaluation-data", "media_type": "text/csv"},
+    {"id": "model_spec", "path": "model_spec.txt", "role": "model-specification", "media_type": "text/plain"}
+  ],
+  "checks": [
+    {"id": "E1", "type": "csv_disjoint", "claim_ids": ["C1"], "left_artifact": "train", "right_artifact": "test", "key": "subject_id"},
+    {"id": "E2", "type": "reaction_balance", "claim_ids": ["C2"], "reactants": [{"formula": "H2", "coefficient": 2}, {"formula": "O2", "coefficient": 1}], "products": [{"formula": "H2O", "coefficient": 2}]},
+    {"id": "E3", "type": "unit_compatible", "claim_ids": ["C3"], "left_unit": "mg/L", "right_unit": "g/L"}
+  ],
+  "workflow": {"nodes": [
+    {"id": "N1", "operation": "fit_model", "inputs": ["train", "model_spec"], "outputs": [], "contract": {"notes": "No formal property claimed in v0.1."}},
+    {"id": "N2", "operation": "evaluate_model", "inputs": ["test", "model_spec"], "outputs": [], "contract": {"notes": "Evaluation artifact generation is a future adapter."}}
+  ]}
+}

@@ -1,0 +1,42 @@
+{
+  "artifacts": [],
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Unit compatibility is not evidence that the modeled quantity matches the scientific measurand."
+    }
+  ],
+  "checks": [
+    {
+      "claim_ids": [
+        "C1"
+      ],
+      "id": "E1",
+      "left_unit": "g/L",
+      "right_unit": "mg/mL",
+      "type": "unit_compatible"
+    }
+  ],
+  "claims": [
+    {
+      "assumptions": [
+        "A1"
+      ],
+      "id": "C1",
+      "kind": "computational",
+      "predicate": {
+        "left_unit": "g/L",
+        "right_unit": "mg/mL",
+        "type": "unit_compatible"
+      },
+      "required_evidence": [
+        "E1"
+      ],
+      "statement": "g/L and mg/mL are dimensionally compatible."
+    }
+  ],
+  "subject": "independent-eval-units-ok-quantity-inadequate",
+  "workflow": {
+    "nodes": []
+  }
+}

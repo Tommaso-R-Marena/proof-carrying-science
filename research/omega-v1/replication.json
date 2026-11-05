@@ -1,0 +1,951 @@
+{
+  "format": "pcs-omega-replication-v1",
+  "settings_fixed_before_replication": true,
+  "selection": "Published workspace keeps the original seed checkpoint, irrespective of replicate results",
+  "runs": [
+    {
+      "seed": 20261009,
+      "source_commit": "71601011781d833886c207a1d9a1593acf67ad24",
+      "source_digest": "b84d3a7dcb668ec0f8ff58584a7281bd8d1550ee0463c92b02e03ea01224dff5",
+      "counts": {
+        "train": 72,
+        "validation": 24,
+        "test": 96
+      },
+      "actual_lean_theorems": 66,
+      "negative_rejected": true
+    },
+    {
+      "seed": 20261010,
+      "source_commit": "a9b63f773f733ebf8d850fdf1b971dcf3c376d28",
+      "source_digest": "bdf3a28808f5b3d3923f15560e8a20e2cd018f02f6bbf14bedc988c7fb4b0496",
+      "counts": {
+        "train": 72,
+        "validation": 24,
+        "test": 96
+      },
+      "actual_lean_theorems": 52,
+      "negative_rejected": true
+    },
+    {
+      "seed": 20261011,
+      "source_commit": "a9b63f773f733ebf8d850fdf1b971dcf3c376d28",
+      "source_digest": "bdf3a28808f5b3d3923f15560e8a20e2cd018f02f6bbf14bedc988c7fb4b0496",
+      "counts": {
+        "train": 72,
+        "validation": 24,
+        "test": 96
+      },
+      "actual_lean_theorems": 61,
+      "negative_rejected": true
+    }
+  ],
+  "test_rows": [
+    {
+      "seed": 20261009,
+      "strategy": "bfs",
+      "budget": 4,
+      "solved": 18,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 4
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "random",
+      "budget": 4,
+      "solved": 35,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 5
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 17
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 5
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 8
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "structural",
+      "budget": 4,
+      "solved": 63,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 8
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 24
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "bag",
+      "budget": 4,
+      "solved": 14,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 0
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "bandit",
+      "budget": 4,
+      "solved": 16,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 2
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "graph",
+      "budget": 4,
+      "solved": 26,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 12
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "bfs",
+      "budget": 8,
+      "solved": 51,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 12
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 4
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "random",
+      "budget": 8,
+      "solved": 54,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 13
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 19
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 10
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 12
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "structural",
+      "budget": 8,
+      "solved": 68,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 24
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "bag",
+      "budget": 8,
+      "solved": 73,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 22
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 3
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "bandit",
+      "budget": 8,
+      "solved": 65,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 10
+        }
+      }
+    },
+    {
+      "seed": 20261009,
+      "strategy": "graph",
+      "budget": 8,
+      "solved": 66,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 24
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "bfs",
+      "budget": 4,
+      "solved": 11,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 2
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "random",
+      "budget": 4,
+      "solved": 29,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 8
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 5
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 9
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "structural",
+      "budget": 4,
+      "solved": 59,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 6
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 6
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 23
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "bag",
+      "budget": 4,
+      "solved": 12,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 3
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "bandit",
+      "budget": 4,
+      "solved": 12,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 3
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "graph",
+      "budget": 4,
+      "solved": 11,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 1
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 2
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "bfs",
+      "budget": 8,
+      "solved": 43,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 10
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 2
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "random",
+      "budget": 8,
+      "solved": 56,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 15
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 18
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 16
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "structural",
+      "budget": 8,
+      "solved": 64,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 8
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 8
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 24
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "bag",
+      "budget": 8,
+      "solved": 73,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 23
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 22
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 4
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "bandit",
+      "budget": 8,
+      "solved": 59,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 5
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 23
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 7
+        }
+      }
+    },
+    {
+      "seed": 20261010,
+      "strategy": "graph",
+      "budget": 8,
+      "solved": 52,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 21
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 12
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 10
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "bfs",
+      "budget": 4,
+      "solved": 15,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 2
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "random",
+      "budget": 4,
+      "solved": 32,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 5
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 4
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 12
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "structural",
+      "budget": 4,
+      "solved": 57,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 6
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 5
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 22
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "bag",
+      "budget": 4,
+      "solved": 13,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 0
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "bandit",
+      "budget": 4,
+      "solved": 18,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 5
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "graph",
+      "budget": 4,
+      "solved": 17,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 2
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 4
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "bfs",
+      "budget": 8,
+      "solved": 43,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 8
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 9
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 2
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "random",
+      "budget": 8,
+      "solved": 55,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 20
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 6
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 18
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "structural",
+      "budget": 8,
+      "solved": 66,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 7
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 11
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 24
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "bag",
+      "budget": 8,
+      "solved": 73,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 20
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 5
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "bandit",
+      "budget": 8,
+      "solved": 53,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 10
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 10
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 9
+        }
+      }
+    },
+    {
+      "seed": 20261011,
+      "strategy": "graph",
+      "budget": 8,
+      "solved": 61,
+      "tasks": 96,
+      "families": {
+        "de-morgan": {
+          "tasks": 24,
+          "solved": 14
+        },
+        "implication-expansion": {
+          "tasks": 24,
+          "solved": 24
+        },
+        "distribution": {
+          "tasks": 24,
+          "solved": 12
+        },
+        "absorption": {
+          "tasks": 24,
+          "solved": 11
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Public generated family holdouts, no external or blind tasks",
+    "Tasks may overlap across separate seeds; no claim of 288 independent observations",
+    "No hyperparameter retuning or claim of broad scientific generalization"
+  ],
+  "pcs_authority": false
+}

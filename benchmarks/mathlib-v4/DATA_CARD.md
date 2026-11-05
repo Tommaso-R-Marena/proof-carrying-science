@@ -1,0 +1,11 @@
+# Public external-source Mathlib v4 benchmark
+
+Twenty-two authentic theorem declarations from Mathlib at the pinned revision cover five source-disjoint held-out families: lists, finite-set cardinality, natural factorials, elementary groups/monoids, and real/rational order. Each retains the exact source file/header lines and hashes, Apache-2.0 license and author attribution, elaborator-derived closed type/universes, alpha/structural hashes and source-symbol dependencies. No solutions, tactics or proof bodies are included.
+
+All tasks are final for this predeclared generation; fitting/selection uses distinct Set.Function/logic source modules/families. The helper rejects explicit module/family/alpha contamination and filters target declarations and alpha-type answer aliases. Known foundational premises from training modules are permitted in the primary search; stricter module-exclusion is an optional separately labeled sensitivity test. The compiled library and automation can transitively use known results; this is not a guarantee of unseen mathematics.
+
+This is a public, developer-selected and developer-exposed external-source set. It is neither privateblind nor externally administered. Source selection exposed some surrounding proof snippets to developers; no such code is present here or passed to the learner. A model or developer may already know these public facts. Historical PCS exposures, architecture-sensitive domain choice and future post-result redesign must be disclosed rather than retrospectively called untouched.
+
+The printed signatures of two Real declarations hid coercion types. Those rendered statements were corrected directly from the source header and all22 propositions independently elaborated with definitional equality against the exact declaration type. Original failed extraction/rendering attempts are retained, with no theorem-selection change and no evaluation/model outcomes consulted.
+
+No training or benchmark evaluation result is reported by this freeze. Integrity hashes are unsigned and require receiver-controlled expected seals/source pins; they do not prove execution, mathematical novelty, production authorization or biological/scientific validity. Financial spend and genuine human participant count are zero.

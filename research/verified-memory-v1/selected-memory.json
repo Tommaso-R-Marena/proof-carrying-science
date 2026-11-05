@@ -1,0 +1,772 @@
+[
+  {
+    "discovery_cost_calls": 3,
+    "entry": {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2 h3 h4",
+          "kind": "induct_nat"
+        },
+        {
+          "argument": "h1",
+          "kind": "rewrite"
+        },
+        {
+          "argument": "nat",
+          "kind": "normalize"
+        },
+        {
+          "argument": "h4",
+          "kind": "rewrite"
+        },
+        {
+          "argument": "nat",
+          "kind": "normalize"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "q0",
+            "type": "NatFn"
+          }
+        ],
+        "body": {
+          "left": {
+            "body": {
+              "left": {
+                "arg": {
+                  "arg": {
+                    "name": "q2",
+                    "op": "var"
+                  },
+                  "op": "succ"
+                },
+                "fn": {
+                  "name": "q0",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "left": {
+                  "arg": {
+                    "name": "q2",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "add",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 1
+                }
+              }
+            },
+            "name": "q2",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "q2",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "q0",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "left": {
+                  "arg": {
+                    "op": "number",
+                    "type": "Nat",
+                    "value": 0
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "add",
+                "right": {
+                  "name": "q2",
+                  "op": "var"
+                }
+              }
+            },
+            "name": "q2",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "ed17576ef1def0715326159db9a2978a12ae56d2"
+    },
+    "identity": "f9d77d5d357b24f531b19564b15f34374bdee619b1ee5fe4f886c4fdaf733075",
+    "mechanism": "kernel_state_cut",
+    "source": {
+      "assumptions_retained": false,
+      "candidate_sha256": "f9d77d5d357b24f531b19564b15f34374bdee619b1ee5fe4f886c4fdaf733075",
+      "goal": {
+        "binders": [
+          {
+            "name": "q0",
+            "type": "NatFn"
+          }
+        ],
+        "body": {
+          "left": {
+            "body": {
+              "left": {
+                "arg": {
+                  "arg": {
+                    "name": "q2",
+                    "op": "var"
+                  },
+                  "op": "succ"
+                },
+                "fn": {
+                  "name": "q0",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "left": {
+                  "arg": {
+                    "name": "q2",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "add",
+                "right": {
+                  "op": "number",
+                  "type": "Nat",
+                  "value": 1
+                }
+              }
+            },
+            "name": "q2",
+            "op": "forall",
+            "type": "Nat"
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "left": {
+                "arg": {
+                  "name": "q2",
+                  "op": "var"
+                },
+                "fn": {
+                  "name": "q0",
+                  "op": "var"
+                },
+                "op": "apply"
+              },
+              "op": "eq",
+              "right": {
+                "left": {
+                  "arg": {
+                    "op": "number",
+                    "type": "Nat",
+                    "value": 0
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "add",
+                "right": {
+                  "name": "q2",
+                  "op": "var"
+                }
+              }
+            },
+            "name": "q2",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "mechanism": "kernel_state_cut",
+      "source_family": "unit_recurrence",
+      "source_state_index": 0,
+      "source_state_sha256": "f66c1403cb4689c1875027bb3736376fe3e5ab7ccb903093685782a999df9521",
+      "source_task": "function_unit_recurrence",
+      "whole_training_goal": true
+    },
+    "whole_training_goal": true
+  },
+  {
+    "discovery_cost_calls": 3,
+    "entry": {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2 h3 h4",
+          "kind": "induct_nat"
+        },
+        {
+          "argument": "h1.2",
+          "kind": "apply"
+        },
+        {
+          "argument": "h4",
+          "kind": "exact"
+        },
+        {
+          "argument": "h1.1",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "q0",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "arg": {
+                "op": "number",
+                "type": "Nat",
+                "value": 0
+              },
+              "fn": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "q3",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "arg": {
+                      "name": "q3",
+                      "op": "var"
+                    },
+                    "op": "succ"
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "q3",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "arg": {
+                "name": "q2",
+                "op": "var"
+              },
+              "fn": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "name": "q2",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "ed17576ef1def0715326159db9a2978a12ae56d2"
+    },
+    "identity": "e9aa23703e0919d46c8dcd21ad0193eea713bcd6af31c1b02cd07768aa0202ea",
+    "mechanism": "kernel_state_cut",
+    "source": {
+      "assumptions_retained": false,
+      "candidate_sha256": "e9aa23703e0919d46c8dcd21ad0193eea713bcd6af31c1b02cd07768aa0202ea",
+      "goal": {
+        "binders": [
+          {
+            "name": "q0",
+            "type": "NatPred"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "arg": {
+                "op": "number",
+                "type": "Nat",
+                "value": 0
+              },
+              "fn": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "arg": {
+                    "name": "q3",
+                    "op": "var"
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                },
+                "op": "implies",
+                "right": {
+                  "arg": {
+                    "arg": {
+                      "name": "q3",
+                      "op": "var"
+                    },
+                    "op": "succ"
+                  },
+                  "fn": {
+                    "name": "q0",
+                    "op": "var"
+                  },
+                  "op": "apply"
+                }
+              },
+              "name": "q3",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "body": {
+              "arg": {
+                "name": "q2",
+                "op": "var"
+              },
+              "fn": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "apply"
+            },
+            "name": "q2",
+            "op": "forall",
+            "type": "Nat"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "mechanism": "kernel_state_cut",
+      "source_family": "predicate_induction_principle",
+      "source_state_index": 0,
+      "source_state_sha256": "0cad2aee278c47ea9625e564b9cf1720bdba9fdfdb9bea4e40cc0469b7b5d65f",
+      "source_task": "predicate_induction",
+      "whole_training_goal": true
+    },
+    "whole_training_goal": true
+  },
+  {
+    "discovery_cost_calls": 3,
+    "entry": {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h0 h2 h3 h4",
+          "kind": "induct_list"
+        },
+        {
+          "argument": "list",
+          "kind": "normalize"
+        },
+        {
+          "argument": "h4",
+          "kind": "rewrite"
+        },
+        {
+          "argument": "list",
+          "kind": "normalize"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "q0",
+            "type": "NatList"
+          },
+          {
+            "name": "q1",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "left": {
+            "arg": {
+              "left": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "append",
+              "right": {
+                "name": "q1",
+                "op": "var"
+              }
+            },
+            "op": "length"
+          },
+          "op": "eq",
+          "right": {
+            "left": {
+              "arg": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "length"
+            },
+            "op": "add",
+            "right": {
+              "arg": {
+                "name": "q1",
+                "op": "var"
+              },
+              "op": "length"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "ed17576ef1def0715326159db9a2978a12ae56d2"
+    },
+    "identity": "2f10ce69067bf85a3f66ef5f69f898e89a209aafa02e7a0c1b53f617c8349309",
+    "mechanism": "kernel_state_cut",
+    "source": {
+      "assumptions_retained": false,
+      "candidate_sha256": "2f10ce69067bf85a3f66ef5f69f898e89a209aafa02e7a0c1b53f617c8349309",
+      "goal": {
+        "binders": [
+          {
+            "name": "q0",
+            "type": "NatList"
+          },
+          {
+            "name": "q1",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "left": {
+            "arg": {
+              "left": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "append",
+              "right": {
+                "name": "q1",
+                "op": "var"
+              }
+            },
+            "op": "length"
+          },
+          "op": "eq",
+          "right": {
+            "left": {
+              "arg": {
+                "name": "q0",
+                "op": "var"
+              },
+              "op": "length"
+            },
+            "op": "add",
+            "right": {
+              "arg": {
+                "name": "q1",
+                "op": "var"
+              },
+              "op": "length"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "mechanism": "kernel_state_cut",
+      "source_family": "list_length",
+      "source_state_index": 0,
+      "source_state_sha256": "ea1f39475a8edee86be85a7a01d5bdc2f94e2572e2de64c98bc073e85b4d699e",
+      "source_task": "length_append",
+      "whole_training_goal": true
+    },
+    "whole_training_goal": true
+  },
+  {
+    "discovery_cost_calls": 88,
+    "entry": {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h2",
+          "kind": "intro"
+        },
+        {
+          "argument": "list",
+          "kind": "normalize"
+        },
+        {
+          "argument": "h2 h3 h4 h5",
+          "kind": "induct_list"
+        },
+        {
+          "argument": "h1 h2 h6",
+          "kind": "induct_nat"
+        },
+        {
+          "argument": "h6",
+          "kind": "rewrite"
+        },
+        {
+          "argument": "list",
+          "kind": "normalize"
+        },
+        {
+          "argument": "h5",
+          "kind": "rewrite"
+        },
+        {
+          "argument": "list",
+          "kind": "normalize"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "v0",
+            "type": "NatList"
+          },
+          {
+            "name": "v1",
+            "type": "Nat"
+          },
+          {
+            "name": "v2",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "left": {
+            "arg": {
+              "left": {
+                "head": {
+                  "name": "v1",
+                  "op": "var"
+                },
+                "op": "cons",
+                "tail": {
+                  "name": "v2",
+                  "op": "var"
+                }
+              },
+              "op": "append",
+              "right": {
+                "name": "v0",
+                "op": "var"
+              }
+            },
+            "op": "length"
+          },
+          "op": "eq",
+          "right": {
+            "left": {
+              "arg": {
+                "head": {
+                  "name": "v1",
+                  "op": "var"
+                },
+                "op": "cons",
+                "tail": {
+                  "name": "v2",
+                  "op": "var"
+                }
+              },
+              "op": "length"
+            },
+            "op": "add",
+            "right": {
+              "arg": {
+                "name": "v0",
+                "op": "var"
+              },
+              "op": "length"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "Apache-2.0",
+      "source_revision": "ed17576ef1def0715326159db9a2978a12ae56d2"
+    },
+    "identity": "3951d57f31d3cf638c317c7bc884d4a83ca3e731c2d3861cc95e8c25f92a1cb9",
+    "mechanism": "kernel_state_cut",
+    "source": {
+      "assumptions_retained": false,
+      "candidate_sha256": "3951d57f31d3cf638c317c7bc884d4a83ca3e731c2d3861cc95e8c25f92a1cb9",
+      "goal": {
+        "binders": [
+          {
+            "name": "v0",
+            "type": "NatList"
+          },
+          {
+            "name": "v1",
+            "type": "Nat"
+          },
+          {
+            "name": "v2",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "left": {
+            "arg": {
+              "left": {
+                "head": {
+                  "name": "v1",
+                  "op": "var"
+                },
+                "op": "cons",
+                "tail": {
+                  "name": "v2",
+                  "op": "var"
+                }
+              },
+              "op": "append",
+              "right": {
+                "name": "v0",
+                "op": "var"
+              }
+            },
+            "op": "length"
+          },
+          "op": "eq",
+          "right": {
+            "left": {
+              "arg": {
+                "head": {
+                  "name": "v1",
+                  "op": "var"
+                },
+                "op": "cons",
+                "tail": {
+                  "name": "v2",
+                  "op": "var"
+                }
+              },
+              "op": "length"
+            },
+            "op": "add",
+            "right": {
+              "arg": {
+                "name": "v0",
+                "op": "var"
+              },
+              "op": "length"
+            }
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "mechanism": "kernel_state_cut",
+      "source_family": "list_length",
+      "source_state_index": 3,
+      "source_state_sha256": "26ac461969cfc9431f633c5bb959205beebc4091d5f9122db5f89c83f64279e9",
+      "source_task": "length_append",
+      "whole_training_goal": false
+    },
+    "whole_training_goal": false
+  }
+]

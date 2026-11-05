@@ -1,0 +1,33 @@
+{
+  "format": "pcs-readonly-host-containment-review-v1",
+  "baseline_commit": "7a48fa34441641b0cd28dad3753c72ccf9dceabc",
+  "baseline_host_sha256": "9a8e10d0500b4c63cec57006d5bc6821084c9ce583b129829cc00eabda0645d0",
+  "current_host_sha256": "90c5b677744b7c6a59a4d2ad8caa01a4d4ccb55503cbbb72f616b23601614bdd",
+  "historical": {
+    "deep_json": {
+      "escaped_exception": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    "descendant": {
+      "accepted": false,
+      "descendant_state_after_deadline": "S",
+      "descendant_running": true,
+      "signed_rejection": true
+    }
+  },
+  "working_tree_fixed": {
+    "deep_json": {
+      "signed_rejection": true,
+      "errors": [
+        "HostRejected: JSON nesting exceeds parser resource limit"
+      ]
+    },
+    "descendant": {
+      "accepted": false,
+      "descendant_state_after_deadline": "Z",
+      "descendant_running": false,
+      "signed_rejection": true
+    }
+  },
+  "scope": "Negative diagnostic subprocesses only; no positive verifier substitute; mathematical codec not independently re-reviewed by its author."
+}

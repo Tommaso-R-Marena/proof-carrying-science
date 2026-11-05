@@ -1,0 +1,146 @@
+name: PCS Checked Progress Supervisor
+on:
+  pull_request:
+    paths:
+      - 'research/progress_supervisor_v1/**'
+      - '.github/workflows/pcs-progress-supervisor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: progress-supervisor-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  matrix:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.census.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Protected predecessor identity and complete test-module census
+        id: census
+        run: |
+          python -m research.progress_supervisor_v1.preservation
+          python -m research.progress_supervisor_v1.ci matrix >> "$GITHUB_OUTPUT"
+  tests:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    name: progress-${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen dependencies and predecessor identity
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.progress_supervisor_v1.preservation
+      - name: Independent exact Lean toolchain
+        if: ${{ matrix.shard != 'intake' }}
+        run: source scripts/activate_lean_428.sh
+      - name: Required shard with actual verification where applicable
+        run: python -m research.progress_supervisor_v1.ci test '${{ matrix.shard }}' "$RUNNER_TEMP/progress-tests"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: progress-supervisor-tests-${{ matrix.shard }}
+          path: ${{ runner.temp }}/progress-tests/tests.xml
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && matrix.shard == 'adapter' }}
+        with:
+          name: progress-supervisor-adapter-qualification
+          path: |
+            ${{ runner.temp }}/progress-tests/adapter-spec/qualification.json
+            ${{ runner.temp }}/progress-tests/adapter-spec/table.csv
+            ${{ runner.temp }}/progress-tests/adapter-spec/executions.json
+            ${{ runner.temp }}/progress-tests/adapter-spec/adapter/*.lean
+            ${{ runner.temp }}/progress-tests/adapter-spec/supervisor/build.json
+          retention-days: 14
+  evidence:
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Frozen dependencies, exact source and fresh toolchain
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m research.progress_supervisor_v1.preservation
+          source scripts/activate_lean_428.sh
+          mkdir -p "$RUNNER_TEMP/progress-evidence"
+      - name: Actual batch capture and independent replay
+        run: |
+          python -m research.progress_supervisor_v1 demo "$RUNNER_TEMP/progress-evidence/capture"
+          python -m research.progress_supervisor_v1 replay "$RUNNER_TEMP/progress-evidence/capture/capture.json" "$RUNNER_TEMP/progress-evidence/replay"
+      - name: Unchanged original model and actual negative kernel certificate
+        run: |
+          python - <<'PYGOALS'
+          import os
+          from pathlib import Path
+          (Path(os.environ['RUNNER_TEMP'])/'progress-goals.json').write_text('[4]')
+          PYGOALS
+          python -m research.progress_supervisor_v1 synthesize examples/action_shield_v1/model.json "$RUNNER_TEMP/progress-goals.json" "$RUNNER_TEMP/progress-evidence/original-certificate.json"
+          python -m research.progress_supervisor_v1 check examples/action_shield_v1/model.json "$RUNNER_TEMP/progress-evidence/original-certificate.json" "$RUNNER_TEMP/progress-evidence/original-model"
+      - name: Real process session and independent receiving replay
+        run: |
+          set -euo pipefail
+          printf '%s\n' '{"action":5}' '{"action":4}' 'not JSON' '{"action":65535}' | python -m research.progress_supervisor_v1 serve "$RUNNER_TEMP/progress-evidence/process" > "$RUNNER_TEMP/progress-evidence/process-session.jsonl"
+          python -m research.progress_supervisor_v1 replay "$RUNNER_TEMP/progress-evidence/process/capture.json" "$RUNNER_TEMP/progress-evidence/process-replay"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: progress-supervisor-evidence
+          path: |
+            ${{ runner.temp }}/progress-evidence/**/*.json
+            ${{ runner.temp }}/progress-evidence/**/*.lean
+            ${{ runner.temp }}/progress-evidence/*.jsonl
+          retention-days: 14
+  checked-progress:
+    needs: [matrix, tests, evidence]
+    if: ${{ always() && github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Every required job must succeed
+        env:
+          MATRIX_RESULT: ${{ needs.matrix.result }}
+          TEST_RESULT: ${{ needs.tests.result }}
+          EVIDENCE_RESULT: ${{ needs.evidence.result }}
+        run: |
+          test "$MATRIX_RESULT" = success
+          test "$TEST_RESULT" = success
+          test "$EVIDENCE_RESULT" = success
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: progress-supervisor-tests-*
+          path: ${{ runner.temp }}/progress-test-reports
+      - name: Check complete, unique, zero-skip reports and publish combined results
+        run: python -m research.progress_supervisor_v1.ci aggregate "$RUNNER_TEMP/progress-test-reports" "$RUNNER_TEMP/progress-qualification"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: progress-supervisor-qualification
+          path: ${{ runner.temp }}/progress-qualification/
+          retention-days: 14

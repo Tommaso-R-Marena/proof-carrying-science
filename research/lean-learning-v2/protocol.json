@@ -1,0 +1,20 @@
+{
+  "beam": 4,
+  "budget": 96,
+  "depth": 18,
+  "epochs": 35,
+  "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+  "format": "pcs-prover-protocol-v1",
+  "limitations": [
+    "public authored elementary tasks",
+    "no external project transfer",
+    "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+  ],
+  "rl_episodes_per_generation": 12,
+  "seeds": [
+    17,
+    31,
+    47
+  ],
+  "selection": "validation verified count, then fewer expansions; no authority promotion"
+}

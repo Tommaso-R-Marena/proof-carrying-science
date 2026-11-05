@@ -1,0 +1,170 @@
+{
+  "candidate_commit": "45c22c90994c72ee9da8ef4f75f8ec9081ad0697",
+  "independent_identity_cases": 12,
+  "matches": 12,
+  "unexpected_accepts": [],
+  "production_authority": false,
+  "test_scope": "Actual file/Git controls; imported gate executes against isolated snapshot, no verifier authorization is mocked.",
+  "results": [
+    {
+      "mutation": "positive",
+      "expected_pass": true,
+      "actual_pass": true,
+      "matches_expectation": true,
+      "failures": [],
+      "files_checked": 1992,
+      "additional_files_checked": 1
+    },
+    {
+      "mutation": "gate_and_manifest",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor differs from committed Git HEAD",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "contract_and_manifest",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor pinned identity differs: pcs/receipt_contract_v06.py",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "test_and_manifest",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor pinned identity differs: tests/test_intake_verify_v06.py",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "missing_gate",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor path allowlist differs",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "formal_replacement",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor path allowlist differs",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "parent_path",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor path allowlist differs",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "nested_duplicate",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: duplicate successor key: old_sha256",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "untracked_manifest",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor must be a tracked regular file",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "symlink_manifest",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor must be a tracked regular file",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "symlink_profile",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source successor invalid: successor predecessor profile bytes differ",
+        "source identity differs: pcs/intake_verify_v06.py",
+        "source identity differs: research/integration_v1/source_gate.py",
+        "source identity differs: tests/test_intake_verify_v06.py"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 0
+    },
+    {
+      "mutation": "unchanged_formal_source",
+      "expected_pass": false,
+      "actual_pass": false,
+      "matches_expectation": true,
+      "failures": [
+        "source identity differs: formal/PCS/V2/ProofGatedPolicy.lean"
+      ],
+      "files_checked": 1992,
+      "additional_files_checked": 1
+    }
+  ]
+}

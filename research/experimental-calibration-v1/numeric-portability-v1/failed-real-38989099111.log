@@ -1,0 +1,779 @@
+﻿2026-10-17T01:02:46.9281060Z Current runner version: '2.337.0'
+2026-10-17T01:02:46.9347309Z ##[group]Runner Image Provisioner
+2026-10-17T01:02:46.9348354Z Hosted Compute Agent
+2026-10-17T01:02:46.9348948Z Version: 20261012.601
+2026-10-17T01:02:46.9349626Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-17T01:02:46.9350383Z Build Date: 2026-10-12T17:48:21Z
+2026-10-17T01:02:46.9351112Z Worker ID: {beb2bf86-44d5-4a6c-856c-bf495a3bad5e}
+2026-10-17T01:02:46.9352335Z Region: northcentralus
+2026-10-17T01:02:46.9352926Z Cloud: Azure
+2026-10-17T01:02:46.9353442Z ##[endgroup]
+2026-10-17T01:02:46.9355353Z ##[group]Operating System
+2026-10-17T01:02:46.9356093Z Ubuntu
+2026-10-17T01:02:46.9356677Z 24.04.5
+2026-10-17T01:02:46.9357187Z LTS
+2026-10-17T01:02:46.9357685Z ##[endgroup]
+2026-10-17T01:02:46.9358371Z ##[group]Runner Image
+2026-10-17T01:02:46.9359007Z Image: ubuntu-24.04
+2026-10-17T01:02:46.9359616Z Version: 20261012.334.1
+2026-10-17T01:02:46.9361045Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-17T01:02:46.9363325Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-17T01:02:46.9364310Z ##[endgroup]
+2026-10-17T01:02:46.9365479Z ##[group]GITHUB_TOKEN Permissions
+2026-10-17T01:02:46.9367837Z Contents: read
+2026-10-17T01:02:46.9368503Z Metadata: read
+2026-10-17T01:02:46.9369142Z ##[endgroup]
+2026-10-17T01:02:46.9372118Z Secret source: Actions
+2026-10-17T01:02:46.9373180Z Cache mode: write
+2026-10-17T01:02:46.9374256Z Prepare workflow directory
+2026-10-17T01:02:46.9741137Z Prepare all required actions
+2026-10-17T01:02:46.9792029Z Getting action download info
+2026-10-17T01:02:47.2379185Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-17T01:02:47.7036038Z Download action repository 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+2026-10-17T01:02:47.8287112Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-17T01:02:48.0604064Z Complete job name: real-analysis-bridge
+2026-10-17T01:02:48.1569487Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-17T01:02:48.1570656Z with:
+2026-10-17T01:02:48.1571179Z   ref: 57f870e67c5cf2a96254df9f0e5cd532b9355792
+2026-10-17T01:02:48.1572153Z   persist-credentials: false
+2026-10-17T01:02:48.1572810Z   repository: Tommaso-R-Marena/proof-carrying-science
+2026-10-17T01:02:48.1577279Z   token: ***
+2026-10-17T01:02:48.1577747Z   ssh-strict: true
+2026-10-17T01:02:48.1578214Z   ssh-user: git
+2026-10-17T01:02:48.1578665Z   clean: true
+2026-10-17T01:02:48.1579143Z   sparse-checkout-cone-mode: true
+2026-10-17T01:02:48.1579711Z   fetch-depth: 1
+2026-10-17T01:02:48.1580201Z   fetch-tags: false
+2026-10-17T01:02:48.1580697Z   show-progress: true
+2026-10-17T01:02:48.1581171Z   lfs: false
+2026-10-17T01:02:48.1581846Z   submodules: false
+2026-10-17T01:02:48.1582387Z   set-safe-directory: true
+2026-10-17T01:02:48.1582934Z   allow-unsafe-pr-checkout: false
+2026-10-17T01:02:48.1583810Z ##[endgroup]
+2026-10-17T01:02:48.2638607Z Syncing repository: Tommaso-R-Marena/proof-carrying-science
+2026-10-17T01:02:48.2642071Z ##[group]Getting Git version info
+2026-10-17T01:02:48.2643750Z Working directory is '/home/runner/work/proof-carrying-science/proof-carrying-science'
+2026-10-17T01:02:48.2646038Z [command]/usr/bin/git version
+2026-10-17T01:02:48.4156763Z git version 2.55.0
+2026-10-17T01:02:48.4180167Z ##[endgroup]
+2026-10-17T01:02:48.4192398Z Temporarily overriding HOME='/home/runner/work/_temp/7fc6cca4-7367-4168-bdda-5eaab0684adc' before making global git config changes
+2026-10-17T01:02:48.4195321Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-17T01:02:48.4199274Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/proof-carrying-science/proof-carrying-science
+2026-10-17T01:02:48.4467823Z Deleting the contents of '/home/runner/work/proof-carrying-science/proof-carrying-science'
+2026-10-17T01:02:48.4471905Z ##[group]Determining repository object format
+2026-10-17T01:02:48.4473979Z ##[endgroup]
+2026-10-17T01:02:48.4475193Z ##[group]Initializing the repository
+2026-10-17T01:02:48.4479625Z [command]/usr/bin/git init /home/runner/work/proof-carrying-science/proof-carrying-science
+2026-10-17T01:02:48.5073768Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-17T01:02:48.5076492Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-17T01:02:48.5078217Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-17T01:02:48.5079393Z hint: call:
+2026-10-17T01:02:48.5080222Z hint:
+2026-10-17T01:02:48.5081860Z hint: 	git config --global init.defaultBranch <name>
+2026-10-17T01:02:48.5083285Z hint:
+2026-10-17T01:02:48.5084229Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-17T01:02:48.5085709Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-17T01:02:48.5086880Z hint:
+2026-10-17T01:02:48.5087894Z hint: 	git branch -m <name>
+2026-10-17T01:02:48.5088669Z hint:
+2026-10-17T01:02:48.5089405Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-17T01:02:48.5090760Z Initialized empty Git repository in /home/runner/work/proof-carrying-science/proof-carrying-science/.git/
+2026-10-17T01:02:48.5093918Z [command]/usr/bin/git remote add origin https://github.com/Tommaso-R-Marena/proof-carrying-science
+2026-10-17T01:02:48.6558207Z ##[endgroup]
+2026-10-17T01:02:48.6559287Z ##[group]Disabling automatic garbage collection
+2026-10-17T01:02:48.6563225Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-17T01:02:48.6996421Z ##[endgroup]
+2026-10-17T01:02:48.6998398Z ##[group]Setting up auth
+2026-10-17T01:02:48.6999913Z Removing SSH command configuration
+2026-10-17T01:02:48.7004521Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-17T01:02:48.7044931Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-17T01:02:48.9138801Z Removing HTTP extra header
+2026-10-17T01:02:48.9145593Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-17T01:02:48.9187718Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-17T01:02:48.9453604Z Removing includeIf entries pointing to credentials config files
+2026-10-17T01:02:48.9461039Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-17T01:02:48.9511182Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-17T01:02:48.9785087Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-17T01:02:48.9836587Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git.path /home/runner/work/_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:48.9889963Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:48.9940047Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:48.9987645Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:49.0100923Z ##[endgroup]
+2026-10-17T01:02:49.0104157Z ##[group]Fetching the repository
+2026-10-17T01:02:49.0107547Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 57f870e67c5cf2a96254df9f0e5cd532b9355792
+2026-10-17T01:02:52.0369338Z From https://github.com/Tommaso-R-Marena/proof-carrying-science
+2026-10-17T01:02:52.0371732Z  * branch            57f870e67c5cf2a96254df9f0e5cd532b9355792 -> FETCH_HEAD
+2026-10-17T01:02:52.0390127Z [command]/usr/bin/git rev-parse --verify --quiet 57f870e67c5cf2a96254df9f0e5cd532b9355792^{object}
+2026-10-17T01:02:52.0414515Z 57f870e67c5cf2a96254df9f0e5cd532b9355792
+2026-10-17T01:02:52.0420455Z ##[endgroup]
+2026-10-17T01:02:52.0421762Z ##[group]Determining the checkout info
+2026-10-17T01:02:52.0422911Z ##[endgroup]
+2026-10-17T01:02:52.0427741Z [command]/usr/bin/git sparse-checkout disable
+2026-10-17T01:02:52.0663999Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-17T01:02:52.0710261Z ##[group]Checking out the ref
+2026-10-17T01:02:52.0715350Z [command]/usr/bin/git checkout --progress --force 57f870e67c5cf2a96254df9f0e5cd532b9355792
+2026-10-17T01:02:53.1523874Z Updating files:  92% (3917/4251)
+2026-10-17T01:02:53.1543549Z Updating files:  93% (3954/4251)
+2026-10-17T01:02:53.1570168Z Updating files:  94% (3996/4251)
+2026-10-17T01:02:53.1597672Z Updating files:  95% (4039/4251)
+2026-10-17T01:02:53.1622473Z Updating files:  96% (4081/4251)
+2026-10-17T01:02:53.1647811Z Updating files:  97% (4124/4251)
+2026-10-17T01:02:53.1688746Z Updating files:  98% (4166/4251)
+2026-10-17T01:02:53.1705732Z Updating files:  99% (4209/4251)
+2026-10-17T01:02:53.1706292Z Updating files: 100% (4251/4251)
+2026-10-17T01:02:53.1706764Z Updating files: 100% (4251/4251), done.
+2026-10-17T01:02:53.1763108Z Note: switching to '57f870e67c5cf2a96254df9f0e5cd532b9355792'.
+2026-10-17T01:02:53.1763736Z 
+2026-10-17T01:02:53.1764087Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-17T01:02:53.1764934Z changes and commit them, and you can discard any commits you make in this
+2026-10-17T01:02:53.1765464Z state without impacting any branches by switching back to a branch.
+2026-10-17T01:02:53.1765758Z 
+2026-10-17T01:02:53.1765955Z If you want to create a new branch to retain commits you create, you may
+2026-10-17T01:02:53.1766464Z do so (now or later) by using -c with the switch command. Example:
+2026-10-17T01:02:53.1766778Z 
+2026-10-17T01:02:53.1766913Z   git switch -c <new-branch-name>
+2026-10-17T01:02:53.1767102Z 
+2026-10-17T01:02:53.1767212Z Or undo this operation with:
+2026-10-17T01:02:53.1767373Z 
+2026-10-17T01:02:53.1767464Z   git switch -
+2026-10-17T01:02:53.1767627Z 
+2026-10-17T01:02:53.1767851Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-17T01:02:53.1768175Z 
+2026-10-17T01:02:53.1768522Z HEAD is now at 57f870e Merge 32a752c9f2fd2133343f8a47f04e5789959b68e9 into c9f89ff8c44a0a7225525f4ab50fa87cb3855fe2
+2026-10-17T01:02:53.1831993Z ##[endgroup]
+2026-10-17T01:02:53.1886770Z [command]/usr/bin/git log -1 --format=%H
+2026-10-17T01:02:53.1920307Z 57f870e67c5cf2a96254df9f0e5cd532b9355792
+2026-10-17T01:02:53.1929566Z ##[group]Removing auth
+2026-10-17T01:02:53.1930038Z Removing SSH command configuration
+2026-10-17T01:02:53.1933991Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-17T01:02:53.1977090Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-17T01:02:53.2230740Z Removing HTTP extra header
+2026-10-17T01:02:53.2236194Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-17T01:02:53.2280365Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-17T01:02:53.2536152Z Removing includeIf entries pointing to credentials config files
+2026-10-17T01:02:53.2539955Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-17T01:02:53.2575087Z includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git.path
+2026-10-17T01:02:53.2576705Z includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path
+2026-10-17T01:02:53.2577834Z includeif.gitdir:/github/workspace/.git.path
+2026-10-17T01:02:53.2578463Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-17T01:02:53.2586755Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git.path
+2026-10-17T01:02:53.2624902Z /home/runner/work/_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:53.2638135Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-a701c45b\-cac1\-4a0c\-bda4\-e2b737f65f50\.config
+2026-10-17T01:02:53.2680856Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path
+2026-10-17T01:02:53.2710459Z /home/runner/work/_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:53.2720435Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/proof-carrying-science/proof-carrying-science/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-a701c45b\-cac1\-4a0c\-bda4\-e2b737f65f50\.config
+2026-10-17T01:02:53.2763899Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-17T01:02:53.2797368Z /github/runner_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:53.2809857Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-a701c45b\-cac1\-4a0c\-bda4\-e2b737f65f50\.config
+2026-10-17T01:02:53.2853405Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-17T01:02:53.2884725Z /github/runner_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config
+2026-10-17T01:02:53.2893664Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-a701c45b\-cac1\-4a0c\-bda4\-e2b737f65f50\.config
+2026-10-17T01:02:53.2936050Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-17T01:02:53.3179201Z Removing credentials config '/home/runner/work/_temp/git-credentials-a701c45b-cac1-4a0c-bda4-e2b737f65f50.config'
+2026-10-17T01:02:53.3189696Z ##[endgroup]
+2026-10-17T01:02:53.3464290Z ##[group]Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+2026-10-17T01:02:53.3464731Z with:
+2026-10-17T01:02:53.3464945Z   python-version: 3.12.14
+2026-10-17T01:02:53.3465196Z   check-latest: false
+2026-10-17T01:02:53.3467885Z   token: ***
+2026-10-17T01:02:53.3468107Z   update-environment: true
+2026-10-17T01:02:53.3468391Z   allow-prereleases: false
+2026-10-17T01:02:53.3468630Z   freethreaded: false
+2026-10-17T01:02:53.3468848Z ##[endgroup]
+2026-10-17T01:02:53.4680543Z ##[group]Installed versions
+2026-10-17T01:02:53.4904699Z Version 3.12.14 was not found in the local cache
+2026-10-17T01:02:54.2547980Z Version 3.12.14 is available for downloading
+2026-10-17T01:02:54.2549789Z Download from "https://github.com/actions/python-versions/releases/download/3.12.14-31661455385/python-3.12.14-linux-24.04-x64.tar.gz"
+2026-10-17T01:02:55.1125821Z Extract downloaded archive
+2026-10-17T01:02:55.1260463Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/beff88ea-f561-40a3-8e9c-7d7ada250ead -f /home/runner/work/_temp/feeb3451-92fb-4299-8d9c-43fdfcb310e3
+2026-10-17T01:02:57.0520992Z Execute installation script
+2026-10-17T01:02:57.0627238Z Check if Python hostedtoolcache folder exist...
+2026-10-17T01:02:57.0628108Z Create Python 3.12.14 folder
+2026-10-17T01:02:57.0640891Z Copy Python binaries to hostedtoolcache folder
+2026-10-17T01:02:57.5463377Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+2026-10-17T01:02:57.5510183Z Upgrading pip...
+2026-10-17T01:03:00.1868416Z Collecting pip
+2026-10-17T01:03:00.2198961Z Downloading pip-26.2.1-py3-none-any.whl.metadata (4.6 kB)
+2026-10-17T01:03:00.2599180Z Downloading pip-26.2.1-py3-none-any.whl (1.8 MB)
+2026-10-17T01:03:00.2911873Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 91.8 MB/s eta 0:00:00
+2026-10-17T01:03:00.2912689Z 
+2026-10-17T01:03:00.3174464Z Installing collected packages: pip
+2026-10-17T01:03:00.3176220Z Attempting uninstall: pip
+2026-10-17T01:03:00.3199967Z Found existing installation: pip 25.0.1
+2026-10-17T01:03:00.3570106Z Uninstalling pip-25.0.1:
+2026-10-17T01:03:00.3632168Z Successfully uninstalled pip-25.0.1
+2026-10-17T01:03:01.3415704Z Successfully installed pip-26.2.1
+2026-10-17T01:03:01.4267015Z Create complete file
+2026-10-17T01:03:01.4307813Z Successfully set up CPython (3.12.14)
+2026-10-17T01:03:01.4309166Z ##[endgroup]
+2026-10-17T01:03:01.4508014Z ##[group]Run set -euo pipefail
+2026-10-17T01:03:01.4508432Z [36;1mset -euo pipefail[0m
+2026-10-17T01:03:01.4508831Z [36;1mtest "$(git rev-parse HEAD)" = '57f870e67c5cf2a96254df9f0e5cd532b9355792'[0m
+2026-10-17T01:03:01.4509272Z [36;1msource scripts/activate_lean_428.sh[0m
+2026-10-17T01:03:01.4509566Z [36;1mlake exe cache get[0m
+2026-10-17T01:03:01.4509819Z [36;1mbash scripts/verify_lean_real.sh[0m
+2026-10-17T01:03:01.4510545Z [36;1mpython -m pcs.experimental.prover.mathlib_cli_v4 "∀ (f : Nat → Nat) (s t : Set Nat), f ⁻¹' (s ∩ t) = (f ⁻¹' s) ∩ (f ⁻¹' t)" --output "$RUNNER_TEMP/mathlib-multistep.json"[0m
+2026-10-17T01:03:01.4511259Z [36;1mpython - <<'PYMATHLIB'[0m
+2026-10-17T01:03:01.4511831Z [36;1mimport json, os[0m
+2026-10-17T01:03:01.4512084Z [36;1mfrom pathlib import Path[0m
+2026-10-17T01:03:01.4512557Z [36;1mresult = json.loads((Path(os.environ['RUNNER_TEMP']) / 'mathlib-multistep.json').read_text())[0m
+2026-10-17T01:03:01.4513208Z [36;1massert result['status'] == 'verified' and result['pcs_authority'] is False[0m
+2026-10-17T01:03:01.4513687Z [36;1massert len(result['result']['receipt']['actions']) >= 3[0m
+2026-10-17T01:03:01.4514025Z [36;1mPYMATHLIB[0m
+2026-10-17T01:03:01.5606368Z shell: /usr/bin/bash -e {0}
+2026-10-17T01:03:01.5606768Z env:
+2026-10-17T01:03:01.5607143Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:03:01.5607787Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-17T01:03:01.5608415Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:03:01.5608996Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:03:01.5609557Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:03:01.5610109Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-17T01:03:01.5610586Z ##[endgroup]
+2026-10-17T01:03:01.6156629Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-10-17T01:03:01.6157574Z                                  Dload  Upload   Total   Spent    Left  Speed
+2026-10-17T01:03:01.6158012Z 
+2026-10-17T01:03:01.6842051Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-17T01:03:01.6842825Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-17T01:03:02.4866645Z 
+2026-10-17T01:03:03.5106342Z  40  496M   40  200M    0     0   230M      0  0:00:02 --:--:--  0:00:02  230M
+2026-10-17T01:03:03.9112479Z  80  496M   80  400M    0     0   211M      0  0:00:02  0:00:01  0:00:01  195M
+2026-10-17T01:03:03.9113872Z 100  496M  100  496M    0     0   216M      0  0:00:02  0:00:02 --:--:--  208M
+2026-10-17T01:03:09.4839089Z Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)
+2026-10-17T01:03:09.5323104Z info: mathlib: cloning https://github.com/leanprover-community/mathlib4.git
+2026-10-17T01:03:40.7555448Z info: mathlib: checking out revision '8f9d9cff6bd728b17a24e163c9402775d9e6a365'
+2026-10-17T01:03:43.3084512Z info: plausible: cloning https://github.com/leanprover-community/plausible
+2026-10-17T01:03:43.5925752Z info: plausible: checking out revision '55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3'
+2026-10-17T01:03:43.6068005Z info: LeanSearchClient: cloning https://github.com/leanprover-community/LeanSearchClient
+2026-10-17T01:03:43.8832701Z info: LeanSearchClient: checking out revision 'c5d5b8fe6e5158def25cd28eb94e4141ad97c843'
+2026-10-17T01:03:43.8946962Z info: importGraph: cloning https://github.com/leanprover-community/import-graph
+2026-10-17T01:03:44.2206845Z info: importGraph: checking out revision '85b59af46828c029a9168f2f9c35119bd0721e6e'
+2026-10-17T01:03:44.2372809Z info: proofwidgets: cloning https://github.com/leanprover-community/ProofWidgets4
+2026-10-17T01:03:44.7929671Z info: proofwidgets: checking out revision 'be3b2e63b1bbf496c478cef98b86972a37c1417d'
+2026-10-17T01:03:45.6948793Z info: aesop: cloning https://github.com/leanprover-community/aesop
+2026-10-17T01:03:46.5918407Z info: aesop: checking out revision 'f642a64c76df8ba9cb53dba3b919425a0c2aeaf1'
+2026-10-17T01:03:46.6221315Z info: Qq: cloning https://github.com/leanprover-community/quote4
+2026-10-17T01:03:47.0015700Z info: Qq: checking out revision 'b8f98e9087e02c8553945a2c5abf07cec8e798c3'
+2026-10-17T01:03:47.0159016Z info: batteries: cloning https://github.com/leanprover-community/batteries
+2026-10-17T01:03:50.7678844Z info: batteries: checking out revision '495c008c3e3f4fb4256ff5582ddb3abf3198026f'
+2026-10-17T01:03:50.8091811Z info: Cli: cloning https://github.com/leanprover/lean4-cli
+2026-10-17T01:03:51.0899407Z info: Cli: checking out revision '4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e'
+2026-10-17T01:03:51.5092823Z ✔ [4/22] Built Cache.Init (383ms)
+2026-10-17T01:03:51.7083342Z ✔ [5/22] Built Cache.Lean (587ms)
+2026-10-17T01:03:51.7084797Z ✔ [6/22] Built Cache.Init:c.o (198ms)
+2026-10-17T01:03:52.0113077Z ✔ [7/22] Built Batteries.Data.String.Basic (546ms)
+2026-10-17T01:03:52.0113841Z ✔ [8/22] Built Cache.Lean:c.o (249ms)
+2026-10-17T01:03:52.1087483Z ✔ [9/22] Built Batteries.Data.String.Basic:c.o (158ms)
+2026-10-17T01:03:52.6113063Z ✔ [10/22] Built Batteries.Data.Array.Match (1.2s)
+2026-10-17T01:03:53.0116378Z ✔ [11/22] Built Batteries.Data.Array.Match:c.o (406ms)
+2026-10-17T01:03:53.1118606Z ✔ [12/22] Built Batteries.Data.String.Matcher (504ms)
+2026-10-17T01:03:53.4125261Z ✔ [13/22] Built Batteries.Data.String.Matcher:c.o (354ms)
+2026-10-17T01:03:53.7128880Z ✔ [14/22] Built Cache.IO (1.9s)
+2026-10-17T01:03:54.5149105Z ✔ [15/22] Built Cache.Hashing (804ms)
+2026-10-17T01:03:55.4162382Z ✔ [16/22] Built Cache.Hashing:c.o (924ms)
+2026-10-17T01:03:56.0181666Z ✔ [17/22] Built Cache.IO:c.o (2.4s)
+2026-10-17T01:03:56.4194537Z ✔ [18/22] Built Cache.Requests (1.0s)
+2026-10-17T01:03:57.3207399Z ✔ [19/22] Built Cache.Main (915ms)
+2026-10-17T01:03:58.0206816Z ✔ [20/22] Built Cache.Main:c.o (723ms)
+2026-10-17T01:03:58.4211362Z ✔ [21/22] Built Cache.Requests:c.o (1.0s)
+2026-10-17T01:03:59.0226080Z ✔ [22/22] Built cache:exe (640ms)
+2026-10-17T01:04:01.7358600Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-10-17T01:04:01.7359544Z                                  Dload  Upload   Total   Spent    Left  Speed
+2026-10-17T01:04:01.7360058Z 
+2026-10-17T01:04:01.7360334Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-17T01:04:01.7361026Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-17T01:04:01.7361799Z 
+2026-10-17T01:04:01.7362135Z 100 1125k  100 1125k    0     0  6607k      0 --:--:-- --:--:-- --:--:-- 6607k
+2026-10-17T01:04:01.7363670Z 
+2026-10-17T01:04:03.1311931Z installing leantar 0.1.16
+2026-10-17T01:04:03.1312946Z Fetching ProofWidgets cloud release... done!
+2026-10-17T01:04:03.1313786Z Current branch: HEAD
+2026-10-17T01:04:03.1314657Z Using cache (Azure) from origin: leanprover-community/mathlib4
+2026-10-17T01:04:03.1316003Z Attempting to download 8010 file(s) from leanprover-community/mathlib4 cache
+2026-10-17T01:04:04.2883250Z 
+2026-10-17T01:04:04.3896166Z Downloaded: 1 file(s) [attempted 1/8010 = 0%, 17 KB/s]
+2026-10-17T01:04:04.4902459Z Downloaded: 240 file(s) [attempted 240/8010 = 2%, 6809 KB/s]
+2026-10-17T01:04:04.5907792Z Downloaded: 524 file(s) [attempted 524/8010 = 6%, 4581 KB/s]
+2026-10-17T01:04:04.6905931Z Downloaded: 816 file(s) [attempted 816/8010 = 10%, 1095 KB/s]
+2026-10-17T01:04:04.7913054Z Downloaded: 1100 file(s) [attempted 1100/8010 = 13%, 780 KB/s]
+2026-10-17T01:04:04.8918684Z Downloaded: 1376 file(s) [attempted 1376/8010 = 17%, 1784 KB/s]
+2026-10-17T01:04:04.9927352Z Downloaded: 1653 file(s) [attempted 1653/8010 = 20%, 2158 KB/s]
+2026-10-17T01:04:05.0932083Z Downloaded: 1892 file(s) [attempted 1892/8010 = 23%, 3822 KB/s]
+2026-10-17T01:04:05.1927093Z Downloaded: 2131 file(s) [attempted 2131/8010 = 26%, 454 KB/s]
+2026-10-17T01:04:05.2926348Z Downloaded: 2379 file(s) [attempted 2379/8010 = 29%, 1240 KB/s]
+2026-10-17T01:04:05.3924652Z Downloaded: 2633 file(s) [attempted 2633/8010 = 32%, 1599 KB/s]
+2026-10-17T01:04:05.4925871Z Downloaded: 2871 file(s) [attempted 2871/8010 = 35%, 1529 KB/s]
+2026-10-17T01:04:05.5938798Z Downloaded: 3120 file(s) [attempted 3120/8010 = 38%, 2292 KB/s]
+2026-10-17T01:04:05.6935586Z Downloaded: 3397 file(s) [attempted 3397/8010 = 42%, 343 KB/s]
+2026-10-17T01:04:05.7944322Z Downloaded: 3664 file(s) [attempted 3664/8010 = 45%, 3999 KB/s]
+2026-10-17T01:04:05.8958853Z Downloaded: 3934 file(s) [attempted 3934/8010 = 49%, 3347 KB/s]
+2026-10-17T01:04:05.9964732Z Downloaded: 4203 file(s) [attempted 4203/8010 = 52%, 815 KB/s]
+2026-10-17T01:04:06.0964062Z Downloaded: 4463 file(s) [attempted 4463/8010 = 55%, 3040 KB/s]
+2026-10-17T01:04:06.1967449Z Downloaded: 4719 file(s) [attempted 4719/8010 = 58%, 1441 KB/s]
+2026-10-17T01:04:06.2974388Z Downloaded: 4974 file(s) [attempted 4974/8010 = 62%, 2382 KB/s]
+2026-10-17T01:04:06.3974279Z Downloaded: 5223 file(s) [attempted 5223/8010 = 65%, 868 KB/s]
+2026-10-17T01:04:06.4993327Z Downloaded: 5494 file(s) [attempted 5494/8010 = 68%, 1873 KB/s]
+2026-10-17T01:04:06.6002583Z Downloaded: 5750 file(s) [attempted 5750/8010 = 71%, 2162 KB/s]
+2026-10-17T01:04:06.7012243Z Downloaded: 5996 file(s) [attempted 5996/8010 = 74%, 2669 KB/s]
+2026-10-17T01:04:06.8016549Z Downloaded: 6256 file(s) [attempted 6256/8010 = 78%, 987 KB/s]
+2026-10-17T01:04:06.9014082Z Downloaded: 6514 file(s) [attempted 6514/8010 = 81%, 1878 KB/s]
+2026-10-17T01:04:07.0013924Z Downloaded: 6768 file(s) [attempted 6768/8010 = 84%, 2173 KB/s]
+2026-10-17T01:04:07.1014149Z Downloaded: 7027 file(s) [attempted 7027/8010 = 87%, 3416 KB/s]
+2026-10-17T01:04:07.2030570Z Downloaded: 7307 file(s) [attempted 7307/8010 = 91%, 6886 KB/s]
+2026-10-17T01:04:07.3031347Z Downloaded: 7569 file(s) [attempted 7569/8010 = 94%, 595 KB/s]
+2026-10-17T01:04:07.5044256Z Downloaded: 7832 file(s) [attempted 7832/8010 = 97%, 1105 KB/s]
+2026-10-17T01:04:07.7944746Z Downloaded: 8007 file(s) [attempted 8007/8010 = 99%, 943 KB/s]
+2026-10-17T01:04:07.7979256Z Downloaded: 8009 file(s) [attempted 8009/8010 = 99%, 555 KB/s]
+2026-10-17T01:04:07.7980069Z Downloaded: 8010 file(s) [attempted 8010/8010 = 100%, 555 KB/s]
+2026-10-17T01:04:29.4978081Z Decompressing 8007 file(s) (3 already decompressed)
+2026-10-17T01:04:29.4979180Z Decompressed in 21122 ms
+2026-10-17T01:04:29.4980065Z Completed successfully!
+2026-10-17T01:04:35.2243152Z ✔ [8026/8088] Built PCS.V2.Json (1.6s)
+2026-10-17T01:04:35.5243236Z ✔ [8028/8088] Built PCS.Core (1.9s)
+2026-10-17T01:04:40.0425581Z ✔ [8029/8088] Built PCSReal.Transport (6.1s)
+2026-10-17T01:04:40.9432835Z ✔ [8030/8088] Built PCS.Decision (832ms)
+2026-10-17T01:04:40.9462495Z ✔ [8031/8088] Built PCSReal.Calibration (5.7s)
+2026-10-17T01:04:43.7453190Z ✔ [8032/8088] Built PCSReal.TransportTrace (2.9s)
+2026-10-17T01:04:43.9472908Z ✔ [8033/8088] Built PCSReal.TransportControls (2.0s)
+2026-10-17T01:04:44.3449058Z ✔ [8034/8088] Built PCS.Refinement (601ms)
+2026-10-17T01:04:47.0513152Z ✔ [8035/8088] Built PCSReal.TransportTraceControls (2.7s)
+2026-10-17T01:04:47.3555901Z ✔ [8036/8088] Built PCSReal.CalibrationControls (3.5s)
+2026-10-17T01:04:47.7516097Z ✔ [8037/8088] Built PCS.V2.JsonRoundtrip (12s)
+2026-10-17T01:04:47.9535636Z ✔ [8038/8088] Built PCS.Normalization (551ms)
+2026-10-17T01:04:48.5553185Z ✔ [8039/8088] Built PCS.Normalized (659ms)
+2026-10-17T01:04:48.7562867Z ✔ [8040/8088] Built PCS.DecisionExtraction (1.0s)
+2026-10-17T01:04:48.7582477Z ✔ [8041/8088] Built PCS.V2.FIPS1804Spec (15s)
+2026-10-17T01:04:50.1585597Z ✔ [8042/8088] Built PCS.V2.Hex (1.4s)
+2026-10-17T01:04:50.7579583Z ✔ [8043/8088] Built PCS.SerializedBridge (543ms)
+2026-10-17T01:04:51.8585817Z ℹ [8044/8088] Built PCSReal.TransportAudit (4.7s)
+2026-10-17T01:04:51.8602970Z info: formal/real/PCSReal/TransportAudit.lean:3:0: 'PCSReal.Transport.of_detailed_balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8633129Z info: formal/real/PCSReal/TransportAudit.lean:4:0: 'PCSReal.Transport.step_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8663482Z info: formal/real/PCSReal/TransportAudit.lean:5:0: 'PCSReal.Transport.step_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8692798Z info: formal/real/PCSReal/TransportAudit.lean:6:0: 'PCSReal.Transport.step_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8722775Z info: formal/real/PCSReal/TransportAudit.lean:7:0: 'PCSReal.Transport.amount_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8724882Z info: formal/real/PCSReal/TransportAudit.lean:8:0: 'PCSReal.Transport.row_quadratic_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8752959Z info: formal/real/PCSReal/TransportAudit.lean:9:0: 'PCSReal.Transport.quadratic_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8782937Z info: formal/real/PCSReal/TransportAudit.lean:10:0: 'PCSReal.Transport.amount_all_times' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8812895Z info: formal/real/PCSReal/TransportAudit.lean:11:0: 'PCSReal.Transport.nonnegative_all_times' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8814792Z info: formal/real/PCSReal/TransportAudit.lean:12:0: 'PCSReal.Transport.bounds_all_times' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8842961Z info: formal/real/PCSReal/TransportAudit.lean:13:0: 'PCSReal.Transport.quadratic_all_times' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8872811Z info: formal/real/PCSReal/TransportAudit.lean:14:0: 'PCSReal.Transport.all_times_contract' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8902886Z info: formal/real/PCSReal/TransportAudit.lean:15:0: 'PCSReal.Transport.check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8904749Z info: formal/real/PCSReal/TransportAudit.lean:16:0: 'PCSReal.Transport.rational_certificate_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8932900Z info: formal/real/PCSReal/TransportAudit.lean:17:0: 'PCSReal.TransportControls.uniform_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8963015Z info: formal/real/PCSReal/TransportAudit.lean:18:0: 'PCSReal.TransportControls.uniform_all_times' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8992836Z info: formal/real/PCSReal/TransportAudit.lean:19:0: 'PCSReal.TransportControls.negative_weight_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.8995710Z info: formal/real/PCSReal/TransportAudit.lean:20:0: 'PCSReal.TransportControls.nonconservative_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.9008220Z info: formal/real/PCSReal/TransportAudit.lean:21:0: 'PCSReal.TransportControls.wrong_row_sum_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.9010594Z info: formal/real/PCSReal/TransportAudit.lean:22:0: 'PCSReal.TransportControls.zero_volume_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:51.9013225Z info: formal/real/PCSReal/TransportAudit.lean:23:0: 'PCSReal.TransportControls.oscillation_preserves_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.2622850Z ⚠ [8045/8088] Built PCS.V2.SHA256 (1.6s)
+2026-10-17T01:04:52.2642244Z warning: PCS/V2/SHA256.lean:137:17: unused variable `hs`
+2026-10-17T01:04:52.2642701Z 
+2026-10-17T01:04:52.2643087Z Note: This linter can be disabled with `set_option linter.unusedVariables false`
+2026-10-17T01:04:52.6642948Z ℹ [8046/8088] Built PCSReal.TransportTraceAudit (4.0s)
+2026-10-17T01:04:52.6672945Z info: formal/real/PCSReal/TransportTraceAudit.lean:3:0: 'PCSReal.TransportTrace.bounded_recurrence_unique' depends on axioms: [propext, Quot.sound]
+2026-10-17T01:04:52.6683239Z info: formal/real/PCSReal/TransportTraceAudit.lean:4:0: 'PCSReal.TransportTrace.check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6685370Z info: formal/real/PCSReal/TransportTraceAudit.lean:5:0: 'PCSReal.TransportTrace.recorded_invariants' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6687401Z info: formal/real/PCSReal/TransportTraceAudit.lean:6:0: 'PCSReal.TransportTrace.adjacent_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6689335Z info: formal/real/PCSReal/TransportTraceAudit.lean:7:0: 'PCSReal.TransportTrace.cast_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6691216Z info: formal/real/PCSReal/TransportTraceAudit.lean:8:0: 'PCSReal.TransportTrace.cast_evolve' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6693437Z info: formal/real/PCSReal/TransportTraceAudit.lean:9:0: 'PCSReal.TransportTrace.real_trace_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6695429Z info: formal/real/PCSReal/TransportTraceAudit.lean:10:0: 'PCSReal.TransportTraceControls.good_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6697500Z info: formal/real/PCSReal/TransportTraceAudit.lean:11:0: 'PCSReal.TransportTraceControls.good_trace_evolves' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6699612Z info: formal/real/PCSReal/TransportTraceAudit.lean:12:0: 'PCSReal.TransportTraceControls.wrong_initial_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6702006Z info: formal/real/PCSReal/TransportTraceAudit.lean:13:0: 'PCSReal.TransportTraceControls.wrong_step_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:52.6704105Z info: formal/real/PCSReal/TransportTraceAudit.lean:14:0: 'PCSReal.TransportTraceControls.wrong_time_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:53.2678138Z ✔ [8047/8088] Built PCS.Wire (1.4s)
+2026-10-17T01:04:54.4743083Z ✔ [8048/8088] Built PCS.V2.Canonical (1.2s)
+2026-10-17T01:04:54.4802927Z ✔ [8049/8088] Built PCS.V2.SHA512 (1.8s)
+2026-10-17T01:04:55.2722828Z ✔ [8050/8088] Built PCS.WireCheck (805ms)
+2026-10-17T01:04:56.8724316Z ✔ [8051/8088] Built PCS.WireCodec (2.4s)
+2026-10-17T01:04:56.9742818Z ✔ [8052/8088] Built PCS.V2.Domains (1.7s)
+2026-10-17T01:04:58.4806144Z ℹ [8053/8088] Built PCSReal.CalibrationAudit (9.7s)
+2026-10-17T01:04:58.4807643Z info: formal/real/PCSReal/CalibrationAudit.lean:4:0: 'PCSReal.Calibration.normal_orthogonal' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4810094Z info: formal/real/PCSReal/CalibrationAudit.lean:5:0: 'PCSReal.Calibration.loss_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4812260Z info: formal/real/PCSReal/CalibrationAudit.lean:6:0: 'PCSReal.Calibration.global_minimum' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4814196Z info: formal/real/PCSReal/CalibrationAudit.lean:7:0: 'PCSReal.Calibration.model_exclusion' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4816137Z info: formal/real/PCSReal/CalibrationAudit.lean:8:0: 'PCSReal.Calibration.reproduction_prediction' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4818085Z info: formal/real/PCSReal/CalibrationAudit.lean:9:0: 'PCSReal.Calibration.dual_prediction' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4820066Z info: formal/real/PCSReal/CalibrationAudit.lean:10:0: 'PCSReal.Calibration.response_perturbation_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4822300Z info: formal/real/PCSReal/CalibrationAudit.lean:11:0: 'PCSReal.Calibration.sharp_perturbation_attained' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4824223Z info: formal/real/PCSReal/CalibrationAudit.lean:12:0: 'PCSReal.Calibration.sharp_radius_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4826410Z info: formal/real/PCSReal/CalibrationAudit.lean:13:0: 'PCSReal.Calibration.physical_enclosure' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4828279Z info: formal/real/PCSReal/CalibrationAudit.lean:14:0: 'PCSReal.Calibration.fit_check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4830080Z info: formal/real/PCSReal/CalibrationAudit.lean:15:0: 'PCSReal.Calibration.cast_loss' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4832086Z info: formal/real/PCSReal/CalibrationAudit.lean:16:0: 'PCSReal.Calibration.dual_check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4833954Z info: formal/real/PCSReal/CalibrationAudit.lean:17:0: 'PCSReal.Calibration.dual_gain_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4835886Z info: formal/real/PCSReal/CalibrationAudit.lean:18:0: 'PCSReal.Calibration.minimax_weights_optimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4837842Z info: formal/real/PCSReal/CalibrationAudit.lean:19:0: 'PCSReal.Calibration.minimax_radius_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4839743Z info: formal/real/PCSReal/CalibrationAudit.lean:20:0: 'PCSReal.Calibration.minimax_check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4841905Z info: formal/real/PCSReal/CalibrationAudit.lean:21:0: 'PCSReal.Calibration.any_estimator_radius_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4844006Z info: formal/real/PCSReal/CalibrationAudit.lean:22:0: 'PCSReal.Calibration.minimax_over_all_estimators_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4845974Z info: formal/real/PCSReal/CalibrationAudit.lean:23:0: 'PCSReal.Calibration.uniform_error_exclusion' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4847893Z info: formal/real/PCSReal/CalibrationAudit.lean:24:0: 'PCSReal.CalibrationControls.good_normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4849876Z info: formal/real/PCSReal/CalibrationAudit.lean:25:0: 'PCSReal.CalibrationControls.wrong_coefficient_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4852168Z info: formal/real/PCSReal/CalibrationAudit.lean:26:0: 'PCSReal.CalibrationControls.exact_nonzero_residual' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4854391Z info: formal/real/PCSReal/CalibrationAudit.lean:27:0: 'PCSReal.CalibrationControls.good_dual' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4856316Z info: formal/real/PCSReal/CalibrationAudit.lean:28:0: 'PCSReal.CalibrationControls.wrong_dual_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4858267Z info: formal/real/PCSReal/CalibrationAudit.lean:29:0: 'PCSReal.CalibrationControls.sharp_gain' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4860164Z info: formal/real/PCSReal/CalibrationAudit.lean:30:0: 'PCSReal.CalibrationControls.good_minimax' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4862340Z info: formal/real/PCSReal/CalibrationAudit.lean:31:0: 'PCSReal.CalibrationControls.false_minimax_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4864311Z info: formal/real/PCSReal/CalibrationAudit.lean:32:0: 'PCSReal.CalibrationControls.smaller_uniform_radius_impossible' depends on axioms: [propext,
+2026-10-17T01:04:58.4865466Z  Classical.choice,
+2026-10-17T01:04:58.4865827Z  Quot.sound]
+2026-10-17T01:04:58.4867033Z info: formal/real/PCSReal/CalibrationAudit.lean:33:0: 'PCSReal.CalibrationControls.nonlinear_radius_two_impossible' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:58.4869395Z info: formal/real/PCSReal/CalibrationAudit.lean:34:0: 'PCSReal.CalibrationControls.uniform_noise_floor_impossible' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:04:59.0882881Z ✔ [8054/8088] Built PCS.V2.Common (2.1s)
+2026-10-17T01:05:00.3933096Z ✔ [8055/8088] Built PCS.V2.TextSplit (1.3s)
+2026-10-17T01:05:00.9949854Z ✔ [8056/8088] Built PCS.V2.NormalizedWire (1.8s)
+2026-10-17T01:05:03.3047480Z ✔ [8057/8088] Built PCS.V2.Base64 (4.1s)
+2026-10-17T01:05:03.8060877Z ✔ [8058/8088] Built PCS.V2.NormalizedWireProofs (2.8s)
+2026-10-17T01:05:03.9055535Z ✔ [8059/8088] Built PCS.V2.SHA256Spec (11s)
+2026-10-17T01:05:04.3096633Z ✔ [8060/8088] Built PCS.V2.Binding (591ms)
+2026-10-17T01:05:05.1126454Z ✔ [8061/8088] Built PCS.V2.Index (731ms)
+2026-10-17T01:05:05.5193265Z ✔ [8062/8088] Built PCS.V2.Signature (2.3s)
+2026-10-17T01:05:06.4219545Z ✔ [8063/8088] Built PCS.V2.Ed25519 (873ms)
+2026-10-17T01:05:06.7201697Z ✔ [8064/8088] Built PCS.V2.Package (1.2s)
+2026-10-17T01:05:06.8203047Z ✔ [8065/8088] Built PCS.V2.IndexProofs (1.7s)
+2026-10-17T01:05:08.9243929Z ✔ [8066/8088] Built PCS.V2.PackageProofs (2.1s)
+2026-10-17T01:05:09.7252937Z ✔ [8067/8088] Built PCS.V2.CertificateModel (716ms)
+2026-10-17T01:05:10.2273534Z ✔ [8068/8088] Built PCS.V2.Replay (569ms)
+2026-10-17T01:05:11.2365682Z ✔ [8069/8088] Built PCS.V2.EndToEnd (1.0s)
+2026-10-17T01:05:11.4367682Z ✔ [8070/8088] Built PCS.V2.Workflow (1.8s)
+2026-10-17T01:05:12.1379788Z ✔ [8071/8088] Built PCS.V2.EnvFacts (1.9s)
+2026-10-17T01:05:12.5383051Z ✔ [8072/8088] Built PCS.V2.Flagship (1.2s)
+2026-10-17T01:05:13.1381703Z ✔ [8073/8088] Built PCS.V2.Reproducibility (652ms)
+2026-10-17T01:05:13.6432756Z ✔ [8074/8088] Built PCS.V2.TCB (482ms)
+2026-10-17T01:05:14.4474583Z ✔ [8075/8088] Built PCS.V2.Archive (818ms)
+2026-10-17T01:05:14.7483585Z ✔ [8076/8088] Built PCS.V2.Chemistry (1.2s)
+2026-10-17T01:05:15.3478704Z ✔ [8077/8088] Built PCS.V2.Zip (861ms)
+2026-10-17T01:05:16.0507402Z ✔ [8078/8088] Built PCS.V2.Units (1.3s)
+2026-10-17T01:05:16.9524135Z ✔ [8079/8088] Built PCS.V2.Csv (944ms)
+2026-10-17T01:05:18.7561297Z ✔ [8080/8088] Built PCS.V2.PKPDCheck (1.8s)
+2026-10-17T01:05:19.6575336Z ✔ [8081/8088] Built PCS.V2.Checkers (850ms)
+2026-10-17T01:05:20.4585648Z ✔ [8082/8088] Built PCS.V2.Authority (788ms)
+2026-10-17T01:05:20.9591321Z ✔ [8083/8088] Built PCS.V2.HighAssurance (535ms)
+2026-10-17T01:05:21.4594813Z ✔ [8084/8088] Built PCS.V2.CanonicalArchive (447ms)
+2026-10-17T01:05:28.1691744Z ✔ [8085/8088] Built PCSReal.PKPD (6.7s)
+2026-10-17T01:05:34.8794035Z ℹ [8086/8088] Built PCSReal.Audit (6.7s)
+2026-10-17T01:05:34.8796976Z info: formal/real/PCSReal/Audit.lean:5:0: 'PCSReal.PKPD.expEncl_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:05:34.8799245Z info: formal/real/PCSReal/Audit.lean:6:0: 'PCSReal.PKPD.closeEncl_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:05:34.8800849Z info: formal/real/PCSReal/Audit.lean:7:0: 'PCSReal.PKPD.rowHolds_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:05:34.8802903Z info: formal/real/PCSReal/Audit.lean:8:0: 'PCSReal.PKPD.pkpdMatchHolds_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:05:34.8804590Z info: formal/real/PCSReal/Audit.lean:9:0: 'PCSReal.PKPD.pcs_pkpd_reference_match_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:05:34.8806024Z info: formal/real/PCSReal/Audit.lean:10:0: 'PCSReal.PKPD.pcs_canonical_archive_pkpd_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-10-17T01:05:38.7840717Z ✔ [8087/8088] Built PCSReal (3.8s)
+2026-10-17T01:05:38.8034057Z Build completed successfully (8088 jobs).
+2026-10-17T01:05:38.8832142Z Production Lean source admission/escape-hatch audit passed.
+2026-10-17T01:05:49.6536881Z {"passed": 3, "mathlib_revision": "8f9d9cff6bd728b17a24e163c9402775d9e6a365"}
+2026-10-17T01:05:49.6621605Z Real-analysis bridge build and audits passed.
+2026-10-17T01:06:16.6669481Z {"status": "verified", "output": "/home/runner/work/_temp/mathlib-multistep.json", "sha256": "968b1d24cf4953b0076e97d60f3e79e350dd7643acc6857331abb337455a575f", "pcs_authority": false}
+2026-10-17T01:06:16.7120821Z ##[group]Run set -euo pipefail
+2026-10-17T01:06:16.7121165Z [36;1mset -euo pipefail[0m
+2026-10-17T01:06:16.7121735Z [36;1msource scripts/activate_lean_428.sh[0m
+2026-10-17T01:06:16.7122262Z [36;1mpython -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock[0m
+2026-10-17T01:06:16.7122837Z [36;1mpython -m pip install --no-deps --no-build-isolation -e .[0m
+2026-10-17T01:06:16.7123223Z [36;1mlake -d formal build pcs-lean-authority[0m
+2026-10-17T01:06:16.7123754Z [36;1mpython scripts/verify_transport_formal.py --output "$RUNNER_TEMP/transport-static-axioms.json"[0m
+2026-10-17T01:06:16.7124427Z [36;1mPCS_REQUIRE_TRANSPORT_KERNEL=1 python -m pytest -q tests/test_transport_kernel_v1.py[0m
+2026-10-17T01:06:16.7125079Z [36;1mpython scripts/run_transport_kernel_v1.py --output "$RUNNER_TEMP/transport-kernel-campaign"[0m
+2026-10-17T01:06:16.7195859Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-17T01:06:16.7196199Z env:
+2026-10-17T01:06:16.7196504Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:06:16.7196958Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-17T01:06:16.7197389Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:06:16.7197780Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:06:16.7198159Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:06:16.7198550Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-17T01:06:16.7198888Z ##[endgroup]
+2026-10-17T01:06:17.7635772Z Collecting setuptools==84.0.0 (from -r requirements-build.lock (line 3))
+2026-10-17T01:06:17.8246410Z   Downloading setuptools-84.0.0-py3-none-any.whl (818 kB)
+2026-10-17T01:06:17.8725408Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 818.2/818.2 kB 34.1 MB/s  0:00:00
+2026-10-17T01:06:17.8946426Z Collecting attrs==26.1.0 (from -r requirements-dev.lock (line 3))
+2026-10-17T01:06:17.8978647Z   Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+2026-10-17T01:06:18.0128516Z Collecting cffi==2.1.1 (from -r requirements-dev.lock (line 9))
+2026-10-17T01:06:18.0166862Z   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+2026-10-17T01:06:18.1821163Z Collecting cryptography==50.0.2 (from -r requirements-dev.lock (line 111))
+2026-10-17T01:06:18.1857423Z   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+2026-10-17T01:06:18.2182332Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 157.7 MB/s  0:00:00
+2026-10-17T01:06:18.2313077Z Collecting iniconfig==2.3.1 (from -r requirements-dev.lock (line 172))
+2026-10-17T01:06:18.2346307Z   Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-10-17T01:06:18.2529501Z Collecting jsonschema==4.26.0 (from -r requirements-dev.lock (line 176))
+2026-10-17T01:06:18.2563198Z   Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+2026-10-17T01:06:18.2691657Z Collecting jsonschema-specifications==2025.9.1 (from -r requirements-dev.lock (line 180))
+2026-10-17T01:06:18.2724384Z   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+2026-10-17T01:06:18.2870028Z Collecting packaging==26.3 (from -r requirements-dev.lock (line 184))
+2026-10-17T01:06:18.2903092Z   Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-10-17T01:06:18.3017668Z Collecting pluggy==1.6.0 (from -r requirements-dev.lock (line 188))
+2026-10-17T01:06:18.3054479Z   Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+2026-10-17T01:06:18.3160095Z Collecting pycparser==3.1 (from -r requirements-dev.lock (line 192))
+2026-10-17T01:06:18.3192721Z   Downloading pycparser-3.1-py3-none-any.whl (48 kB)
+2026-10-17T01:06:18.3350714Z Collecting pygments==2.21.0 (from -r requirements-dev.lock (line 196))
+2026-10-17T01:06:18.3383854Z   Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-10-17T01:06:18.3466886Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 167.0 MB/s  0:00:00
+2026-10-17T01:06:18.3713070Z Collecting pytest==9.1.1 (from -r requirements-dev.lock (line 200))
+2026-10-17T01:06:18.3747901Z   Downloading pytest-9.1.1-py3-none-any.whl (386 kB)
+2026-10-17T01:06:18.3947197Z Collecting referencing==0.37.0 (from -r requirements-dev.lock (line 204))
+2026-10-17T01:06:18.3979355Z   Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+2026-10-17T01:06:18.6459642Z Collecting rpds-py==2026.9.1 (from -r requirements-dev.lock (line 210))
+2026-10-17T01:06:18.6502486Z   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
+2026-10-17T01:06:18.6654423Z Collecting typing-extensions==4.16.0 (from -r requirements-dev.lock (line 342))
+2026-10-17T01:06:18.6686117Z   Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+2026-10-17T01:06:18.7240314Z Installing collected packages: typing-extensions, setuptools, rpds-py, pygments, pycparser, pluggy, packaging, iniconfig, attrs, referencing, pytest, cffi, jsonschema-specifications, cryptography, jsonschema
+2026-10-17T01:06:20.7668201Z 
+2026-10-17T01:06:20.7689033Z Successfully installed attrs-26.1.0 cffi-2.1.1 cryptography-50.0.2 iniconfig-2.3.1 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 packaging-26.3 pluggy-1.6.0 pycparser-3.1 pygments-2.21.0 pytest-9.1.1 referencing-0.37.0 rpds-py-2026.9.1 setuptools-84.0.0 typing-extensions-4.16.0
+2026-10-17T01:06:21.6498210Z Obtaining file:///home/runner/work/proof-carrying-science/proof-carrying-science
+2026-10-17T01:06:21.6511193Z   Checking if build backend supports build_editable: started
+2026-10-17T01:06:21.8172950Z   Checking if build backend supports build_editable: finished with status 'done'
+2026-10-17T01:06:21.8182340Z   Preparing editable metadata (pyproject.toml): started
+2026-10-17T01:06:22.0509595Z   Preparing editable metadata (pyproject.toml): finished with status 'done'
+2026-10-17T01:06:22.0549146Z Building wheels for collected packages: proof-carrying-science
+2026-10-17T01:06:22.0557338Z   Building editable for proof-carrying-science (pyproject.toml): started
+2026-10-17T01:06:22.3273529Z   Building editable for proof-carrying-science (pyproject.toml): finished with status 'done'
+2026-10-17T01:06:22.3279948Z   Created wheel for proof-carrying-science: filename=proof_carrying_science-0.5.0-0.editable-py3-none-any.whl size=8364 sha256=fbb607ab86a5e62626ad427de0495eee534f611280acdda051df40478876832a
+2026-10-17T01:06:22.3281807Z   Stored in directory: /tmp/pip-ephem-wheel-cache-q3by9q99/wheels/54/37/67/90f2ee62840f3f402415cf20db067cd28d6778e5adc35d3402
+2026-10-17T01:06:22.3304713Z Successfully built proof-carrying-science
+2026-10-17T01:06:22.3412456Z Installing collected packages: proof-carrying-science
+2026-10-17T01:06:22.3515995Z Successfully installed proof-carrying-science-0.5.0
+2026-10-17T01:06:22.5382931Z ⚠ [5/130] Replayed PCS.V2.SHA256
+2026-10-17T01:06:22.5412290Z warning: PCS/V2/SHA256.lean:137:17: unused variable `hs`
+2026-10-17T01:06:22.5432258Z 
+2026-10-17T01:06:22.5472619Z Note: This linter can be disabled with `set_option linter.unusedVariables false`
+2026-10-17T01:06:23.1383471Z ✔ [51/130] Built PCS.V2.Frontier (623ms)
+2026-10-17T01:06:23.4422920Z ✔ [52/130] Built PCS.V2.Hex:c.o (355ms)
+2026-10-17T01:06:23.6418388Z ✔ [53/130] Built PCS.V2.ClaimGraph (1.2s)
+2026-10-17T01:06:23.9423876Z ✔ [54/130] Built PCS.V2.Canonical:c.o (292ms)
+2026-10-17T01:06:24.1443938Z ✔ [55/130] Built PCS.V2.SHA256:c.o (610ms)
+2026-10-17T01:06:24.1492980Z ✔ [56/130] Built PCS.V2.Domains:c.o (149ms)
+2026-10-17T01:06:24.2420034Z ✔ [57/130] Built PCS.V2.JsonRoundtrip:c.o (1.7s)
+2026-10-17T01:06:24.2462416Z ✔ [58/130] Built PCS.Refinement:c.o (82ms)
+2026-10-17T01:06:24.4446685Z ✔ [59/130] Built PCS.Normalized:c.o (135ms)
+2026-10-17T01:06:24.5452942Z ✔ [60/130] Built PCS.Decision:c.o (436ms)
+2026-10-17T01:06:24.5492536Z ✔ [61/130] Built PCS.DecisionExtraction:c.o (144ms)
+2026-10-17T01:06:24.6452356Z ✔ [62/130] Built PCS.SerializedBridge:c.o (88ms)
+2026-10-17T01:06:24.6512540Z ✔ [63/130] Built PCS.Normalization:c.o (102ms)
+2026-10-17T01:06:24.7462878Z ✔ [64/130] Built PCS.V2.Json:c.o (2.3s)
+2026-10-17T01:06:24.8453332Z ✔ [65/130] Built PCS.WireCheck:c.o (151ms)
+2026-10-17T01:06:25.0452709Z ✔ [66/130] Built PCS.Core:c.o (977ms)
+2026-10-17T01:06:25.2462740Z ✔ [67/130] Built PCS.V2.Common:c.o (448ms)
+2026-10-17T01:06:25.4462902Z ✔ [68/130] Built PCS.Wire:c.o (776ms)
+2026-10-17T01:06:25.7492741Z ✔ [69/130] Built PCS.WireCodec:c.o (954ms)
+2026-10-17T01:06:25.9490681Z ✔ [70/130] Built PCS.V2.Base64:c.o (914ms)
+2026-10-17T01:06:26.0532843Z ✔ [71/130] Built PCS.V2.Binding:c.o (98ms)
+2026-10-17T01:06:26.2522953Z ✔ [72/130] Built PCS.V2.Signature:c.o (1.0s)
+2026-10-17T01:06:26.6525235Z ✔ [73/130] Built PCS.V2.NormalizedWireProofs:c.o (926ms)
+2026-10-17T01:06:27.1536718Z ✔ [74/130] Built PCS.V2.IndexProofs:c.o (479ms)
+2026-10-17T01:06:27.3540405Z ✔ [75/130] Built PCS.V2.Index:c.o (1.3s)
+2026-10-17T01:06:27.6546622Z ✔ [76/130] Built PCS.V2.Package:c.o (1.4s)
+2026-10-17T01:06:27.6592258Z ✔ [77/130] Built PCS.V2.PackageProofs:c.o (492ms)
+2026-10-17T01:06:27.8549356Z ✔ [78/130] Built PCS.V2.NormalizedWire:c.o (2.4s)
+2026-10-17T01:06:28.0572934Z ✔ [79/130] Built PCS.V2.Flagship:c.o (204ms)
+2026-10-17T01:06:28.1552889Z ✔ [80/130] Built PCS.V2.CertificateModel:c.o (733ms)
+2026-10-17T01:06:28.1582208Z ✔ [81/130] Built PCS.V2.EndToEnd:c.o (499ms)
+2026-10-17T01:06:28.1612241Z ✔ [82/130] Built PCS.V2.Reproducibility:c.o (140ms)
+2026-10-17T01:06:28.4552869Z ✔ [83/130] Built PCS.V2.Replay:c.o (868ms)
+2026-10-17T01:06:28.6562896Z ✔ [84/130] Built PCS.V2.Archive:c.o (165ms)
+2026-10-17T01:06:28.7592737Z ✔ [85/130] Built PCS.V2.Ed25519:c.o (558ms)
+2026-10-17T01:06:28.7622173Z ✔ [86/130] Built PCS.V2.TCB:c.o (603ms)
+2026-10-17T01:06:28.9578324Z ✔ [87/130] Built PCS.V2.TextSplit:c.o (225ms)
+2026-10-17T01:06:29.0594527Z ✔ [88/130] Built PCS.V2.SHA512:c.o (937ms)
+2026-10-17T01:06:29.3622872Z ✔ [89/130] Built PCS.V2.Chemistry:c.o (696ms)
+2026-10-17T01:06:29.6604668Z ✔ [90/130] Built PCS.V2.Units:c.o (865ms)
+2026-10-17T01:06:29.6622239Z ✔ [91/130] Built PCS.V2.Csv:c.o (674ms)
+2026-10-17T01:06:29.8597587Z ✔ [92/130] Built PCS.V2.Checkers:c.o (226ms)
+2026-10-17T01:06:30.5608055Z ✔ [93/130] Built PCS.V2.Authority:c.o (736ms)
+2026-10-17T01:06:30.8614656Z ✔ [94/130] Built PCS.V2.EnvFacts:c.o (1.2s)
+2026-10-17T01:06:31.0617575Z ✔ [95/130] Built PCS.V2.Workflow:c.o (2.0s)
+2026-10-17T01:06:31.1622938Z ✔ [96/130] Built PCS.V2.FIPS1804Spec:c.o (596ms)
+2026-10-17T01:06:31.1652435Z ✔ [97/130] Built PCS.V2.SHA256Spec:c.o (267ms)
+2026-10-17T01:06:31.1672270Z ✔ [98/130] Built PCS.V2.HighAssurance:c.o (124ms)
+2026-10-17T01:06:31.2622781Z ✔ [99/130] Built PCS.V2.Frontier:c.o (98ms)
+2026-10-17T01:06:31.3662833Z ✔ [100/130] Built PCS.V2.CanonicalArchive:c.o (164ms)
+2026-10-17T01:06:31.6658213Z ✔ [101/130] Built PCS.V2.ClaimGraph:c.o (411ms)
+2026-10-17T01:06:31.7659379Z ✔ [102/130] Built PCS.V2.Zip:c.o (584ms)
+2026-10-17T01:06:31.9674531Z ✔ [103/130] Built PCS.V2.DomainAdapter (660ms)
+2026-10-17T01:06:32.0675517Z ✔ [104/130] Built PCS.V2.PKPDCheck:c.o (2.7s)
+2026-10-17T01:06:32.2684222Z ✔ [105/130] Built PCS.V2.DomainAdapter:c.o (236ms)
+2026-10-17T01:06:32.5714715Z ✔ [106/130] Built PCS.V2.DomainAuthority (559ms)
+2026-10-17T01:06:32.7716928Z ✔ [107/130] Built PCS.V2.DomainAuthority:c.o (204ms)
+2026-10-17T01:06:33.0723755Z ✔ [108/130] Built PCS.V2.Proposer (527ms)
+2026-10-17T01:06:33.1743156Z ✔ [109/130] Built PCS.V2.Witnesses.Registry (653ms)
+2026-10-17T01:06:33.2718715Z ✔ [110/130] Built PCS.V2.Proposer:c.o (141ms)
+2026-10-17T01:06:33.4735172Z ✔ [111/130] Built PCS.V2.Witnesses.Registry:c.o (247ms)
+2026-10-17T01:06:33.9765506Z ✔ [112/130] Built PCS.V2.Witnesses.MLEval (790ms)
+2026-10-17T01:06:34.0767680Z ✔ [113/130] Built PCS.V2.Witnesses.AISafety (820ms)
+2026-10-17T01:06:34.2770610Z ✔ [114/130] Built PCS.V2.Witnesses.Biology (1.0s)
+2026-10-17T01:06:34.2772141Z ✔ [115/130] Built PCS.V2.Witnesses.MLEval:c.o (242ms)
+2026-10-17T01:06:34.3772845Z ✔ [116/130] Built PCS.V2.Witnesses.AISafety:c.o (341ms)
+2026-10-17T01:06:34.6777022Z ✔ [117/130] Built PCS.V2.Witnesses.Biology:c.o (453ms)
+2026-10-17T01:06:35.4812097Z ✔ [118/130] Built PCS.V2.Witnesses.Instances (1.2s)
+2026-10-17T01:06:35.7816154Z ✔ [119/130] Built PCS.V2.Witnesses.Instances:c.o (315ms)
+2026-10-17T01:06:35.8823973Z ✔ [120/130] Built PCS.V2.FailClosedGate (409ms)
+2026-10-17T01:06:36.3857150Z ✔ [121/130] Built PCS.V2.FailClosedGate:c.o (492ms)
+2026-10-17T01:06:37.3868211Z ✔ [122/130] Built PCS.V2.FailClosedProofs (1.5s)
+2026-10-17T01:06:37.4869617Z ✔ [123/130] Built PCS.V2.FailClosedProofs:c.o (166ms)
+2026-10-17T01:06:38.2903231Z ✔ [124/130] Built PCS.V2.ExecutableAuthority (941ms)
+2026-10-17T01:06:38.5897550Z ✔ [125/130] Built PCS.V2.ExecutableAuthority:c.o (326ms)
+2026-10-17T01:06:38.6903034Z ✔ [126/130] Built PCS.V2.AuthorityCLI (374ms)
+2026-10-17T01:06:38.7901146Z ✔ [127/130] Built PCS.V2.AuthorityCLI:c.o (110ms)
+2026-10-17T01:06:38.9902261Z ✔ [128/130] Built PCSAuthority (316ms)
+2026-10-17T01:06:39.1905391Z ✔ [129/130] Built PCSAuthority:c.o (195ms)
+2026-10-17T01:06:39.3907301Z ✔ [130/130] Built «pcs-lean-authority»:exe (158ms)
+2026-10-17T01:06:39.3916302Z Build completed successfully (130 jobs).
+2026-10-17T01:06:42.7532848Z {"kernel_theorems": 21, "scientific_acceptance": false}
+2026-10-17T01:07:09.7302262Z ..........................................                               [100%]
+2026-10-17T01:07:09.7302888Z 42 passed in 26.70s
+2026-10-17T01:08:10.8570645Z {"passed": true, "separate_receiving_processes": 15, "wall_seconds": 60.695094, "general_theorems": 14, "scientific_acceptance": false}
+2026-10-17T01:08:10.8819061Z ##[group]Run set -euo pipefail
+2026-10-17T01:08:10.8819420Z [36;1mset -euo pipefail[0m
+2026-10-17T01:08:10.8819732Z [36;1msource scripts/activate_lean_428.sh[0m
+2026-10-17T01:08:10.8820334Z [36;1mpython scripts/verify_transport_trace_formal.py --output "$RUNNER_TEMP/transport-trace-static-axioms.json"[0m
+2026-10-17T01:08:10.8821172Z [36;1mPCS_REQUIRE_TRANSPORT_TRACE_KERNEL=1 python -m pytest -q tests/test_transport_trace_kernel_v1.py[0m
+2026-10-17T01:08:10.8822533Z [36;1mpython scripts/run_transport_trace_kernel_v1.py --output "$RUNNER_TEMP/transport-trace-campaign" --signed-base "$RUNNER_TEMP/transport-kernel-campaign/signed-v3-base"[0m
+2026-10-17T01:08:10.8886790Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-17T01:08:10.8887158Z env:
+2026-10-17T01:08:10.8887449Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:08:10.8887940Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-17T01:08:10.8888461Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:08:10.8888905Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:08:10.8889537Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:08:10.8889983Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-17T01:08:10.8890363Z ##[endgroup]
+2026-10-17T01:08:13.9043228Z {"kernel_theorems": 12, "scientific_acceptance": false}
+2026-10-17T01:10:52.3713841Z ..................................                                       [100%]
+2026-10-17T01:10:52.3714393Z 34 passed in 158.27s (0:02:38)
+2026-10-17T01:13:12.8512852Z {"passed": true, "receiving_processes": 10, "accepted": 4, "expected_rejections": 6, "actual_trace_refutations": 3, "wall_seconds": 140.272494}
+2026-10-17T01:13:12.8782577Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-17T01:13:12.8783010Z with:
+2026-10-17T01:13:12.8783235Z   name: pcs-transport-kernel-38989099111-1
+2026-10-17T01:13:12.8784184Z   path: /home/runner/work/_temp/transport-static-axioms.json
+/home/runner/work/_temp/transport-trace-static-axioms.json
+/home/runner/work/_temp/transport-trace-campaign/
+/home/runner/work/_temp/transport-kernel-campaign/
+
+2026-10-17T01:13:12.8785140Z   if-no-files-found: warn
+2026-10-17T01:13:12.8785371Z   retention-days: 14
+2026-10-17T01:13:12.8785593Z   compression-level: 6
+2026-10-17T01:13:12.8785810Z   overwrite: false
+2026-10-17T01:13:12.8786017Z   include-hidden-files: false
+2026-10-17T01:13:12.8786247Z   archive: true
+2026-10-17T01:13:12.8786432Z env:
+2026-10-17T01:13:12.8786679Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:12.8787109Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-17T01:13:12.8787569Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:12.8787954Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:12.8788324Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:12.8788707Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-17T01:13:12.8789019Z ##[endgroup]
+2026-10-17T01:13:13.2532047Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-17T01:13:13.2534972Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-10-17T01:13:13.2536064Z With the provided path, there will be 284 files uploaded
+2026-10-17T01:13:13.2540305Z Artifact name is valid!
+2026-10-17T01:13:13.2541201Z Root directory input is valid!
+2026-10-17T01:13:13.4990379Z Uploading artifact: pcs-transport-kernel-38989099111-1.zip
+2026-10-17T01:13:13.5035648Z Beginning upload of artifact content to blob storage
+2026-10-17T01:13:13.9850446Z Uploaded bytes 978916
+2026-10-17T01:13:14.0122897Z Finished uploading artifact content to blob storage!
+2026-10-17T01:13:14.0124367Z SHA256 digest of uploaded artifact is 6bb07d6a036b2a2406f84509736d0f2c5b38c7b9468d9329555decd1e0229028
+2026-10-17T01:13:14.0125183Z Finalizing artifact upload
+2026-10-17T01:13:14.2567365Z Artifact pcs-transport-kernel-38989099111-1 successfully finalized. Artifact ID 12084791661
+2026-10-17T01:13:14.2568607Z Artifact pcs-transport-kernel-38989099111-1 has been successfully uploaded! Final size is 978916 bytes. Artifact ID is 12084791661
+2026-10-17T01:13:14.2571184Z Artifact download URL: https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/38989099111/artifacts/12084791661
+2026-10-17T01:13:14.2707079Z ##[group]Run set -euo pipefail
+2026-10-17T01:13:14.2707475Z [36;1mset -euo pipefail[0m
+2026-10-17T01:13:14.2707756Z [36;1msource scripts/activate_lean_428.sh[0m
+2026-10-17T01:13:14.2708098Z [36;1mmkdir "$RUNNER_TEMP/calibration-data-rights"[0m
+2026-10-17T01:13:14.2709029Z [36;1mcp examples/experimental_calibration_v1/ATTRIBUTION.md examples/experimental_calibration_v1/provenance.json examples/experimental_calibration_v1/UPSTREAM_LICENSE.txt "$RUNNER_TEMP/calibration-data-rights/"[0m
+2026-10-17T01:13:14.2710060Z [36;1m# Reuse the already hash-pinned CPU numerical baseline; no training.[0m
+2026-10-17T01:13:14.2710466Z [36;1mpython - <<'PYCALLOCK'[0m
+2026-10-17T01:13:14.2710903Z [36;1mimport os[0m
+2026-10-17T01:13:14.2711136Z [36;1mfrom pathlib import Path[0m
+2026-10-17T01:13:14.2712065Z [36;1mlines = [line for line in Path('requirements-prover.lock').read_text().splitlines() if line.startswith('numpy==')][0m
+2026-10-17T01:13:14.2712675Z [36;1massert len(lines) == 1[0m
+2026-10-17T01:13:14.2713122Z [36;1m(Path(os.environ['RUNNER_TEMP']) / 'calibration-baseline.lock').write_text(lines[0] + '\n')[0m
+2026-10-17T01:13:14.2713578Z [36;1mPYCALLOCK[0m
+2026-10-17T01:13:14.2714011Z [36;1mpython -m pip install --require-hashes --no-deps -r "$RUNNER_TEMP/calibration-baseline.lock"[0m
+2026-10-17T01:13:14.2714734Z [36;1mpython scripts/verify_calibration_formal.py --output "$RUNNER_TEMP/calibration-static-axioms.json"[0m
+2026-10-17T01:13:14.2715501Z [36;1mpython scripts/verify_calibration_numeric_evidence.py --output "$RUNNER_TEMP/calibration-numeric-axioms.json"[0m
+2026-10-17T01:13:14.2716231Z [36;1mPCS_REQUIRE_CALIBRATION_KERNEL=1 python -m pytest -q tests/test_calibration_kernel_v1.py[0m
+2026-10-17T01:13:14.2717359Z [36;1mpython scripts/run_experimental_calibration_v1.py --output "$RUNNER_TEMP/experimental-calibration"[0m
+2026-10-17T01:13:14.2718049Z [36;1mpython scripts/run_calibration_attacks_v1.py --output "$RUNNER_TEMP/calibration-attacks"[0m
+2026-10-17T01:13:14.2782495Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-17T01:13:14.2782836Z env:
+2026-10-17T01:13:14.2783112Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:14.2783553Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-17T01:13:14.2783993Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:14.2784382Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:14.2784778Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:14.2785175Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-17T01:13:14.2785509Z ##[endgroup]
+2026-10-17T01:13:15.4660775Z Collecting numpy==2.2.6 (from -r /home/runner/work/_temp/calibration-baseline.lock (line 1))
+2026-10-17T01:13:15.5128911Z   Downloading numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.5 MB)
+2026-10-17T01:13:15.6002060Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.5/16.5 MB 273.6 MB/s  0:00:00
+2026-10-17T01:13:15.6372515Z Installing collected packages: numpy
+2026-10-17T01:13:17.5889119Z Successfully installed numpy-2.2.6
+2026-10-17T01:13:24.7391893Z {"kernel_theorems": 31, "scientific_acceptance": false}
+2026-10-17T01:13:34.8391751Z Traceback (most recent call last):
+2026-10-17T01:13:34.8402844Z   File "/home/runner/work/proof-carrying-science/proof-carrying-science/scripts/verify_calibration_numeric_evidence.py", line 73, in <module>
+2026-10-17T01:13:34.8403863Z     if __name__=='__main__':main()
+2026-10-17T01:13:34.8404254Z                             ^^^^^^
+2026-10-17T01:13:34.8405204Z   File "/home/runner/work/proof-carrying-science/proof-carrying-science/scripts/verify_calibration_numeric_evidence.py", line 57, in main
+2026-10-17T01:13:34.8406237Z     if r.returncode:raise RuntimeError(r.stdout+r.stderr)
+2026-10-17T01:13:34.8406721Z                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-17T01:13:34.8408438Z RuntimeError: libc++abi: terminating due to uncaught exception of type lean::memory_exception: excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)
+2026-10-17T01:13:34.8409602Z 
+2026-10-17T01:13:34.8667017Z ##[error]Process completed with exit code 1.
+2026-10-17T01:13:34.8753924Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-17T01:13:34.8754354Z with:
+2026-10-17T01:13:34.8754598Z   name: pcs-experimental-calibration-38989099111-1
+2026-10-17T01:13:34.8755742Z   path: /home/runner/work/_temp/calibration-static-axioms.json
+/home/runner/work/_temp/calibration-numeric-axioms.json
+/home/runner/work/_temp/calibration-data-rights/
+/home/runner/work/_temp/experimental-calibration/
+/home/runner/work/_temp/calibration-attacks/
+
+2026-10-17T01:13:34.8757025Z   if-no-files-found: warn
+2026-10-17T01:13:34.8757259Z   retention-days: 14
+2026-10-17T01:13:34.8757482Z   compression-level: 6
+2026-10-17T01:13:34.8757701Z   overwrite: false
+2026-10-17T01:13:34.8757913Z   include-hidden-files: false
+2026-10-17T01:13:34.8758149Z   archive: true
+2026-10-17T01:13:34.8758344Z env:
+2026-10-17T01:13:34.8758594Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:34.8759068Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-10-17T01:13:34.8759500Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:34.8759888Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:34.8760285Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-10-17T01:13:34.8760676Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-10-17T01:13:34.8761005Z ##[endgroup]
+2026-10-17T01:13:35.0451815Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-17T01:13:35.0458876Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-10-17T01:13:35.0460971Z With the provided path, there will be 4 files uploaded
+2026-10-17T01:13:35.0463179Z Artifact name is valid!
+2026-10-17T01:13:35.0464413Z Root directory input is valid!
+2026-10-17T01:13:35.2957869Z Uploading artifact: pcs-experimental-calibration-38989099111-1.zip
+2026-10-17T01:13:35.3011673Z Beginning upload of artifact content to blob storage
+2026-10-17T01:13:35.4317250Z Uploaded bytes 8700
+2026-10-17T01:13:35.4576600Z Finished uploading artifact content to blob storage!
+2026-10-17T01:13:35.4578550Z SHA256 digest of uploaded artifact is 632bfbd3cbad40f1f66f588bd5978ea794d9975d884c4f41e270a4dce8022251
+2026-10-17T01:13:35.4580365Z Finalizing artifact upload
+2026-10-17T01:13:35.7402696Z Artifact pcs-experimental-calibration-38989099111-1 successfully finalized. Artifact ID 12084448570
+2026-10-17T01:13:35.7404592Z Artifact pcs-experimental-calibration-38989099111-1 has been successfully uploaded! Final size is 8700 bytes. Artifact ID is 12084448570
+2026-10-17T01:13:35.7407692Z Artifact download URL: https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/38989099111/artifacts/12084448570
+2026-10-17T01:13:35.7597327Z Post job cleanup.
+2026-10-17T01:13:35.8502201Z [command]/usr/bin/git version
+2026-10-17T01:13:35.8532826Z git version 2.55.0
+2026-10-17T01:13:35.8572292Z Temporarily overriding HOME='/home/runner/work/_temp/6e41ab66-5f4c-4545-9032-896573fb6ff3' before making global git config changes
+2026-10-17T01:13:35.8573702Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-17T01:13:35.8578771Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/proof-carrying-science/proof-carrying-science
+2026-10-17T01:13:35.8613429Z Removing SSH command configuration
+2026-10-17T01:13:35.8620461Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-17T01:13:35.8660290Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-17T01:13:35.8915293Z Removing HTTP extra header
+2026-10-17T01:13:35.8922590Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-17T01:13:35.8967178Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-17T01:13:35.9241938Z Removing includeIf entries pointing to credentials config files
+2026-10-17T01:13:35.9249051Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-17T01:13:35.9289650Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-17T01:13:35.9725963Z Cleaning up orphan processes
+

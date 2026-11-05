@@ -1,0 +1,77 @@
+name: PCS Compositional Disclosure Ledger
+on:
+  pull_request:
+    paths:
+      - 'research/compositional_disclosure_v1/**'
+      - '.github/workflows/pcs-compositional-disclosure-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  formal-adaptive-privacy-and-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install pinned proof tools
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Formal invariants, exhaustive differential cases, hostile storage and replay
+        env:
+          PCS_REQUIRE_DISCLOSURE_CAPTURE: '1'
+          PCS_DISCLOSURE_CONTROL_REPLAY_OUT: ${{ runner.temp }}/disclosure-formal/control-replay
+          PCS_DISCLOSURE_REPLAY_OUT: ${{ runner.temp }}/disclosure-formal/replay
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          mkdir -p "$RUNNER_TEMP/disclosure-formal"
+          python -m research.compositional_disclosure_v1.preservation > "$RUNNER_TEMP/disclosure-formal/preservation.json"
+          python -m research.integration_v1.source_gate > "$RUNNER_TEMP/disclosure-formal/source-gate.json"
+          python scripts/audit_lean_source.py research/compositional_disclosure_v1/Ledger.lean research/compositional_disclosure_v1/Main.lean research/compositional_disclosure_v1/bounds/Bounds.lean > "$RUNNER_TEMP/disclosure-formal/source-audit.log"
+          python -m pytest -q research/compositional_disclosure_v1/test_ledger.py research/compositional_disclosure_v1/bounds/test_bounds.py research/compositional_disclosure_v1/control/test_control.py research/compositional_disclosure_v1/adversarial/test_process.py --basetemp="$RUNNER_TEMP/disclosure-formal/pytest" --junitxml="$RUNNER_TEMP/disclosure-formal/tests.xml"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: disclosure-formal-and-replay
+          path: ${{ runner.temp }}/disclosure-formal
+          retention-days: 14
+  actual-weight-adaptive-query-attack:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install pinned tools
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Download official real weights and pinned engine
+        run: python -m research.local_weights_v1 download "$RUNNER_TEMP/local-weights"
+      - name: Fresh real-model adaptive query campaign
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m research.compositional_disclosure_v1 evaluate "$RUNNER_TEMP/local-weights" "$RUNNER_TEMP/disclosure-neural"
+          python -m research.compositional_disclosure_v1.control evaluate "$RUNNER_TEMP/local-weights" "$RUNNER_TEMP/disclosure-neural/control"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: disclosure-real-weight-adaptive-campaign
+          path: ${{ runner.temp }}/disclosure-neural
+          retention-days: 14

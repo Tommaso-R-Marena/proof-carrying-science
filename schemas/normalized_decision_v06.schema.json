@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Normalized Decision Wire v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "wire_format",
+    "canonical_json_profile",
+    "wire_hash_format",
+    "predicate_hash_format",
+    "source",
+    "context",
+    "claim",
+    "evidence",
+    "decision",
+    "wire_semantic_hash"
+  ],
+  "properties": {
+    "wire_format": {"const": "pcs-normalized-decision-v2"},
+    "canonical_json_profile": {"const": "pcs-jcs-rfc8785-v1"},
+    "wire_hash_format": {"const": "pcs-normalized-decision-sha256-v2"},
+    "predicate_hash_format": {"const": "pcs-predicate-sha256-v2"},
+    "source": {"$ref": "#/$defs/source"},
+    "context": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {"$ref": "#/$defs/contextAssumption"}
+    },
+    "claim": {"$ref": "#/$defs/claim"},
+    "evidence": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "decision": {"$ref": "#/$defs/decision"},
+    "wire_semantic_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "safeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "predicateCommitment": {
+      "type": "string",
+      "pattern": "^pcs-predicate-sha256-v2:[a-f0-9]{64}$"
+    },
+    "idArray": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/safeId"}
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec_version",
+        "checker_version",
+        "certificate_semantic_hash",
+        "certificate_integrity_hash",
+        "claim_id"
+      ],
+      "properties": {
+        "spec_version": {"const": "pcs-0.6"},
+        "checker_version": {
+          "type": "string",
+          "pattern": "^pcs-python-kernel/0\\.6\\.[0-9]+(?:-[A-Za-z0-9._-]+)?$"
+        },
+        "certificate_semantic_hash": {"$ref": "#/$defs/sha256"},
+        "certificate_integrity_hash": {"$ref": "#/$defs/sha256"},
+        "claim_id": {"$ref": "#/$defs/safeId"}
+      }
+    },
+    "contextAssumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement"],
+      "properties": {
+        "id": {"$ref": "#/$defs/safeId"},
+        "statement": {"type": "string", "minLength": 1, "maxLength": 16384}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "predicate_commitment",
+        "required_evidence",
+        "assumptions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/safeId"},
+        "kind": {"enum": ["formal", "computational", "empirical", "mixed"]},
+        "predicate_commitment": {"$ref": "#/$defs/predicateCommitment"},
+        "required_evidence": {"$ref": "#/$defs/idArray"},
+        "assumptions": {"$ref": "#/$defs/idArray"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "outcome", "predicate_commitment"],
+      "properties": {
+        "id": {"$ref": "#/$defs/safeId"},
+        "kind": {
+          "enum": [
+            "formal_proof",
+            "computational_test",
+            "statistical_validation",
+            "empirical_validation",
+            "provenance"
+          ]
+        },
+        "outcome": {"enum": ["PASS", "FAIL", "UNVERIFIED"]},
+        "predicate_commitment": {"$ref": "#/$defs/predicateCommitment"}
+      }
+    },
+    "decision": {
+      "enum": [
+        "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS",
+        "COMPUTATIONALLY_SUPPORTED",
+        "EMPIRICALLY_VALIDATED_WITHIN_SCOPE",
+        "MIXED_SUPPORT_UNDER_ASSUMPTIONS",
+        "OPEN",
+        "FALSIFIED_OR_CHECK_FAILED"
+      ]
+    }
+  }
+}

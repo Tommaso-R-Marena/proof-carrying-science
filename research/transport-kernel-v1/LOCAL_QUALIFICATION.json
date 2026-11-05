@@ -1,0 +1,50 @@
+{
+  "format": "pcs-transport-local-qualification-v1",
+  "base_main": "67ec8a7ef872063c9a05e804d9c6e2d927a90817",
+  "latest_source_commit": "168a46af9e69135d26eee5b37aeae8931161430d",
+  "latest_focused_tests": {
+    "passed": 81,
+    "skipped": 0,
+    "seconds": 37.0
+  },
+  "preceding_full_python": {
+    "source_commit": "f0d03185739def2498e26edcea68ff72fa62dd2f",
+    "passed": 1830,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 685.09,
+    "warning": "intentional duplicate-ZIP-member rejection fixture"
+  },
+  "full_real_build": {
+    "source_commit": "2cfe414e77b29b2b9fe182446c683c6864118d95",
+    "passed": true,
+    "note": "all formal source bytes unchanged in latest source commit"
+  },
+  "latest_static_axiom_audit": {
+    "source_commit": "168a46af9e69135d26eee5b37aeae8931161430d",
+    "theorems": 21
+  },
+  "campaign": {
+    "source_commit": "168a46af9e69135d26eee5b37aeae8931161430d",
+    "receiving_processes": 15,
+    "accepts": 4,
+    "expected_rejections": 11,
+    "actual_false_matrix_proved": true,
+    "wall_seconds": 89.253658
+  },
+  "source_sha256": {
+    "pcs/transport_kernel_v1.py": "d51d5e8655f27574d37af4ac58ca1b5c114a1fb3da61038ce124754912b71a13",
+    "pcs/cli.py": "247dc5a45f3a44082d64270d9b2fc7f69ecf0de783727dabf98a246f735665fd",
+    "formal/real/PCSReal/Transport.lean": "507f6338d008108e5234839ab8be497c9c4be610aadffcefb624f72e2191966d",
+    "formal/real/PCSReal/TransportControls.lean": "014cc164f048cfe0b483e829e725a28871c75cbf38c9770e30c2e0a07ccf78a7",
+    "formal/real/PCSReal/TransportAudit.lean": "84b824447bb29ec56bc67facbfb4c799bae7ddf2436dd7c61bc69182a6a09933",
+    "scripts/verify_transport_formal.py": "157fe2972147cb755f2e7d7cb7ed00fe5b533b42751ef649d783f11105c7668c",
+    "scripts/run_transport_kernel_v1.py": "3d17db3b342d631e6a06f847ae4cc9ad26ea5376f8c30e3b11b40df559c986bc",
+    "tests/test_transport_kernel_v1.py": "29fcb24d895d1969b234a26d0c20eaf2978575d51eb5e9a7a2cf16b46bda2ca5"
+  },
+  "scientific_acceptance": false,
+  "implementation_correspondence": "OPEN",
+  "continuum_accuracy": "OPEN",
+  "empirical_validity": "OPEN",
+  "protected_qualification": "See required checks on the integration PR final source head; local snapshots do not substitute for protected CI."
+}

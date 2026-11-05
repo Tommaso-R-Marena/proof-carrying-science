@@ -1,0 +1,40 @@
+{
+  "format": "pcs-independent-core-validation-v1",
+  "source_commit": "8b9001fcc155fb7ff3e84f92d3c13208bde44bdf",
+  "source_clean_before_and_after": true,
+  "full_python_suite": {
+    "exit_code": 1,
+    "passed": 1785,
+    "failed": 3,
+    "skipped": 1,
+    "warning": 1,
+    "wall_seconds": 411.52,
+    "failure_reason": "Contribution-gate fixture derives repository name from isolated worktree directory; production gate correctly rejects unknown owner repository.",
+    "failed_tests": [
+      "tests/test_pr_contribution_gate.py::ContributionGateTests::test_normal_change_does_not_require_a_nonexistent_archive",
+      "tests/test_pr_contribution_gate.py::ContributionGateTests::test_valid_archive_runs_the_actual_digest_checker",
+      "tests/test_pr_contribution_gate.py::ContributionGateTests::test_valid_promotion_runs_exact_archive_to_source_checker"
+    ]
+  },
+  "optional_real_prover_control": {
+    "test": "tests/test_prospective_hybrid.py::test_actual_std_hybrid_receipt_and_goal_tampering",
+    "env": "PCS_REQUIRE_PROVER=1",
+    "exit_code": 0,
+    "passed": 1,
+    "wall_seconds": 3.36
+  },
+  "adversarial_foundational": {
+    "exit_code": 0,
+    "attacks": 25,
+    "rejected": 25,
+    "false_accepts": 0
+  },
+  "adversarial_v06_hardening": {
+    "exit_code": 0,
+    "attacks": 12,
+    "rejected": 12,
+    "false_accepts": 0
+  },
+  "external_review": false,
+  "scientific_acceptance": false
+}

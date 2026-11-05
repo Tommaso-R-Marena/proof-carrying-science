@@ -1,0 +1,124 @@
+name: PCS Pointwise Dominance Research
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/**'
+      - 'formal/PCS/V2/ProofGated*.lean'
+      - 'formal/lean-toolchain'
+      - 'scripts/activate_lean_428.sh'
+      - '.github/workflows/pcs-pointwise-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pointwise-certificates:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Real kernel tests and preserved historical evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          mkdir "$evidence"
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s pointwise/tests -v 2>&1 | tee "$evidence/tests.log"
+          python check_hardening_evidence.py | tee "$evidence/parent-evidence.json"
+          python kernel/verify_results.py --folder kernel/results/v1 | tee "$evidence/kernel-historical-evidence.json"
+      - name: Prove the infinite worsening-tail family cannot pass
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          cd research/proof-gated-self-improvement-v1
+          python pointwise/experiments/block_family.py --output "$RUNNER_TEMP/pgsi-pointwise-block-family" | tee "$evidence/block-family.json"
+          mkdir "$evidence/block-family"
+          cp "$RUNNER_TEMP/pgsi-pointwise-block-family/"*.json "$RUNNER_TEMP/pgsi-pointwise-block-family/"*.lean "$RUNNER_TEMP/pgsi-pointwise-block-family/"*.log "$evidence/block-family/"
+      - name: Exhaustive whole-domain decisions, counterexamples and search graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          campaign="$RUNNER_TEMP/pgsi-pointwise-campaign"
+          cd research/proof-gated-self-improvement-v1
+          python pointwise/campaign.py --output "$campaign" | tee "$evidence/campaign.log"
+          python pointwise/verify_results.py --folder "$campaign" --expected pointwise/results/v1/RESULTS.json | tee "$evidence/qualification.json"
+          mkdir "$evidence/campaign"
+          cp "$campaign/"*.json "$campaign/"*.gz "$campaign/"*.log "$evidence/campaign/"
+      - name: Independent quadratic oracle and wider falsification
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          cd research/proof-gated-self-improvement-v1
+          python pointwise/experiments/quadratic_oracle.py --output "$RUNNER_TEMP/pgsi-pointwise-quadratic" --decisions "$RUNNER_TEMP/pgsi-pointwise-campaign/DECISIONS.json" > "$evidence/quadratic-oracle.json"
+          python - "$evidence/quadratic-oracle.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          new=json.loads(Path(sys.argv[1]).read_text())
+          old=json.loads(Path('pointwise/results/quadratic-v1/RESULT.json').read_text())
+          for name in ('outcomes','random_decisions_sha256','oracle_source_sha256','kernel_decisions_sha256','source_sha256'):
+              assert new[name]==old[name], name
+          assert new['outcomes']['mismatches']==0
+          PY
+      - name: Replay every surviving prior-guard composition
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/pgsi-pointwise-evidence"
+          campaign="$RUNNER_TEMP/pgsi-pointwise-preserved"
+          cd research/proof-gated-self-improvement-v1
+          python pointwise/experiments/preserved_campaign.py --output "$campaign" --decisions "$RUNNER_TEMP/pgsi-pointwise-campaign/DECISIONS.json" | tee "$evidence/preserved-campaign.log"
+          python - "$campaign" <<'PY'
+          import hashlib,json,sys,tarfile
+          from pathlib import Path
+          sys.path.insert(0,str(Path('pointwise').resolve()))
+          from receive import ROOT,audit,critical_sources,digest,_read_regular
+          folder=Path(sys.argv[1])
+          new=json.loads((folder/'RESULT.json').read_text())
+          old=json.loads(Path('pointwise/results/preserved-v1/RESULT.json').read_text())
+          assert new['core_sources']==critical_sources()
+          for key in ('semantic_results_sha256','accepted_compositions','pairs_sha256','pairs','sources','decisions_sha256'):
+              assert new[key]==old[key], key
+          assert new['accepted_compositions']==673
+          assert all(digest(ROOT/name)==sha for name,sha in new['sources'].items())
+          inventory=json.loads((folder/'SHA256.json').read_text())
+          for name,sha in inventory.items():
+              assert Path(name).name==name
+              assert hashlib.sha256(_read_regular(folder/name,16*1024*1024)).hexdigest()==sha
+          proofs={r['file']:r for r in new['proofs']}
+          assert len(proofs)==len(new['proofs'])==11
+          assert sum(r['claims'] for r in proofs.values())==673
+          assert {r['file']:r['sha256'] for r in old['proofs']}=={name:r['sha256'] for name,r in proofs.items()}
+          for name,r in proofs.items():
+              assert audit((folder/(Path(name).stem+'-lean.log')).read_text(),{'PCS.Research.PreservedPointwiseReplay.cases_sound'})==r['axioms']
+          seen=set(); total=0
+          with tarfile.open(folder/'PROOFS.tar.gz','r:gz') as archive:
+              for m in archive:
+                  total+=m.size
+                  assert m.isfile() and m.name in proofs and m.name not in seen
+                  assert Path(m.name).name==m.name and m.size<=4*1024*1024 and total<=64*1024*1024
+                  assert hashlib.sha256(archive.extractfile(m).read(m.size+1)).hexdigest()==proofs[m.name]['sha256']
+                  seen.add(m.name)
+          assert seen==set(proofs)
+          PY
+          mkdir "$evidence/preserved"
+          cp "$campaign/"*.json "$campaign/"*.gz "$campaign/"*.log "$campaign/Audit.lean" "$campaign/PreservedGuard.lean" "$evidence/preserved/"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: pcs-pointwise-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pgsi-pointwise-evidence
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,161 @@
+   Compiling certir v0.1.0 (/workspace/certiforge/crates/certir)
+   Compiling certir-parser v0.1.0 (/workspace/certiforge/crates/certir-parser)
+   Compiling certir-interpreter v0.1.0 (/workspace/certiforge/crates/certir-interpreter)
+   Compiling forgeopt-cost v0.1.0 (/workspace/certiforge/crates/forgeopt-cost)
+   Compiling forgeopt-search v0.1.0 (/workspace/certiforge/crates/forgeopt-search)
+   Compiling certiforge-mutate v0.1.0 (/workspace/certiforge/crates/certiforge-mutate)
+   Compiling certiforge-package v0.1.0 (/workspace/certiforge/crates/certiforge-package)
+   Compiling certiforge-fuzz v0.1.0 (/workspace/certiforge/crates/certiforge-fuzz)
+   Compiling forgeopt v0.1.0 (/workspace/certiforge/crates/forgeopt)
+   Compiling forgeopt-bench v0.1.0 (/workspace/certiforge/crates/forgeopt-bench)
+   Compiling certiforge-cli v0.1.0 (/workspace/certiforge/crates/certiforge-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.51s
+     Running unittests src/main.rs (target/debug/deps/certiforge-144ec491463e9fcb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/certiforge_fuzz-64d720706a3b4001)
+
+running 2 tests
+test tests::mutants_usually_rejected ... ok
+test tests::random_programs_typecheck_often ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/certiforge_mutate-70c4625805057e70)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/certiforge_package-444e363870ca1e30)
+
+running 7 tests
+test tests::equals_expression_is_checked_instead_of_self_specification ... ok
+test tests::rare_reference_mismatch_is_not_hidden_by_sampling ... ok
+test tests::reject_tampered_optimized ... ok
+test tests::sampled_large_domain_and_unbound_true_theorems_cannot_accept ... ok
+test tests::reject_vacuous_spec_on_verify ... ok
+test tests::accept_good_package ... ok
+test tests::evidence_never_promotes_exhaustive_rust_replay_to_a_lean_proof ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+
+     Running unittests src/lib.rs (target/debug/deps/certir-ef9518c2d70e3683)
+
+running 3 tests
+test tests::boolean_comparisons_match_interpreter_support ... ok
+test tests::ordered_bitvector_comparisons_remain_supported ... ok
+test tests::well_typed_and_or_identity ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/certir_interpreter-d076bd4ad5cbd0a3)
+
+running 5 tests
+test tests::boolean_ordering_error_cannot_be_hidden_by_and_zero ... ok
+test tests::reject_bad_opt ... ok
+test tests::large_u64_shift_does_not_truncate_to_u32 ... ok
+test tests::and_xor_eq_or ... ok
+test tests::wrapping_add ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/certir_parser-fb6cde2b7ae3f19e)
+
+running 2 tests
+test tests::roundtrip_pretty ... ok
+test tests::parse_or_via_add ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/forgeopt-3878b13ce33cef44)
+
+running 1 test
+test tests::admits_or_rewrite_rejects_unsound ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running unittests src/lib.rs (target/debug/deps/forgeopt_bench-b5bccc6c30d6921f)
+
+running 1 test
+test tests::smoke_finds_at_least_one_opt ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.81s
+
+     Running unittests src/lib.rs (target/debug/deps/forgeopt_cost-a6c127b9e3021f11)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/forgeopt_search-f074f5e2d211f499)
+
+running 2 tests
+test tests::finds_or_rewrite ... ok
+test tests::emits_unsound_candidates ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests certiforge_fuzz
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests certiforge_mutate
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests certiforge_package
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests certir
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests certir_interpreter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests certir_parser
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests forgeopt
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests forgeopt_bench
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests forgeopt_cost
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests forgeopt_search
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

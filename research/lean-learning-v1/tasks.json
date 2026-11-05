@@ -1,0 +1,767 @@
+[
+  {
+    "family": "identity",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "name": "P",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "identity",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "conjunction_swap",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "Q",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "P",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "conjunction_swap",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "conjunction_project",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "name": "P",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "conjunction_project",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "conjunction_intro",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "Q",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "conjunction_intro",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "disjunction_left",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "or",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "disjunction_left",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "disjunction_right",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "Q",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "or",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "disjunction_right",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "modus_ponens",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "modus_ponens",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "duplicate",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "name": "P",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "duplicate",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "validation"
+  },
+  {
+    "family": "weaken",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "Q",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "name": "P",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "weaken",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "validation"
+  },
+  {
+    "family": "nested_reorder",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        },
+        {
+          "name": "R",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "Q",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "R",
+              "op": "var"
+            }
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "R",
+            "op": "var"
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "and",
+            "right": {
+              "name": "Q",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nested_reorder",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "final"
+  },
+  {
+    "family": "compose_implications",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        },
+        {
+          "name": "R",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "P",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "name": "Q",
+            "op": "var"
+          }
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "left": {
+              "name": "Q",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "name": "R",
+              "op": "var"
+            }
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "P",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "name": "R",
+              "op": "var"
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "compose_implications",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "final"
+  },
+  {
+    "family": "four_assumptions",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        },
+        {
+          "name": "R",
+          "type": "Prop"
+        },
+        {
+          "name": "S",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "left": {
+            "name": "Q",
+            "op": "var"
+          },
+          "op": "implies",
+          "right": {
+            "left": {
+              "name": "R",
+              "op": "var"
+            },
+            "op": "implies",
+            "right": {
+              "left": {
+                "name": "S",
+                "op": "var"
+              },
+              "op": "implies",
+              "right": {
+                "left": {
+                  "name": "Q",
+                  "op": "var"
+                },
+                "op": "and",
+                "right": {
+                  "name": "S",
+                  "op": "var"
+                }
+              }
+            }
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "four_assumptions",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "final"
+  },
+  {
+    "family": "missing_assumption",
+    "goal": {
+      "binders": [
+        {
+          "name": "P",
+          "type": "Prop"
+        },
+        {
+          "name": "Q",
+          "type": "Prop"
+        }
+      ],
+      "body": {
+        "left": {
+          "name": "P",
+          "op": "var"
+        },
+        "op": "implies",
+        "right": {
+          "name": "Q",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "missing_assumption",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "final"
+  },
+  {
+    "family": "nat_add_zero",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "n",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "op": "number",
+            "type": "Nat",
+            "value": 0
+          }
+        },
+        "op": "eq",
+        "right": {
+          "name": "n",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_add_zero",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "nat_mul_one",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "n",
+            "op": "var"
+          },
+          "op": "mul",
+          "right": {
+            "op": "number",
+            "type": "Nat",
+            "value": 1
+          }
+        },
+        "op": "eq",
+        "right": {
+          "name": "n",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_mul_one",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "nat_add_comm",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        },
+        {
+          "name": "m",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "name": "n",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "name": "m",
+            "op": "var"
+          }
+        },
+        "op": "eq",
+        "right": {
+          "left": {
+            "name": "m",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "name": "n",
+            "op": "var"
+          }
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_add_comm",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "train"
+  },
+  {
+    "family": "nat_zero_add",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "op": "number",
+            "type": "Nat",
+            "value": 0
+          },
+          "op": "add",
+          "right": {
+            "name": "n",
+            "op": "var"
+          }
+        },
+        "op": "eq",
+        "right": {
+          "name": "n",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_zero_add",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "validation"
+  },
+  {
+    "family": "nat_nested_identity",
+    "goal": {
+      "binders": [
+        {
+          "name": "n",
+          "type": "Nat"
+        }
+      ],
+      "body": {
+        "left": {
+          "left": {
+            "left": {
+              "name": "n",
+              "op": "var"
+            },
+            "op": "mul",
+            "right": {
+              "op": "number",
+              "type": "Nat",
+              "value": 1
+            }
+          },
+          "op": "add",
+          "right": {
+            "op": "number",
+            "type": "Nat",
+            "value": 0
+          }
+        },
+        "op": "eq",
+        "right": {
+          "name": "n",
+          "op": "var"
+        }
+      },
+      "format": "pcs-math-ir-v1"
+    },
+    "id": "nat_nested_identity",
+    "license": "Apache-2.0",
+    "source": "PCS authored",
+    "split": "final"
+  }
+]

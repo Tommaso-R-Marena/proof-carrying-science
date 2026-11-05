@@ -1,0 +1,330 @@
+{
+  "format": "pcs-runtime-refinement-integration-v1",
+  "proof_sources": 63,
+  "fresh_extraction_certificates": [
+    "PCSRuntimeRefinement/Python.lean",
+    "PCSRuntimeRefinement/JavaScript.lean",
+    "PCSForgeRefinement/RustSyntax.lean"
+  ],
+  "kernel_checked_inventory": {
+    "PCSRuntimeRefinement.PyIntervention.python_intervention_refines_reference": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeRefinement.JsIntervention.javascript_intervention_refines_reference": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeRefinement.source_extraction_certificate_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeRefinement.runtime_result_semantics": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSRuntimeRefinement.OmegaReplay.omega_execution_replay_correct": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.Language.language_candidates_exact": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.typed_lowering_preserves_denotation": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.RoundTrip.render_parse_alpha_roundtrip": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.action_rendering_closed": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.transition_preserves_original_goal": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.all_branches_required": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.final_receipt_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.replay_reestablishes_original_claim": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.admitted_library_conservative": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.macro_expansion_preserves_proof": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.research_plan_composes_checked_results": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.adaptive_fair_search_complete": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.resume_budget_monotone": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.cost_guided_search_optimal": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.Separation.shared_reasoning_family_upper_bound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.Separation.baseline_family_lower_bound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSReasoningLibrary.Separation.certified_reuse_complexity_separation": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.selector_projection_exact": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.abduction_feasible_iff": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.abduction_global_optimum": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.abduction_optimal_count": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.abduction_mandatory_possible_exact": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.Cegar.counterexample_clause_necessary": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.Cegar.cegar_optimum_preserved": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.Cegar.cegar_finite_termination": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSAssumptionDiscovery.abduction_result_replay_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSVerifiedLearning.episode_success_reward_requires_proof": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSVerifiedLearning.eligible_feedback_reverified": [],
+    "PCSVerifiedLearning.Shaping.potential_return_telescopes": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSVerifiedLearning.Shaping.potential_shaping_preserves_policy_order": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSVerifiedLearning.Shaping.macro_discount_correct": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSMathLanguage.alpha_firewall_exact": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSVerifiedLearning.training_export_label_noninterference": [],
+    "PCSVerifiedLearning.generation_preserves_verifier_authority": [
+      "propext"
+    ],
+    "PCSForgeRefinement.Rust.rust_certir_extraction_sound": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.Rust.rust_certificate_preserves_eval_expr": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.Rust.interp_eval_expr_source_bound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.certir_eval_correspondence": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.rewrite_certificate_universally_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.optimization_sequence_preserves_program": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.verified_static_cost_improvement": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSForgeRefinement.optimization_episode_reward_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSStatisticsCore.exposure_ledger_enforces_test_protocol": [
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSStatisticsCore.union_bound_generations": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSEndToEnd.end_to_end_acceptance_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSEndToEnd.policy_cannot_manufacture_acceptance": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSEndToEnd.success_independent_of_claims": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSEndToEnd.end_to_end_abduction_sound": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PCSEndToEnd.abduction_policy_cannot_change_result": [
+      "propext"
+    ]
+  },
+  "source_windows": [
+    {
+      "component": "proof-carrying-science",
+      "source": "pcs/experimental/intervention.py",
+      "lines": [
+        33,
+        62
+      ],
+      "sha256": "b5b45a7e982e30bd213acd648d1bad07d5815276a53e7227042988ba77b81c76",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "proof-carrying-science-site",
+      "source": "public/intervention-core.mjs",
+      "lines": [
+        14,
+        27
+      ],
+      "sha256": "ca5a3616ff992befffbeb94bdd18a984c021b199c26f8086a47d23d691cbdeb8",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir/src/lib.rs",
+      "lines": [
+        20,
+        35
+      ],
+      "sha256": "da05c845f0858efa7d84baa3fb3ebd7c0e6f89183976dbab6ef2567ef6a748f8",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        14,
+        19
+      ],
+      "sha256": "c0be679c86d57d0a5ebad45e218cfcfae7fadbca34056ed64c28abd7962808f0",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        39,
+        66
+      ],
+      "sha256": "125d6bcc93ab146624f8583ab7ab7885bc44708098395dac1fbceac0f62a54e3",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        68,
+        77
+      ],
+      "sha256": "d258b70c02523ecbd69e3dd7c1fb60aa6042da9795b5bde353a43fe739077583",
+      "current_checkout_checked": true
+    },
+    {
+      "component": "certiforge",
+      "source": "crates/certir-interpreter/src/lib.rs",
+      "lines": [
+        79,
+        137
+      ],
+      "sha256": "e4fb94f8e531618627ad2508bf39afda4b38005271ec30b12633140fa514f44d",
+      "current_checkout_checked": true
+    }
+  ],
+  "conditional_runtime_refinements_proved": false,
+  "parser_source_refinement_proved": false,
+  "rust_top_level_eval_extracted": false,
+  "pcs_scientific_authority": false
+}

@@ -1,0 +1,195 @@
+{
+  "format": "pcs-research-plan-v1",
+  "nodes": [
+    {
+      "id": "association",
+      "goal": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "xs",
+            "type": "NatList"
+          },
+          {
+            "name": "ys",
+            "type": "NatList"
+          },
+          {
+            "name": "zs",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "ys"
+              },
+              "right": {
+                "op": "var",
+                "name": "zs"
+              }
+            }
+          }
+        }
+      },
+      "depends_on": []
+    },
+    {
+      "id": "reverse_association",
+      "goal": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "xs",
+            "type": "NatList"
+          },
+          {
+            "name": "ys",
+            "type": "NatList"
+          },
+          {
+            "name": "zs",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "append",
+            "left": {
+              "op": "var",
+              "name": "xs"
+            },
+            "right": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "ys"
+              },
+              "right": {
+                "op": "var",
+                "name": "zs"
+              }
+            }
+          },
+          "right": {
+            "op": "append",
+            "left": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "var",
+                "name": "ys"
+              }
+            },
+            "right": {
+              "op": "var",
+              "name": "zs"
+            }
+          }
+        }
+      },
+      "depends_on": [
+        "association"
+      ]
+    },
+    {
+      "id": "length_transport",
+      "goal": {
+        "format": "pcs-math-ir-v1",
+        "binders": [
+          {
+            "name": "xs",
+            "type": "NatList"
+          },
+          {
+            "name": "ys",
+            "type": "NatList"
+          },
+          {
+            "name": "zs",
+            "type": "NatList"
+          }
+        ],
+        "body": {
+          "op": "eq",
+          "left": {
+            "op": "length",
+            "arg": {
+              "op": "append",
+              "left": {
+                "op": "append",
+                "left": {
+                  "op": "var",
+                  "name": "xs"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "ys"
+                }
+              },
+              "right": {
+                "op": "var",
+                "name": "zs"
+              }
+            }
+          },
+          "right": {
+            "op": "length",
+            "arg": {
+              "op": "append",
+              "left": {
+                "op": "var",
+                "name": "xs"
+              },
+              "right": {
+                "op": "append",
+                "left": {
+                  "op": "var",
+                  "name": "ys"
+                },
+                "right": {
+                  "op": "var",
+                  "name": "zs"
+                }
+              }
+            }
+          }
+        }
+      },
+      "depends_on": [
+        "reverse_association"
+      ]
+    }
+  ]
+}

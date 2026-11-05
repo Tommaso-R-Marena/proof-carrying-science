@@ -1,0 +1,10 @@
+name = "PCSEpistemicResearch"
+version = "0.1.0"
+defaultTargets = ["PCSEpistemic"]
+
+[[lean_lib]]
+name = "PCSEpistemic"
+srcDir = "../../../formal"
+roots = ["PCSEpistemic"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]

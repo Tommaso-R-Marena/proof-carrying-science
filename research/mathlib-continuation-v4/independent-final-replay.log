@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/.onboarding/mathlib-v4/verify_final.py", line 17, in <module>
+    actual=env._record(f'theorem pcs_post_evaluation_replay_{i} : {statement} := by\n{receipt["proof"]}\n#pcs_audit pcs_post_evaluation_replay_{i}\n','PCS_KERNEL:')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_environment_v4.py", line 165, in _record
+    except subprocess.TimeoutExpired:raise RuntimeError('Mathlib resource exhaustion') from None
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Mathlib resource exhaustion

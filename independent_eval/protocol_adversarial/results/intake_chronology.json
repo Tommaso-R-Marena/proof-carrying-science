@@ -1,0 +1,54 @@
+{
+  "format": "pcs-independent-intake-chronology-v1",
+  "pass": true,
+  "principles": [
+    "Hash integrity \u2260 pre-results specification.",
+    "Signature authenticity \u2260 reviewer-owned preregistration binding.",
+    "frozen_at is producer metadata only.",
+    "Reviewer-owned expected intake semantic hash is the out-of-band commitment under test when available."
+  ],
+  "scenario_count": 5,
+  "scenarios": [
+    {
+      "expected": "reject",
+      "id": "post_hoc_claim_vs_lock",
+      "kind": "attack",
+      "result": {
+        "error": "certificate claim statement changed after intake freeze: C_PK_CONTRACT",
+        "rejected": true
+      }
+    },
+    {
+      "error": null,
+      "id": "forged_frozen_at_still_hash_valid",
+      "intake_semantic_hash_unchanged": true,
+      "kind": "chronology",
+      "lock_valid": true,
+      "observation": "Producer can choose frozen_at without changing intake_semantic_hash; timestamp alone is not preregistration evidence."
+    },
+    {
+      "hashes_differ": true,
+      "id": "substituted_intake_new_hash",
+      "kind": "attack",
+      "observation": "A reviewer-owned out-of-band commitment to the original hash would detect this substitution; package-local consistency alone would not.",
+      "original_hash": "312e3616c086eee43a1a3bfdac53206210bf0125b8059fc34ebc6db632c8190c",
+      "substituted_hash": "20dec6ed7cf58c24b4e39e17a49c7bb70dbbae6bdad8b8ca3e03da82de70f98a"
+    },
+    {
+      "id": "replayed_preregistration_record",
+      "kind": "chronology",
+      "observation": "Byte-identical replay of a lock is trivial for the producer; independent timestamping/notary would be required for wall-clock evidence.",
+      "original_sha256": "5c89160850e54228af2e86f1c4f458528413f8eec579485123b10328f7abdb67",
+      "replay_sha256": "5c89160850e54228af2e86f1c4f458528413f8eec579485123b10328f7abdb67"
+    },
+    {
+      "extended": {
+        "available": false,
+        "error": "ModuleNotFoundError: No module named 'pcs.intake_verify_v06'"
+      },
+      "id": "optional_reviewer_expected_hash_module",
+      "kind": "extended",
+      "note": "Module absent on this PCS revision; chronology conclusions use lock APIs only."
+    }
+  ]
+}

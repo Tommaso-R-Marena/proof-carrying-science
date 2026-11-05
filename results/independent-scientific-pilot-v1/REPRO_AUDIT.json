@@ -1,0 +1,28 @@
+{
+  "authority_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49",
+  "commit": "b512b96952ff53701cf5c43c6b0355c44cc5cd34",
+  "deterministic_fixture": {
+    "bundle_sha256": "ee126671a27f677b2dd9e317ff9c0e58851f7a8810f135fdbd72f4804edab358",
+    "bundle_sha_equal": true,
+    "note": "Fixture-only claim under pinned timestamps and demo key seed."
+  },
+  "format": "pcs-independent-pilot-reproducibility-audit-v1",
+  "identical_bundle_verify": {
+    "authoritative": true,
+    "bundle_sha256": "ad3a9f1822686020ed9d23a8ef204ca9cef80f0301a9747c73a6502d55908a6b",
+    "bundle_sha_match": true,
+    "valid": true
+  },
+  "regeneration": {
+    "bundle_sha_a": "ad3a9f1822686020ed9d23a8ef204ca9cef80f0301a9747c73a6502d55908a6b",
+    "bundle_sha_b": "d06460c9a961495b6f0ccec8b6a7b390bec57af68e757e8087890e253350472e",
+    "bundle_sha_equal": false,
+    "cert_semantic_match": true,
+    "certificate_semantic_hash": "dc6c4d4204eb7829cc1ea4aa2ff9fc451ff6b25e0db0669e88765812fced5483",
+    "frozen_at_a": "2026-10-17T19:29:51.216467+00:00",
+    "frozen_at_b": "2026-10-17T19:29:51.685951+00:00",
+    "intake_semantic_hash": "ab9fec8d50a28c2d432f68ecc8d5fa01e7e3f4867bc061ba289b37947b3a14cd",
+    "intake_semantic_match": true,
+    "note": "Production regenerations are not claimed byte-identical when frozen_at differs."
+  }
+}

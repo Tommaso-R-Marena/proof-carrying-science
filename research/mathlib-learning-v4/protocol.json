@@ -1,0 +1,71 @@
+{
+  "architectures": [
+    "graph",
+    "bag"
+  ],
+  "catalog_sha256": "e0ba4bda1495558f077461f00f20a0043afa555a40546e539a3c2cff6d4dfb64",
+  "entropy": 0.002,
+  "epochs": 20,
+  "evaluation_environment_byte_sha256": "c0ae9f1b7fe2c066bbfa1a5e5a4bd790d9fcfee5a26d33c7d434862a09720819",
+  "final_protocol_sha256": "86d53d20433479942602f5c71e7a73ca7f232b26ec8d07b7709fcbddf03663c4",
+  "format": "pcs-grounded-mathlib-learning-protocol-v4",
+  "gamma": 0.97,
+  "gradient_clip": 1.0,
+  "limitations": [
+    "small CPU experiment; performance requires independent final evaluation",
+    "proposal policies do not confer certification authority"
+  ],
+  "optimizer_resume_at_epoch": 10,
+  "rl_adam_lr": 0.0005,
+  "rl_episodes_per_graph_seed": 8,
+  "rl_max_steps": 16,
+  "rl_seed_offset": 100,
+  "seeds": [
+    71,
+    79
+  ],
+  "selection": "no model selected from final outcomes; all seeds/architectures retained, no automatic promotion",
+  "source_files": [
+    {
+      "name": "premise_experiment_v4.py",
+      "sha256": "c92bce4c8673525e7a8c257f5d3d8d39d726fda92815e840e55550e051844580"
+    },
+    {
+      "name": "premise_policy_v4.py",
+      "sha256": "2833935b2210632c093b0f75242b0f95e5d225c0b8e67477fd918998819dc2da"
+    },
+    {
+      "name": "premise_learning_v4.py",
+      "sha256": "206ce4d3c1902dda1e8edd1c2f944d8112f8f573377447bee86d9fb0f140ac32"
+    },
+    {
+      "name": "mathlib_environment_v4.py",
+      "sha256": "8d4017da4ca7235bb58fce4dafffde0b62eecc8c805eb9ac29a2c104f1c51720"
+    }
+  ],
+  "supervised_adam_lr": 0.003,
+  "terminal_reward": "actual kernel check only",
+  "training_data_sha256": "3008b8209edb78571365d860876e1beb558ac3b0bdf712772b235d1a7ec4ad5e",
+  "training_statement_sha256": [
+    "64d488db7a3d8df1e5bb36586b6671a932f981609ccb029fcf2c8950ef3d3f6b",
+    "180ebbdd258dc67aafe27e4760c019b0715684d10c27b92cce6c59078cf41019",
+    "55f7b41fabe62fd6eda9cfa023dc302f1c663e9e0e8438c0e72bda9b88741493",
+    "3bd5453c6ef4e3723405a5b2e231cb079cb756ad4e303de00c6d5b7dd49fde76",
+    "353468580e462e76f2651cc0172bca8d4c014a02a584f7a0aa521ac018458586",
+    "4470fec8ed321e972519b7d0bb1fc04cc5b995b4d88024c3d9ad6cc31b2548fa",
+    "16167622a3d0422c87830e20d686e4ab56f9e20311543511c154f3775d066879",
+    "f269636d623e7ff661e42dce263de4693daae92903bccc923cc27ff2fe311877"
+  ],
+  "training_task_ids": [
+    "train-Set.preimage_inter",
+    "train-Set.preimage_union",
+    "train-Set.preimage_diff",
+    "train-Set.preimage_compl",
+    "train-Set.preimage_empty",
+    "train-Set.preimage_univ",
+    "train-logic-projection",
+    "train-logic-composition"
+  ],
+  "uncertainty_loss": 0.01,
+  "value_loss": 0.03
+}

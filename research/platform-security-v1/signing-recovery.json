@@ -1,0 +1,40 @@
+{
+  "control_count": 17,
+  "controls": {
+    "backup_restore_fingerprint_matches": true,
+    "compromise_rejects_even_observed_history": true,
+    "corrupted_backup_rejected": true,
+    "corrupted_policy_snapshot_rejected": true,
+    "corrupted_release_artifact_rejected": true,
+    "encrypted_backup_private_mode": true,
+    "expired_signing_credential_rejected": true,
+    "independently_observed_pre_rotation_history_valid": true,
+    "old_policy_backup_cannot_undo_rotation": true,
+    "recovered_signer_policy_bound_positive": true,
+    "replacement_real_signature_valid": true,
+    "restored_key_real_signature_verifies": true,
+    "retired_key_current_verification_rejected": true,
+    "unavailable_signing_service_fails_without_signature": true,
+    "uncompromised_replacement_still_valid": true,
+    "unregistered_key_substitution_rejected": true,
+    "wrong_backup_password_rejected": true
+  },
+  "financial_spend": 0,
+  "format": "pcs-isolated-signing-recovery-v1",
+  "limitations": [
+    "No production key custody or production incident tested",
+    "POSIX mode tested where supported; no hardware key tested",
+    "Witness correctness assumes independently trusted observation service and clock",
+    "Worker/D1/job/CI recovery is outside this signing-only exercise"
+  ],
+  "passed": true,
+  "pcs_authority": false,
+  "production_mutations": 0,
+  "source_sha256": {
+    "pcs/key_lifecycle.py": "92c78c48ae9498360deb3c6e76900bc21223cecb9312a3621906876ff9f98710",
+    "pcs/signing.py": "fbea4b339b3d2c4bc00db0dd1a38460a21050ed7bd9e9388dd74d345268c82e4",
+    "pcs/signing_policy_v1.py": "216685a8d0e26725f1cde0d9430458d76d21ccf384b106fb2e61370783cf9fcd",
+    "scripts/exercise_signing_recovery.py": "b2cdd5f83555cd0d11baa07f5b5959628ae4495fe7b3c396eaeba74be9c24476"
+  },
+  "synthetic_test_keys_only": true
+}

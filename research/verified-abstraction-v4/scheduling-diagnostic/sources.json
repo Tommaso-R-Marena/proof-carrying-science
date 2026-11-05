@@ -1,0 +1,14 @@
+[
+  {
+    "id": "nat-successor-chain",
+    "module": "Mathlib.Data.Nat.Basic",
+    "statement": "\u2200 (a b c : Nat), Nat.succ a = Nat.succ b \u2192 Nat.succ b = Nat.succ c \u2192 a = c",
+    "proof": "  intro a b c hab hbc\n  exact Nat.succ.inj (Eq.trans hab hbc)"
+  },
+  {
+    "id": "list-cons-chain",
+    "module": "Mathlib.Data.List.Basic",
+    "statement": "\u2200 (a b c : List Nat), (0 :: a) = (0 :: b) \u2192 (0 :: b) = (0 :: c) \u2192 a = c",
+    "proof": "  intro a b c hab hbc\n  exact (List.cons.inj (Eq.trans hab hbc)).2"
+  }
+]

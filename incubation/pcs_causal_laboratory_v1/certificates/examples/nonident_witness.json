@@ -1,0 +1,138 @@
+{
+  "assumptions": [
+    "finite_binary_scm_class_with_latent_U"
+  ],
+  "claim": "P(Y|do(X)) not identified from P(X,Y) under latent confounding class",
+  "graph": {
+    "edges": [
+      [
+        "X",
+        "Y"
+      ]
+    ],
+    "nodes": [
+      "X",
+      "Y"
+    ]
+  },
+  "kind": "nonidentifiability_witness",
+  "notice": "producer_pass is untrusted; verifier must recompute. Mathematical acceptance \u2260 scientific validation of assumptions.",
+  "payload": {
+    "interventional_a": {
+      "domains": {
+        "Y": [
+          0,
+          1
+        ]
+      },
+      "mass": [
+        {
+          "assignment": {
+            "Y": 0
+          },
+          "p": [
+            1,
+            1
+          ]
+        }
+      ],
+      "variables": [
+        "Y"
+      ]
+    },
+    "interventional_b": {
+      "domains": {
+        "Y": [
+          0,
+          1
+        ]
+      },
+      "mass": [
+        {
+          "assignment": {
+            "Y": 0
+          },
+          "p": [
+            1,
+            2
+          ]
+        },
+        {
+          "assignment": {
+            "Y": 1
+          },
+          "p": [
+            1,
+            2
+          ]
+        }
+      ],
+      "variables": [
+        "Y"
+      ]
+    },
+    "observational_a": {
+      "domains": {
+        "X": [
+          0,
+          1
+        ],
+        "Y": [
+          0,
+          1
+        ]
+      },
+      "mass": [
+        {
+          "assignment": {
+            "X": 0,
+            "Y": 0
+          },
+          "p": [
+            1,
+            1
+          ]
+        }
+      ],
+      "variables": [
+        "X",
+        "Y"
+      ]
+    },
+    "observational_b": {
+      "domains": {
+        "X": [
+          0,
+          1
+        ],
+        "Y": [
+          0,
+          1
+        ]
+      },
+      "mass": [
+        {
+          "assignment": {
+            "X": 0,
+            "Y": 0
+          },
+          "p": [
+            1,
+            1
+          ]
+        }
+      ],
+      "variables": [
+        "X",
+        "Y"
+      ]
+    }
+  },
+  "producer_pass": null,
+  "query": {
+    "outcome": "Y",
+    "treatment": "X",
+    "treatment_value": 1
+  },
+  "version": "pcs-causal-cert-v1"
+}

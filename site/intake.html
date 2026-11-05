@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PCS Pilot Intake Builder</title>
+<meta name="description" content="Build a pre-result PCS pilot claim and assumption inventory locally in your browser.">
+<link rel="stylesheet" href="styles.css">
+<style>
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.textinput,.selectinput,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit}
+textarea{min-height:92px;resize:vertical}
+.rowcard{border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;background:#fff}
+.rowcard header{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+.rowcard h3{margin:0;font-size:15px}
+.smallbutton{border:1px solid var(--line);background:white;border-radius:9px;padding:7px 10px;cursor:pointer}
+@media(max-width:700px){.formgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav>
+  <a class="brand" href="index.html"><span class="mark">PCS</span>Proof-Carrying Science</a>
+  <div class="navlinks"><a href="demo.html">Demo</a><a class="button secondary" href="index.html">Overview</a></div>
+</nav>
+<main>
+<section class="hero" style="padding-bottom:26px">
+  <div class="eyebrow">Design-partner tool</div>
+  <h1 style="font-size:clamp(42px,6vw,68px)">Freeze the question before seeing the answer.</h1>
+  <p class="lede">Define the workflow boundary, requested claims, assurance classes, and assumptions before attestation. This builder runs entirely in your browser and exports a PCS pilot-intake JSON file; it does not upload your entries.</p>
+</section>
+
+<div class="demo-layout">
+  <section class="panel">
+    <h2>Pilot scope</h2>
+    <div class="field"><label>Pilot ID</label><input id="pilotId" class="textinput" value="PCS-PILOT-001"></div>
+    <div class="field"><label>Workflow summary</label><textarea id="workflow">Bounded computational workflow supplied for PCS assurance review.</textarea></div>
+    <div class="field"><label>Data classification</label>
+      <select id="classification" class="selectinput">
+        <option>synthetic</option><option>public</option><option selected>non_sensitive</option><option>deidentified</option><option>proprietary_sensitive</option>
+      </select>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="notes" placeholder="Scope restrictions, reviewer context, or explicit non-goals."></textarea></div>
+    <div class="actions">
+      <button class="button primary" id="download">Download intake JSON</button>
+      <button class="button secondary" id="loadPkpd">Load PK/PD example</button>
+    </div>
+    <p class="demo-note">For sensitive or regulated work, this form is only a local drafting aid. Use your approved data-handling process for actual pilot artifacts.</p>
+  </section>
+
+  <section>
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;gap:14px;align-items:center"><div><h2>Claims</h2><p>What exactly must the evidence support?</p></div><button class="button secondary" id="addClaim">+ Claim</button></div>
+      <div id="claims"></div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;gap:14px;align-items:center"><div><h2>Assumptions</h2><p>What conditions remain explicit rather than silently treated as facts?</p></div><button class="button secondary" id="addAssumption">+ Assumption</button></div>
+      <div id="assumptions"></div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <h2>Preview</h2>
+      <pre id="preview"></pre>
+      <p class="demo-note">Next CLI step: <code>pcs freeze-intake pilot_intake.json -o pilot_intake.lock.json</code>. The lock semantic hash is then bound into the signed attestation package.</p>
+    </div>
+  </section>
+</div>
+</main>
+<footer>Proof-Carrying Science · Local browser intake builder · Entries are not transmitted by this static page.</footer>
+</div>
+<script src="intake.js"></script>
+</body>
+</html>

@@ -1,0 +1,727 @@
+{
+  "format": "pcs-model-registry-v1",
+  "models": [
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "untrained-17.json",
+      "id": "untrained-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "6ba1bbecb58c8969b6518ffa0f1495e384435b66c23e31a67b10a736b2ddaf77",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 9,
+          "expansions": 74,
+          "tasks": 5,
+          "verified": 1,
+          "wall_seconds": 1.1570423490047688
+        },
+        "validation": {
+          "actual_lean_requests": 4,
+          "expansions": 24,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.5230800599965733
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "graph-17.json",
+      "id": "graph-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "83b5578ce084067707ba203b381f1adb1ac8dd514047dd3171c205ef95bb9348",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 10,
+          "expansions": 91,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.026488358991628
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.612016467996
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "bag",
+      "checkpoint": "bag-17.json",
+      "id": "bag-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "c512b0fba01f187ca233b448f5f4e31764f467dde37bac2c9886f7491ffdf407",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 4,
+          "expansions": 93,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.374253422996844
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.1245264320095885
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl1-17.json",
+      "id": "rl1-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "0530d2177e2782e023af106bd28c82a23b49c2a5a4ff93b846bffc3ade4dc951",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 90,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.241572102997452
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.9540944320033304
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl2-17.json",
+      "id": "rl2-17",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "d5334dcdedb00441f010894ffc98c899d4b2c8e1c7a1b40bd326dc9a3f8e3de5",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 90,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 4.106240877015807
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 3.142516480991617
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "untrained-31.json",
+      "id": "untrained-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "dc27d87912a9476d4bfbb2cd448704e49499f058b8b0d11f782d95846bed9c91",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 6,
+          "expansions": 86,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 4.095703222985321
+        },
+        "validation": {
+          "actual_lean_requests": 4,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.7348213679943
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "graph-31.json",
+      "id": "graph-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "190dad230d1011e2b1f6b2a625f70b8d99cceee889b0d68214687bc465c2e543",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 91,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.1909382340018055
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.711184261002927
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "bag",
+      "checkpoint": "bag-31.json",
+      "id": "bag-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "ba11a3dc9b09a7bf2066bd1ba368ba2aac6b83b099bcdbfad70115dd2839a5c5",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 92,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.4517753740074113
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 23,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.6170092430038494
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl1-31.json",
+      "id": "rl1-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "149593a6334a7bc2c0edcd1da06b256ab71cbb309ca1e7ce6de1d5f37d2fb6a2",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 91,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.8340042069976334
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.5379803649993846
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl2-31.json",
+      "id": "rl2-31",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "6e4bbab2333f98f09e7bdf8cf6712e10d860e3bfa31354003232632dc8837716",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 91,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.912777131983603
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.5998665100050857
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "untrained-47.json",
+      "id": "untrained-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "28fb90a5388311d151a64aebcc72df8568cfa72dcae635eed8c07dfccbb34759",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 1,
+          "expansions": 71,
+          "tasks": 5,
+          "verified": 1,
+          "wall_seconds": 0.9551730650055106
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.569856931004324
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "graph-47.json",
+      "id": "graph-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "a2f3c430f8dc461d6e3708ded0ab64f8af2ef3b8774a91ee8e304d4bd7cca2e7",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 90,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.3808058010108653
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.5156996229998185
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "bag",
+      "checkpoint": "bag-47.json",
+      "id": "bag-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "4616ead39bf6491ecc2e9218297bb0a96701c712cb89fe280938dcc9ba422da5",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 90,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 4.487807982004597
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.6036137319970294
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl1-47.json",
+      "id": "rl1-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "55e261b27be5be112a1d7817f0cc88e05a9ee8ca5884b7ecaca8d5f3d2e35848",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 90,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 3.498334060990601
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.5286695800023153
+        }
+      }
+    },
+    {
+      "approval": "experimental-local",
+      "architecture": "graph",
+      "checkpoint": "rl2-47.json",
+      "id": "rl2-47",
+      "parameters": 10419,
+      "pcs_authority": false,
+      "sha256": "d2793e641d26bcc450d3dc58e8df5562ab6c0d75582274b318f9e37ea52d44d9",
+      "supported_domain": "typed elementary Lean propositions and Nat expressions",
+      "training_source_sha256": "31ea4cd46ddd5f538b5fad170a8a21bbd7531c5e7b1006bf4d908afc8fbe9e76",
+      "dataset_manifest_sha256": "0f6c3fd5eb3cd814765f2c8aa4c6ca038ee2ba8a51618689c706fae8228698d1",
+      "training_configuration": {
+        "beam": 4,
+        "budget": 96,
+        "depth": 18,
+        "epochs": 35,
+        "final_evaluations": "all frozen checkpoints once; no fitting against final results",
+        "format": "pcs-prover-protocol-v1",
+        "limitations": [
+          "public authored elementary tasks",
+          "no external project transfer",
+          "probe replay caching shared; expansion budgets equal, timing cache-dependent"
+        ],
+        "rl_episodes_per_generation": 12,
+        "seeds": [
+          17,
+          31,
+          47
+        ],
+        "selection": "validation verified count, then fewer expansions; no authority promotion"
+      },
+      "metrics": {
+        "final": {
+          "actual_lean_requests": 3,
+          "expansions": 90,
+          "tasks": 5,
+          "verified": 3,
+          "wall_seconds": 4.27123527299409
+        },
+        "validation": {
+          "actual_lean_requests": 3,
+          "expansions": 22,
+          "tasks": 3,
+          "verified": 3,
+          "wall_seconds": 2.550743888001307
+        }
+      }
+    }
+  ],
+  "production_authority": false,
+  "selected_local_experiment": "graph-17"
+}

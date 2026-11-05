@@ -1,0 +1,249 @@
+[
+  {
+    "attacks": 25,
+    "campaign": "pcs-v0.5-foundational-attacks",
+    "false_accepts": 0,
+    "rejected": 25,
+    "results": [
+      {
+        "attack": "artifact_tamper_without_rehash",
+        "detail": [
+          "artifact hash mismatch: train",
+          "evidence replay details mismatch: E1"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "certificate_content_tamper_without_rehash",
+        "detail": [
+          "certificate integrity hash mismatch",
+          "certificate semantic hash mismatch"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "forged_PASS_after_data_change_with_rehash",
+        "detail": [
+          "certificate semantic hash mismatch",
+          "evidence replay outcome mismatch: E1 recorded=PASS replayed=FAIL",
+          "evidence replay details mismatch: E1"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "evidence_details_forged_with_rehash",
+        "detail": [
+          "certificate semantic hash mismatch",
+          "evidence replay details mismatch: E1"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "claim_assessment_forged_with_rehash",
+        "detail": [
+          "certificate semantic hash mismatch",
+          "claim assessment mismatch: C1"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "workflow_summary_forged_with_rehash",
+        "detail": [
+          "certificate semantic hash mismatch",
+          "workflow_summary mismatch"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "manifest_path_traversal",
+        "detail": "artifact a escapes package root: '../pcs-secret.txt'",
+        "rejected": true
+      },
+      {
+        "attack": "semantic_evidence_misbinding",
+        "detail": "computational claim C1 predicate is not bound to any required evidence check",
+        "rejected": true
+      },
+      {
+        "attack": "pkpd_prediction_tamper_with_rehash",
+        "detail": [
+          "certificate semantic hash mismatch",
+          "evidence replay outcome mismatch: E_PK_REPLAY recorded=PASS replayed=FAIL",
+          "evidence replay details mismatch: E_PK_REPLAY"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "pkpd_effect_tamper_with_rehash",
+        "detail": [
+          "certificate semantic hash mismatch",
+          "evidence replay outcome mismatch: E_PK_REPLAY recorded=PASS replayed=FAIL",
+          "evidence replay details mismatch: E_PK_REPLAY"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "semantic_hash_forged_with_integrity_rehash",
+        "detail": [
+          "certificate semantic hash mismatch"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "signature_replay_after_certificate_rewrite",
+        "detail": [
+          "signature payload does not match certificate",
+          "signature verification failed: InvalidSignature: "
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "package_report_tamper",
+        "detail": [
+          "package: package hash mismatch: report.html",
+          "package: package size mismatch: report.html"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "package_manifest_rewrite_without_resign",
+        "detail": [
+          "package signature: signed package manifest hash mismatch",
+          "package signature: package signature verification failed: InvalidSignature: "
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "signer_substitution_against_pinned_identity",
+        "detail": [
+          "package signature: signer fingerprint does not match pinned expected fingerprint"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "external_reviewer_policy_rejects_producer_supported_claim",
+        "detail": [
+          "policy: {'type': 'claim_status', 'claim_id': 'C_PKPD_REPLAY', 'actual': 'COMPUTATIONALLY_SUPPORTED', 'allowed': ['FORMALLY_VERIFIED_UNDER_ASSUMPTIONS']}"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "private_key_material_accidentally_staged_for_bundle",
+        "detail": "refusing to bundle apparent private-key material: accidental-private.pem",
+        "rejected": true
+      },
+      {
+        "attack": "private_key_marker_beyond_prefix_scan",
+        "detail": "refusing to bundle apparent private-key material: late-key.bin",
+        "rejected": true
+      },
+      {
+        "attack": "stale_attestation_output_contamination",
+        "detail": "attestation output directory must be empty to prevent stale evidence contamination: /tmp/tmp44g17r92/evidence",
+        "rejected": true
+      },
+      {
+        "attack": "duplicate_zip_member_ambiguity",
+        "detail": "duplicate or file/directory-colliding ZIP member: 'certificate.json'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_file_parent_namespace_collision",
+        "detail": "ZIP namespace collision: file 'artifacts' is parent of 'artifacts/data.csv'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_casefold_namespace_collision",
+        "detail": "cross-platform ZIP name collision: 'Artifacts/data.csv' vs 'artifacts/data.csv'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_windows_reserved_filename",
+        "detail": "ZIP member uses Windows-reserved filename: 'CON.txt'",
+        "rejected": true
+      },
+      {
+        "attack": "duplicate_json_key_parser_differential",
+        "detail": [
+          "duplicate JSON object key: 'subject'"
+        ],
+        "rejected": true
+      },
+      {
+        "attack": "posthoc_claim_rewrite_after_intake_freeze",
+        "detail": "certificate claim statement changed after intake freeze: C_PK_CONTRACT",
+        "rejected": true
+      }
+    ]
+  },
+  {
+    "attacks": 12,
+    "false_accepts": 0,
+    "format": "pcs-v06-adversarial-hardening-v1",
+    "rejected": 12,
+    "results": [
+      {
+        "attack": "signed_certificate_byte_tamper",
+        "detail": "canonical_inputs",
+        "rejected": true
+      },
+      {
+        "attack": "zip_path_traversal",
+        "detail": "unsafe or non-canonical ZIP member: '../escape.txt'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_duplicate_control_member",
+        "detail": "duplicate or file/directory-colliding ZIP member: 'certificate.json'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_casefold_collision",
+        "detail": "cross-platform ZIP name collision: 'certificate.json' vs 'Certificate.json'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_windows_reserved_name",
+        "detail": "ZIP member uses Windows-reserved filename: 'CON.txt'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_backslash_alias",
+        "detail": "ZIP member uses backslash: 'artifacts\\\\alias.txt'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_non_nfc_name",
+        "detail": "non-NFC ZIP member segment is not portable: 'e\u0301.txt'",
+        "rejected": true
+      },
+      {
+        "attack": "zip_trailing_dot_segment",
+        "detail": "ZIP member has non-portable trailing space/dot: 'result.'",
+        "rejected": true
+      },
+      {
+        "attack": "normalized_index_byte_tamper",
+        "detail": "package_binding",
+        "rejected": true
+      },
+      {
+        "attack": "unsigned_extra_member",
+        "detail": "package_binding",
+        "rejected": true
+      },
+      {
+        "attack": "environment_source_drift_after_signing",
+        "detail": "package_binding",
+        "rejected": true
+      },
+      {
+        "attack": "fully_rehashed_style_false_environment_claim_at_replay_boundary",
+        "detail": [
+          "signed environment contract differs from fresh capture over delivered bytes"
+        ],
+        "rejected": true
+      }
+    ]
+  }
+]

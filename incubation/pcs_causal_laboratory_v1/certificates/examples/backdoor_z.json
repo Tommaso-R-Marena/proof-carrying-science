@@ -1,0 +1,43 @@
+{
+  "assumptions": [
+    "dag_correct",
+    "causal_sufficiency",
+    "positivity",
+    "consistency"
+  ],
+  "claim": "Z adjusts for confounding of X on Y",
+  "graph": {
+    "edges": [
+      [
+        "X",
+        "Y"
+      ],
+      [
+        "Z",
+        "X"
+      ],
+      [
+        "Z",
+        "Y"
+      ]
+    ],
+    "nodes": [
+      "X",
+      "Y",
+      "Z"
+    ]
+  },
+  "kind": "backdoor_identification",
+  "notice": "producer_pass is untrusted; verifier must recompute. Mathematical acceptance \u2260 scientific validation of assumptions.",
+  "payload": {
+    "adjustment_set": [
+      "Z"
+    ]
+  },
+  "producer_pass": true,
+  "query": {
+    "outcome": "Y",
+    "treatment": "X"
+  },
+  "version": "pcs-causal-cert-v1"
+}

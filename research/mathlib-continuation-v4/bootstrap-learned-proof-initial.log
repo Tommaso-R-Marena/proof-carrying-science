@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_cli_v4.py", line 42, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_cli_v4.py", line 38, in main
+    result=run(args.statement,english=args.english,checkpoint=args.checkpoint,checkpoint_sha256=args.checkpoint_sha256)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_cli_v4.py", line 22, in run
+    env=MathlibEnvironmentV4(timeout=12)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_environment_v4.py", line 118, in __init__
+    try:self.observe('True')
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/mathlib_environment_v4.py", line 200, in observe
+    result=LeanEnvironment._worker_source(self,'universe u v w u_1 u_2 u_3 u_4 u_5\n'+self.library_source+text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/proof-carrying-science/pcs/experimental/prover/environment.py", line 308, in _worker_source
+    ready = self._worker_source("#pcs_probe (True) => []\n")
+            ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MathlibEnvironmentV4' object has no attribute '_worker_source'

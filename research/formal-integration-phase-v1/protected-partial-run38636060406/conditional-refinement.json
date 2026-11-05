@@ -1,0 +1,2889 @@
+{
+  "format": "pcs-conditional-runtime-refinement-v1",
+  "stable_contract": {
+    "archive_sha256": "8ec6dcfe96c8171ff64343ed53a29e0d1c7af194a323e02c707d5b6e959cebca",
+    "source_files": [
+      {
+        "language": "python",
+        "source": "pcs/experimental/conditional.py",
+        "sha256": "4045bf1d08ec540e5113f1f15212be2901dfeadb4e3898937596abc411022bf1"
+      },
+      {
+        "language": "javascript",
+        "source": "public/conditional-core.mjs",
+        "sha256": "f25a31d5955c7be1b06e1c788ca7be3badb3ea3e006f56f0e467364a382c8f0d"
+      }
+    ],
+    "proof_sources": [
+      {
+        "path": "formal/PCSConditionalRuntime/CoreBEq.lean",
+        "sha256": "a675044f88bec5f7253c9aa4694b74ca09957f91f892f89de3f710ebfb666d36"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/EnvKeep.lean",
+        "sha256": "5bbe7af46c9c0496db0d19a09844e709ed18667524d37395155dd396878cb254"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsApply.lean",
+        "sha256": "b998f4d13ff4acf7fc02579e4de240ddc7f3615e2588a711c03bbfc6d0663b11"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsAudit.lean",
+        "sha256": "764ad6d5ae2d6c75f5f25c7459656711597bdfe1e25c09c261f4d4ad4ed3022d"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsCex.lean",
+        "sha256": "9fc0079ba0a1bbc768e410e1268ffe7be801d93e416f64d18c2d069514123d92"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsCheckBase.lean",
+        "sha256": "33c2534463628a8a3ec6e32c3ecb1db7e2b9655f8ccf2e4d3ef03c911e56d1d0"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsCheckPrefix.lean",
+        "sha256": "bed46f567f605808ad2c67a94d2c84d2c05f168562a7772b2d473592497903ed"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsComp.lean",
+        "sha256": "7586b6fe25a88b1776948265e345b44883b30422398fc73ff066d0dfb853e831"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsCompile.lean",
+        "sha256": "f654e41d00c6059ad9f597219f58518450463beb47f6ded953a72177ef19bb10"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsConditional.lean",
+        "sha256": "c09913daa5cabe27d64cded9a0755fd1b1b6d41aa72ce7513e49a694e81c91ba",
+        "returned_sha256": "9770692b8f4024bcef4fff590afbed0648e1bdb6acb332e2d58f372c00c6738a",
+        "overlay": "ordinary-kernel segmented conjunction proof only"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsConditionalLowered.lean",
+        "sha256": "155f4c46d81cf54ee0b2a1843ba20362c22f2dac315da558683a506b72c6de75"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsConj.lean",
+        "sha256": "72b582c8d091b54784a6ac66bfc89f9811b4c391f32fa03c56e603f0cba2be8f"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsDecided.lean",
+        "sha256": "d6525228eea94a29028340c41b6aa5f0c7e4fdf2447e6e73b2adc44a536e5fe4"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsEval.lean",
+        "sha256": "a3224767ed301d3f59c3b6d1f77f6ab47b67c47dd5ffda739253de3ba99920ba"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsFront.lean",
+        "sha256": "e3d8157c77697d380942ab6694e14e0d30c3b974441e319d6cebca46bfb6f559"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsIncons.lean",
+        "sha256": "763ccef567fbeb886e896524b2346d2e7265f630ee1767c597a9345d4b83448a"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsInput.lean",
+        "sha256": "1b1a6cba6a77f68f76c34e76b952511d306e7e31ae940edf87a5c6214de77a04"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsKeys.lean",
+        "sha256": "26ae335d1dc5b21258c79bf9fc65d62d2beaa156daaa7883f31689e71baa2f1f"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsLower.lean",
+        "sha256": "e756cd316f219f809de441b765f324582c55dfa55e214ec66bb62d299d0a01e6"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsMain.lean",
+        "sha256": "cc07decbab98bfe46d28845e507851142808fd9820bca424624da9d4a887b656"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsNode.lean",
+        "sha256": "bb93f509433a4d95f8e33fead2542f775a6033f04315d7ada1e53ad291f4d000"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsPrem.lean",
+        "sha256": "ca60c9bc23e6bcba2cb469204e5be28278c33b75d2d281188344d61a25174daa"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsProofBase.lean",
+        "sha256": "846ca1a187bf78318b87a8c3c379a1276df043429f6609e4dabb39febbcde6b7"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsReport.lean",
+        "sha256": "0af48bbd76c577842e817059e675ad398e4f79715b4269f3221ea843f9efab43"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsRun.lean",
+        "sha256": "4c62b059012caf14bec037f06e7bd48898ab1fbf8523911a210a7738b58d824c"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsShrink.lean",
+        "sha256": "855ad41d01262c4fdafd8eeb2502a2f713d5c43b47c9beb737106e6153b1d8a0"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsTail.lean",
+        "sha256": "e40609d5b8bf0d712908aa290e353917896101df39afd0d1025c25404ae05ca7"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsTry.lean",
+        "sha256": "3261c411f3b292b622b70d8d6edab9bdf00322b305eb2a3862e056418362815e"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsWalk.lean",
+        "sha256": "86391f05cae5a17c25ed26f34d61e84719bfe07e324653373bfa7c105ec14054"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsWits.lean",
+        "sha256": "41b5ba46e9798cd6e80c6c641fc9b2e7591c59b4c270192192a7a63aa412ffc3"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/JsWorld.lean",
+        "sha256": "a42f2edba899c96b92e835650f354fdb06d3aac362c7757c606e1e1ca3f94d99"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/Mono.lean",
+        "sha256": "fda730b9b09ed0a3fc1e36a7e65d0ae2f6e2f5a7e73d8c754a73ba999a9649f0"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyAlloc.lean",
+        "sha256": "6976edea8293eef6ff5210c4d43938619773028838123d549402d99b5094d610"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyApply.lean",
+        "sha256": "5fc1e5bbe3dd03a90b3eac9ff5e971ea5972b1a093c43384234d3f4b60a6eb94"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyAudit.lean",
+        "sha256": "655c765d331801e7cc260802674843ad285540bbe46755035dab2e344d77cd3f"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyCex.lean",
+        "sha256": "4321cc7524c58032c3b2af38b15ad18258a2cf97a20691d3a6d305a5fdfee5d5"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyCheckBase.lean",
+        "sha256": "887d31851707b8a5a54295334132a06367dca2f85049b664e27b8efff11bbe5e"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyCheckPrefix.lean",
+        "sha256": "9f2e009a35125ae53cf0304b12bd4474dd244cc58283568478c8d4d4b195fbb9"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyCheckSpec.lean",
+        "sha256": "bbe9691087a913d47ea42d2bf33754e1f00fee16adcfb28661305e22f203a331"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyComp.lean",
+        "sha256": "0a290a2cbf220ccc0dd2faafde9cfe0c059608b7a755d3ca2c935a322db5bb6f"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyCompile.lean",
+        "sha256": "2f5bbd45d0b92dc49b1dec984a9795998b23c33b70261dbdfd9b783af4033349"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyConditional.lean",
+        "sha256": "3020e507395214809a701d183c9b52f7f4a4f99445eed14e309653e5f113444e",
+        "returned_sha256": "7fca1a049c324c8a9ae09a49361fcf104041d945b8c2d61b7d3944d8cb54c8d2",
+        "overlay": "ordinary-kernel segmented conjunction proof only"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyConditionalLowered.lean",
+        "sha256": "39263b89972ae00f784057d10c4c4c2faa47d7b5558bbea6b0321cf857030aa5"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyConj.lean",
+        "sha256": "251fc0ce477c79cf04c9b658d790fda497a15e0903e646e678d0aa30255d819e"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyDecided.lean",
+        "sha256": "4f03a2efc7efc943fcc01c26e38124670897541264e1a3e63ca61e2d328ff422"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyEval.lean",
+        "sha256": "0d2962b65441ce10ea73c70243f745bd5bed2501402a0a54b4451743d8954393"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyFields.lean",
+        "sha256": "69246e32c2ca7dbaad2b1edeea945065334bb781f1fb169d6d25e2022e40e64a"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyFront.lean",
+        "sha256": "948ab538bfa6d90c9a3123d2edb54a4e37e9c3db60d41c223aa14ead84a3f13c"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyHandler.lean",
+        "sha256": "fc2ea73aafccab681626977bfce02c193d61bbebf8ace4db5d120ece106cd9e3"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyIncons.lean",
+        "sha256": "a6c71cf753d4eb1a6df79c05acaa6f0433fd6d40e8fae2959f9753d977644795"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyInput.lean",
+        "sha256": "a7d54f1dabf2c98aadcdc45091fb7ba2e845f00a1add7b40f8cb80d0e67f74ca"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyJson.lean",
+        "sha256": "04ff43e1f77cc22b3a8955052cd3a51a19d824423296efcb543b7449ab5616bf"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyMain.lean",
+        "sha256": "802562c8123982ec41d15f88bf2cb51e1c23317f3b1dab01245be3edb96a2495"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyNode.lean",
+        "sha256": "b9ac6d530a696ad7f87ac1513b57095d71f0be5107e43633c81a7b59378556ff"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyPrem.lean",
+        "sha256": "7f931283d8496d5bd7147057650e79ddd06b46ac45967cc04c033974be295e97"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyProofBase.lean",
+        "sha256": "6bb2b471ddff2fdf3b459ba2e1f6f0038ccd10c3fe97e08ec1c7c5f9c673e596"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyRead.lean",
+        "sha256": "d0e8834f620f996815b7d573603a49269a96d01d26f2f123900f0104cbbc6423"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyReceipt.lean",
+        "sha256": "5cca20362b9d771b628d9566ea378840aad6edc2636ece141f5814b3b20d2b6a"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyReport.lean",
+        "sha256": "4f6053bcac596edf0b6863870c0b930b2ec986d57abdfdf2a42aab6c26b83819"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyRun.lean",
+        "sha256": "40d878880bd1145a52f1c965dff9000032fbdeb71ef0ffe314e4db776f8bc284"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyShrink.lean",
+        "sha256": "f9209851b94050b0d8240f5289f8cc23749cf7f0f7d8f0b80a445fd4510b0682"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyTail.lean",
+        "sha256": "43e6af7516d03da8368c3464cf1e691b5b0c4eb1202651fff34dff3da540fe63"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyTry.lean",
+        "sha256": "4596c04243e3dd219727f362069b495da377ee2b9b267dd39928fc804352c3b5"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyWalk.lean",
+        "sha256": "5d979eff57929f04abf0ea1bc4e97e7d32512f5ead80bb12097a177014748ec5"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyWits.lean",
+        "sha256": "24f629b56434ee1020a07eb2534fb4d8caf28c551d3abff64f00a5a274250800"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/PyWorld.lean",
+        "sha256": "29196b75f6c1a1e7fef40b80a3c2c693885cb320f23780348e5d4c57dbe74e03"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime/Semantics.lean",
+        "sha256": "bdfd687aff6487905a54836a89693e32e4139b04ba27fd68c5e07a684419e552"
+      },
+      {
+        "path": "formal/PCSConditionalRuntime.lean",
+        "sha256": "4980410420a0a087fc91ace21e3dbfcf4726307d77c9a41a5fd660c21b53c2e7"
+      },
+      {
+        "path": "formal/source_reference/current/proof-carrying-science/pcs/experimental/conditional.py.txt",
+        "sha256": "4045bf1d08ec540e5113f1f15212be2901dfeadb4e3898937596abc411022bf1"
+      },
+      {
+        "path": "formal/source_reference/current/proof-carrying-science-site/public/conditional-core.mjs.txt",
+        "sha256": "f25a31d5955c7be1b06e1c788ca7be3badb3ea3e006f56f0e467364a382c8f0d"
+      },
+      {
+        "path": "formal/tools/JsConditionalCompare.lean",
+        "sha256": "fc2c74193180bbb8cd923c9776abb652794a5f45f1b96f0912cbda9233ec3c30"
+      },
+      {
+        "path": "formal/tools/PyConditionalCompare.lean",
+        "sha256": "80e1aa755d080b64fdb609164413440cca24f2e1474f56fb98931fcf13cd0a42"
+      }
+    ],
+    "theorem_targets": [
+      "PCSCR.E.beq_sound",
+      "PCSCR.E.beqL_sound",
+      "PCSCR.E.beqO_sound",
+      "PCSCR.Tgt.beq_sound",
+      "PCSCR.Tgt.beqL_sound",
+      "PCSCR.S.beq_sound",
+      "PCSCR.S.beqL_sound",
+      "PCSCR.Fn.beq_sound",
+      "PCSCR.funsBeq_sound",
+      "PCSCR.classesBeq_sound",
+      "PCSCR.Py.Module.beq_sound",
+      "PCSCR.Py.Module.beqO_sound",
+      "PCSCR.FK.trans",
+      "PCSCR.assignT_keeps",
+      "PCSCR.assignTs_keeps",
+      "PCSCR.assignAll_keeps",
+      "PCSCR.FK_bindS",
+      "PCSCR.Env.get_erase",
+      "PCSCR.execS_keeps",
+      "PCSCR.execB_keeps",
+      "PCSCR.FK_loopK",
+      "PCSCR.interp_keeps",
+      "PCSCR.execB_keeps_interp",
+      "PCSCR.Js.js_aug_attr_add1",
+      "PCSCR.Js.JMRel.setOps",
+      "PCSCR.Js.japply_tail",
+      "PCSCR.Js.japply_rest",
+      "PCSCR.Js.japply_call",
+      "PCSCR.Js.japply_sim",
+      "PCSCR.Js.ReadsKV.jdictSet",
+      "PCSCR.Js.jdictSet_absentKV",
+      "PCSCR.Js.jevalG_eq",
+      "PCSCR.Js.map_jevalG",
+      "PCSCR.Js.jlookup_evaluate_some",
+      "PCSCR.Js.jcomp_truths",
+      "PCSCR.Js.jcex_branch",
+      "PCSCR.Js.jdiagramFields_base",
+      "PCSCR.Js.jdiagramFields_addOwn",
+      "PCSCR.Js.JMRel.weaken",
+      "PCSCR.Js.JMRel.base",
+      "PCSCR.Js.JMRel.addOwn",
+      "PCSCR.Js.JMRel.hsetOwn",
+      "PCSCR.Js.JFRel.weaken",
+      "PCSCR.Js.JFRel.base",
+      "PCSCR.Js.JFRel.addOwn",
+      "PCSCR.Js.JSimOut.both",
+      "PCSCR.Js.jinit_mrel",
+      "PCSCR.Js.jinit_call",
+      "PCSCR.Js.jlimits_loop",
+      "PCSCR.Js.jcheck_prefix",
+      "PCSCR.Js.IterOK.ref",
+      "PCSCR.Js.IterOK.tup",
+      "PCSCR.Js.jcomp_loop",
+      "PCSCR.Js.jcomp_eval",
+      "PCSCR.Js.JFRel.frame",
+      "PCSCR.Js.mkNode_visits",
+      "PCSCR.Js.apply_visits",
+      "PCSCR.Js.compile_visits",
+      "PCSCR.Js.jfindIdx_names",
+      "PCSCR.Js.JMRel.setCounters",
+      "PCSCR.Js.jcompile_atom",
+      "PCSCR.Js.jcompile_tt",
+      "PCSCR.Js.jcompile_ff",
+      "PCSCR.Js.jcompile_not",
+      "PCSCR.Js.jcompile_and",
+      "PCSCR.Js.jcompile_or",
+      "PCSCR.Js.jcompile_imp",
+      "PCSCR.Js.jcompile_sim",
+      "PCSCR.Js.conditional_js_source_bound",
+      "PCSCR.Js.conditional_js_length",
+      "PCSCR.Js.conditional_js_lowers",
+      "PCSCR.Js.jconj_loop",
+      "PCSCR.Js.jconjunction_sim",
+      "PCSCR.Js.jdec_compute",
+      "PCSCR.Js.jdictFind_encVals",
+      "PCSCR.Js.jeval_atom",
+      "PCSCR.Js.jeval_tt",
+      "PCSCR.Js.jeval_ff",
+      "PCSCR.Js.jeval_not",
+      "PCSCR.Js.jeval_and",
+      "PCSCR.Js.jeval_or",
+      "PCSCR.Js.jeval_imp",
+      "PCSCR.Js.jeval_sim",
+      "PCSCR.Js.JWorkOK.of_mrel",
+      "PCSCR.Js.JWorkOK.of_mrel_addOwn",
+      "PCSCR.Js.shrink_wsteps",
+      "PCSCR.Js.jincons_sim",
+      "PCSCR.Js.jtlook_dictFind",
+      "PCSCR.Js.jrb_field",
+      "PCSCR.Js.rb_JFRel",
+      "PCSCR.Js.jallocKV_find",
+      "PCSCR.Js.mapM_zip_JFRel",
+      "PCSCR.Js.jinput_facts",
+      "PCSCR.Js.digVal_append_single",
+      "PCSCR.Js.char_ofNat_digit",
+      "PCSCR.Js.decDigits_val",
+      "PCSCR.Js.decDigits_noComma",
+      "PCSCR.Js.lt_ten_pow",
+      "PCSCR.Js.jsIntStr_nat",
+      "PCSCR.Js.jsIntStr_nat_inj",
+      "PCSCR.Js.jsIntStr_noComma",
+      "PCSCR.Js.split_comma",
+      "PCSCR.Js.toList_join3",
+      "PCSCR.Js.join3_inj",
+      "PCSCR.Js.jukey_inj",
+      "PCSCR.Js.BOp.name_noComma",
+      "PCSCR.Js.jmkey_inj",
+      "PCSCR.Js.jsJoin_ukey",
+      "PCSCR.Js.jsJoin_mkey",
+      "PCSCR.Js.keyEq_js_str",
+      "PCSCR.Js.dictFind_js_set",
+      "PCSCR.Js.fsizeL_le",
+      "PCSCR.Js.JsTaskBounds.vis",
+      "PCSCR.Js.JsTaskBounds.ws",
+      "PCSCR.Js.allocT_opts",
+      "PCSCR.Js.jcheck_run",
+      "PCSCR.Js.javascript_conditional_refines_reference",
+      "PCSCR.Js.jhget_append_lt_list",
+      "PCSCR.Js.lim_bounds",
+      "PCSCR.Js.jmrel_push",
+      "PCSCR.Js.node_spec",
+      "PCSCR.Js.at_last",
+      "PCSCR.Js.at_last_m",
+      "PCSCR.Js.jprem_loop",
+      "PCSCR.Js.JMRel.addrs_lt",
+      "PCSCR.Js.JMRel.neqs",
+      "PCSCR.Js.JMRel.transport",
+      "PCSCR.Js.JMRel.append",
+      "PCSCR.Js.JMRel.setMemo",
+      "PCSCR.Js.JSimOut.frame",
+      "PCSCR.Js.lookup_node",
+      "PCSCR.Js.lookup_apply",
+      "PCSCR.Js.lookup_compile",
+      "PCSCR.Js.lookup_conjunction",
+      "PCSCR.Js.lookup_world",
+      "PCSCR.Js.lookup_work",
+      "PCSCR.Js.lookup_init",
+      "PCSCR.Js.lookup_evaluate",
+      "PCSCR.Js.lookup_check",
+      "PCSCR.Js.jreport_sim",
+      "PCSCR.Js.jreads_nodes",
+      "PCSCR.Js.jdiag_sim",
+      "PCSCR.Js.js_init_result",
+      "PCSCR.Js.jfresh_not_mut",
+      "PCSCR.Js.eqJs_int",
+      "PCSCR.Js.jcomp_indices",
+      "PCSCR.Js.jcomp_filter_ne",
+      "PCSCR.Js.jpremG_map",
+      "PCSCR.Js.jsubOp_idx",
+      "PCSCR.Js.jcomp_pick",
+      "PCSCR.Js.JShrinkOut_lift",
+      "PCSCR.Js.jshrink_loop",
+      "PCSCR.Js.jnull_step",
+      "PCSCR.Js.jhandler_sim",
+      "PCSCR.Js.jwork_call",
+      "PCSCR.Js.JWorkOK.frameR",
+      "PCSCR.Js.jtrystmt_sim",
+      "PCSCR.Js.check_body_drop9",
+      "PCSCR.Js.jtail_sim",
+      "PCSCR.Js.compile_wsteps",
+      "PCSCR.Js.premLoop_wsteps",
+      "PCSCR.Js.premLoop_visits",
+      "PCSCR.Js.fsizeL_le_take",
+      "PCSCR.Js.JWorkOK.of_addOwn",
+      "PCSCR.Js.jtry_sim",
+      "PCSCR.Js.jsWalk_st_le",
+      "PCSCR.Js.jkeyEq_str",
+      "PCSCR.Js.jdictSet_encVals",
+      "PCSCR.Js.jdictSet_absent",
+      "PCSCR.Js.jfromkeys_encVals",
+      "PCSCR.Js.jsWalk_wit",
+      "PCSCR.Js.jsWalk_world",
+      "PCSCR.Js.mkNode_wsteps",
+      "PCSCR.Js.apply_wsteps",
+      "PCSCR.Js.conjList_wsteps",
+      "PCSCR.Js.jcomp_eval'",
+      "PCSCR.Js.jcomp_pick_ne",
+      "PCSCR.Js.jworld_sim_pos2",
+      "PCSCR.Js.jwits_loop",
+      "PCSCR.Js.jworld_loop",
+      "PCSCR.Js.jworld_sim_zero",
+      "PCSCR.Js.refsFrom_succ",
+      "PCSCR.Js.jcomp_pair_loop",
+      "PCSCR.Js.refsFrom_cons",
+      "PCSCR.Js.JMRel.appendList",
+      "PCSCR.Js.Frame.appendList",
+      "PCSCR.Js.jsEntries_pairs",
+      "PCSCR.Js.jworld_sim_pos",
+      "PCSCR.Out.le_refl",
+      "PCSCR.Out.le_trans",
+      "PCSCR.Out.le_app",
+      "PCSCR.Out.bind_mono",
+      "PCSCR.bindS_mono",
+      "PCSCR.bindE_mono",
+      "PCSCR.seqF_mono",
+      "PCSCR.loopK_mono",
+      "PCSCR.onRaise_mono",
+      "PCSCR.fuelpres_mono",
+      "PCSCR.eraseAfter_mono",
+      "PCSCR.compResult_mono",
+      "PCSCR.finishCall_mono",
+      "PCSCR.ite_mono",
+      "PCSCR.evalE_mono",
+      "PCSCR.evalL_mono",
+      "PCSCR.assignT_mono",
+      "PCSCR.assignTs_mono",
+      "PCSCR.assignAll_mono",
+      "PCSCR.execS_mono",
+      "PCSCR.execB_mono",
+      "PCSCR.mkLevel_mono",
+      "PCSCR.Lvl.le_refl",
+      "PCSCR.Lvl.le_trans",
+      "PCSCR.fuelLvl_le",
+      "PCSCR.interp_succ_le",
+      "PCSCR.interp_mono",
+      "PCSCR.run_stable",
+      "PCSCR.run_fuel_or",
+      "PCSCR.Py.alloc_prefix",
+      "PCSCR.Py.allocL_prefix",
+      "PCSCR.Py.allocKV_prefix",
+      "PCSCR.Py.HAgree.of_prefix",
+      "PCSCR.Py.alloc_agree",
+      "PCSCR.Py.allocL_agree",
+      "PCSCR.Py.allocKV_agree",
+      "PCSCR.Py.alloc_rb",
+      "PCSCR.Py.allocL_rb",
+      "PCSCR.Py.allocKV_rb",
+      "PCSCR.Py.rb_obj",
+      "PCSCR.Py.tlook_dictFind",
+      "PCSCR.Py.rb_str",
+      "PCSCR.Py.rb_field",
+      "PCSCR.Py.rb_FRel",
+      "PCSCR.Py.StableEx.refl",
+      "PCSCR.Py.StableEx.trans",
+      "PCSCR.Py.StableEx.append",
+      "PCSCR.Py.StableEx.hset",
+      "PCSCR.Py.readbackEx_stable",
+      "PCSCR.Py.readbackEx_readback",
+      "PCSCR.Py.readback_readbackEx",
+      "PCSCR.Py.apply_succ_eq",
+      "PCSCR.Py.lookup_apply'",
+      "PCSCR.Py.node_ptr",
+      "PCSCR.Py.interp_succ_call",
+      "PCSCR.Py.SimOut.frame",
+      "PCSCR.Py.hget_append_lt_list",
+      "PCSCR.Py.hget_append2",
+      "PCSCR.Py.apply_tail",
+      "PCSCR.Py.apply_rest",
+      "PCSCR.Py.MRel.setOps",
+      "PCSCR.Py.apply_call",
+      "PCSCR.Py.apply_sim",
+      "PCSCR.Py.HAgree.frame",
+      "PCSCR.Py.evalG_eq",
+      "PCSCR.Py.fdepthL_ge",
+      "PCSCR.Py.zip_mem_left",
+      "PCSCR.Py.map_evalG",
+      "PCSCR.Py.comp_truths",
+      "PCSCR.Py.cex_branch",
+      "PCSCR.Py.Addrs.base_mut",
+      "PCSCR.Py.Addrs.addOwn_mut",
+      "PCSCR.Py.diagramFields_base",
+      "PCSCR.Py.diagramFields_addOwn",
+      "PCSCR.Py.MRel.weaken",
+      "PCSCR.Py.MRel.base",
+      "PCSCR.Py.MRel.addOwn",
+      "PCSCR.Py.MRel.hsetOwn",
+      "PCSCR.Py.FRel.weaken",
+      "PCSCR.Py.FRel.base",
+      "PCSCR.Py.FRel.addOwn",
+      "PCSCR.Py.SimOut.both",
+      "PCSCR.Py.FrameS.refl",
+      "PCSCR.Py.FrameS.trans",
+      "PCSCR.Py.FrameS.mono",
+      "PCSCR.Py.FrameS.append",
+      "PCSCR.Py.FrameS.hset",
+      "PCSCR.Py.FrameS.of_frame",
+      "PCSCR.Py.FrameS.to_frame",
+      "PCSCR.Py.allocT_limT",
+      "PCSCR.Py.exact_limits",
+      "PCSCR.Py.limits_loop",
+      "PCSCR.Py.init_mrel",
+      "PCSCR.Py.init_call",
+      "PCSCR.Py.check_prefix",
+      "PCSCR.Py.comp_loop",
+      "PCSCR.Py.comp_eval",
+      "PCSCR.Py.FRel.frame",
+      "PCSCR.Py.findIdx_names",
+      "PCSCR.Py.MRel.setCounters",
+      "PCSCR.Py.lookup_compile'",
+      "PCSCR.Py.compile_atom",
+      "PCSCR.Py.compile_tt",
+      "PCSCR.Py.compile_ff",
+      "PCSCR.Py.compile_not",
+      "PCSCR.Py.compile_and",
+      "PCSCR.Py.compile_or",
+      "PCSCR.Py.compile_imp",
+      "PCSCR.Py.compile_sim",
+      "PCSCR.Py.conditional_py_source_bound",
+      "PCSCR.Py.conditional_py_length",
+      "PCSCR.Py.conditional_py_lowers",
+      "PCSCR.Env.get_replace",
+      "PCSCR.Py.interp_succ_forLoop",
+      "PCSCR.Py.conj_loop",
+      "PCSCR.Py.lookup_conjunction'",
+      "PCSCR.Py.conjunction_sim",
+      "PCSCR.Py.Frame.ofBase",
+      "PCSCR.Py.dec_compute",
+      "PCSCR.Py.dictFind_encVals",
+      "PCSCR.Py.lookup_evaluate'",
+      "PCSCR.Py.eval_atom",
+      "PCSCR.Py.eval_tt",
+      "PCSCR.Py.eval_ff",
+      "PCSCR.Py.eval_not",
+      "PCSCR.Py.eval_and",
+      "PCSCR.Py.eval_or",
+      "PCSCR.Py.eval_imp",
+      "PCSCR.Py.eval_sim",
+      "PCSCR.Py.readback_rbM_false",
+      "PCSCR.Py.ReadsM.of_readback",
+      "PCSCR.Py.kvStep_transport",
+      "PCSCR.Py.ReadsKV.transport",
+      "PCSCR.Py.ReadsKV.frame",
+      "PCSCR.Py.ReadsKV.anti",
+      "PCSCR.Py.ReadsL.anti",
+      "PCSCR.Py.ReadsKV.uncons",
+      "PCSCR.Py.ReadsKV.dictSet",
+      "PCSCR.Py.ReadsKV.append",
+      "PCSCR.Py.dictSet_absentKV",
+      "PCSCR.Py.witStepsF_zero",
+      "PCSCR.Py.witSteps_zero",
+      "PCSCR.Py.hset_hset_same",
+      "PCSCR.Py.null_step",
+      "PCSCR.Py.handler_sim",
+      "PCSCR.Py.WorkOK.of_mrel",
+      "PCSCR.Py.WorkOK.of_mrel_addOwn",
+      "PCSCR.Py.ReadsKV.frameBig",
+      "PCSCR.Py.ReadsM.frameBig",
+      "PCSCR.Py.shrink_sublist",
+      "PCSCR.Py.Addrs.mut_addOwn",
+      "PCSCR.Py.FrameS.big_of_base",
+      "PCSCR.Py.FrameS.append2",
+      "PCSCR.Py.readsL_ints",
+      "PCSCR.Py.incons_sim",
+      "PCSCR.Py.allocKV_find",
+      "PCSCR.Py.allocL_strs",
+      "PCSCR.Py.allocL_length",
+      "PCSCR.Py.HAgree.frameS",
+      "PCSCR.Py.mapM_zip_FRel",
+      "PCSCR.Py.input_facts",
+      "PCSCR.Py.HAgree.refl",
+      "PCSCR.Py.HAgree.trans",
+      "PCSCR.Py.HAgree.append",
+      "PCSCR.Py.mapM_some_congr",
+      "PCSCR.Py.readback_agree",
+      "PCSCR.Py.readback_fuel_mono",
+      "PCSCR.Py.check_run",
+      "PCSCR.Py.python_conditional_refines_reference",
+      "PCSCR.Py.ukey_inj",
+      "PCSCR.Py.mrel_push",
+      "PCSCR.Py.lookup_node'",
+      "PCSCR.Py.node_spec",
+      "PCSCR.Py.MutP_mut",
+      "PCSCR.Py.subOp_last",
+      "PCSCR.Py.subOp_idx",
+      "PCSCR.Py.prem_loop",
+      "PCSCR.Py.hget_append",
+      "PCSCR.Py.hget_lt",
+      "PCSCR.Py.hget_hset",
+      "PCSCR.Py.eqPy_prim",
+      "PCSCR.Py.eqPyL_prim",
+      "PCSCR.Py.keyEq_ok",
+      "PCSCR.Py.dictFind_set",
+      "PCSCR.Py.keysOK_set",
+      "PCSCR.Py.ukey_ok",
+      "PCSCR.Py.mkey_ok",
+      "PCSCR.Py.Frame.refl",
+      "PCSCR.Py.Frame.trans",
+      "PCSCR.Py.Frame.append",
+      "PCSCR.Py.Frame.hset",
+      "PCSCR.Py.execB_cons'",
+      "PCSCR.Py.execB_nil_eq",
+      "PCSCR.Py.NodesRel.frame",
+      "PCSCR.Py.MRel.addrs_lt",
+      "PCSCR.Py.MRel.neqs",
+      "PCSCR.Py.MRel.transport",
+      "PCSCR.Py.MRel.append",
+      "PCSCR.Py.BOp.name_inj",
+      "PCSCR.Py.memoLookup_cons",
+      "PCSCR.Py.MRel.setMemo",
+      "PCSCR.Py.find?_congr'",
+      "PCSCR.Py.findNode_push",
+      "PCSCR.Py.lookup_node",
+      "PCSCR.Py.lookup_apply",
+      "PCSCR.Py.lookup_compile",
+      "PCSCR.Py.lookup_conjunction",
+      "PCSCR.Py.lookup_world",
+      "PCSCR.Py.lookup_work",
+      "PCSCR.Py.lookup_init",
+      "PCSCR.Py.lookup_evaluate",
+      "PCSCR.Py.lookup_exact",
+      "PCSCR.Py.lookup_check",
+      "PCSCR.Py.rbM_transport",
+      "PCSCR.Py.rbM_mono",
+      "PCSCR.Py.rbM_fuel",
+      "PCSCR.Py.rbM_le",
+      "PCSCR.Py.rbM_readback",
+      "PCSCR.Py.mapM_fuel_le",
+      "PCSCR.Py.ReadsM.int",
+      "PCSCR.Py.ReadsM.bool",
+      "PCSCR.Py.ReadsM.str",
+      "PCSCR.Py.ReadsM.none",
+      "PCSCR.Py.ReadsL.nil",
+      "PCSCR.Py.ReadsL.cons",
+      "PCSCR.Py.ReadsKV.nil",
+      "PCSCR.Py.kvStep_fuel",
+      "PCSCR.Py.ReadsKV.cons",
+      "PCSCR.Py.ReadsM.list",
+      "PCSCR.Py.ReadsM.tup",
+      "PCSCR.Py.ReadsM.dict",
+      "PCSCR.Py.ReadsM.transport",
+      "PCSCR.Py.ReadsM.frame",
+      "PCSCR.Py.ReadsM.anti",
+      "PCSCR.Py.ReadsL.frame",
+      "PCSCR.Py.ReadsM.readback",
+      "PCSCR.Py.readback_det",
+      "PCSCR.Py.work_fields_eq",
+      "PCSCR.Py.tset_receipt",
+      "PCSCR.Py.receipt_fields_eq",
+      "PCSCR.Py.report_sim",
+      "PCSCR.Py.reads_ovT",
+      "PCSCR.Py.reads_nodes",
+      "PCSCR.Py.diag_sim",
+      "PCSCR.Py.py_init_result",
+      "PCSCR.Py.fresh_not_mut",
+      "PCSCR.Py.eqPy_int",
+      "PCSCR.Py.filter_map_iv",
+      "PCSCR.Py.comp_filter_ne",
+      "PCSCR.Py.premG_map",
+      "PCSCR.Py.comp_pick",
+      "PCSCR.Py.conjList_inv",
+      "PCSCR.Py.pick_bound",
+      "PCSCR.Py.ShrinkOut_lift",
+      "PCSCR.Py.shrink_loop",
+      "PCSCR.Py.work_call",
+      "PCSCR.Py.WorkOK.frameR",
+      "PCSCR.Py.trystmt_sim",
+      "PCSCR.Py.check_body_drop6",
+      "PCSCR.Py.reads_workKV",
+      "PCSCR.Py.readback_dict",
+      "PCSCR.Py.tail_sim",
+      "PCSCR.Py.seqF_assoc",
+      "PCSCR.Py.execB_append",
+      "PCSCR.Py.WorkOK.of_addOwn",
+      "PCSCR.Py.try_sim",
+      "PCSCR.Py.keyEq_str",
+      "PCSCR.Py.dictSet_encVals",
+      "PCSCR.Py.dictSet_absent",
+      "PCSCR.Py.encVals_append",
+      "PCSCR.Py.fromkeys_encVals",
+      "PCSCR.Py.take_succ_of_getElem",
+      "PCSCR.Py.take_set_succ",
+      "PCSCR.Py.pyWalk_wit",
+      "PCSCR.Py.pyWalk_world",
+      "PCSCR.Py.comp_pick_ne",
+      "PCSCR.Py.world_sim_pos2",
+      "PCSCR.Py.readsKV_encVals",
+      "PCSCR.Py.reads_world",
+      "PCSCR.Py.witsT_eq",
+      "PCSCR.Py.satset_ne_zero",
+      "PCSCR.Py.wits_loop",
+      "PCSCR.Py.hset_append_left",
+      "PCSCR.Py.hset_append_last",
+      "PCSCR.Py.hset_append_last'",
+      "PCSCR.Py.interp_succ_whileLoop",
+      "PCSCR.Py.world_loop",
+      "PCSCR.Py.lookup_world'",
+      "PCSCR.Py.world_sim_zero",
+      "PCSCR.Py.world_sim_pos"
+    ],
+    "kernel_theorems": {
+      "PCSCR.E.beq_sound": [
+        "propext"
+      ],
+      "PCSCR.E.beqL_sound": [
+        "propext"
+      ],
+      "PCSCR.E.beqO_sound": [
+        "propext"
+      ],
+      "PCSCR.Tgt.beq_sound": [
+        "propext"
+      ],
+      "PCSCR.Tgt.beqL_sound": [
+        "propext"
+      ],
+      "PCSCR.S.beq_sound": [
+        "propext"
+      ],
+      "PCSCR.S.beqL_sound": [
+        "propext"
+      ],
+      "PCSCR.Fn.beq_sound": [
+        "propext"
+      ],
+      "PCSCR.funsBeq_sound": [
+        "propext"
+      ],
+      "PCSCR.classesBeq_sound": [
+        "propext"
+      ],
+      "PCSCR.Py.Module.beq_sound": [
+        "propext"
+      ],
+      "PCSCR.Py.Module.beqO_sound": [
+        "propext"
+      ],
+      "PCSCR.FK.trans": [
+        "propext"
+      ],
+      "PCSCR.assignT_keeps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.assignTs_keeps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.assignAll_keeps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.FK_bindS": [
+        "propext"
+      ],
+      "PCSCR.Env.get_erase": [
+        "propext"
+      ],
+      "PCSCR.execS_keeps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.execB_keeps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.FK_loopK": [
+        "propext"
+      ],
+      "PCSCR.interp_keeps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.execB_keeps_interp": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.js_aug_attr_add1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.setOps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.japply_tail": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.japply_rest": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.japply_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.japply_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.ReadsKV.jdictSet": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdictSet_absentKV": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jevalG_eq": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.map_jevalG": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jlookup_evaluate_some": [],
+      "PCSCR.Js.jcomp_truths": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcex_branch": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdiagramFields_base": [],
+      "PCSCR.Js.jdiagramFields_addOwn": [],
+      "PCSCR.Js.JMRel.weaken": [
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.base": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.addOwn": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.hsetOwn": [
+        "propext"
+      ],
+      "PCSCR.Js.JFRel.weaken": [
+        "propext"
+      ],
+      "PCSCR.Js.JFRel.base": [
+        "propext"
+      ],
+      "PCSCR.Js.JFRel.addOwn": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JSimOut.both": [
+        "propext"
+      ],
+      "PCSCR.Js.jinit_mrel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jinit_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jlimits_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcheck_prefix": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.IterOK.ref": [
+        "propext"
+      ],
+      "PCSCR.Js.IterOK.tup": [
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_eval": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JFRel.frame": [
+        "propext"
+      ],
+      "PCSCR.Js.mkNode_visits": [],
+      "PCSCR.Js.apply_visits": [
+        "propext"
+      ],
+      "PCSCR.Js.compile_visits": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jfindIdx_names": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.setCounters": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_atom": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_tt": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_ff": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_not": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_and": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_or": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_imp": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcompile_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.conditional_js_source_bound": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.conditional_js_length": [],
+      "PCSCR.Js.conditional_js_lowers": [
+        "propext"
+      ],
+      "PCSCR.Js.jconj_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jconjunction_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdec_compute": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdictFind_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_atom": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_tt": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_ff": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_not": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_and": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_or": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_imp": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jeval_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JWorkOK.of_mrel": [
+        "propext"
+      ],
+      "PCSCR.Js.JWorkOK.of_mrel_addOwn": [
+        "propext"
+      ],
+      "PCSCR.Js.shrink_wsteps": [
+        "propext"
+      ],
+      "PCSCR.Js.jincons_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jtlook_dictFind": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jrb_field": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.rb_JFRel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jallocKV_find": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.mapM_zip_JFRel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jinput_facts": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.digVal_append_single": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.char_ofNat_digit": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.decDigits_val": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.decDigits_noComma": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.lt_ten_pow": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsIntStr_nat": [
+        "propext"
+      ],
+      "PCSCR.Js.jsIntStr_nat_inj": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsIntStr_noComma": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.split_comma": [
+        "propext"
+      ],
+      "PCSCR.Js.toList_join3": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.join3_inj": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jukey_inj": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.BOp.name_noComma": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jmkey_inj": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsJoin_ukey": [
+        "propext"
+      ],
+      "PCSCR.Js.jsJoin_mkey": [
+        "propext"
+      ],
+      "PCSCR.Js.keyEq_js_str": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.dictFind_js_set": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.fsizeL_le": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JsTaskBounds.vis": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JsTaskBounds.ws": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.allocT_opts": [
+        "propext"
+      ],
+      "PCSCR.Js.jcheck_run": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.javascript_conditional_refines_reference": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jhget_append_lt_list": [
+        "propext"
+      ],
+      "PCSCR.Js.lim_bounds": [
+        "propext"
+      ],
+      "PCSCR.Js.jmrel_push": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.node_spec": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.at_last": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.at_last_m": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jprem_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.addrs_lt": [
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.neqs": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.transport": [
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.append": [
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.setMemo": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JSimOut.frame": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.lookup_node": [],
+      "PCSCR.Js.lookup_apply": [],
+      "PCSCR.Js.lookup_compile": [],
+      "PCSCR.Js.lookup_conjunction": [],
+      "PCSCR.Js.lookup_world": [],
+      "PCSCR.Js.lookup_work": [],
+      "PCSCR.Js.lookup_init": [],
+      "PCSCR.Js.lookup_evaluate": [],
+      "PCSCR.Js.lookup_check": [],
+      "PCSCR.Js.jreport_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jreads_nodes": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdiag_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.js_init_result": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jfresh_not_mut": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.eqJs_int": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_indices": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_filter_ne": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jpremG_map": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsubOp_idx": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_pick": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JShrinkOut_lift": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jshrink_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jnull_step": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jhandler_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jwork_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JWorkOK.frameR": [
+        "propext"
+      ],
+      "PCSCR.Js.jtrystmt_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.check_body_drop9": [],
+      "PCSCR.Js.jtail_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.compile_wsteps": [
+        "propext"
+      ],
+      "PCSCR.Js.premLoop_wsteps": [
+        "propext"
+      ],
+      "PCSCR.Js.premLoop_visits": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.fsizeL_le_take": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.JWorkOK.of_addOwn": [
+        "propext"
+      ],
+      "PCSCR.Js.jtry_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsWalk_st_le": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jkeyEq_str": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdictSet_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jdictSet_absent": [
+        "propext"
+      ],
+      "PCSCR.Js.jfromkeys_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsWalk_wit": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsWalk_world": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.mkNode_wsteps": [],
+      "PCSCR.Js.apply_wsteps": [
+        "propext"
+      ],
+      "PCSCR.Js.conjList_wsteps": [
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_eval'": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_pick_ne": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jworld_sim_pos2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jwits_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jworld_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jworld_sim_zero": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.refsFrom_succ": [
+        "propext"
+      ],
+      "PCSCR.Js.jcomp_pair_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.refsFrom_cons": [
+        "propext"
+      ],
+      "PCSCR.Js.JMRel.appendList": [
+        "propext"
+      ],
+      "PCSCR.Js.Frame.appendList": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Js.jsEntries_pairs": [
+        "propext"
+      ],
+      "PCSCR.Js.jworld_sim_pos": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Out.le_refl": [],
+      "PCSCR.Out.le_trans": [],
+      "PCSCR.Out.le_app": [],
+      "PCSCR.Out.bind_mono": [],
+      "PCSCR.bindS_mono": [],
+      "PCSCR.bindE_mono": [],
+      "PCSCR.seqF_mono": [
+        "propext"
+      ],
+      "PCSCR.loopK_mono": [
+        "propext"
+      ],
+      "PCSCR.onRaise_mono": [
+        "propext"
+      ],
+      "PCSCR.fuelpres_mono": [],
+      "PCSCR.eraseAfter_mono": [
+        "propext"
+      ],
+      "PCSCR.compResult_mono": [
+        "propext"
+      ],
+      "PCSCR.finishCall_mono": [],
+      "PCSCR.ite_mono": [
+        "propext"
+      ],
+      "PCSCR.evalE_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.evalL_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.assignT_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.assignTs_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.assignAll_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.execS_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.execB_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.mkLevel_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Lvl.le_refl": [],
+      "PCSCR.Lvl.le_trans": [],
+      "PCSCR.fuelLvl_le": [],
+      "PCSCR.interp_succ_le": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.interp_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.run_stable": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.run_fuel_or": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.alloc_prefix": [
+        "propext"
+      ],
+      "PCSCR.Py.allocL_prefix": [
+        "propext"
+      ],
+      "PCSCR.Py.allocKV_prefix": [
+        "propext"
+      ],
+      "PCSCR.Py.HAgree.of_prefix": [
+        "propext"
+      ],
+      "PCSCR.Py.alloc_agree": [
+        "propext"
+      ],
+      "PCSCR.Py.allocL_agree": [
+        "propext"
+      ],
+      "PCSCR.Py.allocKV_agree": [
+        "propext"
+      ],
+      "PCSCR.Py.alloc_rb": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.allocL_rb": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.allocKV_rb": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rb_obj": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.tlook_dictFind": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rb_str": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rb_field": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rb_FRel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.StableEx.refl": [
+        "propext"
+      ],
+      "PCSCR.Py.StableEx.trans": [
+        "propext"
+      ],
+      "PCSCR.Py.StableEx.append": [
+        "propext"
+      ],
+      "PCSCR.Py.StableEx.hset": [
+        "propext"
+      ],
+      "PCSCR.Py.readbackEx_stable": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readbackEx_readback": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readback_readbackEx": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.apply_succ_eq": [],
+      "PCSCR.Py.lookup_apply'": [],
+      "PCSCR.Py.node_ptr": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.interp_succ_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.SimOut.frame": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.hget_append_lt_list": [
+        "propext"
+      ],
+      "PCSCR.Py.hget_append2": [
+        "propext"
+      ],
+      "PCSCR.Py.apply_tail": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.apply_rest": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MRel.setOps": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.apply_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.apply_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.HAgree.frame": [
+        "propext"
+      ],
+      "PCSCR.Py.evalG_eq": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.fdepthL_ge": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.zip_mem_left": [
+        "propext"
+      ],
+      "PCSCR.Py.map_evalG": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.comp_truths": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.cex_branch": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.Addrs.base_mut": [
+        "propext"
+      ],
+      "PCSCR.Py.Addrs.addOwn_mut": [
+        "propext"
+      ],
+      "PCSCR.Py.diagramFields_base": [],
+      "PCSCR.Py.diagramFields_addOwn": [],
+      "PCSCR.Py.MRel.weaken": [
+        "propext"
+      ],
+      "PCSCR.Py.MRel.base": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MRel.addOwn": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MRel.hsetOwn": [
+        "propext"
+      ],
+      "PCSCR.Py.FRel.weaken": [
+        "propext"
+      ],
+      "PCSCR.Py.FRel.base": [
+        "propext"
+      ],
+      "PCSCR.Py.FRel.addOwn": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.SimOut.both": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.refl": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.trans": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.mono": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.append": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.hset": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.of_frame": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.to_frame": [
+        "propext"
+      ],
+      "PCSCR.Py.allocT_limT": [
+        "propext"
+      ],
+      "PCSCR.Py.exact_limits": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.limits_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.init_mrel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.init_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.check_prefix": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.comp_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.comp_eval": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.FRel.frame": [
+        "propext"
+      ],
+      "PCSCR.Py.findIdx_names": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MRel.setCounters": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.lookup_compile'": [],
+      "PCSCR.Py.compile_atom": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_tt": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_ff": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_not": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_and": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_or": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_imp": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.compile_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.conditional_py_source_bound": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.conditional_py_length": [],
+      "PCSCR.Py.conditional_py_lowers": [
+        "propext"
+      ],
+      "PCSCR.Env.get_replace": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.interp_succ_forLoop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.conj_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.lookup_conjunction'": [],
+      "PCSCR.Py.conjunction_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.Frame.ofBase": [
+        "propext"
+      ],
+      "PCSCR.Py.dec_compute": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.dictFind_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.lookup_evaluate'": [],
+      "PCSCR.Py.eval_atom": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_tt": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_ff": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_not": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_and": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_or": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_imp": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eval_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readback_rbM_false": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.of_readback": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.kvStep_transport": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.transport": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.frame": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.anti": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsL.anti": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.uncons": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.dictSet": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.append": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.dictSet_absentKV": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.witStepsF_zero": [
+        "propext"
+      ],
+      "PCSCR.Py.witSteps_zero": [
+        "propext"
+      ],
+      "PCSCR.Py.hset_hset_same": [
+        "propext"
+      ],
+      "PCSCR.Py.null_step": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.handler_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.WorkOK.of_mrel": [
+        "propext"
+      ],
+      "PCSCR.Py.WorkOK.of_mrel_addOwn": [
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.frameBig": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.frameBig": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.shrink_sublist": [
+        "propext"
+      ],
+      "PCSCR.Py.Addrs.mut_addOwn": [],
+      "PCSCR.Py.FrameS.big_of_base": [
+        "propext"
+      ],
+      "PCSCR.Py.FrameS.append2": [
+        "propext"
+      ],
+      "PCSCR.Py.readsL_ints": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.incons_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.allocKV_find": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.allocL_strs": [
+        "propext"
+      ],
+      "PCSCR.Py.allocL_length": [
+        "propext"
+      ],
+      "PCSCR.Py.HAgree.frameS": [
+        "propext"
+      ],
+      "PCSCR.Py.mapM_zip_FRel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.input_facts": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.HAgree.refl": [
+        "propext"
+      ],
+      "PCSCR.Py.HAgree.trans": [
+        "propext"
+      ],
+      "PCSCR.Py.HAgree.append": [
+        "propext"
+      ],
+      "PCSCR.Py.mapM_some_congr": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readback_agree": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readback_fuel_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.check_run": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.python_conditional_refines_reference": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ukey_inj": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.mrel_push": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.lookup_node'": [],
+      "PCSCR.Py.node_spec": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MutP_mut": [
+        "propext"
+      ],
+      "PCSCR.Py.subOp_last": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.subOp_idx": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.prem_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.hget_append": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.hget_lt": [
+        "propext"
+      ],
+      "PCSCR.Py.hget_hset": [
+        "propext"
+      ],
+      "PCSCR.Py.eqPy_prim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eqPyL_prim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.keyEq_ok": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.dictFind_set": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.keysOK_set": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ukey_ok": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.mkey_ok": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.Frame.refl": [
+        "propext"
+      ],
+      "PCSCR.Py.Frame.trans": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.Frame.append": [
+        "propext"
+      ],
+      "PCSCR.Py.Frame.hset": [
+        "propext"
+      ],
+      "PCSCR.Py.execB_cons'": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.execB_nil_eq": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.NodesRel.frame": [
+        "propext"
+      ],
+      "PCSCR.Py.MRel.addrs_lt": [
+        "propext"
+      ],
+      "PCSCR.Py.MRel.neqs": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MRel.transport": [
+        "propext"
+      ],
+      "PCSCR.Py.MRel.append": [
+        "propext"
+      ],
+      "PCSCR.Py.BOp.name_inj": [
+        "propext"
+      ],
+      "PCSCR.Py.memoLookup_cons": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.MRel.setMemo": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.find?_congr'": [
+        "propext"
+      ],
+      "PCSCR.Py.findNode_push": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.lookup_node": [],
+      "PCSCR.Py.lookup_apply": [],
+      "PCSCR.Py.lookup_compile": [],
+      "PCSCR.Py.lookup_conjunction": [],
+      "PCSCR.Py.lookup_world": [],
+      "PCSCR.Py.lookup_work": [],
+      "PCSCR.Py.lookup_init": [],
+      "PCSCR.Py.lookup_evaluate": [],
+      "PCSCR.Py.lookup_exact": [],
+      "PCSCR.Py.lookup_check": [],
+      "PCSCR.Py.rbM_transport": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rbM_mono": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rbM_fuel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rbM_le": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.rbM_readback": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.mapM_fuel_le": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.int": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.bool": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.str": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.none": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsL.nil": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsL.cons": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.nil": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.kvStep_fuel": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsKV.cons": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.list": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.tup": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.dict": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.transport": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.frame": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.anti": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsL.frame": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ReadsM.readback": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readback_det": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.work_fields_eq": [
+        "propext"
+      ],
+      "PCSCR.Py.tset_receipt": [
+        "propext"
+      ],
+      "PCSCR.Py.receipt_fields_eq": [
+        "propext"
+      ],
+      "PCSCR.Py.report_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.reads_ovT": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.reads_nodes": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.diag_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.py_init_result": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.fresh_not_mut": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.eqPy_int": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.filter_map_iv": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.comp_filter_ne": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.premG_map": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.comp_pick": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.conjList_inv": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.pick_bound": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.ShrinkOut_lift": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.shrink_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.work_call": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.WorkOK.frameR": [
+        "propext"
+      ],
+      "PCSCR.Py.trystmt_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.check_body_drop6": [],
+      "PCSCR.Py.reads_workKV": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readback_dict": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.tail_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.seqF_assoc": [
+        "propext"
+      ],
+      "PCSCR.Py.execB_append": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.WorkOK.of_addOwn": [
+        "propext"
+      ],
+      "PCSCR.Py.try_sim": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.keyEq_str": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.dictSet_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.dictSet_absent": [
+        "propext"
+      ],
+      "PCSCR.Py.encVals_append": [
+        "propext"
+      ],
+      "PCSCR.Py.fromkeys_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.take_succ_of_getElem": [
+        "propext"
+      ],
+      "PCSCR.Py.take_set_succ": [
+        "propext"
+      ],
+      "PCSCR.Py.pyWalk_wit": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.pyWalk_world": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.comp_pick_ne": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.world_sim_pos2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.readsKV_encVals": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.reads_world": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.witsT_eq": [],
+      "PCSCR.Py.satset_ne_zero": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.wits_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.hset_append_left": [
+        "propext"
+      ],
+      "PCSCR.Py.hset_append_last": [
+        "propext"
+      ],
+      "PCSCR.Py.hset_append_last'": [
+        "propext"
+      ],
+      "PCSCR.Py.interp_succ_whileLoop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.world_loop": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.lookup_world'": [],
+      "PCSCR.Py.world_sim_zero": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCR.Py.world_sim_pos": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    "principals": [
+      "PCSCR.Py.python_conditional_refines_reference",
+      "PCSCR.Js.javascript_conditional_refines_reference"
+    ],
+    "assumptions": {
+      "python": [
+        "distinct declared names",
+        "TaskDen typed JSON task",
+        "valid limits",
+        "ValidateAccepts: unextracted validate accepts and preserves task",
+        "DigestOK: unextracted digest is pure function dg"
+      ],
+      "javascript": [
+        "distinct declared names",
+        "TaskDen typed JSON task",
+        "valid limits",
+        "JsTaskBounds: <=24 names, <=8 assumptions, <=128 nodes per formula",
+        "JValidateAccepts: unextracted validator accepts and preserves task",
+        "JExactOK: unextracted exact helper preserves valid inputs",
+        "JIntegerOK: unextracted integer helper preserves valid inputs",
+        "DigestOK: unextracted digest is pure function dg"
+      ],
+      "external": [
+        "declared Python/JavaScript heap-subset semantics",
+        "source-reading elaborator and trusted Lean toolchain environment",
+        "no native interpreter/compiler/OS correspondence theorem",
+        "no SHA256/JCS/cryptographic implementation refinement"
+      ]
+    },
+    "assurance": "source-bound declared heap-subset refinement",
+    "native_execution_correspondence_proved": false,
+    "scientific_acceptance": false
+  },
+  "fresh_elaboration": [
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M32000",
+        "-D",
+        "Elab.async=false",
+        "-D",
+        "maxHeartbeats=0",
+        "-D",
+        "maxRecDepth=100000",
+        "-o",
+        "/tmp/pcs-conditional-replay-uttlzzlr/PCSConditionalRuntime/PyConditional.olean",
+        "/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/formal/PCSConditionalRuntime/PyConditional.lean"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 75.928307
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M32000",
+        "-D",
+        "Elab.async=false",
+        "-D",
+        "maxHeartbeats=0",
+        "-D",
+        "maxRecDepth=100000",
+        "-o",
+        "/tmp/pcs-conditional-replay-uttlzzlr/PCSConditionalRuntime/JsConditional.olean",
+        "/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/formal/PCSConditionalRuntime/JsConditional.lean"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 259.040389
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M32000",
+        "-D",
+        "Elab.async=false",
+        "-D",
+        "maxHeartbeats=0",
+        "-D",
+        "maxRecDepth=100000",
+        "-o",
+        "/tmp/pcs-conditional-replay-uttlzzlr/PCSConditionalRuntime/PyConditionalLowered.olean",
+        "/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/formal/PCSConditionalRuntime/PyConditionalLowered.lean"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 4.503079
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M32000",
+        "-D",
+        "Elab.async=false",
+        "-D",
+        "maxHeartbeats=0",
+        "-D",
+        "maxRecDepth=100000",
+        "-o",
+        "/tmp/pcs-conditional-replay-uttlzzlr/PCSConditionalRuntime/JsConditionalLowered.olean",
+        "/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/formal/PCSConditionalRuntime/JsConditionalLowered.lean"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 4.540526
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M32000",
+        "-D",
+        "Elab.async=false",
+        "-D",
+        "maxHeartbeats=0",
+        "-D",
+        "maxRecDepth=100000",
+        "-o",
+        "/tmp/pcs-conditional-replay-uttlzzlr/PCSConditionalRuntime/PyMain.olean",
+        "/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/formal/PCSConditionalRuntime/PyMain.lean"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 2.215827
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M32000",
+        "-D",
+        "Elab.async=false",
+        "-D",
+        "maxHeartbeats=0",
+        "-D",
+        "maxRecDepth=100000",
+        "-o",
+        "/tmp/pcs-conditional-replay-uttlzzlr/PCSConditionalRuntime/JsMain.olean",
+        "/home/runner/work/proof-carrying-science/proof-carrying-science/proof-carrying-science/formal/PCSConditionalRuntime/JsMain.lean"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 2.701436
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "/tmp/pcs-conditional-replay-uttlzzlr/CompleteAudit.lean"
+      ],
+      "returncode": 0,
+      "stdout": "'PCSCR.E.beq_sound' depends on axioms: [propext]\n'PCSCR.E.beqL_sound' depends on axioms: [propext]\n'PCSCR.E.beqO_sound' depends on axioms: [propext]\n'PCSCR.Tgt.beq_sound' depends on axioms: [propext]\n'PCSCR.Tgt.beqL_sound' depends on axioms: [propext]\n'PCSCR.S.beq_sound' depends on axioms: [propext]\n'PCSCR.S.beqL_sound' depends on axioms: [propext]\n'PCSCR.Fn.beq_sound' depends on axioms: [propext]\n'PCSCR.funsBeq_sound' depends on axioms: [propext]\n'PCSCR.classesBeq_sound' depends on axioms: [propext]\n'PCSCR.Py.Module.beq_sound' depends on axioms: [propext]\n'PCSCR.Py.Module.beqO_sound' depends on axioms: [propext]\n'PCSCR.FK.trans' depends on axioms: [propext]\n'PCSCR.assignT_keeps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.assignTs_keeps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.assignAll_keeps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.FK_bindS' depends on axioms: [propext]\n'PCSCR.Env.get_erase' depends on axioms: [propext]\n'PCSCR.execS_keeps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.execB_keeps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.FK_loopK' depends on axioms: [propext]\n'PCSCR.interp_keeps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.execB_keeps_interp' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.js_aug_attr_add1' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JMRel.setOps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.japply_tail' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.japply_rest' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.japply_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.japply_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.ReadsKV.jdictSet' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdictSet_absentKV' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jevalG_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.map_jevalG' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jlookup_evaluate_some' does not depend on any axioms\n'PCSCR.Js.jcomp_truths' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcex_branch' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdiagramFields_base' does not depend on any axioms\n'PCSCR.Js.jdiagramFields_addOwn' does not depend on any axioms\n'PCSCR.Js.JMRel.weaken' depends on axioms: [propext]\n'PCSCR.Js.JMRel.base' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.JMRel.addOwn' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.JMRel.hsetOwn' depends on axioms: [propext]\n'PCSCR.Js.JFRel.weaken' depends on axioms: [propext]\n'PCSCR.Js.JFRel.base' depends on axioms: [propext]\n'PCSCR.Js.JFRel.addOwn' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.JSimOut.both' depends on axioms: [propext]\n'PCSCR.Js.jinit_mrel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jinit_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jlimits_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcheck_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.IterOK.ref' depends on axioms: [propext]\n'PCSCR.Js.IterOK.tup' depends on axioms: [propext]\n'PCSCR.Js.jcomp_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcomp_eval' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JFRel.frame' depends on axioms: [propext]\n'PCSCR.Js.mkNode_visits' does not depend on any axioms\n'PCSCR.Js.apply_visits' depends on axioms: [propext]\n'PCSCR.Js.compile_visits' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jfindIdx_names' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JMRel.setCounters' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_tt' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_ff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_not' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_and' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_or' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_imp' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcompile_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.conditional_js_source_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.conditional_js_length' does not depend on any axioms\n'PCSCR.Js.conditional_js_lowers' depends on axioms: [propext]\n'PCSCR.Js.jconj_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jconjunction_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdec_compute' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdictFind_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_tt' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_ff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_not' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_and' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_or' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_imp' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jeval_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JWorkOK.of_mrel' depends on axioms: [propext]\n'PCSCR.Js.JWorkOK.of_mrel_addOwn' depends on axioms: [propext]\n'PCSCR.Js.shrink_wsteps' depends on axioms: [propext]\n'PCSCR.Js.jincons_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jtlook_dictFind' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jrb_field' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.rb_JFRel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jallocKV_find' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.mapM_zip_JFRel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jinput_facts' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.digVal_append_single' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.char_ofNat_digit' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.decDigits_val' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.decDigits_noComma' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.lt_ten_pow' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jsIntStr_nat' depends on axioms: [propext]\n'PCSCR.Js.jsIntStr_nat_inj' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jsIntStr_noComma' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.split_comma' depends on axioms: [propext]\n'PCSCR.Js.toList_join3' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.join3_inj' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jukey_inj' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.BOp.name_noComma' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jmkey_inj' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jsJoin_ukey' depends on axioms: [propext]\n'PCSCR.Js.jsJoin_mkey' depends on axioms: [propext]\n'PCSCR.Js.keyEq_js_str' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.dictFind_js_set' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.fsizeL_le' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.JsTaskBounds.vis' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.JsTaskBounds.ws' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.allocT_opts' depends on axioms: [propext]\n'PCSCR.Js.jcheck_run' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.javascript_conditional_refines_reference' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jhget_append_lt_list' depends on axioms: [propext]\n'PCSCR.Js.lim_bounds' depends on axioms: [propext]\n'PCSCR.Js.jmrel_push' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.node_spec' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.at_last' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.at_last_m' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jprem_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JMRel.addrs_lt' depends on axioms: [propext]\n'PCSCR.Js.JMRel.neqs' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JMRel.transport' depends on axioms: [propext]\n'PCSCR.Js.JMRel.append' depends on axioms: [propext]\n'PCSCR.Js.JMRel.setMemo' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JSimOut.frame' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.lookup_node' does not depend on any axioms\n'PCSCR.Js.lookup_apply' does not depend on any axioms\n'PCSCR.Js.lookup_compile' does not depend on any axioms\n'PCSCR.Js.lookup_conjunction' does not depend on any axioms\n'PCSCR.Js.lookup_world' does not depend on any axioms\n'PCSCR.Js.lookup_work' does not depend on any axioms\n'PCSCR.Js.lookup_init' does not depend on any axioms\n'PCSCR.Js.lookup_evaluate' does not depend on any axioms\n'PCSCR.Js.lookup_check' does not depend on any axioms\n'PCSCR.Js.jreport_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jreads_nodes' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdiag_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.js_init_result' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jfresh_not_mut' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.eqJs_int' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcomp_indices' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcomp_filter_ne' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jpremG_map' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jsubOp_idx' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jcomp_pick' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JShrinkOut_lift' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jshrink_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jnull_step' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jhandler_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jwork_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.JWorkOK.frameR' depends on axioms: [propext]\n'PCSCR.Js.jtrystmt_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.check_body_drop9' does not depend on any axioms\n'PCSCR.Js.jtail_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.compile_wsteps' depends on axioms: [propext]\n'PCSCR.Js.premLoop_wsteps' depends on axioms: [propext]\n'PCSCR.Js.premLoop_visits' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.fsizeL_le_take' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.JWorkOK.of_addOwn' depends on axioms: [propext]\n'PCSCR.Js.jtry_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jsWalk_st_le' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jkeyEq_str' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdictSet_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jdictSet_absent' depends on axioms: [propext]\n'PCSCR.Js.jfromkeys_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jsWalk_wit' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jsWalk_world' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.mkNode_wsteps' does not depend on any axioms\n'PCSCR.Js.apply_wsteps' depends on axioms: [propext]\n'PCSCR.Js.conjList_wsteps' depends on axioms: [propext]\n'PCSCR.Js.jcomp_eval'' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jcomp_pick_ne' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jworld_sim_pos2' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jwits_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jworld_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.jworld_sim_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.refsFrom_succ' depends on axioms: [propext]\n'PCSCR.Js.jcomp_pair_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Js.refsFrom_cons' depends on axioms: [propext]\n'PCSCR.Js.JMRel.appendList' depends on axioms: [propext]\n'PCSCR.Js.Frame.appendList' depends on axioms: [propext, Quot.sound]\n'PCSCR.Js.jsEntries_pairs' depends on axioms: [propext]\n'PCSCR.Js.jworld_sim_pos' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Out.le_refl' does not depend on any axioms\n'PCSCR.Out.le_trans' does not depend on any axioms\n'PCSCR.Out.le_app' does not depend on any axioms\n'PCSCR.Out.bind_mono' does not depend on any axioms\n'PCSCR.bindS_mono' does not depend on any axioms\n'PCSCR.bindE_mono' does not depend on any axioms\n'PCSCR.seqF_mono' depends on axioms: [propext]\n'PCSCR.loopK_mono' depends on axioms: [propext]\n'PCSCR.onRaise_mono' depends on axioms: [propext]\n'PCSCR.fuelpres_mono' does not depend on any axioms\n'PCSCR.eraseAfter_mono' depends on axioms: [propext]\n'PCSCR.compResult_mono' depends on axioms: [propext]\n'PCSCR.finishCall_mono' does not depend on any axioms\n'PCSCR.ite_mono' depends on axioms: [propext]\n'PCSCR.evalE_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.evalL_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.assignT_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.assignTs_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.assignAll_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.execS_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.execB_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.mkLevel_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Lvl.le_refl' does not depend on any axioms\n'PCSCR.Lvl.le_trans' does not depend on any axioms\n'PCSCR.fuelLvl_le' does not depend on any axioms\n'PCSCR.interp_succ_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.interp_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.run_stable' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.run_fuel_or' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.alloc_prefix' depends on axioms: [propext]\n'PCSCR.Py.allocL_prefix' depends on axioms: [propext]\n'PCSCR.Py.allocKV_prefix' depends on axioms: [propext]\n'PCSCR.Py.HAgree.of_prefix' depends on axioms: [propext]\n'PCSCR.Py.alloc_agree' depends on axioms: [propext]\n'PCSCR.Py.allocL_agree' depends on axioms: [propext]\n'PCSCR.Py.allocKV_agree' depends on axioms: [propext]\n'PCSCR.Py.alloc_rb' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.allocL_rb' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.allocKV_rb' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rb_obj' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.tlook_dictFind' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rb_str' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.rb_field' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rb_FRel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.StableEx.refl' depends on axioms: [propext]\n'PCSCR.Py.StableEx.trans' depends on axioms: [propext]\n'PCSCR.Py.StableEx.append' depends on axioms: [propext]\n'PCSCR.Py.StableEx.hset' depends on axioms: [propext]\n'PCSCR.Py.readbackEx_stable' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.readbackEx_readback' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.readback_readbackEx' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.apply_succ_eq' does not depend on any axioms\n'PCSCR.Py.lookup_apply'' does not depend on any axioms\n'PCSCR.Py.node_ptr' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.interp_succ_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.SimOut.frame' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.hget_append_lt_list' depends on axioms: [propext]\n'PCSCR.Py.hget_append2' depends on axioms: [propext]\n'PCSCR.Py.apply_tail' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.apply_rest' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.MRel.setOps' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.apply_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.apply_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.HAgree.frame' depends on axioms: [propext]\n'PCSCR.Py.evalG_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.fdepthL_ge' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.zip_mem_left' depends on axioms: [propext]\n'PCSCR.Py.map_evalG' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.comp_truths' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.cex_branch' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.Addrs.base_mut' depends on axioms: [propext]\n'PCSCR.Py.Addrs.addOwn_mut' depends on axioms: [propext]\n'PCSCR.Py.diagramFields_base' does not depend on any axioms\n'PCSCR.Py.diagramFields_addOwn' does not depend on any axioms\n'PCSCR.Py.MRel.weaken' depends on axioms: [propext]\n'PCSCR.Py.MRel.base' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.MRel.addOwn' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.MRel.hsetOwn' depends on axioms: [propext]\n'PCSCR.Py.FRel.weaken' depends on axioms: [propext]\n'PCSCR.Py.FRel.base' depends on axioms: [propext]\n'PCSCR.Py.FRel.addOwn' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.SimOut.both' depends on axioms: [propext]\n'PCSCR.Py.FrameS.refl' depends on axioms: [propext]\n'PCSCR.Py.FrameS.trans' depends on axioms: [propext]\n'PCSCR.Py.FrameS.mono' depends on axioms: [propext]\n'PCSCR.Py.FrameS.append' depends on axioms: [propext]\n'PCSCR.Py.FrameS.hset' depends on axioms: [propext]\n'PCSCR.Py.FrameS.of_frame' depends on axioms: [propext]\n'PCSCR.Py.FrameS.to_frame' depends on axioms: [propext]\n'PCSCR.Py.allocT_limT' depends on axioms: [propext]\n'PCSCR.Py.exact_limits' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.limits_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.init_mrel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.init_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.check_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.comp_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.comp_eval' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.FRel.frame' depends on axioms: [propext]\n'PCSCR.Py.findIdx_names' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.MRel.setCounters' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.lookup_compile'' does not depend on any axioms\n'PCSCR.Py.compile_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_tt' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_ff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_not' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_and' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_or' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_imp' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.compile_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.conditional_py_source_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.conditional_py_length' does not depend on any axioms\n'PCSCR.Py.conditional_py_lowers' depends on axioms: [propext]\n'PCSCR.Env.get_replace' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.interp_succ_forLoop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.conj_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.lookup_conjunction'' does not depend on any axioms\n'PCSCR.Py.conjunction_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.Frame.ofBase' depends on axioms: [propext]\n'PCSCR.Py.dec_compute' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.dictFind_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.lookup_evaluate'' does not depend on any axioms\n'PCSCR.Py.eval_atom' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_tt' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_ff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_not' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_and' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_or' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_imp' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eval_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.readback_rbM_false' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.of_readback' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.kvStep_transport' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.transport' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.frame' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.anti' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsL.anti' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.uncons' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.dictSet' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.append' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.dictSet_absentKV' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.witStepsF_zero' depends on axioms: [propext]\n'PCSCR.Py.witSteps_zero' depends on axioms: [propext]\n'PCSCR.Py.hset_hset_same' depends on axioms: [propext]\n'PCSCR.Py.null_step' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.handler_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.WorkOK.of_mrel' depends on axioms: [propext]\n'PCSCR.Py.WorkOK.of_mrel_addOwn' depends on axioms: [propext]\n'PCSCR.Py.ReadsKV.frameBig' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.frameBig' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.shrink_sublist' depends on axioms: [propext]\n'PCSCR.Py.Addrs.mut_addOwn' does not depend on any axioms\n'PCSCR.Py.FrameS.big_of_base' depends on axioms: [propext]\n'PCSCR.Py.FrameS.append2' depends on axioms: [propext]\n'PCSCR.Py.readsL_ints' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.incons_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.allocKV_find' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.allocL_strs' depends on axioms: [propext]\n'PCSCR.Py.allocL_length' depends on axioms: [propext]\n'PCSCR.Py.HAgree.frameS' depends on axioms: [propext]\n'PCSCR.Py.mapM_zip_FRel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.input_facts' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.HAgree.refl' depends on axioms: [propext]\n'PCSCR.Py.HAgree.trans' depends on axioms: [propext]\n'PCSCR.Py.HAgree.append' depends on axioms: [propext]\n'PCSCR.Py.mapM_some_congr' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.readback_agree' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.readback_fuel_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.check_run' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.python_conditional_refines_reference' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ukey_inj' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.mrel_push' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.lookup_node'' does not depend on any axioms\n'PCSCR.Py.node_spec' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.MutP_mut' depends on axioms: [propext]\n'PCSCR.Py.subOp_last' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.subOp_idx' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.prem_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.hget_append' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.hget_lt' depends on axioms: [propext]\n'PCSCR.Py.hget_hset' depends on axioms: [propext]\n'PCSCR.Py.eqPy_prim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.eqPyL_prim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.keyEq_ok' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.dictFind_set' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.keysOK_set' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.ukey_ok' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.mkey_ok' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.Frame.refl' depends on axioms: [propext]\n'PCSCR.Py.Frame.trans' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.Frame.append' depends on axioms: [propext]\n'PCSCR.Py.Frame.hset' depends on axioms: [propext]\n'PCSCR.Py.execB_cons'' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.execB_nil_eq' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.NodesRel.frame' depends on axioms: [propext]\n'PCSCR.Py.MRel.addrs_lt' depends on axioms: [propext]\n'PCSCR.Py.MRel.neqs' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.MRel.transport' depends on axioms: [propext]\n'PCSCR.Py.MRel.append' depends on axioms: [propext]\n'PCSCR.Py.BOp.name_inj' depends on axioms: [propext]\n'PCSCR.Py.memoLookup_cons' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.MRel.setMemo' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.find?_congr'' depends on axioms: [propext]\n'PCSCR.Py.findNode_push' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.lookup_node' does not depend on any axioms\n'PCSCR.Py.lookup_apply' does not depend on any axioms\n'PCSCR.Py.lookup_compile' does not depend on any axioms\n'PCSCR.Py.lookup_conjunction' does not depend on any axioms\n'PCSCR.Py.lookup_world' does not depend on any axioms\n'PCSCR.Py.lookup_work' does not depend on any axioms\n'PCSCR.Py.lookup_init' does not depend on any axioms\n'PCSCR.Py.lookup_evaluate' does not depend on any axioms\n'PCSCR.Py.lookup_exact' does not depend on any axioms\n'PCSCR.Py.lookup_check' does not depend on any axioms\n'PCSCR.Py.rbM_transport' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rbM_mono' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rbM_fuel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rbM_le' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.rbM_readback' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.mapM_fuel_le' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.ReadsM.int' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.bool' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.str' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.none' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsL.nil' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsL.cons' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.nil' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.kvStep_fuel' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsKV.cons' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.list' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.tup' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.dict' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.transport' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.frame' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.anti' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsL.frame' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.ReadsM.readback' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.readback_det' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.work_fields_eq' depends on axioms: [propext]\n'PCSCR.Py.tset_receipt' depends on axioms: [propext]\n'PCSCR.Py.receipt_fields_eq' depends on axioms: [propext]\n'PCSCR.Py.report_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.reads_ovT' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.reads_nodes' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.diag_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.py_init_result' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.fresh_not_mut' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.eqPy_int' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.filter_map_iv' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.comp_filter_ne' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.premG_map' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.comp_pick' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.conjList_inv' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.pick_bound' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.ShrinkOut_lift' depends on axioms: [propext, Quot.sound]\n'PCSCR.Py.shrink_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.work_call' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.WorkOK.frameR' depends on axioms: [propext]\n'PCSCR.Py.trystmt_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.check_body_drop6' does not depend on any axioms\n'PCSCR.Py.reads_workKV' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.readback_dict' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.tail_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.seqF_assoc' depends on axioms: [propext]\n'PCSCR.Py.execB_append' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.WorkOK.of_addOwn' depends on axioms: [propext]\n'PCSCR.Py.try_sim' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.keyEq_str' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.dictSet_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.dictSet_absent' depends on axioms: [propext]\n'PCSCR.Py.encVals_append' depends on axioms: [propext]\n'PCSCR.Py.fromkeys_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.take_succ_of_getElem' depends on axioms: [propext]\n'PCSCR.Py.take_set_succ' depends on axioms: [propext]\n'PCSCR.Py.pyWalk_wit' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.pyWalk_world' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.comp_pick_ne' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.world_sim_pos2' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.readsKV_encVals' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.reads_world' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.witsT_eq' does not depend on any axioms\n'PCSCR.Py.satset_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.wits_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.hset_append_left' depends on axioms: [propext]\n'PCSCR.Py.hset_append_last' depends on axioms: [propext]\n'PCSCR.Py.hset_append_last'' depends on axioms: [propext]\n'PCSCR.Py.interp_succ_whileLoop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.world_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.lookup_world'' does not depend on any axioms\n'PCSCR.Py.world_sim_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PCSCR.Py.world_sim_pos' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+      "stderr": "",
+      "wall_seconds": 29.328057
+    }
+  ],
+  "negative_controls": [
+    {
+      "language": "python",
+      "rejected": true,
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "/tmp/pcs-conditional-replay-uttlzzlr/FalseSource_python.lean"
+      ],
+      "returncode": 1,
+      "stdout": "/tmp/pcs-conditional-replay-uttlzzlr/FalseSource_python.lean:2:71: error: Tactic `decide` proved that the proposition\n  PCSCR.Py.checkSegs PCSCR.Py.conditionalPySrc [] = true\nis false\n",
+      "stderr": "",
+      "wall_seconds": 0.745712
+    },
+    {
+      "language": "javascript",
+      "rejected": true,
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "/tmp/pcs-conditional-replay-uttlzzlr/FalseSource_javascript.lean"
+      ],
+      "returncode": 1,
+      "stdout": "/tmp/pcs-conditional-replay-uttlzzlr/FalseSource_javascript.lean:2:72: error: Tactic `decide` proved that the proposition\n  PCSCR.Js.checkJSegs PCSCR.Js.conditionalJsSrc [] = true\nis false\n",
+      "stderr": "",
+      "wall_seconds": 0.807007
+    }
+  ]
+}

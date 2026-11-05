@@ -1,0 +1,37 @@
+{
+  "case_id": "RAW-INVALID-001",
+  "ground_truth_label": "invalid",
+  "distinction_tags": [
+    "outright_rejected",
+    "cryptographic_validity"
+  ],
+  "title": "Tampered / integrity failure",
+  "summary": "Artifact digest mismatch; package must be rejected.",
+  "evidence_excerpt": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Predictions match declared model.",
+        "kind": "computational",
+        "assessment": {
+          "status": "COMPUTATIONALLY_SUPPORTED"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "id": "E_HASH",
+        "type": "artifact_digest",
+        "result": "fail"
+      }
+    ],
+    "integrity_alerts": [
+      "digest mismatch",
+      "do not accept"
+    ],
+    "limitations": [
+      "Integrity failures invalidate assurance."
+    ]
+  },
+  "reviewer_prompt": "Reject as invalid."
+}

@@ -1,0 +1,40 @@
+{
+  "format": "pcs-blind-challenge-ground-truth-v1",
+  "note": "Sealed labels for automated scoring of synthetic cases. Not human review results. Do not distribute inside reviewer packets.",
+  "distinction_dimensions": [
+    "cryptographic_validity",
+    "formally_justified_computational",
+    "empirically_validated",
+    "unsupported_interpretation",
+    "outright_rejected"
+  ],
+  "labels": {
+    "RAW-VALID-001": "valid",
+    "RAW-INVALID-001": "invalid",
+    "RAW-CVSU-001": "computationally_valid_scientifically_unsupported",
+    "RAW-CRYPTO-001": "crypto_valid_without_formal_justification",
+    "RAW-EMP-001": "empirically_and_computationally_supported",
+    "RAW-INTERP-001": "unsupported_interpretation",
+    "RAW-REJECT-HASH-001": "invalid"
+  },
+  "correct_responses": {
+    "valid": [
+      "accept_as_valid"
+    ],
+    "invalid": [
+      "reject_as_invalid"
+    ],
+    "computationally_valid_scientifically_unsupported": [
+      "accept_computational_only"
+    ],
+    "crypto_valid_without_formal_justification": [
+      "abstain"
+    ],
+    "empirically_and_computationally_supported": [
+      "accept_as_valid"
+    ],
+    "unsupported_interpretation": [
+      "reject_as_invalid"
+    ]
+  }
+}

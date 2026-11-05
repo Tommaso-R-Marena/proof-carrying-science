@@ -1,0 +1,36 @@
+{
+  "format": "pcca-mass-action-contract-v1",
+  "question": "Do elemental carbon, hydrogen and oxygen pools stay invariant under the declared stoichiometric Euler trajectory?",
+  "species": [
+    {"id": "glucose", "formula": "C6H12O6"},
+    {"id": "lactate", "formula": "C3H6O3"},
+    {"id": "isomer", "formula": "C3H6O3"}
+  ],
+  "reactions": [
+    {
+      "id": "cleavage",
+      "reactants": [{"species": "glucose", "coefficient": 1}],
+      "products": [{"species": "lactate", "coefficient": 2}],
+      "rate_constant": "1/10",
+      "rate_unit": "s^-1"
+    },
+    {
+      "id": "isomerization",
+      "reactants": [{"species": "lactate", "coefficient": 1}],
+      "products": [{"species": "isomer", "coefficient": 1}],
+      "rate_constant": "1/20",
+      "rate_unit": "s^-1"
+    }
+  ],
+  "initial": {"glucose": "1", "lactate": "0", "isomer": "0"},
+  "concentration_unit": "mol/L",
+  "time_unit": "s",
+  "time_step": "1/4",
+  "steps": 12,
+  "assumptions": [
+    "Closed fixed-volume synthetic compartment.",
+    "Authored mass-action kinetics; not validated biology.",
+    "Finite rational Euler observations only; continuum accuracy OPEN."
+  ],
+  "license": "CC0-1.0"
+}

@@ -1,0 +1,9 @@
+name = "PcsEpistemic"
+version = "0.1.0"
+defaultTargets = ["PcsEpistemic"]
+
+[[lean_lib]]
+name = "PcsEpistemic"
+roots = ["PcsEpistemic"]
+defaultFacets = ["leanArts"]
+moreLeanArgs = ["-j1", "-D", "Elab.async=false"]

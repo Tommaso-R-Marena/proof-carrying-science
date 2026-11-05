@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "name": "backdoor_confounding",
+    "valid_adjustment": [
+      "Z"
+    ],
+    "invalid_adjustment_empty": true,
+    "true_ate": [
+      1,
+      5
+    ],
+    "notes": "Synthetic; confounding makes naive association \u2260 ATE."
+  },
+  "backdoor": {
+    "treatment": "X",
+    "outcome": "Y",
+    "adjustment_set": [
+      "Z"
+    ],
+    "valid": true,
+    "reasons": [
+      "backdoor criterion satisfied under declared assumptions"
+    ],
+    "formula": "P(Y | do(X=x)) = \u03a3_{Z} P(Y | X=x, Z) P(Z)",
+    "assumptions": [
+      "dag_is_correct_causal_graph",
+      "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+      "acyclicity",
+      "consistency_Yx_equals_Y_when_X_x",
+      "graphical_markov_condition",
+      "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+    ],
+    "status": "IDENTIFIED_UNDER_ASSUMPTIONS",
+    "positivity_obligation": "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+  },
+  "identified_ate": [
+    1,
+    5
+  ],
+  "true_ate": [
+    1,
+    5
+  ],
+  "match": true
+}

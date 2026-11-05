@@ -1,0 +1,49 @@
+{
+  "scenario_id": "TT-ARCHIVE-001",
+  "title": "Corrupted evidence archive",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "ZIP CRC failure and hash mismatches.",
+  "signals": [
+    "CRC failure",
+    "SHA-256 mismatch"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Integrity finding.",
+      "acceptable_keywords": [
+        "corrupt",
+        "mismatch",
+        "hash",
+        "crc"
+      ]
+    },
+    {
+      "id": "E2",
+      "prompt": "Source of truth.",
+      "acceptable_keywords": [
+        "manifest",
+        "mirror",
+        "published",
+        "digest"
+      ]
+    },
+    {
+      "id": "E3",
+      "prompt": "Accept partial extract?",
+      "acceptable_keywords": [
+        "hold",
+        "do not accept",
+        "reject",
+        "re-download"
+      ]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Integrity failure recorded",
+    "Acceptance held until integrity restored",
+    "Alternate mirror or republish path noted"
+  ]
+}

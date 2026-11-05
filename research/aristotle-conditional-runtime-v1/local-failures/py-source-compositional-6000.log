@@ -1,0 +1,236 @@
+PCSConditionalRuntime/PyConditional.lean:266:91: error: unsolved goals
+⊢ ((List.take headerLines.length conditionalPySrc == headerLines) = true ∧ headerLines.all headerLineOK = true) ∧
+    ((List.take (PL.renderB 0 constantsCST).length (List.drop headerLines.length conditionalPySrc) ==
+            PL.renderB 0 constantsCST) =
+          true ∧
+        PL.wfB constantsCST = true) ∧
+      (((decide (2 ≥ 1) = true ∧
+              (match
+                  (List.drop (PL.renderB 0 constantsCST).length
+                      (List.drop headerLines.length conditionalPySrc)).head? with
+                | some l => sStarts l ("def " ++ "digest" ++ "(")
+                | none => false) =
+                true) ∧
+            (List.drop 1
+                    (List.take 2
+                      (List.drop (PL.renderB 0 constantsCST).length
+                        (List.drop headerLines.length conditionalPySrc)))).all
+                isIndentedOrBlank =
+              true) ∧
+          (match
+              (List.drop 2
+                  (List.drop (PL.renderB 0 constantsCST).length
+                    (List.drop headerLines.length conditionalPySrc))).head? with
+            | some l => !sStarts l " "
+            | none => true) =
+            true) ∧
+        ((List.take (PL.renderB 0 exactCST).length
+                  (List.drop 2
+                    (List.drop (PL.renderB 0 constantsCST).length (List.drop headerLines.length conditionalPySrc))) ==
+                PL.renderB 0 exactCST) =
+              true ∧
+            PL.wfB exactCST = true) ∧
+          (((decide (30 ≥ 1) = true ∧
+                  (match
+                      (List.drop (PL.renderB 0 exactCST).length
+                          (List.drop 2
+                            (List.drop (PL.renderB 0 constantsCST).length
+                              (List.drop headerLines.length conditionalPySrc)))).head? with
+                    | some l => sStarts l ("def " ++ "validate" ++ "(")
+                    | none => false) =
+                    true) ∧
+                (List.drop 1
+                        (List.take 30
+                          (List.drop (PL.renderB 0 exactCST).length
+                            (List.drop 2
+                              (List.drop (PL.renderB 0 constantsCST).length
+                                (List.drop headerLines.length conditionalPySrc)))))).all
+                    isIndentedOrBlank =
+                  true) ∧
+              (match
+                  (List.drop 30
+                      (List.drop (PL.renderB 0 exactCST).length
+                        (List.drop 2
+                          (List.drop (PL.renderB 0 constantsCST).length
+                            (List.drop headerLines.length conditionalPySrc))))).head? with
+                | some l => !sStarts l " "
+                | none => true) =
+                true) ∧
+            ((List.take (PL.renderB 0 mainCodeCST).length
+                      (List.drop 30
+                        (List.drop (PL.renderB 0 exactCST).length
+                          (List.drop 2
+                            (List.drop (PL.renderB 0 constantsCST).length
+                              (List.drop headerLines.length conditionalPySrc))))) ==
+                    PL.renderB 0 mainCodeCST) =
+                  true ∧
+                PL.wfB mainCodeCST = true) ∧
+              (((decide (7 ≥ 1) = true ∧
+                      (match
+                          (List.drop (PL.renderB 0 mainCodeCST).length
+                              (List.drop 30
+                                (List.drop (PL.renderB 0 exactCST).length
+                                  (List.drop 2
+                                    (List.drop (PL.renderB 0 constantsCST).length
+                                      (List.drop headerLines.length conditionalPySrc)))))).head? with
+                        | some l => sStarts l ("def " ++ "verify" ++ "(")
+                        | none => false) =
+                        true) ∧
+                    (List.drop 1
+                            (List.take 7
+                              (List.drop (PL.renderB 0 mainCodeCST).length
+                                (List.drop 30
+                                  (List.drop (PL.renderB 0 exactCST).length
+                                    (List.drop 2
+                                      (List.drop (PL.renderB 0 constantsCST).length
+                                        (List.drop headerLines.length conditionalPySrc)))))))).all
+                        isIndentedOrBlank =
+                      true) ∧
+                  (match
+                      (List.drop 7
+                          (List.drop (PL.renderB 0 mainCodeCST).length
+                            (List.drop 30
+                              (List.drop (PL.renderB 0 exactCST).length
+                                (List.drop 2
+                                  (List.drop (PL.renderB 0 constantsCST).length
+                                    (List.drop headerLines.length conditionalPySrc))))))).head? with
+                    | some l => !sStarts l " "
+                    | none => true) =
+                    true) ∧
+                ((List.take (PL.renderB 0 [PL.blank, PL.blank]).length
+                          (List.drop 7
+                            (List.drop (PL.renderB 0 mainCodeCST).length
+                              (List.drop 30
+                                (List.drop (PL.renderB 0 exactCST).length
+                                  (List.drop 2
+                                    (List.drop (PL.renderB 0 constantsCST).length
+                                      (List.drop headerLines.length conditionalPySrc))))))) ==
+                        PL.renderB 0 [PL.blank, PL.blank]) =
+                      true ∧
+                    PL.wfB [PL.blank, PL.blank] = true) ∧
+                  (((decide (51 ≥ 1) = true ∧
+                          (match
+                              (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                  (List.drop 7
+                                    (List.drop (PL.renderB 0 mainCodeCST).length
+                                      (List.drop 30
+                                        (List.drop (PL.renderB 0 exactCST).length
+                                          (List.drop 2
+                                            (List.drop (PL.renderB 0 constantsCST).length
+                                              (List.drop headerLines.length conditionalPySrc)))))))).head? with
+                            | some l => sStarts l ("def " ++ "parse_formula" ++ "(")
+                            | none => false) =
+                            true) ∧
+                        (List.drop 1
+                                (List.take 51
+                                  (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                    (List.drop 7
+                                      (List.drop (PL.renderB 0 mainCodeCST).length
+                                        (List.drop 30
+                                          (List.drop (PL.renderB 0 exactCST).length
+                                            (List.drop 2
+                                              (List.drop (PL.renderB 0 constantsCST).length
+                                                (List.drop headerLines.length conditionalPySrc)))))))))).all
+                            isIndentedOrBlank =
+                          true) ∧
+                      (match
+                          (List.drop 51
+                              (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                (List.drop 7
+                                  (List.drop (PL.renderB 0 mainCodeCST).length
+                                    (List.drop 30
+                                      (List.drop (PL.renderB 0 exactCST).length
+                                        (List.drop 2
+                                          (List.drop (PL.renderB 0 constantsCST).length
+                                            (List.drop headerLines.length conditionalPySrc))))))))).head? with
+                        | some l => !sStarts l " "
+                        | none => true) =
+                        true) ∧
+                    ((List.take (PL.renderB 0 [PL.blank, PL.blank]).length
+                              (List.drop 51
+                                (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                  (List.drop 7
+                                    (List.drop (PL.renderB 0 mainCodeCST).length
+                                      (List.drop 30
+                                        (List.drop (PL.renderB 0 exactCST).length
+                                          (List.drop 2
+                                            (List.drop (PL.renderB 0 constantsCST).length
+                                              (List.drop headerLines.length conditionalPySrc))))))))) ==
+                            PL.renderB 0 [PL.blank, PL.blank]) =
+                          true ∧
+                        PL.wfB [PL.blank, PL.blank] = true) ∧
+                      (((decide (13 ≥ 1) = true ∧
+                              (match
+                                  (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                      (List.drop 51
+                                        (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                          (List.drop 7
+                                            (List.drop (PL.renderB 0 mainCodeCST).length
+                                              (List.drop 30
+                                                (List.drop (PL.renderB 0 exactCST).length
+                                                  (List.drop 2
+                                                    (List.drop (PL.renderB 0 constantsCST).length
+                                                      (List.drop headerLines.length
+                                                        conditionalPySrc)))))))))).head? with
+                                | some l => sStarts l ("def " ++ "from_text" ++ "(")
+                                | none => false) =
+                                true) ∧
+                            (List.drop 1
+                                    (List.take 13
+                                      (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                        (List.drop 51
+                                          (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                            (List.drop 7
+                                              (List.drop (PL.renderB 0 mainCodeCST).length
+                                                (List.drop 30
+                                                  (List.drop (PL.renderB 0 exactCST).length
+                                                    (List.drop 2
+                                                      (List.drop (PL.renderB 0 constantsCST).length
+                                                        (List.drop headerLines.length conditionalPySrc)))))))))))).all
+                                isIndentedOrBlank =
+                              true) ∧
+                          (match
+                              (List.drop 13
+                                  (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                    (List.drop 51
+                                      (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                        (List.drop 7
+                                          (List.drop (PL.renderB 0 mainCodeCST).length
+                                            (List.drop 30
+                                              (List.drop (PL.renderB 0 exactCST).length
+                                                (List.drop 2
+                                                  (List.drop (PL.renderB 0 constantsCST).length
+                                                    (List.drop headerLines.length conditionalPySrc))))))))))).head? with
+                            | some l => !sStarts l " "
+                            | none => true) =
+                            true) ∧
+                        ((List.take [""].length
+                                  (List.drop 13
+                                    (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                      (List.drop 51
+                                        (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                          (List.drop 7
+                                            (List.drop (PL.renderB 0 mainCodeCST).length
+                                              (List.drop 30
+                                                (List.drop (PL.renderB 0 exactCST).length
+                                                  (List.drop 2
+                                                    (List.drop (PL.renderB 0 constantsCST).length
+                                                      (List.drop headerLines.length conditionalPySrc))))))))))) ==
+                                [""]) =
+                              true ∧
+                            [""].all headerLineOK = true) ∧
+                          checkSegs
+                              (List.drop [""].length
+                                (List.drop 13
+                                  (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                    (List.drop 51
+                                      (List.drop (PL.renderB 0 [PL.blank, PL.blank]).length
+                                        (List.drop 7
+                                          (List.drop (PL.renderB 0 mainCodeCST).length
+                                            (List.drop 30
+                                              (List.drop (PL.renderB 0 exactCST).length
+                                                (List.drop 2
+                                                  (List.drop (PL.renderB 0 constantsCST).length
+                                                    (List.drop headerLines.length conditionalPySrc))))))))))))
+                              [] =
+                            true

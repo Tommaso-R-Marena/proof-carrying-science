@@ -1,0 +1,30 @@
+{
+  "uid": 1000,
+  "euid": 1000,
+  "gid": 1000,
+  "sudo_available": false,
+  "newuidmap_available": false,
+  "newgidmap_available": false,
+  "uid_map": "         0          0 4294967295\n",
+  "capability_status": [
+    "CapEff:\t0000000000000000",
+    "CapBnd:\t000001ffffffffff",
+    "NoNewPrivs:\t0",
+    "Seccomp:\t0"
+  ],
+  "user_namespace": {
+    "returncode": 0,
+    "stdout": "{\"namespace_uid\": 0, \"outer_uid_map\": \"         0       1000          1\\n\", \"distinct_uid_switch\": {\"errno\": 22, \"error\": \"[Errno 22] Invalid argument\"}}",
+    "stderr": ""
+  },
+  "same_uid_separate_process_can_read_fixture_0600_key": {
+    "returncode": 0,
+    "observed_bytes": "32",
+    "key_material_printed": false
+  },
+  "profiles": {
+    "A": "EXECUTABLE_LOCAL_MULTI_PROCESS_ONE_ADMINISTRATOR",
+    "B": "BLOCKED_TECHNICAL: no supported distinct outer-UID mapping/helper or privilege in this environment",
+    "C": "BLOCKED_EXTERNAL: no independent administrator/host or independently protected key/bootstrap supplied"
+  }
+}

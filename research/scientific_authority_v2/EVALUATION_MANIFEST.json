@@ -1,0 +1,26 @@
+{
+  "format": "pcs-authority-v2-preregistered-evaluation-v1",
+  "parent": "7be674df70eb3108c9dbd8b0b97f42a728bde000",
+  "profile": "A:same-host-separate-processes",
+  "independent_administration": "BLOCKED_EXTERNAL",
+  "expected": {
+    "valid_science_signed_witnessed_admission": "EXECUTED_PASS",
+    "false_science": "REJECT_NO_LOCAL_OR_WITNESS_ADVANCE",
+    "prepared_or_local_only_serving": "REJECT",
+    "witness_finalized_without_local": "REJECT_UNTIL_EXACT_RECONSTRUCTION",
+    "producer_store_rollback_with_live_witness": "DETECT",
+    "unknown_signed_local_fork": "REFUSE_RECOVERY",
+    "witness_and_all_checkpoint_rollback": "EXPECTED_COUNTEREXAMPLE",
+    "empirical_validity": "UNVERIFIED"
+  },
+  "process_crash_windows": [
+    "before_prepare", "after_prepare", "during_local_transaction",
+    "after_local_commit", "after_finalize", "before_eligibility",
+    "after_eligibility_before_return", "witness_prepare_transaction",
+    "witness_finalize_transaction", "witness_after_finalize_commit"
+  ],
+  "measurements": ["actual_Lean_checks", "wall_seconds", "durable_local_generation", "durable_witness_generation", "pending", "recovered_generation"],
+  "bounds": {"max_events": 32, "artifact_bytes": 8192, "envelope_bytes": 40000, "case_timeout_seconds": 100},
+  "success": "All positive/negative/crash outcomes match, no unexpected acceptance, no skipped mandatory verifier. Timings are observations, not speedup claims.",
+  "not_demonstrated": ["physical_power_loss", "host_root_resistance", "independently_administered_witness", "external_laboratory_validation"]
+}

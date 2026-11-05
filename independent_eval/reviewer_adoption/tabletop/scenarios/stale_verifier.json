@@ -1,0 +1,49 @@
+{
+  "scenario_id": "TT-VERIFIER-001",
+  "title": "Stale verifier binary",
+  "offline_only": true,
+  "live_credential_changes_allowed": false,
+  "narrative": "Reviewers used an outdated verifier digest.",
+  "signals": [
+    "Old version string",
+    "Unknown receipt schema field"
+  ],
+  "exercises": [
+    {
+      "id": "E1",
+      "prompt": "Detect stale verifier offline.",
+      "acceptable_keywords": [
+        "digest",
+        "pin",
+        "version",
+        "compare"
+      ]
+    },
+    {
+      "id": "E2",
+      "prompt": "Impact on prior reviews.",
+      "acceptable_keywords": [
+        "non-authoritative",
+        "re-verify",
+        "false accept",
+        "impact"
+      ]
+    },
+    {
+      "id": "E3",
+      "prompt": "Remediation without live CI pin changes.",
+      "acceptable_keywords": [
+        "offline",
+        "refresh",
+        "re-run",
+        "document"
+      ]
+    }
+  ],
+  "after_action_criteria": [
+    "No live credential was rotated by the simulator",
+    "Version or digest mismatch confirmed offline",
+    "Reverification plan recorded",
+    "Residual false-accept risk noted"
+  ]
+}

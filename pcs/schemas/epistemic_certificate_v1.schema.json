@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Epistemic Certificate v1",
+  "type": "object",
+  "required": ["format", "assumptions", "claim", "evidence", "stratum", "scientific_acceptance"],
+  "properties": {
+    "format": {"const": "pcs-epistemic-certificate-v1"},
+    "assumptions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": ["id", "statement"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"},
+          "statement": {"type": "string", "minLength": 1, "maxLength": 4096}
+        },
+        "additionalProperties": false
+      }
+    },
+    "claim": {
+      "type": "object",
+      "required": ["id", "stratum", "predicate", "required_evidence", "assumptions"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"},
+        "stratum": {
+          "enum": ["integrity", "computational", "formal", "continuum", "empirical", "causal"]
+        },
+        "predicate": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "required_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"}
+        },
+        "assumptions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": ["id", "stratum", "outcome", "predicate", "artifact_ids"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"},
+          "stratum": {
+            "enum": ["integrity", "computational", "formal", "continuum", "empirical", "causal"]
+          },
+          "outcome": {"enum": ["PASS", "FAIL", "UNVERIFIED"]},
+          "predicate": {"type": "string", "minLength": 1, "maxLength": 4096},
+          "artifact_ids": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stratum": {
+      "enum": ["integrity", "computational", "formal", "continuum", "empirical", "causal"]
+    },
+    "residuals": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": ["id", "stratum", "reason"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$"},
+          "stratum": {
+            "enum": ["integrity", "computational", "formal", "continuum", "empirical", "causal"]
+          },
+          "reason": {"type": "string", "minLength": 1, "maxLength": 4096},
+          "status": {"const": "OPEN"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "scientific_acceptance": {"const": false}
+  },
+  "additionalProperties": false
+}

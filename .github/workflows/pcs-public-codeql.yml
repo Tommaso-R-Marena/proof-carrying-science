@@ -1,0 +1,41 @@
+name: PCS Public Static Security Analysis
+
+# Trusted default-branch-only CodeQL. No PR code with write tokens, no deploy.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: pcs-codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: codeql-${{ matrix.language }}
+    if: ${{ github.event.repository.private == false && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Initialize CodeQL security analysis
+        uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+      - name: Perform static analysis
+        uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee
+        with:
+          category: /language:${{ matrix.language }}

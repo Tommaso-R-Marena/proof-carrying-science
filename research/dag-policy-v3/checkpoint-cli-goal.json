@@ -1,0 +1,58 @@
+{
+  "binders": [
+    {
+      "name": "a",
+      "type": "Nat"
+    },
+    {
+      "name": "b",
+      "type": "Nat"
+    }
+  ],
+  "body": {
+    "left": {
+      "left": {
+        "name": "a",
+        "op": "var"
+      },
+      "op": "eq",
+      "right": {
+        "name": "b",
+        "op": "var"
+      }
+    },
+    "op": "implies",
+    "right": {
+      "left": {
+        "arg": {
+          "left": {
+            "name": "a",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "name": "a",
+            "op": "var"
+          }
+        },
+        "op": "succ"
+      },
+      "op": "eq",
+      "right": {
+        "arg": {
+          "left": {
+            "name": "b",
+            "op": "var"
+          },
+          "op": "add",
+          "right": {
+            "name": "b",
+            "op": "var"
+          }
+        },
+        "op": "succ"
+      }
+    }
+  },
+  "format": "pcs-math-ir-v1"
+}

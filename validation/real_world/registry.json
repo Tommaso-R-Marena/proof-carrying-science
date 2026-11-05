@@ -1,0 +1,137 @@
+{
+  "format": "pcs-real-world-benchmark-registry-v1",
+  "cases": [
+    {
+      "id": "haber_bosch_balance",
+      "title": "Haber-Bosch ammonia synthesis is atom balanced",
+      "source": {
+        "name": "Chemistry LibreTexts: The Haber Process",
+        "url": "https://chem.libretexts.org/Courses/Brevard_College/LNC_216_CHE/05%3A_Chemical_Reactions/5.04%3A_The_Haber_Process",
+        "citation": "Haber process: N2 + 3 H2 <=> 2 NH3; LibreTexts, accessed 2026-09-29"
+      },
+      "derivation": "Direct transcription of the published stoichiometric equation into the PCS reaction_balance predicate.",
+      "artifacts": {},
+      "check": {
+        "type": "reaction_balance",
+        "reactants": [
+          {"formula": "N2", "coefficient": 1},
+          {"formula": "H2", "coefficient": 3}
+        ],
+        "products": [
+          {"formula": "NH3", "coefficient": 2}
+        ]
+      },
+      "expected_outcome": "PASS",
+      "interpretation": "A known industrial reaction should pass atom-balance replay."
+    },
+    {
+      "id": "iris_clean_split",
+      "title": "UCI Iris deterministic train/test split is disjoint",
+      "source": {
+        "name": "UCI Machine Learning Repository: Iris",
+        "url": "https://archive.ics.uci.edu/dataset/53/iris",
+        "citation": "Fisher, R. A. (1936), Iris dataset; UCI ML Repository DOI 10.24432/C56C76; CC BY 4.0",
+        "source_sha256": "398fadb8f48750d386d670e0b15c65944919682373bcaba59650c33eb5474362"
+      },
+      "derivation": "Rdatasets iris.csv rows 1-120 assigned to left split and rows 121-150 to right split; rownames retained as immutable keys.",
+      "artifacts": {
+        "train": {
+          "path": "iris_train_1_120.csv",
+          "sha256": "82ca18d83fa58a3afbbf26517bd03403bfb37ac90561317a3630438a99e3df8f"
+        },
+        "test": {
+          "path": "iris_test_121_150.csv",
+          "sha256": "5dd4bafacc8cf567dc17175a1178190d8d704200bed23b48b4103c66ce5b95e7"
+        }
+      },
+      "check": {
+        "type": "csv_disjoint",
+        "left_artifact": "train",
+        "right_artifact": "test",
+        "key": "rownames"
+      },
+      "expected_outcome": "PASS",
+      "interpretation": "A deliberately disjoint split should report zero overlapping row IDs."
+    },
+    {
+      "id": "iris_contaminated_split",
+      "title": "PCS detects a one-row Iris train/test leakage",
+      "source": {
+        "name": "UCI Machine Learning Repository: Iris",
+        "url": "https://archive.ics.uci.edu/dataset/53/iris",
+        "citation": "Fisher, R. A. (1936), Iris dataset; UCI ML Repository DOI 10.24432/C56C76; CC BY 4.0",
+        "source_sha256": "398fadb8f48750d386d670e0b15c65944919682373bcaba59650c33eb5474362"
+      },
+      "derivation": "Adversarial mutation of the clean split: source row 120 is copied into the right split, creating exactly one overlapping key.",
+      "artifacts": {
+        "train": {
+          "path": "iris_train_1_120.csv",
+          "sha256": "82ca18d83fa58a3afbbf26517bd03403bfb37ac90561317a3630438a99e3df8f"
+        },
+        "test": {
+          "path": "iris_test_contaminated.csv",
+          "sha256": "0351981c73f360bb0708cd719d3031013d449a1bb841eaf22917c2c44826083c"
+        }
+      },
+      "check": {
+        "type": "csv_disjoint",
+        "left_artifact": "train",
+        "right_artifact": "test",
+        "key": "rownames"
+      },
+      "expected_outcome": "FAIL",
+      "interpretation": "PCS should fail closed and identify row ID 120 as overlap."
+    },
+    {
+      "id": "indometh_unit_equivalence",
+      "title": "Indometh concentration unit representation is dimensionally equivalent",
+      "source": {
+        "name": "CRAN pkr manual / R Indometh example",
+        "url": "https://stat.ethz.ch/CRAN/web/packages/pkr/pkr.pdf",
+        "citation": "pkr manual uses Indometh concentration in mg/L for pharmacokinetic analysis"
+      },
+      "derivation": "Compare mg/L with the SI-equivalent mass concentration g/m^3.",
+      "artifacts": {},
+      "check": {
+        "type": "unit_compatible",
+        "left_unit": "mg/L",
+        "right_unit": "g/m^3"
+      },
+      "expected_outcome": "PASS",
+      "interpretation": "Both units have identical mass/volume dimensions and identical SI scale."
+    },
+    {
+      "id": "indometh_subject1_single_exponential",
+      "title": "Published IV indomethacin data falsify exact single-exponential replay",
+      "source": {
+        "name": "R datasets: Pharmacokinetics of Indomethacin",
+        "url": "https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/Indometh.html",
+        "citation": "Kwan et al. (1976), Journal of Pharmacokinetics and Biopharmaceutics 4(3):255-280; R datasets Indometh",
+        "source_sha256": "aecce7eaa7fd2057ea5bf5a02943463ad5036354dd87a0808376ce502aaf0049"
+      },
+      "derivation": "Subject 1 concentrations were extracted from the 66-row public dataset. A log-linear least-squares single-exponential curve was fit to those 11 observations; dose was normalized to 1 mg and V/CL chosen to reproduce the fitted C0 and elimination constant. The published observations are then intentionally treated as if they were exact model output.",
+      "artifacts": {
+        "model": {
+          "path": "indometh_subject1_single_exponential_fit.json",
+          "sha256": "f8981d87f60a5562bd560443c7b4c7b521ecef4d8f04856db7b20bddf3cbb530"
+        },
+        "observed": {
+          "path": "indometh_subject1_observed.csv",
+          "sha256": "bcc3054d19e5897392a9c4f73a1cbe27370dbac50e48e795718598911e54aaa8"
+        }
+      },
+      "check": {
+        "type": "pkpd_reference_match",
+        "model_artifact": "model",
+        "output_artifact": "observed",
+        "time_column": "time",
+        "concentration_column": "concentration",
+        "effect_column": "effect",
+        "rel_tol": 1e-9,
+        "abs_tol": 1e-12
+      },
+      "expected_outcome": "FAIL",
+      "interpretation": "This is a scope/falsification benchmark: measured clinical data are not exact deterministic output of PCS's narrow analytic replay predicate. A PASS here would be suspicious."
+    }
+  ]
+}

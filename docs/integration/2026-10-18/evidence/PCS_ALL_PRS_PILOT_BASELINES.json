@@ -1,0 +1,381 @@
+{
+  "format": "pcs-original-pr-pilot-baselines-v1",
+  "authority_source_equivalence_file": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_AUTHORITY_REUSE.json",
+  "fresh_authority_build": false,
+  "authority_binary_reuse": "/workspace/proof-carrying-science/formal/.lake/build/bin/pcs-lean-authority",
+  "runs": [
+    {
+      "pr": 120,
+      "source_sha": "ad7aec383d1d28091b1b4c5adb7f06e471a4ed4d",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_120_outputs/pytest-cache",
+        "tests/test_independent_pilot_v1.py",
+        "tests/test_intake_verify_v06.py",
+        "tests/test_attest_v06_intake_lock.py",
+        "tests/test_python_lean_archive_boundary_v06.py",
+        "-k",
+        "not cleanroom"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-120",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_120.log",
+      "exit_code": 0,
+      "duration_seconds": 19.614,
+      "summary_tail": [
+        "PCS_BASELINE_OUTPUT_REMAP []",
+        "...................                                                      [100%]",
+        "19 passed, 1 deselected in 18.23s"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": false,
+      "excluded": [
+        "cleanroom tests require additional Lean build"
+      ],
+      "counts": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0,
+        "deselected": 1,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    },
+    {
+      "pr": 121,
+      "source_sha": "55126481f250f2bcf5ab6110e76a353c4dc6f15a",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_outputs/pytest-cache",
+        "independent_eval/protocol_adversarial/tests"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-121",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121.log",
+      "exit_code": 1,
+      "duration_seconds": 13.018,
+      "summary_tail": [
+        "                                         output=stdout, stderr=stderr)",
+        "E               subprocess.CalledProcessError: Command '['cargo', 'build', '--release']' returned non-zero exit status 101.",
+        "",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py:571: CalledProcessError",
+        "=========================== short test summary info ============================",
+        "FAILED independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_rust_jcs_unit_tests",
+        "FAILED independent_eval/protocol_adversarial/tests/test_protocol_adversarial.py::test_jcs_differential_runs",
+        "2 failed, 6 passed, 7 warnings in 11.95s"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": true,
+      "excluded": [],
+      "counts": {
+        "passed": 6,
+        "failed": 2,
+        "skipped": 0,
+        "deselected": 0,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    },
+    {
+      "pr": 122,
+      "source_sha": "dc03a1d22cc90ce30387fe2566bf60e3092ca5b3",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_122_outputs/pytest-cache",
+        "independent_eval/reviewer_adoption/tests"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-122",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_122.log",
+      "exit_code": 0,
+      "duration_seconds": 1.654,
+      "summary_tail": [
+        "PCS_BASELINE_OUTPUT_REMAP []",
+        "......................                                                   [100%]",
+        "22 passed in 1.00s"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": false,
+      "excluded": [],
+      "counts": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    },
+    {
+      "pr": 123,
+      "source_sha": "fb4f5584aebc6339749d728af4c233a04ee56a33",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/pytest-cache",
+        "independent_eval/repro_tcb/tests"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-123",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123.log",
+      "exit_code": 0,
+      "duration_seconds": 10.213,
+      "summary_tail": [
+        "PCS_BASELINE_OUTPUT_REMAP [{\"module\": \"python_harness.paths\", \"attribute\": \"FIXTURES\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures\"}, {\"module\": \"python_harness.paths\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/results\"}, {\"module\": \"python_harness.paths\", \"attribute\": \"EVIDENCE_FIXTURES\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures/evidence_bundle\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures/evidence_bundle\"}, {\"module\": \"python_harness.paths\", \"attribute\": \"CLAIMS_FIXTURES\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures/claims\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures/claims\"}, {\"module\": \"python_harness.paths\", \"attribute\": \"HASH_MANIFEST\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures/hashes.json\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures/hashes.json\"}, {\"module\": \"python_harness.reconstruction\", \"attribute\": \"EVIDENCE_FIXTURES\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures/evidence_bundle\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures/evidence_bundle\"}, {\"module\": \"python_harness.reconstruction\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/results\"}, {\"module\": \"python_harness.interpreter_matrix\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/results\"}, {\"module\": \"python_harness.tcb_atlas\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/results\"}, {\"module\": \"python_harness.traceability\", \"attribute\": \"CLAIMS_FIXTURES\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures/claims\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures/claims\"}, {\"module\": \"python_harness.traceability\", \"attribute\": \"HASH_MANIFEST\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/fixtures/hashes.json\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/fixtures/hashes.json\"}, {\"module\": \"python_harness.traceability\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-123/independent_eval/repro_tcb/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123_outputs/results\"}]",
+        "............                                                             [100%]",
+        "12 passed in 9.52s"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": true,
+      "excluded": [],
+      "counts": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    },
+    {
+      "pr": 124,
+      "source_sha": "ac06a49f71fe1e61edc0dbb665d0703db0a9de74",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124_outputs/pytest-cache",
+        "independent_eval/scientific_falsification/tests"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-124",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124.log",
+      "exit_code": 0,
+      "duration_seconds": 81.715,
+      "summary_tail": [
+        "PCS_BASELINE_OUTPUT_REMAP [{\"module\": \"python_harness.paths\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-124/independent_eval/scientific_falsification/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124_outputs/results\"}, {\"module\": \"python_harness\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-124/independent_eval/scientific_falsification/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124_outputs/results\"}, {\"module\": \"python_harness.aristotle_candidates\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-124/independent_eval/scientific_falsification/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124_outputs/results\"}, {\"module\": \"python_harness.falsification_scorecard\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-124/independent_eval/scientific_falsification/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124_outputs/results\"}, {\"module\": \"python_harness.run_all\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-124/independent_eval/scientific_falsification/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124_outputs/results\"}]",
+        "............................                                             [100%]",
+        "28 passed in 80.72s (0:01:20)"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": true,
+      "excluded": [],
+      "counts": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    },
+    {
+      "pr": 126,
+      "source_sha": "9d4676b42fd392b2439b6f3b60c6fc9a1a44db8c",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_126_outputs/pytest-cache",
+        "independent_eval/program_assurance/tests"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-126",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_126.log",
+      "exit_code": 0,
+      "duration_seconds": 1.176,
+      "summary_tail": [
+        "PCS_BASELINE_OUTPUT_REMAP [{\"module\": \"python_harness.paths\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-126/independent_eval/program_assurance/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_126_outputs/results\"}, {\"module\": \"python_harness.run_all\", \"attribute\": \"RESULTS\", \"old\": \"/workspace/.onboarding/pcs-pr-baselines/pr-126/independent_eval/program_assurance/results\", \"new\": \"/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_126_outputs/results\"}]",
+        "....................                                                     [100%]",
+        "20 passed in 0.41s"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": true,
+      "excluded": [],
+      "counts": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    },
+    {
+      "pr": 128,
+      "source_sha": "e4ca9760b618600fa811a0cd564781d9bb2edb73",
+      "command": [
+        "/workspace/proof-carrying-science/.venv/bin/python",
+        "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+        "-q",
+        "-ra",
+        "--disable-warnings",
+        "-o",
+        "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_128_outputs/pytest-cache",
+        "independent_eval/assurance_card/tests"
+      ],
+      "cwd": "/workspace/.onboarding/pcs-pr-baselines/pr-128",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_128.log",
+      "exit_code": 0,
+      "duration_seconds": 4.136,
+      "summary_tail": [
+        "PCS_BASELINE_OUTPUT_REMAP []",
+        "............................                                             [100%]",
+        "28 passed in 2.89s"
+      ],
+      "tracked_changes_after": "",
+      "historical_outputs_remapped": true,
+      "excluded": [],
+      "counts": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "errors": 0
+      },
+      "authority_binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49"
+    }
+  ],
+  "test_environment": "Existing /workspace/proof-carrying-science/.venv; scratch output/fixture relocation only; no verifier substitution; no source modifications",
+  "known_infrastructure_failures": [
+    {
+      "pr": 121,
+      "tests": [
+        "test_rust_jcs_unit_tests",
+        "test_jcs_differential_runs"
+      ],
+      "reason": "Cargo offline cache missing locked crate ryu; authorized cargo fetch --locked succeeded; focused rerun pending",
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_cargo_fetch.log",
+      "resolution": "Authorized cargo fetch --locked succeeded; exact2failed tests now passed"
+    }
+  ],
+  "authority_binary_sha256_after_all_first_runs": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49",
+  "instrumentation_sha256": {
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py": "8a33dd578ae44df4380002afca2c7ca35b0e654f940470585e29e8487fff571f",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINES_RUN.py": "d08551f334b9e6c8aec33a892a0f173ba691b4ecacdc9aa48b9acf5beb811fe6"
+  },
+  "protocol_native_campaign": {
+    "case_count": 151,
+    "positive_accepted": 10,
+    "negative_rejected_after_attempted_verify": 141,
+    "false_accepts": [],
+    "unattempted": [],
+    "intake_scenarios": 5,
+    "zip_cases": 8,
+    "resource_measurements": 8,
+    "scope": "Finite regression observations using reused source-equivalent native authority, not security proof"
+  },
+  "focused_retries": [
+    {
+      "pr": 121,
+      "source_sha": "55126481f250f2bcf5ab6110e76a353c4dc6f15a",
+      "selection": "rust_jcs_unit_tests or jcs_differential_runs",
+      "exit_code": 0,
+      "counts": {
+        "passed": 2,
+        "deselected": 6,
+        "failed": 0,
+        "skipped": 0
+      },
+      "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_retry.log",
+      "summary": "2 passed, 6 deselected in 116.59s (0:01:56)",
+      "setup": "Authorized cargo fetch --locked; original first-run missing-cache failures retained",
+      "tracked_changes_after": ""
+    }
+  ],
+  "independent_rust_tests": {
+    "command": "cargo test --locked --manifest-path independent_eval/protocol_adversarial/rust_jcs_ref/Cargo.toml",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_rust_locked.log"
+  },
+  "distinct_final_observations": {
+    "python_passed": 137,
+    "python_failed_unresolved": 0,
+    "python_skipped": 0,
+    "cleanroom_deselected": 1,
+    "rust_passed": 3,
+    "fresh_full_lean_build": "NOT_RUN by this agent; parent main Golden.Crypto encountered host-memory exit137"
+  },
+  "fresh_authority_repeat": {
+    "pr": 120,
+    "source_sha": "ad7aec383d1d28091b1b4c5adb7f06e471a4ed4d",
+    "binary": "/workspace/pcs-all-prs-integration-20261018/formal/.lake/build/bin/pcs-lean-authority",
+    "binary_sha256": "3fd286e68299ad399b59078618045cdaedac3bd0d55305d074005ade16317b49",
+    "source_equivalence_record": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_FRESH_AUTHORITY.json",
+    "command": "original19native tests via same child runner, same sourcehead, explicit freshintegrationbinary, -k not cleanroom",
+    "exit_code": 0,
+    "counts": {
+      "passed": 19,
+      "deselected": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_120_fresh.log",
+    "summary": "19 passed, 1 deselected in 11.65s",
+    "not_additional_distinct_tests": true
+  },
+  "independent_jcs_differential": {
+    "vector_count": 16,
+    "disagreement_count": 2,
+    "disagreements": [
+      {
+        "id": "scientific",
+        "PCS": "1e-7",
+        "Rust": "0.0000001"
+      },
+      {
+        "id": "scientific_large",
+        "PCS": "1e+21",
+        "Rust": "1000000000000000000000"
+      }
+    ],
+    "result": "OBSERVED_MISMATCH",
+    "raw": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_JCS_DIFFERENTIAL.json",
+    "note": "Originaltestpassing does not assert semanticagreement; existing originalBUGS doc acknowledges Rustformatter mismatch. No overall RFC8785equivalence claim."
+  },
+  "final_tracked_statuses": {
+    "120": "",
+    "121": "",
+    "122": "",
+    "123": "",
+    "124": "",
+    "126": "",
+    "128": ""
+  },
+  "artifact_sha256": {
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121.log": "6447683410b3e0a718fce2a2042afa5ec57accb452c60d3e78108b12412f2353",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_128.log": "055ad12ca0241951796ae4b4d4c61390bcf0536573453b39ab584d3c78eb0588",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_120.log": "5b69b5bd98d53f9246b562d7949ecd0ae8984db90f1223b525fd00d348d8230c",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_retry.log": "d98655577be62b936d59e2fcb64b0056b539b6843a44fd5d42d03424cca5a848",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_123.log": "e3c74d4bdd017916cb0a9093e36d99c5d6fb075d6eea299420134aa63f95f7d9",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_122.log": "f8371099c8182590119bcb79d6dbece7489a07e6255a127813b8bb36767195ea",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_cargo_fetch.log": "d4f8e8b34b630691d9eabe41e5353aebd690f40983074fd2342c73b4385cfe25",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_124.log": "ba9578216d6cf561d69926cbde6260736f60858198b0b85c0262afa7bf42e0e9",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_120_fresh.log": "94e7d1173c0da4eed333e206dce447035b180633be8816ae57222e2f4f250e7a",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_126.log": "a657373f7de8903c8f81f6f5385369e139939f1efd97625cb85ade7dbac3e6ea",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_JCS_DIFFERENTIAL.json": "6a95b91b97a4c75b26227c998b9abc7610eab4caf89400b9b8ec93c8c3949762",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_BASELINE_121_rust_locked.log": "6ccbeb06a8853ee5385d1201e2ee16944d321b8bdf0a5fdf77d201d6ecedc5eb"
+  },
+  "status": "COMPLETED_ORIGINAL_HEAD_BASELINES_WITH_NEGATIVE_FINDINGS_PRESERVED"
+}

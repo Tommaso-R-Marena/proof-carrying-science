@@ -1,0 +1,21 @@
+{
+  "format": "pcs-epistemic-lattice-v1",
+  "claims": [
+    {
+      "id": "C_peak_safe",
+      "class": "empirical",
+      "dependencies": [],
+      "falsifiers": [{"atom": "obs.peak_above_threshold", "expects": true}],
+      "support_requires": [{"atom": "obs.n_subjects_ge_30", "expects": true}]
+    }
+  ],
+  "evidence": [
+    {"claim_id": "C_peak_safe", "class": "empirical", "pass": true}
+  ],
+  "observations": {
+    "atoms": {
+      "obs.peak_above_threshold": true,
+      "obs.n_subjects_ge_30": true
+    }
+  }
+}

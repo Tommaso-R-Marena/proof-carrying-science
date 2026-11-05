@@ -1,0 +1,255 @@
+{
+  "authority": {
+    "argv": null,
+    "attempted": false,
+    "certificate_path": "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/certificate.json",
+    "cli_errors": [],
+    "cli_is_authority": true,
+    "cli_valid": null,
+    "disclaimer": "Authority lane: black-box pcs verify (or python -m pcs.cli verify). This lane is authoritative for computational/cryptographic validity of the package. It does not certify empirical or scientific adequacy.",
+    "duration_seconds": null,
+    "lane": "authority",
+    "ok": null,
+    "returncode": null,
+    "skip_reason": "verify skipped by caller",
+    "skipped": true,
+    "stderr_tail": "",
+    "stdout_tail": ""
+  },
+  "card_integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "json-sort-keys-compact-utf8-v1",
+    "digest_sha256": "e5eae21d104ce9501d125d27493987986fe56a7b2ce6e8eb073c33d6e8331d67",
+    "note": "Digest covers the card JSON payload excluding card_integrity. Seal does not issue ACCEPT/PASS and does not certify science.",
+    "sealed_fields_excluded": [
+      "card_integrity"
+    ]
+  },
+  "card_issues_accept": false,
+  "disclaimer": "This Assurance Card records a black-box pcs verify authority lane and a non-authority inspection lane. Computational PASS \u2260 empirical adequacy. The card never certifies science, clinical validity, regulatory acceptance, external-lab completion, security proofs, or merge readiness. card_issues_accept=false; inspection_is_not_authority=true.",
+  "format": "pcs-assurance-card-v1",
+  "inspection": {
+    "artifacts": [
+      {
+        "id": "model",
+        "media_type": "application/json",
+        "path": "artifacts/model.json",
+        "role": "model",
+        "sha256": "b87ba33398a2ec6728615e06b7f9e4221556c2425394e3da29c25760bba2fd1a",
+        "source": "certificate.json"
+      },
+      {
+        "id": "predictions",
+        "media_type": "text/csv",
+        "path": "artifacts/predictions.csv",
+        "role": "predictions",
+        "sha256": "543d633425e13761c695c403482135d8abdaaa6a1300036276023781af8c8331",
+        "source": "certificate.json"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "A_MODEL",
+        "rationale": "Separates computational replay from scientific validity.",
+        "scope": [
+          "C_REPLAY",
+          "C_INTEGRITY"
+        ],
+        "statement": "The declared equation is the computational model under test; biological adequacy is not claimed."
+      }
+    ],
+    "card_issues_accept": false,
+    "certificate_path": "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/certificate.json",
+    "claim_strength_summary": {
+      "computationally_supported": 1,
+      "cryptographic_validity": 1,
+      "rejected_or_failed": 0,
+      "scientific_adequacy_open": 1,
+      "unknown_or_ambiguous": 0
+    },
+    "claims": [
+      {
+        "assumptions": [
+          "A_MODEL"
+        ],
+        "id": "C_REPLAY",
+        "inspection_class": "computationally_supported",
+        "kind": "computational",
+        "notes": [
+          "Status 'COMPUTATIONALLY_SUPPORTED' is reported by source evidence (certificate.json); Assurance Card inspection did not decide it.",
+          "inspection_class='computationally_supported' is a non-authority heuristic over reported_* fields only; not PCS verify authority.",
+          "Receipt reported decision 'COMPUTATIONALLY_SUPPORTED'; inspection did not decide.",
+          "inspection_class='computationally_supported' recomputed after receipt reported_* update; not PCS authority."
+        ],
+        "reported_status": "COMPUTATIONALLY_SUPPORTED",
+        "required_evidence": [
+          "E_REPLAY"
+        ],
+        "statement": "Predictions match the declared analytic model within tolerance.",
+        "status_source": "verification-receipt.json"
+      },
+      {
+        "assumptions": [
+          "A_MODEL"
+        ],
+        "id": "C_INTEGRITY",
+        "inspection_class": "cryptographic_validity",
+        "kind": "integrity",
+        "notes": [
+          "Status 'SIGNATURE_OK' is reported by source evidence (certificate.json); Assurance Card inspection did not decide it.",
+          "inspection_class='cryptographic_validity' is a non-authority heuristic over reported_* fields only; not PCS verify authority.",
+          "Receipt reported decision 'SIGNATURE_OK'; inspection did not decide.",
+          "inspection_class='cryptographic_validity' recomputed after receipt reported_* update; not PCS authority."
+        ],
+        "reported_status": "SIGNATURE_OK",
+        "required_evidence": [
+          "E_HASH"
+        ],
+        "statement": "Artifact digests match the committed package hashes.",
+        "status_source": "verification-receipt.json"
+      },
+      {
+        "assumptions": [
+          "A_MODEL"
+        ],
+        "id": "C_BIOLOGY",
+        "inspection_class": "scientific_adequacy_open",
+        "kind": "scientific",
+        "notes": [
+          "Status 'OPEN' is reported by source evidence (certificate.json); Assurance Card inspection did not decide it.",
+          "inspection_class='scientific_adequacy_open' is a non-authority heuristic over reported_* fields only; not PCS verify authority.",
+          "Receipt reported decision 'OPEN'; inspection did not decide.",
+          "inspection_class='scientific_adequacy_open' recomputed after receipt reported_* update; not PCS authority."
+        ],
+        "reported_status": "OPEN",
+        "required_evidence": [],
+        "statement": "The model is biologically adequate for clinical use.",
+        "status_source": "verification-receipt.json"
+      }
+    ],
+    "disclaimer": "Inspection lane is non-authority. It parses certificate/receipt/LIMITATIONS and classifies reported claims into an inspection_class lattice for human review. It does not replace pcs verify, does not issue ACCEPT/PASS, and does not certify scientific or clinical adequacy.",
+    "evidence_root": "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle",
+    "inspection_class_note": "inspection_class values are Assurance Card heuristics over reported_* fields only; they are not PCS authority decisions.",
+    "inspection_classes": [
+      "cryptographic_validity",
+      "computationally_supported",
+      "scientific_adequacy_open",
+      "rejected_or_failed",
+      "unknown_or_ambiguous"
+    ],
+    "inspection_is_not_authority": true,
+    "lane": "inspection",
+    "limitations_path": "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/LIMITATIONS.md",
+    "limitations_text": "# PCS Assurance Scope and Limitations (fixture)\n\n**Subject:** synthetic-assurance-card-demo\n\nThis fixture LIMITATIONS.md accompanies the offline Assurance Card sample\nbundle. It is not a regulatory certification.\n\n## Claim assessments\n\n- **C_REPLAY \u2014 COMPUTATIONALLY_SUPPORTED:** Predictions match the declared analytic model within tolerance.\n- **C_INTEGRITY \u2014 SIGNATURE_OK:** Artifact digests match the committed package hashes (fixture label).\n- **C_BIOLOGY \u2014 OPEN:** The model is biologically adequate for clinical use.\n\n## Explicit assumptions\n\n- **A_MODEL:** The declared equation is the computational model under test; biological adequacy is not claimed.\n\n## This package does not by itself establish\n\n- biological or mechanistic adequacy of the declared model.\n- clinical safety, efficacy, or patient-level predictive validity.\n- regulatory approval, acceptance, certification, or GxP validation.\n- security proofs or merge readiness.\n\n## Interpretation rule\n\nA computationally supported claim means only that the represented checks\nsucceeded under stated assumptions. Formal/computational assurance and\nempirical scientific validation remain distinct. A computational PASS from\n`pcs verify` is not empirical adequacy; the Assurance Card never certifies\nscience.\n",
+    "outcomes": [
+      {
+        "kind": "certificate_semantic_hash",
+        "reported": true,
+        "source": "certificate.json",
+        "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      {
+        "card_decided": false,
+        "claim_id": "C_REPLAY",
+        "kind": "receipt_claim_outcome",
+        "reported_decision": "COMPUTATIONALLY_SUPPORTED",
+        "source": "verification-receipt.json"
+      },
+      {
+        "card_decided": false,
+        "claim_id": "C_INTEGRITY",
+        "kind": "receipt_claim_outcome",
+        "reported_decision": "SIGNATURE_OK",
+        "source": "verification-receipt.json"
+      },
+      {
+        "card_decided": false,
+        "claim_id": "C_BIOLOGY",
+        "kind": "receipt_claim_outcome",
+        "reported_decision": "OPEN",
+        "source": "verification-receipt.json"
+      }
+    ],
+    "reported_authority": {
+      "bundle_valid": true,
+      "lean_authority_accept": {
+        "note": "Fixture field only; Assurance Card must not treat this as its own decision.",
+        "reported_result": "ACCEPT"
+      },
+      "note": "Inspection lane never sets authority fields; it only copies reported values from receipts when present.",
+      "source": "verification-receipt.json"
+    },
+    "source_paths": [
+      "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/certificate.json",
+      "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/verification-receipt.json",
+      "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/LIMITATIONS.md"
+    ],
+    "subject": "synthetic-assurance-card-demo",
+    "warnings": [
+      "Human reviewers must treat reported statuses and inspection_class labels as evidence aids only; PCS authority remains the black-box verify lane."
+    ]
+  },
+  "inspection_is_not_authority": true,
+  "lane_consistency": {
+    "overall": "inconclusive",
+    "reasons": [
+      "verify skipped by caller"
+    ]
+  },
+  "limitations_banner": "LIMITATIONS: A computational PASS from pcs verify is not empirical or scientific adequacy. This Assurance Card never certifies science, clinical validity, regulatory acceptance, or external-lab completion.",
+  "non_claims": [
+    "no clinical validity",
+    "no external lab completion",
+    "no security proof",
+    "no merge recommendation",
+    "computational PASS is not empirical adequacy",
+    "program_context digests are not authority",
+    "card_integrity seal does not certify science"
+  ],
+  "program_context": {
+    "disclaimer": "Program context digests are optional inspection-adjacent metadata. They are not authority, do not issue ACCEPT/PASS, and do not certify science, residual-trust closure, or merge readiness.",
+    "entries": [
+      {
+        "files": [],
+        "requested": "/nonexistent/sibling-results",
+        "resolved": "/nonexistent/sibling-results",
+        "status": "ABSENT"
+      }
+    ],
+    "format": "pcs-assurance-card-program-context-v1",
+    "is_authority": false,
+    "issues_accept": false,
+    "summary": {
+      "absent": 1,
+      "present": 0,
+      "requested": 1
+    },
+    "warnings": [
+      "attach path ABSENT: /nonexistent/sibling-results"
+    ]
+  },
+  "provenance": {
+    "card_version": "0.2.0",
+    "efficiency": {
+      "lean_rebuild": false,
+      "mathlib_rebuild": false,
+      "network": false,
+      "single_process": true,
+      "verify_only": true
+    },
+    "generated_at_utc": "2026-10-17T21:00:00Z",
+    "git_head": "e8b164a65f7dbd88027706da4f73eeca4077a88f",
+    "input_sha256": {
+      "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/LIMITATIONS.md": "2937b05f35bb6b270e13cdaf0d02af38f22ad75319dab54ed7ec9fe7986da1a8",
+      "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/certificate.json": "dc3bb4ea6ae16a2f8a7490fa7e984291b22c18425c9f0630f75877c115feb0dd",
+      "/home/ubuntu/worktrees/ws-f/independent_eval/assurance_card/fixtures/sample_bundle/verification-receipt.json": "fc1d32cdfab6b7873120a54d407e35e0eeada5e2b730b281f5e5e8bf348d9312"
+    },
+    "python_version": "3.12.3",
+    "repo_root": "/home/ubuntu/worktrees/ws-f",
+    "tool_versions": {
+      "pcs": "0.5.0",
+      "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+      "python": "3.12.3"
+    }
+  }
+}

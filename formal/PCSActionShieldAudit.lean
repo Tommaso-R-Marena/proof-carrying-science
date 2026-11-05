@@ -1,0 +1,13 @@
+import PCSActionShieldControls
+
+#print axioms PCSActionShield.check_iff_certified
+#print axioms PCSActionShield.admitted_histories_safe
+#print axioms PCSActionShield.optimized_guard_histories_safe
+#print axioms PCSActionShield.deployed_histories_safe
+#print axioms PCSActionShieldControls.tool_certificate_passes
+#print axioms PCSActionShieldControls.tool_all_histories_safe
+#print axioms PCSActionShieldControls.unseen_nondeterministic_branch_rejected
+#print axioms PCSActionShieldControls.safe_observation_and_unsafe_admitted_history
+#print axioms PCSActionShieldControls.forbidden_action_safe_target_rejected
+#print axioms PCSActionShieldControls.omitted_branch_exposes_correspondence_failure
+#print axioms PCSActionShieldControls.deadlock_does_not_establish_liveness

@@ -1,0 +1,66 @@
+{
+  "executed_at": "2026-09-30T03:00:00Z",
+  "execution_mode": "host_scientific_runtime_fixed_environment",
+  "format": "pcs-real-study-evidence-v1",
+  "github_ci_probe": {
+    "interpretation": "GitHub runner provisioning failed before checkout; no repository test steps executed.",
+    "repository_private": true,
+    "ubuntu_latest_latest_observation": "runner_id=0, steps=[]",
+    "ubuntu_slim_job_id": 109727349086,
+    "ubuntu_slim_run_id": 36664893472,
+    "ubuntu_slim_runner_id": 0,
+    "ubuntu_slim_steps": []
+  },
+  "host_environment": {
+    "Rscript_available": false,
+    "dependency_tree_sha256": "c2c2f4935e59bdcafc91794a39f25c80b375f70fe3bd69e4d128eee3db855173",
+    "docker_available": false,
+    "installed_distribution_count": 507,
+    "interpreter_sha256": "17b78e0a93175e86f9ac03141924fd7a7f0c0c52e66b34bfa0de20ffef989df1",
+    "os": {
+      "architecture": "x86_64",
+      "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+      "release": "6.18.44",
+      "system": "Linux"
+    },
+    "podman_available": false,
+    "python_implementation": "CPython",
+    "python_version": "3.13.5"
+  },
+  "multistage": {
+    "final_report.json": {"runs": 10, "unique_hashes": 1},
+    "model.npz": {"runs": 10, "unique_hashes": 1},
+    "preprocess.json": {"runs": 10, "unique_hashes": 1},
+    "split.npz": {"runs": 10, "unique_hashes": 1},
+    "train.json": {"runs": 10, "unique_hashes": 1}
+  },
+  "stress10": {
+    "clock_nondeterminism": {"runs": 10, "unique_output_hashes": 10},
+    "digits_pytorch": {"runs": 10, "unique_output_hashes": 1},
+    "entropy_nondeterminism": {"runs": 10, "unique_output_hashes": 10},
+    "iris_notebook": {"runs": 10, "unique_output_hashes": 1},
+    "jax_linear_system": {"runs": 10, "unique_output_hashes": 1},
+    "pk_one_compartment": {"runs": 10, "unique_output_hashes": 1},
+    "unseeded_torch": {"runs": 10, "unique_output_hashes": 10},
+    "wine_xgboost": {"runs": 10, "unique_output_hashes": 1}
+  },
+  "summary": {
+    "adversarial_cases": 12,
+    "adversarial_cases_detected": 12,
+    "multistage_artifacts": 5,
+    "multistage_artifacts_one_hash_across_10": 5,
+    "negative_controls": 3,
+    "negative_controls_diverged": 3,
+    "substantive_three_run_deterministic": 11,
+    "substantive_three_run_studies": 11,
+    "ten_run_negative_controls": 3,
+    "ten_run_negative_controls_all_unique": 3,
+    "ten_run_stable_workloads": 5,
+    "ten_run_stable_workloads_with_one_hash": 5
+  },
+  "limitations": [
+    "Host campaign exercised real scientific/model workloads and PCS-style output/environment fingerprinting, but not the OCI sandbox boundary because Docker/Podman is unavailable in this runtime.",
+    "R execution was not tested because Rscript is unavailable.",
+    "Current signed static environment contract does not sign the full realized dependency tree/interpreter binary/final image digest; those remain observations unless constrained indirectly."
+  ]
+}

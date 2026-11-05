@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof-Carrying Science Certificate v0.5",
+  "type": "object",
+  "required": ["spec_version","checker_version","subject","assumptions","claims","artifacts","evidence","workflow","workflow_summary","semantic_hash","integrity_hash"],
+  "properties": {
+    "spec_version": {"const": "pcs-0.5"},
+    "checker_version": {"type": "string"},
+    "subject": {"type": "string"},
+    "mission_scope": {"type": "string"},
+    "assumptions": {"type": "array"},
+    "claims": {"type": "array"},
+    "artifacts": {"type": "array"},
+    "evidence": {"type": "array"},
+    "workflow": {"type": "object"},
+    "workflow_summary": {"type": "object"},
+    "semantic_hash": {"type": "string","pattern":"^[a-f0-9]{64}$"},
+    "integrity_hash": {"type": "string","pattern":"^[a-f0-9]{64}$"}
+  }
+}

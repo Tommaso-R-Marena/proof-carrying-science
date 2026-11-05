@@ -1,0 +1,26 @@
+{
+  "source_sha256": "10b1ebe2ccdb3945afdba38b4c3e49714986c5223730fc0f7eca189f024f0c0d",
+  "command": [
+    "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+    "-R",
+    "/workspace/.onboarding/aristotle-omega-dd-v1",
+    "-j1",
+    "-M6000",
+    "-D",
+    "maxErrors=1",
+    "-D",
+    "Elab.async=false",
+    "-D",
+    "pp.maxSteps=200",
+    "-o",
+    "/workspace/.onboarding/aristotle-omega-dd-v1/StagedDense.olean",
+    "/workspace/.onboarding/aristotle-omega-dd-v1/StagedDense.lean"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 620.2196644760006,
+  "observed_peak_process_rss_kib": 6165916,
+  "hard_address_space_limit_bytes": 12884901888,
+  "ordinary_kernel": true,
+  "scope": "staged prototype; not complete original controls or integration"
+}

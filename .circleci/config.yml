@@ -1,0 +1,16 @@
+version: 2.1
+
+# Public hosted verification is in pcs-public-full-verification.yml. Preserve
+# this legacy VCS compatibility status only; it supplies no assurance. Migrate
+# protected main to verified-public-integration after its full jobs really pass.
+
+jobs:
+  # Compatibility status only. This does NOT certify the commit; the real
+  # assurance result is the complete public GitHub Actions aggregate.
+  repository-integrity:
+    type: no-op
+
+workflows:
+  pcs-zero-credit-transition:
+    jobs:
+      - repository-integrity

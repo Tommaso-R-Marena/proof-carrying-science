@@ -1,0 +1,302 @@
+{
+  "authority": "reference expectation only; Lean acceptance measured separately",
+  "cases": [
+    {
+      "accepted": true,
+      "id": "zero-step",
+      "json": "zero-step.json",
+      "result": {
+        "finalA": [
+          0,
+          1
+        ],
+        "finalB": [
+          0,
+          1
+        ],
+        "lowerA": [
+          0,
+          1
+        ],
+        "lowerB": [
+          0,
+          1
+        ],
+        "physical": false,
+        "referenceStep": 0,
+        "total": [
+          0,
+          1
+        ],
+        "unitCode": false,
+        "upperA": [
+          0,
+          1
+        ],
+        "upperB": [
+          0,
+          1
+        ]
+      },
+      "sha256": "f71348757a09dec81d1d1837752967c3e4f1a416cda6e9d2c7d68b9d9c61d0a9",
+      "wire": "zero-step.wire"
+    },
+    {
+      "accepted": true,
+      "id": "one-step",
+      "json": "one-step.json",
+      "result": {
+        "finalA": [
+          7,
+          2
+        ],
+        "finalB": [
+          7,
+          2
+        ],
+        "lowerA": [
+          7,
+          2
+        ],
+        "lowerB": [
+          7,
+          2
+        ],
+        "physical": true,
+        "referenceStep": 1,
+        "total": [
+          7,
+          1
+        ],
+        "unitCode": true,
+        "upperA": [
+          7,
+          2
+        ],
+        "upperB": [
+          7,
+          2
+        ]
+      },
+      "sha256": "e5584fb84b3912c879830f36f2ee96c985e02c3434adeef180db6ebfbb739d23",
+      "wire": "one-step.wire"
+    },
+    {
+      "accepted": true,
+      "id": "multi-step-nonsingleton",
+      "json": "multi-step-nonsingleton.json",
+      "result": {
+        "finalA": [
+          13,
+          2
+        ],
+        "finalB": [
+          7,
+          2
+        ],
+        "lowerA": [
+          5,
+          1
+        ],
+        "lowerB": [
+          2,
+          1
+        ],
+        "physical": true,
+        "referenceStep": 3,
+        "total": [
+          10,
+          1
+        ],
+        "unitCode": false,
+        "upperA": [
+          8,
+          1
+        ],
+        "upperB": [
+          5,
+          1
+        ]
+      },
+      "sha256": "487273379e100222b8ee346b7820a8047561924c0deede5d2d71c340e58a669a",
+      "wire": "multi-step-nonsingleton.wire"
+    },
+    {
+      "accepted": true,
+      "id": "signed-algebraic",
+      "json": "signed-algebraic.json",
+      "result": {
+        "finalA": [
+          1,
+          6
+        ],
+        "finalB": [
+          5,
+          6
+        ],
+        "lowerA": [
+          -1,
+          1
+        ],
+        "lowerB": [
+          -1,
+          1
+        ],
+        "physical": false,
+        "referenceStep": 2,
+        "total": [
+          1,
+          1
+        ],
+        "unitCode": false,
+        "upperA": [
+          2,
+          1
+        ],
+        "upperB": [
+          2,
+          1
+        ]
+      },
+      "sha256": "1ad0084af70cc91b427b23c8f6231c34d2b835757083f26306bf0227b6262938",
+      "wire": "signed-algebraic.wire"
+    },
+    {
+      "accepted": true,
+      "id": "sixty-four-steps",
+      "json": "sixty-four-steps.json",
+      "result": {
+        "finalA": [
+          0,
+          1
+        ],
+        "finalB": [
+          64,
+          1
+        ],
+        "lowerA": [
+          0,
+          1
+        ],
+        "lowerB": [
+          64,
+          1
+        ],
+        "physical": true,
+        "referenceStep": 64,
+        "total": [
+          64,
+          1
+        ],
+        "unitCode": false,
+        "upperA": [
+          0,
+          1
+        ],
+        "upperB": [
+          64,
+          1
+        ]
+      },
+      "sha256": "fa390fbf70c647ca967be51d5bae73807aeb3be29e1d00bcf19ecc0abb0559bd",
+      "wire": "sixty-four-steps.wire"
+    },
+    {
+      "accepted": true,
+      "id": "operand-boundary",
+      "json": "operand-boundary.json",
+      "result": {
+        "finalA": [
+          1,
+          1000000000000000000
+        ],
+        "finalB": [
+          -1,
+          1000000000000000000
+        ],
+        "lowerA": [
+          1,
+          1000000000000000000
+        ],
+        "lowerB": [
+          -1,
+          1000000000000000000
+        ],
+        "physical": false,
+        "referenceStep": 0,
+        "total": [
+          0,
+          1
+        ],
+        "unitCode": false,
+        "upperA": [
+          1,
+          1000000000000000000
+        ],
+        "upperB": [
+          -1,
+          1000000000000000000
+        ]
+      },
+      "sha256": "ba81a26fe144f441cf00fd93c216c5a53dc41059902944426bd70e58e36b422d",
+      "wire": "operand-boundary.wire"
+    },
+    {
+      "accepted": false,
+      "id": "wrong-environment",
+      "reason": "environment does not equal final A",
+      "sha256": "adb9918e86e4ed3567c78a7da2ae15ba1540afda487a8397fe3352f41b1da49f",
+      "wire": "wrong-environment.wire"
+    },
+    {
+      "accepted": false,
+      "id": "wrong-total",
+      "reason": "incorrect declared total",
+      "sha256": "5a9b89c97450a7956ad583425f973f9fec8ce3e46a564f851ebf8a035850bdc2",
+      "wire": "wrong-total.wire"
+    },
+    {
+      "accepted": false,
+      "id": "wrong-step",
+      "reason": "reference step does not equal schedule length",
+      "sha256": "98fdb6caa6ec74e9b1c477eda023e0e4dfd4dc2c3f6f60ae11249fb0600deeb5",
+      "wire": "wrong-step.wire"
+    },
+    {
+      "accepted": false,
+      "id": "physical-intermediate-negative",
+      "reason": "negative intermediate physical state",
+      "sha256": "9cd03e41750f97979a6e68abc181efc380aaf9ac05184d36dbc06fcbb42cac1e",
+      "wire": "physical-intermediate-negative.wire"
+    },
+    {
+      "accepted": false,
+      "id": "box-outside-claim",
+      "reason": "declared box is not enclosed by claim",
+      "sha256": "c13b93725600e0ed42e594a3ca3e80a34753a93246ad5ab1c1958755fd02fe8e",
+      "wire": "box-outside-claim.wire"
+    },
+    {
+      "accepted": false,
+      "id": "unknown-version",
+      "reason": "protocol tag",
+      "sha256": "1076ad331ac421e827b90bd0c80d958e87736f0a9dee4892d4a5658b1df116dd",
+      "wire": "unknown-version.wire"
+    },
+    {
+      "accepted": false,
+      "id": "extra-field",
+      "reason": "firing count or trailing fields",
+      "sha256": "9132ee9eb72559d6d235cfb0c2f24890e5e26ec0b3cef04cade461511b99c12c",
+      "wire": "extra-field.wire"
+    },
+    {
+      "accepted": false,
+      "id": "nonreduced-rational",
+      "reason": "noncanonical rational",
+      "sha256": "8c4c61d4b83ce0bd38ff15254691e4531b08838761086e5bbb379fd076682786",
+      "wire": "nonreduced-rational.wire"
+    }
+  ],
+  "format": "pcs-scientific-receiver-fixtures-v1"
+}

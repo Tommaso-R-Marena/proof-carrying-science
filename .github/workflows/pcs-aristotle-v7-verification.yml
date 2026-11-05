@@ -1,0 +1,49 @@
+name: PCS Aristotle V7 Kernel and Authority Verification
+on:
+  pull_request:
+    paths:
+      - 'formal/PCS/V2/ProofGated*.lean'
+      - 'formal/scripts/proof_gated*'
+      - 'formal/scripts/gen_full_audit.sh'
+      - 'formal/fixtures/proof_gated/v7/**'
+      - 'formal/PCS_PROOF_GATED_V7_REPORT.md'
+      - '.github/workflows/pcs-aristotle-v7-verification.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v7-kernel-authority:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Full V7 Lean build, source audit, wire vectors and file authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          bash scripts/proof_gated_ci.sh
+          python3 - <<'PYV7'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('results/proof_gated_ci_results.json').read_text())
+          assert data['overall']=='PASS', data
+          steps={x['step']: x for x in data['steps']}
+          for key in ('build','forbidden_tokens','v6_vectors','v7_vectors','authority_cli'):
+              assert steps[key]['exit_code']==0, (key,steps[key])
+          assert '38 modules' in steps['build']['detail'],steps['build']
+          full=steps['axiom_audit:PCS/V2/ProofGatedFullAudit.lean']
+          assert full['exit_code']==0 and '818 declarations' in full['detail'],full
+          assert '12776 V7 checks passed' in steps['v7_vectors']['detail'],steps['v7_vectors']
+          print('PASS: 38-module V7 kernel, 818-declaration audit, 12776 V7 vectors')
+          PYV7
+      - name: Preserve V7 test report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pcs-v7-research-test-report
+          path: formal/results/proof_gated_ci_results.json
+          if-no-files-found: warn

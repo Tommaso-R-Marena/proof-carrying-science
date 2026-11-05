@@ -1,0 +1,203 @@
+{
+  "format": "pcs-decision-vectors-v1",
+  "vectors": [
+    {
+      "name": "missing_required",
+      "claim": {
+        "id": "C",
+        "kind": "computational",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {},
+      "expected_status": "OPEN"
+    },
+    {
+      "name": "unverified_blocks",
+      "claim": {
+        "id": "C",
+        "kind": "computational",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "computational_test",
+          "outcome": "UNVERIFIED"
+        }
+      },
+      "expected_status": "OPEN"
+    },
+    {
+      "name": "failure_dominates",
+      "claim": {
+        "id": "C",
+        "kind": "computational",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "computational_test",
+          "outcome": "FAIL"
+        }
+      },
+      "expected_status": "FALSIFIED_OR_CHECK_FAILED"
+    },
+    {
+      "name": "computational_pass",
+      "claim": {
+        "id": "C",
+        "kind": "computational",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "computational_test",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "COMPUTATIONALLY_SUPPORTED"
+    },
+    {
+      "name": "formal_pass",
+      "claim": {
+        "id": "C",
+        "kind": "formal",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "formal_proof",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "FORMALLY_VERIFIED_UNDER_ASSUMPTIONS"
+    },
+    {
+      "name": "formal_wrong_class",
+      "claim": {
+        "id": "C",
+        "kind": "formal",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "computational_test",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "OPEN"
+    },
+    {
+      "name": "empirical_pass",
+      "claim": {
+        "id": "C",
+        "kind": "empirical",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "empirical_validation",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "EMPIRICALLY_VALIDATED_WITHIN_SCOPE"
+    },
+    {
+      "name": "statistical_empirical_pass",
+      "claim": {
+        "id": "C",
+        "kind": "empirical",
+        "required_evidence": [
+          "E"
+        ]
+      },
+      "evidence": {
+        "E": {
+          "id": "E",
+          "kind": "statistical_validation",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "EMPIRICALLY_VALIDATED_WITHIN_SCOPE"
+    },
+    {
+      "name": "mixed_pass",
+      "claim": {
+        "id": "C",
+        "kind": "mixed",
+        "required_evidence": [
+          "F",
+          "V"
+        ]
+      },
+      "evidence": {
+        "F": {
+          "id": "F",
+          "kind": "formal_proof",
+          "outcome": "PASS"
+        },
+        "V": {
+          "id": "V",
+          "kind": "statistical_validation",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "MIXED_SUPPORT_UNDER_ASSUMPTIONS"
+    },
+    {
+      "name": "mixed_missing_empirical",
+      "claim": {
+        "id": "C",
+        "kind": "mixed",
+        "required_evidence": [
+          "F"
+        ]
+      },
+      "evidence": {
+        "F": {
+          "id": "F",
+          "kind": "formal_proof",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "OPEN"
+    },
+    {
+      "name": "computational_can_use_formal_evidence",
+      "claim": {
+        "id": "C",
+        "kind": "computational",
+        "required_evidence": [
+          "F"
+        ]
+      },
+      "evidence": {
+        "F": {
+          "id": "F",
+          "kind": "formal_proof",
+          "outcome": "PASS"
+        }
+      },
+      "expected_status": "COMPUTATIONALLY_SUPPORTED"
+    }
+  ]
+}

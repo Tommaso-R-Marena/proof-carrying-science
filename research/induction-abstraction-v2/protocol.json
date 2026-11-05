@@ -1,0 +1,30 @@
+{
+  "format": "pcs-induction-abstraction-experiment-v1",
+  "tasks_sha256": "10f711dc4b94134a08a2f78b189267bd885bbc282b2a2cda2a1975535e9d2d95",
+  "budget": 96,
+  "beam": 4,
+  "depth": 18,
+  "seeds": [
+    17,
+    31
+  ],
+  "epochs": 24,
+  "rl_episodes_per_generation": 8,
+  "generations": 2,
+  "candidate_limit": 24,
+  "candidate_search_budget": 96,
+  "selection": "validation verified count, then expansions; model frozen before final",
+  "library_selection": "first eight independently proved candidates from training-state order; no validation/final candidate mining",
+  "firewall": "disjoint declared task families and exact alpha exclusion; related laws/compositions remain correlated; public authored data, not external or secret holdout",
+  "cost": "fresh observation caches per evaluation task/policy; initial observations, search, final compilation, offline candidate discovery, repeated library compilation, training and independent replay separately recorded; report cold one-shot and amortized search costs",
+  "success_criterion": "improved final verified solutions or fewer expansions at equal budget; no breakthrough claim without independent external replication",
+  "final_probes": [
+    "reverse_append_probe"
+  ],
+  "gpu_used": false,
+  "financial_spend": 0,
+  "training_source": "original_verified_trajectories_replayed_in_library_environment",
+  "grounded_model": true,
+  "validity_epochs": 4,
+  "diagnosis": "v1 reuse search supplied only five imitation examples; retain all original independently checked induction trajectories. Add binding edges, selected-local-premise graphs and a checker-response head. New final compositions were frozen before training; v1 final evidence is not reused as training."
+}

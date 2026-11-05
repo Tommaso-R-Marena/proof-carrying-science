@@ -1,0 +1,27 @@
+{
+  "bundle_sha256": "bb41a317fac50b8f746f1d3ccbd2a9255d163afe2b1ad9cc65a05c549ca3bddd",
+  "findings": [
+    "Same signed evidence yields identical PCS validity for both reviewers.",
+    "Permissive policy can dangerously confuse computational PASS with scientific acceptance if consumers misuse policy flags.",
+    "PCS validity must not silently become broader scientific acceptance."
+  ],
+  "format": "pcs-independent-policy-confusion-v1",
+  "pcs_authoritative": true,
+  "pcs_valid": true,
+  "reviewers": [
+    {
+      "correct_interpretation": "PCS validity is computational/formal relative to declared claims; empirical/scientific acceptance remains OPEN unless independently established.",
+      "pcs_authoritative": true,
+      "pcs_valid": true,
+      "policy_id": "strict-scientific-limits",
+      "unsafe_scientific_acceptance_inference": false
+    },
+    {
+      "correct_interpretation": "PCS validity is computational/formal relative to declared claims; empirical/scientific acceptance remains OPEN unless independently established.",
+      "pcs_authoritative": true,
+      "pcs_valid": true,
+      "policy_id": "permissive-accept-all-computational",
+      "unsafe_scientific_acceptance_inference": true
+    }
+  ]
+}

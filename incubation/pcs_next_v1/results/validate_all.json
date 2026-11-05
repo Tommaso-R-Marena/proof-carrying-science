@@ -1,0 +1,134 @@
+{
+  "commit": "b8be4b2a0bca03fd26b2ce405e74ff4394206630",
+  "format": "pcs-next-validate-all-v1",
+  "owned": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+  "repo": "/home/ubuntu/worktrees/pcs-next-integrated-assurance",
+  "steps": [
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/check_noninterference.py",
+        "--repo",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance",
+      "returncode": 0,
+      "seconds": 0.04727458600018508,
+      "stderr_tail": "",
+      "stdout_tail": "-b9be7c0149b58db2.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/evidence_store/meta.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/independent_receipt.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/intake.lock.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/acceptance_policy.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/evidence_bundle.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/intake.lock.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/package/reviewer_receipt.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/pilot_state.json\n  [OWNED] incubation/pcs_next_v1/results/synthetic_pilot_run/summary.json\n  [OWNED] incubation/pcs_next_v1/results/validate_all.json\n  [OWNED] incubation/pcs_next_v1/scripts/check_noninterference.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_benchmarks.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_cleanroom_replay.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_differential_oracles.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_journal_demos.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_performance.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_real_world_campaign.py\n  [OWNED] incubation/pcs_next_v1/scripts/run_synthetic_pilot.py\n  [OWNED] incubation/pcs_next_v1/scripts/validate_all.py\n  [OWNED] incubation/pcs_next_v1/tests/adversarial/test_adversarial_packages.py\n  [OWNED] incubation/pcs_next_v1/tests/adversarial/test_evidence_tamper.py\n  [OWNED] incubation/pcs_next_v1/tests/adversarial/test_journal_data_integrity.py\n  [OWNED] incubation/pcs_next_v1/tests/adversarial/test_journal_package_mutations.py\n  [OWNED] incubation/pcs_next_v1/tests/conftest.py\n  [OWNED] incubation/pcs_next_v1/tests/integration/test_real_world_campaign.py\n  [OWNED] incubation/pcs_next_v1/tests/integration/test_synthetic_pilot.py\n  [OWNED] incubation/pcs_next_v1/tests/property/test_canonical_property.py\n  [OWNED] incubation/pcs_next_v1/tests/property/test_emax_bounds_property.py\n  [OWNED] incubation/pcs_next_v1/tests/property/test_unit_conversion_property.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_calibration.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_journal_demos.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_puromycin.py\n  [OWNED] incubation/pcs_next_v1/tests/scientific/test_puromycin_labels.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_canonical.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_chemistry.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_claim_ir.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_crypto.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_evidence_store.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_falsification.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_improvement_certificate.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_intake_freeze.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_nca_oral.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_oracles.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pd_conservation_meta.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pkpd.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pog.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_pog_half_life.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_policy.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_python_static.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_registration_notebook.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_research_models.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_signed_receipt.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_state_machine.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_statuses.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_tabular_integrity.py\n  [OWNED] incubation/pcs_next_v1/tests/unit/test_units_aware.py\nPASS: all changed paths within incubation/pcs_next_v1/\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/scripts/check_repository_integrity.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance",
+      "returncode": 0,
+      "seconds": 0.03142550900020069,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"errors\": [],\n  \"format\": \"pcs-repository-integrity-v1\",\n  \"pass\": true,\n  \"required_direct_executables\": [\n    \"scripts/verify_lean.sh\",\n    \"scripts/verify_lean_real.sh\"\n  ],\n  \"tracked_paths\": 4650,\n  \"tracked_shell_files\": [\n    \"formal/tools/check_semantic_v3_audit.sh\",\n    \"formal/tools/run_fixture_tests.sh\",\n    \"formal/tools/run_semantic_fixture_tests.sh\",\n    \"formal/tools/run_semantic_v2_end_to_end.sh\",\n    \"formal/tools/run_semantic_v2_fixture_tests.sh\",\n    \"formal/tools/run_semantic_v3_fixture_tests.sh\",\n    \"scripts/activate_lean_428.sh\",\n    \"scripts/ci_selfhosted_zero_hosted_minutes.sh\",\n    \"scripts/core_ci_cloudflare.sh\",\n    \"scripts/scan_before_public.sh\",\n    \"scripts/verify_lean.sh\",\n    \"scripts/verify_lean_real.sh\"\n  ],\n  \"warnings\": []\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/tests"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 1.1438739289997102,
+      "stderr_tail": "",
+      "stdout_tail": "........................................................................ [ 98%]\n.                                                                        [100%]\n73 passed in 0.94s\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_synthetic_pilot.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.21151397399989946,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"report_status_independent\": \"INDEPENDENTLY_REPRODUCED\",\n  \"receipt_status\": \"INDEPENDENTLY_REPRODUCED\",\n  \"external_lab\": \"OPEN\",\n  \"card\": \"/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/results/synthetic_pilot_run/card/assurance_card.html\"\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_benchmarks.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.07864606500015725,
+      "stderr_tail": "",
+      "stdout_tail": "{'n': 13, 'correct': 13, 'false_acceptances': 0, 'false_rejections': 0, 'latency_s': 0.0007362360001934576}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_journal_demos.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.2549189690003004,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"format\": \"pcs-next-journal-demos-summary-v1\",\n  \"seconds\": 0.15737946699982786,\n  \"demos\": {\n    \"theophylline\": {\n      \"demo_id\": \"theophylline-pinheiro-bates-teaching-set\",\n      \"aggregate_status\": \"COMPUTATIONALLY_TESTED\",\n      \"external\": \"OPEN\"\n    },\n    \"indomethacin\": {\n      \"demo_id\": \"indomethacin-iv-biexponential-with-mono-negative-control\",\n      \"aggregate_status\": \"COMPUTATIONALLY_TESTED\",\n      \"external\": \"OPEN\"\n    },\n    \"edrug3d\": {\n      \"demo_id\": \"edrug3d-pk-half-life-consistency\",\n      \"aggregate_status\": \"COMPUTATIONALLY_TESTED\",\n      \"external\": \"OPEN\"\n    },\n    \"osp_ddi\": {\n      \"demo_id\": \"osp-ddi-literature-digitization-checks\",\n      \"aggregate_status\": \"COMPUTATIONALLY_TESTED\",\n      \"external\": \"OPEN\"\n    },\n    \"paper_claims\": {\n      \"demo_id\": \"paper-blurb-claim-extraction\",\n      \"aggregate_status\": \"COMPUTATIONALLY_TESTED\",\n      \"external\": \"OPEN\"\n    },\n    \"puromycin\": {\n      \"demo_id\": \"puromycin-michaelis-menten-bates-watts\",\n      \"aggregate_status\": \"COMPUTATIONALLY_TESTED\",\n      \"external\": \"OPEN\"\n    }\n  },\n  \"theophylline_pilot\": {\n    \"independent\": \"INDEPENDENTLY_REPRODUCED\",\n    \"external_lab\": \"OPEN\"\n  },\n  \"honesty\": [\n    \"Public/redistributed datasets only; licenses recorded in PROVENANCE.md\",\n    \"No claim that journal authors ran PCS\",\n    \"External laboratory validation remains OPEN\"\n  ]\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_cleanroom_replay.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.05613851899988731,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"base_sha_file_hash\": \"bc7ee869b7d0c3da5a61faa2033653c397a1747668197217b2ea4c556ec053f8\",\n  \"canonical_diff\": {\n    \"match\": true,\n    \"ours_len\": 47,\n    \"ours_prefix\": \"{\\\"demo\\\":\\\"pcs-next\\\",\\\"flag\\\":true,\\\"n\\\":2,\\\"x\\\":[1,2]}\",\n    \"prod_len\": 47,\n    \"prod_prefix\": \"{\\\"demo\\\":\\\"pcs-next\\\",\\\"flag\\\":true,\\\"n\\\":2,\\\"x\\\":[1,2]}\",\n    \"status\": \"COMPUTATIONALLY_TESTED\"\n  },\n  \"environment\": {\n    \"executable\": \"/usr/bin/python3\",\n    \"platform\": \"Linux-6.12.94+-x86_64-with-glibc2.39\",\n    \"python\": \"3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]\"\n  },\n  \"external_lab_validation\": \"OPEN\",\n  \"format\": \"pcs-next-cleanroom-replay-v1\",\n  \"limitations\": [\n    \"Same host/process family as development \\u2014 not an outside laboratory\",\n    \"Producer PASS fields remain ignored by reviewer path\"\n  ],\n  \"manifest_ok\": true,\n  \"nca_oracle_match\": true,\n  \"nca_values\": {\n    \"impl\": 148.92305,\n    \"oracle\": 148.92305\n  },\n  \"puromycin_status\": \"COMPUTATIONALLY_TESTED\",\n  \"seconds\": 0.01723751000008633,\n  \"source_commit_file\": \"/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/BASE_SHA.txt\",\n  \"theophylline_status\": \"COMPUTATIONALLY_TESTED\"\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_performance.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.053990334999980405,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"format\": \"pcs-next-performance-report-v1\",\n  \"edrug3d_load_s\": 0.004996882000341429,\n  \"edrug3d_consistency_s\": 0.003560005000053934,\n  \"edrug3d_rows\": 2118,\n  \"edrug3d_complete_rows\": 1072,\n  \"theoph_all_subjects_fit_s\": 0.010583593999854202,\n  \"canonical_100_iters_s\": 0.000648846999865782,\n  \"notes\": [\n    \"Cold runs; no cache\",\n    \"Not a claim of production SLA\"\n  ]\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_real_world_campaign.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.44900312199979453,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"caught\": 41,\n  \"missed\": 0,\n  \"false_alarms\": 0,\n  \"catch_rate\": 1.0,\n  \"n_mutations\": 44,\n  \"errors\": []\n}\n"
+    },
+    {
+      "cmd": [
+        "python3",
+        "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/scripts/run_differential_oracles.py"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1",
+      "returncode": 0,
+      "seconds": 0.026997825999842462,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"status\": \"COMPUTATIONALLY_TESTED\",\n  \"n_mismatches\": 0\n}\n"
+    },
+    {
+      "cmd": [
+        "lake",
+        "build"
+      ],
+      "cwd": "/home/ubuntu/worktrees/pcs-next-integrated-assurance/incubation/pcs_next_v1/formal",
+      "returncode": 0,
+      "seconds": 0.1411162859999422,
+      "stderr_tail": "",
+      "stdout_tail": "Build completed successfully (13 jobs).\n"
+    }
+  ]
+}

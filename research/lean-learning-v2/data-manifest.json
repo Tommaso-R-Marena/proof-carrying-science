@@ -1,0 +1,40 @@
+{
+  "adapter_sha256": "08a16c0625aad86952b87760235baa004bf6699095935e3b9f86a4c489e8d74c",
+  "format": "pcs-intelligence-data-v1",
+  "hint_exposure": "symbolic search only",
+  "human_trajectories": false,
+  "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "license": "Apache-2.0",
+  "source_revision": "8dd958f2c4efa335ad36b11d8b1494a5aec754a1",
+  "splits": {
+    "final": [
+      "nested_reorder",
+      "compose_implications",
+      "four_assumptions",
+      "missing_assumption",
+      "nat_nested_identity",
+      "predicate_subset_transitivity"
+    ],
+    "train": [
+      "identity",
+      "conjunction_swap",
+      "conjunction_project",
+      "conjunction_intro",
+      "disjunction_left",
+      "disjunction_right",
+      "modus_ponens",
+      "nat_add_zero",
+      "nat_mul_one",
+      "nat_add_comm",
+      "projected_application",
+      "function_injective_composition"
+    ],
+    "validation": [
+      "duplicate",
+      "weaken",
+      "nat_zero_add"
+    ]
+  },
+  "tasks_sha256": "3293308e695797ec190e431c83a01d0758c27225bf5ed62a2b35bdf3b73c5878",
+  "training_sha256": "84cf303d09bf8ec115dfcebda63a0391e7100ff05e528d162656ed0dee40595b"
+}

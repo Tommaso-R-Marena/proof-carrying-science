@@ -1,0 +1,32 @@
+{
+  "format": "pcs-reviewer-integration-regression-requalification-v1",
+  "commit": "75847153ba6bbec34a1e064e2c14d4894942a11b",
+  "source_prior_commit": "27b9f2f7930f178f41730b4ee2edd245cd1ce55c",
+  "worktree": "/workspace/.onboarding/pcs-pilot-integrated-7584715",
+  "source_paths_changed_since_prior_commit": [
+    "incubation/pcs_causal_laboratory_v1/src/pcs_causal/identification/do_calculus.py",
+    "incubation/pcs_causal_laboratory_v1/tests/test_do_calculus_import.py",
+    "independent_eval/reviewer_adoption/workbench/export_assurance_card.py"
+  ],
+  "test_command": [
+    "/workspace/.onboarding/pcs-integration-env/bin/python",
+    "/workspace/.onboarding/PCS_ALL_PRS_PILOT_PYTEST_CHILD.py",
+    "-q",
+    "-ra",
+    "--disable-warnings",
+    "-o",
+    "cache_dir=/workspace/.onboarding/PCS_ALL_PRS_PILOT_INTEGRATED_758_122_outputs/cache",
+    "independent_eval/reviewer_adoption/tests"
+  ],
+  "exit_code": 0,
+  "counts": {
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0
+  },
+  "log": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_INTEGRATED_758_122.log",
+  "discovery_manual_cases": "/workspace/.onboarding/PCS_ALL_PRS_PILOT_INTEGRATED_758_DISCOVERY.json",
+  "tracked_status": "",
+  "limitations": "Other five stream suites run at27b, their namespace source bytes unchanged at758; no claim all six rerun at758. Actual absence/default/env behavior independently inspected; no verifier mocks involved.",
+  "log_sha256": "9f0c723e5d923d81491c1dd7e0a4692f3be29b764f5cead20b543f0c75008852"
+}

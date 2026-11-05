@@ -1,0 +1,674 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcs.example/schemas/semantic_intelligence_v2.schema.json",
+  "title": "PCS Proof-Carrying Semantic Intelligence v2",
+  "description": "Wire formats of pcs-semantic-check --v2 / --check-countermodel / --v2-record. All documents are canonical JSON (sorted keys, no whitespace, integers only, no duplicate keys); the Lean decoder is the authority and rejects anything else. The inner 'request' object is the v1 request of schemas/semantic_translation_v1.schema.json (unchanged).",
+  "$defs": {
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rule",
+        "target"
+      ],
+      "properties": {
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "rule": {
+          "enum": [
+            "dneg_elim",
+            "dneg_intro",
+            "and_comm",
+            "or_comm",
+            "and_assoc_l",
+            "and_assoc_r",
+            "or_assoc_l",
+            "or_assoc_r",
+            "eq_symm",
+            "imp_to_or",
+            "or_to_imp",
+            "de_morgan_and",
+            "de_morgan_and_inv",
+            "de_morgan_or",
+            "de_morgan_or_inv",
+            "not_all",
+            "not_all_inv",
+            "not_ex",
+            "not_ex_inv",
+            "contrapose",
+            "curry",
+            "uncurry",
+            "all_and",
+            "all_and_inv",
+            "ex_or",
+            "ex_or_inv",
+            "quant_swap",
+            "and_true",
+            "or_false",
+            "imp_true_l",
+            "not_true",
+            "not_false",
+            "and_idem",
+            "or_idem"
+          ]
+        },
+        "target": {
+          "oneOf": [
+            {
+              "const": "conclusion"
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        }
+      }
+    },
+    "certificate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "left",
+        "right"
+      ],
+      "properties": {
+        "left": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        },
+        "right": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        }
+      }
+    },
+    "finite_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "functions",
+        "predicates",
+        "sorts"
+      ],
+      "properties": {
+        "functions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "symbol",
+              "table"
+            ],
+            "properties": {
+              "symbol": {
+                "type": "string"
+              },
+              "table": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "args",
+                    "value"
+                  ],
+                  "properties": {
+                    "args": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "value": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "predicates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "symbol",
+              "true_on"
+            ],
+            "properties": {
+              "symbol": {
+                "type": "string"
+              },
+              "true_on": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sorts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "carrier",
+              "sort"
+            ],
+            "properties": {
+              "carrier": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "sort": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "countermodel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_holds",
+        "interpretation_holds",
+        "model"
+      ],
+      "properties": {
+        "candidate_holds": {
+          "type": "boolean"
+        },
+        "interpretation_holds": {
+          "type": "boolean"
+        },
+        "model": {
+          "$ref": "#/$defs/finite_model"
+        }
+      }
+    },
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cert_cap",
+        "cert_depth",
+        "model_bound",
+        "model_budget"
+      ],
+      "properties": {
+        "cert_cap": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cert_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "model_bound": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "model_budget": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "description": "Effort bounds of the untrusted searches; clamped by the checker (cert_depth<=4, cert_cap<=2000, model_bound<=4, model_budget<=200000). They influence which certificate/countermodel is found, never soundness."
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": [
+        "code",
+        "component",
+        "detail"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "repair_obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "component",
+        "expected_invariant",
+        "mechanically_repairable",
+        "observed",
+        "requires_human_clarification"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string"
+        },
+        "expected_invariant": {
+          "type": "string"
+        },
+        "mechanically_repairable": {
+          "type": "boolean"
+        },
+        "observed": {
+          "type": "string"
+        },
+        "requires_human_clarification": {
+          "type": "boolean"
+        }
+      }
+    },
+    "semantic_status": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "NORMAL_FORM_EQUAL",
+            "CERTIFIED_EQUIVALENCE",
+            "VERIFIED_COUNTERMODEL",
+            "UNDETERMINED_WITHIN_BOUNDS"
+          ]
+        },
+        "certificate": {
+          "$ref": "#/$defs/certificate"
+        },
+        "countermodel": {
+          "$ref": "#/$defs/countermodel"
+        },
+        "search": {
+          "enum": [
+            "FOUND",
+            "EXHAUSTED_WITHIN_BOUND",
+            "BUDGET_EXCEEDED"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bounds",
+        "certificate",
+        "request",
+        "schema"
+      ],
+      "properties": {
+        "bounds": {
+          "$ref": "#/$defs/bounds"
+        },
+        "certificate": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/certificate"
+            }
+          ]
+        },
+        "request": {
+          "type": "object",
+          "required": [
+            "candidate",
+            "confirmation",
+            "elaboration",
+            "interpretation",
+            "proof",
+            "schema"
+          ],
+          "description": "v1 request (pcs-semantic-translation-v1)"
+        },
+        "schema": {
+          "const": "pcs-semantic-translation-v2"
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "certificate",
+        "controlled_language",
+        "diagnostics",
+        "expected_lean_source",
+        "explanation",
+        "explanation_views",
+        "label",
+        "outcome",
+        "repair_obligations",
+        "schema",
+        "semantic_status"
+      ],
+      "properties": {
+        "certificate": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/certificate"
+            }
+          ]
+        },
+        "controlled_language": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "assumptions",
+                "cnl_valid",
+                "conclusion",
+                "grammar",
+                "parameters"
+              ],
+              "properties": {
+                "assumptions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "cnl_valid": {
+                  "type": "boolean"
+                },
+                "conclusion": {
+                  "type": "string"
+                },
+                "grammar": {
+                  "const": "pcs-cnl-v1"
+                },
+                "parameters": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        },
+        "expected_lean_source": {
+          "type": "string"
+        },
+        "explanation": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "explanation_views": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "beginner",
+                "technical",
+                "trust"
+              ],
+              "properties": {
+                "beginner": {
+                  "type": "string"
+                },
+                "technical": {
+                  "type": "string"
+                },
+                "trust": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "label": {
+          "enum": [
+            "VERIFIED_POSITIVE",
+            "VERIFIED_SEMANTIC_NEGATIVE",
+            "CONTRACT_REJECTION",
+            "UNRESOLVED"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "CERTIFIED_TRANSLATION",
+            "VERIFIED_COUNTEREXAMPLE",
+            "NEEDS_HUMAN_CLARIFICATION",
+            "UNRESOLVED_PROOF_OBLIGATION",
+            "UNSUPPORTED_FRAGMENT",
+            "SEARCH_EXHAUSTED",
+            "INVALID_PROPOSAL"
+          ]
+        },
+        "repair_obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repair_obligation"
+          }
+        },
+        "schema": {
+          "const": "pcs-semantic-decision-v2"
+        },
+        "semantic_status": {
+          "$ref": "#/$defs/semantic_status"
+        }
+      }
+    },
+    "countermodel_bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate",
+        "countermodel",
+        "interpretation",
+        "schema"
+      ],
+      "properties": {
+        "candidate": {
+          "type": "object"
+        },
+        "countermodel": {
+          "$ref": "#/$defs/countermodel"
+        },
+        "interpretation": {
+          "type": "object"
+        },
+        "schema": {
+          "const": "pcs-countermodel-v1"
+        }
+      }
+    },
+    "training_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "pcs-verifier-feedback-v1: one deterministic checker run. Labels come only from the checker; model confidence is recorded but ignored; provenance distinguishes machine-generated fixtures from real human gameplay.",
+      "required": [
+        "candidate",
+        "candidate_digest",
+        "certificate",
+        "checker_version",
+        "confirmation_authority",
+        "countermodel",
+        "diagnostics",
+        "feedback_available_before_choice",
+        "interpretation",
+        "interpretation_digest",
+        "label",
+        "model_confidence_ignored",
+        "obligations",
+        "outcome",
+        "partition",
+        "provenance",
+        "registry_digest",
+        "repair_attempts",
+        "schema",
+        "semantic_status",
+        "source_revision"
+      ],
+      "properties": {
+        "candidate": {
+          "type": "object"
+        },
+        "candidate_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "certificate": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/certificate"
+            }
+          ]
+        },
+        "checker_version": {
+          "type": "string"
+        },
+        "confirmation_authority": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "countermodel": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/countermodel"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        },
+        "feedback_available_before_choice": {
+          "type": "array"
+        },
+        "interpretation": {
+          "type": "object"
+        },
+        "interpretation_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "label": {
+          "enum": [
+            "VERIFIED_POSITIVE",
+            "VERIFIED_SEMANTIC_NEGATIVE",
+            "CONTRACT_REJECTION",
+            "UNRESOLVED"
+          ]
+        },
+        "model_confidence_ignored": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repair_obligation"
+          }
+        },
+        "outcome": {
+          "enum": [
+            "CERTIFIED_TRANSLATION",
+            "VERIFIED_COUNTEREXAMPLE",
+            "NEEDS_HUMAN_CLARIFICATION",
+            "UNRESOLVED_PROOF_OBLIGATION",
+            "UNSUPPORTED_FRAGMENT",
+            "SEARCH_EXHAUSTED",
+            "INVALID_PROPOSAL"
+          ]
+        },
+        "partition": {
+          "enum": [
+            "train",
+            "evaluation"
+          ]
+        },
+        "provenance": {
+          "type": "string"
+        },
+        "registry_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "repair_attempts": {
+          "type": "array"
+        },
+        "schema": {
+          "const": "pcs-verifier-feedback-v1"
+        },
+        "semantic_status": {
+          "$ref": "#/$defs/semantic_status"
+        },
+        "source_revision": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

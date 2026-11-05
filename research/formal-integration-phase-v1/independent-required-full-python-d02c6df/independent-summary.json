@@ -1,0 +1,21 @@
+{
+  "format": "pcs-independent-required-full-python-validation-v1",
+  "source_commit": "d02c6df0afb0ca36c5d5f4cf06ce7aeb6d9eef36",
+  "source_clean_before_and_after": true,
+  "command": "PCS_REQUIRE_PROVER=1 python -m pytest -q",
+  "cwd": "/workspace/worktrees/pcs-integration",
+  "explicit_receiving_pythonpath": true,
+  "lean_version": "4.28.0",
+  "full_python_suite": {
+    "exit_code": 0,
+    "passed": 1790,
+    "failed": 0,
+    "skipped": 0,
+    "wall_seconds": 376.49,
+    "warnings": 1,
+    "warning_scope": "tests/test_zip_verify_v06.py::test_v06_zip_rejects_duplicate_member intentional duplicate ZIP fixture"
+  },
+  "external_human_review": false,
+  "scientific_acceptance": false,
+  "qualification_scope": "full receiving Python suite; complete new Aristotle kernel library/audit and protected CI qualify separately"
+}

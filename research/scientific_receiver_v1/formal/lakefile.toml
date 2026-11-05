@@ -1,0 +1,19 @@
+name = "PCSScientificReceiverResearch"
+version = "0.1.0"
+defaultTargets = ["PCSScientificReceiver"]
+
+[[require]]
+name = "PCSIntegrationResearch"
+path = "../../integration_v1/formal"
+
+[[require]]
+name = "PCS"
+path = "../../../formal"
+
+[[lean_lib]]
+name = "PCSScientificReceiver"
+defaultFacets = ["leanArts"]
+
+[[lean_exe]]
+name = "pcs-scientific-receive-v1"
+root = "Main"

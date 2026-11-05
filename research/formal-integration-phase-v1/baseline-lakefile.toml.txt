@@ -1,0 +1,113 @@
+name = "PCS"
+version = "0.5.0"
+defaultTargets = ["PCS", "pcs-lean-authority", "pcs-semantic-check", "PCSCountermodel", "pcs-countermodel-replay", "PCSOmega", "PCSDecisionDiagram"]
+
+[[lean_lib]]
+name = "PCS"
+# Elaborate and kernel-check the entire proof-only umbrella without emitting native object files (Lean 4.28 uses leanArts).
+defaultFacets = ["leanArts"]
+
+[[lean_exe]]
+name = "pcs-lean-authority"
+root = "PCSAuthority"
+
+[[lean_exe]]
+name = "pcs-semantic-check"
+root = "PCSSemanticCheck"
+
+[[lean_lib]]
+name = "PCSCountermodel"
+roots = ["PCSCountermodel"]
+defaultFacets = ["leanArts"]
+
+[[lean_exe]]
+name = "pcs-countermodel-replay"
+root = "PCSCountermodelReplay"
+
+# Experimental typed reference models (no PCS authority; not imported by PCS/PCSAuthority).
+[[lean_lib]]
+name = "PCSOmega"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSOmega"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSDecisionDiagram"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSDecisionDiagram"]
+defaultFacets = ["leanArts"]
+
+# Executed positive controls for the experimental models (kernel-checked `decide`).
+[[lean_lib]]
+name = "PCSControls"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSOmega.Controls", "PCSDecisionDiagram.Controls"]
+defaultFacets = ["leanArts"]
+
+# Proof-only computation certificates; no changes to the reference algorithms.
+[[lean_lib]]
+name = "PCSReferenceCertificates"
+moreLeanArgs = ["-j1", "-M6000", "-D", "Elab.async=false"]
+roots = ["PCSReferenceCertificates"]
+defaultFacets = ["leanArts"]
+
+# Independently audited Aristotle reference and source-window refinement libraries.
+[[lean_lib]]
+name = "PCSAssumptionDiscovery"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSAssumptionDiscovery"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSNewControls"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSAssumptionDiscovery.Controls", "PCSForgeRefinement.Controls", "PCSReasoningLibrary.Controls", "PCSMathLanguage.Controls", "PCSMathLanguage.LanguageControls", "PCSVerifiedLearning.Controls", "PCSEndToEnd.Controls"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSForgeRefinement"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSForgeRefinement"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSReasoningLibrary"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSReasoningLibrary"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSVerifiedLearning"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSVerifiedLearning"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSMathLanguage"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSMathLanguage"]
+defaultFacets = ["leanArts"]
+
+[[lean_lib]]
+name = "PCSStatisticsCore"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSStatisticsCore"]
+defaultFacets = ["leanArts"]
+
+# Composed end-to-end theorems (request → policy → decoder → receiver search → final verifier →
+# replay → verifier-derived training intake; and conditional assumption discovery).
+
+[[lean_lib]]
+name = "PCSEndToEnd"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSEndToEnd"]
+defaultFacets = ["leanArts"]
+
+# Source-bound runtime refinement: Python / ECMAScript subset semantics, checked extraction
+# certificates and correspondence with the existing Lean reference algorithms.
+
+[[lean_lib]]
+name = "PCSRuntimeRefinement"
+moreLeanArgs = ["-j1", "-M40000", "-D", "Elab.async=false"]
+roots = ["PCSRuntimeRefinement"]
+defaultFacets = ["leanArts"]

@@ -1,0 +1,2441 @@
+{
+  "137": {
+    "axiom_closures": {
+      "PcsNext.Approx.approx_1_2_1": [],
+      "PcsNext.Approx.approx_not_necessarily_eq": [],
+      "PcsNext.Approx.not_exactEq_1_2": [],
+      "PcsNext.Bateman.proxyTerm.eq_1": [],
+      "PcsNext.Bateman.proxyTerm_mono_dose": [],
+      "PcsNext.Bateman.proxyTerm_nonneg": [],
+      "PcsNext.Bateman.proxyTerm_zero_dose": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Binder.mk.inj": [],
+      "PcsNext.ClaimIR.Binder.mk.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Binder.mk.sizeOf_spec": [],
+      "PcsNext.ClaimIR.EvidenceKind.association.sizeOf_spec": [],
+      "PcsNext.ClaimIR.EvidenceKind.causal.sizeOf_spec": [],
+      "PcsNext.ClaimIR.EvidenceKind.ofNat_ctorIdx": [],
+      "PcsNext.ClaimIR.EvidenceKind.simulation.sizeOf_spec": [],
+      "PcsNext.ClaimIR.EvidenceKind.unknown.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.and.inj": [],
+      "PcsNext.ClaimIR.Expr.and.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.and.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.approx.inj": [],
+      "PcsNext.ClaimIR.Expr.approx.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.approx.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.brecOn.eq": [],
+      "PcsNext.ClaimIR.Expr.claimTagged.inj": [],
+      "PcsNext.ClaimIR.Expr.claimTagged.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.claimTagged.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.const.inj": [],
+      "PcsNext.ClaimIR.Expr.const.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.const.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.implies.inj": [],
+      "PcsNext.ClaimIR.Expr.implies.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.implies.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.not.inj": [],
+      "PcsNext.ClaimIR.Expr.not.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.not.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.or.inj": [],
+      "PcsNext.ClaimIR.Expr.or.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.or.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.quant.inj": [],
+      "PcsNext.ClaimIR.Expr.quant.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.quant.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Expr.var.inj": [],
+      "PcsNext.ClaimIR.Expr.var.injEq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.Expr.var.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Quantifier.existsQ.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Quantifier.forallQ.sizeOf_spec": [],
+      "PcsNext.ClaimIR.Quantifier.ofNat_ctorIdx": [],
+      "PcsNext.ClaimIR.and_preserves_exists_left": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.association_alone_not_flagged": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.association_ne_causal": [],
+      "PcsNext.ClaimIR.causalOverAssociation._sparseCasesOn_1.else_eq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.causalOverAssociation._sparseCasesOn_2.else_eq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.causalOverAssociation._sparseCasesOn_3.else_eq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.causalOverAssociation.eq_1": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.causalOverAssociation.eq_2": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.causal_over_association_detected": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.exists_ne_forall": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.instDecidableEqBinder.decEq._proof_1": [],
+      "PcsNext.ClaimIR.instDecidableEqBinder.decEq._proof_2": [],
+      "PcsNext.ClaimIR.instDecidableEqBinder.decEq._proof_3": [],
+      "PcsNext.ClaimIR.instDecidableEqEvidenceKind._proof_1": [],
+      "PcsNext.ClaimIR.instDecidableEqEvidenceKind._proof_2": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_1": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_10": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_11": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_12": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_13": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_14": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_15": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_16": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_17": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_18": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_19": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_2": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_20": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_21": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_22": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_23": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_24": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_25": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_26": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_27": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_28": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_29": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_3": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_30": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_31": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_32": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_33": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_34": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_35": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_36": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_37": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_38": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_39": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_4": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_40": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_41": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_42": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_43": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_44": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_45": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_46": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_47": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_48": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_49": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_5": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_50": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_51": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_52": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_53": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_54": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_55": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_56": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_57": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_58": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_59": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_6": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_60": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_61": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_62": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_63": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_64": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_65": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_66": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_67": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_68": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_69": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_7": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_70": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_71": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_72": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_73": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_74": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_75": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_76": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_77": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_78": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_79": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_8": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_80": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_81": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_82": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_83": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_84": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_85": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_86": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_87": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_88": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_89": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_9": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_90": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_91": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_92": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_93": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_94": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_95": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_96": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_97": [],
+      "PcsNext.ClaimIR.instDecidableEqExpr.decEq._proof_98": [],
+      "PcsNext.ClaimIR.instDecidableEqQuantifier._proof_1": [],
+      "PcsNext.ClaimIR.instDecidableEqQuantifier._proof_2": [],
+      "PcsNext.ClaimIR.isExists._sparseCasesOn_1.else_eq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.isExists._sparseCasesOn_2.else_eq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.isExists.eq_1": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.isExists.eq_2": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.isForall._sparseCasesOn_1.else_eq": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.isForall.eq_1": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.isForall.eq_2": [
+        "propext"
+      ],
+      "PcsNext.ClaimIR.neg_neg_preserves_exists": [
+        "propext"
+      ],
+      "PcsNext.Conservation.transfer.eq_1": [],
+      "PcsNext.Conservation.transfer_nonincreasing_donor": [
+        "propext"
+      ],
+      "PcsNext.Conservation.transfer_preserves_total": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Conservation.transfer_preserves_total._proof_1_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Conservation.transfer_too_large": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Conservation.transfer_too_large._proof_1_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Conservation.transfer_zero": [
+        "propext"
+      ],
+      "PcsNext.Emax.effect.eq_1": [],
+      "PcsNext.Emax.effect_at_zero": [
+        "propext"
+      ],
+      "PcsNext.Emax.effect_ec50_zero_pos_c": [
+        "propext"
+      ],
+      "PcsNext.Emax.effect_ge_e0": [],
+      "PcsNext.Emax.effect_le_e0_add_emax": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Emax.effect_le_e0_add_emax._proof_1_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Homogeneity.concProxy.eq_1": [],
+      "PcsNext.Homogeneity.concProxy_mono_dose": [],
+      "PcsNext.Homogeneity.concProxy_scale": [
+        "propext"
+      ],
+      "PcsNext.Homogeneity.concProxy_zero_dose": [
+        "propext"
+      ],
+      "PcsNext.Homogeneity.scale_two_ne_one": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.Homogeneity.scale_two_ne_one._proof_1_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.MM.rate.eq_1": [],
+      "PcsNext.MM.rate_km_zero_of_pos_conc": [
+        "propext"
+      ],
+      "PcsNext.MM.rate_le_vmax": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.MM.rate_le_vmax._proof_1_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsNext.MM.rate_zero_conc": [
+        "propext"
+      ],
+      "PcsNext.MM.rate_zero_vmax": [
+        "propext"
+      ],
+      "PcsNext.NCA.trapAUC_nil": [],
+      "PcsNext.NCA.trapAUC_nonneg": [],
+      "PcsNext.NCA.trapAUC_singleton": [],
+      "PcsNext.NCA.trapSegment.eq_1": [],
+      "PcsNext.NCA.trapSegment_nonneg": [],
+      "PcsNext.NCA.trapSegment_zero_when_equal_time": [
+        "propext"
+      ],
+      "PcsNext.ScalarGuard.ScalarModel.mk.inj": [],
+      "PcsNext.ScalarGuard.ScalarModel.mk.injEq": [
+        "propext"
+      ],
+      "PcsNext.ScalarGuard.ScalarModel.mk.sizeOf_spec": [],
+      "PcsNext.ScalarGuard.eval.eq_1": [],
+      "PcsNext.ScalarGuard.improvesOn_implies_lt": [],
+      "PcsNext.ScalarGuard.improvesOn_not_ge": [],
+      "PcsNext.ScalarGuard.preservesWithin_cons": [],
+      "PcsNext.ScalarGuard.preservesWithin_nil": [],
+      "PcsNext.ScalarGuard.preserves_same_model_zero_bound": [
+        "propext"
+      ],
+      "PcsNext.Units.convert_L_per_h_id": [],
+      "PcsNext.Units.convert_mL_per_min.eq_1": [],
+      "PcsNext.Units.convert_mL_per_min_one": [
+        "propext"
+      ],
+      "PcsNext.Units.convert_mL_per_min_zero": [
+        "propext"
+      ],
+      "PcsNext.Units.mL_per_min_factor_pos": [],
+      "PcsNext.Units.mL_per_min_not_identity_scale": [],
+      "PcsNext.Units.mL_per_min_to_L_per_h_den.eq_1": [],
+      "PcsNext.Units.mL_per_min_to_L_per_h_num.eq_1": []
+    },
+    "project": "incubation/pcs_next_v1/formal",
+    "public_theorems_including_generated": 217,
+    "source_sha256": {
+      "incubation/pcs_next_v1/formal/PcsNext.lean": "d71712e828e9eaeb60e733deba260a18276a613db250e9511ac7aec5fbcf0818",
+      "incubation/pcs_next_v1/formal/PcsNext/Approx.lean": "81312678a55ba611a9552d4e78ac907baa64333702699862053a39625bbc2228",
+      "incubation/pcs_next_v1/formal/PcsNext/Bateman.lean": "1b55b720de9d6b7117bd14382abbc933ec08285bbc9e63442ce5029455e5fb42",
+      "incubation/pcs_next_v1/formal/PcsNext/ClaimIR.lean": "875e21543f25472bbe82fe39be0e51a5c73138baa556f98a70f4a2cf19976fe5",
+      "incubation/pcs_next_v1/formal/PcsNext/Conservation.lean": "d340d5358031c1433f413df1e3ec1234d69bfb51a15c601a3fb9b1c1d1667f34",
+      "incubation/pcs_next_v1/formal/PcsNext/Emax.lean": "0a4f89db8057aae47341fa67090dc8dd3f91358ca6a96bb22baa2c60d659c6a6",
+      "incubation/pcs_next_v1/formal/PcsNext/Homogeneity.lean": "a064d70af7226c1f2d71ca739f4447afebd56b2577d1c872dc441e9d9f9167fb",
+      "incubation/pcs_next_v1/formal/PcsNext/MM.lean": "8efe44e6069182832afd0be5f0bd78d00244622c8b419f447b3de54943a6c4b8",
+      "incubation/pcs_next_v1/formal/PcsNext/NCA.lean": "992b2c59256d76d3b409949489eadc1909a2f199ef6ff464def67a0315576dca",
+      "incubation/pcs_next_v1/formal/PcsNext/ScalarGuard.lean": "0a4086f2350e51fc32de74ecd6b94e8080643ca29ef466f45baa9020e432f1af",
+      "incubation/pcs_next_v1/formal/PcsNext/Units.lean": "5bb9fc1da624a5c7f8a04812932f379c068c054090cc5abb364986e870b07221",
+      "incubation/pcs_next_v1/formal/tests/PcsNextTests.lean": "518cbdc00279d1424670c014db54c7a88b95da0c173a4ba395f0006c999cc386"
+    }
+  },
+  "139": {
+    "axiom_closures": {
+      "CertNum.Certificate.IntervalEnclosureCert.arith": [],
+      "CertNum.Certificate.IntervalEnclosureCert.mk.inj": [],
+      "CertNum.Certificate.IntervalEnclosureCert.mk.injEq": [
+        "propext"
+      ],
+      "CertNum.Certificate.IntervalEnclosureCert.mk.sizeOf_spec": [],
+      "CertNum.Certificate.checkIntervalEnclosure._sparseCasesOn_3.else_eq": [
+        "propext"
+      ],
+      "CertNum.Certificate.checkIntervalEnclosure_sound": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Certificate.subset_of_endpoints": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.EnclStatus.emptyDomain.sizeOf_spec": [],
+      "CertNum.EnclStatus.insufficientPrecision.sizeOf_spec": [],
+      "CertNum.EnclStatus.ofNat_ctorIdx": [],
+      "CertNum.EnclStatus.ok.sizeOf_spec": [],
+      "CertNum.EnclStatus.resourceExhausted.sizeOf_spec": [],
+      "CertNum.EnclStatus.unbounded.sizeOf_spec": [],
+      "CertNum.EnclStatus.undefined.sizeOf_spec": [],
+      "CertNum.EnclStatus.unsupported.sizeOf_spec": [],
+      "CertNum.Enclosure.mk.inj": [],
+      "CertNum.Enclosure.mk.injEq": [
+        "propext"
+      ],
+      "CertNum.Enclosure.mk.sizeOf_spec": [],
+      "CertNum.Enclosure.ok.eq_1": [],
+      "CertNum.Expr.IsChecked.brecOn": [],
+      "CertNum.Expr.abs.inj": [],
+      "CertNum.Expr.abs.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.abs.sizeOf_spec": [],
+      "CertNum.Expr.abs_evalInterval_ok": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.add.inj": [],
+      "CertNum.Expr.add.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.add.sizeOf_spec": [],
+      "CertNum.Expr.brecOn.eq": [],
+      "CertNum.Expr.const.inj": [],
+      "CertNum.Expr.const.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.const.sizeOf_spec": [],
+      "CertNum.Expr.div.inj": [],
+      "CertNum.Expr.div.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.div.sizeOf_spec": [],
+      "CertNum.Expr.eval._sparseCasesOn_3.else_eq": [
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_3": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_4": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_5": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_6": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_7": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_8": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_9": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.eval.eq_def": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_3": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_4": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_5": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_6": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_7": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_8": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_9": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval.eq_def": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.evalInterval_sound_arith": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.mul.inj": [],
+      "CertNum.Expr.mul.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.mul.sizeOf_spec": [],
+      "CertNum.Expr.neg.inj": [],
+      "CertNum.Expr.neg.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.neg.sizeOf_spec": [],
+      "CertNum.Expr.neg_evalInterval_ok": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.powNat.inj": [],
+      "CertNum.Expr.powNat.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.powNat.sizeOf_spec": [],
+      "CertNum.Expr.powNat_mem": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Expr.sub.inj": [],
+      "CertNum.Expr.sub.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.sub.sizeOf_spec": [],
+      "CertNum.Expr.var.inj": [],
+      "CertNum.Expr.var.injEq": [
+        "propext"
+      ],
+      "CertNum.Expr.var.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.allNegative.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.allNonNegative.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.allNonPositive.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.allPositive.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.containsZero.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.empty.sizeOf_spec": [],
+      "CertNum.Interval.SignClass.ofNat_ctorIdx": [],
+      "CertNum.Interval.empty.sizeOf_spec": [],
+      "CertNum.Interval.excludesZero.eq_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.excludesZero.eq_2": [
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.hull.eq_1": [],
+      "CertNum.Interval.hull.eq_2": [],
+      "CertNum.Interval.hull.eq_3": [],
+      "CertNum.Interval.instDecidableEqSignClass._proof_1": [],
+      "CertNum.Interval.instDecidableEqSignClass._proof_2": [],
+      "CertNum.Interval.inter.eq_1": [],
+      "CertNum.Interval.inter.eq_2": [],
+      "CertNum.Interval.inter.eq_3": [],
+      "CertNum.Interval.mem_abs": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_add": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_div": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_1": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_2": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_3": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_4": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_5": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_6": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_div._simp_1_7": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_empty": [],
+      "CertNum.Interval.mem_empty._simp_1": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_hull_left": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_hull_right": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_inter_of_mem": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_mul": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_neg": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_nonempty": [],
+      "CertNum.Interval.mem_nonempty._simp_1": [
+        "propext"
+      ],
+      "CertNum.Interval.mem_recip": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_recip_neg": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_recip_pos": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_singleton": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_square": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.mem_sub": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.nonempty.congr_simp": [],
+      "CertNum.Interval.nonempty.inj": [],
+      "CertNum.Interval.nonempty.injEq": [
+        "propext"
+      ],
+      "CertNum.Interval.nonempty.sizeOf_spec": [],
+      "CertNum.Interval.powNat.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.powNat.eq_2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.powNat.eq_def": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.recip_ok_of_excludes_zero": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.sub.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.subset_refl": [],
+      "CertNum.Interval.subset_trans": [],
+      "CertNum.Interval.wellFormed": [],
+      "CertNum.Interval.width.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.width.eq_2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.Interval.width_nonneg": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.instDecidableEqEnclStatus._proof_1": [],
+      "CertNum.instDecidableEqEnclStatus._proof_2": [],
+      "CertNum.le_of_ratMin4": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.le_ratMax4": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.le_ratMax_left": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.le_ratMax_right": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.ratMin_le_left": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.ratMin_le_ratMax": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "CertNum.ratMin_le_right": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "_of_le": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    "project": "incubation/pcs_certified_numerics_v1",
+    "public_theorems_including_generated": 141,
+    "source_sha256": {
+      "incubation/pcs_certified_numerics_v1/lean/CertNum.lean": "a52acf2242dd683151e395a0c9e727880f8e257b2f45187efc5fd0fdbb1c0e71",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Certificate/Checker.lean": "2fb3c75744b89e8e5c5fa65519638ec9a155d045adbb0185f034fff503fd71d6",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Expr/Basic.lean": "9dc191a71951f79a3c3208955f2c9b232324e33c5e8f1c70c46f9a9e445a450a",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Expr/Soundness.lean": "0cc43aa4414f1a847e5a99a0fb210805ba34c5c19cd29ba163986c8dc2f3bc94",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Interval/AbsSquareSoundness.lean": "8f578b9e8909bac056c3ca8fbe61f416a2898c0f57169f21f90609e9f791c16a",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Interval/Arithmetic.lean": "f232392b88679aaf47de2edfc3b86c99b822c9195c1e977b77e581e55611dea0",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Interval/Basic.lean": "850eb2be45876c05c0cae607412262911524519de4364bb8f667885dc8508225",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Interval/MulSoundness.lean": "fddeb03d864be4360e8364109a28a57ce7ebd8f8d8a6956eb393f3c3bd7808ba",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Interval/RecipSoundness.lean": "f34a6ca837ae1993c1b2a52ab165237fe78ab851e01f4bd61194b8d7dfd88e4b",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Interval/Soundness.lean": "0d60a8ae864c0ca26ad34c51d01790be553079f877e08a55e514456d96cc9819",
+      "incubation/pcs_certified_numerics_v1/lean/CertNum/Util/RatAux.lean": "2d1a91d6519e96b47b1ebc93755119d7705eab9435a5ba0022701cefdb0068d0"
+    }
+  },
+  "140": {
+    "axiom_closures": {
+      "PcsEpistemic.Artifact.mk.inj": [],
+      "PcsEpistemic.Artifact.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.Artifact.mk.sizeOf_spec": [],
+      "PcsEpistemic.Assumption.mk.inj": [],
+      "PcsEpistemic.Assumption.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.Assumption.mk.sizeOf_spec": [],
+      "PcsEpistemic.ClaimNode.mk.inj": [],
+      "PcsEpistemic.ClaimNode.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.ClaimNode.mk.sizeOf_spec": [],
+      "PcsEpistemic.Context.mk.inj": [],
+      "PcsEpistemic.Context.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.Context.mk.sizeOf_spec": [],
+      "PcsEpistemic.Controls.control_agreement_contains_formal": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_agreement_dispute_disjoint": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_changed_artifact_in_impact": [],
+      "PcsEpistemic.Controls.control_computational_rejects_formal": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_dispute_contains_computational": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_distinguishing_computational": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_empirical_rejects_formal": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_formal_covers_computational_claim": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_formal_evidence_accepts": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_impact_reaches_claim": [],
+      "PcsEpistemic.Controls.control_incomplete_never_endorses": [],
+      "PcsEpistemic.Controls.control_lattice_antisymm_comp": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_le_trans_formal_comp_prov": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_missing_evidence": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_no_computational_to_formal": [
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_rejected_blocks_formal": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.Controls.control_seed_reaches_processed": [],
+      "PcsEpistemic.Controls.control_unrelated_declared_nonimpact": [],
+      "PcsEpistemic.DepGraph.mk.inj": [],
+      "PcsEpistemic.DepGraph.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.DepGraph.mk.sizeOf_spec": [],
+      "PcsEpistemic.Ensemble.mk.inj": [],
+      "PcsEpistemic.Ensemble.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.Ensemble.mk.sizeOf_spec": [],
+      "PcsEpistemic.EvidenceClass.computational.sizeOf_spec": [],
+      "PcsEpistemic.EvidenceClass.empirical.sizeOf_spec": [],
+      "PcsEpistemic.EvidenceClass.formal.sizeOf_spec": [],
+      "PcsEpistemic.EvidenceClass.le._sparseCasesOn_1.else_eq": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_1": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_10": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_11": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_12": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_2": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_3": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_4": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_5": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_6": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_7": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_8": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le.eq_9": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.le_refl": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceClass.ofNat_ctorIdx": [],
+      "PcsEpistemic.EvidenceClass.provenance.sizeOf_spec": [],
+      "PcsEpistemic.EvidenceNode.mk.inj": [],
+      "PcsEpistemic.EvidenceNode.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceNode.mk.sizeOf_spec": [],
+      "PcsEpistemic.EvidenceRecord.discharges.eq_1": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceRecord.mk.inj": [],
+      "PcsEpistemic.EvidenceRecord.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.EvidenceRecord.mk.sizeOf_spec": [],
+      "PcsEpistemic.HiddenDependency.mk.inj": [],
+      "PcsEpistemic.HiddenDependency.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.HiddenDependency.mk.sizeOf_spec": [],
+      "PcsEpistemic.ImpactReport.mk.inj": [],
+      "PcsEpistemic.ImpactReport.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.ImpactReport.mk.sizeOf_spec": [],
+      "PcsEpistemic.ModelCertificate.mk.inj": [],
+      "PcsEpistemic.ModelCertificate.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.ModelCertificate.mk.sizeOf_spec": [],
+      "PcsEpistemic.WorkflowNode.mk.inj": [],
+      "PcsEpistemic.WorkflowNode.mk.injEq": [
+        "propext"
+      ],
+      "PcsEpistemic.WorkflowNode.mk.sizeOf_spec": [],
+      "PcsEpistemic.affected_evidence_must_replay": [],
+      "PcsEpistemic.agreementCore.eq_1": [
+        "propext"
+      ],
+      "PcsEpistemic.agreement_core_empty_ensemble": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.agreement_core_singleton": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.agreement_core_subset_candidates": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.agreement_core_subset_candidates._simp_1": [
+        "propext"
+      ],
+      "PcsEpistemic.agreement_dispute_disjoint": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.anything_covers_provenance": [
+        "propext"
+      ],
+      "PcsEpistemic.assures_requires_matching_class": [
+        "propext"
+      ],
+      "PcsEpistemic.claimAffected.eq_1": [],
+      "PcsEpistemic.claim_requiring_affected_evidence_is_affected": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.claimsRequiring_covers": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.compose_assures": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.compose_independent_support": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.computational_cannot_assure_formal": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.computational_incomparable_empirical": [
+        "propext"
+      ],
+      "PcsEpistemic.computeImpact.eq_1": [],
+      "PcsEpistemic.declaredNonImpact.eq_1": [],
+      "PcsEpistemic.declared_impact_iff_not_nonimpact": [
+        "propext"
+      ],
+      "PcsEpistemic.disputeFrontier.eq_1": [
+        "propext"
+      ],
+      "PcsEpistemic.dispute_frontier_subset_candidates": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.dispute_of_split": [
+        "propext"
+      ],
+      "PcsEpistemic.dispute_preserved_if_still_split": [
+        "propext"
+      ],
+      "PcsEpistemic.distinguishing_merge_of_split": [
+        "propext"
+      ],
+      "PcsEpistemic.distinguishing_not_unanimous": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.empirical_cannot_assure_formal": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.empty_requirements_supported": [
+        "propext"
+      ],
+      "PcsEpistemic.ensembleImpact.eq_1": [],
+      "PcsEpistemic.ensemble_impact_covers_singleton": [
+        "propext"
+      ],
+      "PcsEpistemic.findEvidence.eq_1": [],
+      "PcsEpistemic.findEvidence_append_right": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.formal_covers_computational": [
+        "propext"
+      ],
+      "PcsEpistemic.formal_evidence_assures_computational": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.formal_evidence_assures_formal": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.formal_incomparable_empirical": [
+        "propext"
+      ],
+      "PcsEpistemic.hidden_dependency_blocks_world_nonimpact": [],
+      "PcsEpistemic.impact.eq_1": [],
+      "PcsEpistemic.incomplete_never_endorses": [],
+      "PcsEpistemic.instDecidableEqArtifact.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqArtifact.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqAssumption.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqAssumption.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqAssumption.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqClaimNode.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqClaimNode.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqClaimNode.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqClaimNode.decEq._proof_4": [],
+      "PcsEpistemic.instDecidableEqContext.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqContext.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqDepGraph.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqDepGraph.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqDepGraph.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqDepGraph.decEq._proof_4": [],
+      "PcsEpistemic.instDecidableEqDepGraph.decEq._proof_5": [],
+      "PcsEpistemic.instDecidableEqEnsemble.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqEnsemble.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqEvidenceClass._proof_1": [],
+      "PcsEpistemic.instDecidableEqEvidenceClass._proof_2": [],
+      "PcsEpistemic.instDecidableEqEvidenceNode.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqEvidenceNode.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqEvidenceNode.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqEvidenceNode.decEq._proof_4": [],
+      "PcsEpistemic.instDecidableEqEvidenceNode.decEq._proof_5": [],
+      "PcsEpistemic.instDecidableEqEvidenceRecord.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqEvidenceRecord.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqEvidenceRecord.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqEvidenceRecord.decEq._proof_4": [],
+      "PcsEpistemic.instDecidableEqHiddenDependency.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqHiddenDependency.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqHiddenDependency.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqImpactReport.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqImpactReport.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqImpactReport.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqImpactReport.decEq._proof_4": [],
+      "PcsEpistemic.instDecidableEqModelCertificate.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqModelCertificate.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqModelCertificate.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqModelCertificate.decEq._proof_4": [],
+      "PcsEpistemic.instDecidableEqModelCertificate.decEq._proof_5": [],
+      "PcsEpistemic.instDecidableEqWorkflowNode.decEq._proof_1": [],
+      "PcsEpistemic.instDecidableEqWorkflowNode.decEq._proof_2": [],
+      "PcsEpistemic.instDecidableEqWorkflowNode.decEq._proof_3": [],
+      "PcsEpistemic.instDecidableEqWorkflowNode.decEq._proof_4": [],
+      "PcsEpistemic.join_computational_empirical": [
+        "propext"
+      ],
+      "PcsEpistemic.join_empirical_computational": [
+        "propext"
+      ],
+      "PcsEpistemic.le_antisymm": [
+        "propext"
+      ],
+      "PcsEpistemic.le_trans": [
+        "propext"
+      ],
+      "PcsEpistemic.meet_comm": [],
+      "PcsEpistemic.meet_formal_empirical_collapses": [],
+      "PcsEpistemic.meet_idem": [],
+      "PcsEpistemic.missing_evidence_blocks": [
+        "propext"
+      ],
+      "PcsEpistemic.no_computational_to_formal": [
+        "propext"
+      ],
+      "PcsEpistemic.no_provenance_to_empirical": [
+        "propext"
+      ],
+      "PcsEpistemic.no_provenance_to_formal": [
+        "propext"
+      ],
+      "PcsEpistemic.nonimpact_requires_completeness": [],
+      "PcsEpistemic.provenance_discharges_only_self": [
+        "propext"
+      ],
+      "PcsEpistemic.rejected_evidence_blocks": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.supportsClaim.eq_1": [
+        "propext"
+      ],
+      "PcsEpistemic.supports_prepend_disjoint": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.supports_prepend_disjoint._simp_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsEpistemic.unanimous_not_distinguishing": [
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    "project": "incubation/pcs_epistemic_calculus_v1",
+    "public_theorems_including_generated": 175,
+    "source_sha256": {
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic.lean": "29b86e07e33c84dfc9143a2a753a55d3711f2d6be5f5a78426e78e7580a5c52c",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Assures.lean": "3a1d4d7911f326587ceefb6be5bc8db20f7929991270f326b05840649744c359",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Audit.lean": "903dbe1c870594be47f9d7c184d39b39c1da94dfa90bb07519cf31559040cb3a",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Composition.lean": "31c11d26c5ca6bf0962e8032c4a787a19359b4382d9ce400d9e93ba4b38e60b2",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Controls.lean": "ddac4baf8ce90b99b3d4ebf61ea65cd85af05ebcc17d926f6cec6ff3acdedeca",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Dialectic.lean": "128928d5eb66209d47d51d51ea7d9e1e64208e4bf2c51b7fdc6e8847c5f3e0b4",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Evidence.lean": "78df7e07ea3ef5f94193c1d0ff39216663a5391e81b75f8dc60ac3165d2e5180",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Graph.lean": "cbbc817a5395bc6faee66f56efb6ccde9ff835966e6ed7e6b900fb84ec3d65d3",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Invalidation.lean": "b11674e1c6b2172c4ffe62552eb7fcc31e034cb98a2d2dc83faa187f2b395229",
+      "incubation/pcs_epistemic_calculus_v1/PcsEpistemic/Laws.lean": "a03be2ec377edd5c9812e6c6894850c9f66eddbe54e8524d842dac4147c1d902"
+    }
+  },
+  "141": {
+    "axiom_closures": {
+      "PCSEpistemic.Assumption.mk.inj": [],
+      "PCSEpistemic.Assumption.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Assumption.mk.sizeOf_spec": [],
+      "PCSEpistemic.Bridge.mk.inj": [],
+      "PCSEpistemic.Bridge.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Bridge.mk.sizeOf_spec": [],
+      "PCSEpistemic.Claim.mk.inj": [],
+      "PCSEpistemic.Claim.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Claim.mk.sizeOf_spec": [],
+      "PCSEpistemic.Controls.claimFormal.eq_1": [],
+      "PCSEpistemic.Controls.composition_meet_is_computational": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.downstream.eq_1": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.evidenceFormal.eq_1": [],
+      "PCSEpistemic.Controls.invalidation_marks_matrix_claim": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.negative_computational_to_empirical": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.negative_formal_to_continuum": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.positive_formal_support": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.residual_after_formal": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.upstream.eq_1": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.\u0393\u2080.eq_1": [],
+      "PCSEpistemic.Evidence.mk.inj": [],
+      "PCSEpistemic.Evidence.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Evidence.mk.sizeOf_spec": [],
+      "PCSEpistemic.Invalidation.mk.inj": [],
+      "PCSEpistemic.Invalidation.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Invalidation.mk.sizeOf_spec": [],
+      "PCSEpistemic.Outcome.fail.sizeOf_spec": [],
+      "PCSEpistemic.Outcome.ofNat_ctorIdx": [],
+      "PCSEpistemic.Outcome.pass.sizeOf_spec": [],
+      "PCSEpistemic.Outcome.unverified.sizeOf_spec": [],
+      "PCSEpistemic.Residual.mk.inj": [],
+      "PCSEpistemic.Residual.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Residual.mk.sizeOf_spec": [],
+      "PCSEpistemic.ResidualDischarge.mk.inj": [],
+      "PCSEpistemic.ResidualDischarge.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.ResidualDischarge.mk.sizeOf_spec": [],
+      "PCSEpistemic.StratifiedCertificate.mk.inj": [],
+      "PCSEpistemic.StratifiedCertificate.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.StratifiedCertificate.mk.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.canDischarge.eq_1": [],
+      "PCSEpistemic.Stratum.canDischarge_iff": [
+        "propext"
+      ],
+      "PCSEpistemic.Stratum.canDischarge_mono_evidence": [],
+      "PCSEpistemic.Stratum.causal.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.computational.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.computational_lt_empirical": [],
+      "PCSEpistemic.Stratum.continuum.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.continuum_lt_causal": [],
+      "PCSEpistemic.Stratum.discharge_table_complete": [],
+      "PCSEpistemic.Stratum.empirical.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.forbiddenPromotion.eq_1": [],
+      "PCSEpistemic.Stratum.forbiddenPromotion_anti_evidence": [],
+      "PCSEpistemic.Stratum.forbiddenPromotion_iff": [
+        "propext"
+      ],
+      "PCSEpistemic.Stratum.forbidden_not_discharge": [
+        "propext"
+      ],
+      "PCSEpistemic.Stratum.formal.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.formal_lt_continuum": [],
+      "PCSEpistemic.Stratum.integrity.sizeOf_spec": [],
+      "PCSEpistemic.Stratum.join.eq_1": [],
+      "PCSEpistemic.Stratum.join_assoc": [],
+      "PCSEpistemic.Stratum.join_comm": [],
+      "PCSEpistemic.Stratum.join_idempotent": [],
+      "PCSEpistemic.Stratum.join_lub": [],
+      "PCSEpistemic.Stratum.join_meet_absorb": [],
+      "PCSEpistemic.Stratum.le_antisymm": [
+        "propext"
+      ],
+      "PCSEpistemic.Stratum.le_def": [],
+      "PCSEpistemic.Stratum.le_join_left": [],
+      "PCSEpistemic.Stratum.le_join_right": [],
+      "PCSEpistemic.Stratum.le_refl": [],
+      "PCSEpistemic.Stratum.le_trans": [],
+      "PCSEpistemic.Stratum.lt_def": [],
+      "PCSEpistemic.Stratum.meet.eq_1": [],
+      "PCSEpistemic.Stratum.meet_assoc": [],
+      "PCSEpistemic.Stratum.meet_comm": [
+        "propext"
+      ],
+      "PCSEpistemic.Stratum.meet_glb": [],
+      "PCSEpistemic.Stratum.meet_idempotent": [],
+      "PCSEpistemic.Stratum.meet_join_absorb": [],
+      "PCSEpistemic.Stratum.meet_le_left": [],
+      "PCSEpistemic.Stratum.meet_le_right": [],
+      "PCSEpistemic.Stratum.ofNat_ctorIdx": [],
+      "PCSEpistemic.Stratum.rank.eq_1": [],
+      "PCSEpistemic.Stratum.rank.eq_2": [],
+      "PCSEpistemic.Stratum.rank.eq_3": [],
+      "PCSEpistemic.Stratum.rank.eq_4": [],
+      "PCSEpistemic.Stratum.rank.eq_5": [],
+      "PCSEpistemic.Stratum.rank.eq_6": [],
+      "PCSEpistemic.Stratum.rank_inj": [
+        "propext"
+      ],
+      "PCSEpistemic.all_unverified_cannot_assure": [
+        "propext"
+      ],
+      "PCSEpistemic.applyBridge.eq_1": [],
+      "PCSEpistemic.asAssumption.eq_1": [
+        "propext"
+      ],
+      "PCSEpistemic.assures_claim_stratum": [],
+      "PCSEpistemic.assures_context": [],
+      "PCSEpistemic.assures_has_passing_discharge": [],
+      "PCSEpistemic.bad_bridge_rejected": [],
+      "PCSEpistemic.bad_computational_discharge_rejected": [],
+      "PCSEpistemic.checkSupportB_rejects_computational_to_empirical": [],
+      "PCSEpistemic.checkSupportB_sound_formal_fixture": [
+        "propext"
+      ],
+      "PCSEpistemic.claimTouches.eq_1": [],
+      "PCSEpistemic.composeCertificates.eq_1": [
+        "propext"
+      ],
+      "PCSEpistemic.composeCertificates_meet": [
+        "propext"
+      ],
+      "PCSEpistemic.compose_meet_le_left": [],
+      "PCSEpistemic.compose_meet_le_right": [],
+      "PCSEpistemic.compose_preserves_downstream": [
+        "propext"
+      ],
+      "PCSEpistemic.computational_cannot_assure_empirical": [],
+      "PCSEpistemic.contextOkB_sound": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.continuum_cannot_assure_causal": [],
+      "PCSEpistemic.continuum_support_keeps_causal_residual": [
+        "propext"
+      ],
+      "PCSEpistemic.continuum_support_keeps_empirical_residual": [
+        "propext"
+      ],
+      "PCSEpistemic.evidenceTouches.eq_1": [],
+      "PCSEpistemic.forbidden_promotion_blocks_assures": [
+        "propext"
+      ],
+      "PCSEpistemic.formal_cannot_assure_continuum": [],
+      "PCSEpistemic.formal_continuum_bridge_requires_discharge": [
+        "propext"
+      ],
+      "PCSEpistemic.formal_support_keeps_continuum_residual": [
+        "propext"
+      ],
+      "PCSEpistemic.formal_support_keeps_empirical_residual": [
+        "propext"
+      ],
+      "PCSEpistemic.impliedResiduals.eq_1": [
+        "propext"
+      ],
+      "PCSEpistemic.impliedResiduals.eq_2": [
+        "propext"
+      ],
+      "PCSEpistemic.impliedResiduals.eq_3": [
+        "propext"
+      ],
+      "PCSEpistemic.impliedResiduals.eq_4": [
+        "propext"
+      ],
+      "PCSEpistemic.impliedResiduals.eq_5": [
+        "propext"
+      ],
+      "PCSEpistemic.impliedResiduals.eq_6": [
+        "propext"
+      ],
+      "PCSEpistemic.instDecidableEqAssumption.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqAssumption.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqAssumption.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqBridge.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqBridge.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqBridge.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqBridge.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqBridge.decEq._proof_5": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_5": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_6": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_5": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_6": [],
+      "PCSEpistemic.instDecidableEqInvalidation.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqInvalidation.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqInvalidation.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqInvalidation.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqOutcome._proof_1": [],
+      "PCSEpistemic.instDecidableEqOutcome._proof_2": [],
+      "PCSEpistemic.instDecidableEqResidual.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqResidual.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqResidual.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqResidual.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqResidualDischarge.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqResidualDischarge.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqResidualDischarge.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqStratifiedCertificate.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqStratifiedCertificate.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqStratifiedCertificate.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqStratifiedCertificate.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqStratifiedCertificate.decEq._proof_5": [],
+      "PCSEpistemic.instDecidableEqStratifiedCertificate.decEq._proof_6": [],
+      "PCSEpistemic.instDecidableEqStratum._proof_1": [],
+      "PCSEpistemic.instDecidableEqStratum._proof_2": [],
+      "PCSEpistemic.invalidate.eq_1": [],
+      "PCSEpistemic.markUnverified.eq_1": [],
+      "PCSEpistemic.markUnverified_outcome": [],
+      "PCSEpistemic.mem_mergeEvidence_right": [
+        "propext"
+      ],
+      "PCSEpistemic.mergeAssumptions.eq_1": [],
+      "PCSEpistemic.mergeEvidence.eq_1": [],
+      "PCSEpistemic.mismatched_residual_bridge_rejected": [],
+      "PCSEpistemic.single_touched_cannot_assure": [
+        "propext"
+      ]
+    },
+    "project": "research/epistemic-stratification-v1/formal",
+    "public_theorems_including_generated": 167,
+    "source_sha256": {
+      "research/epistemic-stratification-v1/formal/PCSEpistemic.lean": "66ad732439a8cfd2f0cc4975bebaafd778b4bd2f18e8623d62f69fef764c6281",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Bridge.lean": "15ae35440a3fd7758dd76192c2d3d2c3c53695070c1ece770e3cab2d4068320d",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Checker.lean": "eceb1ef7ced55e772b98846e513abc156e8b9378a4c140e7fefcf56cac39bcd9",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Composition.lean": "ce3b2ffa668ab19e80479beca342b8c6faff047d1c886c8562453467962f957f",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Controls.lean": "3673abc76205d99161bf6b47ad42a8697f5cd40eca06306b9639a1b03354ea0b",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Invalidation.lean": "9eeeea7a63f60ad667b3be38563610d99211f109c002f676e9fa7fa2694a22f4",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Judgment.lean": "218aef0e83e5cd28ea5fb7b70d9c913d3ab4d2da6b647b826382c730a4b9d249",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Lattice.lean": "426ea27e6216d90fa9e5ee8d3b823470f0c6871dce09bb8622aef749aae71884",
+      "research/epistemic-stratification-v1/formal/PCSEpistemic/Stratum.lean": "0ad5a94e67eb8d1d01215ddcbbd88b977cb6ff4ac7cf3b744be8d90fd7b512e2"
+    }
+  },
+  "143": {
+    "axiom_closures": {
+      "PcsCausal.BackdoorClaim.mk.inj": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.BackdoorClaim.mk.injEq": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.BackdoorClaim.mk.sizeOf_spec": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.edges_in_vertices": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.edges_subset": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mk.inj": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mk.injEq": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mk.sizeOf_spec": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mutilate._proof_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mutilate_edges_subset": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mutilate_no_incoming": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.Digraph.mutilate_vertices": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.DirEdge.mk.inj": [],
+      "PcsCausal.DirEdge.mk.injEq": [
+        "propext"
+      ],
+      "PcsCausal.DirEdge.mk.sizeOf_spec": [],
+      "PcsCausal.FinitePMF.condition.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.condition_zero_event": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.eventProb_univ": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.mk.inj": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.mk.injEq": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.mk.sizeOf_spec": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.nonneg": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.FinitePMF.normalized": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PcsCausal.ModelClass.mk.inj": [],
+      "PcsCausal.ModelClass.mk.injEq": [
+        "propext"
+      ],
+      "PcsCausal.ModelClass.mk.sizeOf_spec": [],
+      "PcsCausal.NonIdentWitness.mk.inj": [],
+      "PcsCausal.NonIdentWitness.mk.injEq": [
+        "propext"
+      ],
+      "PcsCausal.NonIdentWitness.mk.sizeOf_spec": [],
+      "PcsCausal.NonIdentWitness.obs_eq": [],
+      "PcsCausal.NonIdentWitness.target_ne": [],
+      "PcsCausal.PositivityObligation.mk.inj": [],
+      "PcsCausal.PositivityObligation.mk.injEq": [
+        "propext"
+      ],
+      "PcsCausal.PositivityObligation.mk.sizeOf_spec": [],
+      "PcsCausal.PositivityObligation.positive": [],
+      "PcsCausal.instDecidableEqDirEdge.decEq._proof_1": [],
+      "PcsCausal.instDecidableEqDirEdge.decEq._proof_2": [],
+      "PcsCausal.instDecidableEqDirEdge.decEq._proof_3": [],
+      "PcsCausal.nonidentifiable_of_witness": []
+    },
+    "project": "incubation/pcs_causal_laboratory_v1/lean",
+    "public_theorems_including_generated": 39,
+    "source_sha256": {
+      "incubation/pcs_causal_laboratory_v1/lean/PcsCausal.lean": "a08b0877ce23ee5ac4ec8c41730d3396c73b22a93a0fa3f0a1473da885ce6bd4",
+      "incubation/pcs_causal_laboratory_v1/lean/PcsCausal/Basic.lean": "5b32fa311a11c42882f06d1e4add36f5eb7b3f63f5037d27f924189ca5c7a67a",
+      "incubation/pcs_causal_laboratory_v1/lean/PcsCausal/Graph.lean": "f9ea3846d150763210761b1eb4893184bbd517e834c8ac2f7304ba1185af6d0e",
+      "incubation/pcs_causal_laboratory_v1/lean/PcsCausal/Identification.lean": "02476709a72de6d5a314f55a040353063a10f7ccfc635fa65dc22156778a6d13",
+      "incubation/pcs_causal_laboratory_v1/lean/PcsCausal/NonIdent.lean": "ec1ebf29ef69d186c258e41e5f980c5743ed6c65bca796cee6c5021f9499d029",
+      "incubation/pcs_causal_laboratory_v1/lean/PcsCausal/Probability.lean": "710fdac51f804d5242fe1f2c6714a236ab98c115033d71f570c02eff3f68059a"
+    }
+  },
+  "144": {
+    "axiom_closures": {
+      "PCSCompose.Audit.audit_target_count": [],
+      "PCSCompose.Compose.CompositeClaim.mk.inj": [],
+      "PCSCompose.Compose.CompositeClaim.mk.injEq": [
+        "propext"
+      ],
+      "PCSCompose.Compose.CompositeClaim.mk.sizeOf_spec": [],
+      "PCSCompose.Compose.EvidenceAtom.mk.inj": [],
+      "PCSCompose.Compose.EvidenceAtom.mk.injEq": [
+        "propext"
+      ],
+      "PCSCompose.Compose.EvidenceAtom.mk.sizeOf_spec": [],
+      "PCSCompose.Compose.accept.eq_1": [],
+      "PCSCompose.Compose.achievedLevel.eq_1": [],
+      "PCSCompose.Compose.achieved_singleton_formal": [
+        "propext"
+      ],
+      "PCSCompose.Compose.computational_atom_not_formal_accept": [],
+      "PCSCompose.Compose.empty_rejects": [
+        "propext"
+      ],
+      "PCSCompose.Compose.formal_required_empirical_achieved_rejects": [
+        "propext"
+      ],
+      "PCSCompose.Compose.heterogeneous_level_law": [],
+      "PCSCompose.Compose.heterogeneous_pair_law": [],
+      "PCSCompose.Compose.instDecidableEqCompositeClaim.decEq._proof_1": [],
+      "PCSCompose.Compose.instDecidableEqCompositeClaim.decEq._proof_2": [],
+      "PCSCompose.Compose.instDecidableEqCompositeClaim.decEq._proof_3": [],
+      "PCSCompose.Compose.instDecidableEqCompositeClaim.decEq._proof_4": [],
+      "PCSCompose.Compose.instDecidableEqEvidenceAtom.decEq._proof_1": [],
+      "PCSCompose.Compose.instDecidableEqEvidenceAtom.decEq._proof_2": [],
+      "PCSCompose.Compose.instDecidableEqEvidenceAtom.decEq._proof_3": [],
+      "PCSCompose.Compose.instDecidableEqEvidenceAtom.decEq._proof_4": [],
+      "PCSCompose.Compose.instDecidableEqEvidenceAtom.decEq._proof_5": [],
+      "PCSCompose.Compose.leavesOk.eq_1": [],
+      "PCSCompose.Compose.leavesOk_member": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSCompose.Compose.underleveled_empirical_rejects": [],
+      "PCSCompose.Compose.unsupported_formal_rejects": [],
+      "PCSCompose.Controls.achieved_heterogeneous_is_empirical": [],
+      "PCSCompose.Controls.good_empirical_singleton": [],
+      "PCSCompose.Controls.good_formal_singleton": [],
+      "PCSCompose.Controls.good_heterogeneous_empirical_req": [],
+      "PCSCompose.Controls.level_meet_laws": [],
+      "PCSCompose.Controls.predictive_contradict_falsifies": [],
+      "PCSCompose.Controls.predictive_match_not_formal": [],
+      "PCSCompose.Controls.predictive_match_supports": [],
+      "PCSCompose.Controls.predictive_sticky_falsified": [
+        "propext"
+      ],
+      "PCSCompose.Controls.reject_empirical_as_formal": [],
+      "PCSCompose.Controls.reject_empty": [],
+      "PCSCompose.Controls.reject_heterogeneous_formal_req": [],
+      "PCSCompose.Controls.reject_missing": [],
+      "PCSCompose.Controls.reject_unsupported": [],
+      "PCSCompose.Levels.Level.atMostEmpirical.eq_1": [],
+      "PCSCompose.Levels.Level.atMostEmpirical.eq_2": [],
+      "PCSCompose.Levels.Level.atMostEmpirical.eq_3": [],
+      "PCSCompose.Levels.Level.atMostEmpirical.eq_4": [],
+      "PCSCompose.Levels.Level.atMostEmpirical.eq_5": [],
+      "PCSCompose.Levels.Level.computational.sizeOf_spec": [],
+      "PCSCompose.Levels.Level.empirical.sizeOf_spec": [],
+      "PCSCompose.Levels.Level.formal.sizeOf_spec": [],
+      "PCSCompose.Levels.Level.le.eq_1": [],
+      "PCSCompose.Levels.Level.le_antisymm": [
+        "propext"
+      ],
+      "PCSCompose.Levels.Level.le_refl": [],
+      "PCSCompose.Levels.Level.le_trans": [],
+      "PCSCompose.Levels.Level.meet.eq_1": [],
+      "PCSCompose.Levels.Level.meetList.eq_1": [],
+      "PCSCompose.Levels.Level.meetList.eq_2": [],
+      "PCSCompose.Levels.Level.meetList.eq_def": [],
+      "PCSCompose.Levels.Level.meet_assoc": [],
+      "PCSCompose.Levels.Level.meet_comm": [],
+      "PCSCompose.Levels.Level.meet_idempotent": [],
+      "PCSCompose.Levels.Level.meet_le_left": [],
+      "PCSCompose.Levels.Level.meet_le_right": [],
+      "PCSCompose.Levels.Level.ofNat_ctorIdx": [],
+      "PCSCompose.Levels.Level.open_.sizeOf_spec": [],
+      "PCSCompose.Levels.Level.provenance.sizeOf_spec": [],
+      "PCSCompose.Levels.Level.rank.eq_1": [],
+      "PCSCompose.Levels.Level.rank.eq_2": [],
+      "PCSCompose.Levels.Level.rank.eq_3": [],
+      "PCSCompose.Levels.Level.rank.eq_4": [],
+      "PCSCompose.Levels.Level.rank.eq_5": [],
+      "PCSCompose.Levels.Level.rank_inj": [
+        "propext"
+      ],
+      "PCSCompose.Levels.atMostEmpirical_rank": [
+        "propext"
+      ],
+      "PCSCompose.Levels.computational_meet_empirical": [],
+      "PCSCompose.Levels.empirical_meet_formal": [],
+      "PCSCompose.Levels.empirical_ne_formal": [],
+      "PCSCompose.Levels.instDecidableEqLevel._proof_1": [],
+      "PCSCompose.Levels.instDecidableEqLevel._proof_2": [],
+      "PCSCompose.Levels.meetList_cons_le": [],
+      "PCSCompose.Levels.meetList_head_bound": [],
+      "PCSCompose.Levels.meetList_singleton": [],
+      "PCSCompose.Levels.meet_of_atMostEmpirical_ne_formal": [
+        "propext"
+      ],
+      "PCSCompose.Levels.provenance_meet_formal": [],
+      "PCSCompose.Predictive.Observation.contradict.inj": [],
+      "PCSCompose.Predictive.Observation.contradict.injEq": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.Observation.contradict.sizeOf_spec": [],
+      "PCSCompose.Predictive.Observation.match_.inj": [],
+      "PCSCompose.Predictive.Observation.match_.injEq": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.Observation.match_.sizeOf_spec": [],
+      "PCSCompose.Predictive.Observation.unrelated.sizeOf_spec": [],
+      "PCSCompose.Predictive.PredStatus.empiricallySupported.sizeOf_spec": [],
+      "PCSCompose.Predictive.PredStatus.falsified.sizeOf_spec": [],
+      "PCSCompose.Predictive.PredStatus.ofNat_ctorIdx": [],
+      "PCSCompose.Predictive.PredStatus.open_.sizeOf_spec": [],
+      "PCSCompose.Predictive.PredStatus.toLevel.eq_1": [],
+      "PCSCompose.Predictive.PredStatus.toLevel.eq_2": [],
+      "PCSCompose.Predictive.PredStatus.toLevel.eq_3": [],
+      "PCSCompose.Predictive.PredictiveObligation.mk.inj": [],
+      "PCSCompose.Predictive.PredictiveObligation.mk.injEq": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.PredictiveObligation.mk.sizeOf_spec": [],
+      "PCSCompose.Predictive.contradict_falsifies": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.discharge.eq_1": [],
+      "PCSCompose.Predictive.discharge.eq_2": [],
+      "PCSCompose.Predictive.discharge.eq_3": [],
+      "PCSCompose.Predictive.dischargeSticky.eq_1": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.discharged_match_level_empirical": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.empirical_is_support": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.empirical_level_ne_formal": [],
+      "PCSCompose.Predictive.falsified_not_support": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_1": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_10": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_2": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_3": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_4": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_5": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_6": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_7": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_8": [],
+      "PCSCompose.Predictive.instDecidableEqObservation.decEq._proof_9": [],
+      "PCSCompose.Predictive.instDecidableEqPredStatus._proof_1": [],
+      "PCSCompose.Predictive.instDecidableEqPredStatus._proof_2": [],
+      "PCSCompose.Predictive.instDecidableEqPredictiveObligation.decEq._proof_1": [],
+      "PCSCompose.Predictive.instDecidableEqPredictiveObligation.decEq._proof_2": [],
+      "PCSCompose.Predictive.instDecidableEqPredictiveObligation.decEq._proof_3": [],
+      "PCSCompose.Predictive.instDecidableEqPredictiveObligation.decEq._proof_4": [],
+      "PCSCompose.Predictive.instDecidableEqPredictiveObligation.decEq._proof_5": [],
+      "PCSCompose.Predictive.isSupport.eq_1": [],
+      "PCSCompose.Predictive.match_is_empirical": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.open_not_support": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.sticky_preserves_falsified": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.unrelated_preserves": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.wrong_key_contradict_preserves": [
+        "propext"
+      ],
+      "PCSCompose.Predictive.wrong_key_match_preserves": [
+        "propext"
+      ]
+    },
+    "project": "incubation/pcs_heterogeneous_compose_v1/formal",
+    "public_theorems_including_generated": 133,
+    "source_sha256": {
+      "incubation/pcs_heterogeneous_compose_v1/formal/PCSCompose.lean": "789f6c4d8c2a64dcff839aee2deb4795e7fff477eeca6c5fba2bd68aa2bc6737",
+      "incubation/pcs_heterogeneous_compose_v1/formal/PCSCompose/Audit.lean": "eedb8fb4f198c34646181660cb81f87e1629e6f4ee7d0e60745d8c76a068dfeb",
+      "incubation/pcs_heterogeneous_compose_v1/formal/PCSCompose/Compose.lean": "eb527e36e0da61f160274f7d8624520489753107a8625b4eb8edb6e7c0b6e2fa",
+      "incubation/pcs_heterogeneous_compose_v1/formal/PCSCompose/Controls.lean": "ba4c0fdadef7e4022e8dfed56002abd05a99e48447ec5e42e37b04e9bd81f1fd",
+      "incubation/pcs_heterogeneous_compose_v1/formal/PCSCompose/Levels.lean": "d72f0f85f62dd49f51b5290284b1242e5c9c4a2cb44fe5c988261f91627972a5",
+      "incubation/pcs_heterogeneous_compose_v1/formal/PCSCompose/Predictive.lean": "2c01de38a28520521dfb21e0fb0260494413ee5edd8bc1b983c9fcc022bd3ec5"
+    }
+  },
+  "145-isolated": {
+    "axiom_closures": {
+      "PCSAssuranceLattice.Bridge.mk.inj": [],
+      "PCSAssuranceLattice.Bridge.mk.injEq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Bridge.mk.sizeOf_spec": [],
+      "PCSAssuranceLattice.Certified.eq_1": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.ClaimNode.mk.inj": [],
+      "PCSAssuranceLattice.ClaimNode.mk.injEq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.ClaimNode.mk.sizeOf_spec": [],
+      "PCSAssuranceLattice.EvidenceAtom.mk.inj": [],
+      "PCSAssuranceLattice.EvidenceAtom.mk.injEq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.EvidenceAtom.mk.sizeOf_spec": [],
+      "PCSAssuranceLattice.Package.mk.inj": [],
+      "PCSAssuranceLattice.Package.mk.injEq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Package.mk.sizeOf_spec": [],
+      "PCSAssuranceLattice.Stratum.computational.sizeOf_spec": [],
+      "PCSAssuranceLattice.Stratum.computational_le_computational": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.computational_not_le_empirical": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.computational_not_le_formal": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.empirical.sizeOf_spec": [],
+      "PCSAssuranceLattice.Stratum.empirical_not_le_formal": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.formal.sizeOf_spec": [],
+      "PCSAssuranceLattice.Stratum.formal_le_computational": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.formal_le_formal": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le._sparseCasesOn_1.else_eq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le._sparseCasesOn_2.else_eq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le._sparseCasesOn_3.else_eq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le._sparseCasesOn_4.else_eq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le._sparseCasesOn_5.else_eq": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_1": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_2": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_3": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_4": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_5": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_6": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_7": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_8": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le.eq_9": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.le_refl": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.ofNat_ctorIdx": [],
+      "PCSAssuranceLattice.Stratum.provenance.sizeOf_spec": [],
+      "PCSAssuranceLattice.Stratum.provenance_le_provenance": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.Stratum.unverified.sizeOf_spec": [],
+      "PCSAssuranceLattice.bridgeUpgrades.eq_1": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.bridge_enables_formal_from_computational": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.changed_artifact_blocks_certification": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.check.eq_1": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.check_iff_certified": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSAssuranceLattice.check_iff_certified._simp_3": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSAssuranceLattice.check_iff_certified._simp_4": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.claimCertified.eq_1": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.composition_intro": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.computational_discharges_computational": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.discharges.eq_1": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.formal_discharges_formal": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.formal_strengthens_computational": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.instDecidableEqBridge.decEq._proof_1": [],
+      "PCSAssuranceLattice.instDecidableEqBridge.decEq._proof_2": [],
+      "PCSAssuranceLattice.instDecidableEqBridge.decEq._proof_3": [],
+      "PCSAssuranceLattice.instDecidableEqBridge.decEq._proof_4": [],
+      "PCSAssuranceLattice.instDecidableEqBridge.decEq._proof_5": [],
+      "PCSAssuranceLattice.instDecidableEqClaimNode.decEq._proof_1": [],
+      "PCSAssuranceLattice.instDecidableEqClaimNode.decEq._proof_2": [],
+      "PCSAssuranceLattice.instDecidableEqClaimNode.decEq._proof_3": [],
+      "PCSAssuranceLattice.instDecidableEqClaimNode.decEq._proof_4": [],
+      "PCSAssuranceLattice.instDecidableEqClaimNode.decEq._proof_5": [],
+      "PCSAssuranceLattice.instDecidableEqEvidenceAtom.decEq._proof_1": [],
+      "PCSAssuranceLattice.instDecidableEqEvidenceAtom.decEq._proof_2": [],
+      "PCSAssuranceLattice.instDecidableEqEvidenceAtom.decEq._proof_3": [],
+      "PCSAssuranceLattice.instDecidableEqEvidenceAtom.decEq._proof_4": [],
+      "PCSAssuranceLattice.instDecidableEqPackage.decEq._proof_1": [],
+      "PCSAssuranceLattice.instDecidableEqPackage.decEq._proof_2": [],
+      "PCSAssuranceLattice.instDecidableEqPackage.decEq._proof_3": [],
+      "PCSAssuranceLattice.instDecidableEqPackage.decEq._proof_4": [],
+      "PCSAssuranceLattice.instDecidableEqPackage.decEq._proof_5": [],
+      "PCSAssuranceLattice.instDecidableEqStratum._proof_1": [],
+      "PCSAssuranceLattice.instDecidableEqStratum._proof_2": [],
+      "PCSAssuranceLattice.missing_premise_blocks": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSAssuranceLattice.silent_computational_to_formal_rejected": [
+        "propext"
+      ],
+      "PCSAssuranceLattice.silent_empirical_to_formal_rejected": [
+        "propext"
+      ]
+    },
+    "project": "research/assurance-lattice-v1/formal",
+    "public_theorems_including_generated": 78,
+    "source_sha256": {
+      "formal/PCSAssuranceLattice.lean": "ca75be7be15b2dd490042459e569cd20bbaa34a0a8efff7185b895f4f947833a",
+      "formal/PCSAssuranceLatticeControls.lean": "c29124d03efae15ab271d6c5d1415bbb855e6b830bb587757547e4f22e386b83"
+    }
+  },
+  "146-isolated": {
+    "axiom_closures": {
+      "PCSEpistemic.Claim.mk.inj": [],
+      "PCSEpistemic.Claim.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Claim.mk.sizeOf_spec": [],
+      "PCSEpistemic.Claim.wellFormed.eq_1": [],
+      "PCSEpistemic.Controls.atomN.eq_1": [],
+      "PCSEpistemic.Controls.atomPeak.eq_1": [],
+      "PCSEpistemic.Controls.claimEmpirical.eq_1": [],
+      "PCSEpistemic.Controls.claimFormalDep.eq_1": [],
+      "PCSEpistemic.Controls.claim_empirical_wellFormed": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.dependent_reopens_when_premise_refuted": [
+        "propext"
+      ],
+      "PCSEpistemic.Controls.dependent_supported_when_premise_supported": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.empty_empirical_package_unsound_control": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.evidenceEmpiricalPass.eq_1": [],
+      "PCSEpistemic.Controls.evidenceFormalPass.eq_1": [],
+      "PCSEpistemic.Controls.evidenceWrongClass.eq_1": [],
+      "PCSEpistemic.Controls.falsified_claim_refuted": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.falsifierPeak.eq_1": [],
+      "PCSEpistemic.Controls.good_claim_supported": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.good_package_structurally_sound": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.incomplete_claim_open": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.obsFalsified.eq_1": [],
+      "PCSEpistemic.Controls.obsIncomplete.eq_1": [],
+      "PCSEpistemic.Controls.obsOk.eq_1": [],
+      "PCSEpistemic.Controls.promotion_claim_open": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.Controls.supportN.eq_1": [],
+      "PCSEpistemic.Controls.unfalsifiable_not_wellFormed": [
+        "propext"
+      ],
+      "PCSEpistemic.Evidence.mk.inj": [],
+      "PCSEpistemic.Evidence.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Evidence.mk.sizeOf_spec": [],
+      "PCSEpistemic.EvidenceClass.computational.sizeOf_spec": [],
+      "PCSEpistemic.EvidenceClass.empirical.sizeOf_spec": [],
+      "PCSEpistemic.EvidenceClass.formal.sizeOf_spec": [],
+      "PCSEpistemic.EvidenceClass.ofNat_ctorIdx": [],
+      "PCSEpistemic.EvidenceClass.provenance.sizeOf_spec": [],
+      "PCSEpistemic.Literal.matches.eq_1": [],
+      "PCSEpistemic.Literal.mk.inj": [],
+      "PCSEpistemic.Literal.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Literal.mk.sizeOf_spec": [],
+      "PCSEpistemic.Literal.satisfied.eq_1": [],
+      "PCSEpistemic.Observations.lookup.eq_1": [],
+      "PCSEpistemic.Observations.mk.inj": [],
+      "PCSEpistemic.Observations.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Observations.mk.sizeOf_spec": [],
+      "PCSEpistemic.Package.depsResolved.eq_1": [],
+      "PCSEpistemic.Package.idsUnique.eq_1": [],
+      "PCSEpistemic.Package.mk.inj": [],
+      "PCSEpistemic.Package.mk.injEq": [
+        "propext"
+      ],
+      "PCSEpistemic.Package.mk.sizeOf_spec": [],
+      "PCSEpistemic.Package.structurallySound.eq_1": [],
+      "PCSEpistemic.Status.ofNat_ctorIdx": [],
+      "PCSEpistemic.Status.open_.sizeOf_spec": [],
+      "PCSEpistemic.Status.refuted.sizeOf_spec": [],
+      "PCSEpistemic.Status.supported.sizeOf_spec": [],
+      "PCSEpistemic.Status.unsound.sizeOf_spec": [],
+      "PCSEpistemic.allSupport.eq_1": [],
+      "PCSEpistemic.anyFalsifier.eq_1": [],
+      "PCSEpistemic.classCompatible.eq_1": [],
+      "PCSEpistemic.classCompatible_iff": [
+        "propext"
+      ],
+      "PCSEpistemic.classCompatible_iff._simp_2": [
+        "propext"
+      ],
+      "PCSEpistemic.computational_requires_falsifier": [
+        "propext"
+      ],
+      "PCSEpistemic.depJoin.eq_1": [],
+      "PCSEpistemic.depJoin_open_blocks": [
+        "propext"
+      ],
+      "PCSEpistemic.depJoin_refuted_only": [
+        "propext"
+      ],
+      "PCSEpistemic.depJoin_supported_pair": [
+        "propext"
+      ],
+      "PCSEpistemic.depJoin_unsound_cons": [
+        "propext"
+      ],
+      "PCSEpistemic.empirical_requires_falsifier": [
+        "propext"
+      ],
+      "PCSEpistemic.empty_empirical_package_unsound": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.evalClaim.eq_1": [],
+      "PCSEpistemic.evalClaim_falsifier_refutes": [
+        "propext"
+      ],
+      "PCSEpistemic.evidenceFor.eq_1": [],
+      "PCSEpistemic.evidenceFor_wrong_class": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.formal_may_omit_falsifier": [
+        "propext"
+      ],
+      "PCSEpistemic.hasDup.eq_1": [],
+      "PCSEpistemic.hasDup.eq_2": [],
+      "PCSEpistemic.hasDup.eq_def": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_5": [],
+      "PCSEpistemic.instDecidableEqClaim.decEq._proof_6": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqEvidence.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqEvidenceClass._proof_1": [],
+      "PCSEpistemic.instDecidableEqEvidenceClass._proof_2": [],
+      "PCSEpistemic.instDecidableEqLiteral.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqLiteral.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqLiteral.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqObservations.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqObservations.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqPackage.decEq._proof_1": [],
+      "PCSEpistemic.instDecidableEqPackage.decEq._proof_2": [],
+      "PCSEpistemic.instDecidableEqPackage.decEq._proof_3": [],
+      "PCSEpistemic.instDecidableEqPackage.decEq._proof_4": [],
+      "PCSEpistemic.instDecidableEqStatus._proof_1": [],
+      "PCSEpistemic.instDecidableEqStatus._proof_2": [],
+      "PCSEpistemic.literal_matches_known": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSEpistemic.provenance_may_omit_falsifier": [
+        "propext"
+      ],
+      "PCSEpistemic.requiresFalsifier.eq_1": [],
+      "PCSEpistemic.requiresFalsifier.eq_2": [],
+      "PCSEpistemic.requiresFalsifier.eq_3": [],
+      "PCSEpistemic.requiresFalsifier.eq_4": []
+    },
+    "project": "research/epistemic-lattice-v1/formal",
+    "public_theorems_including_generated": 104,
+    "source_sha256": {
+      "formal/PCSEpistemic.lean": "9502393357fa8c0194b203b7e95fef9915bd97cccf63315e1d0bc888524aa766",
+      "formal/PCSEpistemic/Audit.lean": "da28e0caebb2cd438d5ce37d523dedb190184287a12180c733cd609c753f4f11",
+      "formal/PCSEpistemic/Controls.lean": "9aab2dabfea49bae838dd421d1beac75a65ed576f9a34f348b75ce5a8361dd22",
+      "formal/PCSEpistemic/Core.lean": "c4b81734123da63a4c12a5c0e2066b68d8201bc4bbe14a47c143948fec488ca9",
+      "formal/PCSEpistemic/Evaluate.lean": "2ed37fbf2174fd8a427abeba0721c7e9ae9bb7f07f1cf09311359466c3ac824d",
+      "formal/PCSEpistemic/Theorems.lean": "e235f7b1e1c2a487f5c5d196e255c61c910ea77fe579194c9017c91669dd7d25"
+    }
+  },
+  "147": {
+    "axiom_closures": {
+      "PCCA.Controls.carbon_all_times": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.carbon_conserves": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.carbon_rejects_leak": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.carbon_rejects_leak._proof_1_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.exchange_all_times": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.exchange_conserves_amount": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.exchange_conserves_amount._proof_1_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.glucoseS._proof_1": [
+        "propext"
+      ],
+      "PCCA.Controls.glucoseS._proof_2": [
+        "propext"
+      ],
+      "PCCA.Controls.good_carbon": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.good_carbon._proof_1_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.good_hydrogen": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.good_hydrogen._proof_1_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.good_oxygen": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.good_oxygen._proof_1_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.joint_CH_conserves": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.one_step_carbon": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.one_step_carbon_after": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.one_step_carbon_value": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Controls.one_step_carbon_value._proof_1_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Elemental.checkElemental_sound": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Elemental.elementBalanced_iff_conservation": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Elemental.elemental_is_conservation": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Elemental.elemental_pool_invariant": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Elemental.joint_elemental": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.TrajectorySound._proof_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.TrajectorySound._proof_2": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.TrajectorySound._proof_3": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.TrajectorySound._proof_4": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.TrajectorySound.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.check.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.checkTrajectory.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.checkTrajectory_preserves": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.checkTrajectory_sound": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.check_sound": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conservation_add": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conservation_smul": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conservation_smul._simp_1_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conservation_zero": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conserved_all_times": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conserved_step": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.conserved_uniform": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.fire.eq_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.fire_zero": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.rational_certificate_real": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCCA.Stoich.trajectory_preserves_pool": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    "project": "incubation/pcs_conservation_algebra_v1",
+    "public_theorems_including_generated": 46,
+    "source_sha256": {
+      "incubation/pcs_conservation_algebra_v1/lean/PCCA.lean": "8c1d15bf0f17298347469f3fbb6e45bf454d8cc3993f0877dc6502f520977485",
+      "incubation/pcs_conservation_algebra_v1/lean/PCCA/Audit.lean": "fe5b0f411a061b04f59ae59380d3aa9fe3e5ffab7eb0d7c2a91730d7804eee90",
+      "incubation/pcs_conservation_algebra_v1/lean/PCCA/Controls.lean": "0b7762af36d1cc4a47c399b77e30f39e24b7f0f9beb151dfbc405e9b9144f29a",
+      "incubation/pcs_conservation_algebra_v1/lean/PCCA/Elemental.lean": "64900499cd5b9005bd454cd5d35f83a3492acf63d76048ae195b3fa37fc65cef",
+      "incubation/pcs_conservation_algebra_v1/lean/PCCA/Stoich.lean": "75e730eb8f8d8a6ad488af0572ece43659293b8673619e0fa67b9d31e5d3b4cb"
+    }
+  },
+  "bridge-v2": {
+    "axiom_closures": {
+      "PCSIntegration.acceptance_without_semantic_link_is_insufficient": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.conserved_complement_enclosure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.sampleCertificate._proof_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.sampleCertificate._proof_2": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.sampleCertificate.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.sample_certificate_accepts": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.sample_complement_enclosed": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.transfer._proof_1": [
+        "propext"
+      ],
+      "PCSIntegration.transfer.eq_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.transfer_conserves": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.unrelatedCertificate._proof_1": [
+        "Quot.sound",
+        "propext"
+      ],
+      "PCSIntegration.unrelatedCertificate.eq_1": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    "project": "research/integration_v1/formal",
+    "public_theorems_including_generated": 12,
+    "source_sha256": {
+      "research/integration_v1/formal/PCSIntegration.lean": "5d6546ca4819047d5861db661d62eba83ab1434024c7cc02a0997e2164300ddc"
+    }
+  }
+}

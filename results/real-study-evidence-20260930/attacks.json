@@ -1,0 +1,101 @@
+{
+  "dependency_exact_pin_drift": {
+    "class": "contract_attack",
+    "expected": "reject",
+    "expected_projection_sha256": "f1bdd80d7c64d464bf917408fbff82368bad5d7388d9e191842dd05a3cc6f046",
+    "expected_version": "0.0.0-impossible",
+    "realized_projection_sha256": "09bfdf9b91420fd55268b581480797fce9747995a467648f612439d9dcbcdcba",
+    "realized_version": "2.3.5",
+    "rejected": true
+  },
+  "dependency_tree_drift": {
+    "class": "realized_environment_perturbation",
+    "determinism_projection_would_diverge": true,
+    "perturbed_sha256": "1d335409a596a05c9deec9493bcab6807479279cebc650164c34e6f7c6c7d105",
+    "realized_sha256": "c2c2f4935e59bdcafc91794a39f25c80b375f70fe3bd69e4d128eee3db855173",
+    "status": "observed_not_signed_current_contract"
+  },
+  "interpreter_binary_drift": {
+    "class": "realized_environment_perturbation",
+    "determinism_projection_would_diverge": true,
+    "perturbed_sha256": "20241edc1b2eddc6f46085b0245706307508bcaa60d7f2f3ff53622df9ec4507",
+    "realized_sha256": "17b78e0a93175e86f9ac03141924fd7a7f0c0c52e66b34bfa0de20ffef989df1",
+    "status": "observed_not_signed_current_contract"
+  },
+  "interpreter_constraint_mismatch": {
+    "class": "contract_attack",
+    "expected": "reject",
+    "expected_constraint": "3.12.*",
+    "realized_version": "3.13.5",
+    "rejected": true
+  },
+  "nondeterminism_clock_nondeterminism": {
+    "class": "executed_negative_control",
+    "detected": true,
+    "expected": "diverge",
+    "runs": 3,
+    "unique_output_hashes": 3
+  },
+  "nondeterminism_entropy_nondeterminism": {
+    "class": "executed_negative_control",
+    "detected": true,
+    "expected": "diverge",
+    "runs": 3,
+    "unique_output_hashes": 3
+  },
+  "nondeterminism_unseeded_torch": {
+    "class": "executed_negative_control",
+    "detected": true,
+    "expected": "diverge",
+    "runs": 3,
+    "unique_output_hashes": 3
+  },
+  "output_byte_tamper": {
+    "class": "executed_filesystem_attack",
+    "expected": "reject",
+    "rejected": true,
+    "signed_sha256": "2b432c3718e7e3751e702f830fa4a480a8132210f56ecc70ffe09fe3292cf93e",
+    "tampered_sha256": "71d14802a5d768fe12b54d33acc516f65f68eadef59419964781e93942b12aae"
+  },
+  "signed_input_mutation": {
+    "class": "executed_filesystem_attack",
+    "expected": "reject",
+    "expected_sha256": "81bf9fa83c6f7f151bd491a98cd7d933de3965289e3ebd77c6c425f7eaa16392",
+    "realized_sha256": "be49f3b4cf60e31071665c80c9944d94504d6c15c97c4a777b34e642a8df0211",
+    "rejected": true
+  },
+  "stale_output_not_regenerated": {
+    "class": "executed_filesystem_attack",
+    "exists_after_noop_workflow": false,
+    "expected": "reject",
+    "preexisting_removed": true,
+    "rejected": true
+  },
+  "summary": {
+    "attack_count": 12,
+    "executed_or_contract_rejections": 7,
+    "nondeterminism_controls_detected": 3,
+    "projection_drift_cases": 2
+  },
+  "symlink_output_substitution": {
+    "class": "executed_filesystem_attack",
+    "expected": "reject",
+    "is_symlink": true,
+    "rejected": true
+  },
+  "unexpected_output_namespace": {
+    "actual": [
+      "expected.json",
+      "scratch.tmp"
+    ],
+    "class": "executed_filesystem_attack",
+    "declared": [
+      "expected.json"
+    ],
+    "expected": "reject",
+    "extra": [
+      "scratch.tmp"
+    ],
+    "rejected": true
+  }
+}

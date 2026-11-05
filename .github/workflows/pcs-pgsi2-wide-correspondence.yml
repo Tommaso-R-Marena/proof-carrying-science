@@ -1,0 +1,46 @@
+name: PCS PGSI2-WIDE Cross-Runtime Correspondence
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/pgsi2_wide_*'
+      - 'research/proof-gated-self-improvement-v1/tests/test_pgsi2_wide_runtime.py'
+      - 'formal/PCS/V2/ProofGatedNetArtifacts.lean'
+      - 'formal/PCS/V2/ProofGatedStrongArtifacts.lean'
+      - 'formal/fixtures/proof_gated/pgsi2_wide_*'
+      - '.github/workflows/pcs-pgsi2-wide-correspondence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-cross-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Kernel-compile the original versioned decoder and strong gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          lake build PCS.V2.ProofGatedStrongArtifacts PCS.V2.ProofGatedNetArtifacts PCS.V2.ProofGatedDeepCert
+          lake env lean PCS/V2/ProofGatedStrongAudit.lean > /tmp/pcs-pgsi2-axioms.txt
+          if grep -E 'sorryAx|error:' /tmp/pcs-pgsi2-axioms.txt; then
+            cat /tmp/pcs-pgsi2-axioms.txt
+            exit 1
+          fi
+      - name: Independent Python reference and adversarial codec tests
+        run: |
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -p 'test_pgsi2_wide_runtime.py' -v
+      - name: Differential evaluation and actual Lean strong-gate decisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python research/proof-gated-self-improvement-v1/pgsi2_wide_differential.py

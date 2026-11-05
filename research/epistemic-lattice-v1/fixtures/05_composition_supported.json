@@ -1,0 +1,39 @@
+{
+  "format": "pcs-epistemic-lattice-v1",
+  "claims": [
+    {
+      "id": "C_data_ok",
+      "class": "empirical",
+      "dependencies": [],
+      "falsifiers": [{"atom": "obs.integrity_fail", "expects": true}],
+      "support_requires": [{"atom": "obs.checksum_match", "expects": true}]
+    },
+    {
+      "id": "C_model_bound",
+      "class": "computational",
+      "dependencies": ["C_data_ok"],
+      "falsifiers": [{"atom": "obs.bound_violated", "expects": true}],
+      "support_requires": [{"atom": "obs.replay_pass", "expects": true}]
+    },
+    {
+      "id": "C_lemma",
+      "class": "formal",
+      "dependencies": ["C_model_bound"],
+      "falsifiers": [],
+      "support_requires": []
+    }
+  ],
+  "evidence": [
+    {"claim_id": "C_data_ok", "class": "empirical", "pass": true},
+    {"claim_id": "C_model_bound", "class": "computational", "pass": true},
+    {"claim_id": "C_lemma", "class": "formal", "pass": true}
+  ],
+  "observations": {
+    "atoms": {
+      "obs.integrity_fail": false,
+      "obs.checksum_match": true,
+      "obs.bound_violated": false,
+      "obs.replay_pass": true
+    }
+  }
+}

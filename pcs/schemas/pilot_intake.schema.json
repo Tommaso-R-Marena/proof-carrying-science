@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Pilot Intake v1",
+  "type": "object",
+  "required": ["intake_format","pilot_id","workflow_summary","claims","assumptions","data_classification"],
+  "properties": {
+    "intake_format": {"const": "pcs-pilot-intake-v1"},
+    "pilot_id": {"type":"string","pattern":"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+    "workflow_summary": {"type":"string","minLength":1,"maxLength":4000},
+    "claims": {
+      "type":"array","minItems":1,
+      "items":{
+        "type":"object","required":["id","statement","desired_assurance"],
+        "properties":{
+          "id":{"type":"string","pattern":"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+          "statement":{"type":"string","minLength":1,"maxLength":4000},
+          "desired_assurance":{"enum":["formal","computational","empirical","mixed"]},
+          "rationale":{"type":"string","maxLength":4000}
+        },
+        "additionalProperties":false
+      }
+    },
+    "assumptions": {
+      "type":"array",
+      "items":{
+        "type":"object","required":["id","statement"],
+        "properties":{
+          "id":{"type":"string","pattern":"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"},
+          "statement":{"type":"string","minLength":1,"maxLength":4000}
+        },
+        "additionalProperties":false
+      }
+    },
+    "data_classification":{"enum":["synthetic","public","non_sensitive","deidentified","proprietary_sensitive"]},
+    "notes":{"type":"string","maxLength":8000}
+  },
+  "additionalProperties":false
+}

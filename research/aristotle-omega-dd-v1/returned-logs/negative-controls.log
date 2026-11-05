@@ -1,0 +1,13 @@
+== lake env lean PCSNegative/FalseEquivalence.lean
+PCSNegative/FalseEquivalence.lean:11:29: error: Tactic `decide` proved that the proposition
+  check (A.imp B) (B.imp A) = none
+is false
+exit code: 1
+== lake env lean PCSNegative/FalseWeightedMinimum.lean
+PCSNegative/FalseWeightedMinimum.lean:27:16: error: Tactic `decide` proved that the proposition
+  some 1 = some 0
+is false
+PCSNegative/FalseWeightedMinimum.lean:31:17: error: Tactic `decide` proved that the proposition
+  some [1] = some [0]
+is false
+exit code: 1

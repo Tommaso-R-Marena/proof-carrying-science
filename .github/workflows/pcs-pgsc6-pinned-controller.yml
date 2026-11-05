@@ -1,0 +1,46 @@
+name: PCS PGSC6 Pinned-State Controller (Research Only)
+on:
+  pull_request:
+    paths:
+      - 'research/proof-gated-self-improvement-v1/pgsc6_pinned_store*.py'
+      - 'research/proof-gated-self-improvement-v1/tests/test_pgsc6_pinned_store.py'
+      - '.github/workflows/pcs-pgsc6-pinned-controller.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  host-state-and-live-lean:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Host-state consistency and adversarial mutation tests
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -p 'test_pgsc6_pinned_store.py' -v
+      - name: Build and audit actual Lean V6 checker
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd formal
+          bash scripts/proof_gated_ci.sh
+      - name: Three actual Lean-authorized PGSC6 CAS promotions
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/proof-gated-self-improvement-v1
+          python pgsc6_pinned_store_live.py
+      - name: Preserve pre-existing end-to-end regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/proof-gated-self-improvement-v1
+          python -m unittest discover -s tests -v

@@ -1,0 +1,34 @@
+tools/RuntimeOutputBoundaryV3.lean:87:25: error: Application type mismatch: The argument
+  runFn []
+has type
+  Nat → Caller
+but is expected to have type
+  Caller
+in the application
+  evalE (runFn [])
+tools/RuntimeOutputBoundaryV3.lean:88:26: error: Application type mismatch: The argument
+  runFn []
+has type
+  Nat → Caller
+but is expected to have type
+  Caller
+in the application
+  evalE (runFn [])
+tools/RuntimeOutputBoundaryV3.lean:102:8: warning: declaration uses `sorry`
+tools/RuntimeOutputBoundaryV3.lean:132:22: error: No goals to be solved
+tools/RuntimeOutputBoundaryV3.lean:133:6: error: Dependent elimination failed: Failed to solve equation
+  Except.ok value =
+    Decidable.rec (fun h => (fun x => Except.error (EvalError.runtime "return type mismatch")) h)
+      (fun h => (fun x => Except.ok value✝) h) (instDecidableEqTy value✝.ty expected)
+'PCSRuntimeOutputBoundaryV3.output_boundary_source_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCSRuntimeOutputBoundaryV3.derived_type_eq_exact' depends on axioms: [propext]
+'PCSRuntimeOutputBoundaryV3.continuation_exact' depends on axioms: [propext, sorryAx]
+'PCSRuntimeOutputBoundaryV3.checked_output_continuation_refines' depends on axioms: [propext, sorryAx, Quot.sound]
+'PCSRuntimeOutputBoundaryV3.output_acceptance_requires_declared_type' depends on axioms: [sorryAx]
+'PCSRuntimeOutputBoundaryV3.output_preserves_all_checked_errors' depends on axioms: [propext, sorryAx]
+'PCSRuntimeOutputBoundaryV3.output_preserves_resource_failure' depends on axioms: [propext, sorryAx]
+'PCSRuntimeOutputBoundaryV3.output_type_resource_failure' depends on axioms: [propext, sorryAx]
+'PCSRuntimeOutputBoundaryV3.output_certificate_preserves' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

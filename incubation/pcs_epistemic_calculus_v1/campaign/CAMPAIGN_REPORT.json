@@ -1,0 +1,133 @@
+{
+  "cases": [
+    {
+      "detail": {
+        "agreement_core": [
+          "mass_conserved",
+          "cmax_bound"
+        ],
+        "dispute_frontier": [
+          "terminal_slope_matches_ke"
+        ],
+        "distinguishing": [
+          "terminal_slope_matches_ke"
+        ],
+        "format": "pcs-epistemic-dialectic-v1",
+        "limitations": [
+          "Agreement is computational support intersection, not empirical truth.",
+          "Dispute preservation is intentional; consensus is never forced."
+        ],
+        "model_count": 2,
+        "scientific_authority": false
+      },
+      "id": "dialectic_agreement_and_dispute",
+      "passed": true
+    },
+    {
+      "detail": {
+        "affected_artifacts": [
+          "clean_plasma",
+          "params",
+          "prediction",
+          "raw_plasma"
+        ],
+        "affected_claims": [
+          "mass_conserved",
+          "cmax_bound"
+        ],
+        "affected_evidence": [
+          "e_mass",
+          "e_pred"
+        ],
+        "changed_artifacts": [
+          "raw_plasma"
+        ]
+      },
+      "id": "invalidation_transitive",
+      "passed": true
+    },
+    {
+      "detail": {
+        "claim_id": "c_hidden",
+        "declared_nonimpact": true,
+        "dependency_complete": false,
+        "format": "pcs-epistemic-nonimpact-v1",
+        "impact": {
+          "affected_artifacts": [
+            "clean_plasma",
+            "params",
+            "prediction",
+            "raw_plasma"
+          ],
+          "affected_claims": [
+            "mass_conserved",
+            "cmax_bound"
+          ],
+          "affected_evidence": [
+            "e_mass",
+            "e_pred"
+          ],
+          "changed_artifacts": [
+            "raw_plasma"
+          ]
+        },
+        "world_nonimpact_endorsed": false
+      },
+      "id": "hidden_dependency_blocks_endorsement",
+      "passed": true
+    },
+    {
+      "id": "reject_computational_to_formal_promotion",
+      "passed": true
+    },
+    {
+      "detail": {
+        "combined_evidence_ids": [
+          "e1",
+          "e2"
+        ],
+        "composed_assured": true,
+        "downstream_assured": true,
+        "evidence_disjoint": true,
+        "format": "pcs-epistemic-composition-v1",
+        "upstream_assured": true
+      },
+      "id": "compose_disjoint_pipeline",
+      "passed": true
+    },
+    {
+      "detail": {
+        "certificate_sha256": "771d72fc8dfaea22858e6e11747bed3790daad782b08a68a72a1b7af9e4af511"
+      },
+      "id": "certificate_replay",
+      "passed": true
+    },
+    {
+      "detail": {
+        "passed": 17,
+        "total": 17
+      },
+      "id": "lean_python_differential_controls",
+      "passed": true
+    },
+    {
+      "id": "lattice_non_promotion_matrix",
+      "passed": true
+    },
+    {
+      "id": "agreement_dispute_disjoint_example",
+      "passed": true
+    }
+  ],
+  "failed": 0,
+  "format": "pcs-epistemic-campaign-v1",
+  "passed": 9,
+  "production_authority": false,
+  "scientific_authority": false,
+  "source_sha256": {
+    "dialectic_certificate.json": "771d72fc8dfaea22858e6e11747bed3790daad782b08a68a72a1b7af9e4af511",
+    "ensemble.json": "8475739128e1a889480c6722e28651faa2ca42f0b8d46c0d7451fbd662ba63fc",
+    "graph.json": "75a31156cfb6f5c0a7501ae8edfc6ecbc2e812b908a94243502ca32df7e7ade9"
+  },
+  "total": 9
+}

@@ -1,0 +1,72 @@
+{
+  "source_sha": "9d4676b42fd392b2439b6f3b60c6fc9a1a44db8c",
+  "all_missing_preflight": {
+    "format": "pcs-independent-program-preflight-v1",
+    "repo_head": "9d4676b42fd392b2439b6f3b60c6fc9a1a44db8c",
+    "gates": {
+      "branch_nonoverlap": {
+        "id": "branch_nonoverlap",
+        "pass": true,
+        "has_overlaps": false,
+        "missing_branches": [
+          "refs/heads/definitely-absent-pcs-readonly-audit"
+        ],
+        "error_count": 0,
+        "pair_count": 0
+      }
+    },
+    "hard_failures": [],
+    "soft_notes": [],
+    "pass": true,
+    "conclusive": true,
+    "disclaimer": "Local harness gate only. Does not modify CI workflows. Wiring into required GitHub checks remains a separate proposal."
+  },
+  "ignored_nonexistent_base": {
+    "format": "pcs-independent-branch-nonoverlap-audit-v1",
+    "base": "refs/heads/definitely-absent-base-pcs-readonly-audit",
+    "repo": "/workspace/.onboarding/pcs-pr-baselines/pr-126",
+    "branches": [
+      "HEAD"
+    ],
+    "missing_branches": [],
+    "changed_file_counts": {
+      "HEAD": 28
+    },
+    "changed_files": {
+      "HEAD": [
+        "independent_eval/program_assurance/.gitignore",
+        "independent_eval/program_assurance/BUGS_AND_AMBIGUITIES.md",
+        "independent_eval/program_assurance/NONOVERLAP.md",
+        "independent_eval/program_assurance/README.md",
+        "independent_eval/program_assurance/TECHNICAL_REPORT.md",
+        "independent_eval/program_assurance/TEST_INVENTORY.md",
+        "independent_eval/program_assurance/proposals/PROPOSALS.json",
+        "independent_eval/program_assurance/proposals/PROPOSALS.md",
+        "independent_eval/program_assurance/python_harness/__init__.py",
+        "independent_eval/program_assurance/python_harness/__main__.py",
+        "independent_eval/program_assurance/python_harness/collision_scanner.py",
+        "independent_eval/program_assurance/python_harness/inventory_aggregator.py",
+        "independent_eval/program_assurance/python_harness/nonoverlap_auditor.py",
+        "independent_eval/program_assurance/python_harness/paths.py",
+        "independent_eval/program_assurance/python_harness/preflight.py",
+        "independent_eval/program_assurance/python_harness/proposals_catalog.py",
+        "independent_eval/program_assurance/python_harness/residual_trust.py",
+        "independent_eval/program_assurance/python_harness/run_all.py",
+        "independent_eval/program_assurance/results/.gitkeep",
+        "independent_eval/program_assurance/results/SUMMARY.json",
+        "independent_eval/program_assurance/results/TEST_RUN.txt",
+        "independent_eval/program_assurance/results/preflight.json",
+        "independent_eval/program_assurance/tests/test_collision_scanner.py",
+        "independent_eval/program_assurance/tests/test_inventory_aggregator.py",
+        "independent_eval/program_assurance/tests/test_nonoverlap_auditor.py",
+        "independent_eval/program_assurance/tests/test_preflight.py",
+        "independent_eval/program_assurance/tests/test_proposals_catalog.py",
+        "independent_eval/program_assurance/tests/test_residual_trust.py"
+      ]
+    },
+    "pair_overlaps": [],
+    "has_overlaps": false,
+    "errors": {}
+  },
+  "no_authorization_test": true
+}

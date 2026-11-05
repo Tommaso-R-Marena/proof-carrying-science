@@ -1,0 +1,34 @@
+{
+  "detector": "pcs discover-v06",
+  "format": "pcs-independent-eval-discovery-ground-truth-v1",
+  "license": {
+    "spdx": "CC0-1.0",
+    "statement": "All authored fixtures under independent_eval/scientific_falsification are dedicated to the public domain under CC0-1.0. No human participants; no private data."
+  },
+  "minimum_confidence": 0.95,
+  "projects": {
+    "ambiguous_notes": {
+      "abstain": true,
+      "expected_check_types": [],
+      "notes": "No PCS-supported scientific check should be auto-selected at high confidence."
+    },
+    "pk_without_pd": {
+      "abstain": true,
+      "expected_check_types": [],
+      "notes": "Restricted PKPD detector requires direct_emax PD fields; abstention expected."
+    },
+    "pkpd_detectable": {
+      "abstain": false,
+      "expected_check_types": [
+        "pkpd_contract",
+        "pkpd_reference_match"
+      ]
+    },
+    "reaction_detectable": {
+      "abstain": false,
+      "expected_check_types": [
+        "reaction_balance"
+      ]
+    }
+  }
+}

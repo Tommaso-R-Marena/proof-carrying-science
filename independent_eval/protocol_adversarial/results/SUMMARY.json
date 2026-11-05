@@ -1,0 +1,522 @@
+{
+  "adversarial_corpus": {
+    "case_count": 151,
+    "false_accepts": [],
+    "format": "pcs-independent-adversarial-corpus-v1",
+    "mutation_families": [
+      "absolute",
+      "appended",
+      "certificate",
+      "duplicate",
+      "empty",
+      "extra",
+      "fingerprint",
+      "manifest",
+      "missing",
+      "normalized",
+      "not",
+      "package",
+      "path",
+      "payload",
+      "rename",
+      "signature",
+      "signer",
+      "swapped",
+      "truncated"
+    ],
+    "negative_controls": 141,
+    "negatives_rejected_after_attempted_verify": 141,
+    "not_attempted": [],
+    "positive_accepted": 10,
+    "positive_controls": 10
+  },
+  "format": "pcs-independent-protocol-eval-summary-v1",
+  "intake_chronology": {
+    "scenario_count": 5
+  },
+  "jcs_differential": {
+    "cases": [
+      {
+        "id": "empty_object",
+        "pcs_canonical": "{}",
+        "pcs_ok": true,
+        "rust_canonical": "{}",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "key_order",
+        "pcs_canonical": "{\"a\":2,\"b\":1}",
+        "pcs_ok": true,
+        "rust_canonical": "{\"a\":2,\"b\":1}",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "nested",
+        "pcs_canonical": "{\"a\":null,\"z\":{\"y\":[3,2,1]}}",
+        "pcs_ok": true,
+        "rust_canonical": "{\"a\":null,\"z\":{\"y\":[3,2,1]}}",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "unicode_escape",
+        "pcs_canonical": "{\"cafe\":\"caf\u00e9\"}",
+        "pcs_ok": true,
+        "rust_canonical": "{\"cafe\":\"caf\u00e9\"}",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "duplicate_key",
+        "pcs_canonical": "{\"a\":2}",
+        "pcs_ok": true,
+        "rust_canonical": null,
+        "rust_ok": false,
+        "rust_stderr": "ERROR: duplicate object key: a"
+      },
+      {
+        "id": "nan_literal",
+        "pcs_canonical": null,
+        "pcs_error": "CanonicalJSONError: NaN and Infinity are not permitted by JCS",
+        "pcs_ok": false,
+        "rust_canonical": null,
+        "rust_ok": false,
+        "rust_stderr": "ERROR: JSON parse error: unexpected byte at 0"
+      },
+      {
+        "id": "infinity",
+        "pcs_canonical": null,
+        "pcs_error": "CanonicalJSONError: NaN and Infinity are not permitted by JCS",
+        "pcs_ok": false,
+        "rust_canonical": null,
+        "rust_ok": false,
+        "rust_stderr": "ERROR: JSON parse error: unexpected byte at 0"
+      },
+      {
+        "id": "neg_zero_number",
+        "pcs_canonical": "0",
+        "pcs_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "pcs_ok": true,
+        "rust_canonical": "0",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "large_int_as_float",
+        "pcs_canonical": "9007199254740992",
+        "pcs_hash": "c681da39d7273a6a24c15c9cac3a75526ff2ecf8ba4ee60346a0c70c8163bdb2",
+        "pcs_ok": true,
+        "rust_canonical": "9007199254740992",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "array_mixed",
+        "pcs_canonical": "[null,true,false,1,\"x\"]",
+        "pcs_hash": "70f1d6263f711bb5038b390aecb5a2628efd369f972668cb4e166f7b49bbfdc2",
+        "pcs_ok": true,
+        "rust_canonical": "[null,true,false,1,\"x\"]",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "empty_array",
+        "pcs_canonical": "[]",
+        "pcs_ok": true,
+        "rust_canonical": "[]",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "nested_empty",
+        "pcs_canonical": "{\"a\":[],\"b\":{}}",
+        "pcs_ok": true,
+        "rust_canonical": "{\"a\":[],\"b\":{}}",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "scientific",
+        "pcs_canonical": "1e-7",
+        "pcs_hash": "5b33e02f2c5103a05d32f6ba9cb058294452bfbf393967f68bb30c1bdcbbab22",
+        "pcs_ok": true,
+        "rust_canonical": "0.0000001",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "scientific_large",
+        "pcs_canonical": "1e+21",
+        "pcs_hash": "241c4643fa70b1dcde1205b71be4e3bebb17e9f880c8e1a33d0ead6c27271d3c",
+        "pcs_ok": true,
+        "rust_canonical": "1000000000000000000000",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "bool_not_int",
+        "pcs_canonical": "true",
+        "pcs_hash": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "pcs_ok": true,
+        "rust_canonical": "true",
+        "rust_ok": true,
+        "rust_stderr": null
+      },
+      {
+        "id": "string_surrogate_pair_ok",
+        "pcs_canonical": "{\"x\":\"\ud83d\ude00\"}",
+        "pcs_ok": true,
+        "rust_canonical": null,
+        "rust_ok": false,
+        "rust_stderr": "ERROR: lone Unicode surrogate / noncharacter rejected"
+      }
+    ],
+    "disagreement_count": 2,
+    "disagreements": [
+      {
+        "id": "scientific",
+        "kind": "canonicalize_mismatch",
+        "pcs": "1e-7",
+        "rust": "0.0000001"
+      },
+      {
+        "id": "scientific_large",
+        "kind": "canonicalize_mismatch",
+        "pcs": "1e+21",
+        "rust": "1000000000000000000000"
+      }
+    ],
+    "format": "pcs-independent-jcs-differential-v1",
+    "note": "Disagreements are observed differences between an independent Rust reference and PCS Python JCS; they are not automatically PCS defects.",
+    "vector_count": 16
+  },
+  "policy_confusion": {
+    "bundle_sha256": "bb41a317fac50b8f746f1d3ccbd2a9255d163afe2b1ad9cc65a05c549ca3bddd",
+    "findings": [
+      "Same signed evidence yields identical PCS validity for both reviewers.",
+      "Permissive policy can dangerously confuse computational PASS with scientific acceptance if consumers misuse policy flags.",
+      "PCS validity must not silently become broader scientific acceptance."
+    ],
+    "format": "pcs-independent-policy-confusion-v1",
+    "pcs_authoritative": true,
+    "pcs_valid": true,
+    "reviewers": [
+      {
+        "correct_interpretation": "PCS validity is computational/formal relative to declared claims; empirical/scientific acceptance remains OPEN unless independently established.",
+        "pcs_authoritative": true,
+        "pcs_valid": true,
+        "policy_id": "strict-scientific-limits",
+        "unsafe_scientific_acceptance_inference": false
+      },
+      {
+        "correct_interpretation": "PCS validity is computational/formal relative to declared claims; empirical/scientific acceptance remains OPEN unless independently established.",
+        "pcs_authoritative": true,
+        "pcs_valid": true,
+        "policy_id": "permissive-accept-all-computational",
+        "unsafe_scientific_acceptance_inference": true
+      }
+    ]
+  },
+  "repo_head": "4a5de4211419f50b42c8ee9f9c60122d87e1dee2",
+  "resource_bounds": {
+    "format": "pcs-independent-resource-bounds-v1",
+    "limits": {
+      "max_nesting_depth": 100,
+      "max_object_keys": 5000,
+      "max_zip_members": 200,
+      "note": "Bounded synthetic inputs only; no external DoS."
+    },
+    "measurement_count": 8,
+    "measurements": [
+      {
+        "error": null,
+        "id": "jcs_object_100",
+        "ok": true,
+        "output_bytes": 1191,
+        "rss_kb_delta": 0,
+        "seconds": 0.00027484699967317283
+      },
+      {
+        "error": null,
+        "id": "jcs_object_1000",
+        "ok": true,
+        "output_bytes": 12891,
+        "rss_kb_delta": 0,
+        "seconds": 0.002503761999832932
+      },
+      {
+        "error": null,
+        "id": "jcs_object_5000",
+        "ok": true,
+        "output_bytes": 68891,
+        "rss_kb_delta": 0,
+        "seconds": 0.012820041999475507
+      },
+      {
+        "error": null,
+        "id": "jcs_nested_array_depth_10",
+        "ok": true,
+        "output_bytes": 22,
+        "rss_kb_delta": 0,
+        "seconds": 9.81900029728422e-06
+      },
+      {
+        "error": null,
+        "id": "jcs_nested_array_depth_50",
+        "ok": true,
+        "output_bytes": 102,
+        "rss_kb_delta": 0,
+        "seconds": 2.5568999262759462e-05
+      },
+      {
+        "error": null,
+        "id": "jcs_nested_array_depth_100",
+        "ok": true,
+        "output_bytes": 202,
+        "rss_kb_delta": 0,
+        "seconds": 4.973399973096093e-05
+      },
+      {
+        "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+        "id": "zip_many_members_50",
+        "ok": false,
+        "output_bytes": 5622,
+        "rss_kb_delta": 0,
+        "seconds": 0.001451884999369213
+      },
+      {
+        "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+        "id": "zip_many_members_200",
+        "ok": false,
+        "output_bytes": 22422,
+        "rss_kb_delta": 0,
+        "seconds": 0.004897712000456522
+      }
+    ],
+    "risks": [
+      "Large object key sorts are O(n log n) in key count.",
+      "Deep nesting increases recursion/stack pressure in some parsers.",
+      "Many ZIP members increase inventory work before authority checks."
+    ]
+  },
+  "zip_differential": {
+    "case_count": 8,
+    "cases": [
+      {
+        "disagreement": true,
+        "id": "normal_stored",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "438bfc4c2896b14932777ba1aec8eeeaf3061c16d03273370a856aa1ff836058",
+        "size": 121,
+        "stdlib": {
+          "error": null,
+          "infos": [
+            {
+              "CRC": 907060870,
+              "compress_size": 5,
+              "compress_type": 0,
+              "external_attr": 25165824,
+              "file_size": 5,
+              "filename": "hello.txt"
+            }
+          ],
+          "names": [
+            "hello.txt"
+          ],
+          "ok": true
+        }
+      },
+      {
+        "disagreement": true,
+        "id": "path_traversal",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: unsafe or non-canonical ZIP member: '../escape.txt'",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "59882f46289c6b07d34b0fc7b0649842162613ca4bae501dd1f071033fbb9488",
+        "size": 125,
+        "stdlib": {
+          "error": null,
+          "infos": [
+            {
+              "CRC": 2363233923,
+              "compress_size": 1,
+              "compress_type": 0,
+              "external_attr": 25165824,
+              "file_size": 1,
+              "filename": "../escape.txt"
+            }
+          ],
+          "names": [
+            "../escape.txt"
+          ],
+          "ok": true
+        }
+      },
+      {
+        "disagreement": true,
+        "id": "absolute_path",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: unsafe or non-canonical ZIP member: '/tmp/abs.txt'",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "3dcc45318b9596250b229ca43a712c52eda4c3bee47ac104978838319f16acef",
+        "size": 123,
+        "stdlib": {
+          "error": null,
+          "infos": [
+            {
+              "CRC": 2363233923,
+              "compress_size": 1,
+              "compress_type": 0,
+              "external_attr": 25165824,
+              "file_size": 1,
+              "filename": "/tmp/abs.txt"
+            }
+          ],
+          "names": [
+            "/tmp/abs.txt"
+          ],
+          "ok": true
+        }
+      },
+      {
+        "disagreement": true,
+        "id": "duplicate_names",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: duplicate or file/directory-colliding ZIP member: 'dup.txt'",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "58a40e6a166c485c10ab45b83304c56d4c2a7a5e31827dc8bca4d1bf5a2229f8",
+        "size": 208,
+        "stdlib": {
+          "error": null,
+          "infos": [
+            {
+              "CRC": 2053932785,
+              "compress_size": 3,
+              "compress_type": 0,
+              "external_attr": 25165824,
+              "file_size": 3,
+              "filename": "dup.txt"
+            },
+            {
+              "CRC": 298486374,
+              "compress_size": 3,
+              "compress_type": 0,
+              "external_attr": 25165824,
+              "file_size": 3,
+              "filename": "dup.txt"
+            }
+          ],
+          "names": [
+            "dup.txt",
+            "dup.txt"
+          ],
+          "ok": true
+        }
+      },
+      {
+        "disagreement": true,
+        "id": "deflated_member",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: v0.6 ZIP is missing required control files: ['certificate.json', 'certificate_signature.json', 'package_manifest.json', 'package_signature.json']",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "58e3fad7637cbdaa98da8707e3e92459e505545559f27124d1a8f93ee9fd8331",
+        "size": 138,
+        "stdlib": {
+          "error": null,
+          "infos": [
+            {
+              "CRC": 393564749,
+              "compress_size": 16,
+              "compress_type": 8,
+              "external_attr": 25165824,
+              "file_size": 220,
+              "filename": "deflated.txt"
+            }
+          ],
+          "names": [
+            "deflated.txt"
+          ],
+          "ok": true
+        }
+      },
+      {
+        "disagreement": false,
+        "id": "truncated",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: invalid v0.6 ZIP archive: File is not a zip file",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "8244356a5791a14c9de115f5f7e37c1bfbb79cbf255d33ee0f5269628d719b12",
+        "size": 20,
+        "stdlib": {
+          "error": "BadZipFile: File is not a zip file",
+          "infos": [],
+          "names": [],
+          "ok": false
+        }
+      },
+      {
+        "disagreement": false,
+        "id": "garbage",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: invalid v0.6 ZIP archive: File is not a zip file",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "817a46698230aadfd32a23ec59a1e432d9cb21f2c45bffbfc6345326c892ae40",
+        "size": 14,
+        "stdlib": {
+          "error": "BadZipFile: File is not a zip file",
+          "infos": [],
+          "names": [],
+          "ok": false
+        }
+      },
+      {
+        "disagreement": false,
+        "id": "empty",
+        "pcs_load": {
+          "bundle_sha256": null,
+          "error": "V06BundleVerificationError: invalid v0.6 ZIP archive: File is not a zip file",
+          "member_names": [],
+          "ok": false
+        },
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "stdlib": {
+          "error": "BadZipFile: File is not a zip file",
+          "infos": [],
+          "names": [],
+          "ok": false
+        }
+      }
+    ],
+    "disagreement_count": 5,
+    "format": "pcs-independent-zip-differential-v1",
+    "limits": {
+      "note": "Bounded synthetic inputs only; disposable workspaces; no external hosts."
+    }
+  }
+}

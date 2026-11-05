@@ -1,0 +1,78 @@
+{
+  "format": "pcs-real-world-validation-session-v1",
+  "date": "2026-09-29",
+  "execution": {
+    "mode": "direct_checker_logic_execution",
+    "environment": "isolated Python session",
+    "note": "Executed against the current branch's checker logic reproduced exactly for reaction_balance, csv_disjoint, unit_compatible, and the restricted one-compartment replay equation. This is real checker-level execution, not a hosted GitHub Actions run and not a full attest-v06 package round trip."
+  },
+  "summary": {
+    "cases": 5,
+    "matched_expected": 5,
+    "unexpected": 0,
+    "expected_pass": 3,
+    "expected_fail": 2
+  },
+  "cases": [
+    {
+      "id": "haber_bosch_balance",
+      "expected": "PASS",
+      "actual": "PASS",
+      "details": {
+        "reactant_atoms": {"N": 2, "H": 6},
+        "product_atoms": {"N": 2, "H": 6},
+        "delta_product_minus_reactant": {}
+      }
+    },
+    {
+      "id": "iris_clean_split",
+      "expected": "PASS",
+      "actual": "PASS",
+      "details": {
+        "left_unique": 120,
+        "right_unique": 30,
+        "overlap_count": 0,
+        "overlap_sample": []
+      }
+    },
+    {
+      "id": "iris_contaminated_split",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "details": {
+        "left_unique": 120,
+        "right_unique": 31,
+        "overlap_count": 1,
+        "overlap_sample": ["120"]
+      }
+    },
+    {
+      "id": "indometh_unit_equivalence",
+      "expected": "PASS",
+      "actual": "PASS",
+      "details": {
+        "left_unit": "mg/L",
+        "right_unit": "g/m^3",
+        "conversion_left_to_right": 1.0
+      }
+    },
+    {
+      "id": "indometh_subject1_single_exponential",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "details": {
+        "subject": 1,
+        "rows": 11,
+        "fit_C0_mg_per_L": 0.7959236856857457,
+        "fit_kel_per_h": 0.4186240014007021,
+        "max_abs_error_mg_per_L": 0.7831638386902207,
+        "max_rel_error": 1.0925283641651804,
+        "mismatch_rows_at_default_tolerance": 11
+      }
+    }
+  ],
+  "source_sha256": {
+    "Rdatasets_Indometh_csv": "aecce7eaa7fd2057ea5bf5a02943463ad5036354dd87a0808376ce502aaf0049",
+    "Rdatasets_iris_csv": "398fadb8f48750d386d670e0b15c65944919682373bcaba59650c33eb5474362"
+  }
+}

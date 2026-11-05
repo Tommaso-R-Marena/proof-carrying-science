@@ -1,0 +1,2277 @@
+{
+  "format": "pcs-mathematical-evidence-audit-v1",
+  "complete": true,
+  "expected_comparisons": 144,
+  "recorded_comparisons": 144,
+  "missing": [],
+  "counts": {
+    "typed:utility:symbolic": {
+      "tasks": 4,
+      "verified": 1,
+      "unknown": 3,
+      "resource_exhausted": 0
+    },
+    "typed:utility:memory_structural": {
+      "tasks": 4,
+      "verified": 2,
+      "unknown": 2,
+      "resource_exhausted": 0
+    },
+    "typed:utility:memory_learned": {
+      "tasks": 4,
+      "verified": 2,
+      "unknown": 2,
+      "resource_exhausted": 0
+    },
+    "typed:utility:Std": {
+      "tasks": 4,
+      "verified": 3,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "typed:utility:hybrid": {
+      "tasks": 4,
+      "verified": 4,
+      "unknown": 0,
+      "resource_exhausted": 0
+    },
+    "typed:selection:symbolic": {
+      "tasks": 4,
+      "verified": 2,
+      "unknown": 2,
+      "resource_exhausted": 0
+    },
+    "typed:selection:memory_structural": {
+      "tasks": 4,
+      "verified": 2,
+      "unknown": 2,
+      "resource_exhausted": 0
+    },
+    "typed:selection:memory_learned": {
+      "tasks": 4,
+      "verified": 2,
+      "unknown": 2,
+      "resource_exhausted": 0
+    },
+    "typed:selection:Std": {
+      "tasks": 4,
+      "verified": 3,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "typed:selection:hybrid": {
+      "tasks": 4,
+      "verified": 3,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "typed:final:symbolic": {
+      "tasks": 8,
+      "verified": 2,
+      "unknown": 6,
+      "resource_exhausted": 0
+    },
+    "typed:final:memory_structural": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "typed:final:memory_learned": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "typed:final:Std": {
+      "tasks": 8,
+      "verified": 5,
+      "unknown": 3,
+      "resource_exhausted": 0
+    },
+    "typed:final:hybrid": {
+      "tasks": 8,
+      "verified": 7,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "mathlib:selection:lexical": {
+      "tasks": 2,
+      "verified": 1,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "mathlib:selection:structural": {
+      "tasks": 2,
+      "verified": 1,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "mathlib:selection:standard": {
+      "tasks": 2,
+      "verified": 1,
+      "unknown": 1,
+      "resource_exhausted": 0
+    },
+    "mathlib:final:lexical": {
+      "tasks": 6,
+      "verified": 2,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "mathlib:final:structural": {
+      "tasks": 6,
+      "verified": 4,
+      "unknown": 2,
+      "resource_exhausted": 0
+    },
+    "mathlib:final:standard": {
+      "tasks": 6,
+      "verified": 3,
+      "unknown": 3,
+      "resource_exhausted": 0
+    },
+    "transfer:final:untrained-17": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "transfer:final:supervised-17": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "transfer:final:bag-17": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "transfer:final:rl1-17": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    },
+    "transfer:final:rl2-17": {
+      "tasks": 8,
+      "verified": 4,
+      "unknown": 4,
+      "resource_exhausted": 0
+    }
+  },
+  "records": [
+    {
+      "path": "results/utility-cancel-chain-symbolic.json",
+      "task": "utility-cancel-chain",
+      "split": "utility",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 24,
+        "cold_search_and_replay_wall_seconds": 5.78603089000012,
+        "construction_seconds": 26.650425511000094
+      },
+      "expansions": 9,
+      "winning_component": null,
+      "sha256": "f50cb85c9efea5de3bba22195b427c9f1e36915a0a9ab0f62b6dbf0c583e2e61"
+    },
+    {
+      "path": "results/utility-cancel-chain-memory_structural.json",
+      "task": "utility-cancel-chain",
+      "split": "utility",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 28,
+        "cold_search_and_replay_wall_seconds": 4.754284697999992,
+        "construction_seconds": 28.276529871000093
+      },
+      "expansions": 9,
+      "winning_component": null,
+      "sha256": "22e63df369e38b1cd6e38d2b08c0ecb44207130b0aa1acfdb00f6f5c9695538f"
+    },
+    {
+      "path": "results/utility-cancel-chain-memory_learned.json",
+      "task": "utility-cancel-chain",
+      "split": "utility",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 67,
+        "cold_search_and_replay_wall_seconds": 24.555285989999902,
+        "construction_seconds": 34.808910061999995
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "2edc94ba911d214b3370b385e389f218a737718466419d064f3563ac60bda6c2"
+    },
+    {
+      "path": "results/utility-cancel-chain-Std.json",
+      "task": "utility-cancel-chain",
+      "split": "utility",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 1,
+        "cold_search_and_replay_wall_seconds": 3.319206371000064,
+        "construction_seconds": null
+      },
+      "expansions": 1,
+      "winning_component": null,
+      "sha256": "13dc857db713fec4faaf1815d7bab39951f304c826f9ebf191e2c7769c3157cc"
+    },
+    {
+      "path": "results/utility-cancel-chain-hybrid.json",
+      "task": "utility-cancel-chain",
+      "split": "utility",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 2,
+        "cold_wall_seconds": 5.592108483999937
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "e3bdbdc61615e9a0aa861d93d879ca7449e015b12878d784b86fde74db4ff83d"
+    },
+    {
+      "path": "results/utility-reverse-congruence-symbolic.json",
+      "task": "utility-reverse-congruence",
+      "split": "utility",
+      "mode": "symbolic",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 20,
+        "cold_search_and_replay_wall_seconds": 40.011307106000004,
+        "construction_seconds": 38.01595231200008
+      },
+      "expansions": 4,
+      "winning_component": null,
+      "sha256": "99d5d9eaa14085c0f5676950e8cc33e23088df41d92046e777ccfddb48355b44"
+    },
+    {
+      "path": "results/utility-reverse-congruence-memory_structural.json",
+      "task": "utility-reverse-congruence",
+      "split": "utility",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 24,
+        "cold_search_and_replay_wall_seconds": 53.859414454000216,
+        "construction_seconds": 43.83258244700028
+      },
+      "expansions": 4,
+      "winning_component": null,
+      "sha256": "33ebb41f728e8e77ef319c7e22be3ec371ab14ea7c6dfef6540ebedf022d786f"
+    },
+    {
+      "path": "results/utility-reverse-congruence-memory_learned.json",
+      "task": "utility-reverse-congruence",
+      "split": "utility",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 24,
+        "cold_search_and_replay_wall_seconds": 50.77511781500016,
+        "construction_seconds": 55.090338524000344
+      },
+      "expansions": 4,
+      "winning_component": null,
+      "sha256": "43520594afc601bdc2411b657f892dbe6b32b48366d82c993d3dd434ae02453c"
+    },
+    {
+      "path": "results/utility-reverse-congruence-Std.json",
+      "task": "utility-reverse-congruence",
+      "split": "utility",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 1,
+        "cold_search_and_replay_wall_seconds": 4.6118015100000775,
+        "construction_seconds": null
+      },
+      "expansions": 1,
+      "winning_component": null,
+      "sha256": "0d1016437835d90ebd2b4441f1d1516b067225ae30f39d75eb42bcee30ca0238"
+    },
+    {
+      "path": "results/utility-reverse-congruence-hybrid.json",
+      "task": "utility-reverse-congruence",
+      "split": "utility",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 2,
+        "cold_wall_seconds": 5.508470403999581
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "4ac8c0a01757dc3c62082c2ee10a90385ecafbe551dc9ae3e4347a6f13418c4a"
+    },
+    {
+      "path": "results/utility-successor-double-symbolic.json",
+      "task": "utility-successor-double",
+      "split": "utility",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 30,
+        "cold_search_and_replay_wall_seconds": 13.275062828000046,
+        "construction_seconds": 39.912045519
+      },
+      "expansions": 15,
+      "winning_component": null,
+      "sha256": "7ad1b5e262078bae4432e25bfce8b3068bbdcf50d3c7946fbb69811fa62bb5d0"
+    },
+    {
+      "path": "results/utility-successor-double-memory_structural.json",
+      "task": "utility-successor-double",
+      "split": "utility",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 34,
+        "cold_search_and_replay_wall_seconds": 17.996002972000042,
+        "construction_seconds": 73.32712829499997
+      },
+      "expansions": 15,
+      "winning_component": null,
+      "sha256": "6380883fb801a4cf827f9fb68a6aa241ecdca1f02906a085ba9cf084db2787c3"
+    },
+    {
+      "path": "results/utility-successor-double-memory_learned.json",
+      "task": "utility-successor-double",
+      "split": "utility",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 34,
+        "cold_search_and_replay_wall_seconds": 26.671508854999956,
+        "construction_seconds": 87.1999514109998
+      },
+      "expansions": 15,
+      "winning_component": null,
+      "sha256": "a778cb62556c7ba0b1c8c561df275f15a7ded123b792635e84a18e1414eea4dd"
+    },
+    {
+      "path": "results/utility-successor-double-Std.json",
+      "task": "utility-successor-double",
+      "split": "utility",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 1,
+        "cold_search_and_replay_wall_seconds": 12.322066014000029,
+        "construction_seconds": null
+      },
+      "expansions": 1,
+      "winning_component": null,
+      "sha256": "eae96a48704677e0b6a4693654a7934cd76845b12e2015aacea9c401e1ecedec"
+    },
+    {
+      "path": "results/utility-successor-double-hybrid.json",
+      "task": "utility-successor-double",
+      "split": "utility",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "measured_lean_calls_excluding_legacy_memory_replay": 2,
+        "cold_wall_seconds": 8.178070927000135
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "d69d57e41e3c6fa22e9fc251e73e2c54c6948b073f51d01d4b75583f34a8779c"
+    },
+    {
+      "path": "results/utility-predicate-persist-symbolic.json",
+      "task": "utility-predicate-persist",
+      "split": "utility",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 12,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 10.238520688999415
+      },
+      "expansions": 11,
+      "winning_component": null,
+      "sha256": "07d634a48067efb87c822dc969dd32d781d77c812a1934a36f5b7710328d5c5a"
+    },
+    {
+      "path": "results/utility-predicate-persist-memory_structural.json",
+      "task": "utility-predicate-persist",
+      "split": "utility",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 12,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 11.070531901998038
+      },
+      "expansions": 9,
+      "winning_component": "memory_structural",
+      "sha256": "cfcc0f8693bc03df818368e420bd42e64a999cc26fc718e4d9088791c5049143"
+    },
+    {
+      "path": "results/utility-predicate-persist-memory_learned.json",
+      "task": "utility-predicate-persist",
+      "split": "utility",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 16,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.153626555998926
+      },
+      "expansions": 13,
+      "winning_component": "frozen_neural",
+      "sha256": "79eb35bee2ef6855fca840bfb482de90f40e7afcf2ed8d4d4860ffb9ad8caa4d"
+    },
+    {
+      "path": "results/utility-predicate-persist-Std.json",
+      "task": "utility-predicate-persist",
+      "split": "utility",
+      "mode": "Std",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 3,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.4800885699987703
+      },
+      "expansions": 3,
+      "winning_component": null,
+      "sha256": "2fc89954a0387cb9f76dd3ba5742dd8d0dc8442f35616b7e87c8acc3624f10e7"
+    },
+    {
+      "path": "results/utility-predicate-persist-hybrid.json",
+      "task": "utility-predicate-persist",
+      "split": "utility",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 15,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.620692448999762
+      },
+      "expansions": 12,
+      "winning_component": "memory_structural",
+      "sha256": "539256da39c9f4bfb5d117340212a00fed9d60c11030d3e29f71085331c5b5b6"
+    },
+    {
+      "path": "results/selection-cancel-reversed-symbolic.json",
+      "task": "selection-cancel-reversed",
+      "split": "selection",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 9,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 0.4456678930000635
+      },
+      "expansions": 8,
+      "winning_component": null,
+      "sha256": "ad837e4bf744163db25d41069fe05089c3d38462bfb7558e9c7dd862d13003e0"
+    },
+    {
+      "path": "results/selection-cancel-reversed-memory_structural.json",
+      "task": "selection-cancel-reversed",
+      "split": "selection",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 9,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 0.5627987519983435
+      },
+      "expansions": 8,
+      "winning_component": null,
+      "sha256": "8db819892538dddf517948ed6f11a80f006836fc670a99bb3731bd97dec0d2fc"
+    },
+    {
+      "path": "results/selection-cancel-reversed-memory_learned.json",
+      "task": "selection-cancel-reversed",
+      "split": "selection",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 10.553891375999228
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "dbcbfba2d0cc8dc476404c7642fe44cc39a2477a35a99c6edf82e465b62afc24"
+    },
+    {
+      "path": "results/selection-cancel-reversed-Std.json",
+      "task": "selection-cancel-reversed",
+      "split": "selection",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 2,
+        "warm_search_and_replay_wall_seconds": 4.668804369997815
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "a7f620ae8979b6efeedb81f618e02180fca13cb116d6f04a9a0585b4b1896c40"
+    },
+    {
+      "path": "results/selection-cancel-reversed-hybrid.json",
+      "task": "selection-cancel-reversed",
+      "split": "selection",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.8262914180013468
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "5471c724e1c396fecea39d0d04410eeb898cbaad8d0b71db441f9506c72d76e4"
+    },
+    {
+      "path": "results/selection-reverse-triple-symbolic.json",
+      "task": "selection-reverse-triple",
+      "split": "selection",
+      "mode": "symbolic",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 6,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.327407710999978
+      },
+      "expansions": 3,
+      "winning_component": "symbolic",
+      "sha256": "150b173f776d60746369d8cce4bf1749c7f3b3034725fe97ccf18fbee63a1834"
+    },
+    {
+      "path": "results/selection-reverse-triple-memory_structural.json",
+      "task": "selection-reverse-triple",
+      "split": "selection",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 6,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.5899972110019007
+      },
+      "expansions": 3,
+      "winning_component": "memory_structural",
+      "sha256": "912c7c1d69fcadc72410212458ed9b4b1b8a1f08af8c424cd0053320334d2d0e"
+    },
+    {
+      "path": "results/selection-reverse-triple-memory_learned.json",
+      "task": "selection-reverse-triple",
+      "split": "selection",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 6,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.6098185010014276
+      },
+      "expansions": 3,
+      "winning_component": "frozen_neural",
+      "sha256": "50e93f989d6d94f2f5ffc6ff614c88c0da0714cb80d80dec1becdc6e5dee806e"
+    },
+    {
+      "path": "results/selection-reverse-triple-Std.json",
+      "task": "selection-reverse-triple",
+      "split": "selection",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.6878132259989798
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "7bfb84b8c476cdda190a1d5813d01a7f71f11e919bc0377cd3b0972afb93b889"
+    },
+    {
+      "path": "results/selection-reverse-triple-hybrid.json",
+      "task": "selection-reverse-triple",
+      "split": "selection",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.3707964599998377
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "77e37c7674ad7968193aa61bfac5eb096e1ad63c54c6e5c55e55758bbef8ecc1"
+    },
+    {
+      "path": "results/selection-order-chain-symbolic.json",
+      "task": "selection-order-chain",
+      "split": "selection",
+      "mode": "symbolic",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 5,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.4645282680030505
+      },
+      "expansions": 2,
+      "winning_component": "symbolic",
+      "sha256": "e996c02e865c8c1fa5a97af8d399ec354a453bbeb5e1cc92df7d59b783576f97"
+    },
+    {
+      "path": "results/selection-order-chain-memory_structural.json",
+      "task": "selection-order-chain",
+      "split": "selection",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 5,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.602997151996533
+      },
+      "expansions": 2,
+      "winning_component": "memory_structural",
+      "sha256": "95598950c17a0a8174e06098ca523a0b220d59bc8b892d5e6ddb55ed72868f09"
+    },
+    {
+      "path": "results/selection-order-chain-memory_learned.json",
+      "task": "selection-order-chain",
+      "split": "selection",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 4,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.800312352999754
+      },
+      "expansions": 1,
+      "winning_component": "frozen_neural",
+      "sha256": "eed33ae483d5340b1aebade7aa3312c0ada4e08e4c34ce865ea8a97ff2a590db"
+    },
+    {
+      "path": "results/selection-order-chain-Std.json",
+      "task": "selection-order-chain",
+      "split": "selection",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.4219667429970286
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "bd6d9fe74a73a35b995c5daa3fde4b716ba9dcbcc30da17bb2d687616faab8e9"
+    },
+    {
+      "path": "results/selection-order-chain-hybrid.json",
+      "task": "selection-order-chain",
+      "split": "selection",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.560289035001915
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "c4197af193156ebd9162f1da65ac6266480584a5ac72672821c682d2d679376c"
+    },
+    {
+      "path": "results/selection-function-recurrence-symbolic.json",
+      "task": "selection-function-recurrence",
+      "split": "selection",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 1.6894193180014554
+      },
+      "expansions": 19,
+      "winning_component": null,
+      "sha256": "b9810336d00baff1fd3247c190166b159fd44bf20c5a361ba2bdcb6f142a58bd"
+    },
+    {
+      "path": "results/selection-function-recurrence-memory_structural.json",
+      "task": "selection-function-recurrence",
+      "split": "selection",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 1.9843366940003762
+      },
+      "expansions": 19,
+      "winning_component": null,
+      "sha256": "14d810cf99aeb7d9b1d42d734229e37c42e2dd263421424c67d87d29d36a541a"
+    },
+    {
+      "path": "results/selection-function-recurrence-memory_learned.json",
+      "task": "selection-function-recurrence",
+      "split": "selection",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.4512165690030088
+      },
+      "expansions": 19,
+      "winning_component": null,
+      "sha256": "eb2d008657f457a182971738cecd9ae3ce56d8da6afd82f2aaed74ab606d30ae"
+    },
+    {
+      "path": "results/selection-function-recurrence-Std.json",
+      "task": "selection-function-recurrence",
+      "split": "selection",
+      "mode": "Std",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 3,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.798283072999766
+      },
+      "expansions": 3,
+      "winning_component": null,
+      "sha256": "0a1da26fef474110e9c5c5e9ec4681e23d73db465f594d1f54bb364c52a0222d"
+    },
+    {
+      "path": "results/selection-function-recurrence-hybrid.json",
+      "task": "selection-function-recurrence",
+      "split": "selection",
+      "mode": "hybrid",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.545056727998599
+      },
+      "expansions": 41,
+      "winning_component": null,
+      "sha256": "8792b70fa9b1ff9b40d4a48f8ee6882ea19c298d2332f23a9ed082829b45f7a4"
+    },
+    {
+      "path": "results/final-cancel-common-function-symbolic.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.62604576800004
+      },
+      "expansions": 11,
+      "winning_component": "symbolic",
+      "sha256": "a40ca80c63e55c49349c25a53ab6522a80341dfe9b2b8a2dee95163e1becb2a9"
+    },
+    {
+      "path": "results/final-cancel-common-function-memory_structural.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.262962482000148
+      },
+      "expansions": 11,
+      "winning_component": "memory_structural",
+      "sha256": "cb88a0bf1c552bb98c0c9d010fccaf037e3403a237f11c201109e916d7f02035"
+    },
+    {
+      "path": "results/final-cancel-common-function-memory_learned.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.716051196999615
+      },
+      "expansions": 11,
+      "winning_component": "frozen_neural",
+      "sha256": "0ec10474c8527004c43d573a4014719b7c640b0b69470086520c6458af6fe871"
+    },
+    {
+      "path": "results/final-cancel-common-function-Std.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.8212192279970623
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "66026eb7ccdf37bf4d33ff5429dfbee02cf5e422190af5c63599c1d8c9108052"
+    },
+    {
+      "path": "results/final-cancel-common-function-hybrid.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.602563509997708
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "82e2300d78c7f2243b1d0fd8d7e61b1ce8d6a5c02326907f5b990409c2db5844"
+    },
+    {
+      "path": "results/final-cancel-context-symbolic.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 10,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 0.5900389039998117
+      },
+      "expansions": 9,
+      "winning_component": null,
+      "sha256": "46824d18d0235a22ec4de4a4555341cbd0e2cc6b524a36a7c372422d55316b60"
+    },
+    {
+      "path": "results/final-cancel-context-memory_structural.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 10,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 0.7489558339984796
+      },
+      "expansions": 9,
+      "winning_component": null,
+      "sha256": "ffe29c840eb161440daeb0a4b81ddc6eb30a9e24b7aa5fc64bfef88fbfa641eb"
+    },
+    {
+      "path": "results/final-cancel-context-memory_learned.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 9.85839938999925
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "06230fa53c86109bf5de06fc10d4775ae0c28b60abba469f12af27659e31e84a"
+    },
+    {
+      "path": "results/final-cancel-context-Std.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.287040358001832
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "87c4abd1469b386ce44bee74af43871e7967834540d0e8e69dfd24d24c372d17"
+    },
+    {
+      "path": "results/final-cancel-context-hybrid.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.4897268530003203
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "563a5eeeb7512b51039836385d3a320976b73c60d0847e1c112f71d77320cda0"
+    },
+    {
+      "path": "results/final-nested-successor-context-symbolic.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 1.717385779000324
+      },
+      "expansions": 23,
+      "winning_component": null,
+      "sha256": "b6b158cd7eeda609ba82a718e82667797d089dd33d911c629d594c3ea1a3e859"
+    },
+    {
+      "path": "results/final-nested-successor-context-memory_structural.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.7171085019981547
+      },
+      "expansions": 23,
+      "winning_component": null,
+      "sha256": "0f5706358d5b41837bc70685fdc5225fa2a02e95d2b30dc8a87ab9b959c0ebcb"
+    },
+    {
+      "path": "results/final-nested-successor-context-memory_learned.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.4035237320022134
+      },
+      "expansions": 23,
+      "winning_component": null,
+      "sha256": "08c08fdb3eb6e6c02d1ba88d1d159ef2237428692a1f05c2c07549a33ad65825"
+    },
+    {
+      "path": "results/final-nested-successor-context-Std.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.5043615349968604
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "c6370944229d1b62dab0201422f6a3179f410f269321e3acce3edea2ba05db5e"
+    },
+    {
+      "path": "results/final-nested-successor-context-hybrid.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.3056613160006236
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "7f2335b7fd2c6725f57f41e176b31a323c8fbace9d192cfb047a0d464b1bcfad"
+    },
+    {
+      "path": "results/final-list-reverse-quad-symbolic.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 9,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.5893254779985
+      },
+      "expansions": 6,
+      "winning_component": "symbolic",
+      "sha256": "8bd01433d2af787403458249c6b119f027eab4c71581c756e49b40f1bbe5505c"
+    },
+    {
+      "path": "results/final-list-reverse-quad-memory_structural.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 9,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.9570433589979075
+      },
+      "expansions": 6,
+      "winning_component": "memory_structural",
+      "sha256": "e1b629d197354dd185b27136216b67d23f92dcadf509f83c690b50fe846c0988"
+    },
+    {
+      "path": "results/final-list-reverse-quad-memory_learned.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 13,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.3714800889974867
+      },
+      "expansions": 10,
+      "winning_component": "frozen_neural",
+      "sha256": "b47f6744d5fb86ea05ab2a0748af1536b38298c9b22dd9fef3369440bff931d7"
+    },
+    {
+      "path": "results/final-list-reverse-quad-Std.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.7871654570008104
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "fdda68bfaac4275d42f26961bf0debfd960afbd1940f28a333795e1630475e7d"
+    },
+    {
+      "path": "results/final-list-reverse-quad-hybrid.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.701713563998055
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "94616fd3f7b79cbd38d5a96ddf84b8d193f962c5fa6d4cc69bf9227143fe3e8f"
+    },
+    {
+      "path": "results/final-list-length-context-symbolic.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 31,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.9845281390007585
+      },
+      "expansions": 30,
+      "winning_component": null,
+      "sha256": "582041d154b31d3139ab36021fc7224ab9717d2e15090c8e7b4e3d30c59a3894"
+    },
+    {
+      "path": "results/final-list-length-context-memory_structural.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.029856811001082
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "79ea9da47d0dab65966ad07917a3d7f32a492c78c6cda5daea3c35e7f82f22a5"
+    },
+    {
+      "path": "results/final-list-length-context-memory_learned.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.818208793996746
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "d4c42db4d391b76c94b6d103c8ebfc7ef159ab9807a9c20adda729e748e2af51"
+    },
+    {
+      "path": "results/final-list-length-context-Std.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "Std",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.9008895340011804
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "e861e275e6b01741706b5eeb621c2538180715ecebc32ada25298f7ae0bda35b"
+    },
+    {
+      "path": "results/final-list-length-context-hybrid.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 1,
+        "independent_std_replay_calls": 1,
+        "warm_search_and_replay_wall_seconds": 2.452462798999477
+      },
+      "expansions": 1,
+      "winning_component": "ordinary_Std",
+      "sha256": "990f3fef767262a39e38eebfc96cd7aac8d435a60e77b5950fe5823204f34a7c"
+    },
+    {
+      "path": "results/final-predicate-renamed-symbolic.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 28,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.6687190820011892
+      },
+      "expansions": 27,
+      "winning_component": null,
+      "sha256": "7733d56a6ead7bf8689673282f2c37157349e2e92936e86ab09360943b451124"
+    },
+    {
+      "path": "results/final-predicate-renamed-memory_structural.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 12,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.867562999999791
+      },
+      "expansions": 9,
+      "winning_component": "memory_structural",
+      "sha256": "234cc688f66689c7bbff82030d9fc7f831010fa86402b5ec40532be48b5e6042"
+    },
+    {
+      "path": "results/final-predicate-renamed-memory_learned.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 16,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.7948407450021477
+      },
+      "expansions": 13,
+      "winning_component": "frozen_neural",
+      "sha256": "af8c7e467a523ad9d3ae8489e049d6b25e7d9ee267cb0d1417c4854c16500475"
+    },
+    {
+      "path": "results/final-predicate-renamed-Std.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "Std",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 3,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.121116985999834
+      },
+      "expansions": 3,
+      "winning_component": null,
+      "sha256": "6748cf3f6a5f63689d54752978a79ac821c99e444426d815c5040255335596f7"
+    },
+    {
+      "path": "results/final-predicate-renamed-hybrid.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 15,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.022804233001807
+      },
+      "expansions": 12,
+      "winning_component": "memory_structural",
+      "sha256": "63f12ee13c4a1ad99a027b5a9e44b3408068366e6763dc84d17e9a8154c35575"
+    },
+    {
+      "path": "results/final-function-offset-symbolic.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 6.437300114001118
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "97abf8e469c5cff0cfc30c38a46dd691cf7df9eef99437b52fbc787227c32858"
+    },
+    {
+      "path": "results/final-function-offset-memory_structural.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.475642860001244
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "cd91d679cc7a27d4d90728c05ad9a7947707f3d551f0ea7f5a0dc2ca71f15dd4"
+    },
+    {
+      "path": "results/final-function-offset-memory_learned.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 9.855434113000229
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "95bdde24a0941d980e7a9c15ec9f7e1cc4a2ee49bd6c6451d2728e0939a742a7"
+    },
+    {
+      "path": "results/final-function-offset-Std.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "Std",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 3,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.490852137001639
+      },
+      "expansions": 3,
+      "winning_component": null,
+      "sha256": "b7c816b8271fab1cccce6d97b43077edf38c1f96b0f076f6714ffcfc8dcc0517"
+    },
+    {
+      "path": "results/final-function-offset-hybrid.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 31,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 9.71712080799989
+      },
+      "expansions": 48,
+      "winning_component": null,
+      "sha256": "162792078731b4ec62fa07257362f7986680917b7c29beb145dc6c382f6cdc18"
+    },
+    {
+      "path": "results/final-predicate-successor-symbolic.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "symbolic",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 1.731874600998708
+      },
+      "expansions": 19,
+      "winning_component": null,
+      "sha256": "abc837c419a4ed8c248ef10049fd5deb95ac5f375a939becb87e7114d683efe0"
+    },
+    {
+      "path": "results/final-predicate-successor-memory_structural.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "memory_structural",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 12,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.345241603998147
+      },
+      "expansions": 9,
+      "winning_component": "memory_structural",
+      "sha256": "3e5af113fd5537e9904c3f82811f9851e90f8c915cec18894e5f9219922e6f1b"
+    },
+    {
+      "path": "results/final-predicate-successor-memory_learned.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "memory_learned",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.775417331002245
+      },
+      "expansions": 17,
+      "winning_component": "frozen_neural",
+      "sha256": "873135eb210193d5e547ea7378dcb5c743dc7a14f4005667134bfe40eb9a3daa"
+    },
+    {
+      "path": "results/final-predicate-successor-Std.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "Std",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 3,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.094893980996858
+      },
+      "expansions": 3,
+      "winning_component": null,
+      "sha256": "2e98e1f05668c739edae52976b69ae488ff78cf6fb2f7299422195c6bbf6cb97"
+    },
+    {
+      "path": "results/final-predicate-successor-hybrid.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "hybrid",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 15,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.1144061270024395
+      },
+      "expansions": 12,
+      "winning_component": "memory_structural",
+      "sha256": "e80534611448d733d7f4148f55008e68ee2d315927c8f4e3e7f8a9651f2c9821"
+    },
+    {
+      "path": "results/external-function-composition-lexical.json",
+      "task": "external-function-composition",
+      "split": "selection",
+      "mode": "lexical",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 5,
+        "retrieval_seconds": 0.009283435000270401,
+        "wall_seconds": 48.36424254700023
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "a7717846c8a985e1a5ab85a37f6ce39610565c41fc22ecad6937915572d87297"
+    },
+    {
+      "path": "results/external-function-composition-structural.json",
+      "task": "external-function-composition",
+      "split": "selection",
+      "mode": "structural",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 3,
+        "retrieval_seconds": 0.05610309199983021,
+        "wall_seconds": 35.81975327600003
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "f67ac3a88e1a73865e0d4aaf03717a66fc405f01e2c7b751b2064c78f6a9ef65"
+    },
+    {
+      "path": "results/external-function-composition-standard.json",
+      "task": "external-function-composition",
+      "split": "selection",
+      "mode": "standard",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 5,
+        "retrieval_seconds": 0.45044464799957495,
+        "wall_seconds": 29.39188590599997
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "ce10994eb7113be7b1237889cab9c86f4cef33af41e10b23292525114d299449"
+    },
+    {
+      "path": "results/external-group-double-inverse-lexical.json",
+      "task": "external-group-double-inverse",
+      "split": "selection",
+      "mode": "lexical",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 17,
+        "retrieval_seconds": 0.01569928400022036,
+        "wall_seconds": 89.87129024999967
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "3378a2ee142c4f87183ee862d8654483a0bc8183bffcc56adcc3ad9ee2a5f64f"
+    },
+    {
+      "path": "results/external-group-double-inverse-structural.json",
+      "task": "external-group-double-inverse",
+      "split": "selection",
+      "mode": "structural",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 17,
+        "retrieval_seconds": 0.03822791899983713,
+        "wall_seconds": 75.60593154499975
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "15e3c79098dde3e78a46fdc41ddc3e9d2c178bec18214f7eeaca4259368c986c"
+    },
+    {
+      "path": "results/external-group-double-inverse-standard.json",
+      "task": "external-group-double-inverse",
+      "split": "selection",
+      "mode": "standard",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 6,
+        "retrieval_seconds": 0.02800111399983507,
+        "wall_seconds": 18.578116318999946
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "41fe276352dd62e3a87db6126a427397c67d9017bd394cff946f526e4ed571ba"
+    },
+    {
+      "path": "results/external-image-composition-lexical.json",
+      "task": "external-image-composition",
+      "split": "final",
+      "mode": "lexical",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 12,
+        "retrieval_seconds": 0.12153423199970348,
+        "wall_seconds": 44.48132871300004
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "d8b672bedb0bcbe0b479d53d5056afabf47f2a3bd3ca4dd55e7266915ebf3208"
+    },
+    {
+      "path": "results/external-image-composition-structural.json",
+      "task": "external-image-composition",
+      "split": "final",
+      "mode": "structural",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 3,
+        "retrieval_seconds": 0.0264370909999343,
+        "wall_seconds": 12.509626851000121
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "e9a96ed0a92c92636ef3928e00611ef415bb13f6ae0be7d53fe058145c316148"
+    },
+    {
+      "path": "results/external-image-composition-standard.json",
+      "task": "external-image-composition",
+      "split": "final",
+      "mode": "standard",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 5,
+        "retrieval_seconds": 0.036310897000021214,
+        "wall_seconds": 21.773497503999806
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "200d889ee3d899bcb234a1ef8738d706eabf9ea93636bd6c00d168632640f67f"
+    },
+    {
+      "path": "results/external-preimage-union-lexical.json",
+      "task": "external-preimage-union",
+      "split": "final",
+      "mode": "lexical",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 17,
+        "retrieval_seconds": 0.004947735999849101,
+        "wall_seconds": 49.36399158999984
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "80826b1ee9f53fd15b94bfcda70e095f693933a8d33bebade4bb9d6ac48ed4e6"
+    },
+    {
+      "path": "results/external-preimage-union-structural.json",
+      "task": "external-preimage-union",
+      "split": "final",
+      "mode": "structural",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 3,
+        "retrieval_seconds": 0.04067781899993861,
+        "wall_seconds": 10.353729486000248
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "99da08e86e5f807f3265335f5ed2908d697efe179fab401802020e606b2b5060"
+    },
+    {
+      "path": "results/external-preimage-union-standard.json",
+      "task": "external-preimage-union",
+      "split": "final",
+      "mode": "standard",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 3,
+        "retrieval_seconds": 0.06305741799997122,
+        "wall_seconds": 7.8434085419999064
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "3c91dd0d69cd3d2a720db34250a34dc0067fd985891c7607a3ccb5e4a723be4c"
+    },
+    {
+      "path": "results/external-injective-cancel-context-lexical.json",
+      "task": "external-injective-cancel-context",
+      "split": "final",
+      "mode": "lexical",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 17,
+        "retrieval_seconds": 0.008549612000024354,
+        "wall_seconds": 56.266248922999694
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "0e3dbfd0bd6bf8f98047db72e9779ecc73a4f20a0c49d78cd3d4387952943aad"
+    },
+    {
+      "path": "results/external-injective-cancel-context-structural.json",
+      "task": "external-injective-cancel-context",
+      "split": "final",
+      "mode": "structural",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 17,
+        "retrieval_seconds": 0.034050572000069224,
+        "wall_seconds": 65.77307823000001
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "e8e7550c5a784033aa9e34b7f6c57b2956988f79949fb034582d81043941a0ba"
+    },
+    {
+      "path": "results/external-injective-cancel-context-standard.json",
+      "task": "external-injective-cancel-context",
+      "split": "final",
+      "mode": "standard",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 5,
+        "retrieval_seconds": 0.034929887000089366,
+        "wall_seconds": 14.546884078999938
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "db29f4afcafad27b7bd2d90a675f21496d4e0e69a1dcb7d677481887f6433fc8"
+    },
+    {
+      "path": "results/external-surjective-composition-lexical.json",
+      "task": "external-surjective-composition",
+      "split": "final",
+      "mode": "lexical",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 13,
+        "retrieval_seconds": 0.021445174999826122,
+        "wall_seconds": 47.889365291000104
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "adf5b23c8817fa3a35f6776bd13389eee04dbae1bf7e7588ce912fb2629c6020"
+    },
+    {
+      "path": "results/external-surjective-composition-structural.json",
+      "task": "external-surjective-composition",
+      "split": "final",
+      "mode": "structural",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 3,
+        "retrieval_seconds": 0.03756820399985372,
+        "wall_seconds": 9.136080237999977
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "8bf1a74f488797a8b70d123bfea7ca9764570609dc5a5196f723476cff439ed9"
+    },
+    {
+      "path": "results/external-surjective-composition-standard.json",
+      "task": "external-surjective-composition",
+      "split": "final",
+      "mode": "standard",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 4,
+        "retrieval_seconds": 0.027825273999951605,
+        "wall_seconds": 11.819124547999763
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "6d47aaca11f7070d6b8ccc8b8711a045c1b024f2a26959dafd947a1b0ae5fc74"
+    },
+    {
+      "path": "results/external-group-right-inverse-lexical.json",
+      "task": "external-group-right-inverse",
+      "split": "final",
+      "mode": "lexical",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 20,
+        "retrieval_seconds": 0.027049995999732346,
+        "wall_seconds": 61.280479125000056
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "f61b4df66d5984cc850135c2b4197d9dc9167b8a7d59aad83d1307c64a330e2d"
+    },
+    {
+      "path": "results/external-group-right-inverse-structural.json",
+      "task": "external-group-right-inverse",
+      "split": "final",
+      "mode": "structural",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 19,
+        "retrieval_seconds": 0.05328588399970613,
+        "wall_seconds": 67.15099602199962
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "512f948ae679493109c4b78e922d039979651d9bb3bd5ce749bcd848c323b739"
+    },
+    {
+      "path": "results/external-group-right-inverse-standard.json",
+      "task": "external-group-right-inverse",
+      "split": "final",
+      "mode": "standard",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 6,
+        "retrieval_seconds": 0.030084158000136085,
+        "wall_seconds": 16.2858575690002
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "876013cbb9aeb18b05a35f67fe75b350ba2f3979b25c08d5b1151bf8777a28de"
+    },
+    {
+      "path": "results/external-factorial-positive-lexical.json",
+      "task": "external-factorial-positive",
+      "split": "final",
+      "mode": "lexical",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 17,
+        "retrieval_seconds": 0.008607248000316758,
+        "wall_seconds": 40.78332221100027
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "45031aadd94842a3cedcb96b7ec2966de8d929108ff3b1d00705de229ec59ed6"
+    },
+    {
+      "path": "results/external-factorial-positive-structural.json",
+      "task": "external-factorial-positive",
+      "split": "final",
+      "mode": "structural",
+      "status": "verified",
+      "cost": {
+        "physical_lean_calls": 5,
+        "retrieval_seconds": 0.0680670070000815,
+        "wall_seconds": 11.584972406999896
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "da9510ad93894a449c3b37e889947b49b9b92162488deea79589e3e41a5d418b"
+    },
+    {
+      "path": "results/external-factorial-positive-standard.json",
+      "task": "external-factorial-positive",
+      "split": "final",
+      "mode": "standard",
+      "status": "unknown",
+      "cost": {
+        "physical_lean_calls": 4,
+        "retrieval_seconds": 0.052577635000034206,
+        "wall_seconds": 9.360570959000142
+      },
+      "expansions": null,
+      "winning_component": null,
+      "sha256": "22686244cd2f3f21202b53635b5198642d89bd1a963415576b2c588abfdd9d67"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-cancel-common-function.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "verified",
+      "cost": {},
+      "expansions": 11,
+      "sha256": "1c8bfc92f4e75ad8e3f44ecebbd1dcb96dcd1ecdc4879ead6298ec5ad7901e0e"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-cancel-context.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "unknown",
+      "cost": {},
+      "expansions": 9,
+      "sha256": "ce6fca07734026e24c0809ef77cacfe5c4b593eef779ed5a93d3493a6f696100"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-nested-successor-context.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "unknown",
+      "cost": {},
+      "expansions": 23,
+      "sha256": "68ff9da7ef0093267e4360c5d75f6410335384ffcfe36b717fe4b6828e3eae53"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-list-reverse-quad.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 9,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 11.699946611999621
+      },
+      "expansions": 6,
+      "sha256": "3706d84a7512e569e05e9fe530fcecaafd5d87c9c6f9cbf130cae24176e50e54"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-list-length-context.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 10.255062838998128
+      },
+      "expansions": 48,
+      "sha256": "15c3197a25ecc4b8759832c97cb3bfba8e33cf0f560ce20982d07c33a6e64ac8"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-predicate-renamed.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 12,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.125794101000793
+      },
+      "expansions": 9,
+      "sha256": "dbf5ed7223bbb83119cd14c48eb8c75a0c822a7e632b674f00c09477a9220ace"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-function-offset.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 12.98533730499912
+      },
+      "expansions": 48,
+      "sha256": "634351360d2cc93e11bb0e0fff74aa683d52ac2786c541f47d485c364c8e81fe"
+    },
+    {
+      "path": "checkpoint-transfer/untrained-17-final-predicate-successor.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "untrained-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 12,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.902520941999683
+      },
+      "expansions": 9,
+      "sha256": "6229d8b20c736e97aa3484cee552cd34dce5c8645c569c3e63a6ca600b042a67"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-cancel-common-function.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.264276723002695
+      },
+      "expansions": 11,
+      "sha256": "1edba732e8ad5030dcce2013944f8bc82dd396bfe1d144477bda9c72e63c9a12"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-cancel-context.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 17.206106690002343
+      },
+      "expansions": 48,
+      "sha256": "fd0cafc1310f80bc746a62295113e86a5a42857125ef87ccd3aab406941d9f96"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-nested-successor-context.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.967930129998422
+      },
+      "expansions": 23,
+      "sha256": "c53d2b5748903c16c4a1d5256b778de59e57adb3589fdacc5d43674916c93d2b"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-list-reverse-quad.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 13,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.628559684999345
+      },
+      "expansions": 10,
+      "sha256": "a9a69cecaf903c722ea4032bc7bc675debe346f3230fbaa03e7f7de93301129e"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-list-length-context.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 11.27406274399982
+      },
+      "expansions": 48,
+      "sha256": "2bae2b3b5e2e244449830f9d2a0ca5e144c06039a81b09aefe0870a20b8f6801"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-predicate-renamed.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 16,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 6.334403749999183
+      },
+      "expansions": 13,
+      "sha256": "1b383e804b6369c7cb4ab0b1944b1d63d711399b2539d5051aaa62fec4645e57"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-function-offset.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 10.715646874999948
+      },
+      "expansions": 48,
+      "sha256": "05b3a92c1ebd90968d0fa9f5484184eaa9b3a2505fc2beb01d8f328051ce879a"
+    },
+    {
+      "path": "checkpoint-transfer/supervised-17-final-predicate-successor.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "supervised-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.44704379399991
+      },
+      "expansions": 17,
+      "sha256": "7914f855d8e3a84c46f8fc469d0bb23854be397a605c4032e009fdb89f9607e2"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-cancel-common-function.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.124438365997776
+      },
+      "expansions": 11,
+      "sha256": "13f5fd8f3e3b7369c402c9d5679c5f48d43be831aac26f77ebb797fecd4e965c"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-cancel-context.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 10.239529057002073
+      },
+      "expansions": 48,
+      "sha256": "a82a273127445c9cfac44e3c5b41dd862a09e3b03e0f79e483da7f78a3ed2996"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-nested-successor-context.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.3403748410019034
+      },
+      "expansions": 23,
+      "sha256": "fa15f0aad7ad4133f92abcdc1aae1db75b2d2026671d23298e71dbb103b9826f"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-list-reverse-quad.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 13,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.102021196998976
+      },
+      "expansions": 10,
+      "sha256": "d78bb160ce7e9b70a1a1865d3ef4d69b03faa8184f4ff5786ee5de21ebcc1e51"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-list-length-context.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 31,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.165566968000348
+      },
+      "expansions": 30,
+      "sha256": "140b651fc89769e0ceb311bd77405e2ca0d9ec62121951a4f44d67563c47fbf5"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-predicate-renamed.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 16,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.937445635998301
+      },
+      "expansions": 13,
+      "sha256": "d8a3de4ccad7a759f5b81897b93dae30206394f9cd51989765eff45b2f97153d"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-function-offset.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 10.895468519000133
+      },
+      "expansions": 48,
+      "sha256": "aaaa221dda9b164ee3b89af736c21db39aabed7ca81fcdfbb176726aaf2d812f"
+    },
+    {
+      "path": "checkpoint-transfer/bag-17-final-predicate-successor.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "bag-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 5.158880938000948
+      },
+      "expansions": 17,
+      "sha256": "2b738236649aef1a0147e1567627c0ac09bf4bf320d1dc2730a1a98c66729bbc"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-cancel-common-function.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.934029981999629
+      },
+      "expansions": 11,
+      "sha256": "6e145c210aba2cad760e5dc17995368e55b9674aa2cc68540501f06b0d0cae1f"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-cancel-context.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 14.18678424799873
+      },
+      "expansions": 48,
+      "sha256": "0ab24547b69d6145508c5994d81ce2bcb02deeb2af07ca667d3d83c898392dbd"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-nested-successor-context.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.4921338120002474
+      },
+      "expansions": 23,
+      "sha256": "be8d746ab0a34f9df0c3cfe8d8f1923b6923e0d6a061f0963a69ae9261eeff5f"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-list-reverse-quad.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 13,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.9976644950002083
+      },
+      "expansions": 10,
+      "sha256": "fdb770e086e44fb6a4ddb473977be35eb145babb9e2ff34dafe46d3b8f2ad3d4"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-list-length-context.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 7.851828561997536
+      },
+      "expansions": 48,
+      "sha256": "9a7af0c6560bc02c84e530a9bda5f54a9658778235dd73950242eaccca8955c0"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-predicate-renamed.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 16,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.159240155997395
+      },
+      "expansions": 13,
+      "sha256": "14e1e4485ad703d9b9ba281f6fd9344b98bcf2f44ed5b8192030c57bb7840107"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-function-offset.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 8.86165202399934
+      },
+      "expansions": 48,
+      "sha256": "ecec6ecca342975575084687270d60be6950098300544d33b54553f64f7e5140"
+    },
+    {
+      "path": "checkpoint-transfer/rl1-17-final-predicate-successor.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "rl1-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.385419392001495
+      },
+      "expansions": 17,
+      "sha256": "2c3a22b0a1a6d353e77729ef9ffaf533ef413b1b4494158eaf7d45da21c9580a"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-cancel-common-function.json",
+      "task": "final-cancel-common-function",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 14,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.78432500299823
+      },
+      "expansions": 11,
+      "sha256": "fe5b5c6cce90f8ea7734ad758eba52bbb2502648bf7f2d588184f2d0942c4f81"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-cancel-context.json",
+      "task": "final-cancel-context",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 9.812923126999522
+      },
+      "expansions": 48,
+      "sha256": "ddf4e02c4732db14a2438b3f49071bcad730359c7e5683fadc70485226108217"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-nested-successor-context.json",
+      "task": "final-nested-successor-context",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 24,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 2.830495805999817
+      },
+      "expansions": 23,
+      "sha256": "28001160bb5f058e59858170ac2df1b6279c0d281a615e6337bc1c1fc141a027"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-list-reverse-quad.json",
+      "task": "final-list-reverse-quad",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 13,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.7353577249996306
+      },
+      "expansions": 10,
+      "sha256": "313e3d7eb939d68516491db3945ecc981d5a74a0f4868d4ce379843c04e11908"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-list-length-context.json",
+      "task": "final-list-length-context",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 9.06788069599861
+      },
+      "expansions": 48,
+      "sha256": "b35af02578835d3ac78413c21146b4aa6038f8aec00cc91ddad619f30995515a"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-predicate-renamed.json",
+      "task": "final-predicate-renamed",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 16,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 3.979335463998723
+      },
+      "expansions": 13,
+      "sha256": "fced5e09d87d134205a14f788c60cdf7c38748c3a4b98a0cecef9fec1f3407b9"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-function-offset.json",
+      "task": "final-function-offset",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "unknown",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 49,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 9.26099646199873
+      },
+      "expansions": 48,
+      "sha256": "61d88c94718e15c9d2287e6417855df28bf002c414be4d7e05af1b161e006f06"
+    },
+    {
+      "path": "checkpoint-transfer/rl2-17-final-predicate-successor.json",
+      "task": "final-predicate-successor",
+      "split": "final",
+      "mode": "rl2-17",
+      "status": "verified",
+      "cost": {
+        "physical_search_and_cached_replay_calls": 20,
+        "independent_std_replay_calls": 0,
+        "warm_search_and_replay_wall_seconds": 4.763706391000596
+      },
+      "expansions": 17,
+      "sha256": "75f22620c6f053cbe5ba0b35f707bfe8972aa83347a89daa4e27911c7fec9745"
+    }
+  ],
+  "tasks_sha256": "f2faa2489d2fc455529065a75eb34aebafd450285c5977a1a5e2a13e2d298fdd",
+  "final_transfer_sha256": "cc8edc83c2bbb19817214d07d6ccdaeec9ec5fc3dffe74fab023c15ce09274a3",
+  "new_training": false,
+  "model_promotion": false,
+  "cost_boundary": "Cold legacy, pooled loading and warm search costs are distinct; no incomplete-run total is reconstructed."
+}

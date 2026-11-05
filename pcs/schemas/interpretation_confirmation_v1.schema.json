@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pcs:schema:interpretation-confirmation-v1",
+  "title": "PCS independent human interpretation confirmation v1 (untrusted until Ed25519 verified)",
+  "description": "Schema validation is not signer authorization or a proof of human intent. Pin the approval public key outside the model channel.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "claim_id",
+    "interpretation_sha256",
+    "registry_sha256",
+    "claim_ir_sha256",
+    "approver",
+    "issued_at",
+    "expires_at",
+    "nonce",
+    "signature_hex"
+  ],
+  "properties": {
+    "format": {
+      "const": "pcs-interpretation-confirmation-v1"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "interpretation_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "registry_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "claim_ir_sha256": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      ]
+    },
+    "approver": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "issued_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "expires_at": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{32}$"
+    },
+    "signature_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PCS Bundle Verification Receipt v1",
+  "type": "object",
+  "required": [
+    "verification_receipt_format",
+    "verifier_version",
+    "verified_at",
+    "valid",
+    "bundle_sha256",
+    "verification_inputs",
+    "assurance_dimensions"
+  ],
+  "properties": {
+    "verification_receipt_format": {"const": "pcs-bundle-verification-v1"},
+    "verifier_version": {"type": "string", "minLength": 1},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "valid": {"type": "boolean"},
+    "bundle_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "verification_inputs": {
+      "type": "object",
+      "required": ["require_signature", "expected_signer_fingerprint", "policy_sha256"],
+      "properties": {
+        "require_signature": {"type": "boolean"},
+        "expected_signer_fingerprint": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "policy_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "assurance_dimensions": {
+      "type": "object",
+      "required": [
+        "scientific_replay",
+        "package_integrity",
+        "signer_authenticity",
+        "reviewer_policy"
+      ]
+    },
+    "errors": {"type": "array"},
+    "certificate": {"type": "object"},
+    "package_manifest": {"type": "object"},
+    "package_signature": {"type": ["object", "null"]},
+    "policy": {"type": ["object", "null"]}
+  },
+  "additionalProperties": true
+}

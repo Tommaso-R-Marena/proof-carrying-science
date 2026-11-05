@@ -1,0 +1,59 @@
+E............................EEEE..                                      [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_actual_certificate_proves_real_global_optimum_and_sharp_radius _
+
+    @pytest.fixture(scope='module')
+    def positive():
+        required_kernel();r=calibration.replay(DATA,CONTRACT,CERTIFICATE)
+>       assert r['accepted'],r
+E       AssertionError: {'format': 'pcs-calibration-kernel-v1', 'accepted': False, 'scientific_acceptance': False, 'pcs_authority': False, ...}
+E       assert False
+
+tests/test_calibration_kernel_v1.py:28: AssertionError
+_ ERROR at setup of test_evidence_is_bound_to_exact_sources_and_regenerated_proofs _
+
+    @pytest.fixture(scope='module')
+    def positive():
+        required_kernel();r=calibration.replay(DATA,CONTRACT,CERTIFICATE)
+>       assert r['accepted'],r
+E       AssertionError: {'format': 'pcs-calibration-kernel-v1', 'accepted': False, 'scientific_acceptance': False, 'pcs_authority': False, ...}
+E       assert False
+
+tests/test_calibration_kernel_v1.py:28: AssertionError
+_ ERROR at setup of test_export_refuses_proof_data_or_receiving_source_substitution[prepared] _
+
+    @pytest.fixture(scope='module')
+    def positive():
+        required_kernel();r=calibration.replay(DATA,CONTRACT,CERTIFICATE)
+>       assert r['accepted'],r
+E       AssertionError: {'format': 'pcs-calibration-kernel-v1', 'accepted': False, 'scientific_acceptance': False, 'pcs_authority': False, ...}
+E       assert False
+
+tests/test_calibration_kernel_v1.py:28: AssertionError
+_ ERROR at setup of test_export_refuses_proof_data_or_receiving_source_substitution[proof] _
+
+    @pytest.fixture(scope='module')
+    def positive():
+        required_kernel();r=calibration.replay(DATA,CONTRACT,CERTIFICATE)
+>       assert r['accepted'],r
+E       AssertionError: {'format': 'pcs-calibration-kernel-v1', 'accepted': False, 'scientific_acceptance': False, 'pcs_authority': False, ...}
+E       assert False
+
+tests/test_calibration_kernel_v1.py:28: AssertionError
+_ ERROR at setup of test_export_refuses_proof_data_or_receiving_source_substitution[source] _
+
+    @pytest.fixture(scope='module')
+    def positive():
+        required_kernel();r=calibration.replay(DATA,CONTRACT,CERTIFICATE)
+>       assert r['accepted'],r
+E       AssertionError: {'format': 'pcs-calibration-kernel-v1', 'accepted': False, 'scientific_acceptance': False, 'pcs_authority': False, ...}
+E       assert False
+
+tests/test_calibration_kernel_v1.py:28: AssertionError
+=========================== short test summary info ============================
+ERROR tests/test_calibration_kernel_v1.py::test_actual_certificate_proves_real_global_optimum_and_sharp_radius
+ERROR tests/test_calibration_kernel_v1.py::test_evidence_is_bound_to_exact_sources_and_regenerated_proofs
+ERROR tests/test_calibration_kernel_v1.py::test_export_refuses_proof_data_or_receiving_source_substitution[prepared]
+ERROR tests/test_calibration_kernel_v1.py::test_export_refuses_proof_data_or_receiving_source_substitution[proof]
+ERROR tests/test_calibration_kernel_v1.py::test_export_refuses_proof_data_or_receiving_source_substitution[source]
+30 passed, 5 errors in 58.84s

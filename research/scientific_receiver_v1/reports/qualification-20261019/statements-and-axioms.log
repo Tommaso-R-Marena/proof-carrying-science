@@ -1,0 +1,1348 @@
+PCSScientificReceiver.ResultSound.stepBinding {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  Eq.{1} (PCSScientificReceiver.Result.stepCount r) (PCSScientificReceiver.Contract.referenceStep c)
+'PCSScientificReceiver.ResultSound.stepBinding' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ofInts_toInts (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.ofInts (PCSScientificReceiver.toInts c)) (Option.some.{0} c)
+'PCSScientificReceiver.ofInts_toInts' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.renderNat_length_le_decimal._proof_1_3 (n : Nat) (hz : Not (Eq.{1} (HDiv.hDiv.{0, 0, 0} n 10) 0))
+  (small : LT.lt.{0} n 10) : False
+'PCSScientificReceiver.renderNat_length_le_decimal._proof_1_3' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.rationalInts.eq_1 (q : Rat) :
+  Eq.{1} (PCSScientificReceiver.rationalInts q) (List.cons.{0} (Rat.num q) (List.cons.{0} (↑(Rat.den q)) List.nil.{0}))
+'PCSScientificReceiver.rationalInts.eq_1' does not depend on any axioms
+PCSScientificReceiver.codecSample_supported._proof_1_1 :
+  Eq.{1} (PCSScientificReceiver.bounded PCSScientificReceiver.codecSample) Bool.true
+'PCSScientificReceiver.codecSample_supported._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.wireWithinLimits_encode._simp_1_6.{u_1, u_2} {α : Type u_1} {β : Type u_2} {b : β} {f : α → β}
+  {l : List.{u_1} α} :
+  Eq.{1} (Membership.mem.{u_2, u_2} (List.map.{u_1, u_2} f l) b)
+    (∃ a, And (Membership.mem.{u_1, u_1} l a) (Eq.{u_2 + 1} (f a) b))
+'PCSScientificReceiver.wireWithinLimits_encode._simp_1_6' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.parseRationals.eq_3 (x✝ : List.{0} Int) (x_2 : Eq.{1} x✝ List.nil.{0} → False)
+  (x_3 : ∀ (num den : Int) (rest : List.{0} Int), Eq.{1} x✝ (List.cons.{0} num (List.cons.{0} den rest)) → False) :
+  Eq.{1} (PCSScientificReceiver.parseRationals x✝) Option.none.{0}
+'PCSScientificReceiver.parseRationals.eq_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.wireWithinLimits_encode (c : PCSScientificReceiver.Contract)
+  (h : PCSScientificReceiver.OperationallySupported c) :
+  Eq.{1} (PCSScientificReceiver.wireWithinLimits (PCSScientificReceiver.encodeBytes c)) Bool.true
+'PCSScientificReceiver.wireWithinLimits_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.toInts_operands._simp_1_7.{u_1} {α : Type u_1} {a : α} {s t : List.{u_1} α} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (HAppend.hAppend.{u_1, u_1, u_1} s t) a)
+    (Or (Membership.mem.{u_1, u_1} s a) (Membership.mem.{u_1, u_1} t a))
+'PCSScientificReceiver.toInts_operands._simp_1_7' depends on axioms: [propext]
+PCSScientificReceiver.ofInts.eq_1 (ref unit phys aN aD bN bD eN eD loN loD hiN hiD lN lD uN uD tN tD count : Int)
+  (fs : List.{0} Int) :
+  Eq.{1}
+    (PCSScientificReceiver.ofInts
+      (List.cons.{0} 1
+        (List.cons.{0} 1
+          (List.cons.{0} 0
+            (List.cons.{0} 1
+              (List.cons.{0} (-1)
+                (List.cons.{0} 1
+                  (List.cons.{0} 1
+                    (List.cons.{0} 1
+                      (List.cons.{0} 0
+                        (List.cons.{0} ref
+                          (List.cons.{0} unit
+                            (List.cons.{0} phys
+                              (List.cons.{0} 1
+                                (List.cons.{0} 1
+                                  (List.cons.{0} aN
+                                    (List.cons.{0} aD
+                                      (List.cons.{0} bN
+                                        (List.cons.{0} bD
+                                          (List.cons.{0} eN
+                                            (List.cons.{0} eD
+                                              (List.cons.{0} loN
+                                                (List.cons.{0} loD
+                                                  (List.cons.{0} hiN
+                                                    (List.cons.{0} hiD
+                                                      (List.cons.{0} lN
+                                                        (List.cons.{0} lD
+                                                          (List.cons.{0} uN
+                                                            (List.cons.{0} uD
+                                                              (List.cons.{0} tN
+                                                                (List.cons.{0} tD
+                                                                  (List.cons.{0} count
+                                                                    fs))))))))))))))))))))))))))))))))
+    do
+    let referenceStep ← PCSScientificReceiver.parseNatural ref
+    let unitCode ← PCSScientificReceiver.parseBool unit
+    let physical ← PCSScientificReceiver.parseBool phys
+    let initialA ← PCSScientificReceiver.parseRational aN aD
+    let initialB ← PCSScientificReceiver.parseRational bN bD
+    let envValue ← PCSScientificReceiver.parseRational eN eD
+    let boxLo ← PCSScientificReceiver.parseRational loN loD
+    let boxHi ← PCSScientificReceiver.parseRational hiN hiD
+    let lower ← PCSScientificReceiver.parseRational lN lD
+    let upper ← PCSScientificReceiver.parseRational uN uD
+    let declaredTotal ← PCSScientificReceiver.parseRational tN tD
+    let firings ← PCSScientificReceiver.parseRationals fs
+    ite.{1} (Eq.{1} count ↑(List.length.{0} firings))
+        (Option.some.{0}
+          { referenceStep := referenceStep, unitCode := unitCode, physical := physical, initialA := initialA,
+            initialB := initialB, envValue := envValue, boxLo := boxLo, boxHi := boxHi, lower := lower, upper := upper,
+            declaredTotal := declaredTotal, firings := firings })
+        Option.none.{0}
+'PCSScientificReceiver.ofInts.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.canonical_accepts (c : PCSScientificReceiver.Contract)
+  (supported : PCSScientificReceiver.OperationallySupported c)
+  (accepted : Eq.{1} (PCSScientificReceiver.checkContract c) Bool.true) :
+  Eq.{1} (PCSScientificReceiver.receive (PCSScientificReceiver.encodeBytes c))
+    (Option.some.{0} (PCSScientificReceiver.resultOfContract c))
+'PCSScientificReceiver.canonical_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_2 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ b✝ : List.{0} Rat) :
+  Not (Eq.{1} a✝¹¹ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := b✝ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_2' does not depend on any axioms
+PCSScientificReceiver.ResultSound.source {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) : Eq.{1} r (PCSScientificReceiver.resultOfContract c)
+'PCSScientificReceiver.ResultSound.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.toInts_length._proof_1_1 (c : PCSScientificReceiver.Contract) :
+  Not
+      (Eq.{1}
+        (HAdd.hAdd.{0, 0, 0}
+          (HAdd.hAdd.{0, 0, 0}
+            (HAdd.hAdd.{0, 0, 0}
+              (HAdd.hAdd.{0, 0, 0}
+                (HAdd.hAdd.{0, 0, 0}
+                  (HAdd.hAdd.{0, 0, 0}
+                    (HAdd.hAdd.{0, 0, 0}
+                      (HAdd.hAdd.{0, 0, 0}
+                        (HAdd.hAdd.{0, 0, 0}
+                          (HAdd.hAdd.{0, 0, 0}
+                            (HAdd.hAdd.{0, 0, 0}
+                              (HAdd.hAdd.{0, 0, 0}
+                                (HAdd.hAdd.{0, 0, 0}
+                                  (HAdd.hAdd.{0, 0, 0}
+                                    (HAdd.hAdd.{0, 0, 0} 16
+                                      (HAdd.hAdd.{0, 0, 0}
+                                        (HMul.hMul.{0, 0, 0} 2
+                                          (List.length.{0} (PCSScientificReceiver.Contract.firings c)))
+                                        1))
+                                    1)
+                                  1)
+                                1)
+                              1)
+                            1)
+                          1)
+                        1)
+                      1)
+                    1)
+                  1)
+                1)
+              1)
+            1)
+          1)
+        (HAdd.hAdd.{0, 0, 0} 31 (HMul.hMul.{0, 0, 0} 2 (List.length.{0} (PCSScientificReceiver.Contract.firings c))))) →
+    False
+'PCSScientificReceiver.toInts_length._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.toInts_length (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (List.length.{0} (PCSScientificReceiver.toInts c))
+    (HAdd.hAdd.{0, 0, 0} 31 (HMul.hMul.{0, 0, 0} 2 (List.length.{0} (PCSScientificReceiver.Contract.firings c))))
+'PCSScientificReceiver.toInts_length' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.coordinateName.eq_1 : Eq.{1} PCSScientificReceiver.coordinateName "A_final"
+'PCSScientificReceiver.coordinateName.eq_1' does not depend on any axioms
+PCSScientificReceiver.ContractSound.reference {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1} (PCSScientificReceiver.Contract.referenceStep c) (List.length.{0} (PCSScientificReceiver.Contract.firings c))
+'PCSScientificReceiver.ContractSound.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.bounded_field_lengths._simp_1_1.{u_1} {α✝ : Type u_1} {b : α✝} {l : List.{u_1} α✝} {a : α✝} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (List.cons.{u_1} b l) a) (Or (Eq.{u_1 + 1} a b) (Membership.mem.{u_1, u_1} l a))
+'PCSScientificReceiver.bounded_field_lengths._simp_1_1' depends on axioms: [propext]
+PCSScientificReceiver.ContractSound.aEnclosed {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  And (LE.le.{0} (PCSScientificReceiver.Contract.lower c) (PCSScientificReceiver.finalState c 0))
+    (LE.le.{0} (PCSScientificReceiver.finalState c 0) (PCSScientificReceiver.Contract.upper c))
+'PCSScientificReceiver.ContractSound.aEnclosed' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.bounded {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true
+'PCSScientificReceiver.ContractSound.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.physical_state_nonnegative (c : PCSScientificReceiver.Contract)
+  (accepted : Eq.{1} (PCSScientificReceiver.checkContract c) Bool.true)
+  (physical : Eq.{1} (PCSScientificReceiver.Contract.physical c) Bool.true) (k : Nat)
+  (within : LE.le.{0} k (List.length.{0} (PCSScientificReceiver.Contract.firings c))) :
+  And (LE.le.{0} 0 (PCSScientificReceiver.state c k 0)) (LE.le.{0} 0 (PCSScientificReceiver.state c k 1))
+'PCSScientificReceiver.physical_state_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.Result.mk.inj {stepCount : Nat} {unitCode physical : Bool}
+  {finalA finalB total lowerA upperA lowerB upperB : Rat} {stepCount✝ : Nat} {unitCode✝ physical✝ : Bool}
+  {finalA✝ finalB✝ total✝ lowerA✝ upperA✝ lowerB✝ upperB✝ : Rat} :
+  Eq.{1}
+      { stepCount := stepCount, unitCode := unitCode, physical := physical, finalA := finalA, finalB := finalB,
+        total := total, lowerA := lowerA, upperA := upperA, lowerB := lowerB, upperB := upperB }
+      { stepCount := stepCount✝, unitCode := unitCode✝, physical := physical✝, finalA := finalA✝, finalB := finalB✝,
+        total := total✝, lowerA := lowerA✝, upperA := upperA✝, lowerB := lowerB✝, upperB := upperB✝ } →
+    And (Eq.{1} stepCount stepCount✝)
+      (And (Eq.{1} unitCode unitCode✝)
+        (And (Eq.{1} physical physical✝)
+          (And (Eq.{1} finalA finalA✝)
+            (And (Eq.{1} finalB finalB✝)
+              (And (Eq.{1} total total✝)
+                (And (Eq.{1} lowerA lowerA✝)
+                  (And (Eq.{1} upperA upperA✝) (And (Eq.{1} lowerB lowerB✝) (Eq.{1} upperB upperB✝)))))))))
+'PCSScientificReceiver.Result.mk.inj' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_8 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ b✝¹ b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ : Rat) :
+  Not (Eq.{1} a✝³ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := b✝, finalB := b✝¹, total := b✝², lowerA := b✝³,
+          upperA := b✝⁴, lowerB := b✝⁵, upperB := b✝⁶ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_8' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_10 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ : Rat) (b✝ b✝¹ : Bool) (b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ b✝⁸ : Rat) :
+  Not (Eq.{1} a✝¹ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := b✝, physical := b✝¹, finalA := b✝², finalB := b✝³, total := b✝⁴, lowerA := b✝⁵,
+          upperA := b✝⁶, lowerB := b✝⁷, upperB := b✝⁸ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_10' does not depend on any axioms
+PCSScientificReceiver.sample_accepts._simp_1_20 {n : Nat} {P : Fin (HAdd.hAdd.{0, 0, 0} n 1) → Prop} :
+  Eq.{1} (∀ (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), P i) (And (P 0) (∀ (i : Fin n), P (Fin.succ i)))
+'PCSScientificReceiver.sample_accepts._simp_1_20' depends on axioms: [propext]
+PCSScientificReceiver.parseRationals.eq_2 (num den : Int) (rest : List.{0} Int) :
+  Eq.{1} (PCSScientificReceiver.parseRationals (List.cons.{0} num (List.cons.{0} den rest))) do
+    let q ← PCSScientificReceiver.parseRational num den
+    let qs ← PCSScientificReceiver.parseRationals rest
+    Pure.pure.{0, 0} (List.cons.{0} q qs)
+'PCSScientificReceiver.parseRationals.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.malformed_rejects (raw : List.{0} UInt8)
+  (h : Eq.{1} (PCSScientificReceiver.decode raw) Option.none.{0}) :
+  Eq.{1} (PCSScientificReceiver.receive raw) Option.none.{0}
+'PCSScientificReceiver.malformed_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.PhysicalAdmissible.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.PhysicalAdmissible c)
+    (And
+      (∀ (k : Fin (HAdd.hAdd.{0, 0, 0} (List.length.{0} (PCSScientificReceiver.Contract.firings c)) 1)),
+        And (LE.le.{0} 0 (PCSScientificReceiver.state c (↑k) 0)) (LE.le.{0} 0 (PCSScientificReceiver.state c (↑k) 1)))
+      (∀ (k : Fin (List.length.{0} (PCSScientificReceiver.Contract.firings c))),
+        LE.le.{0} 0 (GetElem.getElem.{0, 0, 0} (PCSScientificReceiver.Contract.firings c) ↑k ⋯)))
+'PCSScientificReceiver.PhysicalAdmissible.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.actualInBox {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  And (LE.le.{0} (PCSScientificReceiver.Contract.boxLo c) (PCSScientificReceiver.Contract.envValue c))
+    (LE.le.{0} (PCSScientificReceiver.Contract.envValue c) (PCSScientificReceiver.Contract.boxHi c))
+'PCSScientificReceiver.ContractSound.actualInBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.receive.eq_1 (raw : List.{0} UInt8) :
+  Eq.{1} (PCSScientificReceiver.receive raw) do
+    let c ← PCSScientificReceiver.decode raw
+    ite.{1} (Eq.{1} (PCSScientificReceiver.checkContract c) Bool.true)
+        (Option.some.{0} (PCSScientificReceiver.resultOfContract c)) Option.none.{0}
+'PCSScientificReceiver.receive.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.checkContract_sound (c : PCSScientificReceiver.Contract)
+  (accepted : Eq.{1} (PCSScientificReceiver.checkContract c) Bool.true) : PCSScientificReceiver.ContractSound c
+'PCSScientificReceiver.checkContract_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.rationalsInts_operands._simp_1_2.{u_1} {α : Type u_1} {a : α} :
+  Eq.{1} (Membership.mem.{u_1, u_1} List.nil.{u_1} a) False
+'PCSScientificReceiver.rationalsInts_operands._simp_1_2' depends on axioms: [propext]
+PCSScientificReceiver.sample_accepts :
+  Eq.{1} (PCSScientificReceiver.checkContract PCSScientificReceiver.sampleContract) Bool.true
+'PCSScientificReceiver.sample_accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.finalState.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.finalState c)
+    (PCSScientificReceiver.state c (List.length.{0} (PCSScientificReceiver.Contract.firings c)))
+'PCSScientificReceiver.finalState.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.toInts.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.toInts c)
+    (HAppend.hAppend.{0, 0, 0}
+      (HAppend.hAppend.{0, 0, 0}
+        (HAppend.hAppend.{0, 0, 0}
+          (List.cons.{0} 1
+            (List.cons.{0} 1
+              (List.cons.{0} 0
+                (List.cons.{0} 1
+                  (List.cons.{0} (-1)
+                    (List.cons.{0} 1
+                      (List.cons.{0} 1
+                        (List.cons.{0} 1
+                          (List.cons.{0} 0
+                            (List.cons.{0} (↑(PCSScientificReceiver.Contract.referenceStep c))
+                              (List.cons.{0} (PCSScientificReceiver.boolInt (PCSScientificReceiver.Contract.unitCode c))
+                                (List.cons.{0}
+                                  (PCSScientificReceiver.boolInt (PCSScientificReceiver.Contract.physical c))
+                                  (List.cons.{0} 1 (List.cons.{0} 1 List.nil.{0}))))))))))))))
+          (PCSScientificReceiver.rationalsInts
+            (List.cons.{0} (PCSScientificReceiver.Contract.initialA c)
+              (List.cons.{0} (PCSScientificReceiver.Contract.initialB c)
+                (List.cons.{0} (PCSScientificReceiver.Contract.envValue c)
+                  (List.cons.{0} (PCSScientificReceiver.Contract.boxLo c)
+                    (List.cons.{0} (PCSScientificReceiver.Contract.boxHi c)
+                      (List.cons.{0} (PCSScientificReceiver.Contract.lower c)
+                        (List.cons.{0} (PCSScientificReceiver.Contract.upper c)
+                          (List.cons.{0} (PCSScientificReceiver.Contract.declaredTotal c) List.nil.{0}))))))))))
+        (List.cons.{0} (↑(List.length.{0} (PCSScientificReceiver.Contract.firings c))) List.nil.{0}))
+      (PCSScientificReceiver.rationalsInts (PCSScientificReceiver.Contract.firings c)))
+'PCSScientificReceiver.toInts.eq_1' does not depend on any axioms
+PCSScientificReceiver.bounded_encodeBytes_length._proof_1_4 (c : PCSScientificReceiver.Contract)
+  (hjoined :
+    LE.le.{0}
+      (List.length.{0}
+        (PCS.V2.ProofGatedCodec.joinFields
+          (List.cons.{0} PCSScientificReceiver.protocolTag
+            (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c)))))
+      (HMul.hMul.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 20 1)
+        (List.length.{0}
+          (List.cons.{0} PCSScientificReceiver.protocolTag
+            (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c))))))
+  (hcount :
+    LE.le.{0}
+      (List.length.{0}
+        (List.cons.{0} PCSScientificReceiver.protocolTag
+          (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c))))
+      160) :
+  Not
+      (LE.le.{0}
+        (List.length.{0}
+          (PCS.V2.ProofGatedCodec.joinFields
+            (List.cons.{0} PCSScientificReceiver.protocolTag
+              (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c)))))
+        3360) →
+    False
+'PCSScientificReceiver.bounded_encodeBytes_length._proof_1_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.parseRational.eq_1 (num den : Int) :
+  Eq.{1} (PCSScientificReceiver.parseRational num den)
+    (ite.{1}
+      (And (LT.lt.{0} 0 den)
+        (And (Eq.{1} (Rat.num (HDiv.hDiv.{0, 0, 0} ↑num ↑den)) num)
+          (Eq.{1} (↑(Rat.den (HDiv.hDiv.{0, 0, 0} ↑num ↑den))) den)))
+      (Option.some.{0} (HDiv.hDiv.{0, 0, 0} ↑num ↑den)) Option.none.{0})
+'PCSScientificReceiver.parseRational.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.wireWithinLimits_encode._simp_1_4.{u_1} {α : Type u_1} {p : α → Bool} {l : List.{u_1} α} :
+  Eq.{1} (Eq.{1} (List.all.{u_1} l p) Bool.true) (∀ (x : α), Membership.mem.{u_1, u_1} l x → Eq.{1} (p x) Bool.true)
+'PCSScientificReceiver.wireWithinLimits_encode._simp_1_4' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.sample_scientific_claim :
+  PCSScientificReceiver.ResultSound PCSScientificReceiver.sampleContract
+    (PCSScientificReceiver.resultOfContract PCSScientificReceiver.sampleContract)
+'PCSScientificReceiver.sample_scientific_claim' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.initial.eq_1 (c : PCSScientificReceiver.Contract) (s : Fin 2) :
+  Eq.{1} (PCSScientificReceiver.initial c s)
+    (ite.{1} (Eq.{1} s 0) (PCSScientificReceiver.Contract.initialA c) (PCSScientificReceiver.Contract.initialB c))
+'PCSScientificReceiver.initial.eq_1' depends on axioms: [propext]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_1 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) :
+  Eq.{1}
+    { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+      boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+    { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+      boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_1' does not depend on any axioms
+PCSScientificReceiver.renderNat_length_le_decimal._proof_1_2 (digits n : Nat)
+  (positive : LT.lt.{0} 0 (HAdd.hAdd.{0, 0, 0} digits 1)) (hn : Not (LT.lt.{0} 0 digits)) :
+  Not (Eq.{1} digits 0) → False
+'PCSScientificReceiver.renderNat_length_le_decimal._proof_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.ContractSound.bEnclosed {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  And
+    (LE.le.{0}
+      (HSub.hSub.{0, 0, 0} (PCSScientificReceiver.Contract.declaredTotal c) (PCSScientificReceiver.Contract.upper c))
+      (PCSScientificReceiver.finalState c 1))
+    (LE.le.{0} (PCSScientificReceiver.finalState c 1)
+      (HSub.hSub.{0, 0, 0} (PCSScientificReceiver.Contract.declaredTotal c) (PCSScientificReceiver.Contract.lower c)))
+'PCSScientificReceiver.ContractSound.bEnclosed' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ResultSound.physical {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  Eq.{1} (PCSScientificReceiver.Result.physical r) Bool.true → PCSScientificReceiver.PhysicalAdmissible c
+'PCSScientificReceiver.ResultSound.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.codecSample_supported._proof_1_3 (f : List.{0} Char) :
+  Membership.mem.{0, 0}
+      (List.cons.{0} PCSScientificReceiver.protocolTag
+        (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt
+          (PCSScientificReceiver.toInts PCSScientificReceiver.codecSample)))
+      f →
+    LE.le.{0} (List.length.{0} f) PCSScientificReceiver.maxFieldChars
+'PCSScientificReceiver.codecSample_supported._proof_1_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.decode_iff (raw : List.{0} UInt8) (c : PCSScientificReceiver.Contract) :
+  Iff (Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c))
+    (And (PCSScientificReceiver.OperationallySupported c) (Eq.{1} (PCSScientificReceiver.encodeBytes c) raw))
+'PCSScientificReceiver.decode_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.decode_unique {raw raw' : List.{0} UInt8} {c : PCSScientificReceiver.Contract}
+  (h : Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c))
+  (h' : Eq.{1} (PCSScientificReceiver.decode raw') (Option.some.{0} c)) : Eq.{1} raw raw'
+'PCSScientificReceiver.decode_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.physical_firing_nonnegative (c : PCSScientificReceiver.Contract)
+  (accepted : Eq.{1} (PCSScientificReceiver.checkContract c) Bool.true)
+  (physical : Eq.{1} (PCSScientificReceiver.Contract.physical c) Bool.true)
+  (k : Fin (List.length.{0} (PCSScientificReceiver.Contract.firings c))) :
+  LE.le.{0} 0 (GetElem.getElem.{0, 0, 0} (PCSScientificReceiver.Contract.firings c) ↑k ⋯)
+'PCSScientificReceiver.physical_firing_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.codecSample_bytes._proof_1_1 :
+  Eq.{1} (PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample)
+    (PCS.V2.ProofGatedBytes.ascii
+      "PCS-SCI-BOUND-V1|1|1|0|1|-1|1|1|1|0|1|1|1|1|1|1|1|0|1|2|3|3|5|7|10|1|2|3|4|1|1|1|1|3")
+'PCSScientificReceiver.codecSample_bytes._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_7 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ b✝¹ b✝² b✝³ b✝⁴ b✝⁵ : Rat) :
+  Not (Eq.{1} a✝⁴ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := b✝, total := b✝¹, lowerA := b✝²,
+          upperA := b✝³, lowerB := b✝⁴, upperB := b✝⁵ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_7' does not depend on any axioms
+PCSScientificReceiver.bounded_encodeBytes_length._proof_1_2 (c : PCSScientificReceiver.Contract)
+  (hn : LE.le.{0} (List.length.{0} (PCSScientificReceiver.Contract.firings c)) 64) :
+  Not
+      (LE.le.{0}
+        (HAdd.hAdd.{0, 0, 0}
+          (HAdd.hAdd.{0, 0, 0} 31 (HMul.hMul.{0, 0, 0} 2 (List.length.{0} (PCSScientificReceiver.Contract.firings c))))
+          1)
+        160) →
+    False
+'PCSScientificReceiver.bounded_encodeBytes_length._proof_1_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.rational_rejection_controls._proof_1_1 :
+  And (Eq.{1} (PCSScientificReceiver.parseRational 2 4) Option.none.{0})
+    (And (Eq.{1} (PCSScientificReceiver.parseRational 0 2) Option.none.{0})
+      (And (Eq.{1} (PCSScientificReceiver.parseRational 1 0) Option.none.{0})
+        (Eq.{1} (PCSScientificReceiver.parseRational (-1) (-2)) Option.none.{0})))
+'PCSScientificReceiver.rational_rejection_controls._proof_1_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_6 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ b✝¹ b✝² b✝³ b✝⁴ : Rat) :
+  Not (Eq.{1} a✝⁵ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := b✝, lowerA := b✝¹,
+          upperA := b✝², lowerB := b✝³, upperB := b✝⁴ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_6' does not depend on any axioms
+PCSScientificReceiver.sample_wrong_environment_rejects._simp_1_20 {n : Nat} {P : Fin (HAdd.hAdd.{0, 0, 0} n 1) → Prop} :
+  Eq.{1} (∀ (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), P i) (And (P 0) (∀ (i : Fin n), P (Fin.succ i)))
+'PCSScientificReceiver.sample_wrong_environment_rejects._simp_1_20' depends on axioms: [propext]
+PCSScientificReceiver.ResultSound.stateA {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  Eq.{1} (PCSScientificReceiver.Result.finalA r) (PCSScientificReceiver.finalState c 0)
+'PCSScientificReceiver.ResultSound.stateA' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.joinFields_length_le._proof_1_2 (limit : Nat) (f : List.{0} Char)
+  (hf : LE.le.{0} (List.length.{0} f) limit) (g : List.{0} Char) (gs : List.{0} (List.{0} Char))
+  (hrest :
+    LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.joinFields (List.cons.{0} g gs)))
+      (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} limit 1) (List.length.{0} gs))
+        (HAdd.hAdd.{0, 0, 0} limit 1))) :
+  Not
+      (LE.le.{0}
+        (HAdd.hAdd.{0, 0, 0} (List.length.{0} f)
+          (HAdd.hAdd.{0, 0, 0} (List.length.{0} (PCS.V2.ProofGatedCodec.joinFields (List.cons.{0} g gs))) 1))
+        (HAdd.hAdd.{0, 0, 0}
+          (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} limit 1) (List.length.{0} gs))
+            (HAdd.hAdd.{0, 0, 0} limit 1))
+          (HAdd.hAdd.{0, 0, 0} limit 1))) →
+    False
+'PCSScientificReceiver.joinFields_length_le._proof_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_3 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ b✝¹ : Rat) :
+  Not (Eq.{1} a✝⁸ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := b✝, upperB := b✝¹ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_3' does not depend on any axioms
+PCSScientificReceiver.bounded_operationallySupported (c : PCSScientificReceiver.Contract)
+  (hc : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true) : PCSScientificReceiver.OperationallySupported c
+'PCSScientificReceiver.bounded_operationallySupported' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.encodeChars.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.encodeChars c)
+    (PCS.V2.ProofGatedCodec.encodeInts PCSScientificReceiver.protocolTag (PCSScientificReceiver.toInts c))
+'PCSScientificReceiver.encodeChars.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.totalBinding {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1} (PCSScientificReceiver.Contract.declaredTotal c)
+    (HAdd.hAdd.{0, 0, 0} (PCSScientificReceiver.Contract.initialA c) (PCSScientificReceiver.Contract.initialB c))
+'PCSScientificReceiver.ContractSound.totalBinding' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.toInts_operands._simp_1_11.{u_1} {α : Type u_1} {a b : α} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (List.cons.{u_1} b List.nil.{u_1}) a) (Eq.{u_1 + 1} a b)
+'PCSScientificReceiver.toInts_operands._simp_1_11' depends on axioms: [propext]
+PCSScientificReceiver.ResultSound.conserved {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  Eq.{1} (HAdd.hAdd.{0, 0, 0} (PCSScientificReceiver.Result.finalA r) (PCSScientificReceiver.Result.finalB r))
+    (PCSScientificReceiver.Result.total r)
+'PCSScientificReceiver.ResultSound.conserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.maxFieldChars.eq_1 : Eq.{1} PCSScientificReceiver.maxFieldChars 20
+'PCSScientificReceiver.maxFieldChars.eq_1' does not depend on any axioms
+PCSScientificReceiver.verifiedWireSound (raw : List.{0} UInt8) (r : PCSScientificReceiver.Result)
+  (accepted : Eq.{1} (PCSScientificReceiver.receive raw) (Option.some.{0} r)) :
+  PCSScientificReceiver.ScopedScientificClaimHolds raw r
+'PCSScientificReceiver.verifiedWireSound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.environment.eq_1 (c : PCSScientificReceiver.Contract) (name : String) :
+  Eq.{1} (PCSScientificReceiver.environment c name)
+    (ite.{1} (Eq.{1} name PCSScientificReceiver.coordinateName)
+      (Option.some.{0} (PCSScientificReceiver.Contract.envValue c)) Option.none.{0})
+'PCSScientificReceiver.environment.eq_1' does not depend on any axioms
+PCSScientificReceiver.ContractSound.certificateAccepted {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1} (CertNum.Certificate.checkIntervalEnclosure (PCSScientificReceiver.certificate c)) Bool.true
+'PCSScientificReceiver.ContractSound.certificateAccepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.splitFields_encodeChars (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCS.V2.ProofGatedCodec.splitFields (PCSScientificReceiver.encodeChars c))
+    (List.cons.{0} PCSScientificReceiver.protocolTag
+      (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c)))
+'PCSScientificReceiver.splitFields_encodeChars' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ResultSound.stateB {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  Eq.{1} (PCSScientificReceiver.Result.finalB r) (PCSScientificReceiver.finalState c 1)
+'PCSScientificReceiver.ResultSound.stateB' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.initial._proof_1 : NeZero.{0} (HAdd.hAdd.{0, 0, 0} 1 1)
+'PCSScientificReceiver.initial._proof_1' depends on axioms: [propext]
+PCSScientificReceiver.rationalsInts.eq_1 (qs : List.{0} Rat) :
+  Eq.{1} (PCSScientificReceiver.rationalsInts qs) (List.flatMap.{0, 0} PCSScientificReceiver.rationalInts qs)
+'PCSScientificReceiver.rationalsInts.eq_1' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_13 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ : Nat) (b✝¹ b✝² : Bool)
+  (b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ b✝⁸ b✝⁹ b✝¹⁰ : Rat) (b✝¹¹ : List.{0} Rat) :
+  Not (Eq.{1} a✝ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := b✝, unitCode := b✝¹, physical := b✝², initialA := b✝³, initialB := b✝⁴, envValue := b✝⁵,
+          boxLo := b✝⁶, boxHi := b✝⁷, lower := b✝⁸, upper := b✝⁹, declaredTotal := b✝¹⁰, firings := b✝¹¹ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_13' does not depend on any axioms
+PCSScientificReceiver.decode_supported._simp_1_2.{u_1} {α : Type u_1} {p : α → Bool} {l : List.{u_1} α} :
+  Eq.{1} (Eq.{1} (List.all.{u_1} l p) Bool.true) (∀ (x : α), Membership.mem.{u_1, u_1} l x → Eq.{1} (p x) Bool.true)
+'PCSScientificReceiver.decode_supported._simp_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.wireWithinLimits_encode._simp_1_5.{u_1} {α✝ : Type u_1} {b : α✝} {l : List.{u_1} α✝} {a : α✝} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (List.cons.{u_1} b l) a) (Or (Eq.{u_1 + 1} a b) (Membership.mem.{u_1, u_1} l a))
+'PCSScientificReceiver.wireWithinLimits_encode._simp_1_5' depends on axioms: [propext]
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_2 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ : Rat) :
+  Not (Eq.{1} a✝⁹ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := b✝ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_2' does not depend on any axioms
+PCSScientificReceiver.ResultSound.enclosedA {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  And (LE.le.{0} (PCSScientificReceiver.Result.lowerA r) (PCSScientificReceiver.Result.finalA r))
+    (LE.le.{0} (PCSScientificReceiver.Result.finalA r) (PCSScientificReceiver.Result.upperA r))
+'PCSScientificReceiver.ResultSound.enclosedA' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.physical {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1} (PCSScientificReceiver.Contract.physical c) Bool.true → PCSScientificReceiver.PhysicalAdmissible c
+'PCSScientificReceiver.ContractSound.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.sample_false_total_rejects._simp_1_20 {n : Nat} {P : Fin (HAdd.hAdd.{0, 0, 0} n 1) → Prop} :
+  Eq.{1} (∀ (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), P i) (And (P 0) (∀ (i : Fin n), P (Fin.succ i)))
+'PCSScientificReceiver.sample_false_total_rejects._simp_1_20' depends on axioms: [propext]
+PCSScientificReceiver.sample_reversed_box_rejects :
+  Eq.{1}
+    (PCSScientificReceiver.checkContract
+      (have __src := PCSScientificReceiver.sampleContract;
+      { referenceStep := PCSScientificReceiver.Contract.referenceStep __src,
+        unitCode := PCSScientificReceiver.Contract.unitCode __src,
+        physical := PCSScientificReceiver.Contract.physical __src,
+        initialA := PCSScientificReceiver.Contract.initialA __src,
+        initialB := PCSScientificReceiver.Contract.initialB __src,
+        envValue := PCSScientificReceiver.Contract.envValue __src, boxLo := 1, boxHi := 0,
+        lower := PCSScientificReceiver.Contract.lower __src, upper := PCSScientificReceiver.Contract.upper __src,
+        declaredTotal := PCSScientificReceiver.Contract.declaredTotal __src,
+        firings := PCSScientificReceiver.Contract.firings __src }))
+    Bool.false
+'PCSScientificReceiver.sample_reversed_box_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.toInts_operands._proof_1_6 (c : PCSScientificReceiver.Contract)
+  (hr : LE.le.{0} (PCSScientificReceiver.Contract.referenceStep c) 64) :
+  Not (LE.le.{0} (PCSScientificReceiver.Contract.referenceStep c) 1000000000000000000) → False
+'PCSScientificReceiver.toInts_operands._proof_1_6' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.encodeBytes.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.encodeBytes c)
+    (List.map.{0, 0} PCS.V2.ProofGatedBytes.charToByte (PCSScientificReceiver.encodeChars c))
+'PCSScientificReceiver.encodeBytes.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.Contract.mk.inj {referenceStep : Nat} {unitCode physical : Bool}
+  {initialA initialB envValue boxLo boxHi lower upper declaredTotal : Rat} {firings : List.{0} Rat}
+  {referenceStep✝ : Nat} {unitCode✝ physical✝ : Bool}
+  {initialA✝ initialB✝ envValue✝ boxLo✝ boxHi✝ lower✝ upper✝ declaredTotal✝ : Rat} {firings✝ : List.{0} Rat} :
+  Eq.{1}
+      { referenceStep := referenceStep, unitCode := unitCode, physical := physical, initialA := initialA,
+        initialB := initialB, envValue := envValue, boxLo := boxLo, boxHi := boxHi, lower := lower, upper := upper,
+        declaredTotal := declaredTotal, firings := firings }
+      { referenceStep := referenceStep✝, unitCode := unitCode✝, physical := physical✝, initialA := initialA✝,
+        initialB := initialB✝, envValue := envValue✝, boxLo := boxLo✝, boxHi := boxHi✝, lower := lower✝,
+        upper := upper✝, declaredTotal := declaredTotal✝, firings := firings✝ } →
+    And (Eq.{1} referenceStep referenceStep✝)
+      (And (Eq.{1} unitCode unitCode✝)
+        (And (Eq.{1} physical physical✝)
+          (And (Eq.{1} initialA initialA✝)
+            (And (Eq.{1} initialB initialB✝)
+              (And (Eq.{1} envValue envValue✝)
+                (And (Eq.{1} boxLo boxLo✝)
+                  (And (Eq.{1} boxHi boxHi✝)
+                    (And (Eq.{1} lower lower✝)
+                      (And (Eq.{1} upper upper✝)
+                        (And (Eq.{1} declaredTotal declaredTotal✝) (Eq.{1} firings firings✝)))))))))))
+'PCSScientificReceiver.Contract.mk.inj' does not depend on any axioms
+PCSScientificReceiver.codecSample_roundtrip :
+  Eq.{1} (PCSScientificReceiver.decode (PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample))
+    (Option.some.{0} PCSScientificReceiver.codecSample)
+'PCSScientificReceiver.codecSample_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.wireWithinLimits.eq_1 (raw : List.{0} UInt8) :
+  Eq.{1} (PCSScientificReceiver.wireWithinLimits raw)
+    (Bool.and
+      (Bool.and (Decidable.decide (LE.le.{0} (List.length.{0} raw) PCSScientificReceiver.maxBytes))
+        (List.all.{0} raw PCS.V2.ProofGatedBytes.isAsciiByte))
+      (List.all.{0} (PCS.V2.ProofGatedCodec.splitFields (List.map.{0, 0} PCS.V2.ProofGatedBytes.byteToChar raw))
+        fun f => Decidable.decide (LE.le.{0} (List.length.{0} f) PCSScientificReceiver.maxFieldChars)))
+'PCSScientificReceiver.wireWithinLimits.eq_1' does not depend on any axioms
+PCSScientificReceiver.parseRationals.eq_def (x✝ : List.{0} Int) :
+  Eq.{1} (PCSScientificReceiver.parseRationals x✝)
+    (match x✝ with
+    | List.nil.{0} => Option.some.{0} List.nil.{0}
+    | List.cons.{0} num (List.cons.{0} den rest) => do
+      let q ← PCSScientificReceiver.parseRational num den
+      let qs ← PCSScientificReceiver.parseRationals rest
+      Pure.pure.{0, 0} (List.cons.{0} q qs)
+    | x => Option.none.{0})
+'PCSScientificReceiver.parseRationals.eq_def' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_3 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ : Rat) (b✝¹ : List.{0} Rat) :
+  Not (Eq.{1} a✝¹⁰ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := b✝, firings := b✝¹ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_3' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_5 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ b✝¹ b✝² b✝³ : Rat) :
+  Not (Eq.{1} a✝⁶ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := b✝,
+          upperA := b✝¹, lowerB := b✝², upperB := b✝³ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_5' does not depend on any axioms
+PCSScientificReceiver.renderNat_length_le_decimal (digits n : Nat) (positive : LT.lt.{0} 0 digits)
+  (small : LT.lt.{0} n (HPow.hPow.{0, 0, 0} 10 digits)) :
+  LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderNat n)) digits
+'PCSScientificReceiver.renderNat_length_le_decimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.resultOfContract_sound (c : PCSScientificReceiver.Contract)
+  (accepted : Eq.{1} (PCSScientificReceiver.checkContract c) Bool.true) :
+  PCSScientificReceiver.ResultSound c (PCSScientificReceiver.resultOfContract c)
+'PCSScientificReceiver.resultOfContract_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.PhysicalAdmissible._proof_2 : NeZero.{0} (HAdd.hAdd.{0, 0, 0} 1 1)
+'PCSScientificReceiver.PhysicalAdmissible._proof_2' depends on axioms: [propext]
+PCSScientificReceiver.OperationallySupported.fieldLengths {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.OperationallySupported c) (f : List.{0} Char) :
+  Membership.mem.{0, 0}
+      (List.cons.{0} PCSScientificReceiver.protocolTag
+        (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c)))
+      f →
+    LE.le.{0} (List.length.{0} f) PCSScientificReceiver.maxFieldChars
+'PCSScientificReceiver.OperationallySupported.fieldLengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.sample_false_total_rejects :
+  Eq.{1}
+    (PCSScientificReceiver.checkContract
+      (have __src := PCSScientificReceiver.sampleContract;
+      { referenceStep := PCSScientificReceiver.Contract.referenceStep __src,
+        unitCode := PCSScientificReceiver.Contract.unitCode __src,
+        physical := PCSScientificReceiver.Contract.physical __src,
+        initialA := PCSScientificReceiver.Contract.initialA __src,
+        initialB := PCSScientificReceiver.Contract.initialB __src,
+        envValue := PCSScientificReceiver.Contract.envValue __src, boxLo := PCSScientificReceiver.Contract.boxLo __src,
+        boxHi := PCSScientificReceiver.Contract.boxHi __src, lower := PCSScientificReceiver.Contract.lower __src,
+        upper := PCSScientificReceiver.Contract.upper __src, declaredTotal := 2,
+        firings := PCSScientificReceiver.Contract.firings __src }))
+    Bool.false
+'PCSScientificReceiver.sample_false_total_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.state.eq_1 (c : PCSScientificReceiver.Contract) (k : Nat) :
+  Eq.{1} (PCSScientificReceiver.state c k)
+    (PCCA.Stoich.evolve.{0, 0, 0} PCSIntegration.transfer (PCSScientificReceiver.schedule c)
+      (PCSScientificReceiver.initial c) k)
+'PCSScientificReceiver.state.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.certificate.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.certificate c)
+    { expr := CertNum.Expr.var PCSScientificReceiver.coordinateName, arith := ⋯,
+      box :=
+        List.cons.{0}
+          (Prod.mk.{0, 0} PCSScientificReceiver.coordinateName
+            (CertNum.Interval.mk' (PCSScientificReceiver.Contract.boxLo c) (PCSScientificReceiver.Contract.boxHi c)))
+          List.nil.{0},
+      claimed :=
+        CertNum.Interval.mk' (PCSScientificReceiver.Contract.lower c) (PCSScientificReceiver.Contract.upper c) }
+'PCSScientificReceiver.certificate.eq_1' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_9 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ : Rat) (b✝ : Bool) (b✝¹ b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ : Rat) :
+  Not (Eq.{1} a✝² b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := b✝, finalA := b✝¹, finalB := b✝², total := b✝³, lowerA := b✝⁴,
+          upperA := b✝⁵, lowerB := b✝⁶, upperB := b✝⁷ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_9' does not depend on any axioms
+PCSScientificReceiver.renderInt_length_bounded (z : Int)
+  (small : LE.le.{0} (Int.natAbs z) PCSScientificReceiver.maxOperand) :
+  LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderInt z)) PCSScientificReceiver.maxFieldChars
+'PCSScientificReceiver.renderInt_length_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.Contract.mk.sizeOf_spec (referenceStep : Nat) (unitCode physical : Bool)
+  (initialA initialB envValue boxLo boxHi lower upper declaredTotal : Rat) (firings : List.{0} Rat) :
+  Eq.{1}
+    (SizeOf.sizeOf.{1}
+      { referenceStep := referenceStep, unitCode := unitCode, physical := physical, initialA := initialA,
+        initialB := initialB, envValue := envValue, boxLo := boxLo, boxHi := boxHi, lower := lower, upper := upper,
+        declaredTotal := declaredTotal, firings := firings })
+    (HAdd.hAdd.{0, 0, 0}
+      (HAdd.hAdd.{0, 0, 0}
+        (HAdd.hAdd.{0, 0, 0}
+          (HAdd.hAdd.{0, 0, 0}
+            (HAdd.hAdd.{0, 0, 0}
+              (HAdd.hAdd.{0, 0, 0}
+                (HAdd.hAdd.{0, 0, 0}
+                  (HAdd.hAdd.{0, 0, 0}
+                    (HAdd.hAdd.{0, 0, 0}
+                      (HAdd.hAdd.{0, 0, 0}
+                        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (SizeOf.sizeOf.{1} referenceStep))
+                          (SizeOf.sizeOf.{1} unitCode))
+                        (SizeOf.sizeOf.{1} physical))
+                      (SizeOf.sizeOf.{1} initialA))
+                    (SizeOf.sizeOf.{1} initialB))
+                  (SizeOf.sizeOf.{1} envValue))
+                (SizeOf.sizeOf.{1} boxLo))
+              (SizeOf.sizeOf.{1} boxHi))
+            (SizeOf.sizeOf.{1} lower))
+          (SizeOf.sizeOf.{1} upper))
+        (SizeOf.sizeOf.{1} declaredTotal))
+      (SizeOf.sizeOf.{1} firings))
+'PCSScientificReceiver.Contract.mk.sizeOf_spec' does not depend on any axioms
+PCSScientificReceiver.codecSample_supported :
+  PCSScientificReceiver.OperationallySupported PCSScientificReceiver.codecSample
+'PCSScientificReceiver.codecSample_supported' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.checkContract.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.checkContract c)
+    (Bool.and
+      (Bool.and (Bool.and (PCSScientificReceiver.bounded c) (PCSScientificReceiver.bindingChecks c))
+        (CertNum.Certificate.checkIntervalEnclosure (PCSScientificReceiver.certificate c)))
+      (PCSScientificReceiver.physicalChecks c))
+'PCSScientificReceiver.checkContract.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.sample_reversed_box_rejects._simp_1_20 {n : Nat} {P : Fin (HAdd.hAdd.{0, 0, 0} n 1) → Prop} :
+  Eq.{1} (∀ (i : Fin (HAdd.hAdd.{0, 0, 0} n 1)), P i) (And (P 0) (∀ (i : Fin n), P (Fin.succ i)))
+'PCSScientificReceiver.sample_reversed_box_rejects._simp_1_20' depends on axioms: [propext]
+PCSScientificReceiver.decode.eq_1 (raw : List.{0} UInt8) :
+  Eq.{1} (PCSScientificReceiver.decode raw)
+    (ite.{1} (Eq.{1} (PCSScientificReceiver.wireWithinLimits raw) Bool.true)
+      (match
+        Bind.bind.{0, 0}
+          (PCS.V2.ProofGatedCodec.decodeInts PCSScientificReceiver.protocolTag
+            (List.map.{0, 0} PCS.V2.ProofGatedBytes.byteToChar raw))
+          PCSScientificReceiver.ofInts with
+      | Option.none.{0} => Option.none.{0}
+      | Option.some.{0} c =>
+        ite.{1}
+          (Eq.{1}
+            (Bool.and (PCSScientificReceiver.bounded c)
+              (Decidable.decide (Eq.{1} (PCSScientificReceiver.encodeBytes c) raw)))
+            Bool.true)
+          (Option.some.{0} c) Option.none.{0})
+      Option.none.{0})
+'PCSScientificReceiver.decode.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.toInts_operands (c : PCSScientificReceiver.Contract)
+  (hc : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true) (z : Int)
+  (hz : Membership.mem.{0, 0} (PCSScientificReceiver.toInts c) z) :
+  LE.le.{0} (Int.natAbs z) PCSScientificReceiver.maxOperand
+'PCSScientificReceiver.toInts_operands' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.environmentBinding {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1} (PCSScientificReceiver.Contract.envValue c) (PCSScientificReceiver.finalState c 0)
+'PCSScientificReceiver.ContractSound.environmentBinding' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_5 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ b✝² : Rat) (b✝³ : List.{0} Rat) :
+  Not (Eq.{1} a✝⁸ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := b✝, upper := b✝¹, declaredTotal := b✝², firings := b✝³ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_5' does not depend on any axioms
+PCSScientificReceiver.bounded_field_lengths (c : PCSScientificReceiver.Contract)
+  (hc : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true) (f : List.{0} Char) :
+  Membership.mem.{0, 0}
+      (List.cons.{0} PCSScientificReceiver.protocolTag
+        (List.map.{0, 0} PCS.V2.ProofGatedCodec.renderInt (PCSScientificReceiver.toInts c)))
+      f →
+    LE.le.{0} (List.length.{0} f) PCSScientificReceiver.maxFieldChars
+'PCSScientificReceiver.bounded_field_lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.rationalsInts_length._proof_1_1 (qs : List.{0} Rat)
+  (ih :
+    Eq.{1} (List.length.{0} (PCSScientificReceiver.rationalsInts qs)) (HMul.hMul.{0, 0, 0} 2 (List.length.{0} qs))) :
+  Not
+      (Eq.{1}
+        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 0 1) 1)
+          (List.length.{0} (PCSScientificReceiver.rationalsInts qs)))
+        (HMul.hMul.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} (List.length.{0} qs) 1))) →
+    False
+'PCSScientificReceiver.rationalsInts_length._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.toInts_operands._simp_1_2.{u_1} {α : Type u_1} {p : α → Bool} {l : List.{u_1} α} :
+  Eq.{1} (Eq.{1} (List.all.{u_1} l p) Bool.true) (∀ (x : α), Membership.mem.{u_1, u_1} l x → Eq.{1} (p x) Bool.true)
+'PCSScientificReceiver.toInts_operands._simp_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.OperationallySupported.bounded {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.OperationallySupported c) : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true
+'PCSScientificReceiver.OperationallySupported.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.renderNat_length_le_decimal._proof_1_5 (digits n : Nat)
+  (hi : LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderNat (HDiv.hDiv.{0, 0, 0} n 10))) digits) :
+  Not
+      (LE.le.{0} (HAdd.hAdd.{0, 0, 0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderNat (HDiv.hDiv.{0, 0, 0} n 10))) 1)
+        (HAdd.hAdd.{0, 0, 0} digits 1)) →
+    False
+'PCSScientificReceiver.renderNat_length_le_decimal._proof_1_5' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.toInts_operands._simp_1_8.{u_1} {α✝ : Type u_1} {b : α✝} {l : List.{u_1} α✝} {a : α✝} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (List.cons.{u_1} b l) a) (Or (Eq.{u_1 + 1} a b) (Membership.mem.{u_1, u_1} l a))
+'PCSScientificReceiver.toInts_operands._simp_1_8' depends on axioms: [propext]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_11 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ : Bool) (b✝¹ b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ b✝⁸ : Rat)
+  (b✝⁹ : List.{0} Rat) :
+  Not (Eq.{1} a✝² b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := b✝, initialA := b✝¹, initialB := b✝², envValue := b✝³,
+          boxLo := b✝⁴, boxHi := b✝⁵, lower := b✝⁶, upper := b✝⁷, declaredTotal := b✝⁸, firings := b✝⁹ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_11' does not depend on any axioms
+PCSScientificReceiver.renderInt_length_bounded._proof_1_2 (n : Nat)
+  (h : LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderNat (HAdd.hAdd.{0, 0, 0} n 1))) 19) :
+  Not
+      (LE.le.{0} (HAdd.hAdd.{0, 0, 0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderNat (HAdd.hAdd.{0, 0, 0} n 1))) 1)
+        20) →
+    False
+'PCSScientificReceiver.renderInt_length_bounded._proof_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.codecSample_supported._proof_1_2 :
+  LE.le.{0} (List.length.{0} (PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample))
+    PCSScientificReceiver.maxBytes
+'PCSScientificReceiver.codecSample_supported._proof_1_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ofInts.eq_2 (x✝ : List.{0} Int)
+  (x_2 :
+    ∀ (ref unit phys aN aD bN bD eN eD loN loD hiN hiD lN lD uN uD tN tD count : Int) (fs : List.{0} Int),
+      Eq.{1} x✝
+          (List.cons.{0} 1
+            (List.cons.{0} 1
+              (List.cons.{0} 0
+                (List.cons.{0} 1
+                  (List.cons.{0} (-1)
+                    (List.cons.{0} 1
+                      (List.cons.{0} 1
+                        (List.cons.{0} 1
+                          (List.cons.{0} 0
+                            (List.cons.{0} ref
+                              (List.cons.{0} unit
+                                (List.cons.{0} phys
+                                  (List.cons.{0} 1
+                                    (List.cons.{0} 1
+                                      (List.cons.{0} aN
+                                        (List.cons.{0} aD
+                                          (List.cons.{0} bN
+                                            (List.cons.{0} bD
+                                              (List.cons.{0} eN
+                                                (List.cons.{0} eD
+                                                  (List.cons.{0} loN
+                                                    (List.cons.{0} loD
+                                                      (List.cons.{0} hiN
+                                                        (List.cons.{0} hiD
+                                                          (List.cons.{0} lN
+                                                            (List.cons.{0} lD
+                                                              (List.cons.{0} uN
+                                                                (List.cons.{0} uD
+                                                                  (List.cons.{0} tN
+                                                                    (List.cons.{0} tD
+                                                                      (List.cons.{0} count
+                                                                        fs))))))))))))))))))))))))))))))) →
+        False) :
+  Eq.{1} (PCSScientificReceiver.ofInts x✝) Option.none.{0}
+'PCSScientificReceiver.ofInts.eq_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.expression_state_of_binding (c : PCSScientificReceiver.Contract)
+  (binding : Eq.{1} (PCSScientificReceiver.Contract.envValue c) (PCSScientificReceiver.finalState c 0)) :
+  Eq.{1}
+    (CertNum.Expr.eval (CertNum.Certificate.IntervalEnclosureCert.expr (PCSScientificReceiver.certificate c))
+      (PCSScientificReceiver.environment c))
+    (Option.some.{0} (PCSScientificReceiver.finalState c 0))
+'PCSScientificReceiver.expression_state_of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.encodeChars_ascii (c : PCSScientificReceiver.Contract) :
+  PCS.V2.ProofGatedBytes.AsciiChars (PCSScientificReceiver.encodeChars c)
+'PCSScientificReceiver.encodeChars_ascii' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.splitFields_encodeChars._simp_1_1.{u_1} {α✝ : Type u_1} {b : α✝} {l : List.{u_1} α✝} {a : α✝} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (List.cons.{u_1} b l) a) (Or (Eq.{u_1 + 1} a b) (Membership.mem.{u_1, u_1} l a))
+'PCSScientificReceiver.splitFields_encodeChars._simp_1_1' depends on axioms: [propext]
+PCSScientificReceiver.ContractSound.expressionState {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1}
+    (CertNum.Expr.eval (CertNum.Certificate.IntervalEnclosureCert.expr (PCSScientificReceiver.certificate c))
+      (PCSScientificReceiver.environment c))
+    (Option.some.{0} (PCSScientificReceiver.finalState c 0))
+'PCSScientificReceiver.ContractSound.expressionState' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.boxValid {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  LE.le.{0} (PCSScientificReceiver.Contract.boxLo c) (PCSScientificReceiver.Contract.boxHi c)
+'PCSScientificReceiver.ContractSound.boxValid' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.PhysicalAdmissible._proof_1 (c : PCSScientificReceiver.Contract)
+  (k : Fin (List.length.{0} (PCSScientificReceiver.Contract.firings c))) :
+  Not (LT.lt.{0} (↑k) (List.length.{0} (PCSScientificReceiver.Contract.firings c))) → False
+'PCSScientificReceiver.PhysicalAdmissible._proof_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_9 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ : Rat)
+  (b✝⁷ : List.{0} Rat) :
+  Not (Eq.{1} a✝⁴ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := b✝, envValue := b✝¹,
+          boxLo := b✝², boxHi := b✝³, lower := b✝⁴, upper := b✝⁵, declaredTotal := b✝⁶, firings := b✝⁷ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_9' does not depend on any axioms
+PCSScientificReceiver.boolInt.eq_1 (b : Bool) :
+  Eq.{1} (PCSScientificReceiver.boolInt b) (ite.{1} (Eq.{1} b Bool.true) 1 0)
+'PCSScientificReceiver.boolInt.eq_1' does not depend on any axioms
+PCSScientificReceiver.protocolTag_ascii : PCS.V2.ProofGatedBytes.AsciiChars PCSScientificReceiver.protocolTag
+'PCSScientificReceiver.protocolTag_ascii' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.malformed_examples :
+  And (Eq.{1} (PCSScientificReceiver.decode List.nil.{0}) Option.none.{0})
+    (And (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|00")) Option.none.{0})
+      (And (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|-0")) Option.none.{0})
+        (And
+          (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|+1")) Option.none.{0})
+          (And
+            (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V2|1")) Option.none.{0})
+            (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|1|"))
+              Option.none.{0})))))
+'PCSScientificReceiver.malformed_examples' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_6 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ b✝² b✝³ : Rat) (b✝⁴ : List.{0} Rat) :
+  Not (Eq.{1} a✝⁷ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := b✝, lower := b✝¹, upper := b✝², declaredTotal := b✝³, firings := b✝⁴ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_6' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_12 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ : Bool) (b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ b✝⁸ b✝⁹ : Rat)
+  (b✝¹⁰ : List.{0} Rat) :
+  Not (Eq.{1} a✝¹ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := b✝, physical := b✝¹, initialA := b✝², initialB := b✝³, envValue := b✝⁴,
+          boxLo := b✝⁵, boxHi := b✝⁶, lower := b✝⁷, upper := b✝⁸, declaredTotal := b✝⁹, firings := b✝¹⁰ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_12' does not depend on any axioms
+PCSScientificReceiver.bounded_field_lengths._simp_1_2.{u_1, u_2} {α : Type u_1} {β : Type u_2} {b : β} {f : α → β}
+  {l : List.{u_1} α} :
+  Eq.{1} (Membership.mem.{u_2, u_2} (List.map.{u_1, u_2} f l) b)
+    (∃ a, And (Membership.mem.{u_1, u_1} l a) (Eq.{u_2 + 1} (f a) b))
+'PCSScientificReceiver.bounded_field_lengths._simp_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.ResultSound.enclosedB {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) :
+  And (LE.le.{0} (PCSScientificReceiver.Result.lowerB r) (PCSScientificReceiver.Result.finalB r))
+    (LE.le.{0} (PCSScientificReceiver.Result.finalB r) (PCSScientificReceiver.Result.upperB r))
+'PCSScientificReceiver.ResultSound.enclosedB' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.splitFields_encodeChars._simp_1_2.{u_1, u_2} {α : Type u_1} {β : Type u_2} {b : β} {f : α → β}
+  {l : List.{u_1} α} :
+  Eq.{1} (Membership.mem.{u_2, u_2} (List.map.{u_1, u_2} f l) b)
+    (∃ a, And (Membership.mem.{u_1, u_1} l a) (Eq.{u_2 + 1} (f a) b))
+'PCSScientificReceiver.splitFields_encodeChars._simp_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.physicalChecks.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.physicalChecks c)
+    (ite.{1} (Eq.{1} (PCSScientificReceiver.Contract.physical c) Bool.true)
+      (Decidable.decide (PCSScientificReceiver.PhysicalAdmissible c)) Bool.true)
+'PCSScientificReceiver.physicalChecks.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.sampleContract.eq_1 :
+  Eq.{1} PCSScientificReceiver.sampleContract
+    { referenceStep := 1, unitCode := Bool.true, physical := Bool.true, initialA := 1, initialB := 0, envValue := 2 / 3,
+      boxLo := 3 / 5, boxHi := 7 / 10, lower := 1 / 2, upper := 3 / 4, declaredTotal := 1,
+      firings := List.cons.{0} (1 / 3) List.nil.{0} }
+'PCSScientificReceiver.sampleContract.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.decode_supported {raw : List.{0} UInt8} {c : PCSScientificReceiver.Contract}
+  (h : Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c)) : PCSScientificReceiver.OperationallySupported c
+'PCSScientificReceiver.decode_supported' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.rational_rejection_controls :
+  And (Eq.{1} (PCSScientificReceiver.parseRational 2 4) Option.none.{0})
+    (And (Eq.{1} (PCSScientificReceiver.parseRational 0 2) Option.none.{0})
+      (And (Eq.{1} (PCSScientificReceiver.parseRational 1 0) Option.none.{0})
+        (Eq.{1} (PCSScientificReceiver.parseRational (-1) (-2)) Option.none.{0})))
+'PCSScientificReceiver.rational_rejection_controls' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.PhysicalAdmissible._proof_3 (c : PCSScientificReceiver.Contract)
+  (k : Fin (List.length.{0} (PCSScientificReceiver.Contract.firings c))) :
+  LT.lt.{0} (↑k) (List.length.{0} (PCSScientificReceiver.Contract.firings c))
+'PCSScientificReceiver.PhysicalAdmissible._proof_3' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.joinFields_length_le._proof_1_1 (limit : Nat) (f : List.{0} Char)
+  (hf : LE.le.{0} (List.length.{0} f) limit) :
+  Not (LE.le.{0} (List.length.{0} f) (HMul.hMul.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} limit 1) (HAdd.hAdd.{0, 0, 0} 0 1))) →
+    False
+'PCSScientificReceiver.joinFields_length_le._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.bounded.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.bounded c)
+    (Bool.and
+      (Decidable.decide
+        (And (LE.le.{0} (PCSScientificReceiver.Contract.referenceStep c) PCSScientificReceiver.maxSteps)
+          (LE.le.{0} (List.length.{0} (PCSScientificReceiver.Contract.firings c)) PCSScientificReceiver.maxSteps)))
+      (List.all.{0} (PCSScientificReceiver.rationals c) PCSScientificReceiver.rationalBounded))
+'PCSScientificReceiver.bounded.eq_1' does not depend on any axioms
+PCSScientificReceiver.parseRationals_rationalsInts (qs : List.{0} Rat) :
+  Eq.{1} (PCSScientificReceiver.parseRationals (PCSScientificReceiver.rationalsInts qs)) (Option.some.{0} qs)
+'PCSScientificReceiver.parseRationals_rationalsInts' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.parseNatural.eq_1 (z : Int) :
+  Eq.{1} (PCSScientificReceiver.parseNatural z)
+    (ite.{1} (LE.le.{0} 0 z) (Option.some.{0} (Int.toNat z)) Option.none.{0})
+'PCSScientificReceiver.parseNatural.eq_1' does not depend on any axioms
+PCSScientificReceiver.ContractSound.conservation {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  Eq.{1} (HAdd.hAdd.{0, 0, 0} (PCSScientificReceiver.finalState c 0) (PCSScientificReceiver.finalState c 1))
+    (PCSScientificReceiver.Contract.declaredTotal c)
+'PCSScientificReceiver.ContractSound.conservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.decode_canonical {raw : List.{0} UInt8} {c : PCSScientificReceiver.Contract}
+  (h : Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c)) : Eq.{1} (PCSScientificReceiver.encodeBytes c) raw
+'PCSScientificReceiver.decode_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.renderNat_length_bounded._proof_1_2 (n : Nat) (small : LE.le.{0} n 1000000000000000000) :
+  Not (LT.lt.{0} n 10000000000000000000) → False
+'PCSScientificReceiver.renderNat_length_bounded._proof_1_2' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.schedule.eq_1 (c : PCSScientificReceiver.Contract) (k : Nat) (x✝ : Fin 1) :
+  Eq.{1} (PCSScientificReceiver.schedule c k x✝)
+    (Option.getD.{0} (GetElem?.getElem?.{0, 0, 0} (PCSScientificReceiver.Contract.firings c) k) 0)
+'PCSScientificReceiver.schedule.eq_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.parseRationals.eq_1 :
+  Eq.{1} (PCSScientificReceiver.parseRationals List.nil.{0}) (Option.some.{0} List.nil.{0})
+'PCSScientificReceiver.parseRationals.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_10 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ b✝² b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ : Rat)
+  (b✝⁸ : List.{0} Rat) :
+  Not (Eq.{1} a✝³ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := b✝, initialB := b✝¹, envValue := b✝²,
+          boxLo := b✝³, boxHi := b✝⁴, lower := b✝⁵, upper := b✝⁶, declaredTotal := b✝⁷, firings := b✝⁸ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_10' does not depend on any axioms
+PCSScientificReceiver.maxOperand.eq_1 : Eq.{1} PCSScientificReceiver.maxOperand 1000000000000000000
+'PCSScientificReceiver.maxOperand.eq_1' does not depend on any axioms
+PCSScientificReceiver.encodeBytes_ascii (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (List.all.{0} (PCSScientificReceiver.encodeBytes c) PCS.V2.ProofGatedBytes.isAsciiByte) Bool.true
+'PCSScientificReceiver.encodeBytes_ascii' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_8 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ b✝² b✝³ b✝⁴ b✝⁵ : Rat) (b✝⁶ : List.{0} Rat) :
+  Not (Eq.{1} a✝⁵ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := b✝,
+          boxLo := b✝¹, boxHi := b✝², lower := b✝³, upper := b✝⁴, declaredTotal := b✝⁵, firings := b✝⁶ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_8' does not depend on any axioms
+PCSScientificReceiver.Result.mk.sizeOf_spec (stepCount : Nat) (unitCode physical : Bool)
+  (finalA finalB total lowerA upperA lowerB upperB : Rat) :
+  Eq.{1}
+    (SizeOf.sizeOf.{1}
+      { stepCount := stepCount, unitCode := unitCode, physical := physical, finalA := finalA, finalB := finalB,
+        total := total, lowerA := lowerA, upperA := upperA, lowerB := lowerB, upperB := upperB })
+    (HAdd.hAdd.{0, 0, 0}
+      (HAdd.hAdd.{0, 0, 0}
+        (HAdd.hAdd.{0, 0, 0}
+          (HAdd.hAdd.{0, 0, 0}
+            (HAdd.hAdd.{0, 0, 0}
+              (HAdd.hAdd.{0, 0, 0}
+                (HAdd.hAdd.{0, 0, 0}
+                  (HAdd.hAdd.{0, 0, 0}
+                    (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (SizeOf.sizeOf.{1} stepCount))
+                      (SizeOf.sizeOf.{1} unitCode))
+                    (SizeOf.sizeOf.{1} physical))
+                  (SizeOf.sizeOf.{1} finalA))
+                (SizeOf.sizeOf.{1} finalB))
+              (SizeOf.sizeOf.{1} total))
+            (SizeOf.sizeOf.{1} lowerA))
+          (SizeOf.sizeOf.{1} upperA))
+        (SizeOf.sizeOf.{1} lowerB))
+      (SizeOf.sizeOf.{1} upperB))
+'PCSScientificReceiver.Result.mk.sizeOf_spec' does not depend on any axioms
+PCSScientificReceiver.decode_wireWithinLimits {raw : List.{0} UInt8} {c : PCSScientificReceiver.Contract}
+  (h : Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c)) :
+  Eq.{1} (PCSScientificReceiver.wireWithinLimits raw) Bool.true
+'PCSScientificReceiver.decode_wireWithinLimits' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.renderNat_length_le_decimal._proof_1_4 (digits n : Nat)
+  (small : LT.lt.{0} n (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 10 digits) 10)) :
+  Not (LT.lt.{0} (HDiv.hDiv.{0, 0, 0} n 10) (HPow.hPow.{0, 0, 0} 10 digits)) → False
+'PCSScientificReceiver.renderNat_length_le_decimal._proof_1_4' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_11 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ : Rat) (b✝ : Nat) (b✝¹ b✝² : Bool) (b✝³ b✝⁴ b✝⁵ b✝⁶ b✝⁷ b✝⁸ b✝⁹ : Rat) :
+  Not (Eq.{1} a✝ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := b✝, unitCode := b✝¹, physical := b✝², finalA := b✝³, finalB := b✝⁴, total := b✝⁵, lowerA := b✝⁶,
+          upperA := b✝⁷, lowerB := b✝⁸, upperB := b✝⁹ } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_11' does not depend on any axioms
+PCSScientificReceiver.malformed_examples._proof_1_1 :
+  And (Eq.{1} (PCSScientificReceiver.decode List.nil.{0}) Option.none.{0})
+    (And (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|00")) Option.none.{0})
+      (And (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|-0")) Option.none.{0})
+        (And
+          (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|+1")) Option.none.{0})
+          (And
+            (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V2|1")) Option.none.{0})
+            (Eq.{1} (PCSScientificReceiver.decode (PCS.V2.ProofGatedBytes.ascii "PCS-SCI-BOUND-V1|1|"))
+              Option.none.{0})))))
+'PCSScientificReceiver.malformed_examples._proof_1_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.environment_in_box (c : PCSScientificReceiver.Contract)
+  (lower : LE.le.{0} (PCSScientificReceiver.Contract.boxLo c) (PCSScientificReceiver.Contract.envValue c))
+  (upper : LE.le.{0} (PCSScientificReceiver.Contract.envValue c) (PCSScientificReceiver.Contract.boxHi c)) :
+  CertNum.Expr.EnvInBox (PCSScientificReceiver.environment c)
+    (CertNum.Certificate.toBox (CertNum.Certificate.IntervalEnclosureCert.box (PCSScientificReceiver.certificate c)))
+'PCSScientificReceiver.environment_in_box' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.renderNat_length_le_decimal._proof_1_1 (positive : LT.lt.{0} 0 0) : False
+'PCSScientificReceiver.renderNat_length_le_decimal._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.parseNatural_nat (n : Nat) : Eq.{1} (PCSScientificReceiver.parseNatural ↑n) (Option.some.{0} n)
+'PCSScientificReceiver.parseNatural_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.bounded_encodeBytes_length (c : PCSScientificReceiver.Contract)
+  (hc : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true) :
+  LE.le.{0} (List.length.{0} (PCSScientificReceiver.encodeBytes c)) 3360
+'PCSScientificReceiver.bounded_encodeBytes_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.parseRationals._sparseCasesOn_1.else_eq.{u_1, u} {α : Type u} {motive : List.{u} α → Sort u_1}
+  (t : List.{u} α) (cons : (head : α) → (tail : List.{u} α) → motive (List.cons.{u} head tail))
+  (else✝ : Nat.hasNotBit 2 (List.ctorIdx.{u} t) → motive t) (h : Nat.hasNotBit 2 (List.ctorIdx.{u} t)) :
+  Eq.{u_1} (PCSScientificReceiver.parseRationals._sparseCasesOn_1.{u_1, u} t cons else✝) (else✝ h)
+'PCSScientificReceiver.parseRationals._sparseCasesOn_1.else_eq' depends on axioms: [propext]
+PCSScientificReceiver.rationalsInts_operands._simp_1_1.{u_1} {α✝ : Type u_1} {b : α✝} {l : List.{u_1} α✝} {a : α✝} :
+  Eq.{1} (Membership.mem.{u_1, u_1} (List.cons.{u_1} b l) a) (Or (Eq.{u_1 + 1} a b) (Membership.mem.{u_1, u_1} l a))
+'PCSScientificReceiver.rationalsInts_operands._simp_1_1' depends on axioms: [propext]
+PCSScientificReceiver.decode_encodeBytes (c : PCSScientificReceiver.Contract)
+  (h : PCSScientificReceiver.OperationallySupported c) :
+  Eq.{1} (PCSScientificReceiver.decode (PCSScientificReceiver.encodeBytes c)) (Option.some.{0} c)
+'PCSScientificReceiver.decode_encodeBytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.renderNat_length_bounded (n : Nat) (small : LE.le.{0} n PCSScientificReceiver.maxOperand) :
+  LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.renderNat n)) 19
+'PCSScientificReceiver.renderNat_length_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.encodeBytes_chars (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (List.map.{0, 0} PCS.V2.ProofGatedBytes.byteToChar (PCSScientificReceiver.encodeBytes c))
+    (PCSScientificReceiver.encodeChars c)
+'PCSScientificReceiver.encodeBytes_chars' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.decode_rejects (raw : List.{0} UInt8)
+  (h :
+    ∀ (c : PCSScientificReceiver.Contract),
+      PCSScientificReceiver.OperationallySupported c → Ne.{1} (PCSScientificReceiver.encodeBytes c) raw) :
+  Eq.{1} (PCSScientificReceiver.decode raw) Option.none.{0}
+'PCSScientificReceiver.decode_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.parseBool_boolInt (b : Bool) :
+  Eq.{1} (PCSScientificReceiver.parseBool (PCSScientificReceiver.boolInt b)) (Option.some.{0} b)
+'PCSScientificReceiver.parseBool_boolInt' does not depend on any axioms
+PCSScientificReceiver.rationals.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.rationals c)
+    (HAppend.hAppend.{0, 0, 0}
+      (List.cons.{0} (PCSScientificReceiver.Contract.initialA c)
+        (List.cons.{0} (PCSScientificReceiver.Contract.initialB c)
+          (List.cons.{0} (PCSScientificReceiver.Contract.envValue c)
+            (List.cons.{0} (PCSScientificReceiver.Contract.boxLo c)
+              (List.cons.{0} (PCSScientificReceiver.Contract.boxHi c)
+                (List.cons.{0} (PCSScientificReceiver.Contract.lower c)
+                  (List.cons.{0} (PCSScientificReceiver.Contract.upper c)
+                    (List.cons.{0} (PCSScientificReceiver.Contract.declaredTotal c) List.nil.{0}))))))))
+      (PCSScientificReceiver.Contract.firings c))
+'PCSScientificReceiver.rationals.eq_1' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_7 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ b✝² b✝³ b✝⁴ : Rat) (b✝⁵ : List.{0} Rat) :
+  Not (Eq.{1} a✝⁶ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := b✝, boxHi := b✝¹, lower := b✝², upper := b✝³, declaredTotal := b✝⁴, firings := b✝⁵ } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_7' does not depend on any axioms
+PCSScientificReceiver.decode_encodeBytes_bounded (c : PCSScientificReceiver.Contract)
+  (hc : Eq.{1} (PCSScientificReceiver.bounded c) Bool.true) :
+  Eq.{1} (PCSScientificReceiver.decode (PCSScientificReceiver.encodeBytes c)) (Option.some.{0} c)
+'PCSScientificReceiver.decode_encodeBytes_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.rationalsInts_operands (qs : List.{0} Rat)
+  (hq :
+    ∀ (q : Rat),
+      Membership.mem.{0, 0} qs q →
+        And (LE.le.{0} (Int.natAbs (Rat.num q)) PCSScientificReceiver.maxOperand)
+          (LE.le.{0} (Rat.den q) PCSScientificReceiver.maxOperand))
+  (z : Int) (hz : Membership.mem.{0, 0} (PCSScientificReceiver.rationalsInts qs) z) :
+  LE.le.{0} (Int.natAbs z) PCSScientificReceiver.maxOperand
+'PCSScientificReceiver.rationalsInts_operands' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.rationalsInts_length (qs : List.{0} Rat) :
+  Eq.{1} (List.length.{0} (PCSScientificReceiver.rationalsInts qs)) (HMul.hMul.{0, 0, 0} 2 (List.length.{0} qs))
+'PCSScientificReceiver.rationalsInts_length' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.toInts_operands._proof_1_12 (c : PCSScientificReceiver.Contract)
+  (hn : LE.le.{0} (List.length.{0} (PCSScientificReceiver.Contract.firings c)) 64) :
+  Not (LE.le.{0} (List.length.{0} (PCSScientificReceiver.Contract.firings c)) 1000000000000000000) → False
+'PCSScientificReceiver.toInts_operands._proof_1_12' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.ResultSound.contract {c : PCSScientificReceiver.Contract} {r : PCSScientificReceiver.Result}
+  (self : PCSScientificReceiver.ResultSound c r) : PCSScientificReceiver.ContractSound c
+'PCSScientificReceiver.ResultSound.contract' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.Contract.mk.injEq (referenceStep : Nat) (unitCode physical : Bool)
+  (initialA initialB envValue boxLo boxHi lower upper declaredTotal : Rat) (firings : List.{0} Rat)
+  (referenceStep✝ : Nat) (unitCode✝ physical✝ : Bool)
+  (initialA✝ initialB✝ envValue✝ boxLo✝ boxHi✝ lower✝ upper✝ declaredTotal✝ : Rat) (firings✝ : List.{0} Rat) :
+  Eq.{1}
+    (Eq.{1}
+      { referenceStep := referenceStep, unitCode := unitCode, physical := physical, initialA := initialA,
+        initialB := initialB, envValue := envValue, boxLo := boxLo, boxHi := boxHi, lower := lower, upper := upper,
+        declaredTotal := declaredTotal, firings := firings }
+      { referenceStep := referenceStep✝, unitCode := unitCode✝, physical := physical✝, initialA := initialA✝,
+        initialB := initialB✝, envValue := envValue✝, boxLo := boxLo✝, boxHi := boxHi✝, lower := lower✝,
+        upper := upper✝, declaredTotal := declaredTotal✝, firings := firings✝ })
+    (And (Eq.{1} referenceStep referenceStep✝)
+      (And (Eq.{1} unitCode unitCode✝)
+        (And (Eq.{1} physical physical✝)
+          (And (Eq.{1} initialA initialA✝)
+            (And (Eq.{1} initialB initialB✝)
+              (And (Eq.{1} envValue envValue✝)
+                (And (Eq.{1} boxLo boxLo✝)
+                  (And (Eq.{1} boxHi boxHi✝)
+                    (And (Eq.{1} lower lower✝)
+                      (And (Eq.{1} upper upper✝)
+                        (And (Eq.{1} declaredTotal declaredTotal✝) (Eq.{1} firings firings✝))))))))))))
+'PCSScientificReceiver.Contract.mk.injEq' depends on axioms: [propext]
+PCSScientificReceiver.rationalBounded.eq_1 (q : Rat) :
+  Eq.{1} (PCSScientificReceiver.rationalBounded q)
+    (Decidable.decide
+      (And (LE.le.{0} (Int.natAbs (Rat.num q)) PCSScientificReceiver.maxOperand)
+        (LE.le.{0} (Rat.den q) PCSScientificReceiver.maxOperand)))
+'PCSScientificReceiver.rationalBounded.eq_1' does not depend on any axioms
+PCSScientificReceiver.parseRational_num_den (q : Rat) :
+  Eq.{1} (PCSScientificReceiver.parseRational (Rat.num q) ↑(Rat.den q)) (Option.some.{0} q)
+'PCSScientificReceiver.parseRational_num_den' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.OperationallySupported.byteLength {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.OperationallySupported c) :
+  LE.le.{0} (List.length.{0} (PCSScientificReceiver.encodeBytes c)) PCSScientificReceiver.maxBytes
+'PCSScientificReceiver.OperationallySupported.byteLength' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.encodeBytes_injective {c c' : PCSScientificReceiver.Contract}
+  (h : Eq.{1} (PCSScientificReceiver.encodeBytes c) (PCSScientificReceiver.encodeBytes c')) : Eq.{1} c c'
+'PCSScientificReceiver.encodeBytes_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.joinFields_length_le (fs : List.{0} (List.{0} Char)) (limit : Nat)
+  (boundedFields : ∀ (f : List.{0} Char), Membership.mem.{0, 0} fs f → LE.le.{0} (List.length.{0} f) limit) :
+  LE.le.{0} (List.length.{0} (PCS.V2.ProofGatedCodec.joinFields fs))
+    (HMul.hMul.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} limit 1) (List.length.{0} fs))
+'PCSScientificReceiver.joinFields_length_le' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.toInts_operands._simp_1_9.{u_1} {α : Type u_1} {a : α} :
+  Eq.{1} (Membership.mem.{u_1, u_1} List.nil.{u_1} a) False
+'PCSScientificReceiver.toInts_operands._simp_1_9' depends on axioms: [propext]
+PCSScientificReceiver.protocolTag_pipe_free : '|' ∉ PCSScientificReceiver.protocolTag
+'PCSScientificReceiver.protocolTag_pipe_free' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.codecSample_bytes :
+  Eq.{1} (PCSScientificReceiver.encodeBytes PCSScientificReceiver.codecSample)
+    (PCS.V2.ProofGatedBytes.ascii
+      "PCS-SCI-BOUND-V1|1|1|0|1|-1|1|1|1|0|1|1|1|1|1|1|1|0|1|2|3|3|5|7|10|1|2|3|4|1|1|1|1|3")
+'PCSScientificReceiver.codecSample_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.Result.mk.injEq (stepCount : Nat) (unitCode physical : Bool)
+  (finalA finalB total lowerA upperA lowerB upperB : Rat) (stepCount✝ : Nat) (unitCode✝ physical✝ : Bool)
+  (finalA✝ finalB✝ total✝ lowerA✝ upperA✝ lowerB✝ upperB✝ : Rat) :
+  Eq.{1}
+    (Eq.{1}
+      { stepCount := stepCount, unitCode := unitCode, physical := physical, finalA := finalA, finalB := finalB,
+        total := total, lowerA := lowerA, upperA := upperA, lowerB := lowerB, upperB := upperB }
+      { stepCount := stepCount✝, unitCode := unitCode✝, physical := physical✝, finalA := finalA✝, finalB := finalB✝,
+        total := total✝, lowerA := lowerA✝, upperA := upperA✝, lowerB := lowerB✝, upperB := upperB✝ })
+    (And (Eq.{1} stepCount stepCount✝)
+      (And (Eq.{1} unitCode unitCode✝)
+        (And (Eq.{1} physical physical✝)
+          (And (Eq.{1} finalA finalA✝)
+            (And (Eq.{1} finalB finalB✝)
+              (And (Eq.{1} total total✝)
+                (And (Eq.{1} lowerA lowerA✝)
+                  (And (Eq.{1} upperA upperA✝) (And (Eq.{1} lowerB lowerB✝) (Eq.{1} upperB upperB✝))))))))))
+'PCSScientificReceiver.Result.mk.injEq' depends on axioms: [propext]
+PCSScientificReceiver.instDecidableEqContract.decEq._proof_4 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ a✝¹⁰ : Rat) (a✝¹¹ : List.{0} Rat) (b✝ b✝¹ : Rat) (b✝² : List.{0} Rat) :
+  Not (Eq.{1} a✝⁹ b✝) →
+    Eq.{1}
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := a✝⁹, declaredTotal := a✝¹⁰, firings := a✝¹¹ }
+        { referenceStep := a✝, unitCode := a✝¹, physical := a✝², initialA := a✝³, initialB := a✝⁴, envValue := a✝⁵,
+          boxLo := a✝⁶, boxHi := a✝⁷, lower := a✝⁸, upper := b✝, declaredTotal := b✝¹, firings := b✝² } →
+      False
+'PCSScientificReceiver.instDecidableEqContract.decEq._proof_4' does not depend on any axioms
+PCSScientificReceiver.physical_state_nonnegative._proof_1_1 (c : PCSScientificReceiver.Contract) (k : Nat)
+  (within : LE.le.{0} k (List.length.{0} (PCSScientificReceiver.Contract.firings c))) :
+  Not (LT.lt.{0} k (HAdd.hAdd.{0, 0, 0} (List.length.{0} (PCSScientificReceiver.Contract.firings c)) 1)) → False
+'PCSScientificReceiver.physical_state_nonnegative._proof_1_1' depends on axioms: [propext, Quot.sound]
+PCSScientificReceiver.decode_bounded {raw : List.{0} UInt8} {c : PCSScientificReceiver.Contract}
+  (h : Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c)) :
+  Eq.{1} (PCSScientificReceiver.bounded c) Bool.true
+'PCSScientificReceiver.decode_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.ContractSound.claimValid {c : PCSScientificReceiver.Contract}
+  (self : PCSScientificReceiver.ContractSound c) :
+  LE.le.{0} (PCSScientificReceiver.Contract.lower c) (PCSScientificReceiver.Contract.upper c)
+'PCSScientificReceiver.ContractSound.claimValid' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.sample_wrong_environment_rejects :
+  Eq.{1}
+    (PCSScientificReceiver.checkContract
+      (have __src := PCSScientificReceiver.sampleContract;
+      { referenceStep := PCSScientificReceiver.Contract.referenceStep __src,
+        unitCode := PCSScientificReceiver.Contract.unitCode __src,
+        physical := PCSScientificReceiver.Contract.physical __src,
+        initialA := PCSScientificReceiver.Contract.initialA __src,
+        initialB := PCSScientificReceiver.Contract.initialB __src, envValue := 0,
+        boxLo := PCSScientificReceiver.Contract.boxLo __src, boxHi := PCSScientificReceiver.Contract.boxHi __src,
+        lower := PCSScientificReceiver.Contract.lower __src, upper := PCSScientificReceiver.Contract.upper __src,
+        declaredTotal := PCSScientificReceiver.Contract.declaredTotal __src,
+        firings := PCSScientificReceiver.Contract.firings __src }))
+    Bool.false
+'PCSScientificReceiver.sample_wrong_environment_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.maxSteps.eq_1 : Eq.{1} PCSScientificReceiver.maxSteps 64
+'PCSScientificReceiver.maxSteps.eq_1' does not depend on any axioms
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_1 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ : Rat) :
+  Eq.{1}
+    { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+      upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+    { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+      upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_1' does not depend on any axioms
+PCSScientificReceiver.codecSample_literal_decodes :
+  Eq.{1}
+    (PCSScientificReceiver.decode
+      (PCS.V2.ProofGatedBytes.ascii
+        "PCS-SCI-BOUND-V1|1|1|0|1|-1|1|1|1|0|1|1|1|1|1|1|1|0|1|2|3|3|5|7|10|1|2|3|4|1|1|1|1|3"))
+    (Option.some.{0} PCSScientificReceiver.codecSample)
+'PCSScientificReceiver.codecSample_literal_decodes' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.decode_iff_bounded (raw : List.{0} UInt8) (c : PCSScientificReceiver.Contract) :
+  Iff (Eq.{1} (PCSScientificReceiver.decode raw) (Option.some.{0} c))
+    (And (Eq.{1} (PCSScientificReceiver.bounded c) Bool.true) (Eq.{1} (PCSScientificReceiver.encodeBytes c) raw))
+'PCSScientificReceiver.decode_iff_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.bindingChecks.eq_1 (c : PCSScientificReceiver.Contract) :
+  Eq.{1} (PCSScientificReceiver.bindingChecks c)
+    (Decidable.decide
+      (And
+        (Eq.{1} (PCSScientificReceiver.Contract.referenceStep c)
+          (List.length.{0} (PCSScientificReceiver.Contract.firings c)))
+        (And
+          (Eq.{1} (PCSScientificReceiver.Contract.declaredTotal c)
+            (HAdd.hAdd.{0, 0, 0} (PCSScientificReceiver.Contract.initialA c)
+              (PCSScientificReceiver.Contract.initialB c)))
+          (And (Eq.{1} (PCSScientificReceiver.Contract.envValue c) (PCSScientificReceiver.finalState c 0))
+            (And (LE.le.{0} (PCSScientificReceiver.Contract.boxLo c) (PCSScientificReceiver.Contract.boxHi c))
+              (And (LE.le.{0} (PCSScientificReceiver.Contract.lower c) (PCSScientificReceiver.Contract.upper c))
+                (And (LE.le.{0} (PCSScientificReceiver.Contract.boxLo c) (PCSScientificReceiver.Contract.envValue c))
+                  (LE.le.{0} (PCSScientificReceiver.Contract.envValue c)
+                    (PCSScientificReceiver.Contract.boxHi c)))))))))
+'PCSScientificReceiver.bindingChecks.eq_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCSScientificReceiver.instDecidableEqResult.decEq._proof_4 (a✝ : Nat) (a✝¹ a✝² : Bool)
+  (a✝³ a✝⁴ a✝⁵ a✝⁶ a✝⁷ a✝⁸ a✝⁹ b✝ b✝¹ b✝² : Rat) :
+  Not (Eq.{1} a✝⁷ b✝) →
+    Eq.{1}
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := a✝⁷, lowerB := a✝⁸, upperB := a✝⁹ }
+        { stepCount := a✝, unitCode := a✝¹, physical := a✝², finalA := a✝³, finalB := a✝⁴, total := a✝⁵, lowerA := a✝⁶,
+          upperA := b✝, lowerB := b✝¹, upperB := b✝² } →
+      False
+'PCSScientificReceiver.instDecidableEqResult.decEq._proof_4' does not depend on any axioms

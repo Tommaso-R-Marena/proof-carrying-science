@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof-Carrying Science Manifest v0.5",
+  "type": "object",
+  "required": ["subject","claims","artifacts","checks","workflow"],
+  "properties": {
+    "subject": {"type":"string","minLength":1},
+    "assumptions": {"type":"array","items":{"type":"object","required":["id","statement"]}},
+    "claims": {"type":"array","items":{"type":"object","required":["id","statement","kind","required_evidence"]}},
+    "artifacts": {"type":"array","items":{"type":"object","required":["id","path","role"]}},
+    "checks": {"type":"array","items":{"type":"object","required":["id","type","claim_ids"]}},
+    "workflow": {"type":"object","required":["nodes"],"properties":{"nodes":{"type":"array"}}}
+  }
+}

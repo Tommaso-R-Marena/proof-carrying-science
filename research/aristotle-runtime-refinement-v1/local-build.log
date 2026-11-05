@@ -1,0 +1,126 @@
+✔ [16/54] Built PCSRuntimeRefinement.SourceText (1.8s)
+✔ [17/70] Built PCSRuntimeRefinement.OmegaReplay (2.5s)
+✔ [18/73] Built PCSAssumptionDiscovery.Semantics (1.1s)
+✔ [19/73] Built PCSRuntimeRefinement.Core (3.1s)
+✔ [20/73] Built PCSReasoningLibrary.Calculus (3.2s)
+✔ [21/73] Built PCSStatisticsCore.Finite (1.3s)
+✔ [22/73] Built PCSForgeRefinement.Syntax (2.1s)
+✔ [23/77] Built PCSRuntimeRefinement.Mono (1.9s)
+✔ [24/77] Built PCSAssumptionDiscovery.Symbolic (2.5s)
+✔ [25/77] Built PCSStatisticsCore (325ms)
+✔ [27/77] Built PCSRuntimeRefinement.Eventually (2.8s)
+✔ [28/77] Built PCSReasoningLibrary.Library (2.7s)
+✔ [29/77] Built PCSForgeRefinement.Denote (2.6s)
+✔ [30/77] Built PCSAssumptionDiscovery.Cegar (2.2s)
+✔ [31/77] Built PCSReasoningLibrary.Search (2.6s)
+⚠ [32/77] Built PCSMathLanguage.IR (13s)
+warning: PCSMathLanguage/IR.lean:408:27: This simp argument is unused:
+  List.find?_cons
+
+Hint: Omit it from the simp argument list.
+  simp [NEnv.lookup, L̵i̵s̵t̵.̵f̵i̵n̵d̵?̵_̵c̵o̵n̵s̵,̵ ̵hm, Var.get]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: PCSMathLanguage/IR.lean:413:53: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NEnv.lookup, List.find?_cons, hm,̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵] at this ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [33/77] Built PCSForgeRefinement.Typing (1.6s)
+✔ [34/77] Built PCSAssumptionDiscovery.Receipt (1.3s)
+✔ [35/77] Built PCSVerifiedLearning.Episode (4.6s)
+✔ [36/77] Built PCSRuntimeRefinement.Python (11s)
+✔ [37/77] Built PCSMathLanguage.Alpha (2.6s)
+⚠ [38/77] Built PCSReasoningLibrary.Separation (3.6s)
+warning: PCSReasoningLibrary/Separation.lean:41:29: This simp argument is unused:
+  eq_comm
+
+Hint: Omit it from the simp argument list.
+  simp [famCtx,̵ ̵e̵q̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: PCSReasoningLibrary/Separation.lean:256:76: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [dmp, ax, Fm.subst, inst, Fm.size, List.getElem?_cons_zero, O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵List.getD_cons_zero,
+          List.getD_cons_succ, List.getD_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: PCSReasoningLibrary/Separation.lean:257:50: This simp argument is unused:
+  List.getD_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [dmp, ax, Fm.subst, inst, Fm.size, List.getElem?_cons_zero, Option.map_some,
+          List.getD_cons_zero, List.getD_cons_succ,̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵D̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: PCSReasoningLibrary/Separation.lean:290:54: This simp argument is unused:
+  Nat.one_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [Nat.mul_add, Nat.add_mul, Nat.mul_one, N̵a̵t̵.̵o̵n̵e̵_̵m̵u̵l̵,̵ ̵Nat.mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: PCSReasoningLibrary/Separation.lean:306:60: This simp argument is unused:
+  Nat.one_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [Nat.mul_add, Nat.add_mul, Nat.mul_one, N̵a̵t̵.̵o̵n̵e̵_̵m̵u̵l̵,̵ ̵Nat.mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: PCSReasoningLibrary/Separation.lean:308:60: This simp argument is unused:
+  Nat.one_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [Nat.mul_add, Nat.add_mul, Nat.mul_one, N̵a̵t̵.̵o̵n̵e̵_̵m̵u̵l̵,̵ ̵Nat.mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [40/85] Built PCSVerifiedLearning.Data (1.7s)
+✔ [41/85] Built PCSAssumptionDiscovery (608ms)
+⚠ [43/85] Built PCSVerifiedLearning.Shaping (2.7s)
+warning: PCSVerifiedLearning/Shaping.lean:53:53: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [shapedRet, phiEnd, ret,̵ ̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [44/85] Built PCSRuntimeRefinement.PyBellman (4.4s)
+✔ [45/85] Built PCSForgeRefinement.Rewrite (8.6s)
+✔ [46/85] Built PCSReasoningLibrary (642ms)
+✔ [48/85] Built PCSRuntimeRefinement.JavaScript (8.1s)
+✔ [49/85] Built PCSReasoningLibrary.Controls (1.5s)
+✔ [50/85] Built PCSMathLanguage.RoundTrip (9.5s)
+✔ [51/85] Built PCSEndToEnd.Abduction (1.3s)
+✔ [52/85] Built PCSMathLanguage.Goals (7.1s)
+✔ [53/85] Built PCSVerifiedLearning (468ms)
+✔ [55/85] Built PCSVerifiedLearning.Controls (1.2s)
+✔ [56/85] Built PCSForgeRefinement.Counterexample (794ms)
+✔ [57/85] Built PCSMathLanguage.Language (1.5s)
+✔ [58/85] Built PCSForgeRefinement.Episode (716ms)
+✔ [59/85] Built PCSRuntimeRefinement.PyBellmanLoop (4.4s)
+✔ [60/85] Built PCSMathLanguage.LanguageExact (1.6s)
+✔ [61/85] Built PCSForgeRefinement.Controls (2.8s)
+✔ [62/85] Built PCSRuntimeRefinement.JsBellman (3.8s)
+✔ [63/85] Built PCSRuntimeRefinement.PyIntervention (2.1s)
+✔ [64/85] Built PCSMathLanguage.Receipt (11s)
+✔ [65/85] Built PCSAssumptionDiscovery.Controls (18s)
+✔ [66/85] Built PCSMathLanguage (534ms)
+✔ [68/85] Built PCSRuntimeRefinement.JsBellmanLoop (4.7s)
+✔ [69/85] Built PCSEndToEnd.Pipeline (2.1s)
+✔ [70/85] Built PCSMathLanguage.Controls (2.6s)
+✔ [71/85] Built PCSEndToEnd (484ms)
+✔ [73/85] Built PCSRuntimeRefinement.JsIntervention (2.3s)
+✔ [74/85] Built PCSMathLanguage.LanguageControls (9.7s)
+✔ [75/85] Built PCSForgeRefinement.RustSyntax (43s)
+✔ [76/85] Built PCSForgeRefinement.RustSemantics (1.8s)
+✔ [77/85] Built PCSEndToEnd.Controls (8.0s)
+✔ [79/85] Built PCSRuntimeRefinement.Summary (13s)
+✔ [80/85] Built PCSRuntimeRefinement.Controls (6.0s)
+✔ [81/85] Built PCSRuntimeRefinement (942ms)
+✔ [83/85] Built PCSForgeRefinement.RustExtraction (58s)
+✔ [84/85] Built PCSForgeRefinement (947ms)
+Build completed successfully (85 jobs).

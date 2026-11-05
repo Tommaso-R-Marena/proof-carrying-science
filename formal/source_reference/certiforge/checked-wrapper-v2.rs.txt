@@ -1,0 +1,12 @@
+pub fn eval_expr_checked(store: &HashMap<String, Value>, expr: &Expr) -> Result<Value, EvalError> {
+    for value in store.values() {
+        if let Value::BitVec { width, bits } = value {
+            if *bits != (*bits & width.mask()) {
+                return Err(EvalError::Runtime(
+                    "noncanonical bitvector input; use Value::bitvec".into(),
+                ));
+            }
+        }
+    }
+    eval_expr(store, expr)
+}

@@ -1,0 +1,287 @@
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	﻿2026-10-18T10:02:19.4559578Z ##[group]Run set -euo pipefail
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4559993Z [36;1mset -euo pipefail[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4560486Z [36;1mpython -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4561088Z [36;1mpython -m pip install --no-deps --no-build-isolation -e .[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4561475Z [36;1msource scripts/activate_lean_428.sh[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4562081Z [36;1mlake exe cache get[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4562617Z [36;1mpython -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_certified_numerics_v1[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4563445Z [36;1mpython -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_conservation_algebra_v1[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4564237Z [36;1mpython -m research.integration_v1.prepare_mathlib_cache --project incubation/pcs_causal_laboratory_v1/lean[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4565011Z [36;1mpython -m research.integration_v1.prepare_mathlib_cache --project research/integration_v1/formal[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4566061Z [36;1mpython -m research.integration_v1.formal_audit --project incubation/pcs_next_v1/formal --import PcsNext --import PcsNextTests --prefix PcsNext --out "$RUNNER_TEMP/formal-audits/137"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4567310Z [36;1mpython -m research.integration_v1.formal_audit --project incubation/pcs_certified_numerics_v1 --import CertNum --prefix CertNum --out "$RUNNER_TEMP/formal-audits/139"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4568534Z [36;1mpython -m research.integration_v1.formal_audit --project incubation/pcs_epistemic_calculus_v1 --import PcsEpistemic --prefix PcsEpistemic --out "$RUNNER_TEMP/formal-audits/140"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4569830Z [36;1mpython -m research.integration_v1.formal_audit --project research/epistemic-stratification-v1/formal --import PCSEpistemic --prefix PCSEpistemic --out "$RUNNER_TEMP/formal-audits/141"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4571158Z [36;1mpython -m research.integration_v1.formal_audit --project incubation/pcs_causal_laboratory_v1/lean --import PcsCausal --prefix PcsCausal --out "$RUNNER_TEMP/formal-audits/143"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4572689Z [36;1mpython -m research.integration_v1.formal_audit --project incubation/pcs_heterogeneous_compose_v1/formal --import PCSCompose --prefix PCSCompose --out "$RUNNER_TEMP/formal-audits/144"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4573943Z [36;1mpython -m research.integration_v1.formal_audit --project formal --import PCSAssuranceLattice --prefix PCSAssuranceLattice --out "$RUNNER_TEMP/formal-audits/145"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4575075Z [36;1mpython -m research.integration_v1.formal_audit --project formal --import PCSEpistemic --prefix PCSEpistemic --out "$RUNNER_TEMP/formal-audits/146"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4576175Z [36;1mpython -m research.integration_v1.formal_audit --project incubation/pcs_conservation_algebra_v1 --import PCCA --prefix PCCA --out "$RUNNER_TEMP/formal-audits/147"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4577591Z [36;1mpython -m research.integration_v1.formal_audit --project research/integration_v1/formal --import PCSIntegration --prefix PCSIntegration --out "$RUNNER_TEMP/formal-audits/bridge"[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4578694Z [36;1mpython -m pytest -q tests/test_epistemic_kernel_v1.py tests/test_assurance_lattice_v1.py tests/test_epistemic_lattice_v1.py[0m
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4831057Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4831494Z env:
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4832064Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4832601Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4833117Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4833596Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4834054Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4834515Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.4834910Z ##[endgroup]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:19.9896228Z Collecting setuptools==84.0.0 (from -r requirements-build.lock (line 3))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.0368505Z   Downloading setuptools-84.0.0-py3-none-any.whl (818 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.0735872Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 818.2/818.2 kB 53.5 MB/s  0:00:00
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.0935121Z Collecting attrs==26.1.0 (from -r requirements-dev.lock (line 3))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.0973012Z   Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.2107489Z Collecting cffi==2.1.1 (from -r requirements-dev.lock (line 9))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.2152723Z   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.3892816Z Collecting cryptography==50.0.2 (from -r requirements-dev.lock (line 111))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.3934199Z   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4332138Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 126.1 MB/s  0:00:00
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4470350Z Collecting iniconfig==2.3.1 (from -r requirements-dev.lock (line 172))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4510340Z   Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4708128Z Collecting jsonschema==4.26.0 (from -r requirements-dev.lock (line 176))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4746304Z   Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4889190Z Collecting jsonschema-specifications==2025.9.1 (from -r requirements-dev.lock (line 180))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.4928436Z   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5080370Z Collecting packaging==26.3 (from -r requirements-dev.lock (line 184))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5118937Z   Downloading packaging-26.3-py3-none-any.whl (129 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5250020Z Collecting pluggy==1.6.0 (from -r requirements-dev.lock (line 188))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5288635Z   Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5404266Z Collecting pycparser==3.1 (from -r requirements-dev.lock (line 192))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5444727Z   Downloading pycparser-3.1-py3-none-any.whl (48 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5608600Z Collecting pygments==2.21.0 (from -r requirements-dev.lock (line 196))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5646851Z   Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5748931Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 126.3 MB/s  0:00:00
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.5999905Z Collecting pytest==9.1.1 (from -r requirements-dev.lock (line 200))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.6040846Z   Downloading pytest-9.1.1-py3-none-any.whl (386 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.6252336Z Collecting referencing==0.37.0 (from -r requirements-dev.lock (line 204))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.6289964Z   Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.8833311Z Collecting rpds-py==2026.9.1 (from -r requirements-dev.lock (line 210))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.8880311Z   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.9045080Z Collecting typing-extensions==4.16.0 (from -r requirements-dev.lock (line 342))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.9085036Z   Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:20.9638183Z Installing collected packages: typing-extensions, setuptools, rpds-py, pygments, pycparser, pluggy, packaging, iniconfig, attrs, referencing, pytest, cffi, jsonschema-specifications, cryptography, jsonschema
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.0299429Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.0320374Z Successfully installed attrs-26.1.0 cffi-2.1.1 cryptography-50.0.2 iniconfig-2.3.1 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 packaging-26.3 pluggy-1.6.0 pycparser-3.1 pygments-2.21.0 pytest-9.1.1 referencing-0.37.0 rpds-py-2026.9.1 setuptools-84.0.0 typing-extensions-4.16.0
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.4245258Z Obtaining file:///home/runner/work/proof-carrying-science/proof-carrying-science
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.4256552Z   Checking if build backend supports build_editable: started
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.5901894Z   Checking if build backend supports build_editable: finished with status 'done'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.5910425Z   Preparing editable metadata (pyproject.toml): started
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.8297321Z   Preparing editable metadata (pyproject.toml): finished with status 'done'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.8334628Z Building wheels for collected packages: proof-carrying-science
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:23.8341682Z   Building editable for proof-carrying-science (pyproject.toml): started
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1201502Z   Building editable for proof-carrying-science (pyproject.toml): finished with status 'done'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1208223Z   Created wheel for proof-carrying-science: filename=proof_carrying_science-0.5.0-0.editable-py3-none-any.whl size=8525 sha256=5ccfd4288f655c947f8936c3a62768502ff339e10bb1965f7d4d1d570996087b
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1209860Z   Stored in directory: /tmp/pip-ephem-wheel-cache-r21hr7wm/wheels/54/37/67/90f2ee62840f3f402415cf20db067cd28d6778e5adc35d3402
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1232394Z Successfully built proof-carrying-science
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1341377Z Installing collected packages: proof-carrying-science
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1456384Z Successfully installed proof-carrying-science-0.5.0
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1953914Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1954740Z                                  Dload  Upload   Total   Spent    Left  Speed
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.1955007Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.2881068Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:24.2882294Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:25.0307059Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:25.6473111Z  52  496M   52  259M    0     0   310M      0  0:00:01 --:--:--  0:00:01  310M
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:25.6473968Z 100  496M  100  496M    0     0   342M      0  0:00:01  0:00:01 --:--:--  385M
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:31.5512827Z Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:02:31.5968016Z info: mathlib: cloning https://github.com/leanprover-community/mathlib4.git
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:02.6410480Z info: mathlib: checking out revision '8f9d9cff6bd728b17a24e163c9402775d9e6a365'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:04.9794162Z info: plausible: cloning https://github.com/leanprover-community/plausible
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.1295761Z info: plausible: checking out revision '55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.1428370Z info: LeanSearchClient: cloning https://github.com/leanprover-community/LeanSearchClient
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.2823304Z info: LeanSearchClient: checking out revision 'c5d5b8fe6e5158def25cd28eb94e4141ad97c843'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.2923163Z info: importGraph: cloning https://github.com/leanprover-community/import-graph
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.4636455Z info: importGraph: checking out revision '85b59af46828c029a9168f2f9c35119bd0721e6e'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.4798415Z info: proofwidgets: cloning https://github.com/leanprover-community/ProofWidgets4
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:05.8000148Z info: proofwidgets: checking out revision 'be3b2e63b1bbf496c478cef98b86972a37c1417d'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:06.5938631Z info: aesop: cloning https://github.com/leanprover-community/aesop
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:07.0008375Z info: aesop: checking out revision 'f642a64c76df8ba9cb53dba3b919425a0c2aeaf1'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:07.0271454Z info: Qq: cloning https://github.com/leanprover-community/quote4
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:07.2221019Z info: Qq: checking out revision 'b8f98e9087e02c8553945a2c5abf07cec8e798c3'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:07.2339927Z info: batteries: cloning https://github.com/leanprover-community/batteries
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:10.9788938Z info: batteries: checking out revision '495c008c3e3f4fb4256ff5582ddb3abf3198026f'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:11.0172681Z info: Cli: cloning https://github.com/leanprover/lean4-cli
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:11.2221360Z info: Cli: checking out revision '4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e'
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:11.6331408Z ✔ [2/22] Built Cache.Init (298ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:11.7333641Z ✔ [3/22] Built Cache.Lean (398ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:11.7334359Z ✔ [4/22] Built Cache.Init:c.o (116ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:11.8383070Z ✔ [7/22] Built Cache.Lean:c.o (176ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:12.2366222Z ✔ [8/22] Built Batteries.Data.String.Basic (430ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:12.4383341Z ✔ [9/22] Built Batteries.Data.String.Basic:c.o (164ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:12.8393197Z ✔ [10/22] Built Batteries.Data.Array.Match (1.0s)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:13.3380347Z ✔ [11/22] Built Batteries.Data.String.Matcher (506ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:13.3382964Z ✔ [12/22] Built Batteries.Data.Array.Match:c.o (439ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:13.5376364Z ✔ [13/22] Built Cache.IO (1.8s)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:13.6379024Z ✔ [14/22] Built Batteries.Data.String.Matcher:c.o (249ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:14.2400371Z ✔ [15/22] Built Cache.Hashing (747ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:15.0403460Z ✔ [16/22] Built Cache.Hashing:c.o (752ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:15.5401599Z ✔ [17/22] Built Cache.IO:c.o (1.0s)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:16.1408239Z ✔ [18/22] Built Cache.Requests (1.8s)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:16.9418143Z ✔ [19/22] Built Cache.Main (825ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:17.6426793Z ✔ [20/22] Built Cache.Main:c.o (673ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:17.9430499Z ✔ [21/22] Built Cache.Requests:c.o (1.8s)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:18.5437278Z ✔ [22/22] Built cache:exe (611ms)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1912263Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1913041Z                                  Dload  Upload   Total   Spent    Left  Speed
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1913288Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1913467Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1913872Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1914150Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1914349Z 100 1125k  100 1125k    0     0  8305k      0 --:--:-- --:--:-- --:--:-- 8305k
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:21.1914637Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:22.7815431Z installing leantar 0.1.16
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:22.7816276Z Fetching ProofWidgets cloud release... done!
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:22.7817037Z Current branch: HEAD
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:22.7817801Z Using cache (Azure) from origin: leanprover-community/mathlib4
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:22.7818985Z Attempting to download 8010 file(s) from leanprover-community/mathlib4 cache
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.0275122Z 
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.1288033Z Downloaded: 1 file(s) [attempted 1/8010 = 0%, 16 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.2305881Z Downloaded: 116 file(s) [attempted 116/8010 = 1%, 1756 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.3325154Z Downloaded: 252 file(s) [attempted 252/8010 = 3%, 1071 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.4324467Z Downloaded: 399 file(s) [attempted 399/8010 = 4%, 1172 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.5334028Z Downloaded: 556 file(s) [attempted 556/8010 = 6%, 1528 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.6334670Z Downloaded: 719 file(s) [attempted 719/8010 = 8%, 562 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.7348598Z Downloaded: 875 file(s) [attempted 875/8010 = 10%, 1794 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.8378588Z Downloaded: 1038 file(s) [attempted 1038/8010 = 12%, 262 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:24.9386801Z Downloaded: 1192 file(s) [attempted 1192/8010 = 14%, 581 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.0393828Z Downloaded: 1353 file(s) [attempted 1353/8010 = 16%, 1027 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.1410256Z Downloaded: 1500 file(s) [attempted 1500/8010 = 18%, 1830 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.2407015Z Downloaded: 1665 file(s) [attempted 1665/8010 = 20%, 558 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.3434353Z Downloaded: 1819 file(s) [attempted 1819/8010 = 22%, 2287 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.4452407Z Downloaded: 1975 file(s) [attempted 1975/8010 = 24%, 587 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.5461222Z Downloaded: 2131 file(s) [attempted 2131/8010 = 26%, 383 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.6465281Z Downloaded: 2292 file(s) [attempted 2292/8010 = 28%, 615 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.7472755Z Downloaded: 2453 file(s) [attempted 2453/8010 = 30%, 1055 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.8468837Z Downloaded: 2605 file(s) [attempted 2605/8010 = 32%, 3155 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:25.9476511Z Downloaded: 2761 file(s) [attempted 2761/8010 = 34%, 707 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.0488438Z Downloaded: 2919 file(s) [attempted 2919/8010 = 36%, 1202 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.1484250Z Downloaded: 3082 file(s) [attempted 3082/8010 = 38%, 164 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.2498584Z Downloaded: 3239 file(s) [attempted 3239/8010 = 40%, 1314 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.3498545Z Downloaded: 3399 file(s) [attempted 3399/8010 = 42%, 904 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.4507598Z Downloaded: 3560 file(s) [attempted 3560/8010 = 44%, 244 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.5505209Z Downloaded: 3726 file(s) [attempted 3726/8010 = 46%, 918 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.6512867Z Downloaded: 3882 file(s) [attempted 3882/8010 = 48%, 1000 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.7510019Z Downloaded: 4041 file(s) [attempted 4041/8010 = 50%, 1294 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.8506999Z Downloaded: 4206 file(s) [attempted 4206/8010 = 52%, 1811 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:26.9504572Z Downloaded: 4369 file(s) [attempted 4369/8010 = 54%, 1126 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.0511282Z Downloaded: 4528 file(s) [attempted 4528/8010 = 56%, 285 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.1518323Z Downloaded: 4689 file(s) [attempted 4689/8010 = 58%, 122 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.2522839Z Downloaded: 4847 file(s) [attempted 4847/8010 = 60%, 1930 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.3522471Z Downloaded: 5008 file(s) [attempted 5008/8010 = 62%, 851 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.4516407Z Downloaded: 5164 file(s) [attempted 5164/8010 = 64%, 1622 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.5515489Z Downloaded: 5313 file(s) [attempted 5313/8010 = 66%, 438 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.6519103Z Downloaded: 5467 file(s) [attempted 5467/8010 = 68%, 255 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.7518551Z Downloaded: 5630 file(s) [attempted 5630/8010 = 70%, 1453 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.8518293Z Downloaded: 5789 file(s) [attempted 5789/8010 = 72%, 2019 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:27.9514113Z Downloaded: 5945 file(s) [attempted 5945/8010 = 74%, 861 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.0521504Z Downloaded: 6096 file(s) [attempted 6096/8010 = 76%, 1270 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.1516867Z Downloaded: 6257 file(s) [attempted 6257/8010 = 78%, 619 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.2516753Z Downloaded: 6414 file(s) [attempted 6414/8010 = 80%, 427 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.3544349Z Downloaded: 6579 file(s) [attempted 6579/8010 = 82%, 4888 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.4543675Z Downloaded: 6742 file(s) [attempted 6742/8010 = 84%, 415 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.5555780Z Downloaded: 6905 file(s) [attempted 6905/8010 = 86%, 3733 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.6554500Z Downloaded: 7067 file(s) [attempted 7067/8010 = 88%, 2267 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.7560986Z Downloaded: 7223 file(s) [attempted 7223/8010 = 90%, 425 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.8555425Z Downloaded: 7367 file(s) [attempted 7367/8010 = 91%, 727 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:28.9575572Z Downloaded: 7521 file(s) [attempted 7521/8010 = 93%, 2199 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:29.0584353Z Downloaded: 7682 file(s) [attempted 7682/8010 = 95%, 1640 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:29.1604672Z Downloaded: 7843 file(s) [attempted 7843/8010 = 97%, 3544 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:29.2762339Z Downloaded: 7996 file(s) [attempted 7996/8010 = 99%, 1648 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:29.2796362Z Downloaded: 8010 file(s) [attempted 8010/8010 = 100%, 60 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:29.2797705Z Downloaded: 8010 file(s) [attempted 8010/8010 = 100%, 60 KB/s]
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:50.7720211Z Decompressing 8007 file(s) (3 already decompressed)
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:50.7720657Z Decompressed in 20924 ms
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:50.7720904Z Completed successfully!
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2114520Z {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2115091Z   "project": "incubation/pcs_certified_numerics_v1",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2115510Z   "exact_dependency_revisions": {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2115850Z     "mathlib": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2116240Z     "plausible": "55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2116666Z     "LeanSearchClient": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2117092Z     "importGraph": "85b59af46828c029a9168f2f9c35119bd0721e6e",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2117491Z     "proofwidgets": "be3b2e63b1bbf496c478cef98b86972a37c1417d",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2117878Z     "aesop": "f642a64c76df8ba9cb53dba3b919425a0c2aeaf1",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2118232Z     "Qq": "b8f98e9087e02c8553945a2c5abf07cec8e798c3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2118607Z     "batteries": "495c008c3e3f4fb4256ff5582ddb3abf3198026f",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2119205Z     "Cli": "4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e"
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2119477Z   },
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2119666Z   "build_cache_only": true,
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2119913Z   "immutable_trust_root": false
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2120138Z }
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2940654Z {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2941209Z   "project": "incubation/pcs_conservation_algebra_v1",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2941946Z   "exact_dependency_revisions": {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2942463Z     "mathlib": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2943233Z     "plausible": "55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2943990Z     "LeanSearchClient": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2944715Z     "importGraph": "85b59af46828c029a9168f2f9c35119bd0721e6e",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2945394Z     "proofwidgets": "be3b2e63b1bbf496c478cef98b86972a37c1417d",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2946058Z     "aesop": "f642a64c76df8ba9cb53dba3b919425a0c2aeaf1",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2946613Z     "Qq": "b8f98e9087e02c8553945a2c5abf07cec8e798c3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2947228Z     "batteries": "495c008c3e3f4fb4256ff5582ddb3abf3198026f",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2947816Z     "Cli": "4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e"
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2948285Z   },
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2948589Z   "build_cache_only": true,
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2948993Z   "immutable_trust_root": false
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.2949368Z }
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3755119Z {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3755683Z   "project": "incubation/pcs_causal_laboratory_v1/lean",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3756249Z   "exact_dependency_revisions": {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3756762Z     "mathlib": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3757491Z     "plausible": "55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3758254Z     "LeanSearchClient": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3758978Z     "importGraph": "85b59af46828c029a9168f2f9c35119bd0721e6e",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3759667Z     "proofwidgets": "be3b2e63b1bbf496c478cef98b86972a37c1417d",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3760337Z     "aesop": "f642a64c76df8ba9cb53dba3b919425a0c2aeaf1",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3760902Z     "Qq": "b8f98e9087e02c8553945a2c5abf07cec8e798c3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3761511Z     "batteries": "495c008c3e3f4fb4256ff5582ddb3abf3198026f",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3762291Z     "Cli": "4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e"
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3762769Z   },
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3763082Z   "build_cache_only": true,
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3763478Z   "immutable_trust_root": false
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.3763855Z }
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4566436Z {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4566958Z   "project": "research/integration_v1/formal",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4567603Z   "exact_dependency_revisions": {
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4568214Z     "mathlib": "8f9d9cff6bd728b17a24e163c9402775d9e6a365",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4568887Z     "plausible": "55c8532eb21ec9f6d565d51d96b8ca50bd1fbef3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4569953Z     "LeanSearchClient": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4570680Z     "importGraph": "85b59af46828c029a9168f2f9c35119bd0721e6e",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4571418Z     "proofwidgets": "be3b2e63b1bbf496c478cef98b86972a37c1417d",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4572321Z     "aesop": "f642a64c76df8ba9cb53dba3b919425a0c2aeaf1",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4572935Z     "Qq": "b8f98e9087e02c8553945a2c5abf07cec8e798c3",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4573554Z     "batteries": "495c008c3e3f4fb4256ff5582ddb3abf3198026f",
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4574216Z     "Cli": "4f10f47646cb7d5748d6f423f4a07f98f7bbcc9e"
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4574887Z   },
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4575339Z   "build_cache_only": true,
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4575921Z   "immutable_trust_root": false
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:51.4576495Z }
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:03:55.3525054Z {"project": "incubation/pcs_next_v1/formal", "public_theorems": 217, "actual_lean_build": true, "standard_axioms_only": true}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:21.9428576Z {"project": "incubation/pcs_certified_numerics_v1", "public_theorems": 141, "actual_lean_build": true, "standard_axioms_only": true}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:27.9429234Z {"project": "incubation/pcs_epistemic_calculus_v1", "public_theorems": 175, "actual_lean_build": true, "standard_axioms_only": true}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:32.9452222Z {"project": "research/epistemic-stratification-v1/formal", "public_theorems": 167, "actual_lean_build": true, "standard_axioms_only": true}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:44.7872517Z {"project": "incubation/pcs_causal_laboratory_v1/lean", "public_theorems": 39, "actual_lean_build": true, "standard_axioms_only": true}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:47.9673523Z {"project": "incubation/pcs_heterogeneous_compose_v1/formal", "public_theorems": 133, "actual_lean_build": true, "standard_axioms_only": true}
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8183990Z Traceback (most recent call last):
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8193955Z   File "<frozen runpy>", line 198, in _run_module_as_main
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8194615Z   File "<frozen runpy>", line 88, in _run_code
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8195610Z   File "/home/runner/work/proof-carrying-science/proof-carrying-science/research/integration_v1/formal_audit.py", line 92, in <module>
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8196546Z     main()
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8197368Z   File "/home/runner/work/proof-carrying-science/proof-carrying-science/research/integration_v1/formal_audit.py", line 86, in main
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8198176Z     result = audit(args.project, args.imports, args.prefix, args.out.resolve())
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8198679Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8199369Z   File "/home/runner/work/proof-carrying-science/proof-carrying-science/research/integration_v1/formal_audit.py", line 29, in audit
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8200176Z     raise RuntimeError("forbidden active Lean source: " + "\n".join(findings))
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8201121Z RuntimeError: forbidden active Lean source: /home/runner/work/proof-carrying-science/proof-carrying-science/formal/PCSMathlibWorkerV4.lean:8: forbidden active token unsafe
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8202548Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/PCSProofWorker.lean:8: forbidden active token unsafe
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8203514Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/PCSReuseWorker.lean:9: forbidden active token unsafe
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8204513Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:35: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8205571Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:42: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8206623Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:49: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8207655Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:60: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8208630Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:71: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8209944Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:82: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8210899Z /home/runner/work/proof-carrying-science/proof-carrying-science/formal/ProofTasks/CheckedRawWire.lean:93: forbidden active token sorry
+formal-research	Exact toolchain, dependency cache, full builds and theorem environments	2026-10-18T10:04:50.8288529Z ##[error]Process completed with exit code 1.

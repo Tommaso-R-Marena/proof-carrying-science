@@ -1,0 +1,26 @@
+--- a/pcs/experimental/prover/language.py
++++ b/pcs/experimental/prover/language.py
+@@ class Parser:
+-    def parse(self, minimum=0):
++    def parse(self, minimum=0, depth=0):
++        if depth > 256:
++            raise ValueError("statement nesting exceeds language bound")
+         tok = self.take()
+         if tok == "(":
+-            left = self.parse()
++            left = self.parse(0, depth + 1)
+             self.take(")")
+@@
+             self.take(",")
+-            left = self.parse()
++            left = self.parse(0, depth + 1)
+@@
+         elif tok == "¬":
+-            left = {"op": "not", "arg": self.parse(8)}
++            left = {"op": "not", "arg": self.parse(8, depth + 1)}
+@@
+-                left = {"op": "apply", "fn": left, "arg": self.parse(8)}
++                left = {"op": "apply", "fn": left, "arg": self.parse(8, depth + 1)}
+@@
+-            right = self.parse(p if symbol == "→" else p + 1)
++            right = self.parse(p if symbol == "→" else p + 1, depth + 1)
