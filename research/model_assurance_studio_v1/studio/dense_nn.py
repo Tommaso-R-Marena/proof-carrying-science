@@ -166,7 +166,7 @@ def screen_onnx(raw):
         raise Unsupported('Requires a single standard ONNX opset 13–19 and supported IR version')
     weights={};nodes=[];inputs=[];outputs=[]
     for f,w,v in _exact_fields(graph,wire_fields,level=1,
-                             allowed={1:{2},2:{2},5:{2},10:{2},11:{2},12:{2},13:{2},16:{2}},
+                             allowed={1:{2},2:{2},5:{2},10:{2},11:{2},12:{2},13:{2}},
                              context='GraphProto'):
         if f==11:inputs.append(_parse_shape(v,wire_fields))
         elif f==12:outputs.append(_parse_shape(v,wire_fields))

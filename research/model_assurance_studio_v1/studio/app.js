@@ -438,6 +438,25 @@ el('dual-envelope-demo').onclick=async()=>{
   p.append(save);host.append(p);setNotice('Direct binary32 and exact-real proof families rechecked. Out-of-region execution abstained.');
  }catch(err){setNotice('Dual proof demo failed: '+String(err))}
 };
+el('dual-decoder-demo').onclick=async()=>{
+ const host=el('envelope-results');host.replaceChildren();
+ try{
+  const res=await fetch('/api/dual-decoder-demo');if(!res.ok)throw Error('Two-decoder demonstration unavailable');
+  const d=await res.json(),p=make('section','evidencebox');
+  const accepted=d.review.status==='PROVED_CONDITIONALLY';
+  p.append(make('h3','',accepted?'Model decoding + proof gate: CONDITIONAL CHECK':'Two-decoder gate: OPEN / ABSTAIN'));
+  p.append(make('p','',`Original model protobuf agreement: ${d.old_parser.status}. Updated model protobuf agreement: ${d.new_parser.status}. Mathematical proof gate: ${d.review.status}.`));
+  p.append(make('p','',`Verified ${d.review.checked_fp32_partition_leaves||0} float32 certificate leaves in ${d.review.verified_regions||0} regions. Independent ONNX Runtime and Lean kernel checks remain NOT ESTABLISHED.`));
+  for(const item of d.examples||[]){
+   p.append(make('p','',`Iris #${item.sample_index}: ${item.decision.status}; reference computation ${item.reference_execution.status}; class ${item.decision.class_index??'not admitted'}.`));
+  }
+  p.append(make('p','',`Outside approved region: ${d.outside_example.decision.status}; software execution ${d.outside_example.reference_execution.status}.`));
+  p.append(make('p','hint',d.limitations));
+  const save=make('button','btn secondary','Download two-decoder evidence');save.onclick=()=>download('pcs-protobuf-dual-decoder-v012.json',d);
+  p.append(save);host.append(p);
+  setNotice(accepted?'Independent protobuf decoder and both proof routes checked.':'Independent verification unavailable; gate abstained.');
+ }catch(err){setNotice('Independent decoder demo unavailable: '+String(err))}
+};
 el('guarded-live').onclick=async()=>{
  const host=el('guarded-results');host.replaceChildren();
  try{

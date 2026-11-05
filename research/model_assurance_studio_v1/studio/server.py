@@ -47,7 +47,7 @@ async def js():
 async def status():
     try: import onnx; onnx_version = onnx.__version__
     except ImportError: onnx_version = None
-    return {'ok':True,'version':VERSION,'extension_version':'0.11.0','onnx_checker_version':onnx_version,
+    return {'ok':True,'version':VERSION,'extension_version':'0.12.0','onnx_checker_version':onnx_version,
             'max_file_bytes':MAX_FILE,'storage':'RAM; no upload persistence','model_execution':'screened NumPy reference; optional PyTorch CPU crosscheck; optional SciPy MILP challenger; conditional real partition checks (NOT ONNX Runtime)' 
             ,'numpy_reference_worker_available':__import__('importlib').util.find_spec('numpy') is not None,
             'pytorch_reference_worker_available':__import__('importlib').util.find_spec('torch') is not None,
@@ -56,6 +56,8 @@ async def status():
             'proof_gated_model_update_available':True,
             'fp32_exact_rounding_intervals_available':True,
             'direct_fp32_partition_verifier_available':True,
+            'independent_protobuf_decoder_available':(__import__('importlib').util.find_spec('google') is not None and __import__('importlib').util.find_spec('google.protobuf') is not None),
+            'protobuf_dual_gate_available':True,
             'dual_proof_gated_envelope_available':True,
             'fp32_model_update_error_lifting_available':True,
             'onnxruntime_cpu_available':__import__('importlib').util.find_spec('onnxruntime') is not None,
@@ -255,6 +257,32 @@ async def operating_envelope_demo():
         'limitations':'Reference execution uses screened deterministic software operations; no Lean or official ONNX Runtime equivalence. This demo fingerprint is checked into source and is NOT an independently administered trust anchor.'},
         headers={'Cache-Control':'no-store'})
 
+
+@app.get('/api/dual-decoder-demo')
+async def dual_decoder_demo():
+    """Two independent wire decoders and both proof routes, no uploaded code."""
+    from .protobuf_dual_decoder_v12 import DualDecoderAssuranceGate,crosscheck
+    fixture=ROOT.parent
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    real=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    direct=json.loads((fixture/'validation/v10_direct_fp32_partition_evidence.json').read_text())
+    words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    # A reproducible fixture fingerprint is NOT an independent trust root.
+    pin='aec03cc456c9f6c77e548cffa1dc1503d795c1934d97d114afe4b4a0d7418c6d'
+    gate=DualDecoderAssuranceGate(old,new,real,direct,policy,pin)
+    outside=['00000000']*4
+    return JSONResponse({'schema':'pcs-protobuf-dual-decoder-demo-v0.12',
+        'review':gate.review(),
+        'old_parser':crosscheck(old),'new_parser':crosscheck(new),
+        'examples':[{'sample_index':key,'decision':gate.admit(vector),
+                     'reference_execution':gate.reference_infer(vector)}
+                    for key,vector in sorted(words.items(),key=lambda kv:int(kv[0]))],
+        'outside_example':{'decision':gate.admit(outside),
+                           'reference_execution':gate.reference_infer(outside)},
+        'limitations':'Google protobuf independently decodes the numerical ONNX subset, but this is NOT official onnx.checker, Lean verification, production-runtime equivalence, secure isolation or external policy custody. Missing protobuf causes OPEN/ABSTAIN. Demo regions use non-held-out Iris data.'},
+        headers={'Cache-Control':'no-store'})
 
 @app.get('/api/dual-envelope-demo')
 async def dual_envelope_demo():

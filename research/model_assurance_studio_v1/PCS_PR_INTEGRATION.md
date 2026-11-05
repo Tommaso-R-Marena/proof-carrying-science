@@ -82,3 +82,12 @@ An optional **fixed C binary32 CPU evaluator** provides a distinct numerical exe
 `python -S -m unittest tests.test_strict_onnx_v11 tests.test_native_fp32_v11 -v`
 
 The reviewed C is optional and must be compiled/executed only in a host-controlled local research environment. All code remains in the incubator; `pcs/` and `formal/` are unchanged, and PR #196 remains draft.
+
+### v0.12 additive review note
+
+This update adds a fixed Google protobuf secondary ONNX parser, a fail-closed
+decoder-plus-dual-mathematical operating gate, an interactive local demo, and
+regression tests. The earlier custom parser's GraphProto field 16 (ignored
+`sparse_initializer`) is now rejected. No changes are requested to production
+PCS authority; do not merge until the security/model-semantics boundary is
+independently reviewed. See `docs/DUAL_PROTOBUF_SEMANTICS_V12.md`.

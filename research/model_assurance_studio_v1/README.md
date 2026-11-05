@@ -118,3 +118,21 @@ The reference environment ran **166/166 automated tests**, a live local HTTP API
 5. Carry out independent evaluation on legally cleared, genuine AI and computational biology models before any scientific/commercial assurance claims.
 
 Full threat boundary: `docs/THREAT_MODEL_V05.md`. Neither PCS's original repository nor its verification roots have been modified by this standalone research package.
+
+### v0.12 — Dual decoding and model-to-proof binding (research only)
+
+The enhanced local demonstration cross-checks the mathematical ONNX graph decoded by
+PCS's screened parser against an independently constructed Google protobuf decoder,
+then requires **both** complete prior mathematical proof families before software
+reference inference. If protobuf is missing or the decoders disagree, this enhanced
+gate refuses to execute. The separate stdlib-only mathematical replay remains
+available without protobuf. The parser now rejects previously ignored ONNX sparse
+initializer graph fields. See [the v0.12 threat-boundary report](docs/DUAL_PROTOBUF_SEMANTICS_V12.md)
+for reproducibility, tests and limitations.
+
+```sh
+PYTHONPATH=. python scripts/reproduce_v12_dual_decoder.py
+```
+
+No official ONNX Runtime semantics, Lean kernel proof, secure host, independent
+policy custody or generalized AI safety verdict is established.
