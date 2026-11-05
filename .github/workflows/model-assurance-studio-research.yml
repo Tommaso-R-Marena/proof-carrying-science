@@ -22,7 +22,9 @@ jobs:
         with:
           python-version: '3.12.14'
       - name: Verify retained PR ancestry and unchanged production source
-        run: python scripts/check_reconciled_prs.py --core "$PWD"
+        run: |
+          python scripts/test_reconciled_prs.py
+          python scripts/check_reconciled_prs.py --core "$PWD"
       - name: Install exact hashed validation and existing CPU profile
         run: |
           python -m pip install --only-binary=:all: --require-hashes -r requirements-prover.lock -r research/model_assurance_studio_v1/requirements-validation.lock

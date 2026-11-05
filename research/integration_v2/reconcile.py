@@ -18,8 +18,8 @@ import subprocess
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V21.json"
-MANIFEST_SHA256 = '7fbd145fbf737ab0b2f1ef653a13ff26920e956137942dad67bfdb8c48566bde'
+MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V22.json"
+MANIFEST_SHA256 = 'efff0b29fe5c4cb857707cf4ae89e823187791b56ded08a6fe61dcdc3f325e5b'
 API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
 # Exact reviewed source references for reconciling the held research branch.
 # This adds a source rollback check; it does not release PR117 or grant authority.
@@ -128,11 +128,11 @@ def _historical_identities(root, prs):
 
 def _verify(root, manifest):
     """Internal checker; the CLI accepts only the compiled-in manifest digest."""
-    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21"}:
+    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"}:
         raise ValueError("unsupported reconciliation")
     prs = manifest["prs"]
     numbers = [p["number"] for p in prs]
-    expected_count = 72 if manifest["format"] == "pcs-source-reconciliation-v21" else 70
+    expected_count = 72 if manifest["format"] in {"pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"} else 70
     if len(numbers) != len(set(numbers)) or len(prs) != expected_count:
         raise ValueError("incomplete or duplicate PR census")
     if [p["number"] for p in prs if p["disposition"] == "HELD"] != [117]:
@@ -165,7 +165,7 @@ def _verify(root, manifest):
             if not equal and pr["disposition"] not in {"REVIEWED_ADAPTATION", "HELD"}:
                 raise ValueError("unreviewed adaptation")
             counts[item["relation"]] += 1
-    return {"format": "pcs-source-reconciliation-check-v21", "source_review_complete": True,
+    return {"format": "pcs-source-reconciliation-check-v22", "source_review_complete": True,
             "prs_checked": len(prs), "source_bindings_checked": sum(counts.values()),
             "relations": dict(counts), "dispositions": dict(Counter(p["disposition"] for p in prs)),
             "held_prs": [117], "release_ready": False, "pcs_authority": False,
@@ -311,8 +311,8 @@ def check(*, require_committed=False, live=False):
     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
         raise ValueError("reconciliation manifest differs from fixed reviewed digest")
     manifest = _json(raw)
-    if manifest["format"] != "pcs-source-reconciliation-v21":
-        raise ValueError("current combined admission requires explicit V21 format")
+    if manifest["format"] != "pcs-source-reconciliation-v22":
+        raise ValueError("current combined admission requires explicit V22 format")
     result = _verify(ROOT, manifest)
     _snapshot(ROOT, manifest)
     _workflows(ROOT, manifest)
@@ -336,7 +336,7 @@ def check(*, require_committed=False, live=False):
     return dict(result, committed_source_required=require_committed, live_heads_checked=live,
                 manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
                 pr117_integration=pr117,
-                relations_scope="V21_REVIEW_WITH_IMMUTABLE_V20_PREDECESSOR_AND_EXPLICIT_TEST_SUCCESSOR",
+                relations_scope="V22_LINEAR_INTEGRATION_WITH_IMMUTABLE_V21_AND_V20_PREDECESSORS",
                 reviewed_test_successor=dict(path=RECEIVER_CLEANUP_TEST,
                     old_sha256=RECEIVER_CLEANUP_OLD, new_sha256=RECEIVER_CLEANUP_NEW,
                     mode="100644", authority_code_changed=False,
