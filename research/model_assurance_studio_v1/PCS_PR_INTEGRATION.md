@@ -56,3 +56,5 @@ PYTHONPATH=. python -S scripts/reproduce_v09_envelope.py
 ```
 
 The browser exposes a **bundled demonstration only**, not authorization of arbitrary user-supplied models. The sample policy fingerprint is source-pinned for reproducibility; this is not proof of independently administered reviewer custody. The v0.9 checks are **experimental Python evidence**; Lean and official ONNX Runtime equivalence remain NOT_ESTABLISHED.
+
+Optional non-authoritative second-backend observation: `PYTHONPATH=. python scripts/crosscheck_v09_torch_cpu.py` (requires PyTorch and scikit-learn). This separately executes all 150 Iris vectors in PyTorch CPU and the software sequential binary32 interpreter; the recorded run observed zero violations on the 27 conditionally admitted samples and maximum absolute numerical difference ~3.81e-6 across all 150. See `validation/v09_torch_cpu_observation.json`. These measurements are not a Lean proof, official ONNX Runtime equivalence, or held-out coverage evidence.

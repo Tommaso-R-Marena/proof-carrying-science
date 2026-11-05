@@ -61,3 +61,13 @@ The assurance is also **not** a verification of all floating-point execution env
 4. Evaluate on independently selected models and strictly held-out use cases; measure rejection/coverage tradeoff, scientific relevance and failure modes; do not promote this public example to general AI safety.
 
 **Merge posture:** research-only draft. Additive to PCS, with no changes to the production `pcs` or `formal` authority or existing signed verification formats.
+
+## Optional PyTorch CPU empirical crosscheck (not a proof)
+
+If `torch` and `scikit-learn` are installed locally, run from this folder:
+
+```sh
+PYTHONPATH=. python scripts/crosscheck_v09_torch_cpu.py
+```
+
+It executes all **150** published Iris measurement vectors through the actual PyTorch CPU interpretation of the screened, updated graph, and separately through the deterministic software binary32 interpreter, then uses the reviewer-pinned operating gate to identify the **27** admitted vectors. In the recorded local run (`torch 2.10.0+cpu`), no admitted example violated the 0.25 class-margin requirement; the smallest *observed* admitted margin was approximately **6.3406**; maximum absolute output disagreement between the two numerical interpreters across all 150 vectors was **3.8147 × 10⁻⁶**. This is **finite empirical agreement** of two interpretations; it does not establish ONNX Runtime semantics, formal soundness of Python, input-distribution guarantees, or a statistically independent evaluation. The recorded observation is in `validation/v09_torch_cpu_observation.json` and may vary with hardware/compiler/backend versions.
