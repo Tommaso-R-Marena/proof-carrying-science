@@ -1,3 +1,5 @@
+> **v0.9 research advance:** Proof-gated selective inference over reviewer-pinned operating regions. The local demo verifies six baseline/update certificate pairs across three trained Iris classifier regions and refuses computation outside the conditionally proven domain. [Technical definition, reproducibility and limits](docs/OPERATING_ENVELOPE_V09.md). Not Lean-verified, official ONNX Runtime, or a deployment safety certificate.
+
 # PCS Model Assurance Studio — v0.7 research update
 
 **New:** exact-rational binary32 rounding, conservative numerical error lifting for proof-gated model updates, Lean 4/Mathlib certificate *source* export, and an optional genuine ONNX Runtime CPU comparison. These mechanisms are deliberately separated from the existing v0.6 PCS authority.

@@ -43,3 +43,16 @@ Set up a virtual environment and install this folder's `requirements.txt`. From 
 5. Real external-partner evaluation on legally cleared workflows; no biological validity or generalized AI safety claims.
 
 **Merge posture:** draft until scoped source inspection, exact-commit CI, rights audit, and trust-boundary review are complete. This incubator is deliberately not promoted as `pcs verify-v06` authority.
+
+## v0.9 addendum — proof-gated operating envelope
+
+A new additive research control now checks **complete per-class update-margin evidence** for a reviewer-approved union of bounded regions and refuses to execute screened software-reference inference outside the verified region. See [full mathematical statement and limits](docs/OPERATING_ENVELOPE_V09.md).
+
+The trained Iris demonstration comprises **three regions, six independent update proof pairs, and a conditional minimum float32 class margin of 1/4** under the documented arithmetic assumptions. Source data coverage is 27/150 points; the same data were used to choose the regions, so this is not a blind validation or accuracy metric. The exact three anchor inputs execute using the screened software reference after admission; all out-of-region requests abstain. The independent review path uses only the Python standard library:
+
+```sh
+python -S -m unittest tests.test_operating_envelope_v09 -q
+PYTHONPATH=. python -S scripts/reproduce_v09_envelope.py
+```
+
+The browser exposes a **bundled demonstration only**, not authorization of arbitrary user-supplied models. The sample policy fingerprint is source-pinned for reproducibility; this is not proof of independently administered reviewer custody. The v0.9 checks are **experimental Python evidence**; Lean and official ONNX Runtime equivalence remain NOT_ESTABLISHED.

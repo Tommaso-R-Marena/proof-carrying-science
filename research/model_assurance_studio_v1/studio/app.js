@@ -402,6 +402,25 @@ el('milp-demo').onclick=async()=>{
   state.files=[f];renderFiles();await inspect([f]);
  }catch(e){setNotice('Solver-guided challenge failed: '+String(e))}
 };
+el('envelope-demo').onclick=async()=>{
+ const host=el('envelope-results');host.replaceChildren();
+ try{
+  const res=await fetch('/api/operating-envelope-demo');if(!res.ok)throw Error('Demo fixtures unavailable');
+  const d=await res.json(),p=make('section','evidencebox');
+  p.append(make('h3','',d.review.status==='PROVED_CONDITIONALLY'?'Proof-gated input admission: CONDITIONAL CHECK':'Operating envelope: OPEN'));
+  p.append(make('p','',`${d.review.checked_comparisons||0} complete update-margin comparisons across ${d.review.region_count||0} reviewer-policy regions. No Lean kernel or official inference-runtime equivalence is claimed.`));
+  for(const item of d.examples||[]){
+   const status=item.decision.status,executed=item.reference_execution.status;
+   p.append(make('p','',`Iris #${item.sample_index}: ${status}; software execution ${executed}; certified class ${item.decision.class_index??'none'}; minimum conditional margin ${item.decision.minimum_margin||'unavailable'}`));
+  }
+  p.append(make('p','',`Out-of-region input: ${d.outside_example.decision.status}; reference execution ${d.outside_example.reference_execution.status}.`));
+  p.append(make('p','hint',`${d.measured_data_coverage.admitted}/${d.measured_data_coverage.tested} Iris records fall within the preselected demo regions. This is not an independent generalization result.`));
+  p.append(make('p','hint',d.limitations));
+  const save=make('button','btn secondary','Download conditional admission report');
+  save.onclick=()=>download('pcs-operating-envelope-demo-v09.json',d);
+  p.append(save);host.append(p);setNotice('Conditional operating-envelope demo finished. Outside-region inputs did not reach inference.');
+ }catch(e){setNotice('Operating-envelope demo failed: '+String(e))}
+};
 el('guarded-live').onclick=async()=>{
  const host=el('guarded-results');host.replaceChildren();
  try{

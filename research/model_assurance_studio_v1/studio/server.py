@@ -42,7 +42,7 @@ async def js():
 async def status():
     try: import onnx; onnx_version = onnx.__version__
     except ImportError: onnx_version = None
-    return {'ok':True,'version':VERSION,'extension_version':'0.7.0','onnx_checker_version':onnx_version,
+    return {'ok':True,'version':VERSION,'extension_version':'0.9.0','onnx_checker_version':onnx_version,
             'max_file_bytes':MAX_FILE,'storage':'RAM; no upload persistence','model_execution':'screened NumPy reference; optional PyTorch CPU crosscheck; optional SciPy MILP challenger; conditional real partition checks (NOT ONNX Runtime)' 
             ,'numpy_reference_worker_available':__import__('importlib').util.find_spec('numpy') is not None,
             'pytorch_reference_worker_available':__import__('importlib').util.find_spec('torch') is not None,
@@ -210,3 +210,35 @@ async def attack_campaign():
     """Run bounded local synthetic metamorphic attacks. No user input or tools."""
     from .adversarial_campaign import run_campaign
     return JSONResponse(run_campaign(),headers={'Cache-Control':'no-store'})
+
+
+@app.get('/api/operating-envelope-demo')
+async def operating_envelope_demo():
+    """Bundled research fixture ONLY; no uploaded/native model is executed.
+
+    This fingerprint is frozen in source for demonstration. Production trust
+    requires an independently administered reviewer policy trust anchor.
+    """
+    from .operating_envelope_v09 import OperatingEnvelopeGate
+    from .guarded_reference_infer_v09 import reference_infer
+    fixture=ROOT.parent
+    policy=json.loads((fixture/'validation/v09_demo_envelope_reviewer_policy.json').read_text())
+    bundle=json.loads((fixture/'validation/v09_demo_envelope_evidence.json').read_text())
+    words=json.loads((fixture/'validation/v09_demo_input_words.json').read_text())
+    old=(fixture/'samples/demo_trained_iris_mlp.onnx').read_bytes()
+    new=(fixture/'samples/demo_trained_iris_updated.onnx').read_bytes()
+    pinned='aec03cc456c9f6c77e548cffa1dc1503d795c1934d97d114afe4b4a0d7418c6d'
+    gate=OperatingEnvelopeGate(old,new,bundle,policy,pinned)
+    review=gate.review()
+    cases=[{'sample_index':index,'decision':gate.admit(vector),
+            'reference_execution':reference_infer(gate,new,vector)}
+           for index,vector in sorted(words.items(),key=lambda kv:int(kv[0]))]
+    outsider=['00000000']*4
+    return JSONResponse({'schema':'pcs-operating-envelope-demo-v0.9','review':review,
+        'examples':cases,'outside_example':{'input_bits':outsider,
+            'decision':gate.admit(outsider),
+            'reference_execution':reference_infer(gate,new,outsider)},
+        'measured_data_coverage':{'admitted':27,'tested':150,
+            'note':'Same Iris dataset used to choose demonstration regions; NOT a holdout generalization estimate'},
+        'limitations':'Reference execution uses screened deterministic software operations; no Lean or official ONNX Runtime equivalence. This demo fingerprint is checked into source and is NOT an independently administered trust anchor.'},
+        headers={'Cache-Control':'no-store'})
