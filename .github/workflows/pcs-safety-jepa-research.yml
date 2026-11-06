@@ -32,6 +32,8 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           python -m pytest -q research/safety_jepa_v1
+          python -m research.safety_jepa_v1.verify --directory research/safety_jepa_v1/evidence
+          python -m research.safety_jepa_v1.pilot_replay --directory research/safety_jepa_v1/evidence/real-qwen-pilot
           python -m research.safety_jepa_v1 --output "$RUNNER_TEMP/safety-jepa" --seeds 17 --epochs 1 --rl-episodes 4
           python -m research.safety_jepa_v1.replay --directory "$RUNNER_TEMP/safety-jepa" | tee "$RUNNER_TEMP/safety-jepa-replay.json"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
