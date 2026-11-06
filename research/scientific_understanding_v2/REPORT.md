@@ -84,7 +84,7 @@ Source relevance is not scientific correctness. These results support determinis
 
 ## Formal results
 
-All compile with Lean4.28.0, `-j1 -M512`, with actual source/compiler/library bindings and axiom reports. No sorry/admit, new axioms or unsafe shortcuts are introduced.
+Original local proof receipts compile with Lean4.28.0, `-j1 -M512`, with actual source/compiler/library bindings and axiom reports. Hosted compilation exhausted that research memory budget during imported-environment initialization, so the current runner uses a bounded `-M1024` budget and the same proof statements, compiler version and axiom allowlists. Memory failures never become positive verdicts. No sorry/admit, new axioms or unsafe shortcuts are introduced.
 
 `ScientificDimensions` (nine, empty axiom lists): `check_sound`, `check_complete`, `undeclared_symbol_untypable`, `dimension_unique`, `research_has_no_authority`, `nat_mul_assoc_constructive`, `nat_product_reorder`, `scale_multiplicative_compatibility`, `minutes_to_seconds_exact`.
 

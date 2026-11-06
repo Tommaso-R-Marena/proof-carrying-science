@@ -146,7 +146,7 @@ def verify_formal(lean_binary: str | Path | None = None, *, source: str | Path |
     try:
         version = subprocess.run([str(lean), "--version"], capture_output=True, text=True, timeout=15, check=False)
         receipt["compiler_version"] = version.stdout.strip()
-        command = [str(lean), "-M512", "-j1", str(source_path.resolve())]
+        command = [str(lean), "-M1024", "-j1", str(source_path.resolve())]
         receipt["command"] = command
         result = subprocess.run(command, cwd=str(source_path.parent), env={"PATH": str(lean.parent)+":/usr/bin:/bin", "LANG":"C.UTF-8", "LEAN_NUM_THREADS":"1"}, capture_output=True, text=True, timeout=timeout, check=False)
     except (OSError, subprocess.TimeoutExpired) as exc:

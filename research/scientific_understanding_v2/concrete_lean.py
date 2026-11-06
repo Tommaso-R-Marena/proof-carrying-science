@@ -34,7 +34,7 @@ def verify_certificate(certificate, *, lean=None):
     if 'version 4.28.0,' not in version:raise ValueError('Lean 4.28.0 required')
     with tempfile.TemporaryDirectory(prefix='pcs-model-conservation-') as folder:
         p=Path(folder)/'Certificate.lean';p.write_text(text)
-        result=subprocess.run([str(binary),'-j1','-M512',str(p)],cwd=folder,env={'PATH':str(binary.parent)+':/usr/bin:/bin','LANG':'C.UTF-8','LEAN_NUM_THREADS':'1'},capture_output=True,text=True,timeout=30)
+        result=subprocess.run([str(binary),'-j1','-M1024',str(p)],cwd=folder,env={'PATH':str(binary.parent)+':/usr/bin:/bin','LANG':'C.UTF-8','LEAN_NUM_THREADS':'1'},capture_output=True,text=True,timeout=30)
     if result.returncode:raise ValueError('Lean certificate rejected: '+result.stdout[:2000]+result.stdout[-1000:]+result.stderr[-1000:])
     audit={}
     for name in ['SourceBound.nulls','SourceBound.conservation']:

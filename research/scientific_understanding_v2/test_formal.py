@@ -56,7 +56,7 @@ class LeanCompilationTests(unittest.TestCase):
         self.assertTrue(result["source_stable_during_compile"])
         self.assertFalse(result["authority"])
         self.assertEqual(result["python_lean_refinement"], "OPEN")
-        self.assertIn("-M512", result["command"])
+        self.assertIn("-M1024", result["command"])
         self.assertIn("-j1", result["command"])
 
     def test_compiler_and_source_are_bound_to_receipt(self):
@@ -112,7 +112,7 @@ class SamplingCompilationTests(unittest.TestCase):
         self.assertFalse(result["authority"])
         self.assertIn("twelve fixed samples", result["scope"])
         self.assertRegex(result["source_sha256"], r"^[0-9a-f]{64}$")
-        self.assertIn("-M512", result["command"])
+        self.assertIn("-M1024", result["command"])
         self.assertIn("-j1", result["command"])
 
 
