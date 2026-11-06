@@ -1,0 +1,48 @@
+{
+  "actual_axiom_output": "'PCSScientificIntake.projection_congr' does not depend on any axioms\n'PCSScientificIntake.fixed_checker_reuse' does not depend on any axioms\n'PCSScientificIntake.policy_bound_reuse' does not depend on any axioms\n'PCSScientificIntake.closed_contains_reachable' does not depend on any axioms\n'PCSScientificIntake.closed_dependency_reuse' does not depend on any axioms",
+  "assumptions": [
+    "The checker is one fixed pure function of the projected inputs and fixed policy.",
+    "The declared dependency projection contains every source input used by that checker.",
+    "Retained dependencies are closed under the supplied dependency relation.",
+    "Snapshot equality means equality of the actual named source bytes, not merely a claimed digest."
+  ],
+  "axiom_audit": {
+    "PCSScientificIntake.closed_contains_reachable": [],
+    "PCSScientificIntake.closed_dependency_reuse": [],
+    "PCSScientificIntake.fixed_checker_reuse": [],
+    "PCSScientificIntake.policy_bound_reuse": [],
+    "PCSScientificIntake.projection_congr": []
+  },
+  "build": {
+    "actual_compilation": true,
+    "exit_code": 0,
+    "proof_object_sha256": "6bcebcb91b68e84b158f88402c16c0c7a3d58d89eed0ff3aed06c4d3ee3df845",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "a5bd02d23357e4af29c08825ed3bc290e178f5b24f876ffbe271810d1e06bb0f"
+  },
+  "format": "pcs-scientific-intake-formal-v1",
+  "limitations": [
+    "Abstract conditional theorem only; Python parser/dependency discovery refinement is unproved.",
+    "Host integrity, authentic byte observations, digest collision resistance and external tool semantics are assumptions.",
+    "No scientific claim, imported proof, neural prediction or production admission receives authority from this receipt."
+  ],
+  "production_authority": "NONE",
+  "source": {
+    "path": "research/scientific_intake_v1/formal/Incremental.lean",
+    "sha256": "464f8d1816f26c01605e4e43e04867a48c9b76f68a1906f32d47078311901502"
+  },
+  "status": "VERIFIED",
+  "theorems": [
+    "PCSScientificIntake.projection_congr",
+    "PCSScientificIntake.fixed_checker_reuse",
+    "PCSScientificIntake.policy_bound_reuse",
+    "PCSScientificIntake.closed_contains_reachable",
+    "PCSScientificIntake.closed_dependency_reuse"
+  ],
+  "toolchain": {
+    "path": "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+    "sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+    "version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+  },
+  "verifier_sha256": "7379944ac97dda38d621de3570b9fd2745daac8ba0efea5f6ddf43f34da2d96a"
+}

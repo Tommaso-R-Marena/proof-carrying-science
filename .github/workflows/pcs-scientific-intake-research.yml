@@ -1,0 +1,51 @@
+name: Scientific intake experimental research
+on:
+  pull_request:
+    paths:
+      - 'research/scientific_intake_v1/**'
+      - '.github/workflows/pcs-scientific-intake-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: science-intake-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  scientific-intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Existing hash-pinned CPU dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock -r requirements-prover.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Bounded PDF text extraction
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y poppler-utils
+          pdftotext -v
+      - name: Actual parsing, provenance, independent checking and formal replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q research/scientific_intake_v1
+          python -m research.scientific_intake_v1.verify_formal --output "$RUNNER_TEMP/scientific-formal.json"
+          python -m research.scientific_intake_v1 diagnostics --effects > "$RUNNER_TEMP/scientific-retained-effects.json"
+          python -m research.scientific_intake_v1.benchmark --split development --output "$RUNNER_TEMP/scientific-development"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: scientific-intake-evidence
+          path: |
+            ${{ runner.temp }}/scientific-formal.json
+            ${{ runner.temp }}/scientific-retained-effects.json
+            ${{ runner.temp }}/scientific-development/freeze.json
+            ${{ runner.temp }}/scientific-development/results.json
+            ${{ runner.temp }}/scientific-development/partial.json
