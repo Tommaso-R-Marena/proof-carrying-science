@@ -1,0 +1,4184 @@
+{
+  "created_utc": "2026-11-06T14:21:42.242565+00:00",
+  "data_origin": "Authored synthetic query-source pairs only; scientificprojects evaluation-only",
+  "dataset_sha256": "f6c8c9efb6be848b8aa4954aeb9fad5b6a848212d0b6145d851f435aa6ab4e63",
+  "finding": "Negative finding: neural test MRR does not exceed the strongest lexical baseline.",
+  "limitations": [
+    "Toy synthetic family split does not establish transfer to publication sources.",
+    "One predeclared seed and architecture; no statistical significance claim.",
+    "Source relevance scores do not establish entailment, truth, or proof authority.",
+    "This is contrastive retrieval training, not JEPA; native P1/P2 models and weights were not reused."
+  ],
+  "metrics": {
+    "test": {
+      "bm25": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-initial",
+            "query_id": "q-f10-0-initial",
+            "rank": 1,
+            "top_id": "f10-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-rate",
+            "query_id": "q-f10-0-rate",
+            "rank": 1,
+            "top_id": "f10-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-units",
+            "query_id": "q-f10-0-units",
+            "rank": 1,
+            "top_id": "f10-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-objective",
+            "query_id": "q-f10-0-objective",
+            "rank": 1,
+            "top_id": "f10-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-result",
+            "query_id": "q-f10-0-result",
+            "rank": 1,
+            "top_id": "f10-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-uncertainty",
+            "query_id": "q-f10-0-uncertainty",
+            "rank": 1,
+            "top_id": "f10-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-initial",
+            "query_id": "q-f10-1-initial",
+            "rank": 1,
+            "top_id": "f10-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-rate",
+            "query_id": "q-f10-1-rate",
+            "rank": 1,
+            "top_id": "f10-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-units",
+            "query_id": "q-f10-1-units",
+            "rank": 1,
+            "top_id": "f10-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-objective",
+            "query_id": "q-f10-1-objective",
+            "rank": 1,
+            "top_id": "f10-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-result",
+            "query_id": "q-f10-1-result",
+            "rank": 1,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-uncertainty",
+            "query_id": "q-f10-1-uncertainty",
+            "rank": 1,
+            "top_id": "f10-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-initial",
+            "query_id": "q-f11-0-initial",
+            "rank": 1,
+            "top_id": "f11-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-rate",
+            "query_id": "q-f11-0-rate",
+            "rank": 1,
+            "top_id": "f11-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-units",
+            "query_id": "q-f11-0-units",
+            "rank": 1,
+            "top_id": "f11-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-objective",
+            "query_id": "q-f11-0-objective",
+            "rank": 1,
+            "top_id": "f11-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-result",
+            "query_id": "q-f11-0-result",
+            "rank": 1,
+            "top_id": "f11-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-uncertainty",
+            "query_id": "q-f11-0-uncertainty",
+            "rank": 1,
+            "top_id": "f11-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-initial",
+            "query_id": "q-f11-1-initial",
+            "rank": 1,
+            "top_id": "f11-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-rate",
+            "query_id": "q-f11-1-rate",
+            "rank": 1,
+            "top_id": "f11-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-units",
+            "query_id": "q-f11-1-units",
+            "rank": 1,
+            "top_id": "f11-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-objective",
+            "query_id": "q-f11-1-objective",
+            "rank": 1,
+            "top_id": "f11-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-result",
+            "query_id": "q-f11-1-result",
+            "rank": 1,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-uncertainty",
+            "query_id": "q-f11-1-uncertainty",
+            "rank": 1,
+            "top_id": "f11-1-uncertainty"
+          }
+        ],
+        "mrr": 1.0,
+        "n": 24,
+        "top1": 1.0
+      },
+      "neural": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-initial",
+            "query_id": "q-f10-0-initial",
+            "rank": 1,
+            "top_id": "f10-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-rate",
+            "query_id": "q-f10-0-rate",
+            "rank": 1,
+            "top_id": "f10-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-units",
+            "query_id": "q-f10-0-units",
+            "rank": 1,
+            "top_id": "f10-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-objective",
+            "query_id": "q-f10-0-objective",
+            "rank": 5,
+            "top_id": "f11-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-result",
+            "query_id": "q-f10-0-result",
+            "rank": 1,
+            "top_id": "f10-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-uncertainty",
+            "query_id": "q-f10-0-uncertainty",
+            "rank": 1,
+            "top_id": "f10-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-initial",
+            "query_id": "q-f10-1-initial",
+            "rank": 2,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-rate",
+            "query_id": "q-f10-1-rate",
+            "rank": 1,
+            "top_id": "f10-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-units",
+            "query_id": "q-f10-1-units",
+            "rank": 1,
+            "top_id": "f10-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-objective",
+            "query_id": "q-f10-1-objective",
+            "rank": 4,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-result",
+            "query_id": "q-f10-1-result",
+            "rank": 1,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-uncertainty",
+            "query_id": "q-f10-1-uncertainty",
+            "rank": 1,
+            "top_id": "f10-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-initial",
+            "query_id": "q-f11-0-initial",
+            "rank": 2,
+            "top_id": "f10-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-rate",
+            "query_id": "q-f11-0-rate",
+            "rank": 4,
+            "top_id": "f11-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-units",
+            "query_id": "q-f11-0-units",
+            "rank": 1,
+            "top_id": "f11-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-objective",
+            "query_id": "q-f11-0-objective",
+            "rank": 1,
+            "top_id": "f11-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-result",
+            "query_id": "q-f11-0-result",
+            "rank": 1,
+            "top_id": "f11-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-uncertainty",
+            "query_id": "q-f11-0-uncertainty",
+            "rank": 1,
+            "top_id": "f11-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-initial",
+            "query_id": "q-f11-1-initial",
+            "rank": 7,
+            "top_id": "f10-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-rate",
+            "query_id": "q-f11-1-rate",
+            "rank": 5,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-units",
+            "query_id": "q-f11-1-units",
+            "rank": 1,
+            "top_id": "f11-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-objective",
+            "query_id": "q-f11-1-objective",
+            "rank": 1,
+            "top_id": "f11-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-result",
+            "query_id": "q-f11-1-result",
+            "rank": 1,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-uncertainty",
+            "query_id": "q-f11-1-uncertainty",
+            "rank": 1,
+            "top_id": "f11-1-uncertainty"
+          }
+        ],
+        "mrr": 0.793452380952381,
+        "n": 24,
+        "top1": 0.7083333333333334
+      },
+      "randomized_labels": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-initial",
+            "query_id": "q-f10-0-initial",
+            "rank": 1,
+            "top_id": "f10-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-rate",
+            "query_id": "q-f10-0-rate",
+            "rank": 17,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-units",
+            "query_id": "q-f10-0-units",
+            "rank": 8,
+            "top_id": "f10-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-objective",
+            "query_id": "q-f10-0-objective",
+            "rank": 1,
+            "top_id": "f10-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-result",
+            "query_id": "q-f10-0-result",
+            "rank": 3,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-uncertainty",
+            "query_id": "q-f10-0-uncertainty",
+            "rank": 1,
+            "top_id": "f10-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-initial",
+            "query_id": "q-f10-1-initial",
+            "rank": 1,
+            "top_id": "f10-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-rate",
+            "query_id": "q-f10-1-rate",
+            "rank": 10,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-units",
+            "query_id": "q-f10-1-units",
+            "rank": 4,
+            "top_id": "f10-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-objective",
+            "query_id": "q-f10-1-objective",
+            "rank": 2,
+            "top_id": "f10-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-result",
+            "query_id": "q-f10-1-result",
+            "rank": 1,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-uncertainty",
+            "query_id": "q-f10-1-uncertainty",
+            "rank": 1,
+            "top_id": "f10-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-initial",
+            "query_id": "q-f11-0-initial",
+            "rank": 2,
+            "top_id": "f11-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-rate",
+            "query_id": "q-f11-0-rate",
+            "rank": 11,
+            "top_id": "f11-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-units",
+            "query_id": "q-f11-0-units",
+            "rank": 2,
+            "top_id": "f11-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-objective",
+            "query_id": "q-f11-0-objective",
+            "rank": 18,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-result",
+            "query_id": "q-f11-0-result",
+            "rank": 7,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-uncertainty",
+            "query_id": "q-f11-0-uncertainty",
+            "rank": 1,
+            "top_id": "f11-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-initial",
+            "query_id": "q-f11-1-initial",
+            "rank": 1,
+            "top_id": "f11-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-rate",
+            "query_id": "q-f11-1-rate",
+            "rank": 4,
+            "top_id": "f11-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-units",
+            "query_id": "q-f11-1-units",
+            "rank": 1,
+            "top_id": "f11-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-objective",
+            "query_id": "q-f11-1-objective",
+            "rank": 15,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-result",
+            "query_id": "q-f11-1-result",
+            "rank": 1,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-uncertainty",
+            "query_id": "q-f11-1-uncertainty",
+            "rank": 3,
+            "top_id": "f11-0-uncertainty"
+          }
+        ],
+        "mrr": 0.554436610502787,
+        "n": 24,
+        "top1": 0.4166666666666667
+      },
+      "tfidf": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-initial",
+            "query_id": "q-f10-0-initial",
+            "rank": 1,
+            "top_id": "f10-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-rate",
+            "query_id": "q-f10-0-rate",
+            "rank": 1,
+            "top_id": "f10-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-units",
+            "query_id": "q-f10-0-units",
+            "rank": 1,
+            "top_id": "f10-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-objective",
+            "query_id": "q-f10-0-objective",
+            "rank": 1,
+            "top_id": "f10-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-result",
+            "query_id": "q-f10-0-result",
+            "rank": 1,
+            "top_id": "f10-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-0-uncertainty",
+            "query_id": "q-f10-0-uncertainty",
+            "rank": 1,
+            "top_id": "f10-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-initial",
+            "query_id": "q-f10-1-initial",
+            "rank": 1,
+            "top_id": "f10-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-rate",
+            "query_id": "q-f10-1-rate",
+            "rank": 1,
+            "top_id": "f10-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-units",
+            "query_id": "q-f10-1-units",
+            "rank": 1,
+            "top_id": "f10-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-objective",
+            "query_id": "q-f10-1-objective",
+            "rank": 1,
+            "top_id": "f10-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-result",
+            "query_id": "q-f10-1-result",
+            "rank": 1,
+            "top_id": "f10-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f10-1-uncertainty",
+            "query_id": "q-f10-1-uncertainty",
+            "rank": 1,
+            "top_id": "f10-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-initial",
+            "query_id": "q-f11-0-initial",
+            "rank": 1,
+            "top_id": "f11-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-rate",
+            "query_id": "q-f11-0-rate",
+            "rank": 1,
+            "top_id": "f11-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-units",
+            "query_id": "q-f11-0-units",
+            "rank": 1,
+            "top_id": "f11-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-objective",
+            "query_id": "q-f11-0-objective",
+            "rank": 1,
+            "top_id": "f11-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-result",
+            "query_id": "q-f11-0-result",
+            "rank": 1,
+            "top_id": "f11-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-0-uncertainty",
+            "query_id": "q-f11-0-uncertainty",
+            "rank": 1,
+            "top_id": "f11-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-initial",
+            "query_id": "q-f11-1-initial",
+            "rank": 1,
+            "top_id": "f11-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-rate",
+            "query_id": "q-f11-1-rate",
+            "rank": 1,
+            "top_id": "f11-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-units",
+            "query_id": "q-f11-1-units",
+            "rank": 1,
+            "top_id": "f11-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-objective",
+            "query_id": "q-f11-1-objective",
+            "rank": 1,
+            "top_id": "f11-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-result",
+            "query_id": "q-f11-1-result",
+            "rank": 1,
+            "top_id": "f11-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f11-1-uncertainty",
+            "query_id": "q-f11-1-uncertainty",
+            "rank": 1,
+            "top_id": "f11-1-uncertainty"
+          }
+        ],
+        "mrr": 1.0,
+        "n": 24,
+        "top1": 1.0
+      }
+    },
+    "train": {
+      "bm25": {
+        "examples": [
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-initial",
+            "query_id": "q-f0-0-initial",
+            "rank": 7,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-rate",
+            "query_id": "q-f0-0-rate",
+            "rank": 8,
+            "top_id": "f7-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-units",
+            "query_id": "q-f0-0-units",
+            "rank": 1,
+            "top_id": "f0-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-objective",
+            "query_id": "q-f0-0-objective",
+            "rank": 11,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-result",
+            "query_id": "q-f0-0-result",
+            "rank": 6,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-uncertainty",
+            "query_id": "q-f0-0-uncertainty",
+            "rank": 1,
+            "top_id": "f0-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-initial",
+            "query_id": "q-f0-1-initial",
+            "rank": 7,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-rate",
+            "query_id": "q-f0-1-rate",
+            "rank": 8,
+            "top_id": "f7-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-units",
+            "query_id": "q-f0-1-units",
+            "rank": 1,
+            "top_id": "f0-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-objective",
+            "query_id": "q-f0-1-objective",
+            "rank": 11,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-result",
+            "query_id": "q-f0-1-result",
+            "rank": 6,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-uncertainty",
+            "query_id": "q-f0-1-uncertainty",
+            "rank": 1,
+            "top_id": "f0-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-initial",
+            "query_id": "q-f1-0-initial",
+            "rank": 9,
+            "top_id": "f5-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-rate",
+            "query_id": "q-f1-0-rate",
+            "rank": 11,
+            "top_id": "f0-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-units",
+            "query_id": "q-f1-0-units",
+            "rank": 1,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-objective",
+            "query_id": "q-f1-0-objective",
+            "rank": 3,
+            "top_id": "f2-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-result",
+            "query_id": "q-f1-0-result",
+            "rank": 6,
+            "top_id": "f0-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-uncertainty",
+            "query_id": "q-f1-0-uncertainty",
+            "rank": 1,
+            "top_id": "f1-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-initial",
+            "query_id": "q-f1-1-initial",
+            "rank": 9,
+            "top_id": "f5-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-rate",
+            "query_id": "q-f1-1-rate",
+            "rank": 11,
+            "top_id": "f0-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-units",
+            "query_id": "q-f1-1-units",
+            "rank": 1,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-objective",
+            "query_id": "q-f1-1-objective",
+            "rank": 3,
+            "top_id": "f2-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-result",
+            "query_id": "q-f1-1-result",
+            "rank": 6,
+            "top_id": "f0-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-uncertainty",
+            "query_id": "q-f1-1-uncertainty",
+            "rank": 1,
+            "top_id": "f1-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-initial",
+            "query_id": "q-f2-0-initial",
+            "rank": 12,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-rate",
+            "query_id": "q-f2-0-rate",
+            "rank": 2,
+            "top_id": "f2-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-units",
+            "query_id": "q-f2-0-units",
+            "rank": 1,
+            "top_id": "f2-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-objective",
+            "query_id": "q-f2-0-objective",
+            "rank": 1,
+            "top_id": "f2-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-result",
+            "query_id": "q-f2-0-result",
+            "rank": 3,
+            "top_id": "f0-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-uncertainty",
+            "query_id": "q-f2-0-uncertainty",
+            "rank": 1,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-initial",
+            "query_id": "q-f2-1-initial",
+            "rank": 12,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-rate",
+            "query_id": "q-f2-1-rate",
+            "rank": 2,
+            "top_id": "f2-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-units",
+            "query_id": "q-f2-1-units",
+            "rank": 1,
+            "top_id": "f2-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-objective",
+            "query_id": "q-f2-1-objective",
+            "rank": 1,
+            "top_id": "f2-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-result",
+            "query_id": "q-f2-1-result",
+            "rank": 3,
+            "top_id": "f0-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-uncertainty",
+            "query_id": "q-f2-1-uncertainty",
+            "rank": 1,
+            "top_id": "f2-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-initial",
+            "query_id": "q-f3-0-initial",
+            "rank": 14,
+            "top_id": "f2-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-rate",
+            "query_id": "q-f3-0-rate",
+            "rank": 1,
+            "top_id": "f3-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-units",
+            "query_id": "q-f3-0-units",
+            "rank": 6,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-objective",
+            "query_id": "q-f3-0-objective",
+            "rank": 1,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-result",
+            "query_id": "q-f3-0-result",
+            "rank": 9,
+            "top_id": "f1-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-uncertainty",
+            "query_id": "q-f3-0-uncertainty",
+            "rank": 12,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-initial",
+            "query_id": "q-f3-1-initial",
+            "rank": 14,
+            "top_id": "f2-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-rate",
+            "query_id": "q-f3-1-rate",
+            "rank": 1,
+            "top_id": "f3-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-units",
+            "query_id": "q-f3-1-units",
+            "rank": 6,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-objective",
+            "query_id": "q-f3-1-objective",
+            "rank": 1,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-result",
+            "query_id": "q-f3-1-result",
+            "rank": 9,
+            "top_id": "f1-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-uncertainty",
+            "query_id": "q-f3-1-uncertainty",
+            "rank": 12,
+            "top_id": "f2-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-initial",
+            "query_id": "q-f4-0-initial",
+            "rank": 6,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-rate",
+            "query_id": "q-f4-0-rate",
+            "rank": 8,
+            "top_id": "f4-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-units",
+            "query_id": "q-f4-0-units",
+            "rank": 12,
+            "top_id": "f3-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-objective",
+            "query_id": "q-f4-0-objective",
+            "rank": 9,
+            "top_id": "f6-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-result",
+            "query_id": "q-f4-0-result",
+            "rank": 1,
+            "top_id": "f4-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-uncertainty",
+            "query_id": "q-f4-0-uncertainty",
+            "rank": 1,
+            "top_id": "f4-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-initial",
+            "query_id": "q-f4-1-initial",
+            "rank": 6,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-rate",
+            "query_id": "q-f4-1-rate",
+            "rank": 8,
+            "top_id": "f4-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-units",
+            "query_id": "q-f4-1-units",
+            "rank": 12,
+            "top_id": "f3-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-objective",
+            "query_id": "q-f4-1-objective",
+            "rank": 9,
+            "top_id": "f6-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-result",
+            "query_id": "q-f4-1-result",
+            "rank": 1,
+            "top_id": "f4-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-uncertainty",
+            "query_id": "q-f4-1-uncertainty",
+            "rank": 1,
+            "top_id": "f4-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-initial",
+            "query_id": "q-f5-0-initial",
+            "rank": 1,
+            "top_id": "f5-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-rate",
+            "query_id": "q-f5-0-rate",
+            "rank": 10,
+            "top_id": "f4-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-units",
+            "query_id": "q-f5-0-units",
+            "rank": 1,
+            "top_id": "f5-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-objective",
+            "query_id": "q-f5-0-objective",
+            "rank": 1,
+            "top_id": "f5-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-result",
+            "query_id": "q-f5-0-result",
+            "rank": 2,
+            "top_id": "f3-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-uncertainty",
+            "query_id": "q-f5-0-uncertainty",
+            "rank": 1,
+            "top_id": "f5-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-initial",
+            "query_id": "q-f5-1-initial",
+            "rank": 1,
+            "top_id": "f5-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-rate",
+            "query_id": "q-f5-1-rate",
+            "rank": 10,
+            "top_id": "f4-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-units",
+            "query_id": "q-f5-1-units",
+            "rank": 1,
+            "top_id": "f5-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-objective",
+            "query_id": "q-f5-1-objective",
+            "rank": 1,
+            "top_id": "f5-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-result",
+            "query_id": "q-f5-1-result",
+            "rank": 2,
+            "top_id": "f3-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-uncertainty",
+            "query_id": "q-f5-1-uncertainty",
+            "rank": 1,
+            "top_id": "f5-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-initial",
+            "query_id": "q-f6-0-initial",
+            "rank": 15,
+            "top_id": "f6-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-rate",
+            "query_id": "q-f6-0-rate",
+            "rank": 1,
+            "top_id": "f6-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-units",
+            "query_id": "q-f6-0-units",
+            "rank": 1,
+            "top_id": "f6-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-objective",
+            "query_id": "q-f6-0-objective",
+            "rank": 3,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-result",
+            "query_id": "q-f6-0-result",
+            "rank": 1,
+            "top_id": "f6-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-uncertainty",
+            "query_id": "q-f6-0-uncertainty",
+            "rank": 1,
+            "top_id": "f6-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-initial",
+            "query_id": "q-f6-1-initial",
+            "rank": 15,
+            "top_id": "f6-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-rate",
+            "query_id": "q-f6-1-rate",
+            "rank": 1,
+            "top_id": "f6-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-units",
+            "query_id": "q-f6-1-units",
+            "rank": 1,
+            "top_id": "f6-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-objective",
+            "query_id": "q-f6-1-objective",
+            "rank": 3,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-result",
+            "query_id": "q-f6-1-result",
+            "rank": 1,
+            "top_id": "f6-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-uncertainty",
+            "query_id": "q-f6-1-uncertainty",
+            "rank": 1,
+            "top_id": "f6-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-initial",
+            "query_id": "q-f7-0-initial",
+            "rank": 8,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-rate",
+            "query_id": "q-f7-0-rate",
+            "rank": 4,
+            "top_id": "f7-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-units",
+            "query_id": "q-f7-0-units",
+            "rank": 5,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-objective",
+            "query_id": "q-f7-0-objective",
+            "rank": 1,
+            "top_id": "f7-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-result",
+            "query_id": "q-f7-0-result",
+            "rank": 1,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-uncertainty",
+            "query_id": "q-f7-0-uncertainty",
+            "rank": 1,
+            "top_id": "f7-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-initial",
+            "query_id": "q-f7-1-initial",
+            "rank": 8,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-rate",
+            "query_id": "q-f7-1-rate",
+            "rank": 4,
+            "top_id": "f7-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-units",
+            "query_id": "q-f7-1-units",
+            "rank": 5,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-objective",
+            "query_id": "q-f7-1-objective",
+            "rank": 1,
+            "top_id": "f7-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-result",
+            "query_id": "q-f7-1-result",
+            "rank": 1,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-uncertainty",
+            "query_id": "q-f7-1-uncertainty",
+            "rank": 1,
+            "top_id": "f7-1-uncertainty"
+          }
+        ],
+        "mrr": 0.5549535533910533,
+        "n": 96,
+        "top1": 0.4583333333333333
+      },
+      "neural": {
+        "examples": [
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-initial",
+            "query_id": "q-f0-0-initial",
+            "rank": 1,
+            "top_id": "f0-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-rate",
+            "query_id": "q-f0-0-rate",
+            "rank": 1,
+            "top_id": "f0-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-units",
+            "query_id": "q-f0-0-units",
+            "rank": 1,
+            "top_id": "f0-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-objective",
+            "query_id": "q-f0-0-objective",
+            "rank": 1,
+            "top_id": "f0-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-result",
+            "query_id": "q-f0-0-result",
+            "rank": 1,
+            "top_id": "f0-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-uncertainty",
+            "query_id": "q-f0-0-uncertainty",
+            "rank": 1,
+            "top_id": "f0-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-initial",
+            "query_id": "q-f0-1-initial",
+            "rank": 1,
+            "top_id": "f0-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-rate",
+            "query_id": "q-f0-1-rate",
+            "rank": 1,
+            "top_id": "f0-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-units",
+            "query_id": "q-f0-1-units",
+            "rank": 1,
+            "top_id": "f0-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-objective",
+            "query_id": "q-f0-1-objective",
+            "rank": 1,
+            "top_id": "f0-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-result",
+            "query_id": "q-f0-1-result",
+            "rank": 1,
+            "top_id": "f0-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-uncertainty",
+            "query_id": "q-f0-1-uncertainty",
+            "rank": 1,
+            "top_id": "f0-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-initial",
+            "query_id": "q-f1-0-initial",
+            "rank": 1,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-rate",
+            "query_id": "q-f1-0-rate",
+            "rank": 1,
+            "top_id": "f1-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-units",
+            "query_id": "q-f1-0-units",
+            "rank": 1,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-objective",
+            "query_id": "q-f1-0-objective",
+            "rank": 1,
+            "top_id": "f1-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-result",
+            "query_id": "q-f1-0-result",
+            "rank": 1,
+            "top_id": "f1-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-uncertainty",
+            "query_id": "q-f1-0-uncertainty",
+            "rank": 1,
+            "top_id": "f1-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-initial",
+            "query_id": "q-f1-1-initial",
+            "rank": 1,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-rate",
+            "query_id": "q-f1-1-rate",
+            "rank": 1,
+            "top_id": "f1-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-units",
+            "query_id": "q-f1-1-units",
+            "rank": 1,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-objective",
+            "query_id": "q-f1-1-objective",
+            "rank": 1,
+            "top_id": "f1-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-result",
+            "query_id": "q-f1-1-result",
+            "rank": 1,
+            "top_id": "f1-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-uncertainty",
+            "query_id": "q-f1-1-uncertainty",
+            "rank": 1,
+            "top_id": "f1-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-initial",
+            "query_id": "q-f2-0-initial",
+            "rank": 1,
+            "top_id": "f2-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-rate",
+            "query_id": "q-f2-0-rate",
+            "rank": 1,
+            "top_id": "f2-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-units",
+            "query_id": "q-f2-0-units",
+            "rank": 1,
+            "top_id": "f2-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-objective",
+            "query_id": "q-f2-0-objective",
+            "rank": 1,
+            "top_id": "f2-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-result",
+            "query_id": "q-f2-0-result",
+            "rank": 1,
+            "top_id": "f2-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-uncertainty",
+            "query_id": "q-f2-0-uncertainty",
+            "rank": 1,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-initial",
+            "query_id": "q-f2-1-initial",
+            "rank": 1,
+            "top_id": "f2-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-rate",
+            "query_id": "q-f2-1-rate",
+            "rank": 1,
+            "top_id": "f2-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-units",
+            "query_id": "q-f2-1-units",
+            "rank": 1,
+            "top_id": "f2-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-objective",
+            "query_id": "q-f2-1-objective",
+            "rank": 1,
+            "top_id": "f2-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-result",
+            "query_id": "q-f2-1-result",
+            "rank": 1,
+            "top_id": "f2-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-uncertainty",
+            "query_id": "q-f2-1-uncertainty",
+            "rank": 1,
+            "top_id": "f2-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-initial",
+            "query_id": "q-f3-0-initial",
+            "rank": 1,
+            "top_id": "f3-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-rate",
+            "query_id": "q-f3-0-rate",
+            "rank": 1,
+            "top_id": "f3-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-units",
+            "query_id": "q-f3-0-units",
+            "rank": 1,
+            "top_id": "f3-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-objective",
+            "query_id": "q-f3-0-objective",
+            "rank": 1,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-result",
+            "query_id": "q-f3-0-result",
+            "rank": 1,
+            "top_id": "f3-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-uncertainty",
+            "query_id": "q-f3-0-uncertainty",
+            "rank": 1,
+            "top_id": "f3-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-initial",
+            "query_id": "q-f3-1-initial",
+            "rank": 1,
+            "top_id": "f3-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-rate",
+            "query_id": "q-f3-1-rate",
+            "rank": 1,
+            "top_id": "f3-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-units",
+            "query_id": "q-f3-1-units",
+            "rank": 1,
+            "top_id": "f3-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-objective",
+            "query_id": "q-f3-1-objective",
+            "rank": 1,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-result",
+            "query_id": "q-f3-1-result",
+            "rank": 1,
+            "top_id": "f3-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-uncertainty",
+            "query_id": "q-f3-1-uncertainty",
+            "rank": 1,
+            "top_id": "f3-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-initial",
+            "query_id": "q-f4-0-initial",
+            "rank": 1,
+            "top_id": "f4-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-rate",
+            "query_id": "q-f4-0-rate",
+            "rank": 1,
+            "top_id": "f4-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-units",
+            "query_id": "q-f4-0-units",
+            "rank": 1,
+            "top_id": "f4-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-objective",
+            "query_id": "q-f4-0-objective",
+            "rank": 1,
+            "top_id": "f4-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-result",
+            "query_id": "q-f4-0-result",
+            "rank": 1,
+            "top_id": "f4-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-uncertainty",
+            "query_id": "q-f4-0-uncertainty",
+            "rank": 1,
+            "top_id": "f4-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-initial",
+            "query_id": "q-f4-1-initial",
+            "rank": 1,
+            "top_id": "f4-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-rate",
+            "query_id": "q-f4-1-rate",
+            "rank": 1,
+            "top_id": "f4-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-units",
+            "query_id": "q-f4-1-units",
+            "rank": 1,
+            "top_id": "f4-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-objective",
+            "query_id": "q-f4-1-objective",
+            "rank": 1,
+            "top_id": "f4-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-result",
+            "query_id": "q-f4-1-result",
+            "rank": 1,
+            "top_id": "f4-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-uncertainty",
+            "query_id": "q-f4-1-uncertainty",
+            "rank": 1,
+            "top_id": "f4-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-initial",
+            "query_id": "q-f5-0-initial",
+            "rank": 1,
+            "top_id": "f5-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-rate",
+            "query_id": "q-f5-0-rate",
+            "rank": 1,
+            "top_id": "f5-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-units",
+            "query_id": "q-f5-0-units",
+            "rank": 1,
+            "top_id": "f5-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-objective",
+            "query_id": "q-f5-0-objective",
+            "rank": 1,
+            "top_id": "f5-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-result",
+            "query_id": "q-f5-0-result",
+            "rank": 1,
+            "top_id": "f5-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-uncertainty",
+            "query_id": "q-f5-0-uncertainty",
+            "rank": 1,
+            "top_id": "f5-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-initial",
+            "query_id": "q-f5-1-initial",
+            "rank": 1,
+            "top_id": "f5-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-rate",
+            "query_id": "q-f5-1-rate",
+            "rank": 1,
+            "top_id": "f5-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-units",
+            "query_id": "q-f5-1-units",
+            "rank": 1,
+            "top_id": "f5-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-objective",
+            "query_id": "q-f5-1-objective",
+            "rank": 1,
+            "top_id": "f5-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-result",
+            "query_id": "q-f5-1-result",
+            "rank": 1,
+            "top_id": "f5-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-uncertainty",
+            "query_id": "q-f5-1-uncertainty",
+            "rank": 1,
+            "top_id": "f5-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-initial",
+            "query_id": "q-f6-0-initial",
+            "rank": 1,
+            "top_id": "f6-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-rate",
+            "query_id": "q-f6-0-rate",
+            "rank": 1,
+            "top_id": "f6-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-units",
+            "query_id": "q-f6-0-units",
+            "rank": 1,
+            "top_id": "f6-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-objective",
+            "query_id": "q-f6-0-objective",
+            "rank": 1,
+            "top_id": "f6-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-result",
+            "query_id": "q-f6-0-result",
+            "rank": 1,
+            "top_id": "f6-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-uncertainty",
+            "query_id": "q-f6-0-uncertainty",
+            "rank": 1,
+            "top_id": "f6-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-initial",
+            "query_id": "q-f6-1-initial",
+            "rank": 1,
+            "top_id": "f6-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-rate",
+            "query_id": "q-f6-1-rate",
+            "rank": 1,
+            "top_id": "f6-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-units",
+            "query_id": "q-f6-1-units",
+            "rank": 1,
+            "top_id": "f6-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-objective",
+            "query_id": "q-f6-1-objective",
+            "rank": 1,
+            "top_id": "f6-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-result",
+            "query_id": "q-f6-1-result",
+            "rank": 1,
+            "top_id": "f6-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-uncertainty",
+            "query_id": "q-f6-1-uncertainty",
+            "rank": 1,
+            "top_id": "f6-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-initial",
+            "query_id": "q-f7-0-initial",
+            "rank": 1,
+            "top_id": "f7-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-rate",
+            "query_id": "q-f7-0-rate",
+            "rank": 1,
+            "top_id": "f7-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-units",
+            "query_id": "q-f7-0-units",
+            "rank": 1,
+            "top_id": "f7-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-objective",
+            "query_id": "q-f7-0-objective",
+            "rank": 1,
+            "top_id": "f7-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-result",
+            "query_id": "q-f7-0-result",
+            "rank": 1,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-uncertainty",
+            "query_id": "q-f7-0-uncertainty",
+            "rank": 1,
+            "top_id": "f7-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-initial",
+            "query_id": "q-f7-1-initial",
+            "rank": 1,
+            "top_id": "f7-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-rate",
+            "query_id": "q-f7-1-rate",
+            "rank": 1,
+            "top_id": "f7-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-units",
+            "query_id": "q-f7-1-units",
+            "rank": 1,
+            "top_id": "f7-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-objective",
+            "query_id": "q-f7-1-objective",
+            "rank": 1,
+            "top_id": "f7-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-result",
+            "query_id": "q-f7-1-result",
+            "rank": 1,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-uncertainty",
+            "query_id": "q-f7-1-uncertainty",
+            "rank": 1,
+            "top_id": "f7-1-uncertainty"
+          }
+        ],
+        "mrr": 1.0,
+        "n": 96,
+        "top1": 1.0
+      },
+      "randomized_labels": {
+        "examples": [
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-initial",
+            "query_id": "q-f0-0-initial",
+            "rank": 27,
+            "top_id": "f5-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-rate",
+            "query_id": "q-f0-0-rate",
+            "rank": 33,
+            "top_id": "f4-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-units",
+            "query_id": "q-f0-0-units",
+            "rank": 48,
+            "top_id": "f4-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-objective",
+            "query_id": "q-f0-0-objective",
+            "rank": 15,
+            "top_id": "f5-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-result",
+            "query_id": "q-f0-0-result",
+            "rank": 6,
+            "top_id": "f5-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-uncertainty",
+            "query_id": "q-f0-0-uncertainty",
+            "rank": 42,
+            "top_id": "f7-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-initial",
+            "query_id": "q-f0-1-initial",
+            "rank": 18,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-rate",
+            "query_id": "q-f0-1-rate",
+            "rank": 60,
+            "top_id": "f4-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-units",
+            "query_id": "q-f0-1-units",
+            "rank": 61,
+            "top_id": "f4-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-objective",
+            "query_id": "q-f0-1-objective",
+            "rank": 33,
+            "top_id": "f6-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-result",
+            "query_id": "q-f0-1-result",
+            "rank": 41,
+            "top_id": "f0-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-uncertainty",
+            "query_id": "q-f0-1-uncertainty",
+            "rank": 52,
+            "top_id": "f6-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-initial",
+            "query_id": "q-f1-0-initial",
+            "rank": 40,
+            "top_id": "f2-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-rate",
+            "query_id": "q-f1-0-rate",
+            "rank": 91,
+            "top_id": "f3-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-units",
+            "query_id": "q-f1-0-units",
+            "rank": 6,
+            "top_id": "f6-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-objective",
+            "query_id": "q-f1-0-objective",
+            "rank": 64,
+            "top_id": "f0-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-result",
+            "query_id": "q-f1-0-result",
+            "rank": 38,
+            "top_id": "f2-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-uncertainty",
+            "query_id": "q-f1-0-uncertainty",
+            "rank": 12,
+            "top_id": "f3-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-initial",
+            "query_id": "q-f1-1-initial",
+            "rank": 32,
+            "top_id": "f7-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-rate",
+            "query_id": "q-f1-1-rate",
+            "rank": 93,
+            "top_id": "f3-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-units",
+            "query_id": "q-f1-1-units",
+            "rank": 5,
+            "top_id": "f7-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-objective",
+            "query_id": "q-f1-1-objective",
+            "rank": 51,
+            "top_id": "f5-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-result",
+            "query_id": "q-f1-1-result",
+            "rank": 28,
+            "top_id": "f2-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-uncertainty",
+            "query_id": "q-f1-1-uncertainty",
+            "rank": 40,
+            "top_id": "f0-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-initial",
+            "query_id": "q-f2-0-initial",
+            "rank": 48,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-rate",
+            "query_id": "q-f2-0-rate",
+            "rank": 12,
+            "top_id": "f7-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-units",
+            "query_id": "q-f2-0-units",
+            "rank": 23,
+            "top_id": "f0-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-objective",
+            "query_id": "q-f2-0-objective",
+            "rank": 15,
+            "top_id": "f5-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-result",
+            "query_id": "q-f2-0-result",
+            "rank": 65,
+            "top_id": "f4-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-uncertainty",
+            "query_id": "q-f2-0-uncertainty",
+            "rank": 8,
+            "top_id": "f2-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-initial",
+            "query_id": "q-f2-1-initial",
+            "rank": 58,
+            "top_id": "f5-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-rate",
+            "query_id": "q-f2-1-rate",
+            "rank": 8,
+            "top_id": "f6-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-units",
+            "query_id": "q-f2-1-units",
+            "rank": 17,
+            "top_id": "f0-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-objective",
+            "query_id": "q-f2-1-objective",
+            "rank": 13,
+            "top_id": "f1-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-result",
+            "query_id": "q-f2-1-result",
+            "rank": 69,
+            "top_id": "f1-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-uncertainty",
+            "query_id": "q-f2-1-uncertainty",
+            "rank": 24,
+            "top_id": "f5-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-initial",
+            "query_id": "q-f3-0-initial",
+            "rank": 24,
+            "top_id": "f7-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-rate",
+            "query_id": "q-f3-0-rate",
+            "rank": 7,
+            "top_id": "f3-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-units",
+            "query_id": "q-f3-0-units",
+            "rank": 56,
+            "top_id": "f0-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-objective",
+            "query_id": "q-f3-0-objective",
+            "rank": 62,
+            "top_id": "f3-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-result",
+            "query_id": "q-f3-0-result",
+            "rank": 18,
+            "top_id": "f7-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-uncertainty",
+            "query_id": "q-f3-0-uncertainty",
+            "rank": 35,
+            "top_id": "f6-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-initial",
+            "query_id": "q-f3-1-initial",
+            "rank": 53,
+            "top_id": "f7-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-rate",
+            "query_id": "q-f3-1-rate",
+            "rank": 9,
+            "top_id": "f1-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-units",
+            "query_id": "q-f3-1-units",
+            "rank": 43,
+            "top_id": "f0-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-objective",
+            "query_id": "q-f3-1-objective",
+            "rank": 62,
+            "top_id": "f1-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-result",
+            "query_id": "q-f3-1-result",
+            "rank": 18,
+            "top_id": "f7-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-uncertainty",
+            "query_id": "q-f3-1-uncertainty",
+            "rank": 45,
+            "top_id": "f1-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-initial",
+            "query_id": "q-f4-0-initial",
+            "rank": 36,
+            "top_id": "f5-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-rate",
+            "query_id": "q-f4-0-rate",
+            "rank": 21,
+            "top_id": "f0-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-units",
+            "query_id": "q-f4-0-units",
+            "rank": 48,
+            "top_id": "f4-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-objective",
+            "query_id": "q-f4-0-objective",
+            "rank": 32,
+            "top_id": "f3-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-result",
+            "query_id": "q-f4-0-result",
+            "rank": 8,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-uncertainty",
+            "query_id": "q-f4-0-uncertainty",
+            "rank": 1,
+            "top_id": "f4-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-initial",
+            "query_id": "q-f4-1-initial",
+            "rank": 40,
+            "top_id": "f6-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-rate",
+            "query_id": "q-f4-1-rate",
+            "rank": 51,
+            "top_id": "f6-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-units",
+            "query_id": "q-f4-1-units",
+            "rank": 84,
+            "top_id": "f4-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-objective",
+            "query_id": "q-f4-1-objective",
+            "rank": 56,
+            "top_id": "f3-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-result",
+            "query_id": "q-f4-1-result",
+            "rank": 5,
+            "top_id": "f7-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-uncertainty",
+            "query_id": "q-f4-1-uncertainty",
+            "rank": 13,
+            "top_id": "f4-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-initial",
+            "query_id": "q-f5-0-initial",
+            "rank": 9,
+            "top_id": "f5-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-rate",
+            "query_id": "q-f5-0-rate",
+            "rank": 22,
+            "top_id": "f4-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-units",
+            "query_id": "q-f5-0-units",
+            "rank": 16,
+            "top_id": "f0-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-objective",
+            "query_id": "q-f5-0-objective",
+            "rank": 10,
+            "top_id": "f1-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-result",
+            "query_id": "q-f5-0-result",
+            "rank": 86,
+            "top_id": "f6-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-uncertainty",
+            "query_id": "q-f5-0-uncertainty",
+            "rank": 30,
+            "top_id": "f4-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-initial",
+            "query_id": "q-f5-1-initial",
+            "rank": 2,
+            "top_id": "f2-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-rate",
+            "query_id": "q-f5-1-rate",
+            "rank": 19,
+            "top_id": "f7-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-units",
+            "query_id": "q-f5-1-units",
+            "rank": 16,
+            "top_id": "f6-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-objective",
+            "query_id": "q-f5-1-objective",
+            "rank": 9,
+            "top_id": "f2-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-result",
+            "query_id": "q-f5-1-result",
+            "rank": 84,
+            "top_id": "f5-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-uncertainty",
+            "query_id": "q-f5-1-uncertainty",
+            "rank": 10,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-initial",
+            "query_id": "q-f6-0-initial",
+            "rank": 34,
+            "top_id": "f4-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-rate",
+            "query_id": "q-f6-0-rate",
+            "rank": 3,
+            "top_id": "f4-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-units",
+            "query_id": "q-f6-0-units",
+            "rank": 71,
+            "top_id": "f0-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-objective",
+            "query_id": "q-f6-0-objective",
+            "rank": 12,
+            "top_id": "f0-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-result",
+            "query_id": "q-f6-0-result",
+            "rank": 10,
+            "top_id": "f6-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-uncertainty",
+            "query_id": "q-f6-0-uncertainty",
+            "rank": 7,
+            "top_id": "f4-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-initial",
+            "query_id": "q-f6-1-initial",
+            "rank": 30,
+            "top_id": "f3-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-rate",
+            "query_id": "q-f6-1-rate",
+            "rank": 7,
+            "top_id": "f6-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-units",
+            "query_id": "q-f6-1-units",
+            "rank": 83,
+            "top_id": "f2-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-objective",
+            "query_id": "q-f6-1-objective",
+            "rank": 14,
+            "top_id": "f0-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-result",
+            "query_id": "q-f6-1-result",
+            "rank": 17,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-uncertainty",
+            "query_id": "q-f6-1-uncertainty",
+            "rank": 7,
+            "top_id": "f3-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-initial",
+            "query_id": "q-f7-0-initial",
+            "rank": 67,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-rate",
+            "query_id": "q-f7-0-rate",
+            "rank": 92,
+            "top_id": "f3-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-units",
+            "query_id": "q-f7-0-units",
+            "rank": 80,
+            "top_id": "f5-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-objective",
+            "query_id": "q-f7-0-objective",
+            "rank": 40,
+            "top_id": "f5-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-result",
+            "query_id": "q-f7-0-result",
+            "rank": 25,
+            "top_id": "f0-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-uncertainty",
+            "query_id": "q-f7-0-uncertainty",
+            "rank": 41,
+            "top_id": "f1-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-initial",
+            "query_id": "q-f7-1-initial",
+            "rank": 51,
+            "top_id": "f6-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-rate",
+            "query_id": "q-f7-1-rate",
+            "rank": 56,
+            "top_id": "f4-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-units",
+            "query_id": "q-f7-1-units",
+            "rank": 79,
+            "top_id": "f5-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-objective",
+            "query_id": "q-f7-1-objective",
+            "rank": 49,
+            "top_id": "f5-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-result",
+            "query_id": "q-f7-1-result",
+            "rank": 3,
+            "top_id": "f3-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-uncertainty",
+            "query_id": "q-f7-1-uncertainty",
+            "rank": 25,
+            "top_id": "f2-0-initial"
+          }
+        ],
+        "mrr": 0.07227706298457189,
+        "n": 96,
+        "top1": 0.010416666666666666
+      },
+      "tfidf": {
+        "examples": [
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-initial",
+            "query_id": "q-f0-0-initial",
+            "rank": 6,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-rate",
+            "query_id": "q-f0-0-rate",
+            "rank": 7,
+            "top_id": "f7-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-units",
+            "query_id": "q-f0-0-units",
+            "rank": 1,
+            "top_id": "f0-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-objective",
+            "query_id": "q-f0-0-objective",
+            "rank": 12,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-result",
+            "query_id": "q-f0-0-result",
+            "rank": 9,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-0-uncertainty",
+            "query_id": "q-f0-0-uncertainty",
+            "rank": 1,
+            "top_id": "f0-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-initial",
+            "query_id": "q-f0-1-initial",
+            "rank": 8,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-rate",
+            "query_id": "q-f0-1-rate",
+            "rank": 7,
+            "top_id": "f7-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-units",
+            "query_id": "q-f0-1-units",
+            "rank": 1,
+            "top_id": "f0-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-objective",
+            "query_id": "q-f0-1-objective",
+            "rank": 12,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-result",
+            "query_id": "q-f0-1-result",
+            "rank": 9,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f0-1-uncertainty",
+            "query_id": "q-f0-1-uncertainty",
+            "rank": 1,
+            "top_id": "f0-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-initial",
+            "query_id": "q-f1-0-initial",
+            "rank": 9,
+            "top_id": "f5-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-rate",
+            "query_id": "q-f1-0-rate",
+            "rank": 11,
+            "top_id": "f0-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-units",
+            "query_id": "q-f1-0-units",
+            "rank": 1,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-objective",
+            "query_id": "q-f1-0-objective",
+            "rank": 5,
+            "top_id": "f2-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-result",
+            "query_id": "q-f1-0-result",
+            "rank": 7,
+            "top_id": "f0-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-0-uncertainty",
+            "query_id": "q-f1-0-uncertainty",
+            "rank": 1,
+            "top_id": "f1-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-initial",
+            "query_id": "q-f1-1-initial",
+            "rank": 9,
+            "top_id": "f5-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-rate",
+            "query_id": "q-f1-1-rate",
+            "rank": 11,
+            "top_id": "f0-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-units",
+            "query_id": "q-f1-1-units",
+            "rank": 1,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-objective",
+            "query_id": "q-f1-1-objective",
+            "rank": 5,
+            "top_id": "f2-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-result",
+            "query_id": "q-f1-1-result",
+            "rank": 7,
+            "top_id": "f0-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f1-1-uncertainty",
+            "query_id": "q-f1-1-uncertainty",
+            "rank": 1,
+            "top_id": "f1-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-initial",
+            "query_id": "q-f2-0-initial",
+            "rank": 18,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-rate",
+            "query_id": "q-f2-0-rate",
+            "rank": 1,
+            "top_id": "f2-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-units",
+            "query_id": "q-f2-0-units",
+            "rank": 1,
+            "top_id": "f2-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-objective",
+            "query_id": "q-f2-0-objective",
+            "rank": 1,
+            "top_id": "f2-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-result",
+            "query_id": "q-f2-0-result",
+            "rank": 3,
+            "top_id": "f0-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-0-uncertainty",
+            "query_id": "q-f2-0-uncertainty",
+            "rank": 1,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-initial",
+            "query_id": "q-f2-1-initial",
+            "rank": 18,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-rate",
+            "query_id": "q-f2-1-rate",
+            "rank": 1,
+            "top_id": "f2-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-units",
+            "query_id": "q-f2-1-units",
+            "rank": 1,
+            "top_id": "f2-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-objective",
+            "query_id": "q-f2-1-objective",
+            "rank": 1,
+            "top_id": "f2-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-result",
+            "query_id": "q-f2-1-result",
+            "rank": 3,
+            "top_id": "f0-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f2-1-uncertainty",
+            "query_id": "q-f2-1-uncertainty",
+            "rank": 1,
+            "top_id": "f2-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-initial",
+            "query_id": "q-f3-0-initial",
+            "rank": 14,
+            "top_id": "f2-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-rate",
+            "query_id": "q-f3-0-rate",
+            "rank": 1,
+            "top_id": "f3-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-units",
+            "query_id": "q-f3-0-units",
+            "rank": 5,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-objective",
+            "query_id": "q-f3-0-objective",
+            "rank": 1,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-result",
+            "query_id": "q-f3-0-result",
+            "rank": 10,
+            "top_id": "f1-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-0-uncertainty",
+            "query_id": "q-f3-0-uncertainty",
+            "rank": 12,
+            "top_id": "f2-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-initial",
+            "query_id": "q-f3-1-initial",
+            "rank": 15,
+            "top_id": "f2-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-rate",
+            "query_id": "q-f3-1-rate",
+            "rank": 1,
+            "top_id": "f3-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-units",
+            "query_id": "q-f3-1-units",
+            "rank": 5,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-objective",
+            "query_id": "q-f3-1-objective",
+            "rank": 1,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-result",
+            "query_id": "q-f3-1-result",
+            "rank": 10,
+            "top_id": "f1-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f3-1-uncertainty",
+            "query_id": "q-f3-1-uncertainty",
+            "rank": 12,
+            "top_id": "f2-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-initial",
+            "query_id": "q-f4-0-initial",
+            "rank": 7,
+            "top_id": "f1-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-rate",
+            "query_id": "q-f4-0-rate",
+            "rank": 7,
+            "top_id": "f4-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-units",
+            "query_id": "q-f4-0-units",
+            "rank": 15,
+            "top_id": "f3-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-objective",
+            "query_id": "q-f4-0-objective",
+            "rank": 9,
+            "top_id": "f6-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-result",
+            "query_id": "q-f4-0-result",
+            "rank": 1,
+            "top_id": "f4-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-0-uncertainty",
+            "query_id": "q-f4-0-uncertainty",
+            "rank": 1,
+            "top_id": "f4-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-initial",
+            "query_id": "q-f4-1-initial",
+            "rank": 8,
+            "top_id": "f1-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-rate",
+            "query_id": "q-f4-1-rate",
+            "rank": 7,
+            "top_id": "f4-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-units",
+            "query_id": "q-f4-1-units",
+            "rank": 15,
+            "top_id": "f3-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-objective",
+            "query_id": "q-f4-1-objective",
+            "rank": 9,
+            "top_id": "f6-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-result",
+            "query_id": "q-f4-1-result",
+            "rank": 1,
+            "top_id": "f4-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f4-1-uncertainty",
+            "query_id": "q-f4-1-uncertainty",
+            "rank": 1,
+            "top_id": "f4-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-initial",
+            "query_id": "q-f5-0-initial",
+            "rank": 1,
+            "top_id": "f5-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-rate",
+            "query_id": "q-f5-0-rate",
+            "rank": 11,
+            "top_id": "f4-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-units",
+            "query_id": "q-f5-0-units",
+            "rank": 1,
+            "top_id": "f5-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-objective",
+            "query_id": "q-f5-0-objective",
+            "rank": 1,
+            "top_id": "f5-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-result",
+            "query_id": "q-f5-0-result",
+            "rank": 2,
+            "top_id": "f3-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-0-uncertainty",
+            "query_id": "q-f5-0-uncertainty",
+            "rank": 1,
+            "top_id": "f5-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-initial",
+            "query_id": "q-f5-1-initial",
+            "rank": 1,
+            "top_id": "f5-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-rate",
+            "query_id": "q-f5-1-rate",
+            "rank": 11,
+            "top_id": "f4-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-units",
+            "query_id": "q-f5-1-units",
+            "rank": 1,
+            "top_id": "f5-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-objective",
+            "query_id": "q-f5-1-objective",
+            "rank": 1,
+            "top_id": "f5-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-result",
+            "query_id": "q-f5-1-result",
+            "rank": 2,
+            "top_id": "f3-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f5-1-uncertainty",
+            "query_id": "q-f5-1-uncertainty",
+            "rank": 1,
+            "top_id": "f5-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-initial",
+            "query_id": "q-f6-0-initial",
+            "rank": 15,
+            "top_id": "f0-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-rate",
+            "query_id": "q-f6-0-rate",
+            "rank": 1,
+            "top_id": "f6-0-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-units",
+            "query_id": "q-f6-0-units",
+            "rank": 1,
+            "top_id": "f6-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-objective",
+            "query_id": "q-f6-0-objective",
+            "rank": 3,
+            "top_id": "f3-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-result",
+            "query_id": "q-f6-0-result",
+            "rank": 1,
+            "top_id": "f6-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-0-uncertainty",
+            "query_id": "q-f6-0-uncertainty",
+            "rank": 1,
+            "top_id": "f6-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-initial",
+            "query_id": "q-f6-1-initial",
+            "rank": 15,
+            "top_id": "f6-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-rate",
+            "query_id": "q-f6-1-rate",
+            "rank": 1,
+            "top_id": "f6-1-rate"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-units",
+            "query_id": "q-f6-1-units",
+            "rank": 1,
+            "top_id": "f6-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-objective",
+            "query_id": "q-f6-1-objective",
+            "rank": 3,
+            "top_id": "f3-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-result",
+            "query_id": "q-f6-1-result",
+            "rank": 1,
+            "top_id": "f6-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f6-1-uncertainty",
+            "query_id": "q-f6-1-uncertainty",
+            "rank": 1,
+            "top_id": "f6-1-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-initial",
+            "query_id": "q-f7-0-initial",
+            "rank": 6,
+            "top_id": "f3-0-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-rate",
+            "query_id": "q-f7-0-rate",
+            "rank": 2,
+            "top_id": "f7-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-units",
+            "query_id": "q-f7-0-units",
+            "rank": 7,
+            "top_id": "f1-0-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-objective",
+            "query_id": "q-f7-0-objective",
+            "rank": 1,
+            "top_id": "f7-0-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-result",
+            "query_id": "q-f7-0-result",
+            "rank": 1,
+            "top_id": "f7-0-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-0-uncertainty",
+            "query_id": "q-f7-0-uncertainty",
+            "rank": 1,
+            "top_id": "f7-0-uncertainty"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-initial",
+            "query_id": "q-f7-1-initial",
+            "rank": 8,
+            "top_id": "f3-1-initial"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-rate",
+            "query_id": "q-f7-1-rate",
+            "rank": 2,
+            "top_id": "f7-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-units",
+            "query_id": "q-f7-1-units",
+            "rank": 7,
+            "top_id": "f1-1-units"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-objective",
+            "query_id": "q-f7-1-objective",
+            "rank": 1,
+            "top_id": "f7-1-objective"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-result",
+            "query_id": "q-f7-1-result",
+            "rank": 1,
+            "top_id": "f7-1-result"
+          },
+          {
+            "candidate_count": 96,
+            "positive_id": "f7-1-uncertainty",
+            "query_id": "q-f7-1-uncertainty",
+            "rank": 1,
+            "top_id": "f7-1-uncertainty"
+          }
+        ],
+        "mrr": 0.5646551076238576,
+        "n": 96,
+        "top1": 0.4791666666666667
+      }
+    },
+    "validation": {
+      "bm25": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-initial",
+            "query_id": "q-f8-0-initial",
+            "rank": 3,
+            "top_id": "f8-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-rate",
+            "query_id": "q-f8-0-rate",
+            "rank": 13,
+            "top_id": "f9-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-units",
+            "query_id": "q-f8-0-units",
+            "rank": 10,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-objective",
+            "query_id": "q-f8-0-objective",
+            "rank": 1,
+            "top_id": "f8-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-result",
+            "query_id": "q-f8-0-result",
+            "rank": 1,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-uncertainty",
+            "query_id": "q-f8-0-uncertainty",
+            "rank": 1,
+            "top_id": "f8-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-initial",
+            "query_id": "q-f8-1-initial",
+            "rank": 3,
+            "top_id": "f8-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-rate",
+            "query_id": "q-f8-1-rate",
+            "rank": 13,
+            "top_id": "f9-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-units",
+            "query_id": "q-f8-1-units",
+            "rank": 10,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-objective",
+            "query_id": "q-f8-1-objective",
+            "rank": 1,
+            "top_id": "f8-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-result",
+            "query_id": "q-f8-1-result",
+            "rank": 1,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-uncertainty",
+            "query_id": "q-f8-1-uncertainty",
+            "rank": 1,
+            "top_id": "f8-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-initial",
+            "query_id": "q-f9-0-initial",
+            "rank": 6,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-rate",
+            "query_id": "q-f9-0-rate",
+            "rank": 16,
+            "top_id": "f8-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-units",
+            "query_id": "q-f9-0-units",
+            "rank": 7,
+            "top_id": "f8-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-objective",
+            "query_id": "q-f9-0-objective",
+            "rank": 1,
+            "top_id": "f9-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-result",
+            "query_id": "q-f9-0-result",
+            "rank": 1,
+            "top_id": "f9-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-uncertainty",
+            "query_id": "q-f9-0-uncertainty",
+            "rank": 1,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-initial",
+            "query_id": "q-f9-1-initial",
+            "rank": 6,
+            "top_id": "f9-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-rate",
+            "query_id": "q-f9-1-rate",
+            "rank": 16,
+            "top_id": "f8-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-units",
+            "query_id": "q-f9-1-units",
+            "rank": 7,
+            "top_id": "f8-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-objective",
+            "query_id": "q-f9-1-objective",
+            "rank": 1,
+            "top_id": "f9-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-result",
+            "query_id": "q-f9-1-result",
+            "rank": 1,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-uncertainty",
+            "query_id": "q-f9-1-uncertainty",
+            "rank": 1,
+            "top_id": "f9-1-uncertainty"
+          }
+        ],
+        "mrr": 0.5735233516483517,
+        "n": 24,
+        "top1": 0.5
+      },
+      "neural": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-initial",
+            "query_id": "q-f8-0-initial",
+            "rank": 7,
+            "top_id": "f8-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-rate",
+            "query_id": "q-f8-0-rate",
+            "rank": 24,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-units",
+            "query_id": "q-f8-0-units",
+            "rank": 19,
+            "top_id": "f9-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-objective",
+            "query_id": "q-f8-0-objective",
+            "rank": 1,
+            "top_id": "f8-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-result",
+            "query_id": "q-f8-0-result",
+            "rank": 1,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-uncertainty",
+            "query_id": "q-f8-0-uncertainty",
+            "rank": 3,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-initial",
+            "query_id": "q-f8-1-initial",
+            "rank": 1,
+            "top_id": "f8-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-rate",
+            "query_id": "q-f8-1-rate",
+            "rank": 14,
+            "top_id": "f8-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-units",
+            "query_id": "q-f8-1-units",
+            "rank": 10,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-objective",
+            "query_id": "q-f8-1-objective",
+            "rank": 1,
+            "top_id": "f8-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-result",
+            "query_id": "q-f8-1-result",
+            "rank": 1,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-uncertainty",
+            "query_id": "q-f8-1-uncertainty",
+            "rank": 3,
+            "top_id": "f9-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-initial",
+            "query_id": "q-f9-0-initial",
+            "rank": 2,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-rate",
+            "query_id": "q-f9-0-rate",
+            "rank": 3,
+            "top_id": "f8-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-units",
+            "query_id": "q-f9-0-units",
+            "rank": 13,
+            "top_id": "f8-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-objective",
+            "query_id": "q-f9-0-objective",
+            "rank": 1,
+            "top_id": "f9-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-result",
+            "query_id": "q-f9-0-result",
+            "rank": 1,
+            "top_id": "f9-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-uncertainty",
+            "query_id": "q-f9-0-uncertainty",
+            "rank": 1,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-initial",
+            "query_id": "q-f9-1-initial",
+            "rank": 1,
+            "top_id": "f9-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-rate",
+            "query_id": "q-f9-1-rate",
+            "rank": 2,
+            "top_id": "f8-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-units",
+            "query_id": "q-f9-1-units",
+            "rank": 12,
+            "top_id": "f8-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-objective",
+            "query_id": "q-f9-1-objective",
+            "rank": 1,
+            "top_id": "f9-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-result",
+            "query_id": "q-f9-1-result",
+            "rank": 1,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-uncertainty",
+            "query_id": "q-f9-1-uncertainty",
+            "rank": 1,
+            "top_id": "f9-1-uncertainty"
+          }
+        ],
+        "mrr": 0.6070350154231733,
+        "n": 24,
+        "top1": 0.5
+      },
+      "randomized_labels": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-initial",
+            "query_id": "q-f8-0-initial",
+            "rank": 11,
+            "top_id": "f9-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-rate",
+            "query_id": "q-f8-0-rate",
+            "rank": 21,
+            "top_id": "f8-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-units",
+            "query_id": "q-f8-0-units",
+            "rank": 16,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-objective",
+            "query_id": "q-f8-0-objective",
+            "rank": 3,
+            "top_id": "f8-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-result",
+            "query_id": "q-f8-0-result",
+            "rank": 21,
+            "top_id": "f8-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-uncertainty",
+            "query_id": "q-f8-0-uncertainty",
+            "rank": 1,
+            "top_id": "f8-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-initial",
+            "query_id": "q-f8-1-initial",
+            "rank": 12,
+            "top_id": "f9-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-rate",
+            "query_id": "q-f8-1-rate",
+            "rank": 19,
+            "top_id": "f8-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-units",
+            "query_id": "q-f8-1-units",
+            "rank": 10,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-objective",
+            "query_id": "q-f8-1-objective",
+            "rank": 4,
+            "top_id": "f8-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-result",
+            "query_id": "q-f8-1-result",
+            "rank": 19,
+            "top_id": "f9-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-uncertainty",
+            "query_id": "q-f8-1-uncertainty",
+            "rank": 3,
+            "top_id": "f8-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-initial",
+            "query_id": "q-f9-0-initial",
+            "rank": 7,
+            "top_id": "f9-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-rate",
+            "query_id": "q-f9-0-rate",
+            "rank": 2,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-units",
+            "query_id": "q-f9-0-units",
+            "rank": 12,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-objective",
+            "query_id": "q-f9-0-objective",
+            "rank": 9,
+            "top_id": "f8-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-result",
+            "query_id": "q-f9-0-result",
+            "rank": 3,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-uncertainty",
+            "query_id": "q-f9-0-uncertainty",
+            "rank": 1,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-initial",
+            "query_id": "q-f9-1-initial",
+            "rank": 19,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-rate",
+            "query_id": "q-f9-1-rate",
+            "rank": 6,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-units",
+            "query_id": "q-f9-1-units",
+            "rank": 11,
+            "top_id": "f8-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-objective",
+            "query_id": "q-f9-1-objective",
+            "rank": 8,
+            "top_id": "f8-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-result",
+            "query_id": "q-f9-1-result",
+            "rank": 1,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-uncertainty",
+            "query_id": "q-f9-1-uncertainty",
+            "rank": 7,
+            "top_id": "f8-0-units"
+          }
+        ],
+        "mrr": 0.25844207266904634,
+        "n": 24,
+        "top1": 0.125
+      },
+      "tfidf": {
+        "examples": [
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-initial",
+            "query_id": "q-f8-0-initial",
+            "rank": 3,
+            "top_id": "f8-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-rate",
+            "query_id": "q-f8-0-rate",
+            "rank": 13,
+            "top_id": "f9-0-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-units",
+            "query_id": "q-f8-0-units",
+            "rank": 10,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-objective",
+            "query_id": "q-f8-0-objective",
+            "rank": 1,
+            "top_id": "f8-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-result",
+            "query_id": "q-f8-0-result",
+            "rank": 1,
+            "top_id": "f8-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-0-uncertainty",
+            "query_id": "q-f8-0-uncertainty",
+            "rank": 1,
+            "top_id": "f8-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-initial",
+            "query_id": "q-f8-1-initial",
+            "rank": 3,
+            "top_id": "f8-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-rate",
+            "query_id": "q-f8-1-rate",
+            "rank": 13,
+            "top_id": "f9-1-rate"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-units",
+            "query_id": "q-f8-1-units",
+            "rank": 10,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-objective",
+            "query_id": "q-f8-1-objective",
+            "rank": 1,
+            "top_id": "f8-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-result",
+            "query_id": "q-f8-1-result",
+            "rank": 1,
+            "top_id": "f8-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f8-1-uncertainty",
+            "query_id": "q-f8-1-uncertainty",
+            "rank": 1,
+            "top_id": "f8-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-initial",
+            "query_id": "q-f9-0-initial",
+            "rank": 5,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-rate",
+            "query_id": "q-f9-0-rate",
+            "rank": 16,
+            "top_id": "f8-0-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-units",
+            "query_id": "q-f9-0-units",
+            "rank": 8,
+            "top_id": "f8-0-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-objective",
+            "query_id": "q-f9-0-objective",
+            "rank": 1,
+            "top_id": "f9-0-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-result",
+            "query_id": "q-f9-0-result",
+            "rank": 1,
+            "top_id": "f9-0-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-0-uncertainty",
+            "query_id": "q-f9-0-uncertainty",
+            "rank": 1,
+            "top_id": "f9-0-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-initial",
+            "query_id": "q-f9-1-initial",
+            "rank": 6,
+            "top_id": "f9-1-uncertainty"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-rate",
+            "query_id": "q-f9-1-rate",
+            "rank": 15,
+            "top_id": "f8-1-initial"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-units",
+            "query_id": "q-f9-1-units",
+            "rank": 7,
+            "top_id": "f8-1-units"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-objective",
+            "query_id": "q-f9-1-objective",
+            "rank": 1,
+            "top_id": "f9-1-objective"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-result",
+            "query_id": "q-f9-1-result",
+            "rank": 1,
+            "top_id": "f9-1-result"
+          },
+          {
+            "candidate_count": 24,
+            "positive_id": "f9-1-uncertainty",
+            "query_id": "q-f9-1-uncertainty",
+            "rank": 1,
+            "top_id": "f9-1-uncertainty"
+          }
+        ],
+        "mrr": 0.574341804029304,
+        "n": 24,
+        "top1": 0.5
+      }
+    }
+  },
+  "models": {
+    "neural": {
+      "checkpoint": "scientific_encoder.json",
+      "epochs": 40,
+      "final_loss": 0.13325457274913788,
+      "initial_loss": 4.292922496795654,
+      "json_bytes": 378780,
+      "parameters": 12720,
+      "seconds": 0.10797390597872436,
+      "sha256": "e537cce039675369d63c254b6a51da989c35d773cb23a72995c3527dbc345d95",
+      "vocabulary_size": 223
+    },
+    "randomized_labels": {
+      "checkpoint": "randomized_encoder.json",
+      "epochs": 40,
+      "final_loss": 1.1217374801635742,
+      "initial_loss": 4.724532604217529,
+      "json_bytes": 378728,
+      "parameters": 12720,
+      "seconds": 0.09948493499541655,
+      "sha256": "696cc773266301c694a99ba2a4f0a528343335bd9ade3c6343ecff0f8db4004d",
+      "vocabulary_size": 223
+    }
+  },
+  "runtime_seconds": 8.397853671980556,
+  "schema": "scientific-source-retrieval-evaluation-v1",
+  "seed": 1729,
+  "selection": "Architecture, 40 epochs and optimizer fixed before any test evaluation; no test selection",
+  "split_families": {
+    "test": [
+      10,
+      11
+    ],
+    "train": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "validation": [
+      8,
+      9
+    ]
+  }
+}
