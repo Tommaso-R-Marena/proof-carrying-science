@@ -14,7 +14,7 @@ def verify(directory):
     m=strict_json_loads(raw.decode())
     if set(m)!={'format','authority','files'} or m['format']!='pcs-safety-jepa-evidence-v1' or m['authority']!='NONE':
         raise ValueError('unsupported manifest')
-    census={str(p.relative_to(root)) for p in root.rglob('*') if p.is_file() and p.name!='SHA256.json'}
+    census={str(p.relative_to(root)) for p in root.rglob('*') if p.is_file() and p!=root/'SHA256.json'}
     if set(m['files'])!=census:raise ValueError('artifact census mismatch')
     for name,record in m['files'].items():
         path=PurePosixPath(name)
