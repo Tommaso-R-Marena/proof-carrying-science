@@ -12,7 +12,7 @@ NIST StRD endpoints returned HTTP 403. A recorded pre-evaluation amendment uses 
 
 ## Results
 
-One frozen CPU sweep, Python 3.12.14, Lean 4.28.0. Each project used the same 1,000 fixed scheduling-work-unit budget in three conditions. Work units are not wall-time guarantees. Timing includes ingestion/checking and excludes the separate replay measurement; high-water memory is cumulative process measurement rather than isolated per-case allocation.
+Two frozen CPU sweeps with unchanged source/labels, Python 3.12.14, Lean 4.28.0. The table shows the first sweep. Each project used the same 1,000 fixed scheduling-work-unit budget in three conditions. Work units are not wall-time guarantees. Timing includes ingestion/checking and excludes the separate replay measurement; high-water memory is cumulative process measurement rather than isolated per-case allocation.
 
 | Project | Split | Annotated agreement | Cold calls | Warm calls | Cold seconds | Warm seconds |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
@@ -27,7 +27,7 @@ One frozen CPU sweep, Python 3.12.14, Lean 4.28.0. Each project used the same 1,
 - 403 proposed statements matched retained extraction spans. All 58 annotated statements were found and agreed with their expected bounded-check status. These are internal source-derived annotations, not independent expert labels. Span matching does not establish semantic interpretation accuracy.
 - 330 cold checks: 306 supported successes, 22 exact refutations, two `UNKNOWN` false mathematical claims. Bounded proof failure alone did not label a false theorem refuted. Six independent package replays reran all 330 checks, with cache bypassed.
 - Zero annotated unsupported promotions and zero scientific claims certified. Every scientific meaning remains open. All cases had identical verdicts under cold deterministic, warm deterministic and requested-learned/fallback routing. No graph was truncated in this run.
-- Warm runs reused 328 results and repeated the two unknown mathematical checks. Aggregate time fell from **41.851 s to 13.182 s** in this sweep (3.18×). This is a finite caching result without repeated-run confidence intervals; it is not a neural improvement.
+- Warm runs reused 328 results and repeated the two unknown mathematical checks. Aggregate time fell from **41.851 s to 13.182 s** in this sweep (3.18×). An isolated second sweep reproduced all annotated outcomes/verdicts and 330 actual independent checks, with totals **41.114 s cold / 12.935 s warm**. The first sweep overlapped some focused test execution; the replication had no overlapping tests. These two sweeps do not supply confidence intervals or a neural improvement.
 - Peak parent RSS was 73,296 KiB; cumulative child high-water RSS was 768,260 KiB. CPU-only execution; no GPU measurement or accelerated-training claim.
 - Controlled incremental experiment: initial four checks; unchanged and unrelated-edit runs needed zero checks; changing a bound CSV reran three checks, reused one unrelated check and found a newly false sum. The changed project independently replayed.
 
@@ -65,11 +65,11 @@ One initial development freeze was invalidated by concurrent completion of its f
 
 ## Evidence and reproduction
 
-`evidence/benchmark.json.gz` holds exact measurements, per-annotation outcomes, resource data and replay records. `replayable-cases.zip` retains six complete portable cold evidence packages (about 1.1 MB compressed). `package-index.json` binds their manifests and retained artifact hashes. Host cache keys are excluded.
+`evidence/benchmark.json.gz` and `benchmark-replication.json.gz` hold exact measurements, per-annotation outcomes, resource data and replay records. `replayable-cases.zip` retains six complete portable cold evidence packages (about 1.1 MB compressed). `package-index.json` binds their manifests and retained artifact hashes. Host cache keys are excluded.
 
 Extract only the reviewed, digest-pinned evidence archive into a fresh directory, then run `python -m research.scientific_intake_v1 replay PATH --expected-manifest-sha256 HASH` for each case using its index hash. Source/toolchain drift causes a replay failure; such a failure requires an explicit successor evaluation, not editing old receipts. Reproduction from licensed upstream fixtures and commands is documented in the README. No paid service, external model download, production deployment or production authority modification was used.
 
-A dedicated experimental GitHub workflow runs the actual suite, formal audit, bounded retained-effect replay and development benchmark. Hosted CI status and exact tested commit are reported in the draft PR; local tests do not substitute for an executing hosted run. Frozen main source-admission gates remain intact and need a reviewed successor before production integration.
+A dedicated experimental GitHub workflow runs the actual suite, formal audit, bounded retained-effect replay and development benchmark. Hosted [run 42188673417](https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/42188673417) executed successfully on implementation commit `fb9aa8c34f7fc7c3ec38ba4e949f567777be3ca4`, including actual tests/Lean checks and the development benchmark. `evidence/hosted-ci-code.json` retains execution-step evidence. Subsequent documentation/evidence commits preserve that runtime-source context and receive their own workflow run. Frozen main source-admission gates remain intact and need a reviewed successor before production integration.
 
 ## Scientific assessment
 
