@@ -29,5 +29,5 @@ acceleration is claimed. Numerical test results are in REPORT.md.
 SHA-256 must come from a trusted local record; digest checks alone cannot provide
 independent provenance or protect a compromised host. Checkpoint metadata identifies
 method, seed and exact compressed training-corpus/protocol digests. Only the
-validation-selected checkpoint is retained in the review tree to limit weight size;
+validation-selected overall and proof-guided checkpoints are retained to limit weight size;
 the reproduction command regenerates every comparison checkpoint.

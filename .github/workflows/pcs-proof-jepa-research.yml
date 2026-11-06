@@ -32,12 +32,15 @@ jobs:
           set -euo pipefail
           source scripts/activate_lean_428.sh
           python -m pytest -q research/proof_jepa_rl_v1
+          lean research/proof_jepa_rl_v1/evidence/Demo.lean
+          python -m research.proof_jepa_rl_v1.replay --directory research/proof_jepa_rl_v1/evidence --cache "$RUNNER_TEMP/fresh-proof-jepa-bundle" | tee "$RUNNER_TEMP/proof-jepa-bundle-replay.json"
           python -m research.proof_jepa_rl_v1 train --output "$RUNNER_TEMP/proof-jepa" --seeds 17 --epochs 1 --rl-episodes 2 --budget 24
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
           name: proof-jepa-experimental-evidence
           path: |
+            ${{ runner.temp }}/proof-jepa-bundle-replay.json
             ${{ runner.temp }}/proof-jepa/protocol.json
             ${{ runner.temp }}/proof-jepa/results.json.gz
             ${{ runner.temp }}/proof-jepa/training.json.gz

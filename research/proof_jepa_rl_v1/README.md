@@ -102,3 +102,31 @@ CI is green. The dedicated research workflow runs actual Lean and a small real
 training/evaluation campaign without deployment or secrets.
 
 See `REPORT.md`, `MODEL_CARD.md` and `evidence/` for the executed run and its limits.
+
+## Retained proof-guided demo
+
+This uses the real retained checkpoint, with its exact digest:
+
+```bash
+python -m research.proof_jepa_rl_v1 solve --task-id project_left \
+  --checkpoint research/proof_jepa_rl_v1/evidence/proof_guided-17.json \
+  --sha256 3a340553c2863cbd46cc306db2bc8cfb541cf30d467c3d63141c230756f7485d \
+  --cache /tmp/proof-jepa-demo-cache --output /tmp/proof-jepa-demo.json
+python -m research.proof_jepa_rl_v1 replay --evidence /tmp/proof-jepa-demo.json \
+  --cache /tmp/proof-jepa-replay-cache
+python -m research.proof_jepa_rl_v1.replay \
+  --directory research/proof_jepa_rl_v1/evidence --cache /tmp/proof-jepa-full-replay
+```
+
+The full bundle contains 23 training proofs, four fresh-name proof variants and
+70 accepted test proof occurrences. The separate exploratory covariance diagnostic
+reads training data only:
+
+```bash
+python -m research.proof_jepa_rl_v1.decorrelation \
+  --run-directory /tmp/my-proof-jepa --output /tmp/new-decorrelation.json
+```
+
+The original experiment's physical-attempt field omits one nested bootstrap per
+policy; results are preserved and the report uses completed calls. Future runs
+explicitly count that bootstrap. See REPORT.md for the negative primary result.
