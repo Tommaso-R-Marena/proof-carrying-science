@@ -123,9 +123,11 @@ def execute(obligation,artifacts,*,kernel=True):
                     try:certificates.append(verify_certificate({'matrix':c['matrix'],'weights':vector['amount_weights']}))
                     except (ValueError,RuntimeError) as exc:certificates.append({'status':'UNKNOWN','reason':str(exc)[:1000]})
             if kernel and len(c['certificates'])>4:certificates.append({'status':'UNKNOWN','reason':'Kernel certificate budget: at most four vectors per model'})
-            numeric=integrate_model(model)
-            correspondence=matlab_correspondence(model,bound_bytes(artifacts[p['export_id']])) if p.get('export_id') else {'status':'UNSUPPORTED'}
-            success=numeric['max_solver_difference']<1e-4 and correspondence['status']=='MATCHED_FINITE_RATIONAL_SAMPLES' and all(x['status'].startswith('KERNEL_CHECKED') for x in certificates)
+            try:numeric=integrate_model(model)
+            except (ValueError,RuntimeError,ArithmeticError,ImportError) as exc:numeric={'status':'UNKNOWN','reason':str(exc)[:1000]}
+            try:correspondence=matlab_correspondence(model,bound_bytes(artifacts[p['export_id']])) if p.get('export_id') else {'status':'UNSUPPORTED'}
+            except (ValueError,KeyError,RuntimeError,ArithmeticError) as exc:correspondence={'status':'UNKNOWN','reason':str(exc)[:1000],'code_executed':False}
+            success=numeric.get('status')=='REPRODUCED_NUMERICALLY' and numeric['max_solver_difference']<1e-4 and correspondence['status']=='MATCHED_FINITE_RATIONAL_SAMPLES' and all(x['status'].startswith('KERNEL_CHECKED') for x in certificates)
             result.update(status='VERIFIED_SUPPORTED' if success else 'REFUTED' if correspondence['status']=='CONTRADICTED' else 'UNKNOWN',evidence={'conservation':c,'kernel_certificates':certificates,'numerical':numeric,'author_export':correspondence,
                           'scope':'Compound finite model-assurance observations; no scientific meaning promoted.'})
         elif checker=='document_reproduction':

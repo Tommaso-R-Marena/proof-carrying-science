@@ -9,6 +9,12 @@
       "run": "final-v1",
       "status": "PRIMARY_FROZEN_RESULT",
       "reason": "First held-out evaluation retained. Partial model-assurance evidence omission discovered; no trained weights/reference labels changed."
+    },
+    {
+      "run": "posthoc-v1",
+      "status": "FOLLOWUP_NOT_UNTOUCHED",
+      "reason": "Generic per-component error isolation retains completed numerical/proof evidence when an export is unsupported. A new authored test verifies this. Source fixtures, manual labels, extraction semantics and learned weights unchanged. Primary final-v1 remains the prospective result.",
+      "primary_source_commit": "9e8a8f0"
     }
   ],
   "source_data_training": false,

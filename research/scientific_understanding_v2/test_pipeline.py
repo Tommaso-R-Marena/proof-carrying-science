@@ -77,3 +77,16 @@ def test_foreign_mathml_operator_fails_closed():
     from .model_checks import SBMLModel
     raw=Path(__file__).with_name('fixtures').joinpath('upstream/tyson1991.sbml').read_bytes()
     with pytest.raises(ValueError):SBMLModel(raw.replace(b'<times/>',b'<evil:times xmlns:evil="urn:fake"/>',1))
+
+def test_unsupported_export_preserves_independently_completed_model_evidence(tmp_path):
+    source=tmp_path/'input';source.mkdir();upstream=Path(__file__).with_name('fixtures')/'upstream'
+    (source/'model.sbml').write_bytes((upstream/'tyson1991.sbml').read_bytes())
+    code=(upstream/'tyson1991.m').read_text().replace('compartment_cell=1.0;','system("untrusted call must never run");\ncompartment_cell=1.0;',1)
+    (source/'export.m').write_text(code)
+    summary=run(source,tmp_path/'e',check=True)
+    checks=json.loads((tmp_path/'e/checks.json').read_text());model=next(r for r in checks if r['checker']=='model_assurance')
+    assert model['status']=='UNKNOWN'
+    assert model['evidence']['author_export']['status']=='UNKNOWN'
+    assert model['evidence']['numerical']['status']=='REPRODUCED_NUMERICALLY'
+    assert model['evidence']['kernel_certificates'][0]['status']=='KERNEL_CHECKED_FINITE_INTEGER_CONSERVATION'
+    assert replay(tmp_path/'e')['status']=='REPLAYED'
