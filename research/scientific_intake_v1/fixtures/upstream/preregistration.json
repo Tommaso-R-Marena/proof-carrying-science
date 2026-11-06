@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "frozen_at_utc": "2026-11-06T07:43:56.388864+00:00",
+  "policy": "Case IDs, splits, domains, and anticipated checks frozen before upstream download, imported source inspection, component selection, or evaluation. No training on any imported data. Final cases may only be opened by materialization/evaluation after component freeze. Ground truth is exact source spans and deterministic calculations, never model judgment.",
+  "training": [],
+  "cases": [
+    {
+      "id": "rcsb_1crn",
+      "split": "development",
+      "domain": "protein",
+      "upstream_identifier": "1CRN"
+    },
+    {
+      "id": "nist_norris",
+      "split": "development",
+      "domain": "regression",
+      "upstream_identifier": "Norris"
+    },
+    {
+      "id": "lean4_nat_add",
+      "split": "development",
+      "domain": "formal",
+      "upstream_identifier": "Nat.add_zero"
+    },
+    {
+      "id": "rcsb_1ubq",
+      "split": "final",
+      "domain": "protein",
+      "upstream_identifier": "1UBQ"
+    },
+    {
+      "id": "nist_pontius",
+      "split": "final",
+      "domain": "regression",
+      "upstream_identifier": "Pontius"
+    },
+    {
+      "id": "lean4_list_append",
+      "split": "final",
+      "domain": "formal",
+      "upstream_identifier": "List.append_nil"
+    }
+  ],
+  "checks": {
+    "protein": [
+      "source_sequence_length",
+      "unique_structural_residues",
+      "sequence_structure_agreement",
+      "X-ray measurement metadata",
+      "unsupported folding/causation claim rejection"
+    ],
+    "regression": [
+      "source_row_count",
+      "design_degree",
+      "certified_coefficients",
+      "prediction_fit",
+      "unsupported causation claim rejection"
+    ],
+    "formal": [
+      "source theorem exact quote",
+      "independently closed typed proposition",
+      "imported source is data only",
+      "unsupported strengthened proposition rejection"
+    ]
+  },
+  "source_selection": [
+    "RCSB official entry PDB/mmCIF/FASTA and CC0 usage policy",
+    "NIST StRD Norris/Pontius certified regression data and official public domain policy",
+    "Lean4 v4.19.0 Init Nat/List source, Apache2 LICENSE, README at resolved commit"
+  ],
+  "derived_files": "Clearly labeled DERIVED: computational scripts/config/note, DOCX/XLSX summaries and negative claims. Not independently sourced studies."
+}
