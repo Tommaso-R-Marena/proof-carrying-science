@@ -1,0 +1,1010 @@
+{
+  "schema_version": "manual-reference-v1",
+  "preparation": {
+    "reviewer_role": "independent_internal_review",
+    "pcs_output_used": false,
+    "independence": "Manual annotations prepared without reading, importing, running, or labeling from PCS interpretation/check code. Final outcomes withheld from component developers until freeze.",
+    "source_identity_freeze_sha256": "f7a1d0e2309a99acdc8fb2185b19ef1977d8be6a831d5f5f8c262d25f3e51538",
+    "status": "complete"
+  },
+  "annotations": [
+    {
+      "id": "final-goldbeter-001",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "initial_condition",
+      "statement": "The encoded Goldbeter model initializes cyclin C concentration to 0.01.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 128-128",
+        "quote": "<species compartment=\"cell\" id=\"C\" initialConcentration=\"0.01\" metaid=\"_230475\" name=\"Cyclin\" sboTerm=\"SBO:0000252\" substanceUnits=\"substance\">"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "initial_C",
+        "value": 0.01,
+        "unit": "encoded_concentration",
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "This is the curated model initial condition, not an experimentally measured concentration."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "curated_model_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-002",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "scalar_parameter",
+      "statement": "The encoded maximum activation parameter VM1 is 3.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 182-182",
+        "quote": "<parameter id=\"VM1\" metaid=\"_961187\" name=\"VM1\" sboTerm=\"SBO:0000025\" value=\"3\"/>"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "VM1",
+        "value": 3.0,
+        "unit": "encoded_model_unit",
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "curated_model_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-003",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "rate_law",
+      "statement": "The model assigns V1=VM1*C/(C+Kc).",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 187-204",
+        "quote": "<assignmentRule metaid=\"rule1\" variable=\"V1\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <times/>\n            <ci> C </ci>\n            <ci> VM1 </ci>\n            <apply>\n              <power/>\n              <apply>\n                <plus/>\n                <ci> C </ci>\n                <ci> Kc </ci>\n              </apply>\n              <cn type=\"integer\"> -1 </cn>\n            </apply>\n          </apply>\n        </math>\n            </assignmentRule>"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equivalent_expression",
+        "lhs": "V1",
+        "rhs": "VM1*C/(C+Kc)",
+        "variables": [
+          "VM1",
+          "C",
+          "Kc"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "C+Kc is nonzero."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "curated_model_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-004",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "rate_law",
+      "statement": "The model assigns V3=VM3*M.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 205-213",
+        "quote": "<assignmentRule metaid=\"rule2\" variable=\"V3\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <times/>\n            <ci> M </ci>\n            <ci> VM3 </ci>\n          </apply>\n        </math>\n            </assignmentRule>"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equivalent_expression",
+        "lhs": "V3",
+        "rhs": "VM3*M",
+        "variables": [
+          "VM3",
+          "M"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "curated_model_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-005",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "scalar_parameter",
+      "statement": "The cyclin creation reaction uses vi=0.025.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 241-241",
+        "quote": "<parameter id=\"vi\" metaid=\"_961167\" sboTerm=\"SBO:0000048\" value=\"0.025\"/>"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "vi",
+        "value": 0.025,
+        "unit": "encoded_concentration_per_time",
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Unit is a dimensional role inferred from a concentration source term; no physical time scale is explicitly declared."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "curated_model_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-006",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "mass_balance",
+      "statement": "At fixed compartment volume the encoded cyclin balance is dC/dt=vi-kd*C-vd*X*C/(C+Kd).",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+        "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+        "locator": "lines 121-121",
+        "quote": "xdot(1) = (1/(compartment_cell))*(( 1.0 * reaction_reaction1) + (-1.0 * reaction_reaction2) + (-1.0 * reaction_reaction3));"
+      },
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 80-80",
+          "quote": "reaction_reaction1=compartment_cell*reaction_reaction1_vi;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 85-85",
+          "quote": "reaction_reaction2=x(1)*compartment_cell*reaction_reaction2_kd;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 92-92",
+          "quote": "reaction_reaction3=x(1)*compartment_cell*reaction_reaction3_vd*x(3)*(x(1)+reaction_reaction3_Kd)^(-1);"
+        }
+      ],
+      "typed_expectation": {
+        "relation": "equivalent_expression",
+        "lhs": "dC/dt",
+        "rhs": "vi-kd*C-vd*X*C/(C+Kd)",
+        "variables": [
+          "vi",
+          "kd",
+          "C",
+          "vd",
+          "X",
+          "Kd"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Constant nonzero cell compartment volume.",
+        "C+Kd is nonzero."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "manual_derivation_from_curated_model",
+        "method": "Manually combine the three signed cyclin fluxes and cancel the fixed cell volume. Generated conversion code corroborates the original SBML, not independent experimental evidence.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-007",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "numerical_result",
+      "statement": "At the encoded initial state the initial cyclin derivative is 0.0240666666666667 in encoded concentration per time.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+        "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+        "locator": "lines 121-121",
+        "quote": "xdot(1) = (1/(compartment_cell))*(( 1.0 * reaction_reaction1) + (-1.0 * reaction_reaction2) + (-1.0 * reaction_reaction3));"
+      },
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+          "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+          "locator": "lines 128-128",
+          "quote": "<species compartment=\"cell\" id=\"C\" initialConcentration=\"0.01\" metaid=\"_230475\" name=\"Cyclin\" sboTerm=\"SBO:0000252\" substanceUnits=\"substance\">"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 83-83",
+          "quote": "reaction_reaction2_kd=0.01;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 88-88",
+          "quote": "reaction_reaction3_vd=0.25;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 90-90",
+          "quote": "reaction_reaction3_Kd=0.02;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 28-28",
+          "quote": "x0(3) = 0.01;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+          "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+          "locator": "lines 241-241",
+          "quote": "<parameter id=\"vi\" metaid=\"_961167\" sboTerm=\"SBO:0000048\" value=\"0.025\"/>"
+        }
+      ],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "initial_dC_dt",
+        "value": 0.024066666666666667,
+        "unit": "encoded_concentration_per_time",
+        "absolute_tolerance": 1e-14
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "C=X=0.01; vi=.025; kd=.01; vd=.25; Kd=.02; cell=1."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "manual_derivation_from_curated_model",
+        "method": "Manual substitution into dC/dt: .025-.01*.01-.25*.01*.01/(.01+.02); not a simulated or publication-reported output.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-008",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "unsupported_counterclaim",
+      "statement": "The encoded cyclin concentration C is conserved for every solution.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+        "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+        "locator": "lines 121-121",
+        "quote": "xdot(1) = (1/(compartment_cell))*(( 1.0 * reaction_reaction1) + (-1.0 * reaction_reaction2) + (-1.0 * reaction_reaction3));"
+      },
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 80-80",
+          "quote": "reaction_reaction1=compartment_cell*reaction_reaction1_vi;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 85-85",
+          "quote": "reaction_reaction2=x(1)*compartment_cell*reaction_reaction2_kd;"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.m",
+          "sha256": "5a6951d93c1a39aa04e6ed5517b2870e3428a8018369121f3b9117b05511b59b",
+          "locator": "lines 92-92",
+          "quote": "reaction_reaction3=x(1)*compartment_cell*reaction_reaction3_vd*x(3)*(x(1)+reaction_reaction3_Kd)^(-1);"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+          "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+          "locator": "lines 241-241",
+          "quote": "<parameter id=\"vi\" metaid=\"_961167\" sboTerm=\"SBO:0000048\" value=\"0.025\"/>"
+        }
+      ],
+      "typed_expectation": {
+        "relation": "not_conserved",
+        "quantity": "C",
+        "witness_initial_derivative": 0.024066666666666667,
+        "unit": "encoded_concentration_per_time"
+      },
+      "expected_status": "contradicted",
+      "conditions": [
+        "Initial state and parameters declared in this model."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "reviewer_adversarial_counterclaim",
+        "method": "The manually substituted initial cyclin derivative is nonzero, providing a direct counterexample to conservation; the claim is reviewer-authored.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-goldbeter-009",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "applicability",
+      "statement": "The publication abstract reports possible sustained limit-cycle oscillations conditional on activation thresholds.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 22-22",
+        "quote": "sustained oscillations of the limit cycle type can arise in the cascade, provided that a threshold exists in the activation of cdc2 kinase by cyclin and in the activation of cyclin proteolysis by cdc2 kinase."
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "conditional_possibility",
+        "quantity": "sustained_limit_cycle_oscillations",
+        "conditions": [
+          "threshold_in_cdc2_activation_by_cyclin",
+          "threshold_in_cyclin_proteolysis_activation_by_cdc2"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "This is a publication abstract claim embedded and attributed in the curated SBML notes; it is conditional rather than a numerical result for every parameterization."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "publication_abstract_quotation_in_model",
+        "method": "Manual reading of the attributed abstract quotation. The full paper is not bundled and no figure value is inferred.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-010",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "unsupported_counterclaim",
+      "statement": "The bundled publication evidence establishes an oscillation period of exactly 25 minutes.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 22-22",
+        "quote": "sustained oscillations of the limit cycle type can arise in the cascade, provided that a threshold exists in the activation of cdc2 kinase by cyclin and in the activation of cyclin proteolysis by cdc2 kinase."
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "not_reported",
+        "quantity": "oscillation_period",
+        "proposed_value": 25,
+        "proposed_unit": "minute"
+      },
+      "expected_status": "insufficient_evidence",
+      "conditions": [
+        "The supplied abstract and curated model declarations do not report this precise period."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "reviewer_adversarial_counterclaim",
+        "method": "Reviewer-authored unavailable numerical outcome: no simulation or inferred clock conversion is used to invent a period.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-goldbeter-011",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "dimension",
+      "statement": "The V1 assignment requires Kc and C to have equal dimensions because they are added.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 187-204",
+        "quote": "<assignmentRule metaid=\"rule1\" variable=\"V1\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <times/>\n            <ci> C </ci>\n            <ci> VM1 </ci>\n            <apply>\n              <power/>\n              <apply>\n                <plus/>\n                <ci> C </ci>\n                <ci> Kc </ci>\n              </apply>\n              <cn type=\"integer\"> -1 </cn>\n            </apply>\n          </apply>\n        </math>\n            </assignmentRule>"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "same_dimension",
+        "quantities": [
+          "Kc",
+          "C"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Ordinary dimensional homogeneity of addition."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "manual_dimensional_derivation",
+        "method": "Manual dimensional consequence of the explicit C+Kc sum; no numerical physical unit is claimed.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-goldbeter-012",
+      "project_id": "biomodels_goldbeter1991",
+      "split": "final",
+      "kind": "dimension",
+      "statement": "If the literal 1 in the activation law denotes a dimensionless normalized total, then M must be dimensionless.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/goldbeter1991.sbml",
+        "sha256": "a633872e4c602922e85ac487ef52ac8bd8ead762ec7c0f86f9e93032a84c90f5",
+        "locator": "lines 337-371",
+        "quote": "<kineticLaw metaid=\"_356062\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <apply>\n                <plus/>\n                <cn type=\"integer\"> 1 </cn>\n                <apply>\n                  <times/>\n                  <cn type=\"integer\"> -1 </cn>\n                  <ci> M </ci>\n                </apply>\n              </apply>\n              <ci> V1 </ci>\n              <apply>\n                <power/>\n                <apply>\n                  <plus/>\n                  <ci> K1 </ci>\n                  <apply>\n                    <times/>\n                    <cn type=\"integer\"> -1 </cn>\n                    <ci> M </ci>\n                  </apply>\n                  <cn type=\"integer\"> 1 </cn>\n                </apply>\n                <cn type=\"integer\"> -1 </cn>\n              </apply>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"K1\" metaid=\"_961172\" sboTerm=\"SBO:0000027\" value=\"0.005\"/>\n          </listOfParameters>\n        </kineticLaw>"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "dimension",
+        "quantity": "M",
+        "dimension": {},
+        "conditional_on": "literal_1_represents_dimensionless_normalized_total"
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "The numeral 1 is interpreted as a dimensionless normalized total in 1-M."
+      ],
+      "units": {
+        "explicit_physical_parameter_units": false,
+        "interpretation": "Encoded model units; conditional dimensions stated separately."
+      },
+      "assumptions": [
+        "The encoded substanceUnits metadata alone does not establish a physical fraction; this is a conditional normalization constraint."
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "manual_dimensional_derivation",
+        "method": "Manual homogeneity requirement for 1-M; explicitly conditional to avoid inventing an upstream physical unit.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-001",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "equation",
+      "statement": "The Airy example uses dy0/dt=t*y1 and dy1/dt=y0.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 479-480",
+        "quote": ">>> def func(t, y):\n...     return [t*y[1],y[0]]"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equivalent_system",
+        "lhs": [
+          "dy0/dt",
+          "dy1/dt"
+        ],
+        "rhs": [
+          "t*y1",
+          "y0"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-002",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "initial_condition",
+      "statement": "The Airy example initializes y1(0)=1/(3^(2/3)*Gamma(2/3)).",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 476-476",
+        "quote": ">>> y1_0 = +1 / 3**(2/3) / gamma(2/3)"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equivalent_expression",
+        "lhs": "y1(0)",
+        "rhs": "1/(3^(2/3)*Gamma(2/3))"
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-003",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "initial_condition",
+      "statement": "The Airy example initializes y0(0)=-1/(3^(1/3)*Gamma(1/3)).",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 477-477",
+        "quote": ">>> y0_0 = -1 / 3**(1/3) / gamma(1/3)"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equivalent_expression",
+        "lhs": "y0(0)",
+        "rhs": "-1/(3^(1/3)*Gamma(1/3))"
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-004",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "scalar_parameter",
+      "statement": "The Airy solve_ivp example integrates over the independent-variable interval [0,4].",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 482-482",
+        "quote": ">>> t_span = [0, 4]"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals_interval",
+        "quantity": "t_span",
+        "value": [
+          0,
+          4
+        ],
+        "unit": "unspecified_independent_variable"
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-005",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "scalar_parameter",
+      "statement": "The tightened Airy run sets both relative and absolute tolerances to 1e-8.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 503-504",
+        "quote": ">>> rtol, atol = (1e-8, 1e-8)\n>>> sol2 = solve_ivp(func, t_span, y0, rtol=rtol, atol=atol)"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals_mapping",
+        "quantity": "solver_tolerances",
+        "value": {
+          "rtol": 1e-08,
+          "atol": 1e-08
+        },
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [
+        "Configured local error tolerances are not a promise of global error below exactly 1e-8."
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-006",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "numerical_result",
+      "statement": "The default Airy example prints y1(4)=0.00405982.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 493-494",
+        "quote": "sol1.y[1]: [0.35502805 0.328952   0.12801343 0.04008508 0.01601291 0.00623879\n 0.00356316 0.00405982]"
+      },
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+          "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+          "locator": "lines 486-486",
+          "quote": "3.62692846 4.        ]"
+        }
+      ],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_default_y1_at_t4",
+        "value": 0.00405982,
+        "unit": "dimensionless",
+        "absolute_tolerance": 5e-09
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Specific solve_ivp tutorial run using standard parameters and the stated Airy initial conditions."
+      ],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-007",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "numerical_result",
+      "statement": "At the default solver time grid endpoint t=4 the tutorial prints the Airy reference value 0.00095156.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 496-497",
+        "quote": "airy(sol.t)[0]: [0.35502805 0.328952   0.12804768 0.03995804 0.01575943 0.00562799\n 0.00201689 0.00095156]"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_airy_reference_at_t4",
+        "value": 0.00095156,
+        "unit": "dimensionless",
+        "absolute_tolerance": 5e-09
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Airy reference evaluated at the default solver time points."
+      ],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-008",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "unsupported_counterclaim",
+      "statement": "For this Airy example the default solve_ivp output agrees with the Airy reference at every printed digit.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 499-500",
+        "quote": "The solution of `solve_ivp` with its standard parameters shows a big deviation\nto the airy function."
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "does_not_match_all_printed_digits",
+        "quantity": "default_solution_vs_airy_reference"
+      },
+      "expected_status": "contradicted",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "reviewer_adversarial_counterclaim",
+        "method": "Reviewer-authored counterclaim directly conflicts with both the author statement and printed endpoint values.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-scipy-009",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "applicability",
+      "statement": "In the Airy example the default RK45 method does not support a supplied Jacobian matrix.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 520-522",
+        "quote": "the default integration method\n`RK45` does not support jacobian matrices and thereby another integration method has\nto be chosen."
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "supports",
+        "quantity": "RK45_supplied_jacobian",
+        "value": false
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-010",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "unsupported_counterclaim",
+      "statement": "The reported absolute error estimate from quad is a guaranteed upper bound for every integrand and integration interval.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 145-147",
+        "quote": "Numerical integration algorithms sample the integrand at a finite number of points.\n    Consequently, they cannot guarantee accurate results (or accuracy estimates) for\n    arbitrary integrands and limits of integration."
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "universal_guarantee",
+        "quantity": "quad_absolute_error_estimate",
+        "value": false
+      },
+      "expected_status": "contradicted",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "reviewer_adversarial_counterclaim",
+        "method": "Reviewer-authored universal counterclaim directly conflicts with the explicit upstream accuracy warning.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-scipy-011",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "numerical_result",
+      "statement": "The Bessel J_2.5 integral over [0,4.5] is reported as 1.1178179380783249.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 33-35",
+        "quote": ">>> result = integrate.quad(lambda x: special.jv(2.5,x), 0, 4.5)\n    >>> result\n    (1.1178179380783249, 7.8663172481899801e-09)"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_bessel_integral",
+        "value": 1.1178179380783249,
+        "unit": "dimensionless",
+        "absolute_tolerance": 1e-15
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Pinned tutorial example; Bessel order2.5; integration limits0 and4.5."
+      ],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-scipy-012",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "unsupported_counterclaim",
+      "statement": "The Airy integration example measures a cell-cycle period in minutes.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 482-482",
+        "quote": ">>> t_span = [0, 4]"
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "not_reported",
+        "quantity": "cell_cycle_period",
+        "proposed_unit": "minute"
+      },
+      "expected_status": "insufficient_evidence",
+      "conditions": [],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "reviewer_adversarial_counterclaim",
+        "method": "Reviewer-authored unavailable application claim: this mathematical Airy example has no declared biological clock, cell-cycle quantity, or conversion to minutes.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-scipy-013",
+      "project_id": "scipy_integrate",
+      "split": "final",
+      "kind": "convergence_condition",
+      "statement": "The matrix exponential expression in the tutorial requires A(t) to commute with its time integral; the Airy matrix does not satisfy that condition.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/heldout/scipy_integrate.rst",
+        "sha256": "0013ea5b885ce9e956473db028ce0963cc81ee8161458d4d5a50083e023f2b28",
+        "locator": "lines 466-466",
+        "quote": "However, in this case, :math:`\\mathbf{A}\\left(t\\right)` and its integral do not commute."
+      },
+      "corroborating_sources": [],
+      "typed_expectation": {
+        "relation": "condition_not_satisfied",
+        "quantity": "matrix_exponential_solution_by_integrated_A",
+        "condition": "A(t)_commutes_with_integral_of_A"
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "This is the specific time-dependent matrix in the Airy first-order system."
+      ],
+      "units": {
+        "physical_units_reported": false,
+        "interpretation": "Dimensionless mathematical example; time is the independent coordinate and has no declared physical clock unit."
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Manual reading of upstream declarations; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    }
+  ]
+}

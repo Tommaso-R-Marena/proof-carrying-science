@@ -1,0 +1,1230 @@
+{
+  "schema_version": "manual-reference-v1",
+  "preparation": {
+    "reviewer_role": "independent_internal_review",
+    "pcs_output_used": false,
+    "independence": "Manual annotations prepared without reading, importing, running, or labeling from new PCS interpretation/check code.",
+    "status": "complete",
+    "source_identity_freeze_sha256": "f7a1d0e2309a99acdc8fb2185b19ef1977d8be6a831d5f5f8c262d25f3e51538",
+    "reviewers": [
+      "reference_science",
+      "reference_science/reference_review"
+    ],
+    "method": "Explicit manual source reading, scientific reasoning, and transcription; a second internal reader independently prepared Tyson claims, then reference_science reviewed them."
+  },
+  "annotations": [
+    {
+      "id": "dev-scipy-001",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "optimization_result",
+      "statement": "The unmodified Rosenbrock objective has minimum value zero.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 31-32",
+        "quote": "The minimum value of this function is 0 which is achieved when\n:math:`x_{i}=1.`"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "minimum_objective",
+        "value": 0.0,
+        "unit": "dimensionless",
+        "absolute_tolerance": 0.0
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Unmodified Rosenbrock objective as defined immediately above the quoted statement."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-002",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "optimization_result",
+      "statement": "The documented five-variable Nelder-Mead example prints a minimizer with all five coordinates equal to one.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 65-66",
+        "quote": ">>> print(res.x)\n    [1. 1. 1. 1. 1.]"
+      },
+      "typed_expectation": {
+        "relation": "equals_vector",
+        "quantity": "reported_minimizer",
+        "value": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "unit": "dimensionless",
+        "absolute_tolerance": 1e-08
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Tutorial Rosenbrock example; x0=[1.3,0.7,0.8,1.9,1.2]; Nelder-Mead; xatol=1e-8."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [
+        "Printed precision does not establish a mathematically exact floating-point result."
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-003",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "numerical_result",
+      "statement": "The documented Nelder-Mead run reports 339 iterations.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 61-63",
+        "quote": "Current function value: 0.000000\n             Iterations: 339\n             Function evaluations: 571"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_iteration_count",
+        "value": 339,
+        "unit": "count",
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "The specific five-variable unmodified Rosenbrock tutorial run, with its stated initial point and stopping option."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [
+        "A documented run count is not a convergence guarantee for other runs or versions."
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-004",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "numerical_result",
+      "statement": "The documented Nelder-Mead run reports 571 function evaluations.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 62-63",
+        "quote": "Iterations: 339\n             Function evaluations: 571"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_function_evaluations",
+        "value": 571,
+        "unit": "count",
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "The specific five-variable unmodified Rosenbrock Nelder-Mead tutorial run."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-005",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "scalar_parameter",
+      "statement": "The Nelder-Mead example configures the coordinate stopping tolerance xatol to 1e-8.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 58-59",
+        "quote": ">>> res = minimize(rosen, x0, method='nelder-mead',\n    ...                options={'xatol': 1e-8, 'disp': True})"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "xatol",
+        "value": 1e-08,
+        "unit": "dimensionless_coordinate",
+        "absolute_tolerance": 0.0
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "This is the supplied solver option, not a measured objective error."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-006",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "optimization_result",
+      "statement": "With the tutorial scaling parameter a=0.5 and offset b=1, the reported objective value is 1.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 94-96",
+        "quote": "args=(0.5, 1.), options={'xatol': 1e-8, 'disp': True})\n    Optimization terminated successfully.\n             Current function value: 1.000000"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_objective",
+        "value": 1.0,
+        "unit": "dimensionless",
+        "absolute_tolerance": 5e-07
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Modified Rosenbrock objective with a=0.5, b=1; same five-dimensional initial point; Nelder-Mead."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [
+        "Tolerance reflects the six decimals printed by the documentation."
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-007",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "numerical_result",
+      "statement": "The illustrative BFGS run with analytic gradient reports 25 iterations, and the text explicitly permits variation.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 174-176",
+        "quote": "Iterations: 25                     # may vary\n             Function evaluations: 30\n             Gradient evaluations: 30"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "reported_iteration_count",
+        "value": 25,
+        "unit": "count",
+        "absolute_tolerance": 0,
+        "not_a_universal_bound": true
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "BFGS with jac=rosen_der in the tutorial; illustrative reported count may vary."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation_reported_output",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-008",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "The BFGS Rosenbrock example guarantees exactly 25 iterations for every run.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 174-174",
+        "quote": "Iterations: 25                     # may vary"
+      },
+      "typed_expectation": {
+        "relation": "not_guaranteed",
+        "quantity": "iteration_count",
+        "proposed_universal_value": 25,
+        "unit": "count"
+      },
+      "expected_status": "contradicted",
+      "conditions": [
+        "Counterclaim universalizes an explicitly variable illustrative count."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Reviewer-authored overgeneralization contradicted by the upstream explicit may-vary qualification.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "dev-scipy-009",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "The Nelder-Mead method in this example requires gradient evaluations.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 69-71",
+        "quote": "It requires only function evaluations and is a good\nchoice for simple minimization problems. However, because it does not use\nany gradient evaluations, it may take longer to find the minimum."
+      },
+      "typed_expectation": {
+        "relation": "requires",
+        "quantity": "gradient_evaluations",
+        "value": false
+      },
+      "expected_status": "contradicted",
+      "conditions": [],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Reviewer-authored counterclaim directly conflicts with the stated algorithm requirement.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "dev-scipy-010",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "equation",
+      "statement": "The documented final-coordinate Rosenbrock gradient is 200*(x[-1]-x[-2]**2).",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 163-163",
+        "quote": "...     der[-1] = 200*(x[-1]-x[-2]**2)"
+      },
+      "typed_expectation": {
+        "relation": "equivalent_expression",
+        "lhs": "df/dx[N-1]",
+        "rhs": "200*(x[N-1]-x[N-2]^2)",
+        "variables": [
+          "x[N-1]",
+          "x[N-2]"
+        ]
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "Unmodified Rosenbrock function, N>=2, zero-based coordinate indexing."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_code_declaration",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-011",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "assumption",
+      "statement": "The local quadratic Newton stationary step is described as a local minimum when the Hessian is positive definite.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 258-260",
+        "quote": "If the Hessian is\npositive definite then the local minimum of this function can be found\nby setting the gradient of the quadratic form to zero"
+      },
+      "typed_expectation": {
+        "relation": "requires_condition",
+        "quantity": "local_quadratic_minimum",
+        "condition": "positive_definite_hessian"
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "This statement concerns the local quadratic approximation described in the same section."
+      ],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [
+        "Positive definiteness is stronger than existence of a stationary point; the source does not promise global minimization of the original nonlinear function."
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Direct reading of the upstream tutorial statement or printed example; no PCS output consulted.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "dev-scipy-012",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "The five-variable Rosenbrock tutorial reports the runtime in seconds.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 61-63",
+        "quote": "Current function value: 0.000000\n             Iterations: 339\n             Function evaluations: 571"
+      },
+      "typed_expectation": {
+        "relation": "not_reported",
+        "quantity": "wall_clock_runtime",
+        "proposed_unit": "second"
+      },
+      "expected_status": "insufficient_evidence",
+      "conditions": [],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Reviewer-authored unavailable-outcome request: this example reports objective and operation counts but no wall-clock timing or physical time unit.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "dev-scipy-013",
+      "project_id": "scipy_rosenbrock",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "The unmodified Rosenbrock objective has global minimum value -1.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/scipy_optimize.rst",
+        "sha256": "62cc919a2738b31df8c01accf2f95eaadbe71f92d9073f9975dae9c15e6eb29f",
+        "locator": "lines 31-32",
+        "quote": "The minimum value of this function is 0 which is achieved when\n:math:`x_{i}=1.`"
+      },
+      "typed_expectation": {
+        "relation": "equals",
+        "quantity": "minimum_objective",
+        "value": 0.0,
+        "counterclaim_value": -1.0,
+        "unit": "dimensionless",
+        "absolute_tolerance": 0
+      },
+      "expected_status": "contradicted",
+      "conditions": [],
+      "units": {
+        "objective": "dimensionless illustrative objective",
+        "variables": "dimensionless mathematical variables",
+        "physical_units_reported": false
+      },
+      "assumptions": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "material_type": "author_documentation",
+        "method": "Reviewer-authored numerical counterclaim conflicts directly with the tutorial minimum.",
+        "pcs_output_used": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "tyson-init-cp",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "initial_condition",
+      "statement": "The encoded initial amount of CP is 0.75.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "species[@id='CP']; original lines 130-130",
+        "quote": "      <species compartment=\"cell\" id=\"CP\" initialAmount=\"0.75\" metaid=\"_000005\" name=\"cdc2k-P\">\n"
+      },
+      "typed_expectation": {
+        "entity": "CP",
+        "quantity": "initialAmount",
+        "value": 0.75,
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "The initialAmount attribute explicitly states 0.75.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-init-pm",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "initial_condition",
+      "statement": "The encoded initial amount of pM is 0.25.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "species[@id='pM']; original lines 159-159",
+        "quote": "      <species compartment=\"cell\" id=\"pM\" initialAmount=\"0.25\" metaid=\"_000007\" name=\"p-cyclin_cdc2-p\">\n"
+      },
+      "typed_expectation": {
+        "entity": "pM",
+        "quantity": "initialAmount",
+        "value": 0.25,
+        "absolute_tolerance": 0
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "The initialAmount attribute explicitly states 0.25.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-total-cdc2-definition",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "mass_balance",
+      "statement": "The model defines CT as C2 + CP + M + pM.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "assignmentRule[@variable='CT']; original lines 243-253",
+        "quote": "      <assignmentRule metaid=\"metaid_0000023\" variable=\"CT\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <plus/>\n            <ci> C2 </ci>\n            <ci> CP </ci>\n            <ci> M </ci>\n            <ci> pM </ci>\n          </apply>\n        </math>\n            </assignmentRule>\n"
+      },
+      "typed_expectation": {
+        "lhs": "CT",
+        "relation": "=",
+        "rhs": "C2 + CP + M + pM",
+        "terms": {
+          "C2": 1,
+          "CP": 1,
+          "M": 1,
+          "pM": 1
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [
+        "The summed species share a common concentration dimension."
+      ],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "The MathML plus operator has these four species operands.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-cdc2-conservation",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "mass_balance",
+      "statement": "For the encoded reactions in the fixed size-one compartment, CT is conserved and has initial value 1.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "assignmentRule[@variable='CT']; original lines 243-253",
+        "quote": "      <assignmentRule metaid=\"metaid_0000023\" variable=\"CT\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <plus/>\n            <ci> C2 </ci>\n            <ci> CP </ci>\n            <ci> M </ci>\n            <ci> pM </ci>\n          </apply>\n        </math>\n            </assignmentRule>\n"
+      },
+      "typed_expectation": {
+        "entity": "CT",
+        "initial_value": 1,
+        "derivative": 0,
+        "balance": "d(C2+CP+M+pM)/dt = 0",
+        "stoichiometric_weights": {
+          "C2": 1,
+          "CP": 1,
+          "M": 1,
+          "pM": 1
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "No additional cdc2 creation or destruction reactions.",
+        "Fixed compartment volume."
+      ],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [
+        "Default unit stoichiometric coefficients on the listed species references.",
+        "Species amounts and concentrations are numerically equal in size-one compartment."
+      ],
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "compartment[@id='cell']; original lines 99-99",
+          "quote": "      <compartment id=\"cell\" metaid=\"_000002\" size=\"1\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "species[@id='C2']; original lines 116-116",
+          "quote": "      <species compartment=\"cell\" id=\"C2\" initialAmount=\"0\" metaid=\"_000004\" name=\"cdc2k\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "species[@id='CP']; original lines 130-130",
+          "quote": "      <species compartment=\"cell\" id=\"CP\" initialAmount=\"0.75\" metaid=\"_000005\" name=\"cdc2k-P\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "species[@id='M']; original lines 144-144",
+          "quote": "      <species compartment=\"cell\" id=\"M\" initialAmount=\"0\" metaid=\"_000006\" name=\"p-cyclin_cdc2\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "species[@id='pM']; original lines 159-159",
+          "quote": "      <species compartment=\"cell\" id=\"pM\" initialAmount=\"0.25\" metaid=\"_000007\" name=\"p-cyclin_cdc2-p\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "model/listOfReactions; original lines 255-603",
+          "quote": "    <listOfReactions>\n      <reaction id=\"Reaction1\" metaid=\"_000010\" name=\"cyclin_cdc2k dissociation\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000010\">\n              <bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6308\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0000079\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712369\" species=\"M\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712382\" species=\"C2\"/>\n          <speciesReference metaid=\"_712394\" species=\"YP\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712406\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k6 </ci>\n              <ci> M </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k6\" metaid=\"_840210\" value=\"1\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction2\" metaid=\"_000011\" name=\"cdc2k phosphorylation\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000011\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/2.7.11.1\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006468\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712418\" species=\"C2\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712430\" species=\"CP\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712442\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> C2 </ci>\n              <ci> k8notP </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k8notP\" metaid=\"_840213\" value=\"1000000\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction3\" metaid=\"_000012\" name=\"cdc2k dephosphorylation\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000012\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/3.1.3.16\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006470\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712454\" species=\"CP\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712466\" species=\"C2\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712478\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k9 </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k9\" metaid=\"_840215\" value=\"1000\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction4\" metaid=\"_000013\" name=\"cyclin cdc2k-p association\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000013\">\n\t<bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6216\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6308\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712490\" species=\"CP\"/>\n          <speciesReference metaid=\"_712502\" species=\"Y\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712514\" species=\"pM\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712526\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k3 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k3\" metaid=\"_840217\" value=\"200\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction5\" metaid=\"_000014\" name=\"deactivation of cdc2 kinase\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000014\">\n              <bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/2.7.10.2\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006468\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0045736\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t\n\t<bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_3178\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6327\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712538\" species=\"M\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712550\" species=\"pM\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712562\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k5notP </ci>\n              <ci> M </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k5notP\" metaid=\"_840219\" value=\"0\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction6\" metaid=\"_000015\" name=\"cyclin biosynthesis\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000015\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006412\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712574\" species=\"EmptySet\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712586\" species=\"Y\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712598\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k1aa </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k1aa\" metaid=\"_840221\" value=\"0.015\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction7\" metaid=\"_000016\" name=\"default degradation of cyclin\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000016\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0008054\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712610\" species=\"Y\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712622\" species=\"EmptySet\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712634\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k2 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k2\" metaid=\"_840223\" value=\"0\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction8\" metaid=\"_000017\" name=\"cdc2 kinase triggered degration of cyclin\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000017\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0008054\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712646\" species=\"YP\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712658\" species=\"EmptySet\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712670\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k7 </ci>\n              <ci> YP </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k7\" metaid=\"_840225\" value=\"0.6\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction9\" metaid=\"_000018\" name=\"activation of cdc2 kinase\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000018\">\n              <bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6257\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6175\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6294\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/3.1.3.16\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006470\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0045737\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712682\" species=\"pM\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712694\" species=\"M\"/>\n        </listOfProducts>\n        <listOfModifiers>\n          <modifierSpeciesReference metaid=\"_712706\" species=\"CT\"/>\n        </listOfModifiers>\n        <kineticLaw metaid=\"_712718\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> pM </ci>\n              <apply>\n                <plus/>\n                <ci> k4prime </ci>\n                <apply>\n                  <times/>\n                  <ci> k4 </ci>\n                  <apply>\n                    <power/>\n                    <apply>\n                      <divide/>\n                      <ci> M </ci>\n                      <ci> CT </ci>\n                    </apply>\n                    <cn type=\"integer\"> 2 </cn>\n                  </apply>\n                </apply>\n              </apply>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k4\" metaid=\"_840227\" value=\"180\"/>\n            <parameter id=\"k4prime\" metaid=\"_840229\" value=\"0.018\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n    </listOfReactions>\n"
+        }
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_derivation",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_derived_consequence",
+        "reason": "Manually summing all nine reaction stoichiometries cancels every cdc2-bearing species transfer. Initial amounts 0+0.75+0+0.25 sum to 1, with fixed compartment size 1. This is a derived consequence, not a reported simulation finding.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-total-cyclin-definition",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "mass_balance",
+      "statement": "The model defines YT as Y + YP + M + pM.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "assignmentRule[@variable='YT']; original lines 232-242",
+        "quote": "      <assignmentRule metaid=\"metaid_0000021\" variable=\"YT\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <plus/>\n            <ci> Y </ci>\n            <ci> YP </ci>\n            <ci> M </ci>\n            <ci> pM </ci>\n          </apply>\n        </math>\n            </assignmentRule>\n"
+      },
+      "typed_expectation": {
+        "lhs": "YT",
+        "relation": "=",
+        "rhs": "Y + YP + M + pM",
+        "terms": {
+          "Y": 1,
+          "YP": 1,
+          "M": 1,
+          "pM": 1
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [
+        "The summed species share a common concentration dimension."
+      ],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "The MathML plus operator has exactly these four operands.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-association-rate",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "rate_law",
+      "statement": "The encoded Reaction4 rate is cell * CP * k3 * Y, with k3 = 200.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction4']/kineticLaw; original lines 385-398",
+        "quote": "        <kineticLaw metaid=\"_712526\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k3 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k3\" metaid=\"_840217\" value=\"200\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "reaction_id": "Reaction4",
+        "expression": "cell * CP * k3 * Y",
+        "parameters": {
+          "k3": 200
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "The times operator multiplies cell, CP, k3 and Y; the local parameter k3 is 200.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-activation-rate",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "rate_law",
+      "statement": "The encoded Reaction9 rate is cell * pM * (k4prime + k4 * (M/CT)^2), with k4 = 180 and k4prime = 0.018.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction9']/kineticLaw; original lines 572-601",
+        "quote": "        <kineticLaw metaid=\"_712718\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> pM </ci>\n              <apply>\n                <plus/>\n                <ci> k4prime </ci>\n                <apply>\n                  <times/>\n                  <ci> k4 </ci>\n                  <apply>\n                    <power/>\n                    <apply>\n                      <divide/>\n                      <ci> M </ci>\n                      <ci> CT </ci>\n                    </apply>\n                    <cn type=\"integer\"> 2 </cn>\n                  </apply>\n                </apply>\n              </apply>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k4\" metaid=\"_840227\" value=\"180\"/>\n            <parameter id=\"k4prime\" metaid=\"_840229\" value=\"0.018\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "reaction_id": "Reaction9",
+        "expression": "cell * pM * (k4prime + k4 * (M / CT)^2)",
+        "parameters": {
+          "k4": 180,
+          "k4prime": 0.018
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "CT is nonzero."
+      ],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "Nested MathML product, sum, ratio, and power directly encode this expression and local parameter values.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-zero-deactivation",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "numerical_result",
+      "statement": "With encoded parameter k5notP = 0, Reaction5 has zero flux for finite species values.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction5']/kineticLaw; original lines 428-440",
+        "quote": "        <kineticLaw metaid=\"_712562\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k5notP </ci>\n              <ci> M </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k5notP\" metaid=\"_840219\" value=\"0\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "reaction_id": "Reaction5",
+        "quantity": "flux",
+        "value": 0,
+        "parameters": {
+          "k5notP": 0
+        },
+        "expression": "cell * k5notP * M"
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "cell and M are finite."
+      ],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_derivation",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_derived_consequence",
+        "reason": "The product cell*k5notP*M contains a zero coefficient. This is an inferred consequence, not a reported solver result.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-biosynthesis-rate",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "rate_law",
+      "statement": "The encoded cyclin biosynthesis rate is cell * k1aa, where k1aa = 0.015.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction6']/kineticLaw; original lines 461-472",
+        "quote": "        <kineticLaw metaid=\"_712598\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k1aa </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k1aa\" metaid=\"_840221\" value=\"0.015\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "reaction_id": "Reaction6",
+        "expression": "cell * k1aa",
+        "parameters": {
+          "k1aa": 0.015
+        },
+        "depends_on_Y": false
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "upstream_model_declaration",
+        "reason": "The kinetic law multiplies cell and k1aa without a species factor; k1aa is explicitly 0.015.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-counterclaim-total-cyclin-conserved",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "Total cyclin YT is conserved in this encoded model.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "assignmentRule[@variable='YT']; original lines 232-242",
+        "quote": "      <assignmentRule metaid=\"metaid_0000021\" variable=\"YT\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <plus/>\n            <ci> Y </ci>\n            <ci> YP </ci>\n            <ci> M </ci>\n            <ci> pM </ci>\n          </apply>\n        </math>\n            </assignmentRule>\n"
+      },
+      "typed_expectation": {
+        "counterclaim": {
+          "quantity": "dYT/dt",
+          "value": 0
+        },
+        "incompatible_model_balance": "dYT/dt = k1aa - k2 * Y - k7 * YP",
+        "incompatible_initial_derivative": 0.015
+      },
+      "expected_status": "contradicted",
+      "conditions": [
+        "Fixed compartment volume.",
+        "Encoded initial state."
+      ],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [
+        "Reaction rates act with listed unit stoichiometries."
+      ],
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "species[@id='Y']; original lines 174-174",
+          "quote": "      <species compartment=\"cell\" id=\"Y\" initialAmount=\"0\" metaid=\"_000008\" name=\"cyclin\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "species[@id='YP']; original lines 188-188",
+          "quote": "      <species compartment=\"cell\" id=\"YP\" initialAmount=\"0\" metaid=\"_000009\" name=\"p-cyclin\">\n"
+        },
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "model/listOfReactions; original lines 255-603",
+          "quote": "    <listOfReactions>\n      <reaction id=\"Reaction1\" metaid=\"_000010\" name=\"cyclin_cdc2k dissociation\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000010\">\n              <bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6308\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0000079\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712369\" species=\"M\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712382\" species=\"C2\"/>\n          <speciesReference metaid=\"_712394\" species=\"YP\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712406\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k6 </ci>\n              <ci> M </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k6\" metaid=\"_840210\" value=\"1\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction2\" metaid=\"_000011\" name=\"cdc2k phosphorylation\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000011\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/2.7.11.1\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006468\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712418\" species=\"C2\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712430\" species=\"CP\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712442\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> C2 </ci>\n              <ci> k8notP </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k8notP\" metaid=\"_840213\" value=\"1000000\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction3\" metaid=\"_000012\" name=\"cdc2k dephosphorylation\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000012\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/3.1.3.16\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006470\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712454\" species=\"CP\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712466\" species=\"C2\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712478\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k9 </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k9\" metaid=\"_840215\" value=\"1000\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction4\" metaid=\"_000013\" name=\"cyclin cdc2k-p association\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000013\">\n\t<bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6216\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6308\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712490\" species=\"CP\"/>\n          <speciesReference metaid=\"_712502\" species=\"Y\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712514\" species=\"pM\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712526\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k3 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k3\" metaid=\"_840217\" value=\"200\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction5\" metaid=\"_000014\" name=\"deactivation of cdc2 kinase\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000014\">\n              <bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/2.7.10.2\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006468\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0045736\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t\n\t<bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_3178\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6327\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712538\" species=\"M\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712550\" species=\"pM\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712562\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k5notP </ci>\n              <ci> M </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k5notP\" metaid=\"_840219\" value=\"0\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction6\" metaid=\"_000015\" name=\"cyclin biosynthesis\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000015\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006412\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712574\" species=\"EmptySet\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712586\" species=\"Y\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712598\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k1aa </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k1aa\" metaid=\"_840221\" value=\"0.015\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction7\" metaid=\"_000016\" name=\"default degradation of cyclin\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000016\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0008054\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712610\" species=\"Y\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712622\" species=\"EmptySet\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712634\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k2 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k2\" metaid=\"_840223\" value=\"0\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction8\" metaid=\"_000017\" name=\"cdc2 kinase triggered degration of cyclin\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000017\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0008054\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712646\" species=\"YP\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712658\" species=\"EmptySet\"/>\n        </listOfProducts>\n        <kineticLaw metaid=\"_712670\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> k7 </ci>\n              <ci> YP </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k7\" metaid=\"_840225\" value=\"0.6\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n      <reaction id=\"Reaction9\" metaid=\"_000018\" name=\"activation of cdc2 kinase\" reversible=\"false\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_000018\">\n              <bqbiol:hasVersion>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6257\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6175\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/reactome/REACT_6294\"/>\n\t</rdf:Bag>\n\t</bqbiol:hasVersion>\n\t\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/ec-code/3.1.3.16\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0006470\"/>\n\t<rdf:li rdf:resource=\"http://identifiers.org/obo.go/GO:0045737\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_712682\" species=\"pM\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference metaid=\"_712694\" species=\"M\"/>\n        </listOfProducts>\n        <listOfModifiers>\n          <modifierSpeciesReference metaid=\"_712706\" species=\"CT\"/>\n        </listOfModifiers>\n        <kineticLaw metaid=\"_712718\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> pM </ci>\n              <apply>\n                <plus/>\n                <ci> k4prime </ci>\n                <apply>\n                  <times/>\n                  <ci> k4 </ci>\n                  <apply>\n                    <power/>\n                    <apply>\n                      <divide/>\n                      <ci> M </ci>\n                      <ci> CT </ci>\n                    </apply>\n                    <cn type=\"integer\"> 2 </cn>\n                  </apply>\n                </apply>\n              </apply>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k4\" metaid=\"_840227\" value=\"180\"/>\n            <parameter id=\"k4prime\" metaid=\"_840229\" value=\"0.018\"/>\n          </listOfParameters>\n        </kineticLaw>\n      </reaction>\n    </listOfReactions>\n"
+        }
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_derivation",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_adversarial_counterclaim",
+        "reason": "Manually summing Y+YP+M+pM balances gives (v6-v7-v8)/cell. Encoded k1aa=.015, k2=0, k7=.6, initial Y=YP=0 give dYT/dt=.015, contradicting conservation. This counterclaim is reviewer-authored.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "tyson-counterclaim-association-independent-y",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "Reaction4 flux is independent of cyclin Y.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction4']/kineticLaw; original lines 385-398",
+        "quote": "        <kineticLaw metaid=\"_712526\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k3 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k3\" metaid=\"_840217\" value=\"200\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "counterclaim": {
+          "reaction_id": "Reaction4",
+          "depends_on_Y": false
+        },
+        "incompatible_expression": "cell * CP * k3 * Y",
+        "depends_on_Y": true
+      },
+      "expected_status": "contradicted",
+      "conditions": [
+        "cell, CP, and k3 are nonzero."
+      ],
+      "units": {
+        "numerical_unit": "encoded_model_units",
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_adversarial_counterclaim",
+        "reason": "Y is an explicit multiplicative factor. Changing Y changes flux for nonzero cell, CP, k3, directly contradicting this reviewer-authored counterclaim.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "tyson-unsupported-exact-period",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "unsupported_counterclaim",
+      "statement": "For these initial conditions the encoded model has an oscillation period of exactly 60 minutes.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "model/notes embedded publication abstract; original lines 15-15",
+        "quote": "                <div class=\"bibo:abstract\">        <p>The proteins cdc2 and cyclin form a heterodimer (maturation promoting factor) that controls the major events of the cell cycle. A mathematical model for the interactions of cdc2 and cyclin is constructed. Simulation and analysis of the model show that the control system can operate in three modes: as a steady state with high maturation promoting factor activity, as a spontaneous oscillator, or as an excitable switch. We associate the steady state with metaphase arrest in unfertilized eggs, the spontaneous oscillations with rapid division cycles in early embryos, and the excitable switch with growth-controlled division cycles typical of nonembryonic cells.</p>\n"
+      },
+      "typed_expectation": {
+        "quantity": "oscillation_period",
+        "claimed_value": 60,
+        "claimed_unit": "minute",
+        "reported_value": null
+      },
+      "expected_status": "insufficient_evidence",
+      "conditions": [
+        "Encoded initial conditions."
+      ],
+      "units": {
+        "claimed_unit": "minute",
+        "physical_time_unit_explicitly_declared": false
+      },
+      "assumptions": [],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_transcription",
+        "evidence_category": "publication_abstract_embedded_in_curated_model",
+        "claim_origin": "reviewer_adversarial_counterclaim",
+        "reason": "The abstract reports possible spontaneous oscillation but neither gives this numeric period nor establishes it for this initial state. The XML does not explicitly declare minutes. No simulation was used to invent a period.",
+        "reviewed_by": "reference_science",
+        "material_type": "publication_abstract_embedded_in_curated_model",
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "tyson-dimension-feedback-ratio",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "dimension",
+      "statement": "If CT and M share concentration dimension C, then the feedback ratio M/CT is dimensionless.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction9']/kineticLaw feedback ratio; original lines 584-592",
+        "quote": "                  <apply>\n                    <power/>\n                    <apply>\n                      <divide/>\n                      <ci> M </ci>\n                      <ci> CT </ci>\n                    </apply>\n                    <cn type=\"integer\"> 2 </cn>\n                  </apply>\n"
+      },
+      "typed_expectation": {
+        "expression": "M / CT",
+        "dimension": {},
+        "dimension_name": "dimensionless"
+      },
+      "expected_status": "supported",
+      "conditions": [
+        "CT is nonzero."
+      ],
+      "units": {
+        "scope": "reviewer_inferred_constraint",
+        "symbols": {
+          "C": "concentration",
+          "T": "time"
+        },
+        "expression_dimension": {}
+      },
+      "assumptions": [
+        "All CT sum terms have common dimension C."
+      ],
+      "corroborating_sources": [
+        {
+          "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+          "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+          "locator": "assignmentRule[@variable='CT']; original lines 243-253",
+          "quote": "      <assignmentRule metaid=\"metaid_0000023\" variable=\"CT\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <plus/>\n            <ci> C2 </ci>\n            <ci> CP </ci>\n            <ci> M </ci>\n            <ci> pM </ci>\n          </apply>\n        </math>\n            </assignmentRule>\n"
+        }
+      ],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_derivation",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_derived_consequence",
+        "reason": "A ratio of quantities with the same dimension has zero net dimension. CT is a sum containing M, requiring common dimensions.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-dimension-feedback-coefficients",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "dimension",
+      "statement": "Under concentration-rate dimensional consistency, k4 and k4prime both have dimension inverse time.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction9']/kineticLaw; original lines 572-601",
+        "quote": "        <kineticLaw metaid=\"_712718\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> pM </ci>\n              <apply>\n                <plus/>\n                <ci> k4prime </ci>\n                <apply>\n                  <times/>\n                  <ci> k4 </ci>\n                  <apply>\n                    <power/>\n                    <apply>\n                      <divide/>\n                      <ci> M </ci>\n                      <ci> CT </ci>\n                    </apply>\n                    <cn type=\"integer\"> 2 </cn>\n                  </apply>\n                </apply>\n              </apply>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k4\" metaid=\"_840227\" value=\"180\"/>\n            <parameter id=\"k4prime\" metaid=\"_840229\" value=\"0.018\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "parameters": {
+          "k4": {
+            "T": -1
+          },
+          "k4prime": {
+            "T": -1
+          }
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "scope": "reviewer_inferred_constraint",
+        "symbols": {
+          "C": "concentration",
+          "T": "time"
+        },
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [
+        "v9/cell has dimension C*T^-1.",
+        "pM, M, CT share dimension C.",
+        "The declared equation is dimensionally consistent."
+      ],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_derivation",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_derived_consequence",
+        "reason": "v9/cell is a concentration derivative pM*(k4prime+k4*(M/CT)^2). With pM dimension C and M/CT dimensionless, both coefficients must have dimension T^-1. XML does not explicitly declare the physical time unit.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "tyson-dimension-association-coefficient",
+      "project_id": "biomodels_tyson1991",
+      "split": "development",
+      "kind": "dimension",
+      "statement": "Under concentration-rate dimensional consistency, k3 has dimension concentration^-1 * time^-1.",
+      "source": {
+        "path": "research/scientific_understanding_v2/fixtures/upstream/tyson1991.sbml",
+        "sha256": "5a4f44b5a0bc8f32d3206f460f748236539de593be0fb016da2ed7cddd098e36",
+        "locator": "reaction[@id='Reaction4']/kineticLaw; original lines 385-398",
+        "quote": "        <kineticLaw metaid=\"_712526\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> cell </ci>\n              <ci> CP </ci>\n              <ci> k3 </ci>\n              <ci> Y </ci>\n            </apply>\n          </math>\n                  <listOfParameters>\n            <parameter id=\"k3\" metaid=\"_840217\" value=\"200\"/>\n          </listOfParameters>\n        </kineticLaw>\n"
+      },
+      "typed_expectation": {
+        "parameter": "k3",
+        "dimension": {
+          "C": -1,
+          "T": -1
+        }
+      },
+      "expected_status": "supported",
+      "conditions": [],
+      "units": {
+        "scope": "reviewer_inferred_constraint",
+        "symbols": {
+          "C": "concentration",
+          "T": "time"
+        },
+        "physical_unit_explicitly_declared": false
+      },
+      "assumptions": [
+        "v4/cell has dimension C*T^-1.",
+        "CP and Y share concentration dimension C.",
+        "The declared equation is dimensionally consistent."
+      ],
+      "corroborating_sources": [],
+      "label_provenance": {
+        "reviewer_role": "independent_internal_review",
+        "reviewer_id": "reference_science/reference_review",
+        "pcs_output_used": false,
+        "method": "manual_derivation",
+        "evidence_category": "curated_model_declaration",
+        "claim_origin": "reviewer_derived_consequence",
+        "reason": "v4/cell=CP*k3*Y is C*T^-1 and both species are C, so k3 must be C^-1*T^-1. This is an inferred constraint rather than an explicit unit declaration.",
+        "reviewed_by": "reference_science",
+        "material_type": "curated_model_declaration",
+        "reviewer_authored_counterclaim": false
+      }
+    }
+  ]
+}

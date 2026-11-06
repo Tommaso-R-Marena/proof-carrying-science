@@ -1,0 +1,125 @@
+{
+  "all_declared_axiom_audits_empty": false,
+  "all_declared_axiom_audits_permitted": true,
+  "all_declared_theorems_audited": true,
+  "allowed_lean_axioms": [
+    "propext"
+  ],
+  "authority": false,
+  "axiom_audit": {
+    "add_vector_length": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.add_vector_length"
+    },
+    "conserved_linear_combination": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.conserved_linear_combination"
+    },
+    "conserved_weighted_flux": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.conserved_weighted_flux"
+    },
+    "dot_add": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.dot_add"
+    },
+    "dot_linear_combination": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.dot_linear_combination"
+    },
+    "dot_scale": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.dot_scale"
+    },
+    "dot_zero_vector": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.dot_zero_vector"
+    },
+    "linear_combination_length": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.linear_combination_length"
+    },
+    "null_columns_have_shape": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificConservation.null_columns_have_shape"
+    }
+  },
+  "checked_at_utc": "2026-11-06T19:29:33.399843+00:00",
+  "command": [
+    "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+    "-M512",
+    "-j1",
+    "/dev/shm/pcs-scientific-understanding-v2/research/scientific_understanding_v2/formal/Conservation.lean"
+  ],
+  "compiler_path": "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+  "compiler_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+  "compiler_shared_library_sha256": "cbfea1d1a2681923a714b5fcd36183b4ffecb8b06d398c833f095548f00fa62b",
+  "compiler_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "diagnostics": [],
+  "forbidden_tokens": [],
+  "profile": "conservation",
+  "python_lean_refinement": "OPEN",
+  "required_audit_empty": false,
+  "required_audit_permitted": true,
+  "required_theorems": [
+    "dot_zero_vector",
+    "add_vector_length",
+    "dot_add",
+    "dot_scale",
+    "null_columns_have_shape",
+    "linear_combination_length",
+    "dot_linear_combination",
+    "conserved_weighted_flux",
+    "conserved_linear_combination"
+  ],
+  "required_theorems_present": true,
+  "returncode": 0,
+  "schema": "scientific-formal-receipt/v2",
+  "scope": "finite exact integer stoichiometry and weighted conservation under explicit shape/nullspace hypotheses",
+  "source_path": "/dev/shm/pcs-scientific-understanding-v2/research/scientific_understanding_v2/formal/Conservation.lean",
+  "source_sha256": "579236e629f801f9debdd079193d1e8a324d851f0402472a3faece25e92a7c8d",
+  "source_stable_during_compile": true,
+  "status": "VERIFIED",
+  "stderr": "",
+  "stdout": "'ScientificConservation.dot_zero_vector' depends on axioms: [propext]\n'ScientificConservation.add_vector_length' depends on axioms: [propext]\n'ScientificConservation.dot_add' depends on axioms: [propext]\n'ScientificConservation.dot_scale' depends on axioms: [propext]\n'ScientificConservation.null_columns_have_shape' depends on axioms: [propext]\n'ScientificConservation.linear_combination_length' depends on axioms: [propext]\n'ScientificConservation.dot_linear_combination' depends on axioms: [propext]\n'ScientificConservation.conserved_weighted_flux' depends on axioms: [propext]\n'ScientificConservation.conserved_linear_combination' depends on axioms: [propext]\n",
+  "stdout_sha256": "2ca100980ebf0d371070d97146897b4bee584bf2ecda0e0fa6ea2a18c3c70a3a",
+  "theorem_declarations": [
+    "dot_zero_vector",
+    "add_vector_length",
+    "dot_add",
+    "dot_scale",
+    "null_columns_have_shape",
+    "linear_combination_length",
+    "dot_linear_combination",
+    "conserved_weighted_flux",
+    "conserved_linear_combination"
+  ],
+  "unexpected_imports": []
+}
