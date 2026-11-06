@@ -51,6 +51,9 @@ def source_manifest():
     paths = [*Path(__file__).parent.glob('*.py'),
              ROOT/'pcs/experimental/prover/environment.py',
              ROOT/'pcs/experimental/prover/model.py',
+             ROOT/'pcs/experimental/prover/memory_cost.py',
+             ROOT/'pcs/experimental/prover/data.py', ROOT/'pcs/experimental/prover/ir.py',
+             ROOT/'pcs/jsonio.py',
              ROOT/'pcs/experimental/prover/induction_ir.py',
              ROOT/'formal/PCSProofProbe.lean', ROOT/'formal/PCSProofWorker.lean']
     return {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()

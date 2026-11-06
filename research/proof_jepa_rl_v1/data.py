@@ -247,4 +247,4 @@ def collect(env, records, budget=48, depth=16, beam=4):
 
 def receipt_claim_graph(record, receipt=None):
     """Use existing PCS Canonical Claim IR/obligation graph without registration."""
-    return claim_graph(theorem(record["goal"]), record["goal"], receipt)
+    return claim_graph(record.get("original_statement", theorem(record["goal"])), record["goal"], receipt)

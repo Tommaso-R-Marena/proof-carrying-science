@@ -37,3 +37,15 @@ def test_compressed_evidence_reproducible(tmp_path):
     a,b=tmp_path/'a.json.gz',tmp_path/'b.json.gz'
     assert write_json(a,{'fixture':'ordinary data'})==write_json(b,{'fixture':'ordinary data'})
     assert a.read_bytes()==b.read_bytes()
+
+@pytest.mark.parametrize('raw',[b'{"authority":"NONE","authority":"YES"}',b'{"value":NaN}',b'{"value":Infinity}'])
+def test_replay_rejects_ambiguous_and_nonfinite_json(tmp_path,raw):
+    from .cli import read_evidence
+    path=tmp_path/'ambiguous.json'; path.write_bytes(raw)
+    with pytest.raises(ValueError): read_evidence(path)
+
+def test_replay_enforces_preallocation_bound(tmp_path):
+    from .cli import read_evidence
+    path=tmp_path/'large.json'
+    with path.open('wb') as stream: stream.truncate(16_000_001)
+    with pytest.raises(ValueError,match='exceeds bound'): read_evidence(path)

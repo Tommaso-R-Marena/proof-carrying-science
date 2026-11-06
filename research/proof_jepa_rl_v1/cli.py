@@ -4,10 +4,19 @@ import argparse
 import json
 from pathlib import Path
 from pcs.experimental.prover.environment import search
+from pcs.jsonio import strict_json_loads
 from pcs.experimental.prover.language import formalize
 from .data import tasks, replay_receipt, receipt_claim_graph, verifier_identity
 from .experiment import LeanEnvironment, run, write_json
 from .model import ProofJEPA
+
+
+def read_evidence(path):
+    with Path(path).open('rb') as stream:
+        raw = stream.read(16_000_001)
+    if len(raw)>16_000_000:
+        raise ValueError('evidence exceeds bound')
+    return strict_json_loads(raw.decode('utf-8'))
 
 
 def main():
@@ -41,7 +50,7 @@ def main():
             parsed=formalize(args.statement)
             if parsed['status']!='supported' or len(parsed['candidates'])!=1:
                 raise ValueError('statement is outside the unambiguous supported typed language')
-            record={'id':'user-statement','split':'user','family':'user', 'goal':parsed['candidates'][0]['ir']}
+            record={'id':'user-statement','split':'user','family':'user', 'goal':parsed['candidates'][0]['ir'],'original_statement':args.statement}
         env=LeanEnvironment(cache=args.cache,timeout=30)
         try:
             identity=verifier_identity(env)
@@ -56,9 +65,7 @@ def main():
                               'evidence':args.output,'scientific_authority':False}))
         finally: env.close()
     else:
-        raw=Path(args.evidence).read_bytes()
-        if len(raw)>16_000_000: raise ValueError('evidence exceeds bound')
-        evidence=json.loads(raw)
+        evidence=read_evidence(args.evidence)
         if evidence['format']!='pcs-proof-jepa-search-v1' or evidence['authority']!='NONE':
             raise ValueError('unsupported evidence')
         receipt=evidence['result']['receipt']
