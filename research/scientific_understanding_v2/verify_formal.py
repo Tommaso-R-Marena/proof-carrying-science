@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import os
 import json
 from pathlib import Path
 import re
@@ -19,7 +20,7 @@ import subprocess
 from typing import Any
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_LEAN = Path("/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean")
+DEFAULT_LEAN = Path(os.environ.get("PCS_LEAN") or shutil.which("lean") or "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean")
 REQUIRED_THEOREMS = (
     "check_sound", "check_complete", "undeclared_symbol_untypable", "dimension_unique",
     "research_has_no_authority", "nat_mul_assoc_constructive", "nat_product_reorder",
@@ -147,7 +148,7 @@ def verify_formal(lean_binary: str | Path | None = None, *, source: str | Path |
         receipt["compiler_version"] = version.stdout.strip()
         command = [str(lean), "-M512", "-j1", str(source_path.resolve())]
         receipt["command"] = command
-        result = subprocess.run(command, cwd=str(source_path.parent), capture_output=True, text=True, timeout=timeout, check=False)
+        result = subprocess.run(command, cwd=str(source_path.parent), env={"PATH": str(lean.parent)+":/usr/bin:/bin", "LANG":"C.UTF-8", "LEAN_NUM_THREADS":"1"}, capture_output=True, text=True, timeout=timeout, check=False)
     except (OSError, subprocess.TimeoutExpired) as exc:
         receipt["diagnostics"].append(f"Compiler invocation unavailable or timed out: {type(exc).__name__}")
         return receipt
@@ -162,7 +163,7 @@ def verify_formal(lean_binary: str | Path | None = None, *, source: str | Path |
     receipt["required_audit_empty"] = all(name in audit and audit[name]["empty"] for name in required_theorems)
     receipt["required_audit_permitted"] = all(name in audit and set(audit[name]["axioms"]) <= allowed_axioms for name in required_theorems)
     receipt["source_stable_during_compile"] = _sha256(source_path) == receipt["source_sha256"]
-    passed = (result.returncode == 0 and not receipt["forbidden_tokens"] and not receipt["unexpected_imports"]
+    passed = ("version 4.28.0," in receipt["compiler_version"] and result.returncode == 0 and not receipt["forbidden_tokens"] and not receipt["unexpected_imports"]
               and receipt["required_theorems_present"] and receipt["all_declared_theorems_audited"]
               and receipt["all_declared_axiom_audits_permitted"] and receipt["required_audit_permitted"]
               and receipt["source_stable_during_compile"])

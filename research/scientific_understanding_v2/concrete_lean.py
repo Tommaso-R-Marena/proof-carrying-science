@@ -30,10 +30,12 @@ def verify_certificate(certificate, *, lean=None):
     text=prefix+'\nnamespace SourceBound\ndef weights : List Int := '+vector(weights)+'\ndef columns : List (List Int) := ['+','.join(vector(c) for c in columns)+']\ntheorem nulls : ScientificConservation.NullColumns weights columns := by\n'+proof+'\ntheorem conservation (rates : List Int) (h : rates.length = columns.length) :\n ScientificConservation.dot weights (ScientificConservation.linearCombination weights.length columns rates) = 0 :=\n ScientificConservation.conserved_linear_combination weights nulls rates h\nend SourceBound\n#print axioms SourceBound.nulls\n#print axioms SourceBound.conservation\n'
     binary=lean_path(lean)
     if binary is None:raise RuntimeError('Lean unavailable')
+    version=subprocess.check_output([str(binary),'--version'],text=True,timeout=10).strip()
+    if 'version 4.28.0,' not in version:raise ValueError('Lean 4.28.0 required')
     with tempfile.TemporaryDirectory(prefix='pcs-model-conservation-') as folder:
         p=Path(folder)/'Certificate.lean';p.write_text(text)
-        result=subprocess.run([str(binary),'-j1','-M512',str(p)],cwd=folder,env={'PATH':str(binary.parent)+':/usr/bin:/bin','LANG':'C.UTF-8'},capture_output=True,text=True,timeout=30)
-    if result.returncode:raise ValueError('Lean certificate rejected: '+result.stdout[-1000:]+result.stderr[-1000:])
+        result=subprocess.run([str(binary),'-j1','-M512',str(p)],cwd=folder,env={'PATH':str(binary.parent)+':/usr/bin:/bin','LANG':'C.UTF-8','LEAN_NUM_THREADS':'1'},capture_output=True,text=True,timeout=30)
+    if result.returncode:raise ValueError('Lean certificate rejected: '+result.stdout[:2000]+result.stdout[-1000:]+result.stderr[-1000:])
     audit={}
     for name in ['SourceBound.nulls','SourceBound.conservation']:
         m=re.search("'"+name+r"' (does not depend on any axioms|depends on axioms: \[([^\]]*)\])",result.stdout)

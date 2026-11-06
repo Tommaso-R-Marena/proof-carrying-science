@@ -1,0 +1,20 @@
+{
+  "run_id": 42282305116,
+  "url": "https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/42282305116",
+  "head": "f8d3ce4138009cfdd0803a584947a3c55d9fe94b",
+  "conclusion": "failure",
+  "failure_excerpt": [
+    "2026-11-06T19:45:49.9859905Z Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+    "2026-11-06T19:46:01.7618175Z ____________ test_concrete_lean_rejects_false_nullspace_certificate ____________",
+    "2026-11-06T19:46:01.7618716Z     def test_concrete_lean_rejects_false_nullspace_certificate():",
+    "2026-11-06T19:46:01.7647263Z E       /tmp/pcs-model-conservation-doh8v8a2/Certificate.lean:203:8: error: (kernel) excessive memory consumption detected",
+    "2026-11-06T19:46:01.7650898Z ___ test_unsupported_export_preserves_independently_completed_model_evidence ___",
+    "2026-11-06T19:46:01.7651503Z tmp_path = PosixPath('/tmp/pytest-of-runner/pytest-0/test_unsupported_export_preser0')",
+    "2026-11-06T19:46:01.7652147Z     def test_unsupported_export_preserves_independently_completed_model_evidence(tmp_path):",
+    "2026-11-06T19:46:01.7661710Z FAILED research/scientific_understanding_v2/test_pipeline.py::test_concrete_lean_rejects_false_nullspace_certificate - ValueError: Lean certificate rejected: cientificConservation.dot_linear_combination' depends on axioms: [ScientificConservation.dot,",
+    "2026-11-06T19:46:01.7667779Z /tmp/pcs-model-conservation-doh8v8a2/Certificate.lean:203:8: error: (kernel) excessive memory consumption detected",
+    "2026-11-06T19:46:01.7671388Z FAILED research/scientific_understanding_v2/test_pipeline.py::test_unsupported_export_preserves_independently_completed_model_evidence - AssertionError: assert 'UNKNOWN' == 'KERNEL_CHECK..._CONSERVATION'",
+    "2026-11-06T19:46:01.7673131Z 2 failed, 118 passed, 5 skipped, 168 subtests passed in 10.23s"
+  ],
+  "note": "Actual hosted failure retained. Mathematical assertions and axiom allowlists are not relaxed."
+}
