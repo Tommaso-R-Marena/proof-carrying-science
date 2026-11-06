@@ -1,0 +1,46 @@
+name: Proof JEPA experimental research
+on:
+  pull_request:
+    paths:
+      - 'research/proof_jepa_rl_v1/**'
+      - '.github/workflows/pcs-proof-jepa-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: proof-jepa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  research-smoke:
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Hash-pinned CPU research environment
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock -r requirements-prover.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Required actual Lean checks and neural contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q research/proof_jepa_rl_v1
+          lean research/proof_jepa_rl_v1/evidence/Demo.lean
+          python -m research.proof_jepa_rl_v1.replay --directory research/proof_jepa_rl_v1/evidence --cache "$RUNNER_TEMP/fresh-proof-jepa-bundle" | tee "$RUNNER_TEMP/proof-jepa-bundle-replay.json"
+          python -m research.proof_jepa_rl_v1 train --output "$RUNNER_TEMP/proof-jepa" --seeds 17 --epochs 1 --rl-episodes 2 --budget 24
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: proof-jepa-experimental-evidence
+          path: |
+            ${{ runner.temp }}/proof-jepa-bundle-replay.json
+            ${{ runner.temp }}/proof-jepa/protocol.json
+            ${{ runner.temp }}/proof-jepa/results.json.gz
+            ${{ runner.temp }}/proof-jepa/training.json.gz
