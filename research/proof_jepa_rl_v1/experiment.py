@@ -47,6 +47,12 @@ def configure(seed):
     torch.use_deterministic_algorithms(True)
 
 
+def physical_attempts(env):
+    # Existing worker initialization directly calls the base implementation,
+    # bypassing CostLedger once per initialization. Count it explicitly.
+    return env.actual_calls + getattr(env, 'worker_initialization_requests', 0)
+
+
 def source_manifest():
     paths = [*Path(__file__).parent.glob('*.py'),
              ROOT/'pcs/experimental/prover/environment.py',
@@ -139,12 +145,12 @@ def evaluate(model, records, *, cache, budget=32, beam=4, depth=16):
     try:
         for record in records:
             env.observations.clear()
-            calls, wire, attempts = env.invocations, getattr(env,'worker_wire_requests',0), env.actual_calls
+            calls, wire, attempts = env.invocations, getattr(env,'worker_wire_requests',0), physical_attempts(env)
             tick=time.perf_counter(); cpu=time.process_time()
             result=search(env,record['goal'],ranked if rank else None,budget=budget,depth=depth,beam=beam)
             seconds=time.perf_counter()-tick
             search_calls=env.invocations-calls
-            search_attempts=env.actual_calls-attempts
+            search_attempts=physical_attempts(env)-attempts
             # Independent fresh kernel theorem/axiom replay even after search.verify.
             replay=None
             if result['status']=='verified':
@@ -195,7 +201,7 @@ def run(output, *, seeds=(17,31,47), epochs=6, rl_episodes=24, budget=32):
     protocol={'format':'pcs-proof-jepa-protocol-v1','seeds':list(seeds),'epochs':epochs,
               'rl_episodes':rl_episodes,'action_attempt_budget':budget,'beam':4,'depth':16,
               'methods':['deterministic','published',*METHODS],
-              'shared_imitation_warmup':True,
+              'shared_imitation_warmup':True,'measurement_version':'physical-attempts-with-bootstrap/2',
               'schedule':'joint predictive/imitation warmup then sequential on-policy actor-critic; EMA updated during warmup only',
               'cost_head_target':'unit checker-action proxy, not measured latency','checkpoint_selection':'validation only, before test execution',
               'authority':'NONE','source_manifest':source_manifest(),'split_audit':split_audit,

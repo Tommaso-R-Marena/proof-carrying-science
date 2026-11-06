@@ -136,3 +136,18 @@ def test_claim_graph_keeps_scientific_acceptance_obligations():
     raw = json.dumps(result)
     assert "REGISTERED_SCIENTIFIC_AUTHORITY" in raw
     assert "ENGLISH_INTENT_GROUNDING" in raw
+
+
+def test_actual_verified_training_is_seed_reproducible(lean):
+    import torch
+    from .model import ProofJEPA
+    from .experiment import fit, configure
+    corpus=collect(lean,[tasks()[0]],budget=24)
+    configure(19); first=ProofJEPA()
+    before=first.online.tokens.weight.detach().clone()
+    fit(first,corpus['transitions'],'jepa',seed=19,epochs=2)
+    configure(19); second=ProofJEPA()
+    fit(second,corpus['transitions'],'jepa',seed=19,epochs=2)
+    assert all(torch.equal(first.state_dict()[k],v) for k,v in second.state_dict().items())
+    assert not torch.equal(before,first.online.tokens.weight)
+    assert not any(p.requires_grad for p in first.target.parameters())
