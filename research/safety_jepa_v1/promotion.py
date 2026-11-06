@@ -30,7 +30,7 @@ from .environment import ACTIONS, ToolEnvironment, contract_model, kernel_check
 from .model import MAX_BYTES, SafetyJEPA
 from .scenarios import scenarios
 
-FORMAT = 'pcs-safety-jepa-research-store-v1'
+FORMAT = 'pcs-safety-jepa-research-store-v2'
 MAX_RECORD_BYTES = 131072
 MAX_GENERATIONS = 10000
 HEAD_KEYS = {'generation', 'model_sha', 'policy_sha', 'protocol_sha', 'receipt_sha'}
@@ -105,7 +105,7 @@ def regression_records():
 
 
 def bindings():
-    names = ('environment.py', 'model.py', 'scenarios.py', 'promotion.py')
+    names = ('environment.py', 'model.py', 'scenarios.py', 'promotion.py', 'formal/SafetyBoundary.lean')
     sources = {name: sha256((ROOT/name).read_bytes()) for name in names}
     repository = ROOT.parents[1]
     dependencies = ('research/proof_jepa_rl_v1/model.py', 'pcs/action_shield_v1.py',
@@ -251,8 +251,27 @@ class ResearchStore:
         else: self._once(path,raw)
         return name
 
+    def _required_kernel(self):
+        reports=ResearchStore.verify_guards(self)
+        self._validate_kernel(reports)
+        return reports
+
+    @staticmethod
+    def _validate_kernel(reports):
+        if type(reports) is not dict or set(reports)!={'public','sensitive'}:
+            raise IntegrityFailure('both fixed Lean guard qualifications required')
+        formal_sha=sha256((ROOT.parents[1]/'formal/PCSActionShield.lean').read_bytes())
+        for goal,report in reports.items():
+            model,shield=contract_model(goal)
+            if (report.get('kernel_checked') is not True or report.get('status')!='KERNEL_CHECKED'
+                or report.get('model_sha256')!=sha256(model) or report.get('shield_sha256')!=sha256(shield)
+                or report.get('formal_source_sha256')!=formal_sha
+                or not set(report.get('kernel_axioms',[]))<={'propext','Classical.choice','Quot.sound'}):
+                raise IntegrityFailure('fresh Lean guard qualification rejected')
+
     def initialize(self,checkpoint_bytes):
         _load_bytes(checkpoint_bytes)
+        qualification=self._required_kernel()
         if self.root.exists() and any(self.root.iterdir()):
             raise IntegrityFailure('initialize requires a fresh empty store')
         self.root.mkdir(parents=True,exist_ok=True)
@@ -263,7 +282,7 @@ class ResearchStore:
             if score['unsafe_executions'] or score['leaks']:
                 raise ProposalRejected('initial model caused a guarded unsafe effect')
             name=self._record_artifact(checkpoint_bytes)
-            genesis={'format':FORMAT,'pins':pins,'initial_model_sha':name,'measurement':score}
+            genesis={'format':FORMAT,'pins':pins,'initial_model_sha':name,'measurement':score,'kernel_qualification':qualification}
             raw=canonical(genesis); self._once(self.root/'GENESIS.json',raw)
             head={'generation':0,'model_sha':name,'policy_sha':pins['policy_sha'],
                   'protocol_sha':pins['protocol_sha'],'receipt_sha':sha256(raw)}
@@ -272,12 +291,13 @@ class ResearchStore:
 
     def _checked_head(self):
         genesis=_json(self.root/'GENESIS.json'); head=_json(self.root/'HEAD.json')
-        if (type(genesis) is not dict or set(genesis)!={'format','pins','initial_model_sha','measurement'}
+        if (type(genesis) is not dict or set(genesis)!={'format','pins','initial_model_sha','measurement','kernel_qualification'}
                 or genesis['format']!=FORMAT or genesis['pins']!=bindings()):
             raise IntegrityFailure('source, policy or frozen protocol changed')
         if (type(head) is not dict or set(head)!=HEAD_KEYS or type(head['generation']) is not int
                 or not 0<=head['generation']<=MAX_GENERATIONS):
             raise IntegrityFailure('invalid HEAD')
+        self._validate_kernel(genesis['kernel_qualification'])
         pins=genesis['pins']
         if head['policy_sha']!=pins['policy_sha'] or head['protocol_sha']!=pins['protocol_sha']:
             raise IntegrityFailure('HEAD policy/protocol mismatch')
@@ -290,12 +310,13 @@ class ResearchStore:
         for generation,name in enumerate(names,1):
             path=self.root/'receipts'/name; receipt=_json(path)
             keys={'format','generation','previous_receipt_sha','before_model_sha','model_sha',
-                  'policy_sha','protocol_sha','incumbent_measurement','candidate_measurement'}
+                  'policy_sha','protocol_sha','incumbent_measurement','candidate_measurement','kernel_qualification'}
             if (type(receipt) is not dict or set(receipt)!=keys or receipt['format']!=FORMAT
                     or receipt['generation']!=generation or receipt['previous_receipt_sha']!=prev
                     or receipt['before_model_sha']!=model or receipt['policy_sha']!=pins['policy_sha']
                     or receipt['protocol_sha']!=pins['protocol_sha']):
                 raise IntegrityFailure('receipt chain mismatch')
+            self._validate_kernel(receipt['kernel_qualification'])
             model=_hash(receipt['model_sha']); self._artifact(model)
             prev=sha256(_regular_read(path,MAX_RECORD_BYTES))
         if head['receipt_sha']!=prev or head['model_sha']!=model:
@@ -323,6 +344,7 @@ class ResearchStore:
             incumbent_raw=self._artifact(head['model_sha'])
             candidate_hash=sha256(checkpoint_bytes)
             if candidate_hash==head['model_sha']: raise ProposalRejected('unchanged model has no improvement')
+            qualification=self._required_kernel()
             incumbent=evaluate_checkpoint(incumbent_raw)
             measured=evaluate_checkpoint(checkpoint_bytes)
             if self._checked_head()!=head or self._artifact(head['model_sha'])!=incumbent_raw:
@@ -339,7 +361,7 @@ class ResearchStore:
             receipt={'format':FORMAT,'generation':head['generation']+1,
                      'previous_receipt_sha':head['receipt_sha'],'before_model_sha':head['model_sha'],
                      'model_sha':model,'policy_sha':head['policy_sha'],'protocol_sha':head['protocol_sha'],
-                     'incumbent_measurement':incumbent,'candidate_measurement':measured}
+                     'incumbent_measurement':incumbent,'candidate_measurement':measured,'kernel_qualification':qualification}
             raw=canonical(receipt)
             self._once(self.root/'receipts'/f"{receipt['generation']:08d}.json",raw)
             next_head={**head,'generation':receipt['generation'],'model_sha':model,'receipt_sha':sha256(raw)}

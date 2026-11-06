@@ -170,3 +170,17 @@ def test_optimizer_style_tensor_mutation_invalidates_pinned_inference(tmp_path,m
         next(snapshot.model.parameters()).add_(.125)
     with pytest.raises(IntegrityFailure,match='tensors changed before'):
         snapshot.rank(observation,list(ACTIONS))
+
+
+def test_missing_actual_lean_cannot_initialize_or_promote(tmp_path,model_bytes,monkeypatch):
+    # Negative availability injection only; no positive checker response is mocked.
+    absent=ResearchStore(tmp_path/'absent')
+    with monkeypatch.context() as context:
+        context.setenv('PATH','')
+        with pytest.raises(IntegrityFailure,match='qualification'):absent.initialize(model_bytes['bad'])
+    assert not (tmp_path/'absent'/'HEAD.json').exists()
+    store,head=initialized(tmp_path,model_bytes)
+    with monkeypatch.context() as context:
+        context.setenv('PATH','')
+        with pytest.raises(IntegrityFailure,match='qualification'):store.promote(model_bytes['trained'],head)
+    assert store.head()==head
