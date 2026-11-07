@@ -1,0 +1,103 @@
+{
+  "schema": "pcs.scientific_review_v4.source_admission_plan.v1",
+  "status": "PENDING_REVIEW_NOT_IMPLEMENTED",
+  "authority_granted": false,
+  "scope": "Concrete staged source-admission proposal for PR199\u2013203; no protected gates, contracts, production authority, historical evidence or policies edited by this audit.",
+  "protected_baseline": {
+    "commit": "bc78660b5fac857fce3873eb6cda0445d1903da1",
+    "tree": "93cc797fabafc30c23730c0399a7be13c8263e94",
+    "manifest_path": "docs/integration/2026-11-05/RECONCILIATION_V22.json",
+    "manifest_sha256": "28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83",
+    "snapshot_files": 8042,
+    "control_files": 5,
+    "tracked_files": 8047,
+    "historical_prs": 72,
+    "controller_path": "research/integration_v2/reconcile.py",
+    "controller_unchanged": true,
+    "v22_executed_by_this_audit": false,
+    "reason_not_executed": "Recovered physical checkout omits older research/integration namespaces. Source/contract identities were read from Git objects. No false baseline or current-tree pass is reported.",
+    "commands": {
+      "qualified_baseline_combined": "python -m research.integration_v2.reconcile --require-committed",
+      "qualified_baseline_legacy": "python -m research.integration_v1.source_gate",
+      "qualified_baseline_readmes": "python scripts/audit_current_readmes.py --check docs/integration/2026-11-05/README_AUDIT.json",
+      "qualified_baseline_tests": "python -m pytest -q research/integration_v2/test_reconcile.py tests/test_integration_source_successor.py",
+      "cross_repo": "python scripts/check_reconciled_prs.py --core <clean-qualified-core-checkout>"
+    }
+  },
+  "research_candidate": {
+    "commit": "26a8adda12dbb7fd949f14eeddee3d7d870cadd1",
+    "tree": "cb83cd044adbe918cd379b6bf7daf4dea0c01400",
+    "tracked_files": 8556,
+    "added_files": 509,
+    "old_blob_or_mode_changes": [],
+    "old_path_deletions": [],
+    "path_identity_ledger": "evidence/stack-audit.json#git_tree_comparison.added_files",
+    "runtime_identity_ledger": "evidence/stack-audit.json#source_census.files"
+  },
+  "proposed_successor": {
+    "historical_prs": 77,
+    "additional_pr_numbers": [
+      199,
+      200,
+      201,
+      202,
+      203
+    ],
+    "preserve_original_72_entries": true,
+    "preserve_pr117_status": "HELD",
+    "version": "New versioned contract/checker proposed; name and final compiled control digests require maintainer review. V22 remains unchanged.",
+    "source_scope": "All 8,047 protected identities plus exactly 509 research additions; separately enumerate any new review namespace/control files at their eventual committed identity. Current dirty/uncommitted v4 additions are not part of the reviewed five-PR tree.",
+    "admission_scope": "Source qualification only; no scientific, mathematical, formal, deployment or training authority follows."
+  },
+  "stages": [
+    {
+      "id": "baseline",
+      "action": "Materialize an isolated, clean, committed bc786 checkout with the required historical Git objects and retention tags. Run the unchanged V22 checker, fixed legacy gate, README inventory and tests. Retain actual outputs and source digests.",
+      "result_required": "A baseline pass bound to the exact commit and unchanged controller bytes."
+    },
+    {
+      "id": "closure",
+      "action": "Freeze the exact research candidate commit/tree and all 509 added paths, blobs and modes across five namespaces and five workflows. Retain all 8,047 old identities. Record dependencies and executed-source evidence separately.",
+      "result_required": "An identity-bound research closure rejecting unknown, deleted, substituted or mode-changed paths."
+    },
+    {
+      "id": "registry",
+      "action": "Propose a separate reviewed successor manifest preserving the original 72 entries and adding actual PR199\u2013203 base/head, changed-path and source identities. Require 77 unique PR entries and retain PR117 as HELD.",
+      "result_required": "An exact 77-entry census after repository metadata review; no replacement of 72 inside V22."
+    },
+    {
+      "id": "controls",
+      "action": "Propose a versioned research successor checker, tests, manifest and read-only CI entry point as explicit trusted controls. Preserve V22 and predecessor bytes. Do not alter production authority, formal theorems, signing roots, protected policy or promotion rules.",
+      "result_required": "Reviewed compiled checker and manifest digests with no self-generated or caller-provided allowlist."
+    },
+    {
+      "id": "negative_controls",
+      "action": "Exercise new successor controls against added/deleted source, changed bytes/modes, retargeted PR heads, duplicate PRs, changed old controls, modified V22, malformed manifests, dirty source and unrelated or squashed history. Preserve the original retained-source binding.",
+      "result_required": "Actual refusal tests with real Git fixtures and source-bound candidate evidence."
+    },
+    {
+      "id": "admission",
+      "action": "Run the new successor on the candidate and unchanged V22 on the protected baseline independently. Obtain review and required CI before protected integration under existing linear-history rules.",
+      "result_required": "Source admission only; runtime, numerical, formal, scientific and deployment claims remain separate."
+    }
+  ],
+  "review_gates": [
+    "Maintain exact V22 bytes and fixed legacy gate; run each only in its qualified historical checkout.",
+    "Acquire authoritative base/head/changed-path metadata for all five PRs, then freeze 77 unique identities; no fabricated heads and no blind 72-to-77 replacement.",
+    "Review new complete identity closure and separately enumerated trusted controls; compiled expected identities must not come from imported project data or an auto-regenerated allowlist.",
+    "Run predecessor suites and real formal/numerical dependencies under a new integration CI trigger that includes the new namespace. Retain original failures and old scientific evidence unchanged.",
+    "Exercise unknown/missing/changed source, changed modes, retargeted heads, duplicate PRs, malformed manifests, changed old controls, dirty checkout and unrelated/squashed ancestry as explicit refusals.",
+    "Only after concrete artifact review and required protected checks may maintainers admit or merge under existing rules. This plan performs neither."
+  ],
+  "current_tree_v22_result": "EXPECTED_REFUSAL_FROM_EXACT_CONTRACT_NOT_EXECUTED",
+  "source_freeze_metadata_erratum": {
+    "path": "research/scientific_review_v4/source-freeze.json",
+    "field": "frozen_software_baseline",
+    "recorded_value": "20326a8adda12dbb7fd949f14eeddee3d7d870cadd1",
+    "meaning": "PR number 203 concatenated with the 40-character Git object; the recorded 43-character string is not a Git object identity.",
+    "correct_commit": "26a8adda12dbb7fd949f14eeddee3d7d870cadd1",
+    "corpus_file_hashes_changed": false,
+    "frozen_manifest_modified": false,
+    "authority": "Metadata erratum only; no source-selection or outcome change."
+  }
+}

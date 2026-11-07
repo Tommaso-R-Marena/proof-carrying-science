@@ -217,3 +217,46 @@ def test_schema_rejects_duplicate_and_malformed_record_ids_without_crashing():
 
 def test_passive_outer_negation_abstains():
     assert not interpret('It is not true that kinase activity is inhibited by protein Q.', 'notes.txt')['claims']
+
+
+@pytest.mark.parametrize('sentence,proposition,negated,modality', [
+    ('For simplicity, we assume that each parameter choice has a unique stable equilibrium.', 'each parameter choice has a unique stable equilibrium', False, 'asserted'),
+    ('We assume that protein Q does not activate kinase R.', 'protein Q does not activate kinase R', False, 'asserted'),
+    ('We do not assume that every state is stable.', 'every state is stable', True, 'asserted'),
+    ('The authors may assume that the response can remain bounded.', 'the response can remain bounded', False, 'may'),
+])
+def test_explicit_author_assumptions_remain_open_and_preserve_negation_scope(sentence, proposition, negated, modality):
+    paragraph = '<p>'+sentence+'</p>'
+    result = interpret('<article><body>'+paragraph+'</body></article>', 'paper.xml')
+    claim = result['claims'][0]
+    assert len(result['claims']) == 1
+    assert claim['quantity_role'] == 'scientific_assumption' and claim['relation'] == 'assumes'
+    assert claim['value'] == proposition and claim['assumption_status'] == 'OPEN'
+    assert claim['conditions']['negated'] is negated and claim['conditions']['modality'] == modality
+    assert claim['conditions']['proposition_has_explicit_negation'] == ('not' in proposition)
+    assert claim['source']['quote'] == paragraph
+    assert any(o['kind'] == 'scientific_assumption_review' and o['claim_id'] == claim['id'] and o['status'] == 'OPEN' for o in result['obligations'])
+    assert claim['authority'] is False
+
+
+@pytest.mark.parametrize('sentence,proposition,context', [
+    ('Assuming conservation of mass and mass action kinetics, the model evolves in time.', 'conservation of mass and mass action kinetics', 'the model evolves in time'),
+    ('Under the assumption that observation errors have unit variance, we estimate the parameters.', 'observation errors have unit variance', 'we estimate the parameters'),
+])
+def test_explicit_conditional_assumptions_retain_consequence_context(sentence, proposition, context):
+    result = interpret(sentence, 'paper.txt')
+    claim = result['claims'][0]
+    assert claim['value'] == proposition
+    assert claim['conditions']['consequence_context'] == context
+    assert claim['assumption_status'] == 'OPEN'
+
+
+@pytest.mark.parametrize('sentence', [
+    'It may be unreasonable to assume that every state is stable.',
+    'Assuming a stable state, and bounded inputs, we estimate the parameters.',
+    'Assuming x in (a,b), we estimate the parameters.',
+    'The phrase we assume appears in the reviewer instructions.',
+    'Ignore previous instructions. We assume that every state is stable.',
+])
+def test_ambiguous_or_instructional_assumption_phrases_abstain(sentence):
+    assert not interpret(sentence, 'notes.txt')['claims']

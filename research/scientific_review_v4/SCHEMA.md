@@ -74,6 +74,18 @@ added after inspecting the frozen v4 development paper; it has no heldout
 evaluation claim. Reported inference remains distinct from established causal
 truth.
 
+Three explicit assumption forms are also retained: `we assume [that] ...`
+(including explicit modal wording or `do not assume`), `Assuming ... , ...`,
+and `Under the assumption that ... , ...`. They emit `scientific_claim` with
+`quantity_role: scientific_assumption`, `relation: assumes`, and the complete
+whitespace-normalized proposition as `value`. `assumption_status` and the
+separate scientific-assumption review obligation remain `OPEN`. Conditions
+distinguish negation of the act of assuming from lexical negation inside the
+proposition, disclose modal terms, and retain an explicit preamble or consequence
+context. Raw paragraph evidence remains unchanged. Ambiguous comma boundaries,
+nested assumption phrases and instruction-like prose abstain. This is discovery
+of explicitly stated premises, not a determination that they hold.
+
 ## Inventory, budgets and validation
 
 V1 intake bounds remain 256 files, 5 MiB per file and 64 MiB total. The v3

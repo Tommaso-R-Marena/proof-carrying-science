@@ -120,6 +120,58 @@ _PASSIVE = re.compile(
     re.I,
 )
 _PASSIVE_VERBS = {"inhibited": "inhibits", "repressed": "represses", "activated": "activates", "stimulated": "stimulates"}
+_AUTHOR_ASSUMPTION = re.compile(
+    r"^(?P<preamble>For [A-Za-z][A-Za-z -]{0,79},\s*|Here,\s*)?"
+    r"(?P<speaker>we|the authors)\s+"
+    r"(?:(?P<modal>may|might|can|could|would|should)\s+)?"
+    r"(?:(?:do|did)\s+)?(?P<neg>not\s+|never\s+)?assume\s+"
+    r"(?:that\s+)?(?P<proposition>[^;!?]{1,450}?)[.]?$", re.I,
+)
+_CONDITIONAL_ASSUMPTION = re.compile(
+    r"^(?P<marker>Assuming(?:\s+that)?|Under (?:the )?assumption that)\s+"
+    r"(?P<proposition>[^,;.!?]{1,300}),\s*(?P<consequence>[^;!?]{1,450}?)[.]?$", re.I,
+)
+
+
+def _explicit_assumption(project, source, sentence, scope):
+    """Retain explicitly adopted/declined premises without asserting validity."""
+    match = _AUTHOR_ASSUMPTION.fullmatch(sentence)
+    conditions = {"negated": False, "modality": "asserted"}
+    if match:
+        proposition = match["proposition"].strip()
+        conditions.update(attribution=match["speaker"], negated=bool(match["neg"]),
+                          modality=(match["modal"] or "asserted").lower(),
+                          source_form="explicit_author_assumption")
+        if match["preamble"]:
+            conditions["context"] = match["preamble"].strip().rstrip(",")
+    else:
+        match = _CONDITIONAL_ASSUMPTION.fullmatch(sentence)
+        if not match:
+            return False
+        proposition = match["proposition"].strip()
+        # A comma inside a noun list or an open parenthesis does not provide an
+        # unambiguous assumption/consequence boundary for this small grammar.
+        if (proposition.count("(") != proposition.count(")")
+                or proposition.count("[") != proposition.count("]")
+                or re.match(r"(?:and|or|but)\b", match["consequence"], re.I)):
+            return False
+        conditions.update(source_form=match["marker"], consequence_context=match["consequence"].strip())
+    if not proposition or re.search(r"\b(?:assume|assuming)\b", proposition, re.I):
+        return False
+    # These are lexical disclosures, not a logical analysis of proposition
+    # scope. The full proposition is always retained verbatim after whitespace
+    # normalization, so nested modality and negation are never discarded.
+    conditions["proposition_has_explicit_negation"] = bool(re.search(r"\b(?:not|never|no|without)\b", proposition, re.I))
+    conditions["proposition_modal_terms"] = sorted(set(re.findall(r"\b(?:may|might|can|could|would|should|must)\b", proposition.lower())))
+    claim = project.claim(source, kind="scientific_claim", entity="source_assumption",
+                          relation="assumes", value=proposition, quantity_role="scientific_assumption",
+                          conditions=conditions, scope=scope, assumption_status="OPEN",
+                          evidence_kind="explicit_author_assumption", source_statement=sentence,
+                          assumptions=["Explicit source assumption only; its adoption, applicability and scientific validity require review"])
+    project.add("obligations", {"kind": "scientific_assumption_review", "claim_id": claim["id"],
+                               "status": "OPEN", "source": source,
+                               "reason": "Source wording does not establish that this premise holds in the intended application"})
+    return True
 
 
 def _prose(project, source, plain, *, scope="source_report"):
@@ -133,6 +185,8 @@ def _prose(project, source, plain, *, scope="source_report"):
     for sentence in sentences:
         clean = " ".join(sentence.split())
         if len(clean) > 500:
+            continue
+        if _explicit_assumption(project, source, clean, scope):
             continue
         passive = _PASSIVE.fullmatch(clean)
         if passive:
