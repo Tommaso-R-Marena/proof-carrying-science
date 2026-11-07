@@ -1,0 +1,467 @@
+{
+  "audit_utc": "2026-11-06T20:53:58.045106+00:00",
+  "base_commit": "b612d3d174793ac046b5c93282b24995acadffdb",
+  "census": {
+    "exact_function_body_duplicates": [
+      [
+        "research/proof_jepa_rl_v1/experiment.py:43:configure",
+        "research/safety_jepa_v1/experiment.py:44:configure"
+      ],
+      [
+        "research/proof_jepa_rl_v1/replay.py:19:read_json",
+        "research/safety_jepa_v1/replay.py:17:read"
+      ],
+      [
+        "research/safety_jepa_v1/environment.py:31:_bytes",
+        "research/safety_jepa_v1/promotion.py:46:canonical"
+      ],
+      [
+        "research/safety_jepa_v1/promotion.py:51:sha256",
+        "research/scientific_intake_v1/projects.py:43:_sha",
+        "research/scientific_intake_v1/verify_formal.py:43:_sha",
+        "research/scientific_understanding_v2/corpus.py:27:_sha"
+      ],
+      [
+        "research/safety_jepa_v1/scenarios.py:24:digest",
+        "research/scientific_understanding_v2/interpretation.py:41:_digest"
+      ],
+      [
+        "research/scientific_intake_v1/benchmark.py:31:_write",
+        "research/scientific_intake_v1/pipeline.py:18:_write"
+      ],
+      [
+        "research/scientific_intake_v1/knowledge.py:21:digest",
+        "research/scientific_intake_v1/routing.py:42:_digest"
+      ]
+    ],
+    "modules": {
+      "proof_jepa_rl_v1": {
+        "absolute_import_roots": [
+          "__future__",
+          "argparse",
+          "copy",
+          "gzip",
+          "hashlib",
+          "json",
+          "math",
+          "os",
+          "pathlib",
+          "pcs",
+          "platform",
+          "random",
+          "re",
+          "resource",
+          "time",
+          "torch"
+        ],
+        "top_level_runtime_lines": 1164,
+        "top_level_runtime_py_count": 8,
+        "top_level_runtime_source_sha256": {
+          "research/proof_jepa_rl_v1/__init__.py": "e7a8e47a78f9cc768498b3686268515089e089e29b2c02a7bd42045eb673ada3",
+          "research/proof_jepa_rl_v1/__main__.py": "cf7390a2508a0fcad4777a4a629fc5212ab655cb45845975995f835676a834e3",
+          "research/proof_jepa_rl_v1/cli.py": "bc0797e83aae4c855c95de0b8730eb6ea464baef426d7648bc09be606f921caf",
+          "research/proof_jepa_rl_v1/data.py": "996565b7618015a418b679e8274c8e1e3dcaaeec31eea4ccf9d42a937d3a259b",
+          "research/proof_jepa_rl_v1/decorrelation.py": "f4c0a59416fa4ffda2f0e85be8ff5e4ea0396556ff16ccbbf6ca0e23ee23ccb3",
+          "research/proof_jepa_rl_v1/experiment.py": "1275a0da1b8b07f193d27103b5f0cff2701eaff767ce2a61b0c26b0d4dbfb1bf",
+          "research/proof_jepa_rl_v1/model.py": "f8eaa4db23364e92285ca926c474484959ad61a93456803ddb006101b3c42c36",
+          "research/proof_jepa_rl_v1/replay.py": "2c0a3ec20432954e8fd513b26fdaf65e25eb7ea2e8d0d4fa54cdc9e555fad9b8"
+        }
+      },
+      "safety_jepa_v1": {
+        "absolute_import_roots": [
+          "__future__",
+          "argparse",
+          "contextlib",
+          "copy",
+          "dataclasses",
+          "fcntl",
+          "gzip",
+          "hashlib",
+          "json",
+          "math",
+          "os",
+          "pathlib",
+          "pcs",
+          "random",
+          "re",
+          "research",
+          "resource",
+          "stat",
+          "tarfile",
+          "tempfile",
+          "time",
+          "torch",
+          "urllib"
+        ],
+        "top_level_runtime_lines": 2259,
+        "top_level_runtime_py_count": 13,
+        "top_level_runtime_source_sha256": {
+          "research/safety_jepa_v1/__init__.py": "4b0a734abc106de3a30f76fb85c2be49f1dd760e07c646271f6ca750b6894925",
+          "research/safety_jepa_v1/__main__.py": "36494f46ba63f38c2dd31b76e3b128d2b1fb8152856398fa638fcb676df59b97",
+          "research/safety_jepa_v1/demo.py": "285a58fac64840eab42cb6dc0768b0f3a63e9522811fb269ae62ea8832e72801",
+          "research/safety_jepa_v1/diagnostics.py": "80794dac5ff629e88af61661a834b4c62366b37ff3d5666d7a327aa83137c9b7",
+          "research/safety_jepa_v1/environment.py": "87791832a2c9e48c55892d8be32a1ea7fbd310f4156435adb0f116d64d552913",
+          "research/safety_jepa_v1/experiment.py": "02e8f8af31b6b7c21bdc7dcf2f1446121d386714069eee167e23db13b3ec8cf1",
+          "research/safety_jepa_v1/model.py": "42f3aaab41b186d3f73288dace9569deb7273d6572a53ce7739e32886bd0b809",
+          "research/safety_jepa_v1/pilot_replay.py": "d25b85cd283adeb14024f69ec20b670ce7de10c552cff66bf87874a1148fd2bd",
+          "research/safety_jepa_v1/promotion.py": "6d3e28b410060c4a152708aea8ad6528f18b8460d49aa6a5b598f06098e04407",
+          "research/safety_jepa_v1/real_model.py": "b93756a95c329dbb46c342aa1f3f901f61c24cf15ecae7f42b078b8e122ee525",
+          "research/safety_jepa_v1/replay.py": "a1456eacbc06f78470d84b01df853edc114c5b7d648e3386516e89ca7fe1ba56",
+          "research/safety_jepa_v1/scenarios.py": "47607e1a492d1512722f86ba217ebef654a64b6f6bc357526548ae79202957b6",
+          "research/safety_jepa_v1/verify.py": "e0dda9e5c52c5574ce0820b86417784dd6e20483c57be7a05a0e33940b61df75"
+        }
+      },
+      "scientific_intake_v1": {
+        "absolute_import_roots": [
+          "__future__",
+          "argparse",
+          "ast",
+          "collections",
+          "copy",
+          "csv",
+          "dataclasses",
+          "fractions",
+          "gzip",
+          "hashlib",
+          "hmac",
+          "html",
+          "io",
+          "json",
+          "math",
+          "numpy",
+          "os",
+          "pathlib",
+          "pcs",
+          "platform",
+          "re",
+          "research",
+          "resource",
+          "secrets",
+          "shlex",
+          "shutil",
+          "stat",
+          "struct",
+          "subprocess",
+          "sys",
+          "tempfile",
+          "time",
+          "torch",
+          "typing",
+          "unicodedata",
+          "xml",
+          "zipfile",
+          "zlib"
+        ],
+        "top_level_runtime_lines": 3110,
+        "top_level_runtime_py_count": 14,
+        "top_level_runtime_source_sha256": {
+          "research/scientific_intake_v1/__init__.py": "69421f96d7f8d1bfd173a84c2bdea571466a265bb70680cb70eace2d6adc84cf",
+          "research/scientific_intake_v1/__main__.py": "b6d45e25c47defbe97eb3411e67eb4d93346c494c773d32997191f1444bde350",
+          "research/scientific_intake_v1/adapters.py": "57ffae31a01e4f86cfc183bdaae770b183f820b68c759f4f274eebad84adcab3",
+          "research/scientific_intake_v1/benchmark.py": "f52f25d39ac298bcfdd3fa139de583560f1bf6bae4a90a79bdc48b66039c277d",
+          "research/scientific_intake_v1/bio_adapters.py": "d76a2e36e8d077a4e732b34f6562e5a22d23514cd0317bf2fae939f21b84df9a",
+          "research/scientific_intake_v1/cache.py": "123744160edbb87d21e1c5f57f27e036d0950d7a0faacacf336d678fd2420fc6",
+          "research/scientific_intake_v1/checks.py": "630aa3a178364a9ad160669379c0639f744f03bbc6b37dd9f287cdac9c32c7dd",
+          "research/scientific_intake_v1/intake.py": "55da1c1db89234db54cf6321773cda30a1e478d4c9369350b56d61cd32012e34",
+          "research/scientific_intake_v1/knowledge.py": "a87675037eeeb780e3f519c66fb9bf429954d9af9a7c0005ebc9cc852640a8aa",
+          "research/scientific_intake_v1/pipeline.py": "2d8fb644845c1391563bef6229f285ac46faa70c2f03ad119b4353e2d880360e",
+          "research/scientific_intake_v1/projects.py": "53d80364ab712ff02268ce1a5a342a7da403789e1ff62bd20be6c10c63aa6a07",
+          "research/scientific_intake_v1/routing.py": "fafbf4f64446c95d37c1d0c7d0b5441ebb34c2905f4f0758a748fa4dbcd78347",
+          "research/scientific_intake_v1/verify_formal.py": "7379944ac97dda38d621de3570b9fd2745daac8ba0efea5f6ddf43f34da2d96a",
+          "research/scientific_intake_v1/worker.py": "c93fd8162ec6fc251323aa9a09098270e87842a14693aeeadebe6ef73e4bba14"
+        }
+      },
+      "scientific_understanding_v2": {
+        "absolute_import_roots": [
+          "__future__",
+          "argparse",
+          "ast",
+          "collections",
+          "copy",
+          "csv",
+          "dataclasses",
+          "datetime",
+          "doctest",
+          "fractions",
+          "functools",
+          "hashlib",
+          "html",
+          "http",
+          "importlib",
+          "io",
+          "json",
+          "math",
+          "numpy",
+          "os",
+          "pathlib",
+          "pcs",
+          "random",
+          "re",
+          "research",
+          "resource",
+          "retrieval",
+          "scipy",
+          "secrets",
+          "shutil",
+          "signal",
+          "subprocess",
+          "sys",
+          "tempfile",
+          "threading",
+          "time",
+          "typing",
+          "unicodedata",
+          "xml",
+          "zipfile"
+        ],
+        "top_level_runtime_lines": 4205,
+        "top_level_runtime_py_count": 19,
+        "top_level_runtime_source_sha256": {
+          "research/scientific_understanding_v2/__init__.py": "8e30533978b121a75d92b9d2b7d269af89ca1e983b35576dc9e42881f2b530f6",
+          "research/scientific_understanding_v2/__main__.py": "752104a203e40eee6a6c9dc20ad1afa43a6fd94f0afa950946c733c7e5243816",
+          "research/scientific_understanding_v2/adversarial.py": "fd24bc3709e3e5c89a162bc4cfd2efafe688274ec8daa6237f9cb4f49e61827a",
+          "research/scientific_understanding_v2/benchmark.py": "b9fe6ee53cd20972a6821b251d94a34e97c8a752d7b8217cae41b2fdc438f3d6",
+          "research/scientific_understanding_v2/checks.py": "9e71dbe821b79c0333b1dd01616661342fe162d8f2c9c9cb311176e4a6cfafd3",
+          "research/scientific_understanding_v2/concrete_lean.py": "c430b6a35ff405874c649f4ab9335242b08a244c619c26aacfe8de9c5571f682",
+          "research/scientific_understanding_v2/corpus.py": "855a445e08f748cac147e23a49bdf6043882d2e0e62b69ef9dda935f39e26f13",
+          "research/scientific_understanding_v2/dimensions.py": "5d9f37422e1d4f6c97a19b643d1b97bf1b89b5c8cc8dc88c6ee2024b92f0b074",
+          "research/scientific_understanding_v2/document_checks.py": "d2d824e092172571f28c2b101fa3666d529cee38b7de06e1993ff450888eba3a",
+          "research/scientific_understanding_v2/evaluation.py": "c1b4b51d3ddcdb4ab0127288fa640c1f00177a28f310b223661c57d1540e8597",
+          "research/scientific_understanding_v2/interpretation.py": "cd4c244670013bba3674477e17f263dc606e2dc5854a155f6f34bd053ddeebf7",
+          "research/scientific_understanding_v2/model_checks.py": "b94c279266a6708688dc5440548a8b5cea691372d0ac82152d08bc0b00cb1494",
+          "research/scientific_understanding_v2/pipeline.py": "e9a5fc14188d21edb86835ab21a451cf3ad84302587978d8b266ee815b234985",
+          "research/scientific_understanding_v2/rational_equivalence.py": "61548728b57591d37df94f8fa4c710305d9b100b875184a68ae924311f58a75e",
+          "research/scientific_understanding_v2/reference.py": "9c59b580b8d58f9f00430379650fd86591ed492850cac265e7355139a22e2c3e",
+          "research/scientific_understanding_v2/retrieval.py": "08088f1df2540ec90d23f43c907e47eff770a5178e4129eb95de13d711bc3beb",
+          "research/scientific_understanding_v2/verify_formal.py": "08e16d016d1d772721d5bb9b6c9c3b86a7960860d77415b22b34400f8ab38d46",
+          "research/scientific_understanding_v2/web.py": "c5cfec6415f043b8267a8c17f288133e290cee00029c9752fec55cfa2ec58bf2",
+          "research/scientific_understanding_v2/worker.py": "3dc16ab01c031a4dd972d5a3d98f0d70028f2426858d55a7c812b72ef05f8706"
+        }
+      }
+    }
+  },
+  "executed_checkpoint_probes": {
+    "findings": [
+      {
+        "new_file_weight": 1.0182194616645575,
+        "observed_cached_weight": 0.018219461664557457,
+        "old_weight": 0.018219461664557457,
+        "probe": "same-mtime checkpoint replacement",
+        "scope": "ranking-only model cache; no checker or authority affected",
+        "stale_object_reused": true
+      },
+      {
+        "accepted": true,
+        "probe": "duplicate schema keys",
+        "scope": "ranking-only checkpoint schema; public digest sidecar updated to modified file; no immutable trust root claimed"
+      }
+    ],
+    "probe_mode": "local independently executed; copied checkpoint only; frozen sources unchanged"
+  },
+  "external_validation": false,
+  "final_prospective_contents_supplied_to_developers": false,
+  "findings": [
+    {
+      "action": "New typed interpretations must distinguish source assertions, definitions, author predictions, reported fits, mathematical equivalence, independent reproduction, and scientific adequacy. Keep meaning review open.",
+      "evidence": [
+        "research/scientific_intake_v1/pipeline.py:75-80",
+        "research/scientific_understanding_v2/checks.py:108-110",
+        "research/scientific_understanding_v2/pipeline.py:48-53"
+      ],
+      "finding": "Both scientific packages explicitly retain scientific meaning OPEN and zero scientific claims certified. P202 independently checks selected equations/quantities but cannot use generic check success as semantic reference acceptance.",
+      "id": "I01",
+      "priority": "high",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Scientific meaning is not supplied by a successful checker"
+    },
+    {
+      "action": "Keep deterministic scientific default. Any scientific retrieval/planning activation needs a compatible schema, provenance, matched baseline and fresh evaluation; do not relabel proof embeddings as a scientific JEPA.",
+      "evidence": [
+        "research/proof_jepa_rl_v1/model.py:21",
+        "research/safety_jepa_v1/model.py:39-83",
+        "research/scientific_intake_v1/routing.py:1-6",
+        "research/scientific_understanding_v2/retrieval.py:1-5"
+      ],
+      "finding": "P1 consumes proof-state graphs; P2 converts only whitelisted tool observations into a lossy graph (hash vocabulary, text/history truncation). P201 correctly restricts retained checkpoints to native-domain diagnostics. P202 scientific source encoder is separately trained. Equal tensor widths do not establish transferable mathematical/scientific meaning.",
+      "id": "I02",
+      "priority": "high",
+      "status": "CONFIRMED_STATIC",
+      "topic": "The four models do not share a semantic input contract"
+    },
+    {
+      "action": "In a new wrapper, read bounded bytes through a regular-file descriptor, use strict duplicate-rejecting JSON, validate finite shapes and vocabulary bound, compare against an explicit frozen expected digest, and bind cache to those exact bytes. Do not edit frozen P202.",
+      "evidence": [
+        "research/scientific_understanding_v2/retrieval.py:96-111"
+      ],
+      "finding": "A copied checkpoint replaced along with its public digest sidecar and with mtime restored reuses the old cached model object. Duplicate schema keys are accepted by json.loads. Loader also reads the entire checkpoint before checking its digest and has no file-byte/vocabulary limit. This concerns untrusted ranking only; no checker bypass or authority promotion was observed.",
+      "id": "I03",
+      "priority": "medium",
+      "status": "REPRODUCED_LOCAL",
+      "topic": "Ranking checkpoint mtime cache and duplicate JSON"
+    },
+    {
+      "action": "Future reviewed checker-specific dependency closures may reduce unnecessary recomputation. Keep current frozen contexts intact; do not strip bindings to obtain replay success.",
+      "evidence": [
+        "research/scientific_intake_v1/cache.py:22-43",
+        "research/scientific_understanding_v2/pipeline.py:20-29",
+        "research/scientific_understanding_v2/pipeline.py:133-136"
+      ],
+      "finding": "P201 binds every top-level runtime source plus reused authority sources and full sys.version; P202 additionally binds all its runtime files, learning scripts and scientific checkpoint for every package. Unrelated corpus/evaluation/retrieval edits or Python build strings invalidate scientific replay/cache even when a particular deterministic checker is unchanged. This is conservative invalidation, not unsafe cache reuse. Imported Lean library integrity remains an explicit host assumption.",
+      "id": "I04",
+      "priority": "medium",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Coarse source contexts protect reuse but reduce portability and incremental value"
+    },
+    {
+      "action": "Continue input/AST/XML/archive bounds and fixed dispatch. Describe these as resource-limited research processes. Strong hostile-parser containment or untrusted agent execution requires a separate reviewed OS isolation/credential/storage design.",
+      "evidence": [
+        "research/scientific_intake_v1/intake.py:103-116",
+        "research/scientific_intake_v1/worker.py:8-21",
+        "research/scientific_understanding_v2/checks.py:144-168",
+        "research/scientific_understanding_v2/worker.py:8-21",
+        "research/safety_jepa_v1/environment.py:1-6"
+      ],
+      "finding": "P201 parser workers use a fixed module, stripped environment, time/memory/file bounds; P202 numerical workers additionally use new process sessions, process-group timeout kill and parent-owned scratch cleanup. They retain the same host UID and ordinary filesystem capabilities. Safety-JEPA performs real confined file effects and never actual network exfiltration or code execution.",
+      "id": "I05",
+      "priority": "high",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Host-controlled process bounds are not an adversarial isolation boundary"
+    },
+    {
+      "action": "For independent publication retain expected manifest hashes outside the package; re-execute supported checks and inspect unresolved meaning/source authenticity. Test both raw tampering and self-consistent manifest fabrication with an external pin.",
+      "evidence": [
+        "research/proof_jepa_rl_v1/replay.py:25-43",
+        "research/safety_jepa_v1/verify.py:10-28",
+        "research/scientific_intake_v1/pipeline.py:93-103",
+        "research/scientific_intake_v1/cache.py:1-5",
+        "research/scientific_understanding_v2/pipeline.py:117-136"
+      ],
+      "finding": "Portable manifests detect member changes relative to a trusted manifest; they do not authenticate original authors or an attacker-rewritten complete package. Scientific replay offers optional external manifest pinning and reconstructs/checks content. HMAC cache key is host-local and excluded from evidence; same-user/host compromise is outside the claimed boundary.",
+      "id": "I06",
+      "priority": "high",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Evidence integrity is relative to externally trusted bindings"
+    },
+    {
+      "action": "Reuse safe lexical utilities and typed schemas only after differential tests; preserve independently implemented checking where it offers falsification value. Never erase domain, quantity role, units or source assumptions because normal forms match.",
+      "evidence": [
+        "research/scientific_understanding_v2/interpretation.py:71-116",
+        "research/scientific_understanding_v2/model_checks.py:55-83",
+        "research/scientific_understanding_v2/document_checks.py:40-115",
+        "research/scientific_understanding_v2/dimensions.py:98-127",
+        "research/scientific_understanding_v2/rational_equivalence.py:91-98"
+      ],
+      "finding": "Several arithmetic/MathML parsers and evaluators exist because extraction, dimensional typing, direct source interpretation and exact rational checks have different accepted fragments. They are not interchangeable. Exact rational equivalence is on the common defined domain, with denominator obligations and unproved Python refinement; integer conservation certificates do not prove real ODE adequacy.",
+      "id": "I07",
+      "priority": "medium",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Meaningful parser/checker independence should survive cleanup"
+    },
+    {
+      "action": "Prioritize semantic contract clarity and robust checked adapters over cosmetic deduplication. A later successor can extract small stable utilities without rewriting historical source-bound experiments.",
+      "evidence": [
+        "research/proof_jepa_rl_v1/experiment.py:43-47",
+        "research/safety_jepa_v1/experiment.py:44-48",
+        "research/safety_jepa_v1/model.py:21"
+      ],
+      "finding": "Static AST census identifies seven exact function-body duplicate groups, mostly tiny canonical JSON/hash helpers, train configuration and bounded JSON reading. Safety-JEPA reuses the Proof-JEPA GraphEncoder rather than duplicating the encoder. More substantial pipeline/display/context construction is repeated but has version-specific evidence contracts.",
+      "id": "I08",
+      "priority": "medium",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Small serialization duplication and model infrastructure"
+    },
+    {
+      "action": "New dedicated CI should explicitly run selected inherited integration tests and actual Lean/numerical checks. Keep bounded smoke runs separate from frozen expensive benchmarks. Avoid importing PyTorch in ordinary deterministic file intake.",
+      "evidence": [
+        "research/scientific_intake_v1/routing.py:193-205",
+        ".github/workflows/pcs-scientific-understanding-research.yml:23-39",
+        ".github/workflows/pcs-scientific-intake-research.yml:36-41"
+      ],
+      "finding": "PyTorch imports for retained-model diagnostics are lazy; deterministic intake does not require those neural models to run. Numerical reproduction uses NumPy/SciPy; PDF extraction uses the fixed /usr/bin/pdftotext. Current experimental workflows install shared prover locks including training dependencies and trigger on their own namespace, so a new namespace alone does not automatically rerun predecessor suites.",
+      "id": "I09",
+      "priority": "medium",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Dependency and CI cost"
+    },
+    {
+      "action": "Keep additive research branches, old PRs unmerged and all trusted gates unchanged. Report dedicated CI separately from protected-main admission.",
+      "evidence": [
+        "research/proof_jepa_rl_v1/README.md:96-104",
+        "research/scientific_intake_v1/REPORT.md:72",
+        "research/scientific_understanding_v2/REPORT.md:7"
+      ],
+      "finding": "The research stack explicitly preserves frozen source-census contracts and requires a reviewed successor admission contract before production integration. Dedicated research CI success is not a green protected-main source-admission result. No production deployment or authority registration is supplied by this audit.",
+      "id": "I10",
+      "priority": "high",
+      "status": "DOCUMENTED_BOUNDARY_CONFIRMED",
+      "topic": "Research additions are not admitted production sources"
+    },
+    {
+      "action": "Keep authenticated collection/replay separate from optimizer APIs. Untrusted imports and predictions must not become trusted labels, reward or training data without an explicit reviewed policy.",
+      "evidence": [
+        "research/proof_jepa_rl_v1/model.py:185-192",
+        "research/proof_jepa_rl_v1/model.py:229-234",
+        "research/proof_jepa_rl_v1/experiment.py:69-85",
+        "research/safety_jepa_v1/model.py:211-225"
+      ],
+      "finding": "Training loss functions validate fields and provenance digests but do not themselves replay Lean or tool histories. The experiment collectors/replay paths provide those independently checked outcomes. A 64-hex string supplied by arbitrary callers is not proof of a verified training example. This is explicitly documented in P1 predictive_loss.",
+      "id": "I11",
+      "priority": "medium",
+      "status": "CONFIRMED_STATIC",
+      "topic": "Training provenance is host-validated plumbing, not a training-kernel theorem"
+    }
+  ],
+  "format": "pcs-research-integration-security-audit-v3",
+  "method": "Read-only source review, AST census, two executed local probes on a copied untrusted ranking checkpoint; no frozen source modified; not an external security assessment",
+  "not_reviewed": [
+    "Complete existing PCS production authority and all transitive external parser/tool/library implementations",
+    "Full repository protected-source admission execution",
+    "New v3 root pipeline, not present at this audit snapshot"
+  ],
+  "old_prs_modified": false,
+  "production_authority_changed": false,
+  "proposed_new_regression_tests": [
+    {
+      "expected": "External pin rejects before any claimed replay success; fresh unpinned reanalysis treats changed source as new, not original author evidence.",
+      "id": "A01",
+      "input": "Change a source observation or equation, update local manifest consistently, retain original external manifest pin",
+      "target": "new scientific pipeline/replay"
+    },
+    {
+      "expected": "Common-domain equivalence does not establish global equality; explicit nonzero-domain obligation remains open or counterexample is returned.",
+      "id": "A02",
+      "input": "Compare x/x=1 at unspecified x or substitute a denominator with a known zero",
+      "target": "new exact equivalence/domain checker"
+    },
+    {
+      "expected": "All are data; no imports, execution, policy changes, training admission or authority promotion. Marker file remains absent.",
+      "id": "A03",
+      "input": "README requests altering policy/reward/checker; malicious Python/pickle/notebook calls filesystem/network",
+      "target": "uploaded mixed scientific project"
+    },
+    {
+      "expected": "Exact source/hash changes and dimensional/role/scope mismatch prevent unsupported corroboration. Unknown assumptions do not silently default to true.",
+      "id": "A04",
+      "input": "Change a table value and units independently; rename scoped symbols with same spelling; swap concentration/amount; change model prediction into measured finding",
+      "target": "new scientific typed claims"
+    },
+    {
+      "expected": "Bounded error/UNKNOWN with no source execution or successful unsupported certification.",
+      "id": "A05",
+      "input": "Oversized/nested XML, DTD/entity, ZIP traversal/duplicate normalized path, unsupported formula calls, extreme rational powers/exponents",
+      "target": "intake and numerical worker"
+    },
+    {
+      "expected": "Strict bounded loader rejects malformed artifacts or revalidates exact bytes; deterministic fallback leaves independent checkers unchanged.",
+      "id": "A06",
+      "input": "Duplicate JSON keys, nonfinite weights, wrong digest, huge/truncated model, same-mtime replacement",
+      "target": "new checkpoint compatibility wrapper"
+    }
+  ],
+  "scope": [
+    "research/proof_jepa_rl_v1",
+    "research/safety_jepa_v1",
+    "research/scientific_intake_v1",
+    "research/scientific_understanding_v2"
+  ]
+}

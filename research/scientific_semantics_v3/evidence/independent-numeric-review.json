@@ -1,0 +1,99 @@
+{
+  "schema_version": "independent-numeric-review-v3",
+  "reviewer": "prospective_reference",
+  "review_type": "Internal independent code review and authored/dev input falsification",
+  "final_sources_or_outputs_used": false,
+  "checks": [
+    {
+      "name": "authored_long_decimal_literal_enclosure",
+      "source": "0.12345678901234567890123456789",
+      "exact_source_value": "12345678901234567890123456789/100000000000000000000000000000",
+      "returned_interval": {
+        "lower": "12345678901234567890123456789/100000000000000000000000000000",
+        "upper": "12345678901234567890123456789/100000000000000000000000000000"
+      },
+      "encloses_source_value": true,
+      "legacy_float_rounded_value": "1543209862654321/12500000000000000",
+      "legacy_enclosed_source": false,
+      "status": "REPAIRED"
+    },
+    {
+      "name": "authored_domain_excludes_one",
+      "source_formula": "b1/(x-1)",
+      "all_observation_x": [
+        2,
+        3
+      ],
+      "independent_expected_rss": "0",
+      "observed_status": "REPRODUCED_ROUNDED_COMPUTATION",
+      "observed_reason": null,
+      "status": "PASS"
+    },
+    {
+      "name": "authored_exact_rational_interval_sampling",
+      "seed": 271828,
+      "cases": 240,
+      "independent_points": 49200,
+      "violations": [],
+      "seconds": 0.35177739104256034,
+      "status": "PASS",
+      "limitation": "Finite falsification of arithmetic enclosure only; not universal proof or source-meaning validation."
+    },
+    {
+      "name": "authored_transcendental_honest_scope",
+      "decimal80": "0.95122942450071400909142531977965216065708744934037313453024956606670315516848694",
+      "float": 0.951229424500714,
+      "absolute_float_decimal_difference": 0.0,
+      "interval_outcome": "transcendental interval bound not implemented",
+      "status": "PASS"
+    },
+    {
+      "name": "development_hahn1_numerical_reproduction",
+      "status": "REPRODUCED_ROUNDED_COMPUTATION",
+      "rss_float": 1.532438285360618,
+      "rss_decimal80": "1.5324382853606231100253714149137307869357440812417038683903140822734691162864110",
+      "interval_status": "COMPATIBLE",
+      "scope": "development only; no fresh generalization evidence"
+    }
+  ],
+  "findings": [
+    {
+      "id": "literal-float-rounding",
+      "severity": "correctness",
+      "finding": "ast.Constant stores decimal literals as binary floats; evaluate reconstructs str(node.value) rather than source token, so exact rational/Decimal paths can silently change source decimals.",
+      "demonstrated": true,
+      "current_status": "REPAIRED; source-bound lexical token retained and unattached float exact modes rejected",
+      "consequence": "Before repair, an advertised exact rational enclosure can fail to enclose the actual source-literal result.",
+      "recommendation": "Retain exact numeric token text under bounded syntax, or reject decimal constants whose exact source spelling was lost."
+    },
+    {
+      "id": "arbitrary-eager-domain-point",
+      "severity": "availability",
+      "finding": "Parser eager-validation evaluates at x=1 regardless of the source data domain.",
+      "demonstrated": true,
+      "current_status": "REPAIRED; syntax validation independent of artificial numerical input",
+      "consequence": "Before repair, valid supported expressions whose only singularity is x=1 return UNKNOWN even when all observations avoid that singularity.",
+      "recommendation": "Perform syntax/type/name validation independently of numerical domain; evaluate at actual row inputs under explicit domain guards."
+    },
+    {
+      "id": "interval-overlap-semantics",
+      "severity": "interpretation",
+      "finding": "Interval overlap is necessary for compatibility with a conservative enclosure, but does not establish that one common parameter assignment attains the reported RSS. Dependency widening can create false apparent compatibility.",
+      "demonstrated": false,
+      "recommendation": "Use NOT_REFUTED_BY_ENCLOSURE terminology and preserve conditional nearest-rounding assumption."
+    },
+    {
+      "id": "parameter-standard-deviation-scope",
+      "severity": "scope",
+      "finding": "Parameter standard-deviation table entries are parsed but neither sign-validated nor independently reproduced. The successful status concerns residual statistics only.",
+      "demonstrated": false,
+      "recommendation": "Declare standard-deviation inference unsupported; reject negative values as malformed and do not treat reported parameter standard deviations as bounds."
+    }
+  ],
+  "reviewed_numerical_source_sha256": "1614e178c0dee0ea32104198402cf081a1e18104d7694ae210ea4f955747b763",
+  "regression_tests": {
+    "path": "tests/test_numerical_independent.py",
+    "passed": 6,
+    "failed": 0
+  }
+}

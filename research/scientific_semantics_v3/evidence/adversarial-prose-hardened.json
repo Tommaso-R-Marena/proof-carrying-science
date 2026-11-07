@@ -1,0 +1,32 @@
+{
+  "format": "pcs-internal-prose-counterexamples-v1",
+  "semantics_source_sha256": "6016fbc930d1f177e6dd31c245e25e5c7f9ee7ab9de01b04a21900758673e460",
+  "cases": [
+    {
+      "input": "The claim mean: 3 is false; the study did not report that value.\n",
+      "source_sha256": "24ec59a841fb992084df3c91bb2f26f687fc51358a0ea13adc9719e3730ac7b8",
+      "claims": [],
+      "unresolved": [],
+      "authority": false,
+      "spurious_unqualified_author_report": false
+    },
+    {
+      "input": "The geometric mean: 3\n",
+      "source_sha256": "dc43c1b2c3d6c3fe1f2b17517a0cb0217a0f4cbd276aee5bc8acb829e23a483e",
+      "claims": [],
+      "unresolved": [],
+      "authority": false,
+      "spurious_unqualified_author_report": false
+    },
+    {
+      "input": "Never report Iterations: 7 as an observed run.\n",
+      "source_sha256": "7ce75f39a5b06f0e4d9a4f4f16b8e2aa8454e35f1d21c29e5ad59965bcf1af62",
+      "claims": [],
+      "unresolved": [],
+      "authority": false,
+      "spurious_unqualified_author_report": false
+    }
+  ],
+  "finding": "These three authored negated/qualified prose inputs now abstain instead of emitting unqualified author reports; this is a finite regression result, not a general language-understanding guarantee.",
+  "authority": false
+}

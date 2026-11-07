@@ -1,0 +1,89 @@
+{
+  "Python_Lean_refinement": "OPEN",
+  "allowed_standard_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "authority": false,
+  "axiom_audit": {
+    "cancellation_changes_domain": {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "empty": false,
+      "name": "ScientificPartialExpressions.cancellation_changes_domain"
+    },
+    "division_to_inverse": {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "empty": false,
+      "name": "ScientificPartialExpressions.division_to_inverse"
+    },
+    "rewrite_preserves_definedness": {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "empty": false,
+      "name": "ScientificPartialExpressions.rewrite_preserves_definedness"
+    },
+    "rewrite_preserves_partial_evaluation": {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "empty": false,
+      "name": "ScientificPartialExpressions.rewrite_preserves_partial_evaluation"
+    },
+    "self_division_undefined_at_zero": {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "empty": false,
+      "name": "ScientificPartialExpressions.self_division_undefined_at_zero"
+    },
+    "self_division_under_nonzero": {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "empty": false,
+      "name": "ScientificPartialExpressions.self_division_under_nonzero"
+    }
+  },
+  "checked_at_utc": "2026-11-06T21:10:50.358630+00:00",
+  "compiler_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+  "forbidden_tokens": [],
+  "required_theorems_present": true,
+  "returncode": 0,
+  "schema": "scientific-partial-expression-proof-v3",
+  "scientific_adequacy": "OPEN",
+  "scope": "Structural division-to-guarded-inverse rewriting preserves partial rational evaluation, including undefined points",
+  "shared_library_sha256": "cbfea1d1a2681923a714b5fcd36183b4ffecb8b06d398c833f095548f00fa62b",
+  "source_interpretation": "OPEN",
+  "source_sha256": "1466985a058b817b970fedef966f50f9703277e03fa7ac3f8046b9fd39a39c82",
+  "status": "KERNEL_CHECKED_ABSTRACT_PARTIAL_SEMANTICS",
+  "stderr": "",
+  "stdout": "'ScientificPartialExpressions.division_to_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ScientificPartialExpressions.rewrite_preserves_partial_evaluation' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ScientificPartialExpressions.rewrite_preserves_definedness' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ScientificPartialExpressions.self_division_under_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ScientificPartialExpressions.self_division_undefined_at_zero' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ScientificPartialExpressions.cancellation_changes_domain' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "theorem_declarations": [
+    "division_to_inverse",
+    "rewrite_preserves_partial_evaluation",
+    "rewrite_preserves_definedness",
+    "self_division_under_nonzero",
+    "self_division_undefined_at_zero",
+    "cancellation_changes_domain"
+  ],
+  "unexpected_imports": [],
+  "version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+}
