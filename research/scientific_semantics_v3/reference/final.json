@@ -1,0 +1,1198 @@
+{
+  "schema_version": "scientific-reference-v3",
+  "preparation": {
+    "role": "Independently prepared AI-assisted internal annotations; not external or human expert validation",
+    "pcs_outputs_used": false,
+    "new_interpreter_source_consulted": false,
+    "new_diagnostic_atlas_consulted": false,
+    "source_selection": "Authentic BioModels encoded model revisions and NIST StRD numerical study files at frozen source identities",
+    "method": "Direct source reading, manual typed interpretation and literal transcription; mechanical quote-offset checking only",
+    "labeler": "prospective_reference",
+    "status": "frozen_before_new_system_evaluation"
+  },
+  "annotations": [
+    {
+      "id": "final-elowitz2000-initial_amount-model-Y",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares Y in scope model with initial amount 20.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<species compartment=\"cell\" hasOnlySubstanceUnits=\"true\" id=\"Y\" initialAmount=\"20\" metaid=\"_905781\" name=\"TetR mRNA\" sboTerm=\"SBO:0000250\">",
+        "byte_start": 19827,
+        "byte_end": 19966,
+        "locator": "UTF-8 bytes 19827:19966; lines 401-401"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "Y",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "20",
+        "unit": null,
+        "quantity_role": "initial_amount",
+        "conditions": {
+          "compartment": "cell",
+          "state": "initial",
+          "hasOnlySubstanceUnits": true
+        }
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-initial_amount-model-PX",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares PX in scope model with initial amount 0.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<species compartment=\"cell\" hasOnlySubstanceUnits=\"true\" id=\"PX\" initialAmount=\"0\" metaid=\"PX\" name=\"LacI protein\" sboTerm=\"SBO:0000252\">",
+        "byte_start": 16851,
+        "byte_end": 16988,
+        "locator": "UTF-8 bytes 16851:16988; lines 326-326"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "PX",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "0",
+        "unit": null,
+        "quantity_role": "initial_amount",
+        "conditions": {
+          "compartment": "cell",
+          "state": "initial",
+          "hasOnlySubstanceUnits": true
+        }
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-parameter-model-tau_mRNA",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares tau_mRNA in scope model with parameter 2.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<parameter id=\"tau_mRNA\" metaid=\"metaid_0000028\" name=\"mRNA half life\" sboTerm=\"SBO:0000332\" value=\"2\"/>",
+        "byte_start": 23118,
+        "byte_end": 23222,
+        "locator": "UTF-8 bytes 23118:23222; lines 481-481"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "tau_mRNA",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "2",
+        "unit": null,
+        "quantity_role": "parameter",
+        "conditions": {}
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-parameter-model-tau_prot",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares tau_prot in scope model with parameter 10.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<parameter id=\"tau_prot\" metaid=\"metaid_0000128\" name=\"protein half life\" sboTerm=\"SBO:0000332\" value=\"10\"/>",
+        "byte_start": 23229,
+        "byte_end": 23337,
+        "locator": "UTF-8 bytes 23229:23337; lines 482-482"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "tau_prot",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "10",
+        "unit": null,
+        "quantity_role": "parameter",
+        "conditions": {}
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-parameter-model-KM",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares KM in scope model with parameter 40.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<parameter id=\"KM\" metaid=\"metaid_0000027\" name=\"KM\" sboTerm=\"SBO:0000288\" value=\"40\">",
+        "byte_start": 22818,
+        "byte_end": 22904,
+        "locator": "UTF-8 bytes 22818:22904; lines 475-475"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "KM",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "40",
+        "unit": null,
+        "quantity_role": "parameter",
+        "conditions": {}
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-parameter-model-eff",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares eff in scope model with parameter 20.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<parameter id=\"eff\" metaid=\"metaid_0000025\" name=\"translation efficiency\" value=\"20\">",
+        "byte_start": 22347,
+        "byte_end": 22432,
+        "locator": "UTF-8 bytes 22347:22432; lines 463-463"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "eff",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "20",
+        "unit": null,
+        "quantity_role": "parameter",
+        "conditions": {}
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-parameter-model-ps_0",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded model declares ps_0 in scope model with parameter 0.0005.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<parameter id=\"ps_0\" metaid=\"metaid_0500235\" name=\"tps_repr\" sboTerm=\"SBO:0000485\" value=\"0.0005\">",
+        "byte_start": 24769,
+        "byte_end": 24867,
+        "locator": "UTF-8 bytes 24769:24867; lines 514-514"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "ps_0",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "0.0005",
+        "unit": null,
+        "quantity_role": "parameter",
+        "conditions": {}
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-assignment-beta",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "equation",
+      "statement": "The source assignment rule defines beta = tau_mRNA/tau_prot.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<assignmentRule metaid=\"metaid_0240045\" variable=\"beta\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <divide/>\n            <ci> tau_mRNA </ci>\n            <ci> tau_prot </ci>\n          </apply>\n        </math>\n            </assignmentRule>",
+        "byte_start": 25737,
+        "byte_end": 26028,
+        "locator": "UTF-8 bytes 25737:26028; lines 540-548"
+      },
+      "typed_expectation": {
+        "kind": "equation",
+        "entity": "beta",
+        "scope": "model",
+        "relation": "equation",
+        "lhs": "beta",
+        "rhs": "tau_mRNA/tau_prot",
+        "quantity_role": "assignment_rule",
+        "symbols": [
+          "tau_mRNA",
+          "tau_prot"
+        ],
+        "conditions": {
+          "rule_type": "assignmentRule"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-assignment-a_tr",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "equation",
+      "statement": "The source assignment rule defines a_tr = (ps_a-ps_0)*60.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<assignmentRule metaid=\"metaid_1000237\" variable=\"a_tr\">\n        <math xmlns=\"http://www.w3.org/1998/Math/MathML\">        \n          <apply>\n            <times/>\n            <apply>\n              <minus/>\n              <ci> ps_a </ci>\n              <ci> ps_0 </ci>\n            </apply>\n            <cn> 60 </cn>\n          </apply>\n        </math>\n            </assignmentRule>",
+        "byte_start": 26325,
+        "byte_end": 26701,
+        "locator": "UTF-8 bytes 26325:26701; lines 558-570"
+      },
+      "typed_expectation": {
+        "kind": "equation",
+        "entity": "a_tr",
+        "scope": "model",
+        "relation": "equation",
+        "lhs": "a_tr",
+        "rhs": "(ps_a-ps_0)*60",
+        "quantity_role": "assignment_rule",
+        "symbols": [
+          "ps_0",
+          "ps_a"
+        ],
+        "conditions": {
+          "rule_type": "assignmentRule"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-reaction1",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "equation",
+      "statement": "The first reaction rate is kd_mRNA times X.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<reaction id=\"Reaction1\" metaid=\"_905823\" name=\"degradation of LacI transcripts\" reversible=\"false\" sboTerm=\"SBO:0000179\">\n        <annotation>\n          <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\">\n            <rdf:Description rdf:about=\"#_905823\">\n\t<bqbiol:isVersionOf>\n\t<rdf:Bag>\n\t<rdf:li rdf:resource=\"http://identifiers.org/go/GO:0006402\"/>\n\t</rdf:Bag>\n\t</bqbiol:isVersionOf>\n\t</rdf:Description>\n\t\n          </rdf:RDF>\n        </annotation>\n              <listOfReactants>\n          <speciesReference metaid=\"_420973\" species=\"X\"/>\n        </listOfReactants>\n        <kineticLaw metaid=\"_420986\" sboTerm=\"SBO:0000049\">\n          <math xmlns=\"http://www.w3.org/1998/Math/MathML\">          \n            <apply>\n              <times/>\n              <ci> kd_mRNA </ci>\n              <ci> X </ci>\n            </apply>\n          </math>\n                </kineticLaw>\n      </reaction>",
+        "byte_start": 28913,
+        "byte_end": 29928,
+        "locator": "UTF-8 bytes 28913:29928; lines 648-673"
+      },
+      "typed_expectation": {
+        "kind": "equation",
+        "entity": "Reaction1",
+        "scope": "Reaction1",
+        "relation": "equation",
+        "lhs": "Reaction1",
+        "rhs": "kd_mRNA*X",
+        "quantity_role": "kinetic_law",
+        "symbols": [
+          "kd_mRNA",
+          "X"
+        ],
+        "conditions": {
+          "reaction": "Reaction1"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-time-unit",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "unit_definition",
+      "statement": "The encoded time unit is one minute, represented as 60 seconds.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<unitDefinition id=\"time\" metaid=\"metaid_0000030\" name=\"minute\">\n        <listOfUnits>\n          <unit kind=\"second\" metaid=\"_420960\" multiplier=\"60\"/>\n        </listOfUnits>\n      </unitDefinition>",
+        "byte_start": 16004,
+        "byte_end": 16202,
+        "locator": "UTF-8 bytes 16004:16202; lines 303-307"
+      },
+      "typed_expectation": {
+        "kind": "unit_definition",
+        "entity": "time",
+        "scope": "model",
+        "relation": "unit_definition",
+        "value": "60",
+        "unit": "second",
+        "quantity_role": "unit_scale",
+        "conditions": {
+          "source_unit": "time",
+          "multiplier": "60"
+        },
+        "dimension": "time"
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-repressor-link",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "interaction",
+      "statement": "The source describes LacI protein PX as inhibiting tetR expression (Y mRNA, PY protein), not activating it.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "In this system, LacI (variable X is the mRNA, variable PX is the protein) inhibits the tetracycline-resistance transposon tetR (Y, PY describe mRNA and protein).",
+        "byte_start": 773,
+        "byte_end": 934,
+        "locator": "UTF-8 bytes 773:934; lines 10-10"
+      },
+      "typed_expectation": {
+        "kind": "interaction",
+        "entity": "PX",
+        "scope": "biological_model",
+        "relation": "inhibits",
+        "value": "Y",
+        "quantity_role": "transcriptional_repression",
+        "conditions": {
+          "source_protein": "LacI",
+          "target_gene": "tetR"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [
+        "This is the biological interpretation described by the model notes, not a new measured causal intervention."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-parameter-b1",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports certified estimate b1 = 2.3894212918E+02.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "  b1 =   500         250           2.3894212918E+02  2.7070075241E+00",
+        "byte_start": 1080,
+        "byte_end": 1149,
+        "locator": "UTF-8 bytes 1080:1149; lines 41-41"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "b1",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "2.3894212918E+02",
+        "quantity_role": "certified_parameter",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [
+        "A reported certified estimate is not an exact physical constant."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-std-b1",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports the standard deviation of estimate b1 as 2.7070075241E+00.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "  b1 =   500         250           2.3894212918E+02  2.7070075241E+00",
+        "byte_start": 1080,
+        "byte_end": 1149,
+        "locator": "UTF-8 bytes 1080:1149; lines 41-41"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "b1",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "2.7070075241E+00",
+        "quantity_role": "parameter_std",
+        "conditions": {
+          "parameter": "b1",
+          "statistic": "standard_deviation"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [
+        "A standard deviation is not a confidence interval without additional assumptions."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-parameter-b2",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports certified estimate b2 = 5.5015643181E-04.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "  b2 =     0.0001      0.0005      5.5015643181E-04  7.2668688436E-06",
+        "byte_start": 1150,
+        "byte_end": 1219,
+        "locator": "UTF-8 bytes 1150:1219; lines 42-42"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "b2",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "5.5015643181E-04",
+        "quantity_role": "certified_parameter",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [
+        "A reported certified estimate is not an exact physical constant."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-std-b2",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports the standard deviation of estimate b2 as 7.2668688436E-06.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "  b2 =     0.0001      0.0005      5.5015643181E-04  7.2668688436E-06",
+        "byte_start": 1150,
+        "byte_end": 1219,
+        "locator": "UTF-8 bytes 1150:1219; lines 42-42"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "b2",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "7.2668688436E-06",
+        "quantity_role": "parameter_std",
+        "conditions": {
+          "parameter": "b2",
+          "statistic": "standard_deviation"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [
+        "A standard deviation is not a confidence interval without additional assumptions."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-residual_sum_squares",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports residual sum of squares 1.2455138894E-01.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "Residual Sum of Squares:                    1.2455138894E-01",
+        "byte_start": 1221,
+        "byte_end": 1281,
+        "locator": "UTF-8 bytes 1221:1281; lines 44-44"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "residual_sum_squares",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "1.2455138894E-01",
+        "unit": null,
+        "quantity_role": "residual_sum_squares",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        }
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-residual_std",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports residual standard deviation 1.0187876330E-01.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "Residual Standard Deviation:                1.0187876330E-01",
+        "byte_start": 1282,
+        "byte_end": 1342,
+        "locator": "UTF-8 bytes 1282:1342; lines 45-45"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "residual_std",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "1.0187876330E-01",
+        "unit": null,
+        "quantity_role": "residual_std",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        }
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-degrees_of_freedom",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports degrees of freedom 12.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "Degrees of Freedom:                                12",
+        "byte_start": 1343,
+        "byte_end": 1396,
+        "locator": "UTF-8 bytes 1343:1396; lines 46-46"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "degrees_of_freedom",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "12",
+        "unit": "count",
+        "quantity_role": "degrees_of_freedom",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        }
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-observation_count",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST reports number of observations 14.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "Number of Observations:                            14",
+        "byte_start": 1397,
+        "byte_end": 1450,
+        "locator": "UTF-8 bytes 1397:1450; lines 47-47"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "observation_count",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "14",
+        "unit": "count",
+        "quantity_role": "observation_count",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        }
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-statistical-model",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "equation",
+      "statement": "Misra1a defines y as b1 times one minus exp(-b2*x), plus an additive error e.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "y = b1*(1-exp[-b2*x])  +  e",
+        "byte_start": 917,
+        "byte_end": 944,
+        "locator": "UTF-8 bytes 917:944; lines 34-34"
+      },
+      "typed_expectation": {
+        "kind": "equation",
+        "entity": "y",
+        "scope": "model",
+        "relation": "equation",
+        "lhs": "y",
+        "rhs": "b1*(1-exp(-b2*x))+e",
+        "quantity_role": "statistical_model",
+        "symbols": [
+          "b1",
+          "b2",
+          "x",
+          "e"
+        ],
+        "conditions": {
+          "error_term": "additive e"
+        },
+        "unit": null
+      },
+      "expected_status": "supported",
+      "evidence_kind": "source_declaration",
+      "assumptions": [
+        "The source does not state an error distribution, independence, or homoscedasticity in this file."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-nist_misra1a-predictor-meaning",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "variable_definition",
+      "statement": "The predictor variable x denotes pressure; no pressure unit is specified in the file.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "1 Predictor Variable (x = pressure)",
+        "byte_start": 690,
+        "byte_end": 725,
+        "locator": "UTF-8 bytes 690:725; lines 26-26"
+      },
+      "typed_expectation": {
+        "kind": "variable_definition",
+        "entity": "x",
+        "scope": "model",
+        "relation": "defined_as",
+        "value": "pressure",
+        "unit": null,
+        "quantity_role": "predictor",
+        "conditions": {}
+      },
+      "expected_status": "supported",
+      "evidence_kind": "author_report",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "independent_typed_interpretation"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": false
+      }
+    },
+    {
+      "id": "final-elowitz2000-wrong-initial",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded initial amount of Y is zero.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<species compartment=\"cell\" hasOnlySubstanceUnits=\"true\" id=\"Y\" initialAmount=\"20\" metaid=\"_905781\" name=\"TetR mRNA\" sboTerm=\"SBO:0000250\">",
+        "byte_start": 19827,
+        "byte_end": 19966,
+        "locator": "UTF-8 bytes 19827:19966; lines 401-401"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "Y",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "0",
+        "unit": null,
+        "quantity_role": "initial_amount",
+        "conditions": {
+          "compartment": "cell",
+          "state": "initial",
+          "hasOnlySubstanceUnits": true
+        }
+      },
+      "expected_status": "contradicted",
+      "evidence_kind": "reviewer_counterprobe",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "reject_or_abstain_on_unsupported_meaning"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-elowitz2000-wrong-half-life",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The encoded mRNA half-life tau_mRNA is 10.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "<parameter id=\"tau_mRNA\" metaid=\"metaid_0000028\" name=\"mRNA half life\" sboTerm=\"SBO:0000332\" value=\"2\"/>",
+        "byte_start": 23118,
+        "byte_end": 23222,
+        "locator": "UTF-8 bytes 23118:23222; lines 481-481"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "tau_mRNA",
+        "scope": "model",
+        "relation": "declared_value",
+        "value": "10",
+        "unit": null,
+        "quantity_role": "parameter",
+        "conditions": {}
+      },
+      "expected_status": "contradicted",
+      "evidence_kind": "reviewer_counterprobe",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "reject_or_abstain_on_unsupported_meaning"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-nist_misra1a-wrong-estimate",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "NIST certified the b1 estimate as 250 (the second starting value).",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "  b1 =   500         250           2.3894212918E+02  2.7070075241E+00",
+        "byte_start": 1080,
+        "byte_end": 1149,
+        "locator": "UTF-8 bytes 1080:1149; lines 41-41"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "b1",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "250",
+        "quantity_role": "certified_parameter",
+        "conditions": {
+          "estimation": "nonlinear_least_squares"
+        },
+        "unit": null
+      },
+      "expected_status": "contradicted",
+      "evidence_kind": "reviewer_counterprobe",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "reject_or_abstain_on_unsupported_meaning"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-nist_misra1a-confidence-interval",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "quantity",
+      "statement": "The source standard deviation for b1 is by itself a 95% confidence bound.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "  b1 =   500         250           2.3894212918E+02  2.7070075241E+00",
+        "byte_start": 1080,
+        "byte_end": 1149,
+        "locator": "UTF-8 bytes 1080:1149; lines 41-41"
+      },
+      "typed_expectation": {
+        "kind": "quantity",
+        "entity": "b1",
+        "scope": "model",
+        "relation": "reported_value",
+        "value": "2.7070075241E+00",
+        "quantity_role": "95_percent_confidence_interval",
+        "conditions": {
+          "parameter": "b1",
+          "statistic": "standard_deviation"
+        },
+        "unit": null
+      },
+      "expected_status": "insufficient_evidence",
+      "evidence_kind": "reviewer_counterprobe",
+      "assumptions": [
+        "A standard deviation is not a confidence bound without further assumptions."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "reject_or_abstain_on_unsupported_meaning"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-nist_misra1a-invented-unit",
+      "project_id": "nist_misra1a",
+      "split": "final",
+      "kind": "variable_definition",
+      "statement": "The source explicitly states pressure x is measured in atmospheres.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/nist_misra1a/Misra1a.dat",
+        "sha256": "45c8da1de19d1cd0bdcefe06e333dee7ec8b31fa5c58b4eada427a7777853650",
+        "quote": "1 Predictor Variable (x = pressure)",
+        "byte_start": 690,
+        "byte_end": 725,
+        "locator": "UTF-8 bytes 690:725; lines 26-26"
+      },
+      "typed_expectation": {
+        "kind": "variable_definition",
+        "entity": "x",
+        "scope": "model",
+        "relation": "defined_as",
+        "value": "pressure",
+        "unit": "atm",
+        "quantity_role": "predictor",
+        "conditions": {}
+      },
+      "expected_status": "insufficient_evidence",
+      "evidence_kind": "reviewer_counterprobe",
+      "assumptions": [
+        "No pressure unit appears in the source file."
+      ],
+      "required_obligations": [
+        "source_byte_grounding",
+        "reject_or_abstain_on_unsupported_meaning"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": true
+      }
+    },
+    {
+      "id": "final-elowitz2000-reversed-causality",
+      "project_id": "elowitz2000",
+      "split": "final",
+      "kind": "interaction",
+      "statement": "The source states that LacI protein PX activates tetR expression.",
+      "source": {
+        "path": "research/scientific_semantics_v3/fixtures/final/elowitz2000/elowitz2000.sbml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "quote": "In this system, LacI (variable X is the mRNA, variable PX is the protein) inhibits the tetracycline-resistance transposon tetR (Y, PY describe mRNA and protein).",
+        "byte_start": 773,
+        "byte_end": 934,
+        "locator": "UTF-8 bytes 773:934; lines 10-10"
+      },
+      "typed_expectation": {
+        "kind": "interaction",
+        "entity": "PX",
+        "scope": "biological_model",
+        "relation": "activates",
+        "value": "Y",
+        "quantity_role": "transcriptional_repression",
+        "conditions": {
+          "source_protein": "LacI",
+          "target_gene": "tetR"
+        },
+        "unit": null
+      },
+      "expected_status": "contradicted",
+      "evidence_kind": "reviewer_counterprobe",
+      "assumptions": [],
+      "required_obligations": [
+        "source_byte_grounding",
+        "reject_or_abstain_on_unsupported_meaning"
+      ],
+      "label_provenance": {
+        "reviewer_role": "independently_prepared_AI_assisted_internal_reference",
+        "method": "Direct authentic source reading and manually selected typed interpretation. No new PCS interpreter code, predictions, checker output, retrieval output or diagnostic atlas consulted. Byte offsets transcribed mechanically after selecting exact quote.",
+        "pcs_output_used": false,
+        "external_expert_review": false,
+        "reviewer_authored_counterclaim": true
+      }
+    }
+  ]
+}

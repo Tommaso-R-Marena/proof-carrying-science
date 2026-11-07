@@ -1,0 +1,56 @@
+name: Scientific semantics experimental research
+on:
+  pull_request:
+    paths:
+      - 'research/scientific_semantics_v3/**'
+      - '.github/workflows/pcs-scientific-semantics-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: science-semantics-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  semantic-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Existing CPU and numerical dependency locks
+        run: |
+          python -m pip install --require-hashes -r requirements-build.lock -r requirements-dev.lock -r requirements-prover.lock -r research/scientific_understanding_v2/requirements-numeric.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y poppler-utils
+      - name: Unchanged inherited suites, adversarial tests and real Lean checking
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q research/proof_jepa_rl_v1 research/safety_jepa_v1
+          python -m pytest -q research/scientific_intake_v1 research/scientific_understanding_v2 research/scientific_semantics_v3/tests
+          python -m research.scientific_semantics_v3.error_atlas --check > "$RUNNER_TEMP/error-atlas-check.log"
+          python -m research.scientific_semantics_v3.assurance > "$RUNNER_TEMP/partial-semantics-formal.json"
+          python -m research.scientific_understanding_v2.verify_formal --profile dimensions > "$RUNNER_TEMP/dimensions.json"
+          python -m research.scientific_understanding_v2.verify_formal --profile conservation > "$RUNNER_TEMP/conservation.json"
+          python -m research.scientific_understanding_v2.verify_formal --profile sampling > "$RUNNER_TEMP/sampling.json"
+          python -m research.scientific_semantics_v3 benchmark --split development --output "$RUNNER_TEMP/scientific-semantics-development" > "$RUNNER_TEMP/scientific-semantics-benchmark.log"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: scientific-semantics-evidence
+          path: |
+            ${{ runner.temp }}/error-atlas-check.log
+            ${{ runner.temp }}/partial-semantics-formal.json
+            ${{ runner.temp }}/dimensions.json
+            ${{ runner.temp }}/conservation.json
+            ${{ runner.temp }}/sampling.json
+            ${{ runner.temp }}/scientific-semantics-benchmark.log
+            ${{ runner.temp }}/scientific-semantics-development/software-freeze.json
+            ${{ runner.temp }}/scientific-semantics-development/results.json
+            ${{ runner.temp }}/scientific-semantics-development/partial.json

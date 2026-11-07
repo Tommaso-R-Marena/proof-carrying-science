@@ -1,0 +1,68 @@
+...............................FFF...................................... [ 42%]
+........................................................................ [ 85%]
+.........................                                                [100%]
+=================================== FAILURES ===================================
+_ test_qualified_or_negated_prose_is_not_an_unqualified_positive_report[The claim mean: 3 is false; the study did not report that value.\n-mean-3] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-64/test_qualified_or_negated_pros0')
+prose = 'The claim mean: 3 is false; the study did not report that value.\n'
+entity = 'mean', value = '3'
+
+    @pytest.mark.parametrize("prose,entity,value", [
+        ("The claim mean: 3 is false; the study did not report that value.\n", "mean", "3"),
+        ("Never report Iterations: 7 as an observed run.\n", "iterations", "7"),
+        ("The geometric mean: 3\n", "mean", "3"),
+    ])
+    def test_qualified_or_negated_prose_is_not_an_unqualified_positive_report(tmp_path, prose, entity, value):
+        (tmp_path / "paper.txt").write_text(prose)
+        result = semantics.interpret_project(tmp_path)
+>       assert not any(c.get("entity") == entity and c.get("value") == value and c.get("relation") == "reported_value"
+                       for c in result["claims"])
+E       assert not True
+E        +  where True = any(<generator object test_qualified_or_negated_prose_is_not_an_unqualified_positive_report.<locals>.<genexpr> at 0x7fbd89b426c0>)
+
+research/scientific_semantics_v3/tests/test_adversarial.py:96: AssertionError
+_ test_qualified_or_negated_prose_is_not_an_unqualified_positive_report[Never report Iterations: 7 as an observed run.\n-iterations-7] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-64/test_qualified_or_negated_pros1')
+prose = 'Never report Iterations: 7 as an observed run.\n'
+entity = 'iterations', value = '7'
+
+    @pytest.mark.parametrize("prose,entity,value", [
+        ("The claim mean: 3 is false; the study did not report that value.\n", "mean", "3"),
+        ("Never report Iterations: 7 as an observed run.\n", "iterations", "7"),
+        ("The geometric mean: 3\n", "mean", "3"),
+    ])
+    def test_qualified_or_negated_prose_is_not_an_unqualified_positive_report(tmp_path, prose, entity, value):
+        (tmp_path / "paper.txt").write_text(prose)
+        result = semantics.interpret_project(tmp_path)
+>       assert not any(c.get("entity") == entity and c.get("value") == value and c.get("relation") == "reported_value"
+                       for c in result["claims"])
+E       assert not True
+E        +  where True = any(<generator object test_qualified_or_negated_prose_is_not_an_unqualified_positive_report.<locals>.<genexpr> at 0x7fbd89b552a0>)
+
+research/scientific_semantics_v3/tests/test_adversarial.py:96: AssertionError
+_ test_qualified_or_negated_prose_is_not_an_unqualified_positive_report[The geometric mean: 3\n-mean-3] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-64/test_qualified_or_negated_pros2')
+prose = 'The geometric mean: 3\n', entity = 'mean', value = '3'
+
+    @pytest.mark.parametrize("prose,entity,value", [
+        ("The claim mean: 3 is false; the study did not report that value.\n", "mean", "3"),
+        ("Never report Iterations: 7 as an observed run.\n", "iterations", "7"),
+        ("The geometric mean: 3\n", "mean", "3"),
+    ])
+    def test_qualified_or_negated_prose_is_not_an_unqualified_positive_report(tmp_path, prose, entity, value):
+        (tmp_path / "paper.txt").write_text(prose)
+        result = semantics.interpret_project(tmp_path)
+>       assert not any(c.get("entity") == entity and c.get("value") == value and c.get("relation") == "reported_value"
+                       for c in result["claims"])
+E       assert not True
+E        +  where True = any(<generator object test_qualified_or_negated_prose_is_not_an_unqualified_positive_report.<locals>.<genexpr> at 0x7fbd89b54820>)
+
+research/scientific_semantics_v3/tests/test_adversarial.py:96: AssertionError
+=========================== short test summary info ============================
+FAILED research/scientific_semantics_v3/tests/test_adversarial.py::test_qualified_or_negated_prose_is_not_an_unqualified_positive_report[The claim mean: 3 is false; the study did not report that value.\n-mean-3]
+FAILED research/scientific_semantics_v3/tests/test_adversarial.py::test_qualified_or_negated_prose_is_not_an_unqualified_positive_report[Never report Iterations: 7 as an observed run.\n-iterations-7]
+FAILED research/scientific_semantics_v3/tests/test_adversarial.py::test_qualified_or_negated_prose_is_not_an_unqualified_positive_report[The geometric mean: 3\n-mean-3]
+3 failed, 166 passed in 13.17s

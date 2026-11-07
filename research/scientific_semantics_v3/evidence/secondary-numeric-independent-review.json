@@ -1,0 +1,276 @@
+{
+  "authority": false,
+  "context_binding_reconciliation": {
+    "difference": "Only hash serialization convention: frozen canonical JSON file has terminal newline; result hashes canonical JSON without terminal newline. No runtime/source/environment binding changed.",
+    "freeze_file_bytes_sha256": "51ba46234a7c8bfd1008568edcc8454d57a25d4a9d09dffbb4c90f5a4195d9ae",
+    "parsed_contexts_exactly_equal": true,
+    "result_canonical_json_without_terminal_newline_sha256": "baf95e3f2f02781ce8e529c535e185a4b1cab7561d60065ff0a668103042128c"
+  },
+  "external_validation": false,
+  "field_fail_count": 0,
+  "field_pass_count": 16,
+  "field_results": [
+    {
+      "expected": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11",
+      "field": "source_sha256",
+      "observed": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11",
+      "pass": true,
+      "scope": "exact_provenance"
+    },
+    {
+      "expected": 54,
+      "field": "observations",
+      "observed": 54,
+      "pass": true,
+      "scope": "source_or_computational_field"
+    },
+    {
+      "expected": 3,
+      "field": "fitted_parameters",
+      "observed": 3,
+      "pass": true,
+      "scope": "source_or_computational_field"
+    },
+    {
+      "expected": 51,
+      "field": "degrees_of_freedom",
+      "observed": 51,
+      "pass": true,
+      "scope": "source_or_computational_field"
+    },
+    {
+      "expected": "exp(-b1*x)/(b2+b3*x)",
+      "field": "regression_mean",
+      "observed": "exp(-b1*x)/(b2+b3*x)",
+      "pass": true,
+      "scope": "exact_declared_formula_with_error_term_excluded_for_prediction_only"
+    },
+    {
+      "expected": "5.1304802941E+02",
+      "field": "reported_RSS",
+      "observed": "5.1304802941E+02",
+      "pass": true,
+      "scope": "source_or_computational_field"
+    },
+    {
+      "expected": "3.1717133040E+00",
+      "field": "reported_residual_std",
+      "observed": "3.1717133040E+00",
+      "pass": true,
+      "scope": "source_or_computational_field"
+    },
+    {
+      "expected": "1.6657666537E-01",
+      "field": "fitted_b1",
+      "observed": "1.6657666537E-01",
+      "pass": true,
+      "scope": "source_reported_value_not_confidence_bound"
+    },
+    {
+      "expected": "5.1653291286E-03",
+      "field": "fitted_b2",
+      "observed": "5.1653291286E-03",
+      "pass": true,
+      "scope": "source_reported_value_not_confidence_bound"
+    },
+    {
+      "expected": "1.2150007096E-02",
+      "field": "fitted_b3",
+      "observed": "1.2150007096E-02",
+      "pass": true,
+      "scope": "source_reported_value_not_confidence_bound"
+    },
+    {
+      "expected": "5.1304802941E+02",
+      "field": "recomputed_RSS",
+      "observed": 513.0480294068652,
+      "pass": true,
+      "scope": "predeclared_finite_numerical_tolerance_not_formal_error_bound"
+    },
+    {
+      "expected": "3.1717133040E+00",
+      "field": "recomputed_residual_std",
+      "observed": 3.17171330395538,
+      "pass": true,
+      "scope": "predeclared_finite_numerical_tolerance_not_formal_error_bound"
+    },
+    {
+      "expected": "513.04802940686547049876301631532014235038678334188182253516597379101400805795313",
+      "field": "RSS_independent_Decimal80",
+      "observed": "513.04802940686547049876301631532014235038678334188182253516597379101400805795313",
+      "pass": true,
+      "scope": "independent_closed_formula_implementation_same_Decimal_library"
+    },
+    {
+      "expected": "REPRODUCED_ROUNDED_COMPUTATION",
+      "field": "original_status",
+      "observed": "REPRODUCED_ROUNDED_COMPUTATION",
+      "pass": true,
+      "scope": "source_or_computational_field"
+    },
+    {
+      "comparison_rule": "Compare unchanged checker-owned numerical fields, excluding elapsed seconds and packet-wrapper id/artifact_path/source_sha256. Source binding is independently verified in source_sha256 field.",
+      "expected": "REPRODUCED_ROUNDED_COMPUTATION",
+      "field": "fresh_checker_replay",
+      "observed": "REPRODUCED_ROUNDED_COMPUTATION",
+      "pass": true,
+      "scope": "same_checker_fresh_run_not_external_validation"
+    },
+    {
+      "expected": "REFUTED",
+      "field": "counterprobe_status",
+      "observed": "REFUTED",
+      "pass": true,
+      "scope": "predetermined_altered_table_consistency_check"
+    }
+  ],
+  "first_clean_numeric": {
+    "artifact_path": "Chwirut2.dat",
+    "assumptions": [
+      "Source data values interpreted as their exact tabulated decimals.",
+      "Printed coefficients approximate a fit; parameter standard deviations are not rounding bounds.",
+      "Fitted conditional mean excludes the additive error term e; no distribution is inferred."
+    ],
+    "authority": false,
+    "checker": "nist-rounded-model-v3",
+    "comparison_tolerance": {
+      "justification": "Predeclared finite reproduction tolerance, not a rigorous error bound",
+      "relative": 1e-07
+    },
+    "degrees_of_freedom": 51,
+    "exact_rational_rounding_enclosure": {
+      "reason": "transcendental interval bound not implemented",
+      "status": "UNSUPPORTED"
+    },
+    "fitted_parameters": 3,
+    "float_decimal_absolute_difference": 2.2737367544323206e-13,
+    "formula": "exp(-b1*x)/(b2+b3*x)",
+    "id": "numerical-af6d951bcfc9b91f7c57ed8f",
+    "observations": 54,
+    "residual_std_recomputed": 3.17171330395538,
+    "residual_std_reported": "3.1717133040E+00",
+    "rss_decimal80": "513.04802940686547049876301631532014235038678334188182253516597379101400805795313",
+    "rss_float": 513.0480294068652,
+    "rss_relative_discrepancy": 6.110150870164786e-12,
+    "rss_reported": "5.1304802941E+02",
+    "scientific_meaning": "OPEN",
+    "scope": "Tabulated observations, printed fitted coefficients and residual statistics; no global optimum or empirical validity proof",
+    "seconds": 0.002963256963994354,
+    "source_sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11",
+    "statistical_assumptions_status": "NOT_VERIFIED",
+    "status": "REPRODUCED_ROUNDED_COMPUTATION"
+  },
+  "first_clean_output_sha256": "2b727ffbeeaab7d0e0fd2cb10f61095f017bc551c968ec4011f69e8d4f5b9fd8",
+  "fresh_numeric_replay": {
+    "assumptions": [
+      "Source data values interpreted as their exact tabulated decimals.",
+      "Printed coefficients approximate a fit; parameter standard deviations are not rounding bounds.",
+      "Fitted conditional mean excludes the additive error term e; no distribution is inferred."
+    ],
+    "authority": false,
+    "checker": "nist-rounded-model-v3",
+    "comparison_tolerance": {
+      "justification": "Predeclared finite reproduction tolerance, not a rigorous error bound",
+      "relative": 1e-07
+    },
+    "degrees_of_freedom": 51,
+    "exact_rational_rounding_enclosure": {
+      "reason": "transcendental interval bound not implemented",
+      "status": "UNSUPPORTED"
+    },
+    "fitted_parameters": 3,
+    "float_decimal_absolute_difference": 2.2737367544323206e-13,
+    "formula": "exp(-b1*x)/(b2+b3*x)",
+    "observations": 54,
+    "residual_std_recomputed": 3.17171330395538,
+    "residual_std_reported": "3.1717133040E+00",
+    "rss_decimal80": "513.04802940686547049876301631532014235038678334188182253516597379101400805795313",
+    "rss_float": 513.0480294068652,
+    "rss_relative_discrepancy": 6.110150870164786e-12,
+    "rss_reported": "5.1304802941E+02",
+    "scientific_meaning": "OPEN",
+    "scope": "Tabulated observations, printed fitted coefficients and residual statistics; no global optimum or empirical validity proof",
+    "seconds": 0.0038496520137414336,
+    "statistical_assumptions_status": "NOT_VERIFIED",
+    "status": "REPRODUCED_ROUNDED_COMPUTATION"
+  },
+  "independent_direct_formula_oracle": {
+    "method": "Parse fixed original parameter/data rows, explicitly compute exp(-b1*x)/(b2+b3*x) at Decimal precision80, then residual sum and sqrt(RSS/(n-p)); no shared PCS expression parser/evaluator/IR. Same Python Decimal library is a shared numerical dependency.",
+    "observations": 54,
+    "parameters": {
+      "b1": "1.6657666537E-01",
+      "b2": "5.1653291286E-03",
+      "b3": "1.2150007096E-02"
+    },
+    "residual_std_decimal80": "3.1717133039553808708732827144186455779579986827105155047226089794438333343462096",
+    "rss_decimal80": "513.04802940686547049876301631532014235038678334188182253516597379101400805795313"
+  },
+  "metric_scope": "Sixteen source/computation/replay/counterprobe adjudication checks, several nested and correlated; not sixteen independent scientific claims or trials.",
+  "new_training": false,
+  "predetermined_corrupted_table": {
+    "result": {
+      "assumptions": [
+        "Source data values interpreted as their exact tabulated decimals.",
+        "Printed coefficients approximate a fit; parameter standard deviations are not rounding bounds.",
+        "Fitted conditional mean excludes the additive error term e; no distribution is inferred."
+      ],
+      "authority": false,
+      "checker": "nist-rounded-model-v3",
+      "comparison_tolerance": {
+        "justification": "Predeclared finite reproduction tolerance, not a rigorous error bound",
+        "relative": 1e-07
+      },
+      "degrees_of_freedom": 51,
+      "exact_rational_rounding_enclosure": {
+        "reason": "transcendental interval bound not implemented",
+        "status": "UNSUPPORTED"
+      },
+      "fitted_parameters": 3,
+      "float_decimal_absolute_difference": 1.8189894035458565e-12,
+      "formula": "exp(-b1*x)/(b2+b3*x)",
+      "observations": 54,
+      "residual_std_recomputed": 15.793954415793811,
+      "residual_std_reported": "3.1717133040E+00",
+      "rss_decimal80": "12721.898800496812379095194997659918934131244039424001632735720456514305203083504",
+      "rss_float": 12721.898800496814,
+      "rss_relative_discrepancy": 23.7967014221395,
+      "rss_reported": "5.1304802941E+02",
+      "scientific_meaning": "OPEN",
+      "scope": "Tabulated observations, printed fitted coefficients and residual statistics; no global optimum or empirical validity proof",
+      "seconds": 0.002931139024440199,
+      "statistical_assumptions_status": "NOT_VERIFIED",
+      "status": "REFUTED"
+    },
+    "source_sha256": "f457259857a06477998211f584c636778cd8d980557b721d8379338272642319",
+    "transformation": "Replace first response92.9000E0 with192.9000E0; all predictor/model/parameter/reported-statistic bytes unchanged."
+  },
+  "primary_14_of_22_result_changed": false,
+  "reference_protocol_sha256": "38b2d73a2069098c7925dc3d1808d140d5ff3b0a3241e04c3fb2e0283101b2bd",
+  "review_diagnostics": [
+    {
+      "issue": "Initial reviewer draft compared packet-wrapped numerical result with direct reproduce function output as identical dictionaries.",
+      "observed": "Packet includes source_sha256 added by orchestration; direct function omits that wrapper field. All checker-owned numeric fields were already exactly equal.",
+      "resolution": "Explicitly compare checker-owned fields and check source hash separately. This repairs reviewer schema alignment only; neither scientific protocol, original result, runtime source nor primary score changed."
+    }
+  ],
+  "reviewed_utc": "2026-11-07T01:16:15.675293+00:00",
+  "reviewer": "Independent internal AI-assisted source curator, not external human domain expert",
+  "runtime_implementation_commit": "04582fd89146a8aa31302c6e2c8aec00f6fcec4b",
+  "runtime_source_changed_by_reviewer": false,
+  "schema": "pcs-secondary-numeric-independent-review-v3",
+  "scientific_assumptions": {
+    "domain": "Evaluations require nonzero b2+b3*x; all tabulated x and reported positive b2,b3 give positive denominators for these finite rows. No arbitrary-input domain theorem supplied.",
+    "measurement_units": "UNSPECIFIED; no predictor millimetre unit inferred",
+    "normality_independence_homoscedasticity": "NOT_VERIFIED",
+    "rigorous_transcendental_error_bound": {
+      "reason": "transcendental interval bound not implemented",
+      "status": "UNSUPPORTED"
+    },
+    "rounded_coefficients": "Source-reported fitted decimals used exactly in arithmetic; no proof that rounding encloses true optimum or that parameter standard deviations are rounding bounds.",
+    "scientific_adequacy": "OPEN; finite residual reproduction is not physical validation or novel scientific discovery",
+    "statistical_uncertainty": "Parameter confidence intervals and reported parameter standard deviations not independently validated"
+  },
+  "scope": "One separately frozen numerical project with one predetermined corruption probe; not broad scientific semantic generalization",
+  "software_commit": "75310b56d9c6e4ea1ab47d50345aea7dc592744c",
+  "source_reference_freeze_manifest_sha256": "8db918d5255b417db7490caf7a7bb4a12eb7fa06b92279bc1281bab02537c8e3"
+}

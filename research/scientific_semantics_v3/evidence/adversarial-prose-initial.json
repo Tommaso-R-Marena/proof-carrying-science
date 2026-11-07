@@ -1,0 +1,140 @@
+{
+  "format": "pcs-internal-prose-counterexamples-v1",
+  "semantics_source_sha256": "03f4954933d61f0bd13580994f746ffe89a9848581a3a3291c57230b50318bc5",
+  "cases": [
+    {
+      "input": "The claim mean: 3 is false; the study did not report that value.\n",
+      "source_sha256": "24ec59a841fb992084df3c91bb2f26f687fc51358a0ea13adc9719e3730ac7b8",
+      "claims": [
+        {
+          "kind": "quantity",
+          "subject": "mean",
+          "entity": "mean",
+          "relation": "reported_value",
+          "quantity_role": "mean",
+          "unit": null,
+          "conditions": {
+            "scope": "Specific quoted source report; other runs are not implied"
+          },
+          "assumptions": [],
+          "domain": null,
+          "symbols": [],
+          "evidence_kind": "author_report",
+          "source": {
+            "path": "source.txt",
+            "sha256": "24ec59a841fb992084df3c91bb2f26f687fc51358a0ea13adc9719e3730ac7b8",
+            "artifact_id": "artifact-cf4efa46914ba6618410064a",
+            "byte_start": 0,
+            "byte_end": 65,
+            "quote": "The claim mean: 3 is false; the study did not report that value.\n",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            }
+          },
+          "value": "3",
+          "exact_value": {
+            "literal": "3",
+            "numerator": "3",
+            "denominator": "1"
+          },
+          "authority": false,
+          "meaning_status": "SOURCE_INTERPRETATION_NOT_SCIENTIFIC_CERTIFICATION",
+          "id": "claim-e27a7f966e3ca07161de7e00"
+        }
+      ],
+      "unresolved": [],
+      "authority": false
+    },
+    {
+      "input": "The geometric mean: 3\n",
+      "source_sha256": "dc43c1b2c3d6c3fe1f2b17517a0cb0217a0f4cbd276aee5bc8acb829e23a483e",
+      "claims": [
+        {
+          "kind": "quantity",
+          "subject": "mean",
+          "entity": "mean",
+          "relation": "reported_value",
+          "quantity_role": "mean",
+          "unit": null,
+          "conditions": {
+            "scope": "Specific quoted source report; other runs are not implied"
+          },
+          "assumptions": [],
+          "domain": null,
+          "symbols": [],
+          "evidence_kind": "author_report",
+          "source": {
+            "path": "source.txt",
+            "sha256": "dc43c1b2c3d6c3fe1f2b17517a0cb0217a0f4cbd276aee5bc8acb829e23a483e",
+            "artifact_id": "artifact-f812565f65b6c7b728fe5418",
+            "byte_start": 0,
+            "byte_end": 22,
+            "quote": "The geometric mean: 3\n",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            }
+          },
+          "value": "3",
+          "exact_value": {
+            "literal": "3",
+            "numerator": "3",
+            "denominator": "1"
+          },
+          "authority": false,
+          "meaning_status": "SOURCE_INTERPRETATION_NOT_SCIENTIFIC_CERTIFICATION",
+          "id": "claim-88dbdc4e0ba7761fa5259c3d"
+        }
+      ],
+      "unresolved": [],
+      "authority": false
+    },
+    {
+      "input": "Never report Iterations: 7 as an observed run.\n",
+      "source_sha256": "7ce75f39a5b06f0e4d9a4f4f16b8e2aa8454e35f1d21c29e5ad59965bcf1af62",
+      "claims": [
+        {
+          "kind": "quantity",
+          "subject": "iterations",
+          "entity": "iterations",
+          "relation": "reported_value",
+          "quantity_role": "iterations",
+          "unit": "count",
+          "conditions": {
+            "scope": "Specific quoted source report; other runs are not implied"
+          },
+          "assumptions": [],
+          "domain": null,
+          "symbols": [],
+          "evidence_kind": "author_report",
+          "source": {
+            "path": "source.txt",
+            "sha256": "7ce75f39a5b06f0e4d9a4f4f16b8e2aa8454e35f1d21c29e5ad59965bcf1af62",
+            "artifact_id": "artifact-865faffe2ff31cd9f31c00bc",
+            "byte_start": 0,
+            "byte_end": 47,
+            "quote": "Never report Iterations: 7 as an observed run.\n",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            }
+          },
+          "value": "7",
+          "exact_value": {
+            "literal": "7",
+            "numerator": "7",
+            "denominator": "1"
+          },
+          "authority": false,
+          "meaning_status": "SOURCE_INTERPRETATION_NOT_SCIENTIFIC_CERTIFICATION",
+          "id": "claim-22260456b09dbbe996d12610"
+        }
+      ],
+      "unresolved": [],
+      "authority": false
+    }
+  ],
+  "finding": "Positive report extraction ignores negation and the geometric-mean qualifier in these authored cases. Source meaning was not certified.",
+  "authority": false
+}
