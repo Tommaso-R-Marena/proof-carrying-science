@@ -96,6 +96,20 @@ _RELATION = re.compile(
 )
 _INSTRUCTION = re.compile(r"\b(ignore (?:all |the )?(?:previous|prior) instructions?|system prompt|developer message|you are (?:an? |the )?(?:assistant|reviewer)|(?:set|grant|return) authority\s*(?:=|to)?\s*true)\b", re.I)
 _VERBS = {"inhibit": "inhibits", "inhibits": "inhibits", "repress": "represses", "represses": "represses", "activate": "activates", "activates": "activates", "stimulate": "stimulates", "stimulates": "stimulates"}
+_ROLE_MAPPED = re.compile(
+    r"^(?:In this system,\s*)?(?P<protein>[A-Za-z][A-Za-z0-9_-]*)\s+"
+    r"\(variable\s+(?P<mrna>[A-Za-z][A-Za-z0-9_]*)\s+is the mRNA,\s*"
+    r"variable\s+(?P<protein_var>[A-Za-z][A-Za-z0-9_]*)\s+is the protein\)\s+"
+    r"(?:(?P<modal>may|might|can|could|would|should)\s+)?"
+    r"(?:(?:does|do|did)\s+)?(?P<neg>not\s+|never\s+)?"
+    r"(?P<verb>inhibits?|repress(?:es)?|activates?|stimulates?)\s+"
+    r"(?:the\s+)?(?:[A-Za-z][A-Za-z0-9_-]*\s+){0,5}"
+    r"(?P<gene>[A-Za-z][A-Za-z0-9_-]*)\s+"
+    r"\((?P<target_mrna>[A-Za-z][A-Za-z0-9_]*),\s*"
+    r"(?P<target_protein>[A-Za-z][A-Za-z0-9_]*)\s+describe mRNA and protein\)"
+    r"(?:\s+(?P<condition>when\b.{1,180}|under\b.{1,180}|if\b.{1,180}))?[.!;]?$",
+    re.I,
+)
 
 
 def _prose(project, source, plain, *, scope="source_report"):
@@ -110,11 +124,29 @@ def _prose(project, source, plain, *, scope="source_report"):
         clean = " ".join(sentence.split())
         if len(clean) > 500:
             continue
+        mapped = _ROLE_MAPPED.fullmatch(clean)
+        if mapped:
+            relation = _VERBS[mapped["verb"].lower()]
+            conditions = {"source_protein": mapped["protein"], "target_gene": mapped["gene"],
+                          "negated": bool(mapped["neg"]), "modality": (mapped["modal"] or "asserted").lower()}
+            if mapped["condition"]:
+                conditions["qualifier"] = mapped["condition"].strip()
+            project.claim(source, kind="interaction", entity=mapped["protein_var"],
+                          relation=relation, value=mapped["target_mrna"], object=mapped["target_mrna"],
+                          quantity_role="transcriptional_repression" if relation in {"inhibits", "represses"} else "transcriptional_activation",
+                          conditions=conditions, scope="biological_model", evidence_kind="author_report",
+                          source_statement=clean,
+                          explicit_role_bindings={"source_mrna": mapped["mrna"], "source_protein": mapped["protein_var"],
+                                                  "target_mrna": mapped["target_mrna"], "target_protein": mapped["target_protein"]},
+                          assumptions=["Source explicitly identifies the protein and mRNA variables; relation is an author report, not measured causal truth"])
+            continue
         match = _RELATION.fullmatch(clean)
         if not match:
             continue
         subject, target = match["subject"].strip(), match["object"].strip()
-        if any(re.search(r"\b" + word + r"\b", subject, re.I) for word in ("report", "claim", "instruction", "assistant", "reviewer", "sentence", "statement")):
+        if re.search(r"\b(?:report|claim|instruction|assistant|reviewer|sentence|statement|not|never|that|is|probably|likely|possibly)\b", subject, re.I):
+            continue
+        if re.search(r"\b(?:but|nor|neither|or|not|never)\b", target, re.I):
             continue
         conditions = {"negated": bool(match["neg"]), "modality": (match["modal"] or "asserted").lower()}
         if match["condition"]:
