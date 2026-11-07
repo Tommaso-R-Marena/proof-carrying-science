@@ -1,0 +1,39 @@
+{
+  "schema_version": "scientific-reference-protocol-v4",
+  "annotation_role": "Independently prepared AI-assisted internal reference; not human, qualified external expert, or external expert validation",
+  "independence": "Prepared from exact original papers, supplements, author code, and original or separately attributed curated data. No new scientific interpreter, checker, predictions, outputs, error atlas, or retrieval outputs were read. The v3 reference schema was read as background only.",
+  "development_policy": "Fiedler2016 development sources and labels may guide implementation after annotation freeze. Development performance is not heldout generalization evidence.",
+  "prospective_policy": "Schwen2015, Bertozzi2020, and Smith2013 final original source bytes and labels remain outside the developer checkout until source identities, protocol, annotations, and runtime software are frozen by SHA256. No final inference or testing before freeze. Repairs after access are post-hoc and cannot improve the prospective score.",
+  "source_identity": "Every annotation binds project-relative source path, SHA256 of exact original source bytes, exact UTF-8 quote, and half-open byte_start/byte_end. Source supplements and code retain origin and license/provenance records. Curated PEtab is distinct from author code; correspondence must be demonstrated, never assumed from directory names.",
+  "annotation_scope": "15–25 supported claims and five counterprobes per study. Include the principal paper mathematical and empirical claims; model scope, units, conditions, assumptions, author-code/data completeness, and reproducibility limits. Claims may exceed implemented automation; explicit unknown is a valid and necessary result. This is a selected internal reference, not exhaustive annotation of all paper claims.",
+  "evidence_levels": [
+    "source_declaration",
+    "author_report",
+    "mathematical_consequence",
+    "numerical_reproduction",
+    "empirical_scientific_conclusion"
+  ],
+  "core_match": "Source-bound typed interpretation with kind, entity, scope, relation, exact value or canonical_rhs, quantity_role, unit and source-declared conditions. Equivalent number formatting is allowed. Algebraic equivalence requires common defined domain and nonzero-denominator obligations. Entity aliases require explicit deterministic evidence.",
+  "context_match": "Source-declared units, population, experimental setting, interventions, assumptions, domains and scope must be retained. Null unit means no explicit unit; do not infer dimensionless. Scientific_claim values are interpreted propositions, not mandatory literal output strings.",
+  "caveats_policy": "Caveats are explanatory reviewer prose. Do not impose literal exact-match requirements on caveat wording. Score whether necessary scientific boundaries are preserved through typed conditions and check scope.",
+  "verification_separation": "expected_status concerns original-source support only. verification_expectation has separate level and supported|unknown status. Source recognition is not numerical reproduction, algebraic proof, confidence verification, causality, or empirical truth. Computational supported status requires fresh checks of corresponding original code/data and assumptions.",
+  "counterprobes": "Reviewer-authored questions include source-contradicted and insufficient-evidence propositions. They are not author statements. Correct abstention alone is not a demonstrated refutation. A confident unsupported promotion to verified scientific authority is an error.",
+  "workflow_utility": "Eight fixed questions per study, each with required_annotation_ids, required_check_scopes, and expected_answer supported|unknown. Score coverage of necessary evidence plus whether answer support is limited to the scope of completed checks. Unknown must be explicit, informative, and justified; mere missing output is not useful abstention.",
+  "metrics": [
+    "supported principal-claim core recall",
+    "full typed/context recall",
+    "source-grounded annotated-probe precision",
+    "equation/domain matching",
+    "explicit-unit accuracy and coverage",
+    "conditions/assumptions coverage",
+    "counterprobe abstention and unsupported promotion",
+    "numerical/empirical/formal verification status separation",
+    "workflow utility over eight fixed questions",
+    "source/code/data completeness and correspondence",
+    "latency and inference cost"
+  ],
+  "blind_boundary_audit": "Record source, label and protocol SHA256 before software freeze. Record software hashes before any final run. Preserve original evaluation results. No software edit after final access may count prospectively.",
+  "expert_review": "Provide an auditable blank external-expert review worksheet with source spans, proposed interpretation, disagreements, corrections, reviewer qualifications and disposition. Until completed by an actual qualified expert, external expert validation is absent.",
+  "statistical_limitations": "Four selected projects and internal AI-assisted labels do not establish broad scientific understanding, human expert parity, statistically significant superiority, or exhaustive claim precision.",
+  "annotation_state": "to_be_hash_frozen_before_final_system_evaluation"
+}
