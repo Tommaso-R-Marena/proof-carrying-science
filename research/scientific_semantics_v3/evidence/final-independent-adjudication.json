@@ -1,0 +1,454 @@
+{
+  "schema_version": "independent-final-scientific-adjudication-v3",
+  "reviewer": "prospective_reference",
+  "review_role": "AI-assisted internal source-reading adjudication by a separate agent; not external or qualified human expert validation",
+  "date_utc": "2026-11-07T01:05:34.001333+00:00",
+  "source_and_label_independence": "References prepared before reading implementation or predictions. Final source interpretation review performed after software freeze and primary evaluation; no runtime, protocol, references or primary results modified.",
+  "primary_results_sha256": "5fdd50e46c177deaf2d107ea8a3488938a4fb13bd9b190e7c603b6b7228ab8ae",
+  "software_sha256": "330d32e5ce3fe152ebdb68f7ad20afdfcd62fceb305962ec65f571e09beeed29",
+  "final_reference_sha256": "85fbe7815cc7e826ac6e22b74164223d53edaf30bff8d47b2b70710469e0c754",
+  "metrics_unchanged": {
+    "supported": 22,
+    "new_core": 19,
+    "new_typed_context": 14,
+    "baseline_core": 10,
+    "baseline_typed_context": 5,
+    "counterprobe_primary_core_abstentions": 5,
+    "counterprobes": 6,
+    "counterprobe_full_context_proposals": 0,
+    "unsupported_promotions": 0
+  },
+  "independent_scope_findings": {
+    "references_byte_validated": 28,
+    "candidate_sources_byte_validated": 75,
+    "false_typed_context_positives_found_in_supported_probes": 0,
+    "strict_context_field_placement_misses": 5,
+    "genuine_core_semantic_failures": 3,
+    "confidence_counterprobe_core_role_granularity_artifacts": 1,
+    "new_independent_fit_reproduction_on_final_project": false
+  },
+  "limitations": [
+    "Scores cover selected literal declarations/reports and source equations, not complete paper understanding.",
+    "Correctly reporting a parameter standard deviation does not independently validate statistical uncertainty.",
+    "SBML parameter probes with unit null concern absent explicit parameter units attrs; contextual physical units in narrative are not thereby understood.",
+    "Five context field-placement mismatches are diagnostic observations only; primary14/22 remains unchanged.",
+    "One confidence counterprobe core hit is a grading granularity artifact; no actual confidence interval claim, full context match orauthority grant occurred.",
+    "A failed unsupported syntax dispatch couples all Misra1a source checks to model parsing; correct table transcription receives no independent numerical/checker confirmation in this final run.",
+    "Internal AI-assisted review can share systematic errors; qualified independent domain expert validation remains needed."
+  ],
+  "outcomes": [
+    {
+      "reference_id": "final-elowitz2000-initial_amount-model-Y",
+      "expected_status": "supported",
+      "statement": "The encoded model declares Y in scope model with initial amount 20.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-353fa4c11b9c7682d8d01014"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_source_fact_context_field_placement",
+      "scientific_scope_note": "The source and candidate both declare initialAmount=20 in cell; candidate declarations retains hasOnlySubstanceUnits=\"true\". Strict context failure is bool/string and declarations/conditions placement, not lost source content.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-initial_amount-model-PX",
+      "expected_status": "supported",
+      "statement": "The encoded model declares PX in scope model with initial amount 0.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-17d250d296121327632d1309"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_source_fact_context_field_placement",
+      "scientific_scope_note": "The source and candidate both declare initialAmount=0 in cell; hasOnlySubstanceUnits=\"true\" is retained in declarations, not normalized into conditions.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-parameter-model-tau_mRNA",
+      "expected_status": "supported",
+      "statement": "The encoded model declares tau_mRNA in scope model with parameter 2.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-1ed6a4a0db0f290921ad064a"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_literal_declaration",
+      "scientific_scope_note": "The source parameter attribute declares value=2. This does not establish its physical unit from the separate half-life table; the graded unit=null is literal missing SBML units metadata, not full scientific dimensional interpretation.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-parameter-model-tau_prot",
+      "expected_status": "supported",
+      "statement": "The encoded model declares tau_prot in scope model with parameter 10.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-de24c2552b612072c6b5b822"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_literal_declaration",
+      "scientific_scope_note": "The source parameter attribute declares value=10. Physical minute units in the narrative are not reconstructed in this source-attribute probe.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-parameter-model-KM",
+      "expected_status": "supported",
+      "statement": "The encoded model declares KM in scope model with parameter 40.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-1ec42b0ca06e073446654a07"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_literal_declaration",
+      "scientific_scope_note": "The encoded parameter value is 40. Narrative meaning, monomers/cell and half-maximal repression, remains outside the scored literal slots.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-parameter-model-eff",
+      "expected_status": "supported",
+      "statement": "The encoded model declares eff in scope model with parameter 20.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-904144ee37526bad1feca0ce"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_literal_declaration",
+      "scientific_scope_note": "The encoded parameter value 20 is correctly identified. Proteins-per-transcript interpretation in adjacent notes is not established by this numeric match.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-parameter-model-ps_0",
+      "expected_status": "supported",
+      "statement": "The encoded model declares ps_0 in scope model with parameter 0.0005.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-2db4d17549f72ba8b6f53f2b"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_literal_declaration",
+      "scientific_scope_note": "The exact attribute value 0.0005 is correctly preserved. Transcripts/(second*promotor) narrative unit is not promoted into a proved dimensional statement.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-assignment-beta",
+      "expected_status": "supported",
+      "statement": "The source assignment rule defines beta = tau_mRNA/tau_prot.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-c0489bbe17f0b57e22caaca8"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_source_equation_context_field_placement",
+      "scientific_scope_note": "MathML divides tau_mRNA by tau_prot; candidate div AST, source assignmentRule, assignment_rule role and scoped bindings agree. conditions.rule_type is absent despite equivalent role/source metadata. The nonzero denominator remains an obligation.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-assignment-a_tr",
+      "expected_status": "supported",
+      "statement": "The source assignment rule defines a_tr = (ps_a-ps_0)*60.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-6844cddda73516cd55f5352b"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_source_equation_context_field_placement",
+      "scientific_scope_note": "MathML defines a_tr=(ps_a-ps_0)*60; candidate preserves subtraction, multiplication, constant60 and source-scoped symbols. Strict context misses only duplicated rule_type field.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-reaction1",
+      "expected_status": "supported",
+      "statement": "The first reaction rate is kd_mRNA times X.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-48d0ab6f6714246bb7510cbb"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_scoped_source_equation",
+      "scientific_scope_note": "Kinetic-law MathML multiplies kd_mRNA by X. Candidate names the correct reaction rate, preserves both global symbol bindings, and does not infer biological adequacy.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-time-unit",
+      "expected_status": "supported",
+      "statement": "The encoded time unit is one minute, represented as 60 seconds.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-d4ac82b0d72336b3466e5082"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_unit_factor_context_field_placement",
+      "scientific_scope_note": "Source explicitly uses kind=second,multiplier=60; candidate exactvalue60, terms.multiplier60 and resolved factor60 match. conditions.multiplier is absent; this is field-placement mismatch.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-repressor-link",
+      "expected_status": "supported",
+      "statement": "The source describes LacI protein PX as inhibiting tetR expression (Y mRNA, PY protein), not activating it.",
+      "reference_source_valid": true,
+      "candidate_ids": [],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "genuine_missing_scientific_interpretation",
+      "scientific_scope_note": "The source directly identifies PX as LacI protein and says it inhibits tetR expression with Y/PY mRNA/protein. No interaction candidate is produced. Correct source-name extraction elsewhere does not supply the directed biological relation.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-parameter-b1",
+      "expected_status": "supported",
+      "statement": "NIST reports certified estimate b1 = 2.3894212918E+02.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-cd21f0feaa189142ef999a9d",
+        "claim-717eb2095aba190c6180f3bc"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "The source certified-parameter column reports 2.3894212918E+02; candidate correctly distinguishes it from starts500/250 and from the separate reported standard deviation. The estimate is not certified afresh by PCS.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-std-b1",
+      "expected_status": "supported",
+      "statement": "NIST reports the standard deviation of estimate b1 as 2.7070075241E+00.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-cd21f0feaa189142ef999a9d",
+        "claim-717eb2095aba190c6180f3bc"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "The source standard-deviation column reports 2.7070075241E+00; this is neither a confidence interval nor a rigorous parameter rounding bound. Numerical checker remainsUNKNOWN.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-parameter-b2",
+      "expected_status": "supported",
+      "statement": "NIST reports certified estimate b2 = 5.5015643181E-04.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-61d4932060f86bfebc05c8ea",
+        "claim-df202e3ec57456a276698f49"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "The source certified-parameter column reports 5.5015643181E-04. Candidate retains it as an author/certifier report, not a new numerical fit.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-std-b2",
+      "expected_status": "supported",
+      "statement": "NIST reports the standard deviation of estimate b2 as 7.2668688436E-06.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-61d4932060f86bfebc05c8ea",
+        "claim-df202e3ec57456a276698f49"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "The source standard-deviation column reports 7.2668688436E-06. No confidence construction or probabilistic premises are inferred.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-residual_sum_squares",
+      "expected_status": "supported",
+      "statement": "NIST reports residual sum of squares 1.2455138894E-01.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-19b555cab199c0b416ecbd18"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "The reported RSS 1.2455138894E-01 is correctly transcribed. It is not independently reproduced in this final primary run because the exponential-bracket formula is unsupported.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-residual_std",
+      "expected_status": "supported",
+      "statement": "NIST reports residual standard deviation 1.0187876330E-01.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-a9ff588a913d25bad932e470"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "The reported residual standard deviation 1.0187876330E-01 is correctly transcribed; its inferential assumptions are not verified.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-degrees_of_freedom",
+      "expected_status": "supported",
+      "statement": "NIST reports degrees of freedom 12.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-30906fd5fe9e5204e2054b37"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "Reported degrees of freedom 12 is correctly typed as a count. Recognition is separate from independently verifying degrees-of-freedom and fit assumptions.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-observation_count",
+      "expected_status": "supported",
+      "statement": "NIST reports number of observations 14.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-76f54f9100d83cf12d82eed8"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": true,
+      "authority_granted": false,
+      "independent_adjudication": "correct_author_report",
+      "scientific_scope_note": "Reported observation count 14 is correctly transcribed with count unit. Full numerical reproduction still abstains.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-statistical-model",
+      "expected_status": "supported",
+      "statement": "Misra1a defines y as b1 times one minus exp(-b2*x), plus an additive error e.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-057b188b5cf9aa36f28994e6"
+      ],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "genuine_expression_semantics_error_fail_closed",
+      "scientific_scope_note": "Source mathematical notation exp[-b2*x] denotes exponentiation by the exponential function. Candidate generic AST instead treats exp as a subscriptable symbol and lists exp as a variable. This is an actual interpretation failure, not algebraic equivalence or a valid scientific alternative. Grader misses it; independent checker and numerical reproduction returnUNKNOWN.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-nist_misra1a-predictor-meaning",
+      "expected_status": "supported",
+      "statement": "The predictor variable x denotes pressure; no pressure unit is specified in the file.",
+      "reference_source_valid": true,
+      "candidate_ids": [],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "genuine_missing_variable_definition",
+      "scientific_scope_note": "The source explicitly defines x as pressure and supplies no pressure unit. No variable-definition candidate is generated; pressure and absent-unit meaning remain unrecognized.",
+      "false_typed_context_positive": false
+    },
+    {
+      "reference_id": "final-elowitz2000-wrong-initial",
+      "expected_status": "contradicted",
+      "statement": "The encoded initial amount of Y is zero.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-353fa4c11b9c7682d8d01014"
+      ],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_no_matching_scientific_claim",
+      "scientific_scope_note": "Actual proposed source value contradicts the reviewer counterprobe or no matching proposal exists. The checker never grants scientific authority."
+    },
+    {
+      "reference_id": "final-elowitz2000-wrong-half-life",
+      "expected_status": "contradicted",
+      "statement": "The encoded mRNA half-life tau_mRNA is 10.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-1ed6a4a0db0f290921ad064a"
+      ],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_no_matching_scientific_claim",
+      "scientific_scope_note": "Actual proposed source value contradicts the reviewer counterprobe or no matching proposal exists. The checker never grants scientific authority."
+    },
+    {
+      "reference_id": "final-nist_misra1a-wrong-estimate",
+      "expected_status": "contradicted",
+      "statement": "NIST certified the b1 estimate as 250 (the second starting value).",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-cd21f0feaa189142ef999a9d",
+        "claim-717eb2095aba190c6180f3bc"
+      ],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_no_matching_scientific_claim",
+      "scientific_scope_note": "Actual proposed source value contradicts the reviewer counterprobe or no matching proposal exists. The checker never grants scientific authority."
+    },
+    {
+      "reference_id": "final-nist_misra1a-confidence-interval",
+      "expected_status": "insufficient_evidence",
+      "statement": "The source standard deviation for b1 is by itself a 95% confidence bound.",
+      "reference_source_valid": true,
+      "candidate_ids": [
+        "claim-cd21f0feaa189142ef999a9d",
+        "claim-717eb2095aba190c6180f3bc"
+      ],
+      "primary_core_found": true,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_no_matching_scientific_claim",
+      "scientific_scope_note": "Primary core=true is a coarse grading artifact: candidate reports parameter_std, while the counterprobe expects 95_percent_confidence_interval. The actual claim never asserts a confidence interval; typed-context remains false and all authority remainsfalse.",
+      "primary_core_role_granularity_artifact": true
+    },
+    {
+      "reference_id": "final-nist_misra1a-invented-unit",
+      "expected_status": "insufficient_evidence",
+      "statement": "The source explicitly states pressure x is measured in atmospheres.",
+      "reference_source_valid": true,
+      "candidate_ids": [],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_no_matching_scientific_claim",
+      "scientific_scope_note": "No pressure/atmosphere statement was generated. This is abstention, not an implemented dimensional refutation."
+    },
+    {
+      "reference_id": "final-elowitz2000-reversed-causality",
+      "expected_status": "contradicted",
+      "statement": "The source states that LacI protein PX activates tetR expression.",
+      "reference_source_valid": true,
+      "candidate_ids": [],
+      "primary_core_found": false,
+      "primary_typed_context_found": false,
+      "authority_granted": false,
+      "independent_adjudication": "correct_no_matching_scientific_claim",
+      "scientific_scope_note": "No activating biological relation was generated, but the true inhibitory relation was also missed. Abstention is conservative, not evidence of causal reasoning."
+    }
+  ]
+}

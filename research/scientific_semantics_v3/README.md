@@ -41,9 +41,10 @@ independent replay ignores caches. Host integrity remains an assumption.
 - Independently reparsed source/declaration checks and finite numerical
   reproduction from published observations and fitted coefficients. Rational
   interval enclosures distinguish printed rounding from statistical uncertainty.
-- Deterministic and learned retrieval ablations; the default selected on
+- Deterministic and learned retrieval ablations; the configuration selected on
   development data is TF-IDF over combined source spans and document windows.
-  Retrieval relevance and symbolic similarity grant no verification authority.
+  Select its mode/pool explicitly in the compatibility API. Retrieval relevance
+  and symbolic similarity grant no verification authority.
 - Snapshot-only interpretation, bounded worker processes, independent replay,
   adversarial regression evidence, and a Lean proof of a domain-preserving
   expression rewrite with explicit standard-axiom audits.
