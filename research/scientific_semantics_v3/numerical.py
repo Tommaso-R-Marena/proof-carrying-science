@@ -96,6 +96,32 @@ def parse(raw):
     tree = ast.parse(formula, mode="eval").body
     if len(list(ast.walk(tree))) > 256:
         raise ValueError("model expression bound")
+    # Scientific exp[x]/log[x] notation is not Python array indexing. This
+    # independent AST lowering is deliberately separate from the interpreter's
+    # IR-level rewrite. Only unshadowed scalar primitives may use it.
+    used_functions=set();bare_names=set();bracket_functions=set()
+    def inspect(node,depth=0):
+        if depth>32:raise ValueError("model expression depth")
+        if isinstance(node,ast.Subscript) and isinstance(node.value,ast.Name) and node.value.id in {"exp","log"}:
+            if isinstance(node.slice,(ast.Slice,ast.Tuple,ast.List)):raise ValueError("single scalar function argument required")
+            used_functions.add(node.value.id);bracket_functions.add(node.value.id);inspect(node.slice,depth+1)
+        elif isinstance(node,ast.Call) and isinstance(node.func,ast.Name):
+            used_functions.add(node.func.id)
+            for child in node.args:inspect(child,depth+1)
+        elif isinstance(node,ast.Name):bare_names.add(node.id)
+        else:
+            for child in ast.iter_child_nodes(node):inspect(child,depth+1)
+    inspect(tree)
+    declared_functions=set(re.findall(r"\b(exp|log)\s*=",text))
+    if used_functions & (bare_names|declared_functions):raise ValueError("ambiguous scalar function/variable name")
+    class Brackets(ast.NodeTransformer):
+        def visit_Subscript(self,node):
+            node=self.generic_visit(node)
+            if isinstance(node.value,ast.Name) and node.value.id in {"exp","log"}:
+                call=ast.Call(func=node.value,args=[node.slice],keywords=[])
+                return ast.copy_location(call,node)
+            return node
+    tree=Brackets().visit(tree)
     params = {}
     std = {}
     for match in re.finditer(r"^\s*(b[1-9][0-9]?)\s*=\s*(.+)$", text, re.M):
@@ -149,6 +175,7 @@ def parse(raw):
             raise ValueError("observation bound")
     return {"formula": formula, "tree": tree, "parameters": params,
             "parameter_std": std, "statistics": stats, "rows": rows,
+            "function_notation_assumption":("Unshadowed exp/log bracket applications interpreted as conventional scalar function calls; source meaning remains reviewable" if bracket_functions else None),
             "error_term": "additive e; distribution and independence not established"}
 
 
@@ -227,6 +254,8 @@ def reproduce(raw):
                                    "Printed coefficients approximate a fit; parameter standard deviations are not rounding bounds.",
                                    "Fitted conditional mean excludes the additive error term e; no distribution is inferred."],
                       statistical_assumptions_status="NOT_VERIFIED")
+        if parsed["function_notation_assumption"]:
+            result["assumptions"].append(parsed["function_notation_assumption"])
         relative_std = abs(math.sqrt(rss/df)-float(stats["residual_std"]))/max(abs(float(stats["residual_std"])), 1e-300)
         result["status"] = "REPRODUCED_ROUNDED_COMPUTATION" if relative <= 1e-7 and relative_std <= 1e-7 else "REFUTED"
         result["comparison_tolerance"] = {"relative": 1e-7, "justification": "Predeclared finite reproduction tolerance, not a rigorous error bound"}

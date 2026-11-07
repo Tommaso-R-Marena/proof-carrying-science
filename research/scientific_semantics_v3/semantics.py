@@ -594,6 +594,96 @@ def _sbml(project, artifact, text):
         project.unresolved(short, "SBML interpretation rejected: " + str(exc)[:240])
 
 
+BRACKET_FUNCTIONS = frozenset({"exp", "log"})
+MAX_STATISTICAL_NODES = 512
+
+
+def parse_statistical_expression(expression, *, declared_symbols=()):
+    """Parse scalar regression notation, retaining an explicit interpretation.
+
+    In mathematical documents exp[x] can mean exp(x), whereas Python would
+    parse it as indexing. Only this closed function whitelist is admitted under
+    the conventional scalar-mathematics interpretation, recorded in metadata.
+    An explicitly declared variable or a simultaneous bare use of the same name
+    makes that notation ambiguous and therefore unsupported. Other indexing,
+    slices and vector forms are not scalar regression expressions.
+    """
+    if not isinstance(declared_symbols,(tuple,list,set,frozenset)) or len(declared_symbols)>1024:
+        raise previous.Unsupported("statistical declaration resource bound")
+    declared=set()
+    for symbol in declared_symbols:
+        _safe_name(symbol)
+        declared.add(symbol)
+    original=previous.parse_expression(expression.replace("^","**"))
+    bare=set()
+    functions=set()
+    count=0
+    def inspect(node,depth=0):
+        nonlocal count
+        count+=1
+        if count>MAX_STATISTICAL_NODES or depth>previous.MAX_DEPTH:
+            raise previous.Unsupported("statistical expression resource bound")
+        op=node.get("op")
+        if op=="symbol":
+            bare.add(node["name"])
+            return
+        if op=="subscript" and node.get("value",{}).get("op")=="symbol" and node["value"]["name"] in BRACKET_FUNCTIONS:
+            functions.add(node["value"]["name"])
+            index=node["index"]
+            if index.get("op") in {"slice","vector"}:
+                raise previous.Unsupported("function bracket notation requires one scalar argument")
+            inspect(index,depth+1)
+            return
+        if op=="call":
+            functions.add(node["function"])
+        for value in node.values():
+            if isinstance(value,dict):
+                inspect(value,depth+1)
+            elif isinstance(value,list):
+                for item in value:
+                    if isinstance(item,dict):
+                        inspect(item,depth+1)
+    inspect(original)
+    if functions & (declared|bare):
+        raise previous.Unsupported("ambiguous function name also used or declared as a variable")
+    rewritten=set()
+    def transform(node):
+        op=node["op"]
+        if op=="subscript":
+            value=node.get("value",{})
+            if value.get("op")!="symbol" or value.get("name") not in BRACKET_FUNCTIONS:
+                raise previous.Unsupported("array indexing is outside scalar regression notation")
+            name=value["name"]
+            rewritten.add(name)
+            return {"op":"call","function":name,"args":[transform(node["index"])]}
+        if op in {"slice","vector"}:
+            raise previous.Unsupported("array and slice notation are outside scalar regression notation")
+        if op=="call" and node.get("keywords"):
+            raise previous.Unsupported("scalar mathematical primitives do not accept keyword arguments")
+        if op=="call" and len(node.get("args",[]))!=1:
+            raise previous.Unsupported("mathematical primitive requires one argument")
+        return {key:transform(value) if isinstance(value,dict) else [transform(item) if isinstance(item,dict) else item for item in value] if isinstance(value,list) else value for key,value in node.items()}
+    rhs=transform(original)
+    positive=[]
+    def domains(node):
+        if node.get("op")=="call" and node.get("function")=="log":
+            positive.append({"relation":"positive","expression":node["args"][0]})
+        for value in node.values():
+            if isinstance(value,dict):
+                domains(value)
+            elif isinstance(value,list):
+                for item in value:
+                    if isinstance(item,dict):
+                        domains(item)
+    domains(rhs)
+    notation={"bracket_functions":sorted(rewritten),"assumptions":[],"domain_obligations":positive}
+    if rewritten:
+        notation["assumptions"].append("Bracket applications of whitelisted exp/log primitives are interpreted as conventional scalar mathematical function calls; source meaning requires review")
+    if positive:
+        notation["assumptions"].append("Real logarithm interpretation requires each listed argument to be strictly positive; this requirement is not proved by parsing")
+    return {"rhs":rhs,"notation":notation}
+
+
 def _text(project, artifact, text):
     """Explicit declarations and printed quantities; no free-form conclusions."""
     lines = text.splitlines(keepends=True)
@@ -604,6 +694,10 @@ def _text(project, artifact, text):
     if procedure:
         estimation_conditions["estimation"]="nonlinear_least_squares" if procedure[1].lower().startswith("nonlinear") else "linear_least_squares"
     parameter_table = False
+    # A source variable named exp/log conflicts with the conventional
+    # mathematical-function interpretation. This guard is conservative and does
+    # not claim complete document-level symbol resolution.
+    declared_function_symbols=set(re.findall(r"\b(exp|log)\s*=",text))
     for index, line in enumerate(lines):
         source = project.evidence(artifact, text, offset, offset + len(line))
         offset += len(line)
@@ -656,7 +750,7 @@ def _text(project, artifact, text):
                         joined += " " + continuation.strip()
                         end += len(continuation)
                         try:
-                            previous.parse_expression(joined.replace("^", "**"))
+                            parse_statistical_expression(joined,declared_symbols=declared_function_symbols)
                             expression = joined
                             source = project.evidence(artifact, text, offset-len(line), end)
                             break
@@ -665,8 +759,9 @@ def _text(project, artifact, text):
                     else:
                         pass
                 try:
-                    rhs = previous.parse_expression(expression.replace("^", "**"))
-                    project.claim(source, kind="equation", entity="y", relation="equation", quantity_role="statistical_model", lhs={"op": "symbol", "name": "y"}, rhs=rhs, symbols=_symbols(rhs), domain={"number_system":"real", "required_nonzero":_denominators(rhs)}, assumptions=["Residual symbol is retained; no distribution or independence assumption inferred"], evidence_kind="source_declaration", scope="model", conditions={"error_term":"additive e"} if "e" in _symbols(rhs) else {})
+                    parsed = parse_statistical_expression(expression,declared_symbols=declared_function_symbols)
+                    rhs = parsed["rhs"]
+                    project.claim(source, kind="equation", entity="y", relation="equation", quantity_role="statistical_model", lhs={"op": "symbol", "name": "y"}, rhs=rhs, symbols=_symbols(rhs), domain={"number_system":"real", "required_nonzero":_denominators(rhs), "required_positive":parsed["notation"]["domain_obligations"]}, assumptions=["Residual symbol is retained; no distribution or independence assumption inferred"]+parsed["notation"]["assumptions"], notation=parsed["notation"], evidence_kind="source_declaration", scope="model", conditions={"error_term":"additive e"} if "e" in _symbols(rhs) else {})
                 except previous.Unsupported:
                     project.unresolved(source, "Unsupported NIST regression expression")
         # General source reports with clear labels, preserving reported versus
