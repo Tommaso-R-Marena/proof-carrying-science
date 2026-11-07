@@ -1,0 +1,262 @@
+{
+  "code_executed_from_source": false,
+  "evaluation_plan": {
+    "before_unlock": "Coordinator freezes implementation/checker source and runtime identity before reading scientific source or reference contents.",
+    "corrupted_table_probe": {
+      "bytes": 3060,
+      "expected": "Published residual statistics must fail reproduction; no VERIFIED_SUPPORTED status for unchanged RSS/std on altered table. UNKNOWN counts as failure to reproduce supported countercheck, not a refutation.",
+      "path": "Chwirut2-corrupt-first-response.dat",
+      "sha256": "f457259857a06477998211f584c636778cd8d980557b721d8379338272642319",
+      "source_role": "Purposefully altered derivative; never presented as authentic NIST measurements.",
+      "source_sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11",
+      "transformation": "Replace first response92.9000E0 with192.9000E0; all predictor/model/parameter/reported-statistic bytes unchanged."
+    },
+    "exact_fields": "n=54, p=3, dof=n-p=51; row census and parameter identifiers exact; expression must match source with explicit additive error term separated from mean.",
+    "no_optimization_claim": "No requirement to refit or prove global/local optimality; agreement at published rounded coefficients only.",
+    "primary_fields": [
+      "data_row_count",
+      "parameter_count",
+      "reported_degrees_of_freedom",
+      "safe_parsed_model_expression",
+      "reported_parameter_values",
+      "recomputed_RSS",
+      "recomputed_residual_standard_deviation"
+    ],
+    "residual_std_check": "sqrt(recomputed_RSS/(n-p)) with n-p positive; compare to reported residual standard deviation using atol1e-8+rtol1e-6*abs(reported).",
+    "retention": "Retain first run with all failures/unknowns. Changes after first new evaluation must be explicitly posthoc, not silently rescored as the same prospective result.",
+    "rss_check": "Independently evaluate declared mean at all source x values using source-reported fitted parameters; sum (y-f(x))**2. Compare to reported RSS with atol1e-8+rtol1e-6*abs(reported).",
+    "tolerance_basis": "Predeclared conservative floating-point/printed-parameter reproduction tolerance, not a certified numerical error bound or verified statistical confidence interval.",
+    "unsupported_checks": [
+      "No certification of normality, independence, homoscedasticity, measurement calibration, true physical units, parameter confidence intervals, scientific adequacy or model optimum."
+    ]
+  },
+  "format": "pcs-secondary-numeric-prospective-v3",
+  "frozen_utc": "2026-11-07T01:12:47.190771+00:00",
+  "independence": "Reference authored by a separate AI-assisted internal source curator reading original dataset only, without new numerical.py or checker output. No external human/expert adjudication.",
+  "prior_exposure": "Chwirut2 was named as a possible source earlier but no source bytes/checker results were supplied to implementation agents during this collection.",
+  "purpose": "Narrow fresh prospective computational evaluation of independently frozen generic NIST expression/notation repair; not replacement of primary scientific evaluation or evidence of general semantic understanding.",
+  "reference_interpretations": [
+    {
+      "entity": "number_of_observations",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": 54,
+      "id": "chwirut2_n",
+      "kind": "count",
+      "source": {
+        "byte_end": 1513,
+        "byte_start": 1460,
+        "line_end": 48,
+        "line_start": 48,
+        "path": "Chwirut2.dat",
+        "quote": "Number of Observations:                            54",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported"
+    },
+    {
+      "entity": "number_of_parameters",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": 3,
+      "id": "chwirut2_p",
+      "kind": "count",
+      "source": {
+        "byte_end": 890,
+        "byte_start": 852,
+        "line_end": 32,
+        "line_start": 32,
+        "path": "Chwirut2.dat",
+        "quote": "               3 Parameters (b1 to b3)",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported"
+    },
+    {
+      "entity": "residual_degrees_of_freedom",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": 51,
+      "id": "chwirut2_dof",
+      "kind": "count",
+      "source": {
+        "byte_end": 1459,
+        "byte_start": 1406,
+        "line_end": 47,
+        "line_start": 47,
+        "path": "Chwirut2.dat",
+        "quote": "Degrees of Freedom:                                51",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported"
+    },
+    {
+      "domain_obligations": [
+        "b2+b3*x must be nonzero for each evaluated observation",
+        "exp argument is a dimensionless mathematical quantity; source does not declare measurement units"
+      ],
+      "entity": "regression_mean",
+      "equation_role": "regression model declaration, not a pointwise noiseless empirical identity",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": "exp(-b1*x)/(b2+b3*x)",
+      "id": "chwirut2_model",
+      "kind": "equation",
+      "noise_term": "e",
+      "source": {
+        "byte_end": 937,
+        "byte_start": 892,
+        "line_end": 34,
+        "line_start": 34,
+        "path": "Chwirut2.dat",
+        "quote": "               y = exp(-b1*x)/(b2+b3*x)  +  e",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported"
+    },
+    {
+      "entity": "residual_sum_of_squares",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": "5.1304802941E+02",
+      "id": "chwirut2_rss",
+      "kind": "reported_statistic",
+      "source": {
+        "byte_end": 1344,
+        "byte_start": 1284,
+        "line_end": 45,
+        "line_start": 45,
+        "path": "Chwirut2.dat",
+        "quote": "Residual Sum of Squares:                    5.1304802941E+02",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported"
+    },
+    {
+      "entity": "residual_standard_deviation",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": "3.1717133040E+00",
+      "id": "chwirut2_rsd",
+      "kind": "reported_statistic",
+      "source": {
+        "byte_end": 1405,
+        "byte_start": 1345,
+        "line_end": 46,
+        "line_start": 46,
+        "path": "Chwirut2.dat",
+        "quote": "Residual Standard Deviation:                3.1717133040E+00",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported"
+    },
+    {
+      "entity": "b1",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": "1.6657666537E-01",
+      "id": "chwirut2_b1",
+      "kind": "reported_fitted_parameter",
+      "source": {
+        "byte_end": 1142,
+        "byte_start": 1073,
+        "line_end": 41,
+        "line_start": 41,
+        "path": "Chwirut2.dat",
+        "quote": "  b1 =   0.1         0.15          1.6657666537E-01  3.8303286810E-02",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported",
+      "uncertainty_role": "Source has a distinct standard-deviation column; parameter uncertainty is not certified by reproducing residuals"
+    },
+    {
+      "entity": "b2",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": "5.1653291286E-03",
+      "id": "chwirut2_b2",
+      "kind": "reported_fitted_parameter",
+      "source": {
+        "byte_end": 1212,
+        "byte_start": 1143,
+        "line_end": 42,
+        "line_start": 42,
+        "path": "Chwirut2.dat",
+        "quote": "  b2 =   0.01        0.008         5.1653291286E-03  6.6621605126E-04",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported",
+      "uncertainty_role": "Source has a distinct standard-deviation column; parameter uncertainty is not certified by reproducing residuals"
+    },
+    {
+      "entity": "b3",
+      "evidence_role": "source-reported reference value; not independent scientific truth",
+      "expected_value": "1.2150007096E-02",
+      "id": "chwirut2_b3",
+      "kind": "reported_fitted_parameter",
+      "source": {
+        "byte_end": 1282,
+        "byte_start": 1213,
+        "line_end": 43,
+        "line_start": 43,
+        "path": "Chwirut2.dat",
+        "quote": "  b3 =   0.02        0.010         1.2150007096E-02  1.5304234767E-03",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "status": "supported",
+      "uncertainty_role": "Source has a distinct standard-deviation column; parameter uncertainty is not certified by reproducing residuals"
+    },
+    {
+      "id": "chwirut2_statistical_assumptions",
+      "kind": "unsupported_scientific_inference",
+      "reason": "Nonlinear least squares procedure is named, but the source does not establish independence, Gaussianity, homoscedasticity or measurement-noise law. Reproducing RSS does not establish these assumptions.",
+      "source": {
+        "byte_end": 287,
+        "byte_start": 238,
+        "line_end": 9,
+        "line_start": 9,
+        "path": "Chwirut2.dat",
+        "quote": "Procedure:     Nonlinear Least Squares Regression",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "statement": "The residuals are independently distributed Gaussian errors with identical variance.",
+      "status": "insufficient_evidence"
+    },
+    {
+      "id": "chwirut2_physical_units",
+      "kind": "unsupported_units",
+      "reason": "Source calls predictor metal distance without a physical unit declaration. Do not infer length unit from context or typical experiments.",
+      "source": {
+        "byte_end": 716,
+        "byte_start": 669,
+        "line_end": 26,
+        "line_start": 26,
+        "path": "Chwirut2.dat",
+        "quote": "               1 Predictor (x = metal distance)",
+        "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11"
+      },
+      "statement": "The predictor x is measured in millimetres.",
+      "status": "insufficient_evidence"
+    }
+  ],
+  "selection": "Chwirut2 preselected by coordinator before collecting data; no alternate source selected based on checker results.",
+  "sources": [
+    {
+      "bytes": 3060,
+      "license": "NIST US-government dataset; mirror BSD-3-Clause license retained unchanged",
+      "original_source_status": "Direct NIST403 documented for collection endpoint during corpus collection; this Chwirut2 body obtained from pinned public lmfit mirror, not compared to direct NIST bytes",
+      "original_source_url": "https://www.itl.nist.gov/div898/strd/nls/data/LINKS/DATA/Chwirut2.dat",
+      "path": "Chwirut2.dat",
+      "retrieved_utc": "2026-11-07T01:11:53.871337+00:00",
+      "revision": "3a2439c2061ddeaf4cca8f99eb70a069e6a51a41",
+      "role": "original_reference_dataset",
+      "sha256": "968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11",
+      "url": "https://raw.githubusercontent.com/lmfit/lmfit-py/3a2439c2061ddeaf4cca8f99eb70a069e6a51a41/NIST_STRD/Chwirut2.dat"
+    },
+    {
+      "bytes": 3677,
+      "license": "NIST US-government dataset; mirror BSD-3-Clause license retained unchanged",
+      "original_source_status": "Direct NIST403 documented for collection endpoint during corpus collection; this Chwirut2 body obtained from pinned public lmfit mirror, not compared to direct NIST bytes",
+      "original_source_url": "https://www.itl.nist.gov/div898/strd/nls/data/LINKS/DATA/Chwirut2.dat",
+      "path": "lmfit-LICENSE.txt",
+      "retrieved_utc": "2026-11-07T01:11:54.201046+00:00",
+      "revision": "3a2439c2061ddeaf4cca8f99eb70a069e6a51a41",
+      "role": "mirror_repository_license",
+      "sha256": "baea1fdc019fad9f0cb3c32c045347620821830257587e9f454481a0bd942aef",
+      "url": "https://raw.githubusercontent.com/lmfit/lmfit-py/3a2439c2061ddeaf4cca8f99eb70a069e6a51a41/LICENSE"
+    }
+  ],
+  "training_authorized": false
+}

@@ -256,3 +256,58 @@ next experiment is qualified domain-expert annotation of a new full open-access
 paper/data/code project, with source-to-code roles, uncertainty and biological
 interactions prospectively adjudicated. Additional neural complexity is not
 currently supported by the evidence.
+
+## Explicit successor repair and secondary prospective computation
+
+After committing and archiving the primary results, commit `04582fd` repaired
+bracketed elementary-function interpretation. The interpreter rewrites closed
+mathematical IR; the numerical checker independently lowers a bounded AST.
+Only unshadowed `exp`/`log` bracket applications are interpreted as scalar calls.
+Array indexing, slices, multiple arguments, variable/function ambiguity and unsafe
+calls abstain. Original source quotes and decimal spellings remain exact; the
+conventional-notation interpretation and real-log positivity requirements remain
+explicit assumptions. This is not a Lean proof of exponential interpretation.
+
+On the exposed Misra1a source, the successor reproduces RSS
+`0.12455138894439811` against reported `0.12455138894`, relative discrepancy
+`3.53e-11`, and the reported residual standard deviation. Fresh packet replay
+rechecks all10 results. This is **post-hoc repair**, not a replacement of the
+original UNKNOWN numerical result or the primary14/22 context score.
+
+A different agent independently selected, sourced and annotated a NEW NIST
+Chwirut2 ultrasonic-reference-block regression without seeing the new checker
+code or outputs. The pinned mirror source, reference protocol and predetermined
+table-corruption probe were frozen before root source access. Runtime `04582fd`
+and the secondary software context were committed through `75310b5` before
+unlocking that source. The frozen source hash is
+`968142c6f5427d87b1fed1e1bfc8cfce1f7ae8c6b89d3fbfb4960d7ced3c1e11`.
+This is a **secondary prospective numerical test**, not another full semantic
+benchmark or new evidence of broad scientific generalization.
+
+The first run reconstructs54 observations and3 fitted parameters with51 degrees
+of freedom. RSS is `513.0480294068652`, versus reported `513.04802941`
+(relative discrepancy`6.11e-12`); residual standard deviation is
+`3.17171330395538`, versus `3.1717133040`. An independently implemented80-digit
+Decimal oracle matches the recorded Decimal result. Full packet replay recomputes
+all14 check results in about one second end-to-end. The predeclared first-response
+change92.9→192.9 is actually REFUTED, with RSS`12721.898800496814`.
+
+Independent review records16 correlated checks passing and0 failing; these are
+not16 independent scientific findings. Both sources retain UNKNOWN rigorous
+transcendental interval bounds and OPEN statistical assumptions, physical units,
+fit optimality and scientific adequacy. Source access was through the same pinned
+mirror, with the original NIST-access limitation retained.
+
+The secondary freeze's file digest includes a terminal newline; the result's
+canonical context digest does not. Independent full-dictionary comparison confirms
+the contexts are identical. Both byte conventions and the review are retained;
+no binding was ignored to obtain a positive verdict.
+
+The successor local inherited/new suite passes499 tests and168 subtests; four
+additional secondary evidence/computation tests are run separately. Primary hosted
+CI at `2b51070` passes131 Proof-JEPA/Safety-JEPA tests plus455 intake/v2/v3 tests and
+168 subtests, with no skips. Its run is
+https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/42322456440.
+Final successor CI is recorded separately. A separate checkout of `a5de2b0`
+successfully replays all four archived primary packets, including264 fresh checks,
+after the successor source changed; historical context gates remain enforced.

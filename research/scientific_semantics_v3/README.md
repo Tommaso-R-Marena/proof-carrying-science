@@ -29,6 +29,20 @@ Optional `--cache /tmp/host-private-pcs-cache` reuses the unchanged parent's
 authenticated check cache. New semantic checks are inexpensive and run fresh;
 independent replay ignores caches. Host integrity remains an assumption.
 
+The successor also supports explicitly interpreted `exp[...]` and `log[...]`
+scientific notation. To inspect the separately labeled repaired regression:
+
+```bash
+python -m research.scientific_semantics_v3.posthoc \
+  research/scientific_semantics_v3/fixtures/final/nist_misra1a \
+  --output /tmp/pcs-regression-repair
+```
+
+That example was repaired after its original final evaluation; it is a post-hoc
+demonstration, not fresh generalization evidence. The original primary results
+remain archived. `SECONDARY_NUMERICAL_REVIEW.md` describes a separately frozen,
+new ultrasonic regression project and its deliberately corrupted table.
+
 ## What is implemented
 
 - Exact-byte intake and format adapters from PR201, and original PR202 checks.
