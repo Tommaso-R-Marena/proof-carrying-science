@@ -110,6 +110,16 @@ _ROLE_MAPPED = re.compile(
     r"(?:\s+(?P<condition>when\b.{1,180}|under\b.{1,180}|if\b.{1,180}))?[.!;]?$",
     re.I,
 )
+_PASSIVE = re.compile(
+    r"^(?:(?P<attribution>We conclude that|We report that|The authors conclude that)\s+)?"
+    r"(?P<target>[A-Za-z][A-Za-z0-9_+() /\-]{0,119}?)\s+"
+    r"(?:(?P<modal>may|might|can|could|would|should)\s+(?P<modal_neg>not\s+)?be|is|are|was|were)\s+"
+    r"(?P<neg>not\s+|never\s+)?(?P<verb>inhibited|repressed|activated|stimulated)\s+by\s+"
+    r"(?P<agent>[A-Za-z][A-Za-z0-9_+() /\-]{0,119}?)"
+    r"(?:\s+(?P<condition>during\b.{1,180}|when\b.{1,180}|under\b.{1,180}|if\b.{1,180}|in\s+the\s+presence\s+of\b.{1,180}))?[.!;]?$",
+    re.I,
+)
+_PASSIVE_VERBS = {"inhibited": "inhibits", "repressed": "represses", "activated": "activates", "stimulated": "stimulates"}
 
 
 def _prose(project, source, plain, *, scope="source_report"):
@@ -123,6 +133,26 @@ def _prose(project, source, plain, *, scope="source_report"):
     for sentence in sentences:
         clean = " ".join(sentence.split())
         if len(clean) > 500:
+            continue
+        passive = _PASSIVE.fullmatch(clean)
+        if passive:
+            if re.search(r"\b(?:not|never|that|probably|likely|possibly|claim|report|reviewer|instruction)\b", passive["target"], re.I):
+                continue
+            if re.search(r"\b(?:but|nor|neither|or|not|never)\b", passive["agent"], re.I):
+                continue
+            conditions = {"negated": bool(passive["neg"] or passive["modal_neg"]),
+                          "modality": (passive["modal"] or "asserted").lower(),
+                          "source_voice": "passive"}
+            if passive["condition"]:
+                conditions["qualifier"] = passive["condition"].strip()
+            if passive["attribution"]:
+                conditions["attribution"] = passive["attribution"]
+            project.claim(source, kind="scientific_claim", entity=passive["agent"].strip(),
+                          relation=_PASSIVE_VERBS[passive["verb"].lower()], value=passive["target"].strip(),
+                          object=passive["target"].strip(), quantity_role="biological_relation",
+                          conditions=conditions, scope=scope, evidence_kind="author_inference" if passive["attribution"] else "author_report",
+                          source_statement=clean,
+                          assumptions=["Passive source report normalized to agent and target; author inference does not establish causal truth or experimental validity"])
             continue
         mapped = _ROLE_MAPPED.fullmatch(clean)
         if mapped:

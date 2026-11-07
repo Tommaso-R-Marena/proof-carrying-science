@@ -71,6 +71,31 @@ def test_config_paths_are_relative_to_config_directory():
     assert link["parameter_file"] == "nested/parameters.tsv"
 
 
+def test_standard_indentless_yaml_and_optional_visualizations():
+    files = artifacts(); del files["problem.json"]
+    files["visualizations.tsv"] = b"plotId\np0\n"
+    files["problem.yaml"] = b'''format_version: 1
+parameter_file: parameters.tsv
+problems:
+- condition_files:
+  - conditions.tsv
+  measurement_files:
+  - measurements.tsv
+  observable_files:
+  - observables.tsv
+  sbml_files:
+  - model.xml
+  visualization_files:
+  - visualizations.tsv
+'''
+    link, = c.parse_project_links(files)
+    assert link["sbml_files"] == ["model.xml"]
+    assert "/problems/0/visualization_files/0" in link["pointer_sources"]
+    assert all(c.verify_source(s,files) for s in link["pointer_sources"].values())
+    del files["visualizations.tsv"]
+    with pytest.raises(ValueError,match="missing"): c.parse_project_links(files)
+
+
 @pytest.mark.parametrize("version", [0, 2, 1.0, "1", True, None])
 def test_only_exact_integer_format_version_one(version):
     with pytest.raises(ValueError): c.parse_project_links(artifacts(config(format_version=version)))
@@ -188,6 +213,9 @@ def test_exact_rational_comparison_retains_original_domains():
     compared, = [r for r in result["correspondences"] if r["kind"] == "equation_comparison"]
     assert compared["status"] == "EQUAL_ON_COMMON_DEFINED_DOMAIN"
     assert compared["scientific_equivalence"] == "NOT_ESTABLISHED"
+    assert compared["comparison"]["original_domain_conditions"]["right"][0]["expression"]["name"] == "z"
+    assert c.verify_source(compared["symbol_mappings"][0]["source"], files)
+    assert compared["symbol_mappings"][0]["source"] in compared["sources"]
     assert any(o["kind"] == "common_defined_domain" and o["status"] == "OPEN" for o in result["obligations"])
 
 

@@ -1,0 +1,1145 @@
+{
+  "schema_version": "scientific-external-expert-worksheet-v4",
+  "status": "not_reviewed",
+  "external_expert_validation_completed": false,
+  "source_reference_sha256": "86c43ac3dd7bd96cee94c2420a37d64d80b549c35eda9aba5c9cb43709735bba",
+  "reviewer": {
+    "name": null,
+    "affiliation": null,
+    "qualifications": null,
+    "claim_domain_coverage": null,
+    "independent_human_reviewer": null,
+    "conflicts": null,
+    "review_date": null,
+    "signed_attestation": null
+  },
+  "instructions": "See EXPERT_REVIEW.md. Preserve original proposals; record disagreements and final disposition. Blank/AI-completed worksheet is not external expert validation.",
+  "annotations": [
+    {
+      "annotation_id": "F01",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The stability of <inline-formula id=\"IEq14\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M32\" overflow=\"scroll\"><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup></mml:math></inline-formula> can be assessed using Lyapunov theory [<xref rid=\"CR33\" ref-type=\"bibr\">33</xref>]. We denote the collection of all parameter-state pairs (<italic>θ</italic>,<italic>x</italic><sub>0</sub>) which fulfill the steady-state constraint (<xref rid=\"Equ2\" ref-type=\"disp-formula\">2</xref>) for a given input <italic>u</italic> as the manifold of steady states. For simplicity, we assume that (<xref rid=\"Equ2\" ref-type=\"disp-formula\">2</xref>) possesses a unique, exponentially stable steady state for every combination of parameters <italic>θ</italic> and inputs <italic>u</italic>. In this case, there exists a function <inline-formula id=\"IEq15\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M34\" overflow=\"scroll\"><mml:msub><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow></mml:msub><mml:mo>:</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>θ</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>×</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>u</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>→</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>x</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula> which maps the parameters to the corresponding steady state, i.e., <italic>x</italic>(0)=<italic>x</italic><sub><italic>s</italic></sub>(<italic>θ</italic>,<italic>u</italic>) (see Fig. <xref rid=\"Fig1\" ref-type=\"fig\">1</xref>b). An analytical expression of the function <italic>x</italic><sub><italic>s</italic></sub>(<italic>θ</italic>,<italic>u</italic>) is usually not available.</p>",
+        "byte_start": 29973,
+        "byte_end": 32205,
+        "locator": "original UTF-8 bytes 29973:32205"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "steady_state",
+        "scope": "general mathematical setting",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {
+          "parameter_domain": "every considered parameter/input combination"
+        },
+        "value": "unique exponentially stable steady state for every parameter/input combination"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F02",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>with states <inline-formula id=\"IEq4\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M10\" overflow=\"scroll\"><mml:mi>x</mml:mi><mml:mo>(</mml:mo><mml:mi>t</mml:mi><mml:mo>)</mml:mo><mml:mo>∈</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>x</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula>, observables <inline-formula id=\"IEq5\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M12\" overflow=\"scroll\"><mml:mi>y</mml:mi><mml:mo>(</mml:mo><mml:mi>t</mml:mi><mml:mo>)</mml:mo><mml:mo>∈</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>y</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula>, parameters <inline-formula id=\"IEq6\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M14\" overflow=\"scroll\"><mml:mi>θ</mml:mi><mml:mo>∈</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>θ</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula> and inputs <inline-formula id=\"IEq7\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M16\" overflow=\"scroll\"><mml:mi>u</mml:mi><mml:mo>(</mml:mo><mml:mi>t</mml:mi><mml:mo>)</mml:mo><mml:mo>∈</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>u</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula>. The states <italic>x</italic>(<italic>t</italic>) are the concentrations of biochemical species at time <italic>t</italic>. The observables <italic>y</italic>(<italic>t</italic>) are the values of measurable quantities. The parameters <italic>θ</italic> are biochemical reaction rates, total abundances of biochemical species (in the presence of conservation relations) and experimental parameters (e.g. scaling and offset). The inputs <italic>u</italic> encode the experimental conditions applied to the system, e.g., extracellular concentration of ligands. To ensure existence and uniqueness of the solution of (<xref rid=\"Equ1\" ref-type=\"disp-formula\">1</xref>), the vector field <inline-formula id=\"IEq8\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M18\" overflow=\"scroll\"><mml:mi>f</mml:mi><mml:mo>:</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>x</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>×</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>θ</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>×</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>u</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>→</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>x</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula> is assumed to be Lipschitz continuous. The mapping <inline-formula id=\"IEq9\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M20\" overflow=\"scroll\"><mml:mi>h</mml:mi><mml:mo>:</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>x</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>×</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>θ</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>×</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>u</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>→</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>y</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula> describes the observation process and the mapping <inline-formula id=\"IEq10\"><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M22\" overflow=\"scroll\"><mml:msub><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mn>0</mml:mn></mml:mrow></mml:msub><mml:mo>:</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>θ</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup><mml:mo>→</mml:mo><mml:msup><mml:mrow><mml:mi mathvariant=\"double-struck\">R</mml:mi></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>n</mml:mi></mml:mrow><mml:mrow><mml:mi>x</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:msup></mml:math></inline-formula> provides the initial conditions.</p>",
+        "byte_start": 22545,
+        "byte_end": 27948,
+        "locator": "original UTF-8 bytes 22545:27948"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "vector_field_f",
+        "scope": "ODE model Eq1",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "Lipschitz continuity is assumed to ensure solution existence and uniqueness"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F03",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<disp-formula id=\"Equ2\"><label>2</label><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M30\" display=\"block\" overflow=\"scroll\"><mml:mn>0</mml:mn><mml:mo>=</mml:mo><mml:mi>f</mml:mi><mml:mfenced close=\")\" open=\"(\" separators=\"\"><mml:mrow><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup><mml:mo>,</mml:mo><mml:mi>θ</mml:mi><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>u</mml:mi></mml:mrow><mml:mrow><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup></mml:mrow></mml:mfenced><mml:mi>.</mml:mi></mml:math></disp-formula>",
+        "byte_start": 29311,
+        "byte_end": 29973,
+        "locator": "original UTF-8 bytes 29311:29973"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "steady_state_constraint",
+        "scope": "Eq2",
+        "relation": "declared_equation",
+        "quantity_role": "steady_state_constraint",
+        "unit": null,
+        "conditions": {
+          "input": "control condition u_c^e"
+        },
+        "canonical_rhs": "f(x_s^e,theta,u_c^e)=0"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F04",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<disp-formula id=\"Equ12\"><label>12</label><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M86\" display=\"block\" overflow=\"scroll\"><mml:mi>S</mml:mi><mml:mo>=</mml:mo><mml:mo>−</mml:mo><mml:msup><mml:mrow><mml:mfenced close=\")\" open=\"(\" separators=\"\"><mml:mrow><mml:mfrac><mml:mrow><mml:mi>∂f</mml:mi></mml:mrow><mml:mrow><mml:mi>∂x</mml:mi></mml:mrow></mml:mfrac></mml:mrow></mml:mfenced></mml:mrow><mml:mrow><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mfrac><mml:mrow><mml:mi>∂f</mml:mi></mml:mrow><mml:mrow><mml:mi>∂θ</mml:mi></mml:mrow></mml:mfrac><mml:mo>,</mml:mo></mml:math></disp-formula>",
+        "byte_start": 69173,
+        "byte_end": 69812,
+        "locator": "original UTF-8 bytes 69173:69812"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "steady_state_sensitivity_S",
+        "scope": "Eq12",
+        "relation": "declared_equation",
+        "quantity_role": "steady_state_parameter_sensitivity",
+        "unit": null,
+        "conditions": {
+          "evaluation_point": "(theta,x_s(theta,u),u)",
+          "domain": "invertible state Jacobian"
+        },
+        "canonical_rhs": "-(df/dx)^(-1)*(df/dtheta)"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F05",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<disp-formula id=\"Equ17\"><label>17</label><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M118\" display=\"block\" overflow=\"scroll\"><mml:mtable><mml:mtr><mml:mtd><mml:mfrac><mml:mrow><mml:mi>dθ</mml:mi></mml:mrow><mml:mrow><mml:mtext mathvariant=\"italic\">dr</mml:mtext></mml:mrow></mml:mfrac></mml:mtd><mml:mtd><mml:mo>=</mml:mo><mml:mo>−</mml:mo><mml:mi>g</mml:mi><mml:mfenced close=\")\" open=\"(\" separators=\"\"><mml:mrow><mml:mi>θ</mml:mi><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mn>1</mml:mn></mml:mrow></mml:msubsup><mml:mo>,</mml:mo><mml:mo>…</mml:mo><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>E</mml:mi></mml:mrow></mml:msubsup></mml:mrow></mml:mfenced></mml:mtd></mml:mtr><mml:mtr><mml:mtd><mml:mfrac><mml:mrow><mml:mi>d</mml:mi><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup></mml:mrow><mml:mrow><mml:mtext mathvariant=\"italic\">dr</mml:mtext></mml:mrow></mml:mfrac></mml:mtd><mml:mtd><mml:mo>=</mml:mo><mml:mi>Ŝ</mml:mi><mml:mfenced close=\")\" open=\"(\" separators=\"\"><mml:mrow><mml:mi>θ</mml:mi><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>u</mml:mi></mml:mrow><mml:mrow><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup></mml:mrow></mml:mfenced><mml:mfrac><mml:mrow><mml:mi>dθ</mml:mi></mml:mrow><mml:mrow><mml:mtext mathvariant=\"italic\">dr</mml:mtext></mml:mrow></mml:mfrac><mml:mo>+</mml:mo><mml:mi>λf</mml:mi><mml:mfenced close=\")\" open=\"(\" separators=\"\"><mml:mrow><mml:mi>θ</mml:mi><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>u</mml:mi></mml:mrow><mml:mrow><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup></mml:mrow></mml:mfenced><mml:mo>,</mml:mo><mml:mspace width=\"0.3em\"/><mml:mspace width=\"0.3em\"/><mml:mi>e</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mo>…</mml:mo><mml:mo>,</mml:mo><mml:mi>E.</mml:mi></mml:mtd></mml:mtr></mml:mtable></mml:math></disp-formula>",
+        "byte_start": 90078,
+        "byte_end": 92563,
+        "locator": "original UTF-8 bytes 90078:92563"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "simulation_based_state_update",
+        "scope": "Eq17",
+        "relation": "declared_equation",
+        "quantity_role": "state_update_dx_s_e_dr",
+        "unit": null,
+        "conditions": {
+          "optimization_parameter": "r",
+          "retraction_factor": "lambda"
+        },
+        "canonical_rhs": "S_hat(theta,x_s^e,u_c^e)*(dtheta/dr)+lambda*f(theta,x_s^e,u_c^e)"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F06",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<disp-formula id=\"Equ18\"><label>18</label><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M122\" display=\"block\" overflow=\"scroll\"><mml:mi>Ŝ</mml:mi><mml:mo>(</mml:mo><mml:mi>θ</mml:mi><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup><mml:mo>,</mml:mo><mml:msubsup><mml:mrow><mml:mi>u</mml:mi></mml:mrow><mml:mrow><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>e</mml:mi></mml:mrow></mml:msubsup><mml:mo>)</mml:mo><mml:mo>=</mml:mo><mml:mo>−</mml:mo><mml:msup><mml:mrow><mml:mfenced close=\")\" open=\"(\" separators=\"\"><mml:mrow><mml:mfrac><mml:mrow><mml:mi>∂f</mml:mi></mml:mrow><mml:mrow><mml:mi>∂x</mml:mi></mml:mrow></mml:mfrac></mml:mrow></mml:mfenced></mml:mrow><mml:mrow><mml:mo>+</mml:mo></mml:mrow></mml:msup><mml:mfrac><mml:mrow><mml:mi>∂f</mml:mi></mml:mrow><mml:mrow><mml:mi>∂θ</mml:mi></mml:mrow></mml:mfrac></mml:math></disp-formula>",
+        "byte_start": 93395,
+        "byte_end": 94377,
+        "locator": "original UTF-8 bytes 93395:94377"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "generalized_steady_state_sensitivity",
+        "scope": "Eq18",
+        "relation": "declared_equation",
+        "quantity_role": "pseudoinverse_sensitivity",
+        "unit": null,
+        "conditions": {
+          "operator": "Moore-Penrose pseudoinverse"
+        },
+        "canonical_rhs": "-(df/dx)^+*(df/dtheta)"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F07",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<disp-formula id=\"Equ20\"><label>20</label><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M138\" display=\"block\" overflow=\"scroll\"><mml:mtable><mml:mtr><mml:mtd><mml:mfrac><mml:mrow><mml:mtext mathvariant=\"italic\">dx</mml:mtext></mml:mrow><mml:mrow><mml:mtext mathvariant=\"italic\">dt</mml:mtext></mml:mrow></mml:mfrac></mml:mtd><mml:mtd><mml:mo>=</mml:mo><mml:msub><mml:mrow><mml:mi>θ</mml:mi></mml:mrow><mml:mrow><mml:mn>2</mml:mn></mml:mrow></mml:msub><mml:mo>−</mml:mo><mml:mo>(</mml:mo><mml:msub><mml:mrow><mml:mi>θ</mml:mi></mml:mrow><mml:mrow><mml:mn>1</mml:mn></mml:mrow></mml:msub><mml:mi>u</mml:mi><mml:mo>+</mml:mo><mml:msub><mml:mrow><mml:mi>θ</mml:mi></mml:mrow><mml:mrow><mml:mn>2</mml:mn></mml:mrow></mml:msub><mml:mo>)</mml:mo><mml:mi>x</mml:mi></mml:mtd></mml:mtr><mml:mtr><mml:mtd><mml:mi>y</mml:mi></mml:mtd><mml:mtd><mml:mo>=</mml:mo><mml:mi>x</mml:mi></mml:mtd></mml:mtr></mml:mtable></mml:math></disp-formula>",
+        "byte_start": 105677,
+        "byte_end": 106624,
+        "locator": "original UTF-8 bytes 105677:106624"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "conversion_process_dx_dt",
+        "scope": "simulation example Eq20",
+        "relation": "declared_equation",
+        "quantity_role": "state_derivative",
+        "unit": null,
+        "conditions": {
+          "state": "x=[A]",
+          "conservation": "[A]+[B]=1",
+          "kinetics": "mass action"
+        },
+        "canonical_rhs": "theta2-(theta1*u+theta2)*x"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F08",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<disp-formula id=\"Equ21\"><label>21</label><mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" id=\"M142\" display=\"block\" overflow=\"scroll\"><mml:msub><mml:mrow><mml:mi>x</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi></mml:mrow></mml:msub><mml:mo>(</mml:mo><mml:mi>θ</mml:mi><mml:mo>,</mml:mo><mml:mi>u</mml:mi><mml:mo>)</mml:mo><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:msub><mml:mrow><mml:mi>θ</mml:mi></mml:mrow><mml:mrow><mml:mn>2</mml:mn></mml:mrow></mml:msub></mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>θ</mml:mi></mml:mrow><mml:mrow><mml:mn>1</mml:mn></mml:mrow></mml:msub><mml:mi>u</mml:mi><mml:mo>+</mml:mo><mml:msub><mml:mrow><mml:mi>θ</mml:mi></mml:mrow><mml:mrow><mml:mn>2</mml:mn></mml:mrow></mml:msub></mml:mrow></mml:mfrac><mml:mi>.</mml:mi></mml:math></disp-formula>",
+        "byte_start": 107143,
+        "byte_end": 107939,
+        "locator": "original UTF-8 bytes 107143:107939"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "conversion_steady_state",
+        "scope": "simulation example Eq21",
+        "relation": "declared_equation",
+        "quantity_role": "steady_state",
+        "unit": null,
+        "conditions": {
+          "domain": "theta1>0,theta2>0,u>0"
+        },
+        "canonical_rhs": "theta2/(theta1*u+theta2)"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F09",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The simulation-based retraction to the manifold of steady states (Step 2) reduces the problem dimension and eliminates the constraint. The objective function gradient for this reduced problem is \n</p>",
+        "byte_start": 81109,
+        "byte_end": 81312,
+        "locator": "original UTF-8 bytes 81109:81312"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "hybrid_optimization",
+        "scope": "method",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "simulation-based steady-state retraction eliminates equality constraints and reduces optimization dimension"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F10",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>For the gradient descent we established local exponential stability of local optima for appropriate choice of <italic>λ</italic> for a broad class of problems (see Additional file <xref rid=\"MOESM1\" ref-type=\"other\">1</xref>: Section 1). This implies that the trajectories of the system converge to the local optima of the optimization problem (<xref rid=\"Equ6\" ref-type=\"disp-formula\">6</xref>). We expect that a similar result can be derived for the Newton-type descent. Though this is not yet available, we included the Newton type descent as we expect – similar to classical optimizers – faster convergence.</p>",
+        "byte_start": 97700,
+        "byte_end": 98323,
+        "locator": "original UTF-8 bytes 97700:98323"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "gradient_descent_stability",
+        "scope": "simulation-based optimization theorem",
+        "relation": "reported_finding",
+        "quantity_role": "scientific_conclusion",
+        "unit": null,
+        "conditions": {
+          "descent": "gradient type",
+          "result": "local",
+          "lambda": "appropriate"
+        },
+        "value": "local exponential stability of local optima for an appropriate retraction factor lambda in the proved problem class"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "formal_proof",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F11",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>For the simulation-based optimization method we established local asymptotic stability of optimal points using perturbation theory. This result is however restricted to the gradient-type descent and locally convex objective functions. The latter implies local practical identifiability. The theoretical properties of the Newton-type descent and the properties in the presence of practical and structural non-identifiability remain to be analyzed. Preliminary results and the applications suggest that in the presence of non-identifiabilities the simulation-based optimization method always yields a point on the non-identifiable subspace. Furthermore, the available proof shows the retraction factor <italic>λ</italic> has to be chosen large enough to ensure convergence. However, as too large <italic>λ</italic> will result in a stiff system, an intelligent choice of <italic>λ</italic> is necessary.</p>",
+        "byte_start": 180725,
+        "byte_end": 181636,
+        "locator": "original UTF-8 bytes 180725:181636"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "theorem_scope",
+        "scope": "Discussion",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {
+          "descent": "gradient type",
+          "objective": "locally convex"
+        },
+        "value": "proof restricted to gradient-type descent and locally convex objectives; Newton-type and nonidentifiable cases remain unanalyzed"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F12",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The different methods are implemented in MATLAB and provided in an Additional file <xref rid=\"MOESM2\" ref-type=\"other\">2</xref>. The local optimization is performed using the MATLAB routine fmincon.m. fmincon is supplied with the objective function value and the values of the constraint, as well as the respective analytical derivatives. The continuous analogue used for simulation-based optimization is simulated using the MATLAB ODE solver ode15s. The computationally intensive simulation of the perturbation experiments and the numerical calculation of the steady state is performed using the SUNDIALS package [<xref rid=\"CR44\" ref-type=\"bibr\">44</xref>] which was accessed using the MATLAB Toolbox AMICI (<ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"https://github.com/AMICI-developer/AMICI\" ext-link-type=\"uri\">https://github.com/AMICI-developer/AMICI</ext-link>). Default settings are used for fmincon.m and the simulation routines unless stated otherwise. The convergence tolerance for the hybrid optimization method is set to <italic>ε</italic><sub>tol</sub>=10<sup>−9</sup> in the simulation example and the first application example and to <italic>ε</italic><sub>tol</sub>=10<sup>−13</sup> in the second application example. For the simulation-based optimization methods it is set to <italic>ε</italic><sub>tol</sub>=10<sup>−6</sup>.</p>",
+        "byte_start": 99233,
+        "byte_end": 100613,
+        "locator": "original UTF-8 bytes 99233:100613"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "implementation",
+        "scope": "Methods implementation",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "MATLAB fmincon and ode15s, with SUNDIALS via AMICI for expensive model/steady-state simulations"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F13",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The different methods are implemented in MATLAB and provided in an Additional file <xref rid=\"MOESM2\" ref-type=\"other\">2</xref>. The local optimization is performed using the MATLAB routine fmincon.m. fmincon is supplied with the objective function value and the values of the constraint, as well as the respective analytical derivatives. The continuous analogue used for simulation-based optimization is simulated using the MATLAB ODE solver ode15s. The computationally intensive simulation of the perturbation experiments and the numerical calculation of the steady state is performed using the SUNDIALS package [<xref rid=\"CR44\" ref-type=\"bibr\">44</xref>] which was accessed using the MATLAB Toolbox AMICI (<ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"https://github.com/AMICI-developer/AMICI\" ext-link-type=\"uri\">https://github.com/AMICI-developer/AMICI</ext-link>). Default settings are used for fmincon.m and the simulation routines unless stated otherwise. The convergence tolerance for the hybrid optimization method is set to <italic>ε</italic><sub>tol</sub>=10<sup>−9</sup> in the simulation example and the first application example and to <italic>ε</italic><sub>tol</sub>=10<sup>−13</sup> in the second application example. For the simulation-based optimization methods it is set to <italic>ε</italic><sub>tol</sub>=10<sup>−6</sup>.</p>",
+        "byte_start": 99233,
+        "byte_end": 100613,
+        "locator": "original UTF-8 bytes 99233:100613"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "quantity",
+        "entity": "hybrid_tolerance_application2",
+        "scope": "Methods implementation",
+        "relation": "declared_value",
+        "quantity_role": "convergence_tolerance",
+        "unit": null,
+        "conditions": {
+          "method": "hybrid",
+          "application": "second HeLa example"
+        },
+        "value": "1e-13"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F14",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The different methods are implemented in MATLAB and provided in an Additional file <xref rid=\"MOESM2\" ref-type=\"other\">2</xref>. The local optimization is performed using the MATLAB routine fmincon.m. fmincon is supplied with the objective function value and the values of the constraint, as well as the respective analytical derivatives. The continuous analogue used for simulation-based optimization is simulated using the MATLAB ODE solver ode15s. The computationally intensive simulation of the perturbation experiments and the numerical calculation of the steady state is performed using the SUNDIALS package [<xref rid=\"CR44\" ref-type=\"bibr\">44</xref>] which was accessed using the MATLAB Toolbox AMICI (<ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"https://github.com/AMICI-developer/AMICI\" ext-link-type=\"uri\">https://github.com/AMICI-developer/AMICI</ext-link>). Default settings are used for fmincon.m and the simulation routines unless stated otherwise. The convergence tolerance for the hybrid optimization method is set to <italic>ε</italic><sub>tol</sub>=10<sup>−9</sup> in the simulation example and the first application example and to <italic>ε</italic><sub>tol</sub>=10<sup>−13</sup> in the second application example. For the simulation-based optimization methods it is set to <italic>ε</italic><sub>tol</sub>=10<sup>−6</sup>.</p>",
+        "byte_start": 99233,
+        "byte_end": 100613,
+        "locator": "original UTF-8 bytes 99233:100613"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "quantity",
+        "entity": "simulation_based_tolerance",
+        "scope": "Methods implementation",
+        "relation": "declared_value",
+        "quantity_role": "convergence_tolerance",
+        "unit": null,
+        "conditions": {
+          "method": "simulation-based optimization"
+        },
+        "value": "1e-6"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F15",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>To illustrate the properties of the hybrid and the simulation-based optimization methods, we consider the estimation of the parameters <italic>θ</italic> from artificial time-resolved data for <italic>y</italic>. The artificial data are obtained by simulation of (<xref rid=\"Equ20\" ref-type=\"disp-formula\">20</xref>) for <italic>θ</italic>=(4,1) and <italic>u</italic>=0.4 at the time points <italic>t</italic><sub><italic>j</italic></sub>= [0,0.1,0.5,1,2], starting from the steady state of the control condition <italic>u</italic><sub><italic>c</italic></sub>=1 at <italic>t</italic>=0. Assuming unit variance for observation errors, yields the optimization problem \n</p>",
+        "byte_start": 107939,
+        "byte_end": 108617,
+        "locator": "original UTF-8 bytes 107939:108617"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "synthetic_data",
+        "scope": "conversion example",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {
+          "data_origin": "synthetic",
+          "noise_variance": "unit variance for objective"
+        },
+        "value": "theta=(4,1), u=0.4, control u_c=1, measurement times [0,0.1,0.5,1,2]"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F16",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The proposed hybrid and simulation-based optimization methods are evaluated using three models for biological processes. Following a simple illustration example, an application with multiple steady-state constraints and an application with time-resolved data for multiple perturbation conditions are considered. For this rich set of scenarios we find that the hybrid and simulation-based optimization methods possess improved convergence properties in comparison to standard constrained optimization methods implemented in the MATLAB routine fmincon. We expect that the proposed methods also outperform alternative optimization routines (e.g. IPOPT [<xref rid=\"CR62\" ref-type=\"bibr\">62</xref>]), this, however, remains to be analyzed. The proposed optimization methods yield convergence properties comparable to those of unconstrained optimization methods exploiting an analytical expression for the steady state. However, if analytical expressions for the steady state can be determined using available methods [<xref rid=\"CR18\" ref-type=\"bibr\">18</xref>, <xref rid=\"CR25\" ref-type=\"bibr\">25</xref>, <xref rid=\"CR26\" ref-type=\"bibr\">26</xref>], unconstrained optimization should be used as the computation time is lower. The proposed methods are also applicable to a broader class of problems for which no analytical expression for the steady state is available. Furthermore, the method directly allows for multiple steady-state constraints. Unlike methods based on sequential geometric programming [<xref rid=\"CR63\" ref-type=\"bibr\">63</xref>, <xref rid=\"CR64\" ref-type=\"bibr\">64</xref>], steady-state and kinetic data can be handled.</p>",
+        "byte_start": 177985,
+        "byte_end": 179627,
+        "locator": "original UTF-8 bytes 177985:179627"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "optimization_convergence",
+        "scope": "three studied biological-process examples",
+        "relation": "reported_finding",
+        "quantity_role": "scientific_conclusion",
+        "unit": null,
+        "conditions": {
+          "comparison": "MATLAB fmincon constrained optimization",
+          "scope": "three studied models"
+        },
+        "value": "hybrid and simulation-based methods show improved convergence compared with standard constrained fmincon"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "numerical_reproduction",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F17",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The proposed hybrid and simulation-based optimization methods are evaluated using three models for biological processes. Following a simple illustration example, an application with multiple steady-state constraints and an application with time-resolved data for multiple perturbation conditions are considered. For this rich set of scenarios we find that the hybrid and simulation-based optimization methods possess improved convergence properties in comparison to standard constrained optimization methods implemented in the MATLAB routine fmincon. We expect that the proposed methods also outperform alternative optimization routines (e.g. IPOPT [<xref rid=\"CR62\" ref-type=\"bibr\">62</xref>]), this, however, remains to be analyzed. The proposed optimization methods yield convergence properties comparable to those of unconstrained optimization methods exploiting an analytical expression for the steady state. However, if analytical expressions for the steady state can be determined using available methods [<xref rid=\"CR18\" ref-type=\"bibr\">18</xref>, <xref rid=\"CR25\" ref-type=\"bibr\">25</xref>, <xref rid=\"CR26\" ref-type=\"bibr\">26</xref>], unconstrained optimization should be used as the computation time is lower. The proposed methods are also applicable to a broader class of problems for which no analytical expression for the steady state is available. Furthermore, the method directly allows for multiple steady-state constraints. Unlike methods based on sequential geometric programming [<xref rid=\"CR63\" ref-type=\"bibr\">63</xref>, <xref rid=\"CR64\" ref-type=\"bibr\">64</xref>], steady-state and kinetic data can be handled.</p>",
+        "byte_start": 177985,
+        "byte_end": 179627,
+        "locator": "original UTF-8 bytes 177985:179627"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "analytic_steady_state_choice",
+        "scope": "Discussion",
+        "relation": "reported_finding",
+        "quantity_role": "scientific_conclusion",
+        "unit": null,
+        "conditions": {
+          "availability": "analytical steady-state expression"
+        },
+        "value": "when an analytical steady-state expression is available, unconstrained optimization should be used because computation time is lower"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "numerical_reproduction",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F18",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>Beyond the evaluation of the proposed methods, our experimental and computational analysis of novel data for Raf/MEK/ERK signaling after release for S-phase arrest provided new insights. Parameter estimation and model comparison indicate that the negative feedback from ERK to Raf phosphorylation is also active at the G1/S border. This complements previous knowledge of stimulus-, context-dependence of this stimulus [<xref rid=\"CR49\" ref-type=\"bibr\">49</xref>] and its relevance for the robustness of MAPK signaling in tumor cells [<xref rid=\"CR52\" ref-type=\"bibr\">52</xref>].</p>",
+        "byte_start": 179627,
+        "byte_end": 180212,
+        "locator": "original UTF-8 bytes 179627:180212"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "ERK_to_Raf_negative_feedback",
+        "scope": "HeLa G1/S biological conclusion",
+        "relation": "reported_finding",
+        "quantity_role": "scientific_conclusion",
+        "unit": null,
+        "conditions": {
+          "cell_type": "HeLa",
+          "experimental_state": "release from S-phase arrest",
+          "evidence": "parameter estimation and model comparison"
+        },
+        "value": "parameter estimation and model comparison indicate active ERK-to-Raf phosphorylation negative feedback at the G1/S border"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "empirical_scientific_conclusion",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F19",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The simulation example and the applications possess a unique exponentially stable steady state. However, preliminary results suggest that the methods also achieve good convergence for dynamical systems with multiple stable steady states and bifurcations [<xref rid=\"CR65\" ref-type=\"bibr\">65</xref>] (see Additional file <xref rid=\"MOESM1\" ref-type=\"other\">1</xref>: Section 6). The theoretical analysis of the proposed methods and a detailed performance evaluation for dynamical systems with such properties remains to be addressed.</p>",
+        "byte_start": 181636,
+        "byte_end": 182175,
+        "locator": "original UTF-8 bytes 181636:182175"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "multiple_steady_states",
+        "scope": "Discussion",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "multiple stable steady states and bifurcations have preliminary results only; theoretical analysis and detailed performance evaluation remain open"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F20",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>All data generated and analyzed during this study are included in this published article and its supplementary information files.</p>",
+        "byte_start": 184676,
+        "byte_end": 184812,
+        "locator": "original UTF-8 bytes 184676:184812"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "data_availability",
+        "scope": "Availability of data and materials",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "authors declare all generated/analyzed data in the article and supplementary files"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F21",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>To evaluate the performance of the proposed methods, we use two application examples with experimental data. In the first application example, we consider a dataset for NGF-induced ERK signaling in primary sensory neurons which was published by Andres et al. [<xref rid=\"CR45\" ref-type=\"bibr\">45</xref>]. In the second application example, we use novel data for Raf/MEK/ERK signaling in HeLa cells after release from S-phase arrest. This novel experimental data for Raf/MEK/ERK signaling in HeLa cells was acquired using the following methods.</p>",
+        "byte_start": 100681,
+        "byte_end": 101231,
+        "locator": "original UTF-8 bytes 100681:101231"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "application_scope",
+        "scope": "experimental studies",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "paper evaluates NGF-induced ERK in primary sensory neurons and novel Raf/MEK/ERK HeLa release-from-arrest data"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F22",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>For the simulation-based optimization method we established local asymptotic stability of optimal points using perturbation theory. This result is however restricted to the gradient-type descent and locally convex objective functions. The latter implies local practical identifiability. The theoretical properties of the Newton-type descent and the properties in the presence of practical and structural non-identifiability remain to be analyzed. Preliminary results and the applications suggest that in the presence of non-identifiabilities the simulation-based optimization method always yields a point on the non-identifiable subspace. Furthermore, the available proof shows the retraction factor <italic>λ</italic> has to be chosen large enough to ensure convergence. However, as too large <italic>λ</italic> will result in a stiff system, an intelligent choice of <italic>λ</italic> is necessary.</p>",
+        "byte_start": 180725,
+        "byte_end": 181636,
+        "locator": "original UTF-8 bytes 180725:181636"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "retraction_factor_tradeoff",
+        "scope": "Discussion",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {
+          "parameter": "lambda"
+        },
+        "value": "lambda must be large enough for the proof but overly large lambda causes stiffness"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F23",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>For the simulation-based optimization method we established local asymptotic stability of optimal points using perturbation theory. This result is however restricted to the gradient-type descent and locally convex objective functions. The latter implies local practical identifiability. The theoretical properties of the Newton-type descent and the properties in the presence of practical and structural non-identifiability remain to be analyzed. Preliminary results and the applications suggest that in the presence of non-identifiabilities the simulation-based optimization method always yields a point on the non-identifiable subspace. Furthermore, the available proof shows the retraction factor <italic>λ</italic> has to be chosen large enough to ensure convergence. However, as too large <italic>λ</italic> will result in a stiff system, an intelligent choice of <italic>λ</italic> is necessary.</p>",
+        "byte_start": 180725,
+        "byte_end": 181636,
+        "locator": "original UTF-8 bytes 180725:181636"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "global_Newton_convergence",
+        "scope": "theoretical guarantee",
+        "relation": "reported_finding",
+        "quantity_role": "reviewer_authored_counterprobe",
+        "unit": null,
+        "conditions": {},
+        "value": "Newton-type descent is proved globally convergent for all nonidentifiable models"
+      },
+      "proposed_source_support": "contradicted",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "formal_proof",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F24",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The proposed hybrid and simulation-based optimization methods are evaluated using three models for biological processes. Following a simple illustration example, an application with multiple steady-state constraints and an application with time-resolved data for multiple perturbation conditions are considered. For this rich set of scenarios we find that the hybrid and simulation-based optimization methods possess improved convergence properties in comparison to standard constrained optimization methods implemented in the MATLAB routine fmincon. We expect that the proposed methods also outperform alternative optimization routines (e.g. IPOPT [<xref rid=\"CR62\" ref-type=\"bibr\">62</xref>]), this, however, remains to be analyzed. The proposed optimization methods yield convergence properties comparable to those of unconstrained optimization methods exploiting an analytical expression for the steady state. However, if analytical expressions for the steady state can be determined using available methods [<xref rid=\"CR18\" ref-type=\"bibr\">18</xref>, <xref rid=\"CR25\" ref-type=\"bibr\">25</xref>, <xref rid=\"CR26\" ref-type=\"bibr\">26</xref>], unconstrained optimization should be used as the computation time is lower. The proposed methods are also applicable to a broader class of problems for which no analytical expression for the steady state is available. Furthermore, the method directly allows for multiple steady-state constraints. Unlike methods based on sequential geometric programming [<xref rid=\"CR63\" ref-type=\"bibr\">63</xref>, <xref rid=\"CR64\" ref-type=\"bibr\">64</xref>], steady-state and kinetic data can be handled.</p>",
+        "byte_start": 177985,
+        "byte_end": 179627,
+        "locator": "original UTF-8 bytes 177985:179627"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "IPOPT_superiority",
+        "scope": "benchmark comparison",
+        "relation": "reported_finding",
+        "quantity_role": "reviewer_authored_counterprobe",
+        "unit": null,
+        "conditions": {},
+        "value": "the paper demonstrates faster convergence than IPOPT"
+      },
+      "proposed_source_support": "contradicted",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "numerical_reproduction",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F25",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>Beyond the evaluation of the proposed methods, our experimental and computational analysis of novel data for Raf/MEK/ERK signaling after release for S-phase arrest provided new insights. Parameter estimation and model comparison indicate that the negative feedback from ERK to Raf phosphorylation is also active at the G1/S border. This complements previous knowledge of stimulus-, context-dependence of this stimulus [<xref rid=\"CR49\" ref-type=\"bibr\">49</xref>] and its relevance for the robustness of MAPK signaling in tumor cells [<xref rid=\"CR52\" ref-type=\"bibr\">52</xref>].</p>",
+        "byte_start": 179627,
+        "byte_end": 180212,
+        "locator": "original UTF-8 bytes 179627:180212"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "universal_biological_feedback",
+        "scope": "biological scope",
+        "relation": "reported_finding",
+        "quantity_role": "reviewer_authored_counterprobe",
+        "unit": null,
+        "conditions": {},
+        "value": "the study establishes ERK-to-Raf feedback as active in every mammalian cell type"
+      },
+      "proposed_source_support": "insufficient_evidence",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "empirical_scientific_conclusion",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F26",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>The simulation example and the applications possess a unique exponentially stable steady state. However, preliminary results suggest that the methods also achieve good convergence for dynamical systems with multiple stable steady states and bifurcations [<xref rid=\"CR65\" ref-type=\"bibr\">65</xref>] (see Additional file <xref rid=\"MOESM1\" ref-type=\"other\">1</xref>: Section 6). The theoretical analysis of the proposed methods and a detailed performance evaluation for dynamical systems with such properties remains to be addressed.</p>",
+        "byte_start": 181636,
+        "byte_end": 182175,
+        "locator": "original UTF-8 bytes 181636:182175"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "all_multistable_systems",
+        "scope": "theoretical guarantee",
+        "relation": "reported_finding",
+        "quantity_role": "reviewer_authored_counterprobe",
+        "unit": null,
+        "conditions": {},
+        "value": "convergence for all multistable and bifurcating systems is rigorously established"
+      },
+      "proposed_source_support": "contradicted",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "formal_proof",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F27",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/paper.xml",
+        "sha256": "015f56f263fb11782c139c71b74dd31f5215fcabdb82dbddc13ea6850ac73b02",
+        "quote": "<p>All data generated and analyzed during this study are included in this published article and its supplementary information files.</p>",
+        "byte_start": 184676,
+        "byte_end": 184812,
+        "locator": "original UTF-8 bytes 184676:184812"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "independent_complete_reproduction",
+        "scope": "reproducibility",
+        "relation": "reported_finding",
+        "quantity_role": "reviewer_authored_counterprobe",
+        "unit": null,
+        "conditions": {},
+        "value": "the availability statement alone proves independent reproduction of all numerical and biological findings"
+      },
+      "proposed_source_support": "insufficient_evidence",
+      "proposed_verification": {
+        "status": "unknown",
+        "level": "numerical_reproduction",
+        "reason": "Original-source support is separate from independent numerical reproduction, proof, or empirical validation; those checks are not established by this annotation."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F28",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/author_code/Revision/SimulationBasedOpti/VFMO_mod.m",
+        "sha256": "410aaa22c5ec58e394cc021e9170b54aa93d3187fa15640a6c8e4a848dcfe7f8",
+        "quote": "dx = S*dtheta + lambda*f;",
+        "byte_start": 2120,
+        "byte_end": 2145,
+        "locator": "original UTF-8 bytes 2120:2145"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "equation",
+        "entity": "original_state_update",
+        "scope": "author VFMO_mod.m",
+        "relation": "implemented_equation",
+        "quantity_role": "state_update",
+        "unit": null,
+        "conditions": {
+          "source": "original author MATLAB implementation"
+        },
+        "canonical_rhs": "S*dtheta+lambda*f"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F29",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/author_code/Revision/readme.html",
+        "sha256": "5ce582df27de10bd800d49b95d21d2d32977511a32ebf4f2fcd2d0021698a23b",
+        "quote": "The evolution of parameters along the solver path and all other evolutions paths, which are saved by default, were deleted from the results of all optimization to decrease data size.",
+        "byte_start": 5367,
+        "byte_end": 5549,
+        "locator": "original UTF-8 bytes 5367:5549"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "saved_results_limit",
+        "scope": "author readme",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "saved optimization results omit solver parameter/state evolution paths to decrease data size"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    },
+    {
+      "annotation_id": "F30",
+      "project_id": "fiedler2016",
+      "source": {
+        "path": "research/scientific_review_v4/fixtures/development/fiedler2016/author_code/Revision/readme.html",
+        "sha256": "5ce582df27de10bd800d49b95d21d2d32977511a32ebf4f2fcd2d0021698a23b",
+        "quote": "creates Figure 8 and calculates the AIC and BIC for the Raf/MEK/ERK model with and without feedback.",
+        "byte_start": 6346,
+        "byte_end": 6446,
+        "locator": "original UTF-8 bytes 6346:6446"
+      },
+      "additional_sources": [],
+      "proposed_typed_expectation": {
+        "kind": "scientific_claim",
+        "entity": "model_selection_figure_code",
+        "scope": "author readme",
+        "relation": "declared_scope",
+        "quantity_role": "model_or_method_scope",
+        "unit": null,
+        "conditions": {},
+        "value": "Figure_RafMekErk.m generates Figure8 and calculates AIC/BIC comparing feedback and no-feedback models"
+      },
+      "proposed_source_support": "supported",
+      "proposed_verification": {
+        "status": "supported",
+        "level": "source_statement",
+        "reason": "Exact original-source declaration is supported; this does not verify higher evidence levels."
+      },
+      "decision": null,
+      "reason": null,
+      "corrected_interpretation": null,
+      "missing_units_conditions_assumptions": null,
+      "verification_boundary_appropriate": null,
+      "additional_evidence_or_checks": [],
+      "disagreement_disposition": null
+    }
+  ]
+}

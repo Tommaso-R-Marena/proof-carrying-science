@@ -184,3 +184,36 @@ def test_explicit_protein_mrna_bindings_are_generic_and_qualified():
 @pytest.mark.parametrize('text', ['It is not true that protein A inhibits protein B.', 'Protein A probably inhibits protein B.', 'Protein A inhibits protein B but not protein C.'])
 def test_outer_negation_or_unsupported_qualifiers_do_not_become_positive_claims(text):
     assert not interpret(text, 'notes.txt')['claims']
+
+
+@pytest.mark.parametrize('sentence,negated,modality', [
+    ('We conclude that kinase phosphorylation is inhibited by protein Q during the first phase.', False, 'asserted'),
+    ('Kinase phosphorylation may not be inhibited by protein Q under high temperature.', True, 'may'),
+    ('Kinase phosphorylation is not activated by protein Q.', True, 'asserted'),
+])
+def test_passive_reports_keep_agent_target_negation_and_source_attribution(sentence, negated, modality):
+    result = interpret('<article><body><p>'+sentence+'</p></body></article>', 'paper.xml')
+    claim = result['claims'][0]
+    assert claim['entity'] == 'protein Q'
+    assert claim['value'].lower() == 'kinase phosphorylation'
+    assert claim['conditions']['negated'] is negated and claim['conditions']['modality'] == modality
+    if sentence.startswith('We conclude'):
+        assert claim['evidence_kind'] == 'author_inference'
+        assert claim['conditions']['attribution'] == 'We conclude that'
+
+
+def test_schema_rejects_duplicate_and_malformed_record_ids_without_crashing():
+    result = s.interpret_artifacts({'notes.txt': b'Protein A inhibits protein B.'})
+    repeated = deepcopy(result)
+    repeated['obligations'][0]['id'] = repeated['claims'][0]['id']
+    assert not validate_interpretation(repeated)['valid']
+    malformed = deepcopy(result)
+    malformed['claims'][0]['id'] = []
+    assert not validate_interpretation(malformed)['valid']
+    malformed = deepcopy(result)
+    malformed['artifacts'][0]['size'] = 'large'
+    assert not validate_interpretation(malformed)['valid']
+
+
+def test_passive_outer_negation_abstains():
+    assert not interpret('It is not true that kinase activity is inhibited by protein Q.', 'notes.txt')['claims']

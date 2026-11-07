@@ -201,7 +201,7 @@ class _Literals:
                 _, content, start = lines[index]
                 if sequence:
                     if not (content == "-" or content.startswith("- ")):
-                        raise ValueError("mixed sequence/mapping block")
+                        break  # End of a standard YAML indentless sequence.
                     token = content[1:].strip()
                     value_start = start + len(content)-len(token)
                     key = None
@@ -217,7 +217,9 @@ class _Literals:
                 if token:
                     child = self.flow(token, value_start, depth+1)
                 else:
-                    if index >= len(lines) or lines[index][0] <= indent:
+                    indentless = (not sequence and index < len(lines) and lines[index][0] == indent
+                                  and (lines[index][1] == "-" or lines[index][1].startswith("- ")))
+                    if index >= len(lines) or (lines[index][0] <= indent and not indentless):
                         raise ValueError("missing configuration value")
                     child, index = block(index, lines[index][0], depth+1)
                 if sequence:
@@ -317,9 +319,10 @@ def _parse_config(path, raw, artifacts):
         return resolved
     parameter = resolve(value["parameter_file"])
     output = []
-    allowed = {"sbml_files", "measurement_files", "observable_files", "condition_files"}
+    required = {"sbml_files", "measurement_files", "observable_files"}
+    allowed = required | {"condition_files", "visualization_files"}
     for index, problem in enumerate(problems):
-        if not isinstance(problem, dict) or not {"sbml_files", "measurement_files", "observable_files"} <= set(problem) or set(problem) - allowed:
+        if not isinstance(problem, dict) or not required <= set(problem) or set(problem) - allowed:
             raise ValueError("bounded PEtab problem fields required")
         node = root.children["problems"].children[index]
         pointers = {"/format_version": root.children["format_version"],
@@ -329,13 +332,13 @@ def _parse_config(path, raw, artifacts):
         all_targets = []
         for key in sorted(allowed):
             entries = problem.get(key, [])
-            if not isinstance(entries, list) or (key != "condition_files" and not entries) or len(entries) > 64:
+            if not isinstance(entries, list) or (key in required and not entries) or len(entries) > 64:
                 raise ValueError("bounded PEtab file list required: " + key)
             resolved = [resolve(entry) for entry in entries]
             if len(set(resolved)) != len(resolved):
                 raise ValueError("duplicate PEtab target")
             all_targets.extend(resolved)
-            record[key] = resolved
+            if key != "visualization_files": record[key] = resolved
             for position, child in enumerate(node.children[key].children if key in node.children else []):
                 pointers[f"/problems/{index}/{key}/{position}"] = child
         if len(set(all_targets + [parameter])) != len(all_targets) + 1:
@@ -450,11 +453,11 @@ def _mapped_rhs(left, right, mappings):
             actual_scopes = binding_scopes or {claim.get("scope")}
             if endpoint["scope"] is not None and actual_scopes != {endpoint["scope"]}:
                 break
-        else: pairs.append((a["entity"], b["entity"]))
-    if (any(len({b for a, b in pairs if a == name}) != 1 for name in left_names)
-            or any(len({a for a, b in pairs if b == name}) != 1 for name in right_names)):
+        else: pairs.append((a["entity"], b["entity"], mapping))
+    if (any(len({b for a, b, _ in pairs if a == name}) != 1 for name in left_names)
+            or any(len({a for a, b, _ in pairs if b == name}) != 1 for name in right_names)):
         raise ValueError("Every equation symbol needs one explicit cross-file mapping")
-    rename = {b:a for a,b in pairs}
+    rename = {b:a for a,b,_ in pairs}
     def replace(value, depth=0):
         if depth > 64: raise ValueError("equation IR depth bound")
         if isinstance(value, dict):
@@ -462,7 +465,8 @@ def _mapped_rhs(left, right, mappings):
             return {k:replace(v, depth+1) for k,v in value.items()}
         if isinstance(value, list): return [replace(v, depth+1) for v in value]
         return deepcopy(value)
-    return replace(right["rhs"]), [{"left":a, "right":b} for a,b in sorted(set(pairs))]
+    return replace(right["rhs"]), [{"left":a, "right":b, "mapping_id":m["id"], "source":m["source"]}
+                                   for a,b,m in sorted(pairs, key=lambda item:(item[0],item[1],item[2]["id"]))]
 
 
 def _compare(mapping, left, right, result, mappings):
@@ -475,16 +479,19 @@ def _compare(mapping, left, right, result, mappings):
         try:
             renamed, symbol_mappings = _mapped_rhs(left, right, mappings)
             comparison = semantics.compare_expressions(left["rhs"], renamed)
+            comparison["original_domain_conditions"] = {"left":semantics._denominators(left["rhs"]),
+                                                        "right":semantics._denominators(right["rhs"])}
         except (ValueError, KeyError, TypeError, RecursionError):
             result.obligation("equation_comparison", "Mapped equations exceed the closed rational fragment", **base)
         else:
+            equation_base = {**base, "sources":base["sources"]+[m["source"] for m in symbol_mappings]}
             result.add("correspondences", kind="equation_comparison", status=comparison["algebra"]["status"],
-                       comparison=comparison, symbol_mappings=symbol_mappings, **base)
+                       comparison=comparison, symbol_mappings=symbol_mappings, **equation_base)
             if comparison["algebra"]["status"] == "DISTINCT_RATIONAL_FUNCTIONS":
                 result.add("conflicts", kind="mapped_equation_difference", status="DECLARATION_CONFLICT", **base)
-            if any(comparison["domain_conditions"].values()):
+            if any(comparison["original_domain_conditions"].values()):
                 result.obligation("common_defined_domain", "Original denominator conditions remain open",
-                                  domain_conditions=comparison["domain_conditions"], **base)
+                                  domain_conditions=comparison["original_domain_conditions"], **equation_base)
     lu, ru = left.get("unit_resolution", {}), right.get("unit_resolution", {})
     if left.get("unit") is not None and right.get("unit") is not None:
         if lu.get("dimension") is None or ru.get("dimension") is None:

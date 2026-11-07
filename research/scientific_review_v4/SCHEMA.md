@@ -65,6 +65,15 @@ unsupported qualification abstain; instruction-like source prose remains data.
 These are deliberately narrow source interpretations, not a general biological
 language model or causal inference system.
 
+A bounded passive fragment also supports `target is inhibited by agent` (and
+repressed/activated/stimulated), including explicit modal negation and
+`during`/`under`/`when` context. It normalizes the explicitly named agent and
+target, retains `conditions.source_voice: passive`, and preserves `We conclude
+that`/`We report that` attribution as `author_inference`. This fragment was
+added after inspecting the frozen v4 development paper; it has no heldout
+evaluation claim. Reported inference remains distinct from established causal
+truth.
+
 ## Inventory, budgets and validation
 
 V1 intake bounds remain 256 files, 5 MiB per file and 64 MiB total. The v3

@@ -79,7 +79,9 @@ def classify(record):
     """
     if not isinstance(record, dict):
         return "unknown", "Invalid check record."
-    if record.get("authority") is not False or record.get("scientific_meaning") not in (None, "OPEN"):
+    if (record.get("authority") is not False or record.get("scientific_meaning") not in (None, "OPEN")
+            or record.get("production_authority") not in (None, False, "NONE")
+            or record.get("scientific_meanings_certified", 0) != 0):
         return "unknown", "The record claims authority or certified meaning and was not accepted."
     status = record.get("status")
     if status in KERNEL_STATUSES:
@@ -128,14 +130,14 @@ def _source(source, inventory, blobs, prefix):
     quote = str(source.get("quote", ""))
     original_sha = source.get("original_sha256", sha)
     item = inventory.get(path, {})
-    if transformation:
+    binary_derived = bool(transformation) and (path.lower().endswith((".pdf", ".docx")) or isinstance(transformation, dict) and any(k in transformation for k in ("derived_text_sha256", "derived_text", "adapter")))
+    transformation_html = "<p><strong>Extraction provenance:</strong> " + _e(_text(transformation)) + "</p>" if transformation else ""
+    if binary_derived:
         heading = "Read the derived text and original file"
         locator = "Derived text excerpt. These text offsets do not identify a quote in the original binary file."
-        transformation_html = "<p><strong>Extraction provenance:</strong> " + _e(_text(transformation)) + "</p>"
     else:
         heading = "Read the source and download the original"
         locator = "Captured source excerpt"
-        transformation_html = ""
         raw = blobs.get(path)
         if raw is not None and type(start) is int and type(end) is int and 0 <= start <= end <= len(raw):
             if hashlib.sha256(raw).hexdigest() == sha and raw[start:end] == quote.encode("utf-8"):
@@ -171,11 +173,12 @@ def render(interpretation, checks, inventory_or_artifacts, summary):
     inventory, blobs = _inventory(interpretation, inventory_or_artifacts)
     prefix = _prefix(summary)
     claims = interpretation.get("claims", [])
+    claim_titles = {c.get("id"): str(c.get("entity", c.get("subject", "Statement"))) + " — " + str(c.get("quantity_role", c.get("kind", "statement"))).replace("_", " ") for c in claims}
     by_claim = {}
     for check in checks:
         if isinstance(check, dict) and check.get("claim_id"):
             by_claim.setdefault(check["claim_id"], []).append(check)
-    classified = [(record, *classify(record)) for record in checks]
+    classified = [(record if isinstance(record, dict) else {"status": "UNKNOWN", "rejected_record": record}, *classify(record)) for record in checks]
     counts = Counter(category for _, category, _ in classified)
     suspect_summary = summary.get("authority") not in (False, None) or summary.get("scientific_meanings_certified", 0) != 0
     alert = '<p class="alert">The summary claims authority or certified scientific meaning. Those claims are not accepted by this review.</p>' if suspect_summary else ""
@@ -187,7 +190,7 @@ def render(interpretation, checks, inventory_or_artifacts, summary):
     for record, category, reason in classified:
         if category in {"refuted", "unknown"}:
             ref = record.get("claim_id") if isinstance(record, dict) else None
-            title = record.get("artifact_path", record.get("id", "Check")) if isinstance(record, dict) else "Check"
+            title = record.get("artifact_path", claim_titles.get(ref, "Evidence check")) if isinstance(record, dict) else "Check"
             link = '<a href="#claim-' + _e(ref) + '">Review related statement</a>' if ref else '<a href="#checks">Read the check record</a>'
             flagged.append("<li><strong>" + LABELS[category][0] + ":</strong> " + _e(str(title)) + ". " + _e(reason or record.get("reason", record.get("scope", "Inspect the recorded evidence."))) + " " + link + "</li>")
     for unresolved in interpretation.get("unresolved", []):
@@ -216,7 +219,9 @@ def render(interpretation, checks, inventory_or_artifacts, summary):
             if found != category:
                 continue
             scope = record.get("scope", record.get("reason", "The record below states the exact fields checked."))
-            records.append('<article class="check ' + category + '"><h4>' + _e(record.get("artifact_path", record.get("id", record.get("status", "Check")))) + '</h4><p>' + _e(scope) + '</p>' + ('<p>' + _e(reason) + '</p>' if reason else '') + '<details><summary>Exactly what was checked: evidence record</summary><pre>' + _e(_pretty(record)) + '</pre></details></article>')
+            proof_titles = {"KERNEL_CHECKED_ABSTRACT_PARTIAL_SEMANTICS": "Abstract partial-expression theorem", "KERNEL_CHECKED_ABSTRACT_RESIDUAL_SEMANTICS": "Abstract residual-sum theorem", "KERNEL_CHECKED_FINITE_INTEGER_CONSERVATION": "Finite integer conservation theorem"}
+            title = record.get("artifact_path", claim_titles.get(record.get("claim_id"), proof_titles.get(record.get("status"), "Evidence check")))
+            records.append('<article class="check ' + category + '"><h4>' + _e(title) + '</h4><p>' + _e(scope) + '</p>' + ('<p>' + _e(reason) + '</p>' if reason else '') + '<details><summary>Exactly what was checked: evidence record</summary><pre>' + _e(_pretty(record)) + '</pre></details></article>')
         grouped.append('<section class="check-group" data-evidence-class="' + category + '"><h3>' + label + ' <span class="count">' + str(counts[category]) + '</span></h3><p>' + description + '</p>' + ("".join(records) or '<p>No accepted result in this category.</p>') + '</section>')
     assets = ''.join('<li>' + _e(path) + ' <span class="digest">' + _e(a.get("sha256", "digest missing")) + '</span></li>' for path, a in sorted(inventory.items()))
     return '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><title>PCS scientific review</title><style>

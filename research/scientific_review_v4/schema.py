@@ -47,9 +47,22 @@ def validate_interpretation(value, artifacts=None):
             errors.append(category + " must be a list")
     if errors:
         return {"valid": False, "errors": errors, "authority": False}
-    identifiers = [row.get("id") for category in CATEGORIES for row in value[category] if isinstance(row, dict)]
-    if any(not isinstance(identifier, str) for identifier in identifiers) or len(identifiers) != len(set(identifiers)):
+    for category in CATEGORIES:
+        if any(not isinstance(row, dict) for row in value[category]):
+            errors.append(category + ": records must be objects")
+    if errors:
+        return {"valid": False, "errors": errors, "authority": False}
+    identifiers = [row.get("id") for category in CATEGORIES for row in value[category]]
+    if any(not isinstance(identifier, str) for identifier in identifiers):
         errors.append("record IDs must be unique strings")
+        return {"valid": False, "errors": errors, "authority": False}
+    if len(identifiers) != len(set(identifiers)):
+        errors.append("record IDs must be unique strings")
+    for artifact in value["artifacts"]:
+        if type(artifact.get("size")) is not int or artifact["size"] < 0 or not isinstance(artifact.get("path"), str) or not isinstance(artifact.get("sha256"), str):
+            errors.append("invalid artifact metadata")
+    if errors:
+        return {"valid": False, "errors": errors, "authority": False}
     artifact_by_id = {row.get("id"): row for row in value["artifacts"]}
     claims = {row.get("id") for row in value["claims"]}
     symbols = {row.get("id") for row in value["symbols"]}
