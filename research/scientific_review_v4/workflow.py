@@ -5,6 +5,7 @@ import csv
 from fractions import Fraction
 import hashlib
 import io
+import math
 import re
 
 from research.scientific_intake_v1.intake import canonical
@@ -60,8 +61,12 @@ def join_predictions(measurements,predictions):
     """
     if not measurements or not predictions:raise ValueError('empty numerical table')
     required={'observableId','simulationConditionId','time'}
-    if not required<=measurements[0].keys() or not required<=predictions[0].keys():raise ValueError('observation key missing')
-    keys=sorted((set(measurements[0])|set(predictions[0]))-{'measurement','simulation'})
+    measurement_columns=set(measurements[0]);prediction_columns=set(predictions[0])
+    if not required|{'measurement'}<=measurement_columns or not required|{'simulation'}<=prediction_columns:raise ValueError('observation key/value missing')
+    # The table reader enforces a common header. Keep the public helper equally
+    # strict so metadata appearing only in a later row can never be discarded.
+    if any(set(r)!=measurement_columns for r in measurements) or any(set(r)!=prediction_columns for r in predictions):raise ValueError('inconsistent observation metadata columns')
+    keys=sorted((measurement_columns|prediction_columns)-{'measurement','simulation'})
     for k in keys:
         if k not in measurements[0] or k not in predictions[0]:
             present=measurements if k in measurements[0] else predictions
@@ -80,7 +85,14 @@ def residual_statistics(pairs):
     if max(rss.numerator.bit_length(),rss.denominator.bit_length())>65536:raise ValueError('exact residual bit bound')
     grouped=defaultdict(list)
     for p,e in zip(pairs,errors):grouped[(p['row']['observableId'],p['row']['simulationConditionId'])].append(e)
-    return {'observations':len(pairs),'rss_exact':str(rss),'rss_float':float(rss),'nonzero_residuals':sum(e!=0 for e in errors),
+    try:
+        rss_float=float(rss)
+    except OverflowError:
+        rss_float=None
+    if rss_float is not None and not math.isfinite(rss_float):rss_float=None
+    projection={'source':'rss_exact','format':'binary64','status':'FINITE_APPROXIMATION' if rss_float is not None else 'OUT_OF_RANGE'}
+    if rss and rss_float==0:projection['status']='UNDERFLOW_TO_ZERO'
+    return {'observations':len(pairs),'rss_exact':str(rss),'rss_float':rss_float,'rss_float_projection':projection,'nonzero_residuals':sum(e!=0 for e in errors),
             'max_absolute_residual_exact':str(max(map(abs,errors),default=Fraction(0))),
             'groups':[{'observable':k[0],'condition':k[1],'n':len(v),'rss_exact':str(sum((e*e for e in v),Fraction(0)))} for k,v in sorted(grouped.items())],
             'assumptions':['Full source observation keys align the same observable, condition, time and calibration metadata.',
@@ -104,7 +116,8 @@ def analyze(artifacts):
             rows=tables[path][1];_unique(rows,'parameterId');bad=[]
             for i,r in enumerate(rows):
                 lo,hi,v=map(number,(r['lowerBound'],r['upperBound'],r['nominalValue']))
-                if not lo<hi or not lo<=v<=hi or r.get('estimate','1') not in {'0','1'} or r.get('parameterScale','lin') not in {'lin','log','log10'}:bad.append(i)
+                scale=r.get('parameterScale','lin')
+                if not lo<hi or not lo<=v<=hi or r.get('estimate','1') not in {'0','1'} or scale not in {'lin','log','log10'} or (scale in {'log','log10'} and not all(x>0 for x in (lo,v,hi))):bad.append(i)
             results.append(record('parameter_domain','REFUTED' if bad else 'REPRODUCED_COMPUTATION',bindings,{'parameters':len(rows),'invalid_rows':bad,'scale_policy':'PEtab nominal/bounds are untransformed values; no optimization certificate'},'Declared parameter identifiers and bounds'))
         except (ValueError,KeyError) as exc:results.append(record('parameter_domain','UNKNOWN',bindings,{'reason':str(exc)},'Parameter table validation'))
     for path in roles['measurement']:
