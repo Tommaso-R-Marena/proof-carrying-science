@@ -40,5 +40,6 @@ def same_source(a,b,artifacts,inventory=None):
         # A PDF quote cannot match a raw JATS quote merely by similar words.
         if a.get('transformation',{}).get('segment_sha256')!=b.get('transformation',{}).get('segment_sha256'):return False
         aa,bb=a['transformation'],b['transformation']
+        if any(aa.get(k)!=bb.get(k) for k in ['adapter','version','segment_index','locator']):return False
         return max(aa['extracted_byte_start'],bb['extracted_byte_start'])<min(aa['extracted_byte_end'],bb['extracted_byte_end'])
     return max(a['byte_start'],b['byte_start'])<min(a['byte_end'],b['byte_end'])

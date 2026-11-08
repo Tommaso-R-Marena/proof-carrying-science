@@ -17,12 +17,13 @@ def augment(meaning,inventory):
     quotation's byte offsets refer to extracted text, never the original PDF.
     """
     result=deepcopy(meaning);virtual={};bindings={};total=0
+    artifact_ids={(a['path'],a['sha256']):a['id'] for a in meaning['artifacts']}
     for artifact in inventory['artifacts']:
         if artifact.get('adapter') not in {'pdf','docx'} or artifact.get('status')!='EXTRACTED':continue
         for index,segment in enumerate(artifact.get('segments',[])):
             text=segment.get('text','');raw=text.encode('utf-8')
             if not raw or len(raw)>100000 or len(virtual)>=200 or total+len(raw)>1000000:continue
-            name='extracted-'+artifact['sha256'][:20]+'-'+str(index)+'.txt'
+            name='extracted-'+digest([artifact['path'],artifact['sha256'],index])[:24]+'.txt'
             virtual[name]=raw;total+=len(raw)
             bindings[name]=(artifact,index,segment,hashlib.sha256(raw).hexdigest())
     if not virtual:return result
@@ -34,7 +35,7 @@ def augment(meaning,inventory):
         if value.get('path') in bindings and 'quote' in value and 'sha256' in value:
             a,index,segment,sha=bindings[value['path']]
             begin,end=value.pop('byte_start',None),value.pop('byte_end',None)
-            value.update(path=a['path'],sha256=a['sha256'],artifact_id=a['id'],
+            value.update(path=a['path'],sha256=a['sha256'],artifact_id=artifact_ids[(a['path'],a['sha256'])],
                 transformation={'kind':'adapter_extracted_text','adapter':a['adapter'],'version':a['version'],
                     'segment_index':index,'segment_sha256':sha,'extracted_byte_start':begin,'extracted_byte_end':end,
                     'locator':segment.get('locator',{}),'original_bytes_preserved':True})

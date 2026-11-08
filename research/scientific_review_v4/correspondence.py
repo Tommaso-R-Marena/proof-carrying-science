@@ -19,8 +19,8 @@ from research.scientific_understanding_v2.interpretation import parse_expression
 
 VERSION = "scientific-correspondence/v4.0"
 MAX_FILES = 256
-MAX_FILE = 1_000_000
-MAX_TOTAL = 16_000_000
+MAX_FILE = 5 * 1024**2
+MAX_TOTAL = 64 * 1024**2
 MAX_NODES = 8192
 MAX_DEPTH = 16
 MAX_RECORDS = 6000
