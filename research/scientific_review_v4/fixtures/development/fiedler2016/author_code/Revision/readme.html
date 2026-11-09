@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1348.17">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none; color: #000000; -webkit-text-stroke: 0px #000000}
+    span.s2 {font-kerning: none}
+    span.s3 {font-kerning: none; color: #000000}
+    span.s4 {font-variant-ligatures: no-common-ligatures}
+    span.s5 {font-variant-ligatures: no-common-ligatures; color: #bb2ca2}
+    span.s6 {-webkit-text-stroke: 0px #000000}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">Code to the paper „</span>Tailored parameter optimization methods for ordinary differential equation models with steady-state constraints<span class="s1">“ (in submission)</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">1. </span><span class="s3">Main</span><span class="s2"> files</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">- <i>VFMO_mod.m</i></span></p>
+<p class="p1"><span class="s4">provides the gradient </span><span class="s5">for</span><span class="s4"> the simulation-based optimization</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">- <i>sampleParameters.m</i></span></p>
+<p class="p3"><span class="s2">samples parameters using latin hypercube sampling</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">- <i>Manifold_opt.m</i></span></p>
+<p class="p1"><span class="s4">is a multistart routine </span><span class="s5">for</span><span class="s4"> simulation-based optimization</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2"><br>
+2. Examples</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p1">Simulation example:</p>
+<p class="p3"><span class="s2">- <i>ConversionReactionTimeSeries_opt.m</i></span></p>
+<p class="p4"><span class="s2">performs the optimization for the </span><span class="s6">conversion process using</span><span class="s2"> the different methods saving the results in the Result folder.</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">Apllication example 1:</span></p>
+<p class="p3"><span class="s2">- <i>NGFIndErkSignaling_opt.m</i></span></p>
+<p class="p1"><span class="s2">performs the optimization for the </span>NGF-induced ERK signaling using<span class="s2"> the different methods saving the results in the Result folder.</span></p>
+<p class="p4"><span class="s2">- <i>Supplement_opt.m</i></span></p>
+<p class="p4"><span class="s2">performs the parameter estimation for the NGF-induced optimization for different values of the retraction factor lambda.</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">Application example 2:</span></p>
+<p class="p3"><span class="s2">- <i>RafMekErk_opt.m</i></span></p>
+<p class="p3"><span class="s2">performs the optimization for the Raf/MEK/ERK signaling using the different methods saving the results in the Result folder.</span></p>
+<p class="p3"><span class="s2">- <i>modelComparison.m</i></span></p>
+<p class="p3"><span class="s2">performs the parameter estimation for the Raf/MEK/ERK pathway model without feedback.</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">Supplementary information - hysteresis</span></p>
+<p class="p3"><span class="s2">- <i>hysteresis_opt.m</i></span></p>
+<p class="p1"><span class="s2">performs the optimization for the </span>hysteresis system using<span class="s2"> the different methods saving the results.</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p4"><span class="s2">Supplementary information - hopf</span></p>
+<p class="p4"><span class="s2">- <i>hopf_opt.m</i></span></p>
+<p class="p4"><span class="s2">performs the optimization for the </span>hopf system using<span class="s2"> the different methods saving the results.</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p4"><span class="s2">The parameters estimated by the simulation-based optimization using gradient descent and newton method are saved to the structs parameters_SD and parameters_NM, respectively.</span></p>
+<p class="p4"><span class="s2">The parameters estimated by hybrid optimization are saved to the struct parameters_FMs.</span></p>
+<p class="p4"><span class="s2">The parameters estimated by constrained and unconstrained optimization are saved to the structs parameters_FM and parameters_FUa, respectively.<br>
+</span></p>
+<p class="p4"><span class="s2">The evolution of parameters along the solver path and all other evolutions paths, which are saved by default, were deleted from the results of all optimization to decrease data size.</span><span class="s3"><br>
+</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">3. Figure generation</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">- <i>Figure_ConversionReaction.m</i></span></p>
+<p class="p3"><span class="s2">- <i>Figure_ConversionReactionFMs.m</i></span></p>
+<p class="p3"><span class="s2">create the Figure 3 and 4 used in the manuscript<br>
+</span></p>
+<p class="p3"><span class="s2">- <i>Figure_NGFInducedErkSignaling.m</i></span></p>
+<p class="p3"><span class="s2">creates Figure 6<br>
+</span></p>
+<p class="p3"><span class="s2">- <i>Figure_RafMekErk.m</i></span></p>
+<p class="p3"><span class="s2">creates Figure 8 and calculates the AIC and BIC for the Raf/MEK/ERK model with and without feedback.<br>
+</span></p>
+<p class="p3"><span class="s2">- <i>Figure_SupplementLambda.m</i></span></p>
+<p class="p3"><span class="s2">creates Figure 1 from the supplement</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">- <i>figureHystersis.m</i></span></p>
+<p class="p4"><span class="s3">creates </span><span class="s2">Figure 2 from the supplement</span></p>
+<p class="p2"><span class="s2"></span><br></p>
+<p class="p3"><span class="s2">- <i>figureHopf.m</i></span></p>
+<p class="p4"><span class="s2">creates Figure 3 from the supplement</span></p>
+</body>
+</html>
