@@ -1,0 +1,54 @@
+{
+  "schema": "pcs-real-project-browser-walkthrough-v4",
+  "project": "fiedler2016-development",
+  "started_at_utc": "2026-11-09T00:11:13.929Z",
+  "authored_walkthrough": true,
+  "human_usability_study": false,
+  "scientific_validation": false,
+  "heldout_data_read": false,
+  "review_sha256": "e44fe0b57eae56d550fbcd4b6c5b11f9ff73f27a8c289e323b6bd3bd0c12f047",
+  "manifest_sha256": "8f60d6d71fafd5b0974e31ebdc05d192daf2ec622f20b38e9a9c3cb9b768c351",
+  "renderer_sha256": "4bc0374beb9f34a19b3d256c210abc9e14582280ee6d6632655941341bf0ca11",
+  "browser_harness_sha256": "d10dd893c35ff51e8492b15ced479dc22dc1f9d4e331c9ae190610220481d66e",
+  "inputs": {
+    "artifacts": 103,
+    "claims": 54,
+    "checks": 59,
+    "check_statuses": [
+      "KERNEL_CHECKED_ABSTRACT_RESIDUAL_SEMANTICS",
+      "REPRODUCED_COMPUTATION",
+      "SCOPED_EQUATION_CHECKED",
+      "SOURCE_DECLARATION_CHECKED",
+      "UNKNOWN"
+    ]
+  },
+  "checks": {
+    "actual_inventory_and_statement_counts": true,
+    "evidence_classes": {
+      "proof": 1,
+      "computation": 4,
+      "source": 38,
+      "refuted": 0,
+      "unknown": 16
+    },
+    "scope_separation_visible": true,
+    "actual_assumptions_biological_relation_and_abstract_proof_displayed": true,
+    "keyboard_skip_link": true
+  },
+  "defects": [
+    {
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(await summary.evaluate(el=>el===document.activeElement))\n",
+      "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(await summary.evaluate(el=>el===document.activeElement))\n\n    at main (/dev/shm/pcs-independent-scientific-review-v4/research/scientific_review_v4/tests/project_browser_demo.cjs:94:5)"
+    }
+  ],
+  "browser": {
+    "name": "Firefox",
+    "version": "157.0",
+    "headless": true
+  },
+  "status": "FAILED",
+  "requests": [
+    "/"
+  ],
+  "finished_at_utc": "2026-11-09T00:11:20.337Z"
+}
