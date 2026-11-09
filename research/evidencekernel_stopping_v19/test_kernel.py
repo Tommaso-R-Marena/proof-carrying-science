@@ -113,13 +113,16 @@ class StoppingDesignTests(unittest.TestCase):
         self.assertGreater(len(str(d['total'])),200)
 
     def test_all_accepted_and_none_accepted_extremes(self):
-        for cutoff in (0,10000):
-            p=protocol(3,1,4,[0,1,2],cutoff);d=design(p)
+        for p, expected_R in [
+            (protocol(4,2,3,[0,0,0,1],0),6),
+            (protocol(4,2,3,[0,0,0,1],10000),0),
+        ]:
+            d=design(p)
+            self.assertEqual(d['R'],expected_R)
             for seq in itertools.islice(transcripts(d),30):
                 rank,M=prefix_rank(d,seq)
                 self.assertTrue(1<=rank<=M)
-            if cutoff==10000:self.assertEqual(d['R'],0)
-            else:self.assertGreater(d['R'],0)
+            self.assertEqual(sum(d['mass']),d['N']**d['H'])
 
     def test_closeout_fails_on_hidden_early_acceptance(self):
         p=protocol(4,2,3,cutoff=2)
