@@ -38,7 +38,7 @@ theorem nonlaundering {n : Nat} {parents : Fin n → List (Fin n)}
     {root child : Fin n} (path : Reaches parents root child) :
     label root ≤ label child := by
   induction path with
-  | refl _ => exact Nat.le_refl _
+  | refl => exact Nat.le_refl _
   | step prev edge ih => exact Nat.le_trans ih (safe _ _ edge)
 
 /-- No descendant of a secret root can be released to a lower sink without
@@ -46,10 +46,10 @@ theorem nonlaundering {n : Nat} {parents : Fin n → List (Fin n)}
 theorem forbidden_release {n : Nat} {parents : Fin n → List (Fin n)}
     {label : Fin n → Nat} (safe : FlowSound parents label)
     {root child : Fin n} (path : Reaches parents root child)
-    {sink : Nat} (protected : sink < label root) :
+    {sink : Nat} (aboveSink : sink < label root) :
     ¬ label child ≤ sink := by
   intro release
-  exact Nat.not_le_of_gt protected (Nat.le_trans (nonlaundering safe path) release)
+  exact Nat.not_le_of_gt aboveSink (Nat.le_trans (nonlaundering safe path) release)
 
 /-- Actual acceptance of a restricted sink is evidence that every ancestor of
     the output respects that sink classification, under the edge assumption. -/
