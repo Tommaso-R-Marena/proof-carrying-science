@@ -90,3 +90,26 @@ The companion **Writ/13 alpha**, delivered separately from this research PR, now
 **Independent cross-check:** `source_witness.py` is a separate reference implementation of the explicit root/concat provenance commitment. `test_source_witness.py` checks it against the frozen Writ/13 fixture commitment `35508ee5c4f886ef8a2154b81ce39a5318ec6d0334995d2dc1179087ac78eb8a` and rejects changed roots/recipes, including a hidden source substitution.
 
 The complete Writ/13 runtime (including external Ed25519 receipt verifier) is intentionally **not imported into PCS production**. Neither a kernel-checked projection nor an operator signature establishes honesty of the host, legitimacy of reviewer signers, correctness of arbitrary model behavior, implicit-flow security, real tool effects, or Python-to-Lean refinement. That precise refinement problem and an independent benchmark against Cedar and proof-carrying-agent protocols remain the primary research blockers.
+
+## Writ/14: independently checked effect lifecycles and no automatic ambiguous retry
+
+Writ/13 had a **reproducible semantic defect in its detached receipt receiver**: with the synthetic test operator's legitimate Ed25519 private key, a tester could append a second `delivered` event for the same effect, recompute all hash-link fields and the envelope signature, and have Writ/13 accept the contradictory receipt. This is *not* a cryptographic forgery by an attacker who lacks the signing key. It shows that even authenticated, operator-signed histories need a separate semantic validator. A test operator can also be buggy.
+
+The companion Writ/14 runtime (distributed as a separate alpha release; **not imported into PCS production**) introduces opt-in `audit effects;` (requires `audit authority;` and `witness provenance;`), a new `writ/14` policy identity, and a domain-separated `writ/portable-receipt/2`. The gateway durably records `dispatch_lease` *before* external adapter I/O. Ambiguous adapter exceptions, including an exception after a real effect, and expired worker leases become terminal `uncertain` states; **they are not automatically reexecuted**. The gateway and detached signature verifier independently reconstruct each effect's history and compare it with durable/signed outbox status.
+
+The audited transition rules are:
+
+- `pending --dispatch_lease--> working`
+- `working --delivered--> delivered`
+- `working --dispatch_uncertain--> uncertain`
+- `pending --cancel_effect--> canceled`
+- `pending --dispatch_suppressed--> suppressed`
+- `pending --dispatch_expired--> expired`
+
+Every terminal state is absorbing. The verifier rejects duplicate delivery, cancellation after delivery, delivery without a lease, and mismatched outbox status, even when an inconsistent test history has been validly re-signed.
+
+**Kernel-checked theorem:** `formal/EffectLifecycle.lean` proves the executable transition function sound and complete against separately stated allowed transitions, finite-trace replay sound and complete, and terminal-state non-reentrance. `formal/TripleSafety.lean` composes that model with the already kernel-checked source-anchored weighted authority and explicit provenance checks, establishing conditional product-checker soundness, completeness and no overspending. `formal/SignedEffectReceipt.lean` was **generated from an actual synthetic Writ/14 signed gateway receipt** after detached verification; Lean checks each resource balance, lease→delivery history, combined acceptance and an impossible post-terminal transition. The [dedicated Writ CI run](https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/42646453323) passed all three source files on Lean 4.28.0.
+
+**Reproducible implementation evidence:** 335/335 full Python tests; 55,987 event sequences (lengths 0–6) matched an independently authored finite-state oracle; clean-installed wheel; separate-process Writ/14 admission→lease→delivery→signed-receipt→Lean-export demonstration; inherited Writ/13 demo still passes. Writ/14's complete runtime and confidential synthetic test signing key were *not* added to the PCS PR.
+
+**Important nonclaims:** Even a formally consistent `delivered` log entry does not prove that the remote tool *physically delivered* anything; that remains a trusted adapter/operator assertion. Writ/14 does **not** establish exactly-once physical effects, trusted operator honesty, complete mediation, remote idempotency, key custody, source provenance authenticity, or Python-to-Lean refinement. Strict effect auditing is opt-in; Writ/13 historical policies retain their weaker receipt semantics unless migrated. The real next milestone is a trusted, independently attested adapter receipt or narrow executable refinement proof.
