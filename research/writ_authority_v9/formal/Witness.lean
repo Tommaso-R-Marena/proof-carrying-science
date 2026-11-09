@@ -13,7 +13,7 @@ namespace Writ11
 structure Fingerprint where
   sequence : Nat
   head : Nat
-  seal : Nat
+  stateSeal : Nat
   deriving DecidableEq, Repr
 
 structure HostState where
@@ -57,10 +57,10 @@ theorem older_sequence_refused (old current : Fingerprint)
 
 /-- Even with equal sequence numbers, different committed seals are refused. -/
 theorem same_step_modified_state_refused (old current : Fingerprint)
-    (differentSeal : old.seal ≠ current.seal) :
+    (differentSeal : old.stateSeal ≠ current.stateSeal) :
     ¬ Ready ⟨old, current⟩ := by
   intro eq
-  exact differentSeal (congrArg Fingerprint.seal eq)
+  exact differentSeal (congrArg Fingerprint.stateSeal eq)
 
 /-- The type of permission granted by a witness-gated host. -/
 inductive MayExecute : HostState → Prop where
@@ -72,6 +72,6 @@ theorem old_snapshot_cannot_execute (old current : Fingerprint)
     ¬ MayExecute ⟨old, current⟩ := by
   intro proof
   cases proof with
-  | matched _ h => exact different h
+  | matched h => exact different h
 
 end Writ11
