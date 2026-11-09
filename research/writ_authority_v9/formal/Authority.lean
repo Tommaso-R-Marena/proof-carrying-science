@@ -247,11 +247,19 @@ inductive WeightedRuns {n : Nat} : (Fin n → Nat) → List (Fin n → Nat) →
       (next : WeightedRuns (WeightedDebit r spending) rest final) :
       WeightedRuns r (spending :: rest) final
 
+def WeightedWithinB {n : Nat} (spent available : Fin n → Nat) : Bool :=
+  (List.finRange n).all (fun i => decide (spent i ≤ available i))
+
+/-- A finite executable check agrees exactly with the declarative guard. -/
+theorem weightedWithinB_iff {n : Nat} (spent available : Fin n → Nat) :
+    WeightedWithinB spent available = true ↔ WeightedWithin spent available := by
+  simp [WeightedWithinB, WeightedWithin, List.all_eq_true, List.mem_finRange]
+
 def CheckWeighted {n : Nat} (available : Fin n → Nat) :
     List (Fin n → Nat) → Option (Fin n → Nat)
   | [] => some available
   | spending :: rest =>
-      if WeightedWithin spending available then
+      if WeightedWithinB spending available then
         CheckWeighted (WeightedDebit available spending) rest
       else none
 
@@ -266,10 +274,11 @@ theorem checkWeighted_sound {n : Nat} {available final : Fin n → Nat}
       subst final
       exact WeightedRuns.done available
   | cons spending rest ih =>
-      by_cases valid : WeightedWithin spending available
+      by_cases valid : WeightedWithinB spending available = true
       · have next : CheckWeighted (WeightedDebit available spending) rest = some final := by
           simpa [CheckWeighted, valid] using accepted
-        exact WeightedRuns.spend available spending rest final valid (ih next)
+        exact WeightedRuns.spend available spending rest final
+          ((weightedWithinB_iff spending available).mp valid) (ih next)
       · simp [CheckWeighted, valid] at accepted
 
 /-- Certified executable checker: every valid relational trace is accepted. -/
@@ -280,7 +289,9 @@ theorem checkWeighted_complete {n : Nat} {available final : Fin n → Nat}
   induction run with
   | done _ => simp [CheckWeighted]
   | spend r spending rest final ok next ih =>
-      simpa [CheckWeighted, ok] using ih
+      have valid : WeightedWithinB spending r = true :=
+        (weightedWithinB_iff spending r).mpr ok
+      simpa [CheckWeighted, valid] using ih
 
 /-- All weighted resource charges are conserved across an arbitrary trace. -/
 theorem weighted_quota_conservation {n : Nat} {available final : Fin n → Nat}
