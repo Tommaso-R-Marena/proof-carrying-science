@@ -46,9 +46,13 @@ def _write(path, value):
 
 
 def stable(value):
-    """Only measured timing and receipt timestamps are comparison-volatile."""
+    """Only check-record timing and receipt timestamps are volatile.
+
+    Source objects, evidence, theorem/axiom audits and authority fields are
+    compared in full, even if an adversary adds a similarly named nested key.
+    """
     if isinstance(value, dict):
-        return {k: stable(v) for k, v in value.items() if k not in {"seconds", "checked_at_utc", "checked_at", "duration_seconds", "elapsed_seconds"}}
+        return {k: v for k, v in value.items() if k not in {"seconds", "checked_at_utc", "checked_at", "duration_seconds", "elapsed_seconds"}}
     if isinstance(value, list):
         return [stable(v) for v in value]
     return value
@@ -78,7 +82,8 @@ def analyze_snapshots(artifacts, inventory, check=False, formal_check=False):
     checks = []
     if check:
         for claim in meaning["claims"]:
-            if claim["source"].get("transformation", {}).get("kind") == "adapter_extracted_text":
+            transformation = claim["source"].get("transformation")
+            if isinstance(transformation, dict) and transformation.get("kind") == "adapter_extracted_text":
                 checks.append({"id": "check-" + claim["id"], "claim_id": claim["id"], "checker": "adapter-extracted-source-v4", "status": "UNKNOWN", "authority": False, "scientific_meaning": "OPEN", "source_sha256": claim["source"]["sha256"], "reason": "The quotation is bound to adapter-extracted text; no independent scientific or original-byte declaration checker supports this transformed claim."})
             else:
                 checks.append(check_claim(claim, artifacts))
@@ -172,6 +177,28 @@ def _validate_checks(checks, authorized, formal_authorized):
         raise ValueError("duplicate check record")
     if ("formal-v4-residual-semantics" in ids) != formal_authorized:
         raise ValueError("missing or unauthorized formal receipt")
+
+
+def _validate_parent_records(blobs, authorized):
+    """Apply explicit v4 authority/status boundaries to inherited sidecars."""
+    parent_summary = strict_json_loads(blobs["parent/summary.json"].decode("utf-8"))
+    parent_checks = strict_json_loads(blobs["parent/checks.json"].decode("utf-8"))
+    obligations = strict_json_loads(blobs["parent/obligations.json"].decode("utf-8"))
+    if parent_summary.get("authorized_checks") is not authorized or parent_summary.get("authority") is not False or parent_summary.get("scientific_claims_certified") != 0:
+        raise ValueError("nested parent authorization or authority mismatch")
+    by_id = {row["id"]: row for row in obligations}
+    for record in parent_checks:
+        obligation = by_id.get(record.get("obligation_id"))
+        if (record.get("status") not in {"UNKNOWN", "REFUTED", "VERIFIED_SUPPORTED"}
+                or record.get("authority") is not False or record.get("scientific_meaning") != "OPEN"
+                or obligation is None or record.get("id") != obligation["id"]
+                or record.get("checker") != obligation["checker"]
+                or record.get("source_bindings") != obligation["source_bindings"]):
+            raise ValueError("unrecognized nested parent check or source binding")
+    intake_summary = strict_json_loads(blobs["parent/intake/summary.json"].decode("utf-8"))
+    intake_checks = strict_json_loads(blobs["parent/intake/checks.json"].decode("utf-8"))
+    if intake_summary.get("check_authorized") is not False or intake_checks or intake_summary.get("authority") != "NONE":
+        raise ValueError("nested intake authorization or authority mismatch")
 
 
 def summary_for(meaning, checks, graph, authorized, formal_authorized=False):
@@ -276,6 +303,7 @@ def replay(directory, *, recheck=True, expected_manifest_sha256=None):
         raise ValueError("invalid review summary")
     authorized, formal_authorized = summary.get("authorized_checks"), summary.get("authorized_formal_checks")
     _validate_checks(checks, authorized, formal_authorized)
+    _validate_parent_records(blobs, authorized)
     inventory, artifacts = snapshot_artifacts(directory / "parent")
     # Even integrity-only replay rederives the complete bounded v4 check set:
     # resealing hashes cannot turn a missing, forged or unsupported result into

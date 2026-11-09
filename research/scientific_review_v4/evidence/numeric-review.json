@@ -1,0 +1,2019 @@
+{
+  "authority": false,
+  "conditional_reconstruction": {
+    "authority": false,
+    "checker": "conditional_ode_reconstruction",
+    "empirical_validity": "NOT_ESTABLISHED",
+    "evidence": {
+      "Python_SBML_refinement": "OPEN",
+      "assumptions": [
+        "Closed SBML L2V4 reactions, fixed three-dimensional compartments, acyclic initial/assignment expressions, no events/rate rules/functions/external parameter updates.",
+        "PEtab nominal parameters, literal conditions and measurement-specific observable scale placeholders are interpreted according to the declared problem.",
+        "Finite two-solver comparison, not a rigorous error enclosure, fit-optimum proof or empirical validation."
+      ],
+      "conditions": [
+        {
+          "condition": "model1_data1",
+          "initial_decimal80": {
+            "ERK": "0.90896191421508809056902528009547731017222481868014221783208011922227658703158319",
+            "MEK": "0.99937439245817778560586620298049141438164864149752094573006573398722011219819107",
+            "RAF": "0.99999763412087382715994429307981294954254349624148202272071112807087020247041419",
+            "pERK": "0.091038085784911909430974719904522689827775181319857782167919880777723412968416812",
+            "pMEK": "0.00062560754182221439413379701950858561835135850247905426993426601277988780180893012",
+            "pRAF": "0.0000023658791261728400557069201870504574565037585179772792888719291297975295858057608"
+          },
+          "initial_float_decimal_difference": 1.3877787807814457e-17,
+          "model_overrides": {
+            "ERK_total": "1",
+            "K_1": "1.0000122099653E-05",
+            "K_2": "1.51121996768986",
+            "K_3": "0.960465656770682",
+            "MEK_total": "1",
+            "RAF_total": "1",
+            "Sorafenib": "0",
+            "UO126": "0",
+            "k10": "0.026413685021474",
+            "k11": "163.162367794459",
+            "k2": "1.22622424049592",
+            "k3": "769.159517169525",
+            "k4": "2.90693427220412",
+            "k5": "577.552181196191",
+            "k6": "3.60757835904195",
+            "tau1": "0.242822010781068",
+            "tau2": "0.021140927521636"
+          },
+          "original_model_sha256": "40c66f3280795fd3821f151e1cf88dd27f75204f7ca13b1c1cf8be5354bdec0a",
+          "rhs_calls": {
+            "BDF": 1072,
+            "Radau": 3821
+          },
+          "solver_max_state_difference": 3.660770536706437e-08,
+          "states": [
+            "RAF",
+            "pRAF",
+            "MEK",
+            "pMEK",
+            "ERK",
+            "pERK"
+          ],
+          "stoichiometric_matrix": [
+            [
+              "-1",
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "1",
+              "-1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "-1",
+              "1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1",
+              "-1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "-1",
+              "1"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "1",
+              "-1"
+            ]
+          ],
+          "structural_projection_changes": [
+            "Remove core notes/annotation and independently interpreted initial assignments/assignment rules.",
+            "Apply the disclosed model_overrides. Fix parameter declarations for structural parsing; exclude assignment-rule species from independent dynamic state."
+          ],
+          "structural_projection_sha256": "b8ceab4d9bd2104dad19ec20b3829b5765684091c5e53e9c5a29a47b68379694",
+          "times": [
+            0.0,
+            0.25,
+            1.0,
+            5.5,
+            7.0,
+            8.5,
+            10.0
+          ]
+        },
+        {
+          "condition": "model1_data2",
+          "initial_decimal80": {
+            "ERK": "0.90896191421508809056902528009547731017222481868014221783208011922227658703158319",
+            "MEK": "0.99937439245817778560586620298049141438164864149752094573006573398722011219819107",
+            "RAF": "0.99999763412087382715994429307981294954254349624148202272071112807087020247041419",
+            "pERK": "0.091038085784911909430974719904522689827775181319857782167919880777723412968416812",
+            "pMEK": "0.00062560754182221439413379701950858561835135850247905426993426601277988780180893012",
+            "pRAF": "0.0000023658791261728400557069201870504574565037585179772792888719291297975295858057608"
+          },
+          "initial_float_decimal_difference": 1.3877787807814457e-17,
+          "model_overrides": {
+            "ERK_total": "1",
+            "K_1": "1.0000122099653E-05",
+            "K_2": "1.51121996768986",
+            "K_3": "0.960465656770682",
+            "MEK_total": "1",
+            "RAF_total": "1",
+            "Sorafenib": "5",
+            "UO126": "0",
+            "k10": "0.026413685021474",
+            "k11": "163.162367794459",
+            "k2": "1.22622424049592",
+            "k3": "769.159517169525",
+            "k4": "2.90693427220412",
+            "k5": "577.552181196191",
+            "k6": "3.60757835904195",
+            "tau1": "0.242822010781068",
+            "tau2": "0.021140927521636"
+          },
+          "original_model_sha256": "40c66f3280795fd3821f151e1cf88dd27f75204f7ca13b1c1cf8be5354bdec0a",
+          "rhs_calls": {
+            "BDF": 901,
+            "Radau": 3282
+          },
+          "solver_max_state_difference": 2.9286712610598897e-08,
+          "states": [
+            "RAF",
+            "pRAF",
+            "MEK",
+            "pMEK",
+            "ERK",
+            "pERK"
+          ],
+          "stoichiometric_matrix": [
+            [
+              "-1",
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "1",
+              "-1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "-1",
+              "1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1",
+              "-1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "-1",
+              "1"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "1",
+              "-1"
+            ]
+          ],
+          "structural_projection_changes": [
+            "Remove core notes/annotation and independently interpreted initial assignments/assignment rules.",
+            "Apply the disclosed model_overrides. Fix parameter declarations for structural parsing; exclude assignment-rule species from independent dynamic state."
+          ],
+          "structural_projection_sha256": "5377b52696a26a260b338d1f62d920c0ad772bb74695acdfb9872add58a0dfdb",
+          "times": [
+            0.0,
+            1.0,
+            5.5,
+            7.0,
+            8.5,
+            10.0
+          ]
+        },
+        {
+          "condition": "model1_data3",
+          "initial_decimal80": {
+            "ERK": "0.90896191421508809056902528009547731017222481868014221783208011922227658703158319",
+            "MEK": "0.99937439245817778560586620298049141438164864149752094573006573398722011219819107",
+            "RAF": "0.99999763412087382715994429307981294954254349624148202272071112807087020247041419",
+            "pERK": "0.091038085784911909430974719904522689827775181319857782167919880777723412968416812",
+            "pMEK": "0.00062560754182221439413379701950858561835135850247905426993426601277988780180893012",
+            "pRAF": "0.0000023658791261728400557069201870504574565037585179772792888719291297975295858057608"
+          },
+          "initial_float_decimal_difference": 1.3877787807814457e-17,
+          "model_overrides": {
+            "ERK_total": "1",
+            "K_1": "1.0000122099653E-05",
+            "K_2": "1.51121996768986",
+            "K_3": "0.960465656770682",
+            "MEK_total": "1",
+            "RAF_total": "1",
+            "Sorafenib": "0",
+            "UO126": "30",
+            "k10": "0.026413685021474",
+            "k11": "163.162367794459",
+            "k2": "1.22622424049592",
+            "k3": "769.159517169525",
+            "k4": "2.90693427220412",
+            "k5": "577.552181196191",
+            "k6": "3.60757835904195",
+            "tau1": "0.242822010781068",
+            "tau2": "0.021140927521636"
+          },
+          "original_model_sha256": "40c66f3280795fd3821f151e1cf88dd27f75204f7ca13b1c1cf8be5354bdec0a",
+          "rhs_calls": {
+            "BDF": 874,
+            "Radau": 3421
+          },
+          "solver_max_state_difference": 3.847367313625227e-09,
+          "states": [
+            "RAF",
+            "pRAF",
+            "MEK",
+            "pMEK",
+            "ERK",
+            "pERK"
+          ],
+          "stoichiometric_matrix": [
+            [
+              "-1",
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "1",
+              "-1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "-1",
+              "1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1",
+              "-1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "-1",
+              "1"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "1",
+              "-1"
+            ]
+          ],
+          "structural_projection_changes": [
+            "Remove core notes/annotation and independently interpreted initial assignments/assignment rules.",
+            "Apply the disclosed model_overrides. Fix parameter declarations for structural parsing; exclude assignment-rule species from independent dynamic state."
+          ],
+          "structural_projection_sha256": "a2b80ccc8e329eaeca100bff76d0870be4020dbdd31852b04ae8e01797af1ebc",
+          "times": [
+            1.0,
+            5.5,
+            7.0,
+            8.5,
+            10.0
+          ]
+        }
+      ],
+      "global_ODE_error_bound": "NOT_ESTABLISHED",
+      "initialization_arithmetic": {
+        "decimal_precision": 80,
+        "rigorous_error_bound": "NOT_ESTABLISHED",
+        "seed": "Exact source fractions; no binary64 round trip"
+      },
+      "maximum_observable_solver_difference": 5.690257305e-07,
+      "measurements": 72,
+      "provided_prediction_max_absolute_difference": 5.31543728e-07,
+      "residuals": {
+        "assumptions": [
+          "Full source observation keys align the same observable, condition, time and calibration metadata.",
+          "Tabulated decimals are interpreted exactly; supplied predictions have not thereby been independently executed."
+        ],
+        "groups": [
+          {
+            "condition": "model1_data1",
+            "n": 14,
+            "observable": "pErk",
+            "rss_exact": "176351123108899790267070272184051441/62500000000000000000000000000000000"
+          },
+          {
+            "condition": "model1_data2",
+            "n": 12,
+            "observable": "pErk",
+            "rss_exact": "11162679820522737554108152286585313/200000000000000000000000000000000000"
+          },
+          {
+            "condition": "model1_data3",
+            "n": 10,
+            "observable": "pErk",
+            "rss_exact": "5850284533828260967172360844065687/500000000000000000000000000000000000"
+          },
+          {
+            "condition": "model1_data1",
+            "n": 14,
+            "observable": "pMek",
+            "rss_exact": "88866644000270390631661462436326481/1000000000000000000000000000000000000"
+          },
+          {
+            "condition": "model1_data2",
+            "n": 12,
+            "observable": "pMek",
+            "rss_exact": "9972805032404318374118963179839339/10000000000000000000000000000000000"
+          },
+          {
+            "condition": "model1_data3",
+            "n": 10,
+            "observable": "pMek",
+            "rss_exact": "6228238443842425561386253497823/1000000000000000000000000000000"
+          }
+        ],
+        "max_absolute_residual_exact": "3572587381687971/2000000000000000",
+        "nonzero_residuals": 72,
+        "observations": 72,
+        "rss_exact": "79714980695279645651623602471165167/7812500000000000000000000000000000",
+        "rss_float": 10.203517528995794,
+        "rss_float_projection": {
+          "format": "binary64",
+          "source": "rss_exact",
+          "status": "FINITE_APPROXIMATION"
+        }
+      },
+      "solver_predictions": {
+        "BDF": [
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.03361643271144515",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.08384601681583652",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.14529415033614784",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.033738883206147464",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.03361660831574312",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.033614607281751696",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.033616822335357864",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8126060252664575",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "2.0267997810470963",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "3.512178196079884",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8155660064948668",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8126102701282433",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8125618993718294",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8126154435989075",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.04863500550105046",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.2857962460028179",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.28761277349671255",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.048924435995153136",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.048612690408163184",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.048635536716019605",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.04863522135412717",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24552376547695284",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "1.4427832330824717",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "1.4519535963999755",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.2469848954598498",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24541111234622515",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24552644720584663",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.245524855166563",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.022771734786134108",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.03631871880011803",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011295409785652872",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011240690128032907",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011246908122835964",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011246374889387381",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.2600384889733869",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.4147362880751062",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12898627709228772",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12836141397938594",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12843241946000555",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12842633027876654",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.2528813041919007",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.38089405484146943",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.1192158625919834",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.1188109857063587",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.1188733874046557",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.11886560638555599",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.6256030660476077",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.9422938137305005",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.2949281260526014",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.2939265011130748",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.2940808766763689",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.29406162721298407",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.006788284181229018",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004167647624161835",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004164243974100425",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004164954227852281",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004164841766467599",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.07751781661727382",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.0475918414182688",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.04755297393508073",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.04756108457373671",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.0475598003374317",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "2.0430845837757095",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3779161333179277",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3780504934824596",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.378128286338003",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3781067087995653",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "5.0543870132635185",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.408826763666181",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.4091591572812576",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.409351609028927",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.4092982283559365",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          }
+        ],
+        "Radau": [
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.03361643271144515",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.08384600356271653",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.1452941368185035",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.03373888275674643",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.03361660862517836",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.033614607558728034",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140430_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel1",
+            "simulation": "0.0336168222425337",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8126060252664575",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "2.026799460681005",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "3.512177869319477",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.815565995631549",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8126102776081846",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8125619060671454",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pErk_20140505_gel1;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel1",
+            "simulation": "0.8126154413550801",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.04863500550105046",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.2857961790701663",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.28761273174910845",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.04892443515008834",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.04861269105502243",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.048635536941672816",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140430_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel1",
+            "simulation": "0.048635221337987505",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24552376547695284",
+            "simulationConditionId": "model1_data1",
+            "time": "0"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "1.442782895186825",
+            "simulationConditionId": "model1_data1",
+            "time": "0.25"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "1.4519533856458315",
+            "simulationConditionId": "model1_data1",
+            "time": "1"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24698489119371497",
+            "simulationConditionId": "model1_data1",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24541111561176024",
+            "simulationConditionId": "model1_data1",
+            "time": "7"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.2455264483450102",
+            "simulationConditionId": "model1_data1",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "control",
+            "noiseParameters": "s_pMek_20140505_gel1;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel1",
+            "simulation": "0.24552485508508523",
+            "simulationConditionId": "model1_data1",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.022771734786134108",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.036318711474510934",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011295409622308425",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011240690260068542",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.01124690812493257",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.011246374906530516",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.2600384889733869",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.4147362044214093",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.1289862752269997",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12836141548714755",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12843241948394743",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.12842633047453006",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.2528813041919007",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.380893974549781",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.11921586170894907",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.1188109866238233",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.1188733870127755",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "0.1188656067231718",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.6256030660476077",
+            "simulationConditionId": "model1_data2",
+            "time": "0"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.9422936150968901",
+            "simulationConditionId": "model1_data2",
+            "time": "1"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.2949281238680627",
+            "simulationConditionId": "model1_data2",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.29392650338279047",
+            "simulationConditionId": "model1_data2",
+            "time": "7"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.29408087570689645",
+            "simulationConditionId": "model1_data2",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "Sorafenib",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "0.29406162804821184",
+            "simulationConditionId": "model1_data2",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.006788283218871069",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004167647619516494",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004164243989467048",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004164954212228091",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140430_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140430_gel2",
+            "simulation": "0.004164841777396544",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.07751780562776822",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.047591841365222",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.04755297411055763",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.047561084395318566",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pErk_20140505_gel2;sigma_pErk",
+            "observableId": "pErk",
+            "observableParameters": "s_pErk_20140505_gel2",
+            "simulation": "0.04755980046223318",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "2.043084353764099",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3779161411955991",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3780504924286652",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3781282835248183",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140430_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140430_gel2",
+            "simulation": "1.3781067122306048",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "5.054386444237788",
+            "simulationConditionId": "model1_data3",
+            "time": "1"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.4088267831547516",
+            "simulationConditionId": "model1_data3",
+            "time": "5.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.4091591546742754",
+            "simulationConditionId": "model1_data3",
+            "time": "7"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.4093516020693895",
+            "simulationConditionId": "model1_data3",
+            "time": "8.5"
+          },
+          {
+            "datasetId": "UO126",
+            "noiseParameters": "s_pMek_20140505_gel2;sigma_pMek",
+            "observableId": "pMek",
+            "observableParameters": "s_pMek_20140505_gel2",
+            "simulation": "3.4092982368439855",
+            "simulationConditionId": "model1_data3",
+            "time": "10"
+          }
+        ]
+      }
+    },
+    "id": "workflow-8f1ad9a831dfbbfbd43fae7a",
+    "scientific_meaning": "OPEN",
+    "scope": "Conditional independent model reconstruction from source and finite comparison to supplied predictions",
+    "sources": [
+      {
+        "path": "problem.yaml",
+        "sha256": "16fd70a09e7ee100637e9ab9e2efcf46a3420e2de9569ebaacec041fe1755158",
+        "size": 253
+      },
+      {
+        "path": "parameters.tsv",
+        "sha256": "d05ca67d4f78fdde9c4ce097c80180aec91aab99c6d4f72174f29e05abb19489",
+        "size": 1560
+      },
+      {
+        "path": "model.xml",
+        "sha256": "40c66f3280795fd3821f151e1cf88dd27f75204f7ca13b1c1cf8be5354bdec0a",
+        "size": 133114
+      },
+      {
+        "path": "measurements.tsv",
+        "sha256": "7a96a9ba79598621944fc21cb56768aea192233930a08aed289b163785a10a5e",
+        "size": 6705
+      },
+      {
+        "path": "conditions.tsv",
+        "sha256": "15dba73e03891f3f532c71571c5b5a9c7181fb128cc11cf94ef9f23a58cfe278",
+        "size": 97
+      },
+      {
+        "path": "observables.tsv",
+        "sha256": "e05f1570ab8c901282769d8351fda5f5427674da97999f51c0015edd08b21b09",
+        "size": 286
+      },
+      {
+        "path": "simulations.tsv",
+        "sha256": "d6ca0bf8c5798a78e5736f42ae3f4cf0800499c01fa910c87c0b2fed8da2819d",
+        "size": 7514
+      }
+    ],
+    "status": "REPRODUCED_COMPUTATION"
+  },
+  "development_source_bindings": [
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/conditions.tsv",
+      "sha256": "15dba73e03891f3f532c71571c5b5a9c7181fb128cc11cf94ef9f23a58cfe278",
+      "size": 97
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/measurements.tsv",
+      "sha256": "7a96a9ba79598621944fc21cb56768aea192233930a08aed289b163785a10a5e",
+      "size": 6705
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/model.xml",
+      "sha256": "40c66f3280795fd3821f151e1cf88dd27f75204f7ca13b1c1cf8be5354bdec0a",
+      "size": 133114
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/observables.tsv",
+      "sha256": "e05f1570ab8c901282769d8351fda5f5427674da97999f51c0015edd08b21b09",
+      "size": 286
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/parameters.tsv",
+      "sha256": "d05ca67d4f78fdde9c4ce097c80180aec91aab99c6d4f72174f29e05abb19489",
+      "size": 1560
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/problem.yaml",
+      "sha256": "16fd70a09e7ee100637e9ab9e2efcf46a3420e2de9569ebaacec041fe1755158",
+      "size": 253
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/simulations.tsv",
+      "sha256": "d6ca0bf8c5798a78e5736f42ae3f4cf0800499c01fa910c87c0b2fed8da2819d",
+      "size": 7514
+    },
+    {
+      "path": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1/visualizations.tsv",
+      "sha256": "783bef9f51f8f783c09c6c97e19800bc264eb75281afa88f642879743adbef13",
+      "size": 550
+    }
+  ],
+  "development_source_directory": "research/scientific_review_v4/fixtures/development/fiedler2016/petab/v1",
+  "empirical_validity": "NOT_ESTABLISHED",
+  "environment": {
+    "dependency_directory": "/dev/shm/pcs-science-numeric-deps",
+    "numpy": "2.2.6",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "scipy": "1.15.3",
+    "solver_parameters": {
+      "atol": 1e-12,
+      "methods": [
+        "Radau",
+        "BDF"
+      ],
+      "rtol": 1e-09
+    }
+  },
+  "final_reference_annotations_consulted": false,
+  "final_sources_consulted": false,
+  "implementation_sources": [
+    {
+      "path": "research/scientific_review_v4/simulation.py",
+      "sha256": "34202345d2c8ec3c389331f443ae6908a728ee74c532274bbf2698f54f2ba30e",
+      "size": 24171
+    },
+    {
+      "path": "research/scientific_review_v4/workflow.py",
+      "sha256": "c56482ae0c9142dad2b570875b6c6b92b53bb96a799d68c689bd6d11ba687909",
+      "size": 9884
+    },
+    {
+      "path": "research/scientific_review_v4/tests/test_independent_numerics.py",
+      "sha256": "678d5383f29a647b041e50f2a8447583df43b059e1d42c053ce54fa5753a1218",
+      "size": 16170
+    }
+  ],
+  "limits": [
+    "Finite development evidence; no external expert or empirical validation.",
+    "Python/SBML semantic refinement remains OPEN; original and structural-projection hashes are distinct and disclosed.",
+    "Decimal80 and two numerical solvers provide no certified rounding or global ODE error bounds.",
+    "No optimum, identifiability, uncertainty, biological meaning or scientific truth is established.",
+    "The unchanged older structural parser supports a narrower kinetic-law fragment; unsupported features abstain."
+  ],
+  "provided_prediction_workflow": {
+    "authority": false,
+    "checks": [
+      {
+        "authority": false,
+        "checker": "parameter_domain",
+        "empirical_validity": "NOT_ESTABLISHED",
+        "evidence": {
+          "invalid_rows": [],
+          "parameters": 25,
+          "scale_policy": "PEtab nominal/bounds are untransformed values; no optimization certificate"
+        },
+        "id": "workflow-827f0a1855a605bd6a4a830c",
+        "scientific_meaning": "OPEN",
+        "scope": "Declared parameter identifiers and bounds",
+        "sources": [
+          {
+            "path": "parameters.tsv",
+            "sha256": "d05ca67d4f78fdde9c4ce097c80180aec91aab99c6d4f72174f29e05abb19489",
+            "size": 1560
+          }
+        ],
+        "status": "REPRODUCED_COMPUTATION"
+      },
+      {
+        "authority": false,
+        "checker": "measurement_dependencies",
+        "empirical_validity": "NOT_ESTABLISHED",
+        "evidence": {
+          "measurements": 72,
+          "missing_references": {
+            "condition": [],
+            "observable": []
+          },
+          "observables": [
+            "pErk",
+            "pMek"
+          ],
+          "simulation_conditions": [
+            "model1_data1",
+            "model1_data2",
+            "model1_data3"
+          ]
+        },
+        "id": "workflow-b6b07cf159d1ce9813161347",
+        "scientific_meaning": "OPEN",
+        "scope": "Finite declared measurement/condition/observable references, not empirical adequacy",
+        "sources": [
+          {
+            "path": "measurements.tsv",
+            "sha256": "7a96a9ba79598621944fc21cb56768aea192233930a08aed289b163785a10a5e",
+            "size": 6705
+          },
+          {
+            "path": "observables.tsv",
+            "sha256": "e05f1570ab8c901282769d8351fda5f5427674da97999f51c0015edd08b21b09",
+            "size": 286
+          },
+          {
+            "path": "conditions.tsv",
+            "sha256": "15dba73e03891f3f532c71571c5b5a9c7181fb128cc11cf94ef9f23a58cfe278",
+            "size": 97
+          }
+        ],
+        "status": "REPRODUCED_COMPUTATION"
+      },
+      {
+        "authority": false,
+        "checker": "provided_prediction_residuals",
+        "empirical_validity": "NOT_ESTABLISHED",
+        "evidence": {
+          "assumptions": [
+            "Full source observation keys align the same observable, condition, time and calibration metadata.",
+            "Tabulated decimals are interpreted exactly; supplied predictions have not thereby been independently executed."
+          ],
+          "groups": [
+            {
+              "condition": "model1_data1",
+              "n": 14,
+              "observable": "pErk",
+              "rss_exact": "112864707535951753938783613700713321/40000000000000000000000000000000000"
+            },
+            {
+              "condition": "model1_data2",
+              "n": 12,
+              "observable": "pErk",
+              "rss_exact": "55813411096755597809881320731581709/1000000000000000000000000000000000000"
+            },
+            {
+              "condition": "model1_data3",
+              "n": 10,
+              "observable": "pErk",
+              "rss_exact": "46802276642876016371999767421534153/4000000000000000000000000000000000000"
+            },
+            {
+              "condition": "model1_data1",
+              "n": 14,
+              "observable": "pMek",
+              "rss_exact": "3554663160533873101766946606543289/40000000000000000000000000000000000"
+            },
+            {
+              "condition": "model1_data2",
+              "n": 12,
+              "observable": "pMek",
+              "rss_exact": "498640058048852281552517486262737/500000000000000000000000000000000"
+            },
+            {
+              "condition": "model1_data3",
+              "n": 10,
+              "observable": "pMek",
+              "rss_exact": "622823894588931357712542412080779/100000000000000000000000000000000"
+            }
+          ],
+          "join_columns": [
+            "datasetId",
+            "noiseParameters",
+            "observableId",
+            "observableParameters",
+            "simulationConditionId",
+            "time"
+          ],
+          "max_absolute_residual_exact": "2232867040401443/1250000000000000",
+          "nonzero_residuals": 72,
+          "observations": 72,
+          "rss_exact": "40814069238626533672588417454406577989/4000000000000000000000000000000000000",
+          "rss_float": 10.203517309656634,
+          "rss_float_projection": {
+            "format": "binary64",
+            "source": "rss_exact",
+            "status": "FINITE_APPROXIMATION"
+          },
+          "simulation_reexecution": "NOT_PERFORMED"
+        },
+        "id": "workflow-58189d9f1a6d123fd51d4114",
+        "scientific_meaning": "OPEN",
+        "scope": "Exact finite residual arithmetic between measurements and supplied predictions",
+        "sources": [
+          {
+            "path": "measurements.tsv",
+            "sha256": "7a96a9ba79598621944fc21cb56768aea192233930a08aed289b163785a10a5e",
+            "size": 6705
+          },
+          {
+            "path": "simulations.tsv",
+            "sha256": "d6ca0bf8c5798a78e5736f42ae3f4cf0800499c01fa910c87c0b2fed8da2819d",
+            "size": 7514
+          }
+        ],
+        "status": "REPRODUCED_COMPUTATION"
+      }
+    ],
+    "schema": "pcs-study-workflow-v4",
+    "table_roles": {
+      "condition": [
+        "conditions.tsv"
+      ],
+      "measurement": [
+        "measurements.tsv"
+      ],
+      "observable": [
+        "observables.tsv"
+      ],
+      "parameter": [
+        "parameters.tsv"
+      ],
+      "simulation": [
+        "simulations.tsv"
+      ]
+    }
+  },
+  "review_kind": "INTERNAL_AI_ASSISTED_IMPLEMENTATION_REVIEW",
+  "schema": "pcs-independent-numerical-review-v4",
+  "scientific_meaning": "OPEN",
+  "tests": {
+    "authoring": "Independent authored counterexamples and admitted development model; no final source or annotation access.",
+    "command": "PYTHONPATH=/dev/shm/pcs-science-numeric-deps:. /workspace/proof-carrying-science/.venv/bin/python -m pytest -q research/scientific_review_v4/tests/test_independent_numerics.py",
+    "covered_boundaries": [
+      "Joint initial/assignment topological resolution; parameter propagation; exact Fraction-to-Decimal seed.",
+      "Strict MathML numeric types/base/separators/units and source-safe reserved time.",
+      "Original assignment mutability, semantic namespace/container placement, duplicates, local IDs, three-dimensional fixed compartments, nonnegative stoichiometry and species references.",
+      "Unique PEtab identifiers, condition/model override filtering, logarithmic parameter domain.",
+      "Exact RSS projection overflow and complete metadata identities; ambiguous predictions UNKNOWN.",
+      "No uploaded Python execution or executable observable formula; filesystem marker absent.",
+      "Actual72-row Radau and BDF reconstruction; retained Radau rows independently rejoined to exact source measurements and RSS recomputed."
+    ],
+    "result": "60 passed in 3.42s"
+  }
+}

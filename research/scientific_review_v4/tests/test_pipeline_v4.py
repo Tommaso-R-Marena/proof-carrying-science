@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import shutil
 
 import pytest
 
@@ -18,7 +19,7 @@ def project(tmp_path):
     source = tmp_path / 'source'
     source.mkdir()
     (source / 'model.sbml').write_bytes(MODEL)
-    (source / 'notes.txt').write_text('Protein A activates protein B.\n', encoding='utf-8')
+    (source / 'notes.xml').write_text('<article><body><p>Protein A activates protein B.</p></body></article>\n', encoding='utf-8')
     return source
 
 
@@ -127,3 +128,52 @@ def test_pinned_manifest_mismatch_rejected(tmp_path):
     run(project(tmp_path), output)
     with pytest.raises(ValueError, match='pinned'):
         replay(output, expected_manifest_sha256='0' * 64)
+
+
+@pytest.mark.skipif(not Path('/usr/bin/pdftotext').is_file(), reason='actual PDF adapter unavailable')
+def test_large_actual_pdf_derived_source_stays_unverified(tmp_path):
+    from research.scientific_intake_v1.test_adapters import _pdf
+    source = tmp_path / 'source'
+    source.mkdir()
+    raw = _pdf(text='Protein A activates protein B.' + ' ' * 1_001_000)
+    assert 1_000_000 < len(raw) < 5 * 1024**2
+    (source / 'paper.pdf').write_bytes(raw)
+    output = tmp_path / 'evidence'
+    run(source, output, check=True)
+    meaning = json.loads((output / 'interpretation.json').read_text())
+    claims = [c for c in meaning['claims'] if c['source'].get('transformation', {}).get('kind') == 'adapter_extracted_text']
+    assert claims and claims[0]['source']['path'] == 'paper.pdf'
+    assert 'byte_start' not in claims[0]['source']
+    assert claims[0]['source']['sha256'] == hashlib.sha256(raw).hexdigest()
+    checks = json.loads((output / 'checks.json').read_text())
+    assert all(next(c for c in checks if c.get('claim_id') == claim['id'])['status'] == 'UNKNOWN' for claim in claims)
+    assert replay(output)['status'] == 'REPLAYED'
+
+
+@pytest.mark.skipif(not (shutil.which('lean') or Path('/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean').is_file()), reason='actual pinned Lean unavailable')
+def test_actual_nine_theorem_formal_receipt_and_replay(tmp_path):
+    from research.scientific_review_v4.review import classify
+    output = tmp_path / 'evidence'
+    run(project(tmp_path), output, check=True, formal_check=True)
+    checks = json.loads((output / 'checks.json').read_text())
+    receipt = next(c for c in checks if c['id'] == 'formal-v4-residual-semantics')
+    assert receipt['status'] == 'KERNEL_CHECKED_ABSTRACT_RESIDUAL_SEMANTICS'
+    assert receipt['theorem_count'] == receipt['axiom_audit_count'] == 9
+    assert receipt['returncode'] == 0
+    assert classify(receipt)[0] == 'proof'
+    assert replay(output)['status'] == 'REPLAYED'
+
+
+def test_resealed_nested_parent_authority_rejected(tmp_path):
+    output = tmp_path / 'evidence'
+    run(project(tmp_path), output, check=True)
+    checks = json.loads((output / 'parent/checks.json').read_text())
+    assert checks
+    checks[0]['authority'] = True
+    reseal(output / 'parent', 'checks.json', checks)
+    manifest = json.loads((output / 'manifest.json').read_text())
+    for name in ('parent/checks.json', 'parent/manifest.json'):
+        manifest['files'][name] = hashlib.sha256((output / name).read_bytes()).hexdigest()
+    (output / 'manifest.json').write_bytes(canonical(manifest) + b'\n')
+    with pytest.raises(ValueError, match='parent check|authority'):
+        replay(output, recheck=False)

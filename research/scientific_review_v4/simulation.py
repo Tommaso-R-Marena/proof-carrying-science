@@ -49,7 +49,7 @@ def _constant(n,decimal):
             if not _REAL.fullmatch(text) or abs(int(other))>64:raise ValueError('bounded decimal mantissa/exponent required')
             q=number(text+'e'+other)
     else:
-        if len(n) or (kind=='integer' and not _INTEGER.fullmatch(text)):raise ValueError('invalid scalar numeric literal')
+        if len(n) or not (_INTEGER.fullmatch(text) if kind=='integer' else _REAL.fullmatch(text)):raise ValueError('invalid scalar numeric literal')
         q=number(text)
     return Decimal(q.numerator)/Decimal(q.denominator) if decimal else float(q)
 
@@ -181,6 +181,9 @@ def _original_tree(raw):
         if set(n.attrib)-_ATTRS[tag(n)]-{'id','name','metaid','sboTerm'}:raise ValueError('unsupported SBML attributes')
         if any('}' in k for k in n.attrib):raise ValueError('SBML extension attributes unsupported')
         if n.get('offset') not in {None,'0','0.0'}:raise ValueError('offset units unsupported')
+        if tag(n)=='parameter' and not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*',n.get('id','')):raise ValueError('missing/invalid parameter identifier')
+        if tag(n)=='speciesReference' and number(n.get('stoichiometry','1'))<0:raise ValueError('negative stoichiometry unsupported')
+        if tag(n)=='compartment' and n.get('spatialDimensions','3')!='3':raise ValueError('only fixed three-dimensional compartments supported')
         for flag in ('constant','boundaryCondition','hasOnlySubstanceUnits','reversible','fast'):
             if flag in n.attrib and n.attrib[flag] not in {'true','false'}:raise ValueError('unsupported boolean lexical form')
         if n.get('fast')=='true' or n.get('conversionFactor') is not None:raise ValueError('unsupported fast/conversion semantics')
@@ -223,6 +226,8 @@ class ReactionRuntime:
                 target[key]=first(n,'math')
         parameters=elements(model,'listOfParameters');species=elements(model,'listOfSpecies')
         declared={n.get('id') for n in parameters+species}
+        species_ids={n.get('id') for n in species}
+        if any(n.get('species') not in species_ids for n in model.iter() if tag(n) in {'speciesReference','modifierSpeciesReference'}):raise ValueError('unknown referenced species')
         if not set(overrides)<=declared:raise ValueError('unknown/compartment model override unsupported')
         if len(initial)>32 or len(self.rules)>32 or not (set(initial)|set(self.rules))<=declared or set(initial)&set(self.rules):raise ValueError('assignment target/budget')
         if set(overrides)&(set(initial)|set(self.rules)):raise ValueError('condition/assignment precedence unsupported')
@@ -307,7 +312,7 @@ def reconstruct(artifacts):
                     predictions[method].append({**{k:v for k,v in row.items() if k!='measurement'},'simulation':repr(value)})
             details.append({'condition':cid,'states':runtime.base.dynamic,'times':times,'initial_decimal80':runtime.initial_decimal80,'initial_float_decimal_difference':runtime.initial_difference,
                 'solver_max_state_difference':float(np.max(np.abs(states['Radau']-states['BDF']))),'rhs_calls':costs,
-                'stoichiometric_matrix':[[str(v) for v in row] for row in runtime.base.matrix],'original_model_sha256':runtime.original_sha256,'structural_projection_changes':['Remove core notes/annotation and independently interpreted initial assignments/assignment rules.','Fix parameter declarations for structural parsing; exclude assignment-rule species from independent dynamic state.'],'structural_projection_sha256':hashlib.sha256(runtime.projection).hexdigest()})
+                'stoichiometric_matrix':[[str(v) for v in row] for row in runtime.base.matrix],'original_model_sha256':runtime.original_sha256,'model_overrides':dict(sorted(overrides.items())),'structural_projection_changes':['Remove core notes/annotation and independently interpreted initial assignments/assignment rules.','Apply the disclosed model_overrides. Fix parameter declarations for structural parsing; exclude assignment-rule species from independent dynamic state.'],'structural_projection_sha256':hashlib.sha256(runtime.projection).hexdigest()})
         pairs,_=join_predictions(measurements,predictions['Radau']);stats=residual_statistics(pairs);provided=[]
         solver_pairs,_=join_predictions([{**p,'measurement':p['simulation']} for p in predictions['Radau']],predictions['BDF'])
         for p,raw in artifacts.items():
@@ -319,10 +324,11 @@ def reconstruct(artifacts):
         if len(provided)==1:
             peer=provided[0];comparison,_=join_predictions([{**p,'measurement':p['simulation']} for p in predictions['Radau']],table(artifacts[peer],peer)[1])
             difference=float(max(abs(x['measurement']-x['simulation']) for x in comparison));bindings.append(source(peer,artifacts[peer]))
-        return record('conditional_ode_reconstruction','REPRODUCED_COMPUTATION',bindings,{'conditions':details,'measurements':len(measurements),'residuals':stats,
+        return record('conditional_ode_reconstruction','REPRODUCED_COMPUTATION',bindings,{'conditions':details,'measurements':len(measurements),'solver_predictions':predictions,'residuals':stats,
             'maximum_observable_solver_difference':float(max(abs(p['measurement']-p['simulation']) for p in solver_pairs)),
-            'provided_prediction_max_absolute_difference':difference,'Python_SBML_refinement':'OPEN',
-            'assumptions':['Closed SBML L2V4 reactions, fixed compartments, acyclic initial/assignment expressions, no events/rate rules/functions/external parameter updates.',
+            'provided_prediction_max_absolute_difference':difference,'Python_SBML_refinement':'OPEN','global_ODE_error_bound':'NOT_ESTABLISHED',
+            'initialization_arithmetic':{'decimal_precision':80,'seed':'Exact source fractions; no binary64 round trip','rigorous_error_bound':'NOT_ESTABLISHED'},
+            'assumptions':['Closed SBML L2V4 reactions, fixed three-dimensional compartments, acyclic initial/assignment expressions, no events/rate rules/functions/external parameter updates.',
               'PEtab nominal parameters, literal conditions and measurement-specific observable scale placeholders are interpreted according to the declared problem.',
               'Finite two-solver comparison, not a rigorous error enclosure, fit-optimum proof or empirical validation.']},'Conditional independent model reconstruction from source and finite comparison to supplied predictions')
     except (ValueError,KeyError,TypeError,ZeroDivisionError,OverflowError,ArithmeticError,ImportError,ET.ParseError) as exc:

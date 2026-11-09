@@ -17,8 +17,8 @@ def bound_source(source,artifacts,inventory=None):
         key=source_key(source,artifacts);raw=artifacts[key]
         if hashlib.sha256(raw).hexdigest()!=source['sha256']:return False
         normalized={**source,'path':key}
-        if source.get('transformation',{}).get('kind')!='adapter_extracted_text':return raw_bound(normalized,artifacts)
-        t=source['transformation']
+        t=source.get('transformation')
+        if not isinstance(t,dict) or t.get('kind')!='adapter_extracted_text':return raw_bound(normalized,artifacts)
         if t.get('kind')!='adapter_extracted_text' or inventory is None:return False
         records=[a for a in inventory['artifacts'] if a['path']==key and a['sha256']==source['sha256']]
         if len(records)!=1:return False
@@ -36,9 +36,10 @@ def bound_source(source,artifacts,inventory=None):
 def same_source(a,b,artifacts,inventory=None):
     if not bound_source(a,artifacts,inventory) or not bound_source(b,artifacts,inventory):return False
     if source_key(a,artifacts)!=source_key(b,artifacts) or a['sha256']!=b['sha256']:return False
-    if a.get('transformation',{}).get('kind')=='adapter_extracted_text' or b.get('transformation',{}).get('kind')=='adapter_extracted_text':
+    ta=a.get('transformation');tb=b.get('transformation')
+    if isinstance(ta,dict) and ta.get('kind')=='adapter_extracted_text' or isinstance(tb,dict) and tb.get('kind')=='adapter_extracted_text':
         # A PDF quote cannot match a raw JATS quote merely by similar words.
-        if a.get('transformation',{}).get('segment_sha256')!=b.get('transformation',{}).get('segment_sha256'):return False
+        if not isinstance(ta,dict) or not isinstance(tb,dict) or ta.get('segment_sha256')!=tb.get('segment_sha256'):return False
         aa,bb=a['transformation'],b['transformation']
         if any(aa.get(k)!=bb.get(k) for k in ['adapter','version','segment_index','locator']):return False
         return max(aa['extracted_byte_start'],bb['extracted_byte_start'])<min(aa['extracted_byte_end'],bb['extracted_byte_end'])

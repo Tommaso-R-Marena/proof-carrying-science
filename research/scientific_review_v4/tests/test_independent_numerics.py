@@ -100,6 +100,7 @@ def test_supported_mathml_constant_forms(literal, expected):
 
 @pytest.mark.parametrize('literal', [
     '<cn base="2">10</cn>', '<cn type="hexdouble">12</cn>', '<cn units="second">1</cn>',
+    '<cn type="real">1e2</cn>', '<cn>1e2</cn>',
     '<cn type="integer">1.5</cn>', '<cn type="integer">1e2</cn>',
     '<cn type="rational">1</cn>', '<cn type="rational">1.2<sep/>2</cn>',
     '<cn type="rational">1<sep/>0</cn>', '<cn type="e-notation">2</cn>',
@@ -138,6 +139,29 @@ def test_original_constant_species_cannot_acquire_assignment_semantics():
     model(assignments=initial('k', '<cn>2</cn>'), rules=rule('k', '<cn>3</cn>'), k_constant='false'),
 ])
 def test_duplicate_or_conflicting_assignment_targets_are_unsupported(raw):
+    with pytest.raises(ValueError):
+        s.ReactionRuntime(raw, {})
+
+
+@pytest.mark.parametrize('parameter', [
+    '<parameter value="2"/>', '<parameter id="bad-id" value="2"/>',
+])
+def test_local_parameter_identifiers_are_required_and_lexically_valid(parameter):
+    raw = model().replace(b'<kineticLaw>',
+                          f'<kineticLaw><listOfParameters>{parameter}</listOfParameters>'.encode())
+    with pytest.raises(ValueError):
+        s.ReactionRuntime(raw, {})
+
+
+def test_negative_stoichiometry_cannot_reverse_reaction_semantics():
+    raw = model().replace(b'stoichiometry="1"', b'stoichiometry="-1"')
+    with pytest.raises(ValueError):
+        s.ReactionRuntime(raw, {})
+
+
+def test_modifier_species_must_reference_an_existing_species():
+    raw = model().replace(b'<kineticLaw>',
+        b'<listOfModifiers><modifierSpeciesReference species="missing"/></listOfModifiers><kineticLaw>')
     with pytest.raises(ValueError):
         s.ReactionRuntime(raw, {})
 
@@ -242,6 +266,30 @@ def test_distinct_predictions_with_identical_complete_identity_are_ambiguous():
                            [{**base, 'simulation': '2'}, {**base, 'simulation': '3'}])
 
 
+def test_ambiguous_prediction_identity_is_reported_unknown_by_workflow():
+    files = project()
+    files['simulations.tsv'] = (
+        b'observableId\tsimulationConditionId\ttime\tsimulation\n'
+        b'obs\tcondition\t0\t2\nobs\tcondition\t0\t3\n')
+    result, = [check for check in w.analyze(files)['checks']
+               if check['checker'] == 'provided_prediction_residuals']
+    assert result['status'] == 'UNKNOWN'
+    assert result['authority'] is False
+
+
+def test_source_scripts_and_executable_observable_text_are_never_executed(tmp_path):
+    marker = tmp_path / 'executed.txt'
+    files = project()
+    files['author_program.py'] = (
+        f'from pathlib import Path\nPath({str(marker)!r}).write_text("executed")\n').encode()
+    expression = f'__import__("pathlib").Path({str(marker)!r}).write_text("executed")'
+    files['observables.tsv'] = (
+        f'observableId\tobservableFormula\tnoiseFormula\nobs\t{expression}\t1\n').encode()
+    result = s.reconstruct(files)
+    assert result['status'] == 'UNKNOWN'
+    assert not marker.exists()
+
+
 def development_files():
     directory = Path(__file__).parents[1] / 'fixtures/development/fiedler2016/petab/v1'
     return {path.name: path.read_bytes() for path in directory.iterdir() if path.is_file()}
@@ -265,6 +313,11 @@ def test_admitted_development_source_is_actually_reconstructed_with_two_solvers(
     evidence = result['evidence']
     assert evidence['measurements'] == 72
     assert len(evidence['conditions']) == 3
+    assert set(evidence['solver_predictions']) == {'Radau', 'BDF'}
+    assert all(len(rows) == 72 for rows in evidence['solver_predictions'].values())
+    measurements = w.table(files['measurements.tsv'], 'measurements.tsv')[1]
+    pairs, _ = w.join_predictions(measurements, evidence['solver_predictions']['Radau'])
+    assert w.residual_statistics(pairs)['rss_exact'] == evidence['residuals']['rss_exact']
     assert evidence['maximum_observable_solver_difference'] < 1e-5
     assert evidence['provided_prediction_max_absolute_difference'] < 1e-5
     assert all(set(condition['rhs_calls']) == {'Radau', 'BDF'} for condition in evidence['conditions'])
@@ -275,3 +328,9 @@ def test_admitted_development_source_is_actually_reconstructed_with_two_solvers(
     assert evidence['Python_SBML_refinement'] == 'OPEN'
     assert result['scientific_meaning'] == 'OPEN'
     assert result['empirical_validity'] == 'NOT_ESTABLISHED'
+
+
+def test_nonvolume_compartment_semantics_are_not_silently_interpreted_as_concentrations():
+    raw = model().replace(b'id="c" size="1"', b'id="c" size="1" spatialDimensions="0"')
+    with pytest.raises(ValueError):
+        s.ReactionRuntime(raw, {})

@@ -13,7 +13,7 @@ def _source_errors(source, artifact_by_id, raw_artifacts, *, allow_empty=False, 
     artifact = artifact_by_id.get(source.get("artifact_id"))
     if artifact is None or source.get("path") != artifact.get("path") or source.get("sha256") != artifact.get("sha256"):
         errors.append("source artifact binding")
-    if source.get('transformation',{}).get('kind')=='adapter_extracted_text':
+    if isinstance(source.get('transformation'),dict) and source['transformation'].get('kind')=='adapter_extracted_text':
         from .grounding import bound_source
         t=source['transformation'];quote=source.get('quote');a=t.get('extracted_byte_start');b=t.get('extracted_byte_end')
         if type(a) is not int or type(b) is not int or not isinstance(quote,str) or a<0 or b<a or (not allow_empty and a==b):return errors+['invalid extracted-text span']

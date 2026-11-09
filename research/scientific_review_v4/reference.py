@@ -18,9 +18,18 @@ def canonical_sha256(path: str | Path) -> str:
 
 
 def _read_frozen(name: str, root: Path) -> dict:
-    freeze = json.loads((root / "annotation-freeze.json").read_text(encoding="utf-8"))
+    original=root / 'annotation-freeze.json'
+    recovered=root / 'annotation-freeze-recovered.json'
+    if recovered.exists():
+        if canonical_sha256(original)!='0de3e945881de16047584e84720aed388f081f32d8660755304e4ab474a8795b':
+            raise ValueError('original annotation freeze changed')
+        if canonical_sha256(recovered)!='5dbf52e99976fe656b9423f4fb0b49ad50bf5989a56e0736dec87bad57f5da79':
+            raise ValueError('recovered annotation freeze changed')
+        freeze=json.loads(recovered.read_text(encoding='utf-8'))
+    else:
+        freeze=json.loads(original.read_text(encoding='utf-8'))
     path = root / name
-    if freeze.get("schema_version") != "scientific-annotation-freeze-v4":
+    if freeze.get("schema_version") not in {"scientific-annotation-freeze-v4","scientific-annotation-freeze-recovered-v4"}:
         raise ValueError("unsupported scientific annotation freeze")
     if canonical_sha256(path) != freeze["files"].get(name):
         raise ValueError("scientific reference hash mismatch: " + name)
