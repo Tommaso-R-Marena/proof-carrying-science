@@ -182,3 +182,67 @@ physical delivery or arbitrary real-world safety. No Python/SQLite-to-Lean
 refinement theorem, implicit-flow proof, cryptographic theorem, or complete
 agent tool mediation is established. Earlier policy versions are unchanged;
 production PCS has not been modified, deployed or merged.
+
+## Writ/16: fresh verifier-chosen challenges for receiver-side readback
+
+**Concrete Writ/15 regression, reproduced before editing the receiver:**
+
+1. Present a valid gateway-signed Writ/15 request to a correctly keyed
+   receiver. It writes the file and returns an independently signed ACK.
+2. Delete `writ-000000000001.bin` but leave
+   `writ-000000000001.ack.json` intact.
+3. Re-send the exact same authorized request. **Writ/15 returned the same
+   signed ACK while the file was missing.**
+4. Simply adding a read check to `previous_ack` was insufficient: its old
+   broad `except FileNotFoundError` also caught the *missing output file*,
+   fell through to the output write path and could silently recreate the
+   effect. Writ/16 corrects that exception boundary and refuses the mismatch.
+
+**Companion Writ/16 release (separate from this PR):** Adds opt-in
+`audit retention;` (requires Writ/15 destination auditing), a new
+`writ/16` policy identity and domain-separated
+`writ/portable-receipt/4` signed records. A Writ/16 gateway now requires
+receiver-signed **readback evidence after delivery**. For a post-hoc present
+state claim, `python -m writlang.portable_receipt verify-live` first verifies
+the operator and destination signatures and signed audit/authority history,
+then issues a **new verifier-generated random nonce** to the independently
+pinned receiver socket. The receiver checks its persisted signed ACK against
+its journal, rereads the pinned regular file using no-follow directory-FD
+operations, checks byte length/digest, and signs a bounded readback response.
+
+A saved, valid signed ACK is explicitly **not** treated as evidence of current
+file presence. A captured older readback response is rejected under a new
+nonce. The new receiver signature is bound to that verifier nonce, the exact
+saved ACK hash, policy, effect ID, destination route, lease nonce, source
+digest and byte count.
+
+**This research PR contains the new Lean model**
+`formal/LiveRetention.lean` and the independent adversarial receiver-signature
+checker `retention_reference.py` with `test_retention_reference.py`, plus
+`formal/LiveRetentionExample.lean`. The Lean model distinguishes the
+logical insufficiency of historical signed ACKs from a fresh readback
+predicate, states and attempts to prove that a combined checker accepting
+source/provenance/weighted authority and fresh readback evidence necessarily
+has the exact challenged bytes/receipt/receiver binding, and preserves
+the prior no-overspending invariant.
+
+**Implementation results from the independently packaged Writ/16 alpha:**
+- 352/352 local Python unit tests PASS (343 inherited plus 9 new);
+- new two-process Writ/16 demo PASS, including a fresh verifier challenge,
+  deletion and fail-closed refusal with the original ACK still valid, then
+  restoration and re-verification;
+- existing Writ/15 policy identity remains unchanged; new Writ/16 uses a
+  distinct signing domain;
+- ordinary historical detached verification is not a current-file claim;
+  `verify-live` must reach the independent receiver.
+
+**Formal and threat-model boundaries:** The Lean checker treats
+`signatureVerified=true` and `bytesPresent=true` as facts produced by a
+trusted receiver/cryptographic-checker boundary. It does *not* prove Python,
+Ed25519, OS isolation, receiver honesty, that remote physical delivery happened,
+or that bytes will remain present after the challenge. The local same-user
+test does not independently isolate receiver keys at the OS level. The
+proposal is a narrower **point-in-time readback assurance improvement**, not
+a proof of durable storage forever or general AI safety. The proof workflow
+must compile the exact Writ/16 Lean file before it can be described as
+machine-checked; do not infer that from earlier successful Writ/15 runs.
