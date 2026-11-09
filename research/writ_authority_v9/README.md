@@ -44,3 +44,33 @@ The independently packaged Writ/11 alpha adds `audit authority;`, `witness autho
 4. Novelty and comparative evaluation against existing capability-security systems, third-party review, and deployment threat modelling.
 
 A kernel-checked accounting theorem does not establish truth of scientific premises, physical-world safety, verified declassification, or general AI alignment. No production PCS modules or existing CI definitions are changed, no merges or deployments are authorized.
+
+## Writ/12: verified explicit-provenance and dual-axis release reasoning
+
+Writ/12 adds a new finite `CheckFlow` checker over explicit data-derivation edges in
+`formal/Provenance.lean`. Lean proves equivalence to the independent
+declarative edge condition, arbitrary-length non-laundering of sensitivity, and
+no lower-classification release of a descendant of a higher-classification
+ancestor **without declassification**.
+
+`formal/DualBoundary.lean` composes this with `Writ9.SafeChain`, so that
+a successful action at a delegated scope implies **both** authorization within
+its ancestral scope and source-label compatibility at the sink, *assuming*
+the independent monitors receive complete, correct inputs.
+
+A synthetic Writ/12 gateway produces
+`formal/GeneratedProvenanceReceipt.lean` (four resources, one multi-parent
+derived value), which the exact-head proof workflow checks together with
+a positive and deliberately invalid classification fixture.
+
+The complete Writ/12 Python runtime is **not included in this PR**. It adds
+`audit provenance;` in both policy syntaxes and independently reconstructs
+host-pinned root bytes, deterministic concatenation recipes, exact derived
+bytes, joined labels, and transitive lineage before admission and dispatch.
+It passed 297 unit tests, 1,500 deterministic graph cases, and separate
+process-integrated witness/provenance demonstrations when packaged locally.
+
+**Limitations:** No formal refinement from the Python runtime to these Lean
+theorems, no guarantee of complete dataflow observation or arbitrary-model
+noninterference, no security against rewriting both trusted pins and values,
+and no claim that delegated actions are harmless or scientifically true.
