@@ -14,6 +14,7 @@ from typing import Any, Protocol
 from .core import MAX_RESPONSE_BYTES, PROPOSAL_SCHEMA, Source, prompt_for
 from .arithmetic import ARITH_SCHEMA, arithmetic_prompt
 from .typed import TYPED_SCHEMA, typed_prompt
+from .evidence import EVIDENCE_SCHEMA, evidence_prompt
 
 
 class ProviderError(Exception):
@@ -55,17 +56,19 @@ class Provider:
                    else r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}/[A-Za-z0-9][A-Za-z0-9._:-]{0,79}")
         if not re.fullmatch(pattern, model):
             raise ValueError("model identifier rejected")
-        if mode not in {"literal", "arithmetic", "typed"}:
+        if mode not in {"literal", "arithmetic", "typed", "evidence"}:
             raise ValueError("unsupported proposal mode")
         self.kind, self.model, self.mode = kind, model, mode
         self.transport = transport or UrlLibTransport()
 
     def prompt(self, source: Source) -> str:
-        return typed_prompt(source) if self.mode == "typed" else (arithmetic_prompt(source) if self.mode == "arithmetic" else prompt_for(source))
+        return (evidence_prompt(source) if self.mode == "evidence" else typed_prompt(source) if self.mode == "typed"
+                else arithmetic_prompt(source) if self.mode == "arithmetic" else prompt_for(source))
 
     @property
     def schema(self) -> dict:
-        return TYPED_SCHEMA if self.mode == "typed" else (ARITH_SCHEMA if self.mode == "arithmetic" else PROPOSAL_SCHEMA)
+        return (EVIDENCE_SCHEMA if self.mode == "evidence" else TYPED_SCHEMA if self.mode == "typed"
+                else ARITH_SCHEMA if self.mode == "arithmetic" else PROPOSAL_SCHEMA)
 
     def propose(self, source: Source) -> dict:
         envname = "GEMINI_API_KEY" if self.kind == "gemini" else "OPENROUTER_API_KEY"

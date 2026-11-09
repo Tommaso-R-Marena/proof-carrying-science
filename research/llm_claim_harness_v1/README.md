@@ -234,3 +234,65 @@ verification, PR #203, and independently frozen evidence are unchanged.
 human-annotated CSV/SBML projects, with explicit identifier scope, unit
 provenance, versioned IR schema and a prospective false-certification benchmark.
 No direct import from the unmerged PR #203 is attempted.
+
+## Experimental v4: source-line evidence bridge with review-only semantics
+
+`--mode evidence` reads an **arbitrary UTF-8 plain-text source** (up to 32 KiB),
+including narrative text around source declarations and equations. It does
+**not** understand unconstrained scientific prose or PDF screenshots. This
+is the first explicitly non-DSL ingestion path: only complete standalone
+source lines with *explicit* quantity values and units, e.g. `mass = 2 kg`,
+`acceleration: 3 m/s^2`, and an equation `mass * acceleration = 6 N`,
+qualify. Scientific text around these lines is retained but **not interpreted**.
+
+Try the privacy-preserving, zero-API route:
+
+```bash
+python -m research.llm_claim_harness_v1 \
+  --mode evidence --primary deterministic \
+  --source research/llm_claim_harness_v1/fixtures/evidence_source.txt \
+  --out /tmp/pcs-evidence-v4.json \
+  --review-html /tmp/pcs-evidence-v4-review.html
+```
+
+An optional Gemini or OpenRouter model can *select* whole equation lines by
+returning their exact source spans and quotes. It cannot propose new values,
+units, assumptions, or Lean code. The parser discovers complete source
+declaration lines independently. Duplicate declarations, undefined identifiers,
+future declarations, unit mismatches, unsupported equations, partial source
+lines, and schema alterations fail closed. The bridge converts only explicit
+literal unit suffixes such as `6 N` to `6[N]` and reuses the fixed v3 typed
+AST interpreter and Lean check without importing model-generated proof scripts.
+Model comparison remains optional; disagreement blocks the formal step.
+
+Receipts maintain **three separate status dimensions**:
+- `formal_status`: the *generated* closed arithmetic proposition's Lean
+  result, if an actual Lean 4.28.0 check ran (e.g. `TYPED_QTY_PROVED`).
+- `semantic_fidelity`: always `UNREVIEWED` in v4. The scientific statement
+  might be a hypothesis, a denial, a quotation, an obsolete measurement,
+  or an approximation despite the equation line's syntax.
+- `scientific_status`: always `NOT_ASSESSED`. No empirical inference,
+  measurement uncertainty, code reproduction, model assumption, or external
+  citation is verified here.
+
+The top-level claim `status` remains `SEMANTIC_REVIEW_REQUIRED` even after
+kernel success. A missing Lean executable is explicitly `KERNEL_UNAVAILABLE`.
+Source and each contributing declaration are linked by exact Unicode spans and
+SHA-256 hashes. The opt-in static HTML review escapes all untrusted strings,
+has no JavaScript or external resources, and **is not an approval mechanism**.
+The report itself may contain potentially sensitive excerpts; do not publish
+it without reviewing their contents.
+
+The hosted CI smoke checks **two additional evidence-linked propositions**
+(one true, one false) using actual Lean 4.28.0. The offline test suite includes
+cases where earlier declarations change without changing the quoted equation:
+this must produce a *different* source/proof obligation rather than reusing
+any previous formal result.
+
+**Known limitations:** only exact decimal rational values and a small unit
+whitelist; one unambiguous equation or comparison per source line; declarations
+must precede use; no CSV, PDF, SBML, complex scientific notation, uncertainties,
+scoped models or full Claim IR equivalence yet. This is a research adapter and
+does not modify production PCS or the unmerged PR #203. Follow-on work is a
+prospectively evaluated typed source-IR interoperability adapter, with human
+scientific semantic review and truly independent empirical validation.

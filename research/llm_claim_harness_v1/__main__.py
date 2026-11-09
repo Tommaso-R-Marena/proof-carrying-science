@@ -11,14 +11,17 @@ from .core import Source, canonical
 from .pipeline import LeanChecker, LocalCache, get_proposals, run, run_arithmetic, run_typed
 from .providers import Provider, ProviderError
 from .discovery import discover_standalone
+from .evidence import discover_evidence, run_evidence
+from .review_html import write_evidence_review
 
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Experimental PCS source-grounded LLM+Lean harness (NOT production verifier)")
-    parser.add_argument("--mode", choices=["literal", "arithmetic", "typed"], default="literal",
+    parser.add_argument("--mode", choices=["literal", "arithmetic", "typed", "evidence"], default="literal",
                         help="Experimental arithmetic mode checks rational expression ASTs in Lean")
     parser.add_argument("--source", type=Path, required=True, help="Plain UTF-8 text only; <=32KiB")
     parser.add_argument("--out", type=Path, required=True, help="Where to write an experimental JSON receipt")
+    parser.add_argument("--review-html", type=Path, help="Optional local HTML review report (evidence mode only; includes source excerpts)")
     parser.add_argument("--offline-proposals", type=Path, help="JSON fixture replacing all primary network calls")
     parser.add_argument("--offline-reviewer", type=Path, help="Optional second independent JSON fixture")
     parser.add_argument("--primary", choices=["gemini", "openrouter", "deterministic"])
@@ -36,6 +39,8 @@ def main(argv=None) -> int:
     args = parse_args(argv)
     try:
         source = Source.from_bytes(args.source.read_bytes())
+        if args.review_html and args.mode != "evidence":
+            raise ValueError("--review-html requires --mode evidence")
         network_needed = (not args.offline_proposals and args.primary != "deterministic") or (args.reviewer and not args.offline_reviewer)
         if network_needed and not args.allow_external:
             raise ValueError("network calls require --allow-external; provide offline fixtures otherwise")
@@ -58,7 +63,7 @@ def main(argv=None) -> int:
         if args.offline_proposals:
             primary = json.loads(args.offline_proposals.read_text(encoding="utf-8"))
         elif args.primary == "deterministic":
-            primary = discover_standalone(source, args.mode)
+            primary = discover_evidence(source) if args.mode == "evidence" else discover_standalone(source, args.mode)
             primary_meta = {"provider": "deterministic", "model": None, "network_calls": 0}
         else:
             provider = Provider(args.primary, args.primary_model, mode=args.mode)
@@ -72,7 +77,7 @@ def main(argv=None) -> int:
             provider = Provider(args.reviewer, args.reviewer_model, mode=args.mode)
             reviewer, hit = get_proposals(provider, source, cache)
             reviewer_meta = {"provider": provider.kind, "model": provider.model, "cache_hit": hit}
-        receiver = {"literal": run, "arithmetic": run_arithmetic, "typed": run_typed}[args.mode]
+        receiver = {"literal": run, "arithmetic": run_arithmetic, "typed": run_typed, "evidence": run_evidence}[args.mode]
         receipt = receiver(source, primary, reviewer_proposals=reviewer, lean=LeanChecker(args.lean), primary_metadata=primary_meta, reviewer_metadata=reviewer_meta)
         # Refuse symlink targets; caller controls the output path.
         if args.out.is_symlink():
@@ -85,6 +90,9 @@ def main(argv=None) -> int:
         with os.fdopen(fd, "wb") as fh:
             fh.write(canonical(receipt) + b"\n")
         os.replace(temp, args.out)
+        if args.review_html:
+            write_evidence_review(args.review_html, source, receipt)
+            print(f"Offline evidence review: {args.review_html}")
         print(f"Experimental PCS receipt: {args.out}")
         print(f"Grounded: {receipt['counts']['accepted_grounding']}; kernel-checked: {receipt['counts']['kernel_checked']}; rejected: {receipt['counts']['rejected_grounding']}; needs-review: {receipt['counts']['needs_review']}")
         if args.require_lean and receipt["counts"]["kernel_checked"] == 0:

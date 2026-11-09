@@ -11,6 +11,7 @@ import sys
 
 from .core import Source
 from .pipeline import LeanChecker, run, run_arithmetic, run_typed
+from .evidence import discover_evidence, run_evidence
 
 
 HERE = Path(__file__).parent
@@ -53,7 +54,24 @@ def main() -> int:
     if typed["counts"]["kernel_checked"] != 5:
         print("FAIL: not all typed quantity examples were kernel checked", file=sys.stderr)
         return 1
-    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal and 5 typed quantity claims")
+    evidence_src = Source.from_bytes((HERE / "fixtures/evidence_source.txt").read_bytes())
+    evidence_proposals = discover_evidence(evidence_src)
+    evidence = run_evidence(evidence_src, evidence_proposals,
+                            reviewer_proposals=evidence_proposals, lean=lean)
+    evidence_formal = [c["formal_status"] for c in evidence["claims"]]
+    if evidence_formal != ["TYPED_QTY_PROVED", "TYPED_QTY_REFUTED"]:
+        print("FAIL: source-linked evidence Lean checks incomplete:", evidence_formal, file=sys.stderr)
+        for c in evidence["claims"]:
+            if c["formal_status"] not in ("TYPED_QTY_PROVED", "TYPED_QTY_REFUTED"):
+                print("Lean diagnostic:", c.get("lean_diagnostic", "not available"), file=sys.stderr)
+        return 1
+    if evidence["counts"]["kernel_checked"] != 2 or any(
+        c["status"] != "SEMANTIC_REVIEW_REQUIRED" or c["scientific_status"] != "NOT_ASSESSED"
+        for c in evidence["claims"]
+    ):
+        print("FAIL: evidence mode must preserve semantics/science boundary", file=sys.stderr)
+        return 1
+    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal, 5 typed, and 2 evidence-linked claims")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 
