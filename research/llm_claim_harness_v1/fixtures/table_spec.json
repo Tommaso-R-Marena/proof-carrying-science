@@ -1,0 +1,12 @@
+{
+  "schema": "pcs-tabular-evidence-v5-research",
+  "columns": [
+    {"name": "mass", "unit": "kg"},
+    {"name": "acceleration", "unit": "m/s^2"},
+    {"name": "reported_force", "unit": "N"}
+  ],
+  "assertions": [
+    {"id": "force_check", "expression": "mass * acceleration = reported_force"},
+    {"id": "positive_mass", "expression": "mass > 0[kg]"}
+  ]
+}

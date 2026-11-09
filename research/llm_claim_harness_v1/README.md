@@ -296,3 +296,70 @@ scoped models or full Claim IR equivalence yet. This is a research adapter and
 does not modify production PCS or the unmerged PR #203. Follow-on work is a
 prospectively evaluated typed source-IR interoperability adapter, with human
 scientific semantic review and truly independent empirical validation.
+
+
+## Experimental v5: exact-cell CSV-to-Lean verification
+
+`--mode table` extends the deterministic verified-arithmetic path to actual
+numeric **CSV file bytes**. A separate, caller-supplied JSON manifest declares
+exact column names, units, and up to four formula templates; PCS never infers
+column meanings, missing units, experimental assumptions, or mathematical
+formulae from an LLM response. This path intentionally makes **zero API calls**.
+
+```bash
+python -m research.llm_claim_harness_v1 \
+  --mode table --primary deterministic \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --out /tmp/pcs-table-v5.json
+```
+
+The fixture has two rows and two assertions per row. One row reports an
+inconsistent force (the calculated `mass * acceleration` equals 8 N but the
+reported value is 9 N). In the absence of Lean the four generated obligations
+are `KERNEL_UNAVAILABLE`, not asserted as kernel verified. A real Lean 4.28.0
+run can distinguish this row as a refuted closed mathematical proposition.
+
+The table manifest uses the exact schema:
+
+```json
+{
+  "schema": "pcs-tabular-evidence-v5-research",
+  "columns": [
+    {"name": "mass", "unit": "kg"},
+    {"name": "acceleration", "unit": "m/s^2"},
+    {"name": "reported_force", "unit": "N"}
+  ],
+  "assertions": [
+    {"id": "force_check", "expression": "mass * acceleration = reported_force"}
+  ]
+}
+```
+
+The parser accepts only unquoted ASCII CSV with exactly matching headers,
+1–16 numeric rows, at most 24 named columns and four checked assertions per
+row (64 proof attempts maximum). CSV cells must be bounded exact decimal or
+integer literals. Quoted cells, embedded line breaks, comments, missing values,
+scientific notation, spreadsheets, uncertainties, text IDs and flexible CSV
+formats fail closed. LF and CRLF records work with *byte-exact* cell offsets.
+All data are parsed and all obligations constructed successfully before any
+Lean proof attempts are run. Invalid units, missing columns, malicious code,
+unsupported formulae, dimension mismatches, division by zero and missing
+observations cause the whole table run to reject. The tabular path never
+submits source files to Gemini/OpenRouter and refuses model/reviewer flags.
+
+Every row-level receipt binds raw dataset SHA-256, manifest SHA-256, CSV row
+hash, precise byte spans and per-cell hashes, a typed AST hash and generated
+Lean source hash. The receipt's top-level status remains
+`SEMANTIC_REVIEW_REQUIRED`, and the scientific assessment remains
+`NOT_ASSESSED` even if Lean proves a closed row proposition. A caller-supplied
+manifest is **not** a verified human review or a certified unit ontology.
+
+Unproved boundaries include CSV bytes-to-cells Python parsing, quantity
+lexing and translation to Lean, compiler/runtime authenticity, correctness of
+supplied column meanings, statistical or physical assumptions, and whether
+the mathematical template is scientifically appropriate. This does not claim
+to verify arbitrary CSV formats, causal claims, model fit or research papers.
+It does not modify PCS production validity or accept model-generated proof
+source. Hosted Lean smoke tests include four tabular proof obligations in
+addition to the earlier twelve.

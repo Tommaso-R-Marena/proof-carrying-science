@@ -13,13 +13,15 @@ from .providers import Provider, ProviderError
 from .discovery import discover_standalone
 from .evidence import discover_evidence, run_evidence
 from .review_html import write_evidence_review
+from .table_evidence import run_table
 
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Experimental PCS source-grounded LLM+Lean harness (NOT production verifier)")
-    parser.add_argument("--mode", choices=["literal", "arithmetic", "typed", "evidence"], default="literal",
+    parser.add_argument("--mode", choices=["literal", "arithmetic", "typed", "evidence", "table"], default="literal",
                         help="Experimental arithmetic mode checks rational expression ASTs in Lean")
     parser.add_argument("--source", type=Path, required=True, help="Plain UTF-8 text only; <=32KiB")
+    parser.add_argument("--table-spec", type=Path, help="Strict reviewed JSON column/unit/formula template for --mode table")
     parser.add_argument("--out", type=Path, required=True, help="Where to write an experimental JSON receipt")
     parser.add_argument("--review-html", type=Path, help="Optional local HTML review report (evidence mode only; includes source excerpts)")
     parser.add_argument("--offline-proposals", type=Path, help="JSON fixture replacing all primary network calls")
@@ -39,14 +41,23 @@ def main(argv=None) -> int:
     args = parse_args(argv)
     try:
         source = Source.from_bytes(args.source.read_bytes())
+        if args.mode == "table":
+            if args.table_spec is None:
+                raise ValueError("--mode table requires --table-spec")
+            if (args.primary not in (None, "deterministic") or args.primary_model or args.reviewer
+                or args.reviewer_model or args.offline_proposals or args.offline_reviewer
+                or args.cache_dir or args.allow_external):
+                raise ValueError("table mode forbids model proposals, network and review fixtures")
+        elif args.table_spec is not None:
+            raise ValueError("--table-spec is exclusive to --mode table")
         if args.review_html and args.mode != "evidence":
             raise ValueError("--review-html requires --mode evidence")
-        network_needed = (not args.offline_proposals and args.primary != "deterministic") or (args.reviewer and not args.offline_reviewer)
+        network_needed = args.mode != "table" and ((not args.offline_proposals and args.primary != "deterministic") or (args.reviewer and not args.offline_reviewer))
         if network_needed and not args.allow_external:
             raise ValueError("network calls require --allow-external; provide offline fixtures otherwise")
-        if not args.offline_proposals and not args.primary:
+        if args.mode != "table" and not args.offline_proposals and not args.primary:
             raise ValueError("select --primary")
-        if not args.offline_proposals and args.primary != "deterministic" and not args.primary_model:
+        if args.mode != "table" and not args.offline_proposals and args.primary != "deterministic" and not args.primary_model:
             raise ValueError("external primary requires --primary-model")
         if args.primary == "deterministic" and args.primary_model:
             raise ValueError("deterministic extraction does not use a model")
@@ -57,6 +68,36 @@ def main(argv=None) -> int:
         if args.offline_reviewer and args.reviewer and not args.allow_external:
             # Entirely offline: allowed. Reviewer fixture wins over remote.
             pass
+        if args.mode == "table":
+            receipt = run_table(source, args.table_spec.read_bytes(), lean=LeanChecker(args.lean))
+        else:
+            receipt = _run_model_mode(args, source)
+        # Refuse symlink targets; caller controls the output path.
+        if args.out.is_symlink():
+            raise ValueError("output must not be a symbolic link")
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        temp = args.out.with_name(args.out.name + ".tmp")
+        if temp.is_symlink():
+            raise ValueError("temporary output must not be a symbolic link")
+        fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(canonical(receipt) + b"\n")
+        os.replace(temp, args.out)
+        if args.review_html:
+            write_evidence_review(args.review_html, source, receipt)
+            print(f"Offline evidence review: {args.review_html}")
+        print(f"Experimental PCS receipt: {args.out}")
+        print(f"Grounded: {receipt['counts']['accepted_grounding']}; kernel-checked: {receipt['counts']['kernel_checked']}; rejected: {receipt['counts']['rejected_grounding']}; needs-review: {receipt['counts']['needs_review']}")
+        if args.require_lean and (receipt["counts"]["kernel_checked"] == 0 or (args.mode == "table" and receipt["counts"]["kernel_checked"] != receipt["counts"]["accepted_grounding"])):
+            return 2
+        return 0
+    except (OSError, ValueError, TypeError, ProviderError, json.JSONDecodeError) as exc:
+        # Never print provider error payloads or API keys.
+        print(f"harness error: {exc}", file=sys.stderr)
+        return 1
+
+
+def _run_model_mode(args, source):
         cache = LocalCache(args.cache_dir) if args.cache_dir else None
         primary_meta = {"provider": "offline", "model": "local-fixture"}
         reviewer_meta = None
@@ -79,29 +120,7 @@ def main(argv=None) -> int:
             reviewer_meta = {"provider": provider.kind, "model": provider.model, "cache_hit": hit}
         receiver = {"literal": run, "arithmetic": run_arithmetic, "typed": run_typed, "evidence": run_evidence}[args.mode]
         receipt = receiver(source, primary, reviewer_proposals=reviewer, lean=LeanChecker(args.lean), primary_metadata=primary_meta, reviewer_metadata=reviewer_meta)
-        # Refuse symlink targets; caller controls the output path.
-        if args.out.is_symlink():
-            raise ValueError("output must not be a symbolic link")
-        args.out.parent.mkdir(parents=True, exist_ok=True)
-        temp = args.out.with_name(args.out.name + ".tmp")
-        if temp.is_symlink():
-            raise ValueError("temporary output must not be a symbolic link")
-        fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
-        with os.fdopen(fd, "wb") as fh:
-            fh.write(canonical(receipt) + b"\n")
-        os.replace(temp, args.out)
-        if args.review_html:
-            write_evidence_review(args.review_html, source, receipt)
-            print(f"Offline evidence review: {args.review_html}")
-        print(f"Experimental PCS receipt: {args.out}")
-        print(f"Grounded: {receipt['counts']['accepted_grounding']}; kernel-checked: {receipt['counts']['kernel_checked']}; rejected: {receipt['counts']['rejected_grounding']}; needs-review: {receipt['counts']['needs_review']}")
-        if args.require_lean and receipt["counts"]["kernel_checked"] == 0:
-            return 2
-        return 0
-    except (OSError, ValueError, TypeError, ProviderError, json.JSONDecodeError) as exc:
-        # Never print provider error payloads or API keys.
-        print(f"harness error: {exc}", file=sys.stderr)
-        return 1
+        return receipt
 
 
 if __name__ == "__main__":
