@@ -1,0 +1,45 @@
+name: PCS EvidenceKernel v17 design-exact research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_selective_v17/**'
+      - '.github/workflows/pcs-evidencekernel-selective-v17.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-design-and-randomization:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: research/evidencekernel_selective_v17
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Full exact tests and exhaustive adversarial controls
+        run: python -m unittest discover -v -p 'test_*.py'
+      - name: Independent exact inference and confidence-bound replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          PIN="$(cat example_pin.txt)"
+          python kernel.py example_protocol.json example_evidence.json \
+            --protocol-pin "$PIN" --external-uniform-index 8 > "$RUNNER_TEMP/ekv17-python.json"
+          node independent.js example_protocol.json example_evidence.json "$PIN" 8 > "$RUNNER_TEMP/ekv17-node.json"
+          python - "$RUNNER_TEMP/ekv17-python.json" "$RUNNER_TEMP/ekv17-node.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(x)) for x in sys.argv[1:]]
+          assert a==b
+          assert a['conditional_robust_p']=='1/200'
+          assert a['randomized_conditional_p']=='1/400'
+          assert a['conditional_lower_ate']=='1/3'
+          assert a['randomized_conditional_lower_ate']=='1/2'
+          PY
