@@ -221,4 +221,87 @@ theorem checkedReplay_exact_accounting {balance final : Nat → Nat}
     (id : Nat) : balance id = final id + Used id trace := by
   exact trace_quota_conservation (checkedReplay_sound accepted) id
 
+
+/-!
+Weighted finite-dimensional resource calculus. A component can represent a
+root grant (unit charge), a delegation ancestor (unit charge), or a budget
+(arbitrary nonnegative action cost). Unlike a function on all Nat identifiers,
+Fin n makes the resource-domain check executable by finite enumeration.
+-/
+def WeightedWithin {n : Nat} (spent available : Fin n → Nat) : Prop :=
+  ∀ i, spent i ≤ available i
+
+def WeightedDebit {n : Nat} (available spent : Fin n → Nat) : Fin n → Nat :=
+  fun i => available i - spent i
+
+def WeightedUsed {n : Nat} (i : Fin n) : List (Fin n → Nat) → Nat
+  | [] => 0
+  | spending :: rest => spending i + WeightedUsed i rest
+
+inductive WeightedRuns {n : Nat} : (Fin n → Nat) → List (Fin n → Nat) →
+    (Fin n → Nat) → Prop where
+  | done (r : Fin n → Nat) : WeightedRuns r [] r
+  | spend (r spending : Fin n → Nat)
+      (rest : List (Fin n → Nat)) (final : Fin n → Nat)
+      (ok : WeightedWithin spending r)
+      (next : WeightedRuns (WeightedDebit r spending) rest final) :
+      WeightedRuns r (spending :: rest) final
+
+def CheckWeighted {n : Nat} (available : Fin n → Nat) :
+    List (Fin n → Nat) → Option (Fin n → Nat)
+  | [] => some available
+  | spending :: rest =>
+      if WeightedWithin spending available then
+        CheckWeighted (WeightedDebit available spending) rest
+      else none
+
+/-- Certified executable checker: successful results are valid traces. -/
+theorem checkWeighted_sound {n : Nat} {available final : Fin n → Nat}
+    {trace : List (Fin n → Nat)}
+    (accepted : CheckWeighted available trace = some final) :
+    WeightedRuns available trace final := by
+  induction trace generalizing available with
+  | nil =>
+      have eq : available = final := by simpa [CheckWeighted] using accepted
+      subst final
+      exact WeightedRuns.done available
+  | cons spending rest ih =>
+      by_cases valid : WeightedWithin spending available
+      · have next : CheckWeighted (WeightedDebit available spending) rest = some final := by
+          simpa [CheckWeighted, valid] using accepted
+        exact WeightedRuns.spend available spending rest final valid (ih next)
+      · simp [CheckWeighted, valid] at accepted
+
+/-- Certified executable checker: every valid relational trace is accepted. -/
+theorem checkWeighted_complete {n : Nat} {available final : Fin n → Nat}
+    {trace : List (Fin n → Nat)}
+    (run : WeightedRuns available trace final) :
+    CheckWeighted available trace = some final := by
+  induction run with
+  | done _ => simp [CheckWeighted]
+  | spend r spending rest final ok next ih =>
+      simpa [CheckWeighted, ok] using ih
+
+/-- All weighted resource charges are conserved across an arbitrary trace. -/
+theorem weighted_quota_conservation {n : Nat} {available final : Fin n → Nat}
+    {trace : List (Fin n → Nat)} (run : WeightedRuns available trace final)
+    (i : Fin n) : available i = final i + WeightedUsed i trace := by
+  induction run with
+  | done _ => simp [WeightedUsed]
+  | spend r spending rest final ok next ih =>
+      have h : spending i ≤ r i := ok i
+      have step : r i = WeightedDebit r spending i + spending i := by
+        simp [WeightedDebit]
+        omega
+      rw [ih] at step
+      simpa [WeightedUsed, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using step
+
+/-- No budget, grant or delegated quota can be overspent by an accepted trace. -/
+theorem checkWeighted_no_overspend {n : Nat} {available final : Fin n → Nat}
+    {trace : List (Fin n → Nat)}
+    (accepted : CheckWeighted available trace = some final) (i : Fin n) :
+    WeightedUsed i trace ≤ available i := by
+  have exact := weighted_quota_conservation (checkWeighted_sound accepted) i
+  omega
+
 end Writ9
