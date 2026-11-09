@@ -4,7 +4,7 @@
 
 ## Result: eliminate the second randomness premise
 
-V17 can improve the discrete-test power with a separately sampled uniform index `J`, but that introduces a new independent-randomness assumption and attack surface. V18 uses the *original, already-preregistered candidate-allocation transcript* as a conditional ancillary source of discrete tie randomness. The full ordered transcript is still assumed honestly generated and complete. No additional post-outcome randomization is requested from a researcher or beacon.
+V17 can improve the discrete-test power with a separately sampled uniform index `J`, but that introduces a new independent-randomness assumption and attack surface. V18 uses the *original, already-preregistered candidate-allocation transcript* as a conditional ancillary source of discrete tie randomness. The full ordered transcript is still assumed honestly generated and complete. To prevent an uncommitted reporter from swapping transcripts after outcomes are known, the executable **requires** a separately provided, protocol-bound SHA-256 commitment to the complete ordered attempt list. It must be independently retained before outcome inspection; the software cannot prove this chronology. No additional post-outcome randomization is requested from a researcher or beacon.
 
 Let `Ω` be all length-`b` candidate sequences under the preregistered distribution (IID uniform with replacement or ordered uniform without replacement). Each sequence has probability `1/D`, where `D=N^b` or `(N)_b`, respectively, with `N = C(n,k)`. Let `f: Ω→Z` be the deterministic, preregistered outcome-blind selection rule. For selected assignment `z`, define:
 
@@ -45,13 +45,14 @@ From the repository root, with Python ≥3.12 and Node.js ≥20:
 ```bash
 python -m unittest discover -s research/evidencekernel_transcript_v18 -p 'test_*.py' -v
 PIN=$(cat research/evidencekernel_transcript_v18/example_pin.txt) # DEMO ONLY
+ATTEMPTS_PIN=$(cat research/evidencekernel_transcript_v18/example_attempts_pin.txt) # DEMO ONLY
 python -m research.evidencekernel_transcript_v18.kernel \
   research/evidencekernel_transcript_v18/example_protocol.json \
   research/evidencekernel_transcript_v18/example_evidence.json \
-  --protocol-pin "$PIN" > /tmp/ekv18-py.json
+  --protocol-pin "$PIN" --attempts-pin "$ATTEMPTS_PIN" > /tmp/ekv18-py.json
 node research/evidencekernel_transcript_v18/independent.js \
   research/evidencekernel_transcript_v18/example_protocol.json \
-  research/evidencekernel_transcript_v18/example_evidence.json "$PIN" > /tmp/ekv18-js.json
+  research/evidencekernel_transcript_v18/example_evidence.json "$PIN" "$ATTEMPTS_PIN" > /tmp/ekv18-js.json
 python -c "import json; assert json.load(open('/tmp/ekv18-py.json'))==json.load(open('/tmp/ekv18-js.json'))"
 ```
 
@@ -73,15 +74,17 @@ For the inherited 6-unit, 3-treated, 2-IID-candidate design:
 
 The example is **synthetic** and the observed allocation is deliberately rare; it is not a prospective causal finding. The last power number is specific to this design/world, not a general improvement guarantee. The original v17 auxiliary randomizer achieves `87.625%` power under its different source of randomness, while the nonrandomized version achieves `1%`.
 
+**Adversarial result:** if the operator can rewrite its claimed candidate-draw transcript after the selected allocation is known, it can always choose the lexicographically earliest transcript mapping to that allocation. For the all-null zero-effect world in this 6-unit design, this creates an exact **396/400 = 99%** false-positive probability at a 5% threshold. The executable now rejects any substituted transcript against a *separately supplied* genuine attempt commitment, but a self-generated post-hoc commitment cannot establish a real-world guarantee.
+
 An earlier global-transcript-rank construction could return an empty confidence set in this example. The conditional-within-selected-allocation rank is deliberately used instead, and the tautological null `ATE≤1` is explicitly nonrejected.
 
-Tests include exact lexicographic histogram comparison to brute-force enumeration (both candidate laws), complete sharp-null rank calibration on **all 256 binary potential-outcome tables** for a 4-unit design, a composite-null exact finite level check, 80 independently generated cross-language full-inference comparisons, malformed/tampered evidence rejection, and algebraic counting with `70^128` possible candidate sequences without enumerating them.
+Tests include exact lexicographic histogram comparison to brute-force enumeration (both candidate laws), complete sharp-null rank calibration on **all 256 binary potential-outcome tables** for a 4-unit design, a composite-null exact finite level check, 80 independently generated cross-language full-inference comparisons, the 99% forging counterexample and fail-closed attempt-pin mismatch, malformed/tampered evidence rejection, and algebraic counting with `70^128` possible candidate sequences without enumerating them.
 
 ## Trust boundary and limitations
 
 1. The candidate allocation sequence must genuinely be drawn as preregistered, independently of potential outcomes; baseline covariates and selection rule must be fixed in advance. **Checking that a transcript is internally consistent is not proof of these premises.**
 2. The researcher must not discard or alter earlier candidate sequences, choose a favorable trial, stop and restart secretly, choose the covariate/selection rule after seeing outcomes, or reset a trial without external accountability. V15's selective-retry problem remains.
-3. Externally pinned protocol hash is required. The bundled demonstration hash is not independent preregistration. Evidence is not signed or externally witnessed in this v18 example; earlier PCS projects have separate witnessing prototypes.
+3. Externally pinned protocol hash is required. The bundled protocol and attempt hashes are not independently retained and do not establish preregistration or pre-outcome chronology. Evidence is not signed or externally witnessed in this v18 example; earlier PCS projects have separate witnessing prototypes.
 4. Binary potential outcomes, finite-population ATE, and externally justified simultaneous interval coverage are assumed. No real biological data or laboratory calibration used.
 5. Exact conditional error control is a mathematical argument supported by bounded exhaustive tests. It is **not** a Lean-kernel proof, security audit, or empirical validation.
 6. The randomized p-value itself is not a new concept; this conditional-ancillary implementation and algebraic ranking are engineering/research contributions. Formal novelty and broader utility require an independent literature and experimental review.

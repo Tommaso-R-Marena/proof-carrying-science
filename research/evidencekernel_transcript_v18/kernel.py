@@ -100,10 +100,21 @@ def lex_before_histogram(space, scores, attempts, law):
     return result
 
 
-def audit(protocol, evidence, *, external_pin):
+def attempt_commitment(protocol_pin, attempts):
+    return digest({'domain':'pcs-evidencekernel-v18-attempts-v1',
+                   'protocol_sha256':protocol_pin,'attempts':attempts})
+
+
+def audit(protocol, evidence, *, external_pin, external_attempts_pin):
     insist(type(external_pin) is str and len(external_pin) == 64 and
            all(c in '0123456789abcdef' for c in external_pin), 'external SHA-256 pin required')
     insist(digest(protocol) == external_pin, 'untrusted or mismatched protocol')
+    insist(type(external_attempts_pin) is str and len(external_attempts_pin) == 64 and
+           all(c in '0123456789abcdef' for c in external_attempts_pin),
+           'independently retained attempt pin required')
+    insist(type(evidence) is dict and 'attempts' in evidence and
+           attempt_commitment(external_pin, evidence['attempts']) == external_attempts_pin,
+           'attempt transcript differs from externally pinned commitment')
     adapter = v17_adapter(protocol)
     space, scores, mass, total = design(adapter)
     z, labels = evidence_check(adapter, evidence, external_pin=digest(adapter),
@@ -174,7 +185,8 @@ def audit(protocol, evidence, *, external_pin):
         'maximizing_world':witness,
         'null_curve':curve,
         'protocol_sha256':external_pin,
-        'warning':'Conditional inference only. Transcript completeness, ex ante protocol pinning, random candidate draws, outcome blindness, and interval coverage are external premises; a submitted transcript does not authenticate them. No auxiliary post-outcome random draw is assumed.'
+        'attempts_sha256':external_attempts_pin,
+        'warning':'Conditional inference only. Transcript completeness, ex ante protocol pinning, random candidate draws, outcome blindness, and interval coverage are external premises; the attempt pin must have been independently retained before outcomes, which this program cannot prove. No auxiliary post-outcome random draw is assumed.'
     }
 
 
@@ -183,9 +195,11 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('protocol');p.add_argument('evidence')
     p.add_argument('--protocol-pin',required=True)
+    p.add_argument('--attempts-pin',required=True)
     a=p.parse_args()
     try:
-        result=audit(load_strict(a.protocol),load_strict(a.evidence),external_pin=a.protocol_pin)
+        result=audit(load_strict(a.protocol),load_strict(a.evidence),
+                     external_pin=a.protocol_pin,external_attempts_pin=a.attempts_pin)
     except (Reject, ValueError, TypeError, KeyError, OverflowError, OSError) as exc:
         p.exit(2, 'REJECTED: '+str(exc)+'\n')
     print(json.dumps(result,indent=2,sort_keys=True))

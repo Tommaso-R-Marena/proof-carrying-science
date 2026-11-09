@@ -30,8 +30,9 @@ jobs:
           set -euo pipefail
           dir=research/evidencekernel_transcript_v18
           PIN="$(cat "$dir/example_pin.txt")"
-          python -m research.evidencekernel_transcript_v18.kernel "$dir/example_protocol.json" "$dir/example_evidence.json" --protocol-pin "$PIN" > "$RUNNER_TEMP/ekv18-python.json"
-          node "$dir/independent.js" "$dir/example_protocol.json" "$dir/example_evidence.json" "$PIN" > "$RUNNER_TEMP/ekv18-node.json"
+          ATTEMPTS_PIN="$(cat "$dir/example_attempts_pin.txt")"
+          python -m research.evidencekernel_transcript_v18.kernel "$dir/example_protocol.json" "$dir/example_evidence.json" --protocol-pin "$PIN" --attempts-pin "$ATTEMPTS_PIN" > "$RUNNER_TEMP/ekv18-python.json"
+          node "$dir/independent.js" "$dir/example_protocol.json" "$dir/example_evidence.json" "$PIN" "$ATTEMPTS_PIN" > "$RUNNER_TEMP/ekv18-node.json"
           python - "$RUNNER_TEMP/ekv18-python.json" "$RUNNER_TEMP/ekv18-node.json" <<'PY'
           import json,sys
           a,b=[json.load(open(x)) for x in sys.argv[1:]]
@@ -40,4 +41,5 @@ jobs:
           assert a['conditional_lower_ate']=='1/2'
           assert a['within_selected_assignment_transcript_rank']=='1'
           assert a['within_selected_assignment_transcript_mass']=='2'
+          assert a['attempts_sha256']==open('research/evidencekernel_transcript_v18/example_attempts_pin.txt').read().strip()
           PY

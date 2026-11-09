@@ -73,9 +73,12 @@ function stat(world,z,n,k){const assigned=new Set(z);let treated=0,control=0;
   for(let i=0;i<n;i++){if(assigned.has(i))treated+=world[i][1];else control+=world[i][0];}
   return (n-k)*treated-k*control;
 }
-function audit(p,e,pin){
+function attemptCommitment(pin,attempts){return digest({domain:'pcs-evidencekernel-v18-attempts-v1',protocol_sha256:pin,attempts});}
+function audit(p,e,pin,attemptsPin){
   check(typeof pin==='string'&&/^[0-9a-f]{64}$/.test(pin),'external pin required');
   check(digest(p)===pin,'untrusted or mismatched protocol');
+  check(typeof attemptsPin==='string'&&/^[0-9a-f]{64}$/.test(attemptsPin),'independently retained attempt pin required');
+  check(e&&Array.isArray(e.attempts)&&attemptCommitment(pin,e.attempts)===attemptsPin,'attempt transcript differs from externally pinned commitment');
   const d=design(adapter(p));
   keys(e,['attempts','selected_assignment','observed_intervals']);
   check(Array.isArray(e.attempts)&&e.attempts.length===p.candidate_draws,'wrong attempt length');
@@ -137,12 +140,12 @@ function audit(p,e,pin){
     within_selected_assignment_transcript_rank:String(rank),
     within_selected_assignment_transcript_mass:String(m),
     confidence_alpha:rational(...alpha),maximizing_world:witness,null_curve:curve,
-    protocol_sha256:pin,
-    warning:'Conditional inference only. Transcript completeness, ex ante protocol pinning, random candidate draws, outcome blindness, and interval coverage are external premises; a submitted transcript does not authenticate them. No auxiliary post-outcome random draw is assumed.'
+    protocol_sha256:pin,attempts_sha256:attemptsPin,
+    warning:'Conditional inference only. Transcript completeness, ex ante protocol pinning, random candidate draws, outcome blindness, and interval coverage are external premises; the attempt pin must have been independently retained before outcomes, which this program cannot prove. No auxiliary post-outcome random draw is assumed.'
   };
 }
 if(require.main===module){try{
-  check(process.argv.length===5,'Usage: node independent.js protocol.json evidence.json PIN');
-  console.log(JSON.stringify(audit(readStrict(process.argv[2]),readStrict(process.argv[3]),process.argv[4]),null,2));
+  check(process.argv.length===6,'Usage: node independent.js protocol.json evidence.json PROTOCOL_PIN ATTEMPTS_PIN');
+  console.log(JSON.stringify(audit(readStrict(process.argv[2]),readStrict(process.argv[3]),process.argv[4],process.argv[5]),null,2));
 }catch(err){console.error('REJECTED: '+err.message);process.exit(2);}}
-module.exports={audit,suffixHistogram,beforeHistogram};
+module.exports={audit,suffixHistogram,beforeHistogram,attemptCommitment};

@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from itertools import combinations
 
-from research.evidencekernel_transcript_v18.kernel import audit, digest, v17_adapter
+from research.evidencekernel_transcript_v18.kernel import audit, digest, v17_adapter, attempt_commitment
 from research.evidencekernel_selective_v17.kernel import design
 from research.evidencekernel_transcript_v18.test_kernel import protocol
 
@@ -39,14 +39,31 @@ class IndependentVerifierTests(unittest.TestCase):
             e={'attempts':[list(space[i]) for i in inds],
                'selected_assignment':list(space[selected]),
                'observed_intervals':[rng.choice(['0','1','01']) for _ in range(n)]}
-            py=audit(p,e,external_pin=digest(p))
+            py=audit(p,e,external_pin=digest(p),external_attempts_pin=attempt_commitment(digest(p),e['attempts']))
             with tempfile.TemporaryDirectory() as temp:
                 pp=Path(temp)/'p.json';ep=Path(temp)/'e.json'
                 pp.write_text(json.dumps(p));ep.write_text(json.dumps(e))
-                r=subprocess.run(['node',str(HERE/'independent.js'),str(pp),str(ep),digest(p)],
+                r=subprocess.run(['node',str(HERE/'independent.js'),str(pp),str(ep),digest(p),attempt_commitment(digest(p),e['attempts'])],
                                  capture_output=True,text=True,timeout=8)
                 self.assertEqual(r.returncode,0,r.stderr)
                 self.assertEqual(py,json.loads(r.stdout))
+
+    def test_independent_verifier_rejects_forgery_with_pinned_original_attempts(self):
+        import tempfile
+        p=json.loads((HERE/'example_protocol.json').read_text())
+        e=json.loads((HERE/'example_evidence.json').read_text())
+        pin=digest(p); attempt_pin=attempt_commitment(pin,e['attempts'])
+        tampered=copy.deepcopy(e)
+        tampered['attempts']=[[0,1,3],[0,1,2]]
+        # Last selection remains the same (the first attempt has worse balance),
+        # but the advertised candidate transcript is no longer committed.
+        with tempfile.TemporaryDirectory() as temp:
+            pp=Path(temp)/'p.json';ep=Path(temp)/'e.json'
+            pp.write_text(json.dumps(p));ep.write_text(json.dumps(tampered))
+            r=subprocess.run(['node',str(HERE/'independent.js'),str(pp),str(ep),pin,attempt_pin],
+                             capture_output=True,text=True,timeout=8)
+            self.assertNotEqual(r.returncode,0)
+            self.assertIn('externally pinned commitment',r.stderr)
 
     def test_tampered_protocol_and_attempts_independently_rejected(self):
         import tempfile
@@ -60,7 +77,7 @@ class IndependentVerifierTests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as temp:
                 pp=Path(temp)/'p.json';ep=Path(temp)/'e.json'
                 pp.write_text(json.dumps(pr));ep.write_text(json.dumps(ev))
-                r=subprocess.run(['node',str(HERE/'independent.js'),str(pp),str(ep),external_pin],
+                r=subprocess.run(['node',str(HERE/'independent.js'),str(pp),str(ep),external_pin,attempt_commitment(external_pin,e['attempts'])],
                                  capture_output=True,text=True,timeout=8)
                 self.assertNotEqual(r.returncode,0)
 

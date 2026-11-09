@@ -8,7 +8,7 @@ from fractions import Fraction
 from pathlib import Path
 from research.evidencekernel_selective_v17.kernel import design, digest, effect_stat, Reject
 from research.evidencekernel_transcript_v18.kernel import (
-    FORMAT, TIE_RULE, audit, lex_before_histogram, selected_histogram_after_prefix, v17_adapter
+    FORMAT, TIE_RULE, audit, attempt_commitment, lex_before_histogram, selected_histogram_after_prefix, v17_adapter
 )
 
 
@@ -85,7 +85,7 @@ class TranscriptRankTests(unittest.TestCase):
                 labels=[str(world[i][int(i in z)]) for i in range(3)]
                 e={'attempts':[list(space[i]) for i in seq],
                    'selected_assignment':list(z),'observed_intervals':labels}
-                result=audit(p,e,external_pin=digest(p))
+                result=audit(p,e,external_pin=digest(p),external_attempts_pin=attempt_commitment(digest(p),e["attempts"]))
                 if Fraction(result['conditional_rank_p'])<=Fraction(1,9):rejections+=1
             self.assertLessEqual(Fraction(rejections,total),Fraction(1,9))
 
@@ -93,7 +93,7 @@ class TranscriptRankTests(unittest.TestCase):
         loc=Path(__file__).parent
         p=json.loads((loc/'example_protocol.json').read_text())
         e=json.loads((loc/'example_evidence.json').read_text())
-        r=audit(p,e,external_pin=digest(p))
+        r=audit(p,e,external_pin=digest(p),external_attempts_pin=attempt_commitment(digest(p),e["attempts"]))
         self.assertEqual(r['conditional_rank_p'],'1/400')
         self.assertEqual(r['conditional_lower_ate'],'1/2')
         self.assertEqual(r['lexicographically_prior_transcripts'],'0')
@@ -103,7 +103,7 @@ class TranscriptRankTests(unittest.TestCase):
         space,scores,_,_=design(v17_adapter(p))
         e={'attempts':[list(space[0])]*2,'selected_assignment':list(space[0]),
            'observed_intervals':['1']*3+['0']*3}
-        r=audit(p,e,external_pin=digest(p))
+        r=audit(p,e,external_pin=digest(p),external_attempts_pin=attempt_commitment(digest(p),e["attempts"]))
         self.assertEqual(r['conditional_rank_p'],'1')
         self.assertEqual(r['confidence_set_status'],'NONEMPTY')
 
@@ -112,11 +112,36 @@ class TranscriptRankTests(unittest.TestCase):
         z=space[0];e={'attempts':[list(z),list(z)],'selected_assignment':list(z),
                       'observed_intervals':['01']*p['n']}
         pin=digest(p)
-        with self.assertRaisesRegex(Reject,'mismatched'): audit({**p,'tie_rule':'bogus'},e,external_pin=pin)
-        with self.assertRaises(Reject): audit(p,{**e,'attempts':e['attempts'][:1]},external_pin=pin)
-        with self.assertRaises(Reject): audit(p,{**e,'selected_assignment':[1,3]},external_pin=pin)
+        with self.assertRaisesRegex(Reject,'mismatched'): audit({**p,'tie_rule':'bogus'},e,external_pin=pin,external_attempts_pin=attempt_commitment(pin,e['attempts']))
+        with self.assertRaises(Reject): audit(p,{**e,'attempts':e['attempts'][:1]},external_pin=pin,external_attempts_pin=attempt_commitment(pin,e['attempts']))
+        with self.assertRaises(Reject): audit(p,{**e,'selected_assignment':[1,3]},external_pin=pin,external_attempts_pin=attempt_commitment(pin,e['attempts']))
         q=copy.deepcopy(p);q['tie_rule']='choose_posthoc';
-        with self.assertRaises(Reject): audit(q,e,external_pin=digest(q))
+        with self.assertRaises(Reject): audit(q,e,external_pin=digest(q),external_attempts_pin=attempt_commitment(digest(q),e["attempts"]))
+
+    def test_forging_a_favorable_transcript_can_inflate_null_rejection_to_99_percent(self):
+        # All units have Y0=Y1=0 (sharp null). After seeing selected z, a
+        # malicious reporter can fake the lex-first preimage, making U_z=1/m_z.
+        p=protocol(6,3,2,cov=[0,0,0,1,1,1])
+        space,scores,mass,total=design(v17_adapter(p))
+        false_reject_mass=sum(m for m in mass if Fraction(1,m)<=Fraction(1,20))
+        self.assertEqual(Fraction(false_reject_mass,total),Fraction(99,100))
+        candidates={}
+        for a in range(len(space)):
+            for b in range(len(space)):
+                win=min((a,b),key=lambda i:scores[i])
+                candidates.setdefault(win,[]).append((a,b))
+        z_idx=next(i for i,m in enumerate(mass) if m>=20)
+        first,last=candidates[z_idx][0],candidates[z_idx][-1]
+        self.assertNotEqual(first,last)
+        honest={'attempts':[list(space[i]) for i in last],
+                'selected_assignment':list(space[z_idx]),'observed_intervals':['0']*6}
+        pinned=attempt_commitment(digest(p),honest['attempts'])
+        self.assertTrue(audit(p,honest,external_pin=digest(p),external_attempts_pin=pinned))
+        forgery={**honest,'attempts':[list(space[i]) for i in first]}
+        with self.assertRaisesRegex(Reject,'externally pinned'):
+            audit(p,forgery,external_pin=digest(p),external_attempts_pin=pinned)
+        with self.assertRaises(Reject):
+            audit(p,honest,external_pin=digest(p),external_attempts_pin=None)
 
     def test_counting_with_many_draws_without_tuple_enumeration(self):
         p=protocol(8,4,128,'iid_with_replacement',[0,0,0,0,1,1,1,1]);
