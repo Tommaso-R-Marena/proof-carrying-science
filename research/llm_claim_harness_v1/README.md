@@ -613,3 +613,38 @@ strict note is an intermediate, researcher/reviewer-authored object; a model
 could propose draft note content for human checking, but a correct kernel proof
 does not validate the original paper's meaning or authenticate the note author.
 No general scientific-validity status or production PCS authority is granted.
+
+
+## v10: source-bound all-deletions exact OLS sensitivity (experimental)
+
+`ols_stability_v10.py` adds a **complete, finite leave-one-out regression** audit on
+exact source CSV bytes. Every one-row omission is considered, with `3..8`
+complete data records and exact rational arithmetic. A strict seven-line
+`PCS-OLS-LOO/1` note commits to the CSV and manifest hashes, predictor and
+response column names, and exact nonnegative tolerance bounds (SI slope and
+intercept units). This note is **not** an authenticated scientific author claim.
+
+The generated Lean script recomputes the full regression, **refits after every
+single-row deletion**, reads both tolerance values directly from the note's
+original bytes, checks that the enumerated fit and verdict lists have the
+expected row count, and proves either the finite *all deletions within tolerance*
+claim or its negation with a row-indexed counterexample. A degenerate deletion
+fails closed rather than passing vacuously. No arbitrary input Lean or dynamic
+execution of scientific source code is allowed. Exactly matching source notes
+and verified certificates may be independently replayed.
+
+```bash
+python -m research.llm_claim_harness_v1.ols_stability_v10 \
+  --source research/llm_claim_harness_v1/fixtures/ols_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/ols_table_spec.json \
+  --stability-note research/llm_claim_harness_v1/fixtures/ols_stability_note_v10.txt \
+  --lean lean --out /tmp/pcs-loo-v10.json
+```
+
+**Limits:** This is sensitivity to deletion of one supplied row. It does not
+certify global regression optimality as a universally quantified theorem,
+external data completeness, correct statistical model choice, distributional
+assumptions, sampling representativeness, outlier resistance to larger changes,
+scientific interpretation, or any production PCS v0.6 authority. Truth of
+formal arithmetic on an admitted note is separate from whether the original
+research paper actually claimed or justified that tolerance.

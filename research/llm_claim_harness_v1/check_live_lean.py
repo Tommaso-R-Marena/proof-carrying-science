@@ -19,6 +19,7 @@ from .byte_bridge import run_byte_bridge, replay_byte_bridge
 from .csv_integrated_v8 import run_integrated, replay_integrated
 from .ols_integrated_v9 import run_ols, replay_ols
 from .ols_note_v9 import run_ols_note, replay_ols_note, parse_ols_note
+from .ols_stability_v10 import run_stability, replay_stability
 from .core import canonical, sha
 
 
@@ -249,6 +250,57 @@ def main() -> int:
             changed_claim["reported_metric_sources"][0]["candidate_matches_by_external_python"]):
         print("FAIL: modified report-note coefficient was not formally refuted", file=sys.stderr)
         return 1
+    # V10: leave-one-out sensitivity of every exact source CSV row. The supplied
+    # thresholds are re-read inside the same Lean script from the original note.
+    stability_note = Source.from_bytes((HERE / "fixtures/ols_stability_note_v10.txt").read_bytes())
+    stability = run_stability(ols_source, ols_manifest, stability_note, lean=lean,
+                              expected_data_sha256=ols_source.digest,
+                              expected_manifest_sha256=sha(ols_manifest),
+                              expected_note_sha256=stability_note.digest)
+    if (not stability["kernel_checked"] or stability["finite_loo_verdict"] != "ALL_DELETIONS_WITHIN_THRESHOLDS"
+            or stability["metrics"]["complete_record_count"] != 4):
+        print("FAIL: v10 exact source-bound leave-one-out proof:",
+              stability.get("lean_diagnostic", stability["formal_status"]), file=sys.stderr)
+        return 1
+    stability_replay = replay_stability(
+        ols_source, ols_manifest, stability_note, canonical(stability) + b"\n", lean=lean,
+        expected_data_sha256=ols_source.digest, expected_manifest_sha256=sha(ols_manifest),
+        expected_note_sha256=stability_note.digest)
+    if stability_replay["status"] != "REPLAYED_OLS_LOO":
+        print("FAIL: v10 fresh leave-one-out replay:", stability_replay, file=sys.stderr)
+        return 1
+    raw_loo = stability["lean_source"]
+    true_statement = "pcsOLSStabilityVerdict = some true"
+    if true_statement not in raw_loo or lean._check_generated(
+        raw_loo.replace(true_statement, "pcsOLSStabilityVerdict = some false", 1),
+        True, "OLS_LOO")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged false global LOO status accepted", file=sys.stderr)
+        return 1
+    # Forged data coverage: removing an iteration must be caught by row-count checks.
+    old_range = "(List.range points.length).map"
+    if old_range not in raw_loo or lean._check_generated(
+        raw_loo.replace(old_range, "(List.range (points.length - 1)).map", 1),
+        True, "OLS_LOO")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged skipped deletion accepted", file=sys.stderr)
+        return 1
+    changed_loo_data = Source.from_bytes(ols_source.raw.replace(b"300,7", b"300,20"))
+    revised_note_bytes = stability_note.raw.replace(ols_source.digest.encode(), changed_loo_data.digest.encode())
+    revised_note = Source.from_bytes(revised_note_bytes)
+    sensitivity = run_stability(changed_loo_data, ols_manifest, revised_note, lean=lean)
+    if (not sensitivity["kernel_checked"] or sensitivity["finite_loo_verdict"] !=
+            "COUNTEREXAMPLE_TO_ALL_DELETIONS" or sensitivity["metrics"]["first_counterexample_row"] is None):
+        print("FAIL: influenced row not kernel-refuted:",
+              sensitivity.get("lean_diagnostic", sensitivity["formal_status"]), file=sys.stderr)
+        return 1
+    bad_loo = sensitivity["lean_source"]
+    false_statement = "pcsOLSStabilityVerdict = some false"
+    if false_statement not in bad_loo or lean._check_generated(
+        bad_loo.replace(false_statement, "pcsOLSStabilityVerdict = some true", 1),
+        True, "OLS_LOO")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged claim of stability accepted on influential row", file=sys.stderr)
+        return 1
+    print("PASS: v10 source-backed finite leave-one-out true/false kernel checks, "
+          "fresh replay, omitted-deletion and forged-verdict negative controls")
     print("PASS: Lean 4.28.0 checked previous 20 scoped proof checks and new exact OLS "
           "(3 reported metrics + full fit) plus note-byte unified verification; "
           "10 fresh replays; forged coefficient, report offset and changed-data "
