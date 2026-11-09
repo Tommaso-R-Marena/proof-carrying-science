@@ -18,15 +18,12 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12.14'
+      - name: Install version-pinned research Ed25519 dependency
+        run: python -m pip install --disable-pip-version-check --only-binary=:all: cryptography==46.0.4
       - name: Execute independent Python reference checker
         run: |
-          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace research.writ_authority_v9.test_witness research.writ_authority_v9.test_source_witness research.writ_authority_v9.test_effect_model
+          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace research.writ_authority_v9.test_witness research.writ_authority_v9.test_source_witness research.writ_authority_v9.test_effect_model research.writ_authority_v9.test_destination_reference
           python -m research.writ_authority_v9.verify_bounds
-          if python -c 'import cryptography' >/dev/null 2>&1; then
-            python -m unittest -v research.writ_authority_v9.test_destination_reference
-          else
-            echo "Optional Ed25519 reference tests not run: cryptography is not installed"
-          fi
       - name: Install hash-pinned Lean 4.28.0
         shell: bash
         run: source scripts/activate_lean_428.sh
