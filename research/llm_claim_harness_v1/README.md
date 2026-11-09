@@ -389,3 +389,58 @@ trusted independent channel**; otherwise an attacker can replace all three.
 This replay uses the *same Python implementation* as the producer and is **not
 an independent semantics implementation or scientific certification**. This is
 an experimental local result, not a signed PCS v0.6 package/receipt.
+
+## Experimental v6: finite-universe proof-carrying falsification
+
+The new independent CLI extends the v5 CSV-bound exact arithmetic checker to
+**complete finite-universe claims**. For every assertion in a caller-supplied
+`pcs-tabular-evidence-v5-research` manifest, it re-parses **every** record of the
+submitted CSV and emits a single generated Lean 4.28.0 obligation for the ordered
+Boolean conjunction. On a false conjunction, the generated source also proves
+that the **first failing record** makes the predicate false. A separate Lean
+example checks the list length. All clauses use the v3 typed rational AST and
+unit-aware interpreter; no LLM output or arbitrary Lean proof is accepted.
+
+The `Option Bool` aggregator makes computation errors (`none`) distinct from
+false assertions (`some false`): a malformed or undefined expression must **not**
+become a certified counterexample. Full-source and strict manifest parsing occur
+**before any Lean call**. Each receipt carries the source and manifest SHA-256,
+ordered row spans and row hashes, exact AST digests, the generated Lean source,
+and proof-status details. A first-failing row has cell-level anchors. As with v5,
+this is **not** a scientific validity decision or PCS v0.6 certificate.
+
+```bash
+# Without Lean 4.28.0, this produces a receipt with KERNEL_UNAVAILABLE and exits 2.
+python -m research.llm_claim_harness_v1.finite_universe \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --out /tmp/pcs-finite-universe.json
+
+# Re-parse source + template and invoke fresh Lean before comparing all receipt fields.
+python -m research.llm_claim_harness_v1.finite_universe \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --receipt /tmp/pcs-finite-universe.json \
+  --out /tmp/pcs-finite-replay.json
+```
+
+The sample contains two rows. `force_check` is false on the second row, while
+`positive_mass` is true on both. This deliberately demonstrates **falsification**,
+not a guarantee that the physical measurements are genuine. A valid v6 proof
+means *all rows in the submitted byte-exact file*, not all observations that
+exist in the world. An adversary could submit a shortened CSV and obtain a true
+finite proposition about that **different CSV**. If a trusted reviewer has
+retained a SHA-256 of the complete intended dataset, pass it with
+`--expected-data-sha256 <64-lowercase-hex>` to reject replacement/subsetting.
+Passing a self-chosen hash does not establish authenticity, custody or completeness.
+The replay command must use the same pin, if one was supplied initially.
+
+A positive mathematical proof still does not establish the unit declarations,
+measurement methodology, model assumptions, selection criteria, or relationship
+of the chosen equation to a researcher's prose. The v6 code reuses the same
+Python CSV parser and typed compiler on receipt replay; this is fresh checking,
+not an independent compiler-correctness proof or a new trust root. The finite
+subset remains limited to **1–16 rows**, 1–4 assertions, and the original v5
+strict numeric CSV grammar. Benchmarks on adversarial or blinded scientific
+projects and live LLM inference have **not** been run. Novel scientific or
+algorithmic superiority is not claimed from synthetic fixture passes.
