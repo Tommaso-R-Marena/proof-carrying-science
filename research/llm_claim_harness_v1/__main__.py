@@ -8,12 +8,14 @@ from pathlib import Path
 import sys
 
 from .core import Source, canonical
-from .pipeline import LeanChecker, LocalCache, get_proposals, run
+from .pipeline import LeanChecker, LocalCache, get_proposals, run, run_arithmetic
 from .providers import Provider, ProviderError
 
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Experimental PCS source-grounded LLM+Lean harness (NOT production verifier)")
+    parser.add_argument("--mode", choices=["literal", "arithmetic"], default="literal",
+                        help="Experimental arithmetic mode checks rational expression ASTs in Lean")
     parser.add_argument("--source", type=Path, required=True, help="Plain UTF-8 text only; <=32KiB")
     parser.add_argument("--out", type=Path, required=True, help="Where to write an experimental JSON receipt")
     parser.add_argument("--offline-proposals", type=Path, help="JSON fixture replacing all primary network calls")
@@ -51,7 +53,7 @@ def main(argv=None) -> int:
         if args.offline_proposals:
             primary = json.loads(args.offline_proposals.read_text(encoding="utf-8"))
         else:
-            provider = Provider(args.primary, args.primary_model)
+            provider = Provider(args.primary, args.primary_model, mode=args.mode)
             primary, hit = get_proposals(provider, source, cache)
             primary_meta = {"provider": provider.kind, "model": provider.model, "cache_hit": hit}
         reviewer = None
@@ -59,10 +61,11 @@ def main(argv=None) -> int:
             reviewer = json.loads(args.offline_reviewer.read_text(encoding="utf-8"))
             reviewer_meta = {"provider": "offline", "model": "local-fixture"}
         elif args.reviewer:
-            provider = Provider(args.reviewer, args.reviewer_model)
+            provider = Provider(args.reviewer, args.reviewer_model, mode=args.mode)
             reviewer, hit = get_proposals(provider, source, cache)
             reviewer_meta = {"provider": provider.kind, "model": provider.model, "cache_hit": hit}
-        receipt = run(source, primary, reviewer_proposals=reviewer, lean=LeanChecker(args.lean), primary_metadata=primary_meta, reviewer_metadata=reviewer_meta)
+        receiver = run_arithmetic if args.mode == "arithmetic" else run
+        receipt = receiver(source, primary, reviewer_proposals=reviewer, lean=LeanChecker(args.lean), primary_metadata=primary_meta, reviewer_metadata=reviewer_meta)
         # Refuse symlink targets; caller controls the output path.
         if args.out.is_symlink():
             raise ValueError("output must not be a symbolic link")

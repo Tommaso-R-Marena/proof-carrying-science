@@ -99,3 +99,50 @@ malformed JSON and provider errors fail closed; no automatic paid fallback.
 
 Provider references: https://ai.google.dev/api/generate-content ;
 https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request .
+
+## Experimental v2 extension: bounded arithmetic ASTs
+
+Select `--mode arithmetic` to let Gemini or OpenRouter **propose exact source
+spans**, but **not** propose formal terms or prove mathematical claims. The local
+receiver independently parses the span with an explicitly limited grammar:
+
+- Exact literals (integers and decimals, at most six digits before/after the
+  decimal), unary minus, `+`, `-`, `*`, `/`, parentheses, and one comparison.
+- Every intermediate value is evaluated exactly with Python `Fraction`, with
+  bounds on document size, expression size, nesting depth, AST count and value.
+- Division by zero, variables, scientific notation, exponents, approximations,
+  units, chained comparisons, prose, extra assumptions and imported proof terms
+  fail closed. Source offsets and quotes are compared character-for-character.
+- Lean source **retains the full arithmetic expression AST in `Rat`** rather than
+  substituting an externally computed final number. Lean recomputes the
+  expression and checks either the submitted relation or its explicit negation
+  using `by decide`. The Python parser, token meaning and source context remain
+  external to the Lean theorem and must not be advertised as verified.
+
+Reproduce offline without external credentials:
+
+```bash
+python -m research.llm_claim_harness_v1 \
+  --mode arithmetic \
+  --source research/llm_claim_harness_v1/fixtures/arithmetic_source.txt \
+  --offline-proposals research/llm_claim_harness_v1/fixtures/arithmetic_proposals.json \
+  --offline-reviewer research/llm_claim_harness_v1/fixtures/arithmetic_reviewer.json \
+  --out /tmp/pcs-arith-receipt.json
+```
+
+To obtain a **real** Lean 4.28.0 check, install the pinned toolchain and run:
+
+```bash
+python -m research.llm_claim_harness_v1.check_live_lean
+```
+
+The new `.github/workflows/pcs-llm-claim-research.yml` runs offline tests and a
+live Lean smoke gate in CI. It downloads Lean using the existing repository's
+SHA-256-pinned installer and neither sends papers to providers nor accesses API
+secrets. A model's agreement is only a second untrusted extraction proposal.
+
+**Not established:** sound interpretation of prose, units, symbols, model
+assumptions, the correctness of scientific code, or empirical support. The
+term *ARITH_EXPR_PROVED* means the generated bounded arithmetic AST proposition
+was proved by Lean under the explicitly unverified source-to-AST translation.
+Nothing in this research folder is authorized to issue production PCS receipts.

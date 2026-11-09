@@ -12,6 +12,7 @@ import urllib.request
 from typing import Any, Protocol
 
 from .core import MAX_RESPONSE_BYTES, PROPOSAL_SCHEMA, Source, prompt_for
+from .arithmetic import ARITH_SCHEMA, arithmetic_prompt
 
 
 class ProviderError(Exception):
@@ -46,28 +47,37 @@ class UrlLibTransport:
 
 
 class Provider:
-    def __init__(self, kind: str, model: str, *, transport: Transport | None = None):
+    def __init__(self, kind: str, model: str, *, transport: Transport | None = None, mode: str = "literal"):
         if kind not in {"gemini", "openrouter"}:
             raise ValueError("unsupported provider")
         pattern = (r"[A-Za-z0-9][A-Za-z0-9._-]{0,99}" if kind == "gemini"
                    else r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}/[A-Za-z0-9][A-Za-z0-9._:-]{0,79}")
         if not re.fullmatch(pattern, model):
             raise ValueError("model identifier rejected")
-        self.kind, self.model = kind, model
+        if mode not in {"literal", "arithmetic"}:
+            raise ValueError("unsupported proposal mode")
+        self.kind, self.model, self.mode = kind, model, mode
         self.transport = transport or UrlLibTransport()
+
+    def prompt(self, source: Source) -> str:
+        return arithmetic_prompt(source) if self.mode == "arithmetic" else prompt_for(source)
+
+    @property
+    def schema(self) -> dict:
+        return ARITH_SCHEMA if self.mode == "arithmetic" else PROPOSAL_SCHEMA
 
     def propose(self, source: Source) -> dict:
         envname = "GEMINI_API_KEY" if self.kind == "gemini" else "OPENROUTER_API_KEY"
         key = os.environ.get(envname, "")
         if not key or not key.strip():
             raise ProviderError(f"missing {envname} environment variable")
-        content = prompt_for(source)
+        content = self.prompt(source)
         if self.kind == "gemini":
             url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent"
             headers = {"Content-Type": "application/json", "x-goog-api-key": key}
             payload = {
                 "contents": [{"role": "user", "parts": [{"text": content}]}],
-                "generationConfig": {"temperature": 0, "maxOutputTokens": 4096, "responseMimeType": "application/json", "responseSchema": PROPOSAL_SCHEMA},
+                "generationConfig": {"temperature": 0, "maxOutputTokens": 4096, "responseMimeType": "application/json", "responseSchema": self.schema},
             }
         else:
             url = "https://openrouter.ai/api/v1/chat/completions"

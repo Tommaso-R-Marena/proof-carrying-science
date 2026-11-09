@@ -12,6 +12,7 @@ from typing import Any
 from . import VERSION
 from .core import Source, Comparison, canonical, make_lean_source, prompt_for, PROPOSAL_SCHEMA, sha, validate_proposals
 from .providers import Provider
+from .arithmetic import ArithmeticClaim, make_arithmetic_lean_source, validate_arithmetic_proposals
 
 
 class LocalCache:
@@ -27,7 +28,7 @@ class LocalCache:
             raise ValueError("cache directory must not be a symlink")
 
     def key(self, provider: Provider, source: Source) -> str:
-        return sha(canonical({"version": VERSION, "role": "claims", "kind": provider.kind, "model": provider.model, "source_sha256": source.digest, "prompt_sha256": sha(prompt_for(source).encode("utf-8")), "schema_sha256": sha(canonical(PROPOSAL_SCHEMA))}))
+        return sha(canonical({"version": VERSION, "role": "claims", "kind": provider.kind, "model": provider.model, "mode": provider.mode, "source_sha256": source.digest, "prompt_sha256": sha(provider.prompt(source).encode("utf-8")), "schema_sha256": sha(canonical(provider.schema))}))
 
     def get(self, key: str) -> dict | None:
         path = self.root / (key + ".json")
@@ -78,9 +79,17 @@ class LeanChecker:
 
     def check(self, claim: Comparison) -> dict:
         code, truth = make_lean_source(claim)
+        return self._check_generated(code, truth, "NORMALIZED")
+
+    def check_arithmetic(self, claim: ArithmeticClaim) -> dict:
+        code, truth = make_arithmetic_lean_source(claim)
+        return self._check_generated(code, truth, "ARITH_EXPR")
+
+    def _check_generated(self, code: str, truth: bool, scope: str) -> dict:
         executable = shutil.which(self.executable)
         output = {
-            "normalization": "external-exact-Fraction-cross-product",
+            "normalization": ("external-exact-Fraction-cross-product" if scope == "NORMALIZED"
+                              else "exact-AST-rational-expressions-rechecked-by-Lean"),
             "tested_relation": "source" if truth else "negation_of_source",
             "lean_source_sha256": sha(code.encode("utf-8")),
             "lean_source": code,
@@ -111,7 +120,7 @@ class LeanChecker:
                 output["status"] = "KERNEL_INVOCATION_FAILED"
                 return output
         if result.returncode == 0:
-            output["status"] = "NORMALIZED_PROVED" if truth else "NORMALIZED_REFUTED"
+            output["status"] = scope + ("_PROVED" if truth else "_REFUTED")
             output["kernel_checked"] = True
         else:
             output["status"] = "KERNEL_REJECTED"
@@ -164,5 +173,47 @@ def run(
             "rejected_grounding": len(rejected),
             "kernel_checked": sum(row.get("kernel_checked", False) for row in claims),
             "needs_review": sum(row["status"] == "NEEDS_REVIEW" for row in claims),
+        },
+    }
+
+
+def run_arithmetic(
+    source: Source, primary_proposals: dict, *, reviewer_proposals: dict | None = None,
+    lean: LeanChecker | None = None, primary_metadata: dict | None = None,
+    reviewer_metadata: dict | None = None,
+) -> dict:
+    """Research-only expression-claim receiver. Never promotes to PCS authority."""
+    primary, rejected = validate_arithmetic_proposals(primary_proposals, source)
+    reviewer_set = None
+    reviewer_rejected = []
+    if reviewer_proposals is not None:
+        reviewers, reviewer_rejected = validate_arithmetic_proposals(reviewer_proposals, source)
+        reviewer_set = {c.identity() for c in reviewers}
+    rows = []
+    for claim in primary:
+        row = claim.to_dict()
+        if reviewer_set is not None and claim.identity() not in reviewer_set:
+            row.update({"status": "NEEDS_REVIEW", "kernel_checked": False})
+        else:
+            checker = lean or LeanChecker(executable="__pcs_missing_lean_executable__")
+            row.update(checker.check_arithmetic(claim))
+        rows.append(row)
+    return {
+        "schema_version": "llm-claim-arithmetic-v2-research",
+        "authority": "EXPERIMENTAL_NOT_PCS_V06_AUTHORITY",
+        "source_sha256": source.digest,
+        "source_encoding": "UTF-8 raw bytes; offsets index Unicode codepoints",
+        "primary_proposal_sha256": sha(canonical(primary_proposals)),
+        "reviewer_proposal_sha256": sha(canonical(reviewer_proposals)) if reviewer_proposals is not None else None,
+        "primary": primary_metadata or {"provider": "offline", "model": "local-fixture"},
+        "reviewer": reviewer_metadata,
+        "scope": ("bounded literal rational expressions only; AST parser and source semantics "
+                  "are not Lean-verified; no scientific validity"),
+        "claims": rows, "rejected": rejected, "reviewer_rejected": reviewer_rejected,
+        "counts": {
+            "primary_proposed": len(primary_proposals["claims"]),
+            "accepted_grounding": len(primary), "rejected_grounding": len(rejected),
+            "kernel_checked": sum(row.get("kernel_checked", False) for row in rows),
+            "needs_review": sum(row["status"] == "NEEDS_REVIEW" for row in rows),
         },
     }

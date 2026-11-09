@@ -1,0 +1,28 @@
+name: PCS experimental LLM claim extraction and Lean 4.28 smoke
+
+on:
+  pull_request:
+    paths:
+      - "research/llm_claim_harness_v1/**"
+      - ".github/workflows/pcs-llm-claim-research.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  experimental-source-and-kernel-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run offline adversarial tests (no API keys)
+        run: python -m unittest discover -s research/llm_claim_harness_v1/tests -v
+      - name: Install checksum-pinned Lean 4.28.0
+        shell: bash
+        run: source scripts/activate_lean_428.sh
+      - name: Check generated rational AST and literal propositions in actual Lean
+        run: python -m research.llm_claim_harness_v1.check_live_lean
