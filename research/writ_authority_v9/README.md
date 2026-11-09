@@ -113,3 +113,72 @@ Every terminal state is absorbing. The verifier rejects duplicate delivery, canc
 **Reproducible implementation evidence:** 335/335 full Python tests; 55,987 event sequences (lengths 0–6) matched an independently authored finite-state oracle; clean-installed wheel; separate-process Writ/14 admission→lease→delivery→signed-receipt→Lean-export demonstration; inherited Writ/13 demo still passes. Writ/14's complete runtime and confidential synthetic test signing key were *not* added to the PCS PR.
 
 **Important nonclaims:** Even a formally consistent `delivered` log entry does not prove that the remote tool *physically delivered* anything; that remains a trusted adapter/operator assertion. Writ/14 does **not** establish exactly-once physical effects, trusted operator honesty, complete mediation, remote idempotency, key custody, source provenance authenticity, or Python-to-Lean refinement. Strict effect auditing is opt-in; Writ/13 historical policies retain their weaker receipt semantics unless migrated. The real next milestone is a trusted, independently attested adapter receipt or narrow executable refinement proof.
+
+## Writ/15: independent destination-signed delivery receipts
+
+Writ/14 only checked that a gateway/operator logged a semantically consistent
+`delivered` event. **It did not require evidence from the actual destination.**
+That was a real assurance gap: a compromised or buggy operator could validly
+sign a false delivery history.
+
+**Companion Writ/15 alpha** adds opt-in `audit destination;` (requires
+`audit effects;`) and domain-separated `writ/15` policy /
+`writ/portable-receipt/3` identities. It provides:
+
+1. A distinct UNIX-domain-socket **receiver process** with its own Ed25519
+   signing key, separately from gateway request signing and operator audit
+   signing. The receiver verifies the gateway-signed request and its immutable
+   policy, source digest, effect ID, route, receiver identity and fresh worker
+   lease. No untrusted agent can directly select an arbitrary file path.
+2. Receiver-side pinned-directory writes and fsync before signing the
+   `durably_written` acknowledgment. The receiver persists a per-effect
+   acknowledgment so a different nonce, payload or route cannot later receive
+   a conflicting receipt, including after receiver restart.
+3. Gateway-side verification of the **independent receiver signature**
+   before recording `delivered`. Unacknowledged or ambiguously interrupted
+   effects remain `uncertain` without automatic replay.
+4. Detached receiver+operator signature verification, with a receiver public
+   key **pinned outside** the operator-signed portable receipt. Exact policy,
+   source, route, digest, nonce, effect and resource accounting are checked
+   before exporting the Lean proof projection.
+5. A concrete adversarial regression: a test operator modifies its delivery
+   audit log, repairs all hash links, and legitimately re-signs the resulting
+   operator receipt. Writ/15 still rejects it because the receiver signature
+   does not validate.
+
+### Newly verified Lean source
+
+- `formal/DestinationAttestation.lean`: executable receipt-bound
+  state machine, state-safety preservation across arbitrary finite traces,
+  no accepted delivered outcome without an exact verified acknowledgment,
+  and rejection of bad receiver identity, failed-signature markers and
+  post-terminal replay.
+- `formal/AttestedProduct.lean`: soundness, completeness and no weighted
+  overspending when independent receiver acknowledgment checks compose
+  with Writ/13's source-anchored provenance and resource calculus.
+- `formal/DestinationReceiptExample.lean`: synthetic operator-and-receiver
+  signature verified numeric trace fixture with positive and negative controls.
+- `destination_reference.py` and `test_destination_reference.py`: separate
+  Python Ed25519 reference checker and adversarial tests, not imported into
+  production PCS. The full Writ/15 gateway, receiver service and integration
+  harness are in the downloadable companion research source package; this PR
+  retains an isolated reviewable verification slice.
+
+The formal source was checked with pinned Lean 4.28.0 in
+[Writ proof workflow #58](https://github.com/Tommaso-R-Marena/proof-carrying-science/actions/runs/42655063411).
+The comprehensive companion Writ/15 suite passed **343 tests**, the new
+separate-process gateway→receiver→detached-verifier demonstration, and
+an inherited Writ/14 demonstration. Its public synthetic evidence and
+version 15 source archive can be independently inspected.
+
+**Trust assumptions and nonclaims:** The Lean theorem's
+`signatureVerified = true` input is supplied by Python's Ed25519 verifier.
+The recipient's private key must actually be isolated from gateway/operator
+compromise, and the recipient must honestly perform the fsynced operation.
+The test uses separate processes and keys but **one test OS user**, so it
+does not establish real OS key isolation. A receiver acknowledgment is a
+signed statement about a local write, not a mathematical proof of remote
+physical delivery or arbitrary real-world safety. No Python/SQLite-to-Lean
+refinement theorem, implicit-flow proof, cryptographic theorem, or complete
+agent tool mediation is established. Earlier policy versions are unchanged;
+production PCS has not been modified, deployed or merged.
