@@ -146,3 +146,23 @@ assumptions, the correctness of scientific code, or empirical support. The
 term *ARITH_EXPR_PROVED* means the generated bounded arithmetic AST proposition
 was proved by Lean under the explicitly unverified source-to-AST translation.
 Nothing in this research folder is authorized to issue production PCS receipts.
+
+## Free deterministic-first discovery
+
+For documents that already put explicit comparisons on separate lines, no LLM
+call is needed. The strictly bounded local scanner reuses the exact same
+validators and skips unsupported lines instead of guessing their interpretation:
+
+```bash
+python -m research.llm_claim_harness_v1 \
+  --mode arithmetic --primary deterministic \
+  --source research/llm_claim_harness_v1/fixtures/arithmetic_source.txt \
+  --out /tmp/pcs-deterministic-receipt.json
+```
+
+You can optionally use the external `--reviewer` with explicit
+`--allow-external`, but a second model is not an authority. Deterministic
+standalone-line discovery is a **cost-saving fast path**, not complete document
+coverage: prose-embedded, context-dependent, symbolic and scientific claims are
+skipped rather than declared absent or false. More expensive LLM extraction
+remains available where its narrower benefits are demonstrably useful.

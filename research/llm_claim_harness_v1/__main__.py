@@ -10,6 +10,7 @@ import sys
 from .core import Source, canonical
 from .pipeline import LeanChecker, LocalCache, get_proposals, run, run_arithmetic
 from .providers import Provider, ProviderError
+from .discovery import discover_standalone
 
 
 def parse_args(argv=None):
@@ -20,7 +21,7 @@ def parse_args(argv=None):
     parser.add_argument("--out", type=Path, required=True, help="Where to write an experimental JSON receipt")
     parser.add_argument("--offline-proposals", type=Path, help="JSON fixture replacing all primary network calls")
     parser.add_argument("--offline-reviewer", type=Path, help="Optional second independent JSON fixture")
-    parser.add_argument("--primary", choices=["gemini", "openrouter"])
+    parser.add_argument("--primary", choices=["gemini", "openrouter", "deterministic"])
     parser.add_argument("--primary-model")
     parser.add_argument("--reviewer", choices=["gemini", "openrouter"])
     parser.add_argument("--reviewer-model")
@@ -35,11 +36,15 @@ def main(argv=None) -> int:
     args = parse_args(argv)
     try:
         source = Source.from_bytes(args.source.read_bytes())
-        network_needed = not args.offline_proposals or (args.reviewer and not args.offline_reviewer)
+        network_needed = (not args.offline_proposals and args.primary != "deterministic") or (args.reviewer and not args.offline_reviewer)
         if network_needed and not args.allow_external:
             raise ValueError("network calls require --allow-external; provide offline fixtures otherwise")
-        if not args.offline_proposals and not (args.primary and args.primary_model):
-            raise ValueError("select --primary and --primary-model")
+        if not args.offline_proposals and not args.primary:
+            raise ValueError("select --primary")
+        if not args.offline_proposals and args.primary != "deterministic" and not args.primary_model:
+            raise ValueError("external primary requires --primary-model")
+        if args.primary == "deterministic" and args.primary_model:
+            raise ValueError("deterministic extraction does not use a model")
         if args.reviewer and not args.offline_reviewer and not args.reviewer_model:
             raise ValueError("select --reviewer-model")
         if args.reviewer_model and not args.reviewer:
@@ -52,6 +57,9 @@ def main(argv=None) -> int:
         reviewer_meta = None
         if args.offline_proposals:
             primary = json.loads(args.offline_proposals.read_text(encoding="utf-8"))
+        elif args.primary == "deterministic":
+            primary = discover_standalone(source, args.mode)
+            primary_meta = {"provider": "deterministic", "model": None, "network_calls": 0}
         else:
             provider = Provider(args.primary, args.primary_model, mode=args.mode)
             primary, hit = get_proposals(provider, source, cache)
