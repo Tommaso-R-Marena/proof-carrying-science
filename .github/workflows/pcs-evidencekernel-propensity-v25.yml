@@ -1,0 +1,56 @@
+name: PCS EvidenceKernel v25 propensity-ceiling research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_propensity_v25/**'
+      - '.github/workflows/pcs-evidencekernel-propensity-v25.yml'
+      - 'research/evidencekernel_anytime_v24/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-propensity-ceiling-replay:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: V24 preservation and V25 adversarial exact tests
+        run: |
+          python -m unittest discover -s research/evidencekernel_anytime_v24 -t . -v
+          python -m unittest discover -s research/evidencekernel_propensity_v25 -t . -v
+      - name: Two-language protocol-pinned replay and frontier certification
+        shell: bash
+        run: |
+          set -euo pipefail
+          D=research/evidencekernel_propensity_v25
+          P="$(cat "$D/example_protocol_pin.txt")"
+          E="$(cat "$D/example_evidence_pin.txt")"
+          python -m research.evidencekernel_propensity_v25.kernel "$D/example_protocol.json" "$D/example_evidence.json" --protocol-pin "$P" --evidence-pin "$E" > "$RUNNER_TEMP/v25-python.json"
+          node "$D/independent.js" "$D/example_protocol.json" "$D/example_evidence.json" "$P" "$E" > "$RUNNER_TEMP/v25-node.json"
+          python - "$RUNNER_TEMP/v25-python.json" "$RUNNER_TEMP/v25-node.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(x)) for x in sys.argv[1:]]
+          assert a==b
+          assert a['anytime_lower_ate']=='8515174471273905593/19000741375306629120'
+          assert a['common_upper_slack_supremum']=='8515174471273905593/69762177483835200000'
+          assert a['status']=='CONDITIONALLY_REJECTED'
+          PY
+      - name: Verify retained source integrity
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          d=Path('research/evidencekernel_propensity_v25')
+          for name,hexdigest in json.loads((d/'SOURCE_SHA256.json').read_text()).items():
+              assert hashlib.sha256((d/name).read_bytes()).hexdigest()==hexdigest,name
+          print('source integrity verified')
+          PY
