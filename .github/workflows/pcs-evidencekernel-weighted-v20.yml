@@ -1,0 +1,45 @@
+name: PCS EvidenceKernel v20 weighted stopping research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_weighted_v20/**'
+      - '.github/workflows/pcs-evidencekernel-weighted-v20.yml'
+      - 'research/evidencekernel_selective_v17/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-weighted-inference:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Exhaustive finite-design tests, adversarial counterexample, cross-language comparisons
+        run: python -m unittest discover -s research/evidencekernel_weighted_v20 -v -p 'test_*.py'
+      - name: Independent exact inference demonstration
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir=research/evidencekernel_weighted_v20
+          pin="$(cat "$dir/example_pin.txt")"
+          apin="$(cat "$dir/example_attempts_pin.txt")"
+          python -m research.evidencekernel_weighted_v20.kernel "$dir/example_protocol.json" "$dir/example_evidence.json" \
+            --protocol-pin "$pin" --attempts-pin "$apin" > "$RUNNER_TEMP/weighted-python.json"
+          node "$dir/independent.js" "$dir/example_protocol.json" "$dir/example_evidence.json" \
+            "$pin" "$apin" > "$RUNNER_TEMP/weighted-js.json"
+          python - "$RUNNER_TEMP/weighted-python.json" "$RUNNER_TEMP/weighted-js.json" <<'PY'
+          import json,sys
+          a,b=(json.load(open(p,encoding='utf-8')) for p in sys.argv[1:])
+          assert a==b
+          assert a['conditional_p']=='864625/8661249'
+          assert a['weighted_prefix_right_numerator']=='10000'
+          assert a['weighted_prefix_right_denominator']=='11664'
+          PY
