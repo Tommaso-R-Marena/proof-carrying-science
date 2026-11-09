@@ -142,7 +142,9 @@ def _pipeline_case(engine, source, packet, refs, rubric, artifacts, *, v4):
                    checks_path=str(packet / "checks.json"), checks=checks,
                    grading=grade(refs, interpretation, captured, checks, inventory),
                    check_statuses=dict(Counter(c.get("status", "MISSING") for c in checks)),
-                   numerical=[c for c in checks if any(w in str(c.get("checker", "")).lower() for w in ("numeric", "simulation", "residual", "nist", "prediction"))],
+                   numerical=[c for c in checks if c.get("checker") == "conditional_ode_reconstruction"
+                              or c.get("status") in {"REPRODUCED_COMPUTATION", "REPRODUCED_ROUNDED_COMPUTATION"}
+                              or any(w in str(c.get("checker", "")).lower() for w in ("numeric", "simulation", "residual", "nist", "prediction"))],
                    status="COMPLETED")
         row["workflow_utility"] = grade_workflow(rubric, refs, row["grading"], interpretation, checks)
     except Exception as exc:
@@ -163,6 +165,11 @@ def _pipeline_case(engine, source, packet, refs, rubric, artifacts, *, v4):
         row["independent_replay"] = _error(exc)
         row["status"] = "FAILED_UNKNOWN"
     row["valid_for_prospective_scoring"] = row["status"] == "COMPLETED" and row["independent_replay"]["status"] == "COMPLETED"
+    if not row["valid_for_prospective_scoring"]:
+        # Retain what the interpreter appeared to achieve for diagnosis, while
+        # the aggregate below grants it no validated positive credit.
+        row["provisional_grading"] = row["grading"]
+        row["provisional_workflow_utility"] = row["workflow_utility"]
     row["review_exists"] = (packet / "review.html").is_file()
     row["replay_seconds"] = time.monotonic()-replay_start
     row["resource_usage"] = _measure()
@@ -178,16 +185,24 @@ def _aggregate(cases):
                   ("supported_total", "core_found", "typed_context_found", "annotated_probe_pairs", "typed_correct_probe_pairs",
                    "counterprobes", "counterprobe_core_proposals", "counterprobe_full_context_proposals", "correct_counterprobe_abstentions",
                    "unsupported_promotions", "source_binding_failures", "reference_binding_failures", "claims_generated")}
+        # Every project remains in recall/task denominators, and every observed
+        # annotated pair remains in precision's denominator. An invalid or
+        # unreplayed package can contribute diagnostic failures/proposals, but
+        # cannot improve recall, precision, abstention or workflow achievement.
+        valid = [r for r in runs if r["valid_for_prospective_scoring"]]
+        for name in ("core_found", "typed_context_found", "typed_correct_probe_pairs", "correct_counterprobe_abstentions"):
+            totals[name] = sum(r["grading"].get(name, 0) for r in valid)
         totals["core_recall"] = totals["core_found"]/totals["supported_total"] if totals["supported_total"] else None
         totals["typed_context_recall"] = totals["typed_context_found"]/totals["supported_total"] if totals["supported_total"] else None
         totals["annotated_probe_precision"] = totals["typed_correct_probe_pairs"]/totals["annotated_probe_pairs"] if totals["annotated_probe_pairs"] else None
         totals["failed_or_unreplayed_projects"] = sum(not r["valid_for_prospective_scoring"] for r in runs)
         totals["workflow_tasks"] = sum(r["workflow_utility"]["tasks"] for r in runs)
-        totals["workflow_correct"] = sum(r["workflow_utility"]["correct"] for r in runs)
-        totals["workflow_correct_informative_abstentions"] = sum(r["workflow_utility"]["correct_informative_abstentions"] for r in runs)
+        totals["workflow_correct"] = sum(r["workflow_utility"]["correct"] for r in valid)
+        totals["workflow_correct_informative_abstentions"] = sum(r["workflow_utility"]["correct_informative_abstentions"] for r in valid)
         totals["inference_seconds"] = sum(r["inference_seconds"] for r in runs)
         totals["replay_seconds"] = sum(r["replay_seconds"] for r in runs)
         totals["metrics_include_failed_project_denominators"] = True
+        totals["positive_credit_requires_independent_replay"] = True
         combined[key] = totals
     return combined
 

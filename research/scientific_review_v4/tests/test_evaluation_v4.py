@@ -204,3 +204,54 @@ def test_actual_runtime_failure_keeps_unknown_outcomes_and_replay_failure(tmp_pa
     assert len(result["grading"]["outcomes"]) == 2
     assert result["grading"]["correct_counterprobe_abstentions"] == 0
     assert result["checks"] == [] and result["numerical"] == []
+
+
+def test_successful_grading_then_replay_failure_cannot_improve_aggregate(tmp_path):
+    import json
+    from types import SimpleNamespace
+    claim, ref, artifacts = example()
+    counter = deepcopy(ref)
+    counter.update(id="R2", expected_status="contradicted")
+    counter["typed_expectation"]["entity"] = "other"
+    checks = [{"id": "ode", "checker": "conditional_ode_reconstruction", "status": "UNKNOWN", "authority": False},
+              {"id": "domain", "checker": "parameter_domain", "status": "REPRODUCED_COMPUTATION", "authority": False},
+              {"id": "source", "checker": "source_declaration", "status": "SOURCE_DECLARATION_CHECKED", "authority": False}]
+    def completed(source, packet, **kwargs):
+        packet.mkdir()
+        (packet / "semantics.json").write_text(json.dumps({"claims": [claim]}))
+        (packet / "checks.json").write_text(json.dumps(checks))
+        return {"authority": False}
+    def failed_replay(*args, **kwargs):
+        raise ValueError("independent recomputation differs")
+    engine = SimpleNamespace(run=completed, replay=failed_replay,
+                             snapshot_artifacts=lambda path: ({"artifacts": []}, artifacts))
+    invalid = benchmark._pipeline_case(engine, tmp_path / "source", tmp_path / "package", [ref, counter], [], artifacts, v4=False)
+    assert invalid["grading"]["core_found"] == 1
+    assert invalid["grading"]["typed_correct_probe_pairs"] == 1
+    assert invalid["grading"]["correct_counterprobe_abstentions"] == 1
+    assert invalid["provisional_grading"] == invalid["grading"]
+    assert [c["id"] for c in invalid["numerical"]] == ["ode", "domain"]
+    assert len(invalid["checks"]) == 3
+    assert not invalid["valid_for_prospective_scoring"]
+    # Include explicit provisional workflow successes to ensure they receive
+    # the same replay gate as strict source interpretation achievements.
+    invalid["workflow_utility"] = {"tasks": 8, "correct": 8, "correct_informative_abstentions": 4}
+    valid = deepcopy(invalid)
+    valid["valid_for_prospective_scoring"] = True
+    cases = [{"baseline_v3_new_protocol": invalid, "review_v4_new_protocol": invalid},
+             {"baseline_v3_new_protocol": valid, "review_v4_new_protocol": valid}]
+    for totals in benchmark._aggregate(cases).values():
+        assert totals["supported_total"] == 2 and totals["counterprobes"] == 2
+        assert totals["annotated_probe_pairs"] == 2
+        assert totals["core_found"] == 1 and totals["typed_context_found"] == 1
+        assert totals["typed_correct_probe_pairs"] == 1
+        assert totals["core_recall"] == 0.5 and totals["annotated_probe_precision"] == 0.5
+        assert totals["correct_counterprobe_abstentions"] == 1
+        assert totals["workflow_tasks"] == 16 and totals["workflow_correct"] == 8
+        assert totals["workflow_correct_informative_abstentions"] == 4
+        assert totals["failed_or_unreplayed_projects"] == 1
+        assert totals["positive_credit_requires_independent_replay"]
+    all_invalid = benchmark._aggregate([cases[0]])["review_v4_new_protocol"]
+    assert all_invalid["core_recall"] == 0 and all_invalid["annotated_probe_precision"] == 0
+    assert all_invalid["correct_counterprobe_abstentions"] == 0
+    assert all_invalid["workflow_correct"] == 0 and all_invalid["workflow_tasks"] == 8

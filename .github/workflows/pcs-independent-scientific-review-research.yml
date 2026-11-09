@@ -1,0 +1,208 @@
+name: Independent scientific review experimental research
+
+on:
+  pull_request:
+    paths:
+      - 'research/proof_jepa_rl_v1/**'
+      - 'research/safety_jepa_v1/**'
+      - 'research/scientific_intake_v1/**'
+      - 'research/scientific_understanding_v2/**'
+      - 'research/scientific_semantics_v3/**'
+      - 'research/scientific_review_v4/**'
+      - 'pcs/**'
+      - 'formal/PCSProofProbe.lean'
+      - 'scripts/activate_lean_428.sh'
+      - 'scripts/check_repository_integrity.py'
+      - 'requirements*.lock'
+      - 'pyproject.toml'
+      - 'lean-toolchain'
+      - 'formal/lean-toolchain'
+      - '.gitattributes'
+      - '.github/workflows/pcs-independent-scientific-review-research.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: science-independent-review-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  independent-review-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      LEAN_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      PYTHONDONTWRITEBYTECODE: '1'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          # Frozen candidate/protected Git identities are checked by the v4 suite.
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12.14'
+      - name: Install existing hash-pinned CPU and numerical dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --only-binary=:all: --require-hashes \
+            -r requirements-build.lock -r requirements-dev.lock -r requirements-prover.lock \
+            -r research/scientific_understanding_v2/requirements-numeric.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y poppler-utils zstd
+          mkdir -p "$RUNNER_TEMP/independent-review-evidence/formal" "$RUNNER_TEMP/independent-review-evidence/replay"
+          test -x /usr/bin/pdftotext
+          /usr/bin/pdftotext -v > "$RUNNER_TEMP/independent-review-evidence/pdftotext-version.log" 2>&1
+      - name: Require the actual pinned Lean toolchain and CPU libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          export PCS_LEAN="$(command -v lean)"
+          printf 'PCS_LEAN=%s\n' "$PCS_LEAN" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import json, os, platform, subprocess
+          from pathlib import Path
+          import numpy, scipy, torch
+          version = subprocess.check_output([os.environ['PCS_LEAN'], '--version'], text=True).strip()
+          assert 'version 4.28.0,' in version, version
+          assert numpy.__version__ == '2.2.6', numpy.__version__
+          assert scipy.__version__ == '1.15.3', scipy.__version__
+          assert torch.__version__ == '2.7.1+cpu', torch.__version__
+          assert torch.version.cuda is None, torch.version.cuda
+          evidence = {'python': platform.python_version(), 'lean': version,
+                      'numpy': numpy.__version__, 'scipy': scipy.__version__,
+                      'torch': torch.__version__, 'cuda': torch.version.cuda}
+          destination = Path(os.environ['RUNNER_TEMP']) / 'independent-review-evidence/runtime.json'
+          destination.write_text(json.dumps(evidence, indent=2, sort_keys=True) + '\n')
+          PY
+      - name: Repository integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/check_repository_integrity.py > "$RUNNER_TEMP/independent-review-evidence/repository-integrity.json"
+      - name: Run every unchanged PR199-203 research test
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q \
+            research/proof_jepa_rl_v1 research/safety_jepa_v1 \
+            research/scientific_intake_v1 research/scientific_understanding_v2 \
+            research/scientific_semantics_v3/tests \
+            --junitxml="$RUNNER_TEMP/independent-review-evidence/inherited-tests.xml"
+      - name: Run every additive v4 test with actual proof and numerical checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m pytest -q research/scientific_review_v4/tests \
+            --junitxml="$RUNNER_TEMP/independent-review-evidence/review-v4-tests.xml"
+      - name: Refuse skipped or missing test suites
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, xml.etree.ElementTree as ET
+          from pathlib import Path
+          evidence = Path(os.environ['RUNNER_TEMP']) / 'independent-review-evidence'
+          counts = {}
+          for name, minimum in [('inherited-tests.xml', 634), ('review-v4-tests.xml', 1)]:
+              root = ET.parse(evidence / name).getroot()
+              suites = [root] if root.tag == 'testsuite' else list(root.iter('testsuite'))
+              totals = {key: sum(int(suite.get(key, '0')) for suite in suites)
+                        for key in ['tests', 'failures', 'errors', 'skipped']}
+              counts[name] = totals
+              assert totals['tests'] >= minimum, (name, totals)
+              assert all(totals[key] == 0 for key in ['failures', 'errors', 'skipped']), (name, totals)
+          (evidence / 'test-counts.json').write_text(json.dumps(counts, indent=2, sort_keys=True) + '\n')
+          PY
+      - name: Recompile inherited formal profiles and the actual v4 residual source
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          evidence="$RUNNER_TEMP/independent-review-evidence"
+          lean research/proof_jepa_rl_v1/evidence/Demo.lean > "$evidence/formal/proof-jepa-demo.log"
+          python -m research.scientific_intake_v1.verify_formal \
+            --output "$evidence/formal/intake.json" > "$evidence/formal/intake.log"
+          for profile in dimensions conservation sampling; do
+            python -m research.scientific_understanding_v2.verify_formal --profile "$profile" \
+              --output "$evidence/formal/$profile.json" > "$evidence/formal/$profile.log"
+          done
+          python -m research.scientific_semantics_v3.error_atlas --check > "$evidence/error-atlas-check.log"
+          python -m research.scientific_semantics_v3.assurance > "$evidence/formal/partial-semantics.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from research.scientific_review_v4.formal import verify
+          evidence = Path(os.environ['RUNNER_TEMP']) / 'independent-review-evidence/formal'
+          receipt = verify()
+          (evidence / 'residual-semantics.json').write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          assert receipt['status'] == 'VERIFIED', receipt
+          assert receipt['theorem_count'] == receipt['axiom_audit_count'] == 9, receipt
+          assert receipt['theorem_census_exact'] and receipt['axiom_census_exact'], receipt
+          assert not receipt['forbidden_tokens'] and not receipt['unexpected_imports'], receipt
+          assert receipt['authority'] is False and receipt['scientific_meaning'] == 'OPEN', receipt
+          for name in ['intake', 'dimensions', 'conservation', 'sampling']:
+              prior = json.loads((evidence / (name + '.json')).read_text())
+              assert prior['status'] == 'VERIFIED' and prior['axiom_audit'], (name, prior)
+          partial = json.loads((evidence / 'partial-semantics.json').read_text())
+          assert partial['status'] == 'KERNEL_CHECKED_ABSTRACT_PARTIAL_SEMANTICS', partial
+          assert not partial['forbidden_tokens'] and not partial['unexpected_imports'] and partial['axiom_audit'], partial
+          PY
+      - name: Run the frozen CPU development benchmark and independent replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          python -m research.scientific_review_v4 benchmark --split development \
+            --output "$RUNNER_TEMP/independent-review-evidence/development" \
+            > "$RUNNER_TEMP/independent-review-evidence/development-benchmark.log"
+          python - <<'PY'
+          import hashlib, json, os, subprocess, sys
+          from pathlib import Path
+          evidence = Path(os.environ['RUNNER_TEMP']) / 'independent-review-evidence'
+          results = json.loads((evidence / 'development/results.json').read_text())
+          assert results['status'] == 'COMPLETED' and results['split'] == 'development', results
+          assert results['authority'] is False and results['training_on_sources'] is False, results
+          assert results['cases'], results
+          for case in results['cases']:
+              run = case['review_v4_new_protocol']
+              assert run['status'] == 'COMPLETED' and run['valid_for_prospective_scoring'], run
+              assert run['independent_replay']['status'] == 'COMPLETED', run
+              assert run['check_statuses'].get('KERNEL_CHECKED_ABSTRACT_RESIDUAL_SEMANTICS') == 1, run
+              package = Path(run['package'])
+              digest = hashlib.sha256((package / 'manifest.json').read_bytes()).hexdigest()
+              completed = subprocess.run([sys.executable, '-m', 'research.scientific_review_v4', 'replay',
+                                          str(package), '--expected-manifest-sha256', digest],
+                                         capture_output=True, text=True, check=True, timeout=600)
+              replay = json.loads(completed.stdout)
+              (evidence / 'replay' / (case['project_id'] + '.json')).write_text(completed.stdout)
+              assert replay['status'] == 'REPLAYED' and replay['cache_used'] is False, replay
+              assert replay['authority'] is False, replay
+          measured = results['aggregate']['review_v4_new_protocol']
+          assert measured['failed_or_unreplayed_projects'] == 0, measured
+          assert measured['unsupported_promotions'] == 0, measured
+          assert measured['source_binding_failures'] == measured['reference_binding_failures'] == 0, measured
+          # The full-project v3 baseline may fail its older document limit.
+          # Its recorded failure stays in the benchmark and is not upgraded.
+          PY
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: independent-scientific-review-evidence
+          path: ${{ runner.temp }}/independent-review-evidence
+          if-no-files-found: error
+          retention-days: 14

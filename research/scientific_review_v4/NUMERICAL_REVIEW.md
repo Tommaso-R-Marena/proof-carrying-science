@@ -8,6 +8,10 @@ The retained run in [evidence/numeric-review.json](evidence/numeric-review.json)
 
 (approximately `10.203517309656634`). This calculation alone does not reexecute a model. Separately, reconstruction interprets the original closed SBML reactions, assignments, PEtab nominal parameters, conditions and observable formulas. Radau/BDF maximum observable difference is `5.690257305e-7`; the Radau/supplied-prediction maximum difference is `5.31543728e-7`. The reconstructed Radau decimal outputs have RSS approximately `10.203517528995794`. These are observed finite numerical comparisons, not certified error bounds.
 
+The `provided_prediction_agreement` field applies the declared binary64 criterion `abs(reconstructed - supplied) <= 1e-5 + 1e-5 * abs(supplied)` after full-identity joins. This is a chosen numerical correspondence tolerance, not a source-reported uncertainty or a certified error allowance. `REPRODUCED_COMPUTATION` records successful conditional reconstruction even when this separate field reports disagreement; `NOT_AVAILABLE` means no unique supplied simulation table was compared.
+
+Both residual summaries are unweighted sums of squared differences on the tabulated measurement scale. They do not evaluate PEtab noise formulas, noise weighting, observable transformations or a likelihood/objective function. An exact rational RSS from decimal solver outputs certifies arithmetic on those displayed decimals, not exact ODE trajectories, a fit optimum or statistical goodness of fit.
+
 Review repaired the following defects before final evaluation:
 
 - Initial assignments to parameters now reach reaction environments. Initial assignments and assignment rules resolve together, with every pending target excluded from seed values, so stale declarations cannot satisfy an unresolved dependency. Decimal initialization uses exact source fractions directly at precision 80 instead of passing species or compartment values through binary64 first.
