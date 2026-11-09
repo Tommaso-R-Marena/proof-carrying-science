@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           lean --version
-          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean research/writ_authority_v9/formal/DualBoundary.lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean research/writ_authority_v9/formal/AnchoredExecution.lean; then
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean research/writ_authority_v9/formal/DualBoundary.lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean research/writ_authority_v9/formal/AnchoredExecution.lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean; then
             echo "Forbidden proof escape hatch detected" >&2
             exit 1
           fi
@@ -41,4 +41,5 @@ jobs:
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/ProvenanceExample.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/DualBoundary.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean
-          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/AnchoredExecution.lean
+          lean -o "$RUNNER_TEMP/AnchoredExecution.olean" -D pp.universes=true research/writ_authority_v9/formal/AnchoredExecution.lean
+          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean
