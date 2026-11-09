@@ -1,0 +1,36 @@
+name: Writ authority research proof check
+on:
+  pull_request:
+    paths:
+      - 'research/writ_authority_v9/**'
+      - '.github/workflows/writ-authority-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  proof-and-reference:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Execute independent Python reference checker
+        run: |
+          python -m unittest -v research.writ_authority_v9.test_core
+          python -m research.writ_authority_v9.verify_bounds
+      - name: Install hash-pinned Lean 4.28.0
+        shell: bash
+        run: source scripts/activate_lean_428.sh
+      - name: Kernel-check exact abstract authority theorems
+        shell: bash
+        run: |
+          lean --version
+          if grep -nE '\\b(sorry|admit|axiom|unsafe|implemented_by)\\b' research/writ_authority_v9/formal/Authority.lean; then
+            echo "Forbidden proof escape hatch detected" >&2
+            exit 1
+          fi
+          lean research/writ_authority_v9/formal/Authority.lean
