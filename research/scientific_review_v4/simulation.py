@@ -320,13 +320,18 @@ def reconstruct(artifacts):
             try:
                 if 'simulation' in table(raw,p)[0]:provided.append(p)
             except (ValueError,UnicodeError):pass
-        difference=None
+        difference=None;agreement={'status':'NOT_AVAILABLE','absolute_tolerance':1e-5,'relative_tolerance':1e-5,
+            'scope':'Finite source-prediction correspondence only; not statistical goodness of fit or rigorous ODE error'}
         if len(provided)==1:
             peer=provided[0];comparison,_=join_predictions([{**p,'measurement':p['simulation']} for p in predictions['Radau']],table(artifacts[peer],peer)[1])
             difference=float(max(abs(x['measurement']-x['simulation']) for x in comparison));bindings.append(source(peer,artifacts[peer]))
+            disagreements=[i for i,x in enumerate(comparison) if abs(float(x['measurement']-x['simulation']))>1e-5+1e-5*abs(float(x['simulation']))]
+            agreement.update(status='DISAGREES_WITH_PROVIDED_PREDICTIONS' if disagreements else 'MATCHED_WITHIN_DECLARED_TOLERANCE',
+                compared_rows=len(comparison),disagreeing_row_indices=disagreements)
         return record('conditional_ode_reconstruction','REPRODUCED_COMPUTATION',bindings,{'conditions':details,'measurements':len(measurements),'solver_predictions':predictions,'residuals':stats,
             'maximum_observable_solver_difference':float(max(abs(p['measurement']-p['simulation']) for p in solver_pairs)),
-            'provided_prediction_max_absolute_difference':difference,'Python_SBML_refinement':'OPEN','global_ODE_error_bound':'NOT_ESTABLISHED',
+            'provided_prediction_max_absolute_difference':difference,'provided_prediction_agreement':agreement,
+            'Python_SBML_refinement':'OPEN','global_ODE_error_bound':'NOT_ESTABLISHED',
             'initialization_arithmetic':{'decimal_precision':80,'seed':'Exact source fractions; no binary64 round trip','rigorous_error_bound':'NOT_ESTABLISHED'},
             'assumptions':['Closed SBML L2V4 reactions, fixed three-dimensional compartments, acyclic initial/assignment expressions, no events/rate rules/functions/external parameter updates.',
               'PEtab nominal parameters, literal conditions and measurement-specific observable scale placeholders are interpreted according to the declared problem.',

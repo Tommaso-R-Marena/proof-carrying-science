@@ -12,6 +12,8 @@ from research.scientific_understanding_v2.rational_equivalence import compare
 from .grounding import bound_source, same_source, source_key
 
 VERSION = "scientific-review-grading-v4.0"
+SUPPORTED_CHECK_STATUSES = frozenset({"SOURCE_DECLARATION_CHECKED", "SOURCE_REPORT_CHECKED", "SCOPED_EQUATION_CHECKED",
+                                      "REPRODUCED_COMPUTATION", "REPRODUCED_ROUNDED_COMPUTATION", "KERNEL_CHECKED_ABSTRACT_RESIDUAL_SEMANTICS"})
 
 
 def value_equal(actual, expected, tolerance=0):
@@ -148,7 +150,8 @@ def grade(references, interpretation, artifacts, checks=(), inventory=None):
                          "scientific_authority_granted": False})
     supported = [x for x in outcomes if x["expected_status"] == "supported"]
     counter = [x for x in outcomes if x["expected_status"] != "supported"]
-    promotions = sum(c.get("authority") is not False or c.get("meaning_status", "OPEN") not in {"OPEN", "MEANING_REVIEW_REQUIRED", "CANDIDATE_INTERPRETATION"} for c in claims)
+    promotions = sum(c.get("authority") is not False or c.get("meaning_status") in {"CERTIFIED", "VERIFIED_SCIENTIFIC_MEANING", "SCIENTIFICALLY_VERIFIED"}
+                     or c.get("scientific_meaning", "OPEN") != "OPEN" for c in claims)
     promotions += sum(c.get("authority") is not False or c.get("scientific_meaning", "OPEN") != "OPEN" for c in checks)
     return {"protocol": VERSION, "supported_total": len(supported), "core_found": sum(x["core_found"] for x in supported),
             "typed_context_found": sum(x["typed_context_found"] for x in supported),
@@ -202,7 +205,7 @@ def grade_workflow(rubric, references, grading, interpretation, checks=(), *, an
                 # relevant task claims; its status alone cannot broaden scope.
                 valid = bool(receipts) and all(c is not None and c.get("authority") is False and c.get("scientific_meaning", "OPEN") == "OPEN"
                     and name in c.get("check_scopes", []) and set(required).issubset(set(c.get("annotation_ids", [])))
-                    and c.get("status") not in {"UNKNOWN", "REFUTED", None} for c in receipts)
+                    and c.get("status") in SUPPORTED_CHECK_STATUSES for c in receipts)
                 unknown = status == "unknown" and isinstance(slot.get("reason"), str) and bool(slot["reason"].strip())
                 scope_rows.append({"scope": name, "supported": status == "supported" and valid, "explicit_unknown": unknown})
             answer_status = str(answer.get("answer", answer.get("status", ""))).lower()

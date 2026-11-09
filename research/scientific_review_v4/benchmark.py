@@ -64,7 +64,8 @@ def software_freeze():
             "source_metadata_erratum_sha256": _sha(base / "source-freeze-errata.json"),
             "protocol_sha256": _sha(base / "reference/protocol.json"),
             "annotation_freeze_sha256": _sha(base / "reference/annotation-freeze.json"),
-            "reference_recovery_sha256": _sha(base / "reference/reference-recovery.json") if (base / "reference/reference-recovery.json").is_file() else None,
+            "annotation_freeze_recovered_sha256": _sha(base / "reference/annotation-freeze-recovered.json") if (base / "reference/annotation-freeze-recovered.json").is_file() else None,
+            "toolchain_sha256": _sha(base.parents[1] / "lean-toolchain"),
             "reference_schema": protocol.get("schema_version"), "version_pins": _versions(), "selection": SELECTION,
             "final_data_used_for_training_or_selection": False, "external_expert_validation": False, "authority": False}
 
@@ -96,22 +97,40 @@ def _source_inventory(root):
 
 
 def _retrieval(refs, inventory):
+    # The historical retrieval API has a smaller input bound than the v4
+    # intake. Admit all UTF-8 files inside its fixed per-file bound and report
+    # every excluded original file. Never truncate source text silently.
+    eligible, excluded = [], []
+    for artifact in inventory["artifacts"]:
+        if artifact["size"] > retrieval.MAX_SOURCE:
+            excluded.append({"path": artifact["path"], "reason": "historical retrieval per-file bound", "bytes": artifact["size"]})
+            continue
+        try:
+            Path(artifact["snapshot_path"]).read_bytes().decode("utf-8-sig")
+        except UnicodeError:
+            excluded.append({"path": artifact["path"], "reason": "not UTF-8 source text", "bytes": artifact["size"]})
+            continue
+        eligible.append(artifact)
+    selected = {"artifacts": eligible}
     result = []
     for mode in SELECTION["source_retrieval"]:
         started = time.monotonic()
         try:
-            measured = retrieval.evaluate_references(refs, inventory, mode=mode, pool="structural")
+            measured = retrieval.evaluate_references(refs, selected, mode=mode, pool="structural")
             result.append({"pool": "structural", "mode": mode, "status": "COMPLETED", "result": measured,
-                           "source_relevance_only": True, "scientific_meaning": "OPEN", "seconds": time.monotonic()-started})
+                           "source_relevance_only": True, "scientific_meaning": "OPEN", "seconds": time.monotonic()-started,
+                           "eligible_source_files": len(eligible), "excluded_sources": excluded})
         except Exception as exc:
             result.append({"pool": "structural", "mode": mode, "error": _error(exc), "seconds": time.monotonic()-started,
-                           "source_relevance_only": True, "scientific_meaning": "OPEN"})
+                           "source_relevance_only": True, "scientific_meaning": "OPEN",
+                           "eligible_source_files": len(eligible), "excluded_sources": excluded})
     return result
 
 
 def _pipeline_case(engine, source, packet, refs, rubric, artifacts, *, v4):
     started = time.monotonic()
-    row = {"package": str(packet), "review_path": str(packet / "review.html"), "status": "FAILED_UNKNOWN"}
+    row = {"package": str(packet), "review_path": str(packet / "review.html"), "status": "FAILED_UNKNOWN",
+           "checks": [], "numerical": [], "check_statuses": {}}
     try:
         summary = engine.run(source, packet, check=True, **({"formal_check": True} if v4 else {}))
         interpretation = _json(packet / ("interpretation.json" if v4 else "semantics.json"))
@@ -131,6 +150,8 @@ def _pipeline_case(engine, source, packet, refs, rubric, artifacts, *, v4):
         # Negative outcomes remain enumerable even when an interpreter fails.
         row["grading"] = grade(refs, {"claims": []}, artifacts)
         row["grading"]["execution_failed"] = True
+        row["grading"]["correct_counterprobe_abstentions"] = 0
+        row["grading"]["counterprobe_abstention_interpretation"] = "Execution failed; no abstention credit"
         row["workflow_utility"] = grade_workflow(rubric, refs, row["grading"], {"claims": []})
     row["inference_seconds"] = time.monotonic()-started
     # Replay every produced package independently. Missing/partial packages stay
@@ -140,10 +161,35 @@ def _pipeline_case(engine, source, packet, refs, rubric, artifacts, *, v4):
         row["independent_replay"] = {"status": "COMPLETED", "result": engine.replay(packet)}
     except Exception as exc:
         row["independent_replay"] = _error(exc)
+        row["status"] = "FAILED_UNKNOWN"
+    row["valid_for_prospective_scoring"] = row["status"] == "COMPLETED" and row["independent_replay"]["status"] == "COMPLETED"
+    row["review_exists"] = (packet / "review.html").is_file()
     row["replay_seconds"] = time.monotonic()-replay_start
     row["resource_usage"] = _measure()
     row["resource_usage"]["scope"] = "process lifetime high-water RSS; includes preceding cases, not an isolated per-case peak"
     return row
+
+
+def _aggregate(cases):
+    combined = {}
+    for key in ("baseline_v3_new_protocol", "review_v4_new_protocol"):
+        runs = [case[key] for case in cases]
+        totals = {name: sum(r["grading"].get(name, 0) for r in runs) for name in
+                  ("supported_total", "core_found", "typed_context_found", "annotated_probe_pairs", "typed_correct_probe_pairs",
+                   "counterprobes", "counterprobe_core_proposals", "counterprobe_full_context_proposals", "correct_counterprobe_abstentions",
+                   "unsupported_promotions", "source_binding_failures", "reference_binding_failures", "claims_generated")}
+        totals["core_recall"] = totals["core_found"]/totals["supported_total"] if totals["supported_total"] else None
+        totals["typed_context_recall"] = totals["typed_context_found"]/totals["supported_total"] if totals["supported_total"] else None
+        totals["annotated_probe_precision"] = totals["typed_correct_probe_pairs"]/totals["annotated_probe_pairs"] if totals["annotated_probe_pairs"] else None
+        totals["failed_or_unreplayed_projects"] = sum(not r["valid_for_prospective_scoring"] for r in runs)
+        totals["workflow_tasks"] = sum(r["workflow_utility"]["tasks"] for r in runs)
+        totals["workflow_correct"] = sum(r["workflow_utility"]["correct"] for r in runs)
+        totals["workflow_correct_informative_abstentions"] = sum(r["workflow_utility"]["correct_informative_abstentions"] for r in runs)
+        totals["inference_seconds"] = sum(r["inference_seconds"] for r in runs)
+        totals["replay_seconds"] = sum(r["replay_seconds"] for r in runs)
+        totals["metrics_include_failed_project_denominators"] = True
+        combined[key] = totals
+    return combined
 
 
 def run_benchmark(output, *, split="development", allow_final=False, source_root=None, reference_root=None, expected_software_sha256=None):
@@ -166,6 +212,12 @@ def run_benchmark(output, *, split="development", allow_final=False, source_root
     _write(output / "started.json", {"utc": datetime.now(timezone.utc).isoformat(), "split": split, "software_sha256": freeze_sha})
     started, cases = time.monotonic(), []
     try:
+        if reference_root is not None:
+            supplied = Path(reference_root)
+            for name, field in (("annotation-freeze.json", "annotation_freeze_sha256"),
+                                ("annotation-freeze-recovered.json", "annotation_freeze_recovered_sha256")):
+                if freeze.get(field) is not None and _sha(supplied / name) != freeze[field]:
+                    raise ValueError("reference manifest differs from pre-run software freeze: " + name)
         refs = load_reference(split, allow_final=allow_final, reference_root=reference_root)
         rubric = load_workflow_rubric(split, allow_final=allow_final, reference_root=reference_root)
         protocol = load_protocol(reference_root=reference_root)
@@ -193,6 +245,7 @@ def run_benchmark(output, *, split="development", allow_final=False, source_root
                 raise ValueError("runtime context changed while processing case; retained failure, no prospective score")
         result = {"schema": SCHEMA, "status": "COMPLETED", "split": split, "software_sha256": freeze_sha,
                   "source_freeze_sha256": FROZEN_SHA256, "cases": cases, "seconds": time.monotonic()-started,
+                  "aggregate": _aggregate(cases),
                   **_measure(), "protocol": protocol, "authority": False, "external_expert_validation": False,
                   "training_on_sources": False, "test_set_reused_for_development": split == "development",
                   "interpretation_scope": "Selected independent source declarations and findings; not arbitrary paper understanding",

@@ -61,7 +61,7 @@ def test_authorized_checks_replay_without_cache(tmp_path):
     assert result['v4_checks_independently_recomputed'] == len(checks)
 
 
-@pytest.mark.parametrize('mutation', ['unknown_status', 'authority', 'missing', 'fake_positive'])
+@pytest.mark.parametrize('mutation', ['unknown_status', 'authority', 'missing', 'fake_positive', 'nested_timing'])
 def test_resealed_check_tampering_rejected_even_integrity_only(tmp_path, mutation):
     output = tmp_path / 'evidence'
     run(project(tmp_path), output, check=True)
@@ -72,6 +72,8 @@ def test_resealed_check_tampering_rejected_even_integrity_only(tmp_path, mutatio
         checks[0]['authority'] = True
     elif mutation == 'missing':
         checks.pop()
+    elif mutation == 'nested_timing':
+        next(c for c in checks if isinstance(c.get('evidence'), dict))['evidence']['seconds'] = 123
     else:
         record = next(c for c in checks if c['status'] == 'UNKNOWN')
         record['status'] = 'REPRODUCED_COMPUTATION'
@@ -150,9 +152,9 @@ def test_large_actual_pdf_derived_source_stays_unverified(tmp_path):
     assert replay(output)['status'] == 'REPLAYED'
 
 
-@pytest.mark.skipif(not (shutil.which('lean') or Path('/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean').is_file()), reason='actual pinned Lean unavailable')
 def test_actual_nine_theorem_formal_receipt_and_replay(tmp_path):
     from research.scientific_review_v4.review import classify
+    assert shutil.which('lean') or Path('/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean').is_file(), 'The required Lean 4.28 toolchain must be installed'
     output = tmp_path / 'evidence'
     run(project(tmp_path), output, check=True, formal_check=True)
     checks = json.loads((output / 'checks.json').read_text())
