@@ -22,7 +22,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check --only-binary=:all: cryptography==46.0.4
       - name: Execute independent Python reference checker
         run: |
-          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace research.writ_authority_v9.test_witness research.writ_authority_v9.test_source_witness research.writ_authority_v9.test_effect_model research.writ_authority_v9.test_destination_reference
+          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace research.writ_authority_v9.test_witness research.writ_authority_v9.test_source_witness research.writ_authority_v9.test_effect_model research.writ_authority_v9.test_destination_reference research.writ_authority_v9.test_retention_reference
           python -m research.writ_authority_v9.verify_bounds
       - name: Install hash-pinned Lean 4.28.0
         shell: bash
