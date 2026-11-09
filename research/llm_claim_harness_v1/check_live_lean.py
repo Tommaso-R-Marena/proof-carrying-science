@@ -16,7 +16,8 @@ from .table_evidence import run_table
 from .replay_table import replay_table
 from .finite_universe import run_finite_universe, replay_finite_universe
 from .byte_bridge import run_byte_bridge, replay_byte_bridge
-from .core import canonical
+from .csv_integrated_v8 import run_integrated, replay_integrated
+from .core import canonical, sha
 
 
 HERE = Path(__file__).parent
@@ -131,7 +132,54 @@ def main() -> int:
     if negative["status"] != "KERNEL_REJECTED" or negative["kernel_checked"]:
         print("FAIL: forged decimal unexpectedly accepted by Lean:", negative["status"], file=sys.stderr)
         return 1
-    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal, 5 typed, 2 evidence-linked, 4 CSV-linked, 2 finite-universe and 1 independent byte-grounding proof; 7 fresh replays; forged numeric expectation rejected")
+    integrated = run_integrated(table_source, table_manifest, lean=lean,
+                                expected_data_sha256=table_source.digest,
+                                expected_manifest_sha256=sha(table_manifest))
+    if (integrated["formal_status"] != "INTEGRATED_CSV_PROVED"
+            or not integrated["kernel_checked"]
+            or [c["expected_relation_by_external_python"] for c in integrated["claims"]] != [False, True]
+            or integrated["claims"][0]["first_counterexample_row"] != 2):
+        print("FAIL: integrated source/structure/arithmetic Lean proof:",
+              integrated.get("lean_diagnostic", integrated["formal_status"]), file=sys.stderr)
+        return 1
+    replay_integrated_status = replay_integrated(
+        table_source, table_manifest, canonical(integrated) + b"\n", lean=lean,
+        expected_data_sha256=table_source.digest, expected_manifest_sha256=sha(table_manifest))
+    if replay_integrated_status["status"] != "REPLAYED_INTEGRATED_CSV":
+        print("FAIL: fresh integrated Lean receipt replay:", replay_integrated_status, file=sys.stderr)
+        return 1
+    # Negative control A: falsely claim that every row satisfies the first relation.
+    integrated_source = integrated["lean_source"]
+    original_goal = "(pcsAllChecks pcsCSVClaim_0) = some false"
+    changed_goal = "(pcsAllChecks pcsCSVClaim_0) = some true"
+    if original_goal not in integrated_source:
+        print("FAIL: missing integrated falsification target", file=sys.stderr)
+        return 1
+    forged_goal = integrated_source.replace(original_goal, changed_goal, 1)
+    if lean._check_generated(forged_goal, True, "INTEGRATED_CSV")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged integrated claim unexpectedly accepted by Lean", file=sys.stderr)
+        return 1
+    # Negative control B: forge the declared CSV header while retaining bytes.
+    original_header = "pcsCSVRecords.head? = some ([[109,97,115,115]"
+    altered_header = "pcsCSVRecords.head? = some ([[110,97,115,115]"
+    if original_header not in integrated_source:
+        print("FAIL: missing original header theorem", file=sys.stderr)
+        return 1
+    forged_header = integrated_source.replace(original_header, altered_header, 1)
+    if lean._check_generated(forged_header, True, "INTEGRATED_CSV")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged header unexpectedly accepted by Lean", file=sys.stderr)
+        return 1
+    # Negative control C: falsely claim the submitted CSV has one fewer row.
+    original_size = "pcsCSVRecords.length = 3"
+    if original_size not in integrated_source:
+        print("FAIL: missing complete-row theorem", file=sys.stderr)
+        return 1
+    forged_size = integrated_source.replace(original_size, "pcsCSVRecords.length = 2", 1)
+    if lean._check_generated(forged_size, True, "INTEGRATED_CSV")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged row count unexpectedly accepted by Lean", file=sys.stderr)
+        return 1
+    print("PASS: Lean 4.28.0 checked previous 19 scoped proof checks and the new integrated CSV certificate; "
+          "8 fresh replays; forged number, universal conclusion, header and row count all rejected")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 

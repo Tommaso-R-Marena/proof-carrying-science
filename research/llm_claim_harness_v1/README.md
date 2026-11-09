@@ -484,3 +484,49 @@ source interpretation, causal inference or empirical validity.
 
 This addition is a narrowed trust assumption and a useful architectural advance,
 not proof of novel algorithmic superiority or general scientific understanding.
+
+## v8: One-source integrated CSV certificate (experimental)
+
+`csv_integrated_v8.py` adds a **single Lean 4.28.0 proof script** that reads a
+strict CSV from exact embedded ASCII bytes, splits **every** source line and
+column, checks the header, complete row count, per-record column width and
+numeric parse of every cell, and evaluates all typed all-row predicates over
+those **Lean-decoded** numbers with their manifest-supplied rational SI scales.
+An incorrect universal claim gets a checked counterexample at its first failing
+row. No previously Python-computed CSV cell magnitude is used as a binding leaf
+in the generated Lean arithmetic. This composes the independent byte checks and
+finite-universe arithmetic in a *single* proof obligation rather than trusting
+Python to connect two separate certificates.
+
+From the repository root, with Lean 4.28.0 on `PATH`:
+
+```bash
+python -m research.llm_claim_harness_v1.csv_integrated_v8 \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --out /tmp/pcs-v8-integrated-receipt.json
+```
+
+Use `--expected-data-sha256` and `--expected-manifest-sha256` with independently
+retained hashes to reject cropped, reordered, substituted or edited input before
+proof generation. These are **caller-supplied, unauthenticated** commitments;
+they do not establish original dataset completeness. To check a delivered receipt
+again, add `--receipt /path/to/original-receipt.json` with the **same** pins.
+Fresh replay regenerates the whole Lean script and requires an exact canonical
+receipt match and successful kernel re-execution.
+
+**Boundaries:** this supports at most 512 source bytes, 32 numeric cells,
+16 records, and the reviewed CSV template's narrow rational typed grammar.
+The entire received CSV is the finite universe—not all observations in a real
+research study. CSV custody, template scientific meaning, correctness of the
+Python-to-Lean generator, approved unit semantics, source licensing, and
+original sample completeness remain unproved. A verified equation is not
+scientific validation. No LLM output is executed, no API key is required, and
+this script does not modify PCS v0.6 production authority. A mock Lean checker
+in offline tests is **not** proof evidence; rely on hosted Lean CI or your own
+pinned Lean 4.28.0 run to establish actual kernel checking.
+
+The hosted smoke check runs three intentional negative controls against the
+**actual Lean executable**: forged universal success, forged header, and forged
+row count must all fail. This is a falsification exercise, not a general proof
+of the generator or CSV parser's semantic refinement to a standard RFC.
