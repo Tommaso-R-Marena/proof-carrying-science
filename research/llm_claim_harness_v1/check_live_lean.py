@@ -17,6 +17,7 @@ from .replay_table import replay_table
 from .finite_universe import run_finite_universe, replay_finite_universe
 from .byte_bridge import run_byte_bridge, replay_byte_bridge
 from .csv_integrated_v8 import run_integrated, replay_integrated
+from .ols_integrated_v9 import run_ols, replay_ols
 from .core import canonical, sha
 
 
@@ -178,8 +179,45 @@ def main() -> int:
     if lean._check_generated(forged_size, True, "INTEGRATED_CSV")["status"] != "KERNEL_REJECTED":
         print("FAIL: forged row count unexpectedly accepted by Lean", file=sys.stderr)
         return 1
-    print("PASS: Lean 4.28.0 checked previous 19 scoped proof checks and the new integrated CSV certificate; "
-          "8 fresh replays; forged number, universal conclusion, header and row count all rejected")
+    # V9: complete byte-parsed OLS regression: fit coefficients and SSE are
+    # recomputed inside Lean from all rows, not embedded Python coefficients.
+    ols_source = Source.from_bytes((HERE / "fixtures/ols_data.csv").read_bytes())
+    ols_manifest = (HERE / "fixtures/ols_table_spec.json").read_bytes()
+    ols_proposal = (HERE / "fixtures/ols_proposal.json").read_bytes()
+    ols = run_ols(ols_source, ols_manifest, ols_proposal, lean=lean,
+                  expected_data_sha256=ols_source.digest,
+                  expected_manifest_sha256=sha(ols_manifest),
+                  expected_proposal_sha256=sha(ols_proposal))
+    if (ols["formal_status"] != "OLS_INTEGRATED_PROVED" or not ols["kernel_checked"]
+            or [m["computed_exact_si_by_external_python"] for m in ols["metrics"]] != ["2", "1", "0"]
+            or not all(m["candidate_matches_by_external_python"] for m in ols["metrics"])):
+        print("FAIL: v9 integrated exact OLS verification incomplete:",
+              ols.get("lean_diagnostic", ols["formal_status"]), file=sys.stderr)
+        return 1
+    ols_replay = replay_ols(ols_source, ols_manifest, ols_proposal, canonical(ols) + b"\n",
+                            lean=lean, expected_data_sha256=ols_source.digest,
+                            expected_manifest_sha256=sha(ols_manifest),
+                            expected_proposal_sha256=sha(ols_proposal))
+    if ols_replay["status"] != "REPLAYED_INTEGRATED_OLS":
+        print("FAIL: v9 fresh exact OLS receipt replay:", ols_replay, file=sys.stderr)
+        return 1
+    # Negative control: forge claimed slope equality with original CSV unchanged.
+    ols_code = ols["lean_source"]
+    actual = "pcsOLSMetric pcsOLSOriginalFit 0 ((2 : Rat) / (1 : Rat)) = some true"
+    forged = "pcsOLSMetric pcsOLSOriginalFit 0 ((3 : Rat) / (1 : Rat)) = some true"
+    if actual not in ols_code or lean._check_generated(ols_code.replace(actual, forged, 1), True,
+                                                        "OLS_INTEGRATED")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged v9 reported slope was not rejected by Lean", file=sys.stderr)
+        return 1
+    # Negative control: a fraudulent zero residual on perturbed data must fail.
+    changed_data = ols_source.raw.replace(b"300,7", b"300,8")
+    changed = run_ols(Source.from_bytes(changed_data), ols_manifest, ols_proposal, lean=lean)
+    if not changed["kernel_checked"] or changed["metrics"][2]["candidate_matches_by_external_python"]:
+        print("FAIL: v9 did not refute false zero SSE under changed dataset", file=sys.stderr)
+        return 1
+    print("PASS: Lean 4.28.0 checked previous 20 scoped proof checks and new exact OLS "
+          "(3 reported metrics + full fit), 9 fresh replays; forged coefficient and "
+          "source-perturbed residual controls rejected")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 

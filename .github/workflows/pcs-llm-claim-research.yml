@@ -24,5 +24,5 @@ jobs:
       - name: Install checksum-pinned Lean 4.28.0
         shell: bash
         run: source scripts/activate_lean_428.sh
-      - name: Check generated arithmetic, evidence and CSV propositions in actual Lean
+      - name: Check generated arithmetic, CSV and exact OLS propositions in actual Lean
         run: python -m research.llm_claim_harness_v1.check_live_lean

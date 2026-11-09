@@ -530,3 +530,53 @@ The hosted smoke check runs three intentional negative controls against the
 **actual Lean executable**: forged universal success, forged header, and forged
 row count must all fail. This is a falsification exercise, not a general proof
 of the generator or CSV parser's semantic refinement to a standard RFC.
+
+## V9 experimental: exact least-squares regression over source bytes
+
+`ols_integrated_v9.py` extends the v8 single-script source-to-Lean construction
+from rowwise equations to an **ordinary least squares affine regression**. It
+parses every submitted strict CSV row inside Lean, reuses the bounded decimal
+and header/shape checkers, applies manifest-declared rational unit scales, then
+independently recomputes the exact fit `y = slope*x + intercept` and SSE from the
+raw values. It proves or refutes three *reported exact values* and checks an
+independent candidate fit equality. This is arithmetic reproducibility, not
+proof of inferential/statistical assumptions, model adequacy or scientific truth.
+
+Example from repository root:
+
+```bash
+python -m research.llm_claim_harness_v1.ols_integrated_v9 \
+  --source research/llm_claim_harness_v1/fixtures/ols_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/ols_table_spec.json \
+  --ols-proposal research/llm_claim_harness_v1/fixtures/ols_proposal.json \
+  --out /tmp/pcs-ols-v9-receipt.json
+```
+
+The demo uses four observations in centimetres and metres. The SI-unit fit
+has slope `2`, intercept `1`, SSE `0`. The exact `pcs-ols-integrated-v9-research`
+proposal (a separate untrusted artifact) specifies the x/y column identifiers
+and three reported numerical strings. A dishonest reported slope generates a
+Lean-checked **refutation** rather than being silently replaced by the fitted
+slope. A singular design matrix (all x-values equal), unsupported data, unsafe
+syntax, missing evidence, or a Lean failure must not create a positive receipt.
+
+Limits: 2–8 observations; existing v8 512-byte CSV / 32-cell bounds; exact
+ASCII decimal data; two distinct named columns from the reviewed table schema;
+closed finite rational regression; exactly three reported scalar metrics;
+no LLM-selected subset of records. Source/manifest/proposal SHA-256 commitments
+can be pinned externally. Units and their physical interpretation remain from
+reviewer-supplied manifest, and proof generation is not a verified compiler.
+
+**Open trust/meaning boundaries:** external file custody, the identity of the
+scientific study population, the fit method and variable roles, rounding and
+measurement uncertainty, autocorrelation, homoscedasticity, statistical
+significance, causal claims, and whether an LLM matched an original paper's
+reported parameters to the right data. This research engine deliberately returns
+`semantic_fidelity=UNREVIEWED` and `scientific_status=NOT_ASSESSED` even when Lean
+checks every generated numeric obligation. PR #203's richer source semantics
+remain unmerged; importing that branch or its reference labels here would risk
+misstating evidence and contaminating a prospective evaluation.
+
+Hosted research CI runs `check_live_lean.py`, including v9 positive controls,
+recertification, a forged coefficient, and a changed-data SSE negative control.
+Neither a fake test checker nor a model suggestion counts as kernel evidence.
