@@ -363,3 +363,29 @@ to verify arbitrary CSV formats, causal claims, model fit or research papers.
 It does not modify PCS production validity or accept model-generated proof
 source. Hosted Lean smoke tests include four tabular proof obligations in
 addition to the earlier twelve.
+
+
+### Rechecking a delivered v5 CSV receipt
+
+For a locally generated receipt, rerun the exact source bytes, manifest, and
+all proof obligations **with installed Lean 4.28.0**. The original receipt's
+`kernel_checked` flags are not trusted; a source/hash mismatch, altered proof
+source, modified row, noncanonical receipt, missing Lean, or incomplete replay
+must fail closed:
+
+```bash
+python -m research.llm_claim_harness_v1.replay_table \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --receipt /tmp/pcs-table-v5.json --out /tmp/pcs-table-replay-v5.json \
+  --lean lean
+```
+
+Exit 0 and `REPLAYED_MATHEMATICAL_RECEIPT` only when the new result is
+byte-equivalent after canonical JSON parsing **and all rows pass fresh Lean**.
+Missing Lean returns exit 2 (`KERNEL_UNAVAILABLE_OR_REJECTED`) rather than
+trusting a stored success. The source and manifest **must be obtained through a
+trusted independent channel**; otherwise an attacker can replace all three.
+This replay uses the *same Python implementation* as the producer and is **not
+an independent semantics implementation or scientific certification**. This is
+an experimental local result, not a signed PCS v0.6 package/receipt.

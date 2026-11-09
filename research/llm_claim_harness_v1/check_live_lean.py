@@ -13,6 +13,8 @@ from .core import Source
 from .pipeline import LeanChecker, run, run_arithmetic, run_typed
 from .evidence import discover_evidence, run_evidence
 from .table_evidence import run_table
+from .replay_table import replay_table
+from .core import canonical
 
 
 HERE = Path(__file__).parent
@@ -87,7 +89,11 @@ def main() -> int:
            for c in table_receipt["claims"]):
         print("FAIL: table math cannot claim scientific validation", file=sys.stderr)
         return 1
-    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal, 5 typed, 2 evidence-linked and 4 CSV-linked claims")
+    replay = replay_table(table_source, table_manifest, canonical(table_receipt) + b"\n", lean=lean)
+    if replay["status"] != "REPLAYED_MATHEMATICAL_RECEIPT" or replay["kernel_replayed"] != 4:
+        print("FAIL: independent-run receipt replay did not regenerate all checked claims:", replay, file=sys.stderr)
+        return 1
+    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal, 5 typed, 2 evidence-linked and 4 CSV-linked claims; 4 CSV claims freshly replayed")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 
