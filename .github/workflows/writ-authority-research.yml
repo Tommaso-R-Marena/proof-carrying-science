@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12.14'
       - name: Execute independent Python reference checker
         run: |
-          python -m unittest -v research.writ_authority_v9.test_core
+          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace
           python -m research.writ_authority_v9.verify_bounds
       - name: Install hash-pinned Lean 4.28.0
         shell: bash
@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           lean --version
-          if grep -nE '\\b(sorry|admit|axiom|unsafe|implemented_by)\\b' research/writ_authority_v9/formal/Authority.lean; then
+          if grep -nE '(^|[^[:alpha:]_])(sorry|admit|axiom|unsafe|implemented_by)([^[:alpha:]_]|$)' research/writ_authority_v9/formal/Authority.lean; then
             echo "Forbidden proof escape hatch detected" >&2
             exit 1
           fi
