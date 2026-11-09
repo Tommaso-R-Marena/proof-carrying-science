@@ -124,6 +124,11 @@ class LeanChecker:
             output["kernel_checked"] = True
         else:
             output["status"] = "KERNEL_REJECTED"
+            # This is generated-only arithmetic source. Diagnostic bytes contain
+            # no provider prompts, API credentials, or external research text.
+            output["lean_diagnostic"] = (
+                (result.stderr + b"\n" + result.stdout).decode("utf-8", errors="replace")[:1800]
+            )
         return output
 
 

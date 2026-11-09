@@ -25,6 +25,9 @@ def main() -> int:
     statuses = [c["status"] for c in receipt["claims"]]
     if statuses != ["ARITH_EXPR_PROVED", "ARITH_EXPR_PROVED", "ARITH_EXPR_REFUTED"]:
         print("FAIL: arithmetic Lean verification incomplete:", statuses, file=sys.stderr)
+        for c in receipt["claims"]:
+            if c["status"] != "ARITH_EXPR_PROVED" and c["status"] != "ARITH_EXPR_REFUTED":
+                print("Lean diagnostic:", c.get("lean_diagnostic", "not available"), file=sys.stderr)
         return 1
     if receipt["counts"]["kernel_checked"] != 3:
         print("FAIL: not all arithmetic examples were kernel checked", file=sys.stderr)
