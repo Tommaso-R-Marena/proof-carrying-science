@@ -97,3 +97,11 @@ python -m research.scientific_review_v4 benchmark --split development \
 ```
 
 The final evaluation interface additionally requires `--split final --allow-final --software-sha256` with the digest of the prospective software freeze. `--source-root` and `--reference-root` select explicit corpus locations; they do not bypass frozen identity checks. Keep final materials out of development, training, selection and retuning. Numerical and benchmark results belong to their retained run reports; this workflow guide makes no unmeasured performance claim.
+
+## Primary evidence and later engineering fixes
+
+[REPORT.md](REPORT.md) gives the actual complete-study results and limitations. The primary prospective experiment used frozen commit `f8d9802587e0a2fe9a254ca3b8b8bc41d7f0bf48`, whose runtime matches the pre-final software freeze. The final materials are now exposed; reruns are reproductions, not new held-out experiments. The primary packet archives and exact hashes are listed in [experiment-index.json](evidence/experiment-index.json). Check out that frozen commit, retain the recorded dependency/toolchain context and extract the archive to replay its v4 directories. Context drift must reject the old package; do not edit its receipts or manifests to make it replay under newer code.
+
+A subsequent resource-dispatch fix charges each raw source check its entire source length and stops dispatching checks once a fixed 32 MiB project budget would be exceeded. Every deferred check remains explicitly `UNKNOWN` with its source binding, reason and budget evidence. The full interpretation is retained. The summary's `source_check_budget` distinguishes requested/dispatched/deferred checks and bytes; workflow, numerical and Lean checks have separate execution. This improves bounded availability, not scientific understanding, and does not increase the worker timeout or manufacture positive verdicts. Its exposed-case results are labeled posthoc, leaving the original Smith timeout and final metrics unchanged.
+
+PDF extraction requires the trusted `/usr/bin/pdftotext` executable. On Ubuntu, install it with `sudo apt-get install --no-install-recommends poppler-utils` before reviewing papers. An unavailable adapter remains an extraction error rather than successful scientific interpretation.
