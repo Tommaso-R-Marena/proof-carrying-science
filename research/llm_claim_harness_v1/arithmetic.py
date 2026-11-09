@@ -241,7 +241,7 @@ def make_arithmetic_lean_source(c: ArithmeticClaim) -> tuple[str, bool]:
         expr = f"(¬ {expr})"
     return ("-- PCS research only: Lean checks the rational expression AST, not source semantics.\n"
             "-- No LLM-provided code, custom tactics, axioms, or admitted premises.\n"
-            f"example : {expr} := by decide\n"), true
+            f"example : {expr} := by decide +kernel\n"), true
 
 
 ARITH_SCHEMA = {

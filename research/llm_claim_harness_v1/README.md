@@ -116,7 +116,7 @@ receiver independently parses the span with an explicitly limited grammar:
 - Lean source **retains the full arithmetic expression AST in `Rat`** rather than
   substituting an externally computed final number. Lean recomputes the
   expression and checks either the submitted relation or its explicit negation
-  using `by decide`. The Python parser, token meaning and source context remain
+  using `by decide +kernel` (no native evaluation or new axiom). The Python parser, token meaning and source context remain
   external to the Lean theorem and must not be advertised as verified.
 
 Reproduce offline without external credentials:
