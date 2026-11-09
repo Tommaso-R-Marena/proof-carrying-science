@@ -41,5 +41,5 @@ jobs:
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/ProvenanceExample.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/DualBoundary.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean
-          lean -o "$RUNNER_TEMP/AnchoredExecution.olean" -D pp.universes=true research/writ_authority_v9/formal/AnchoredExecution.lean
+          LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/AnchoredExecution.olean" research/writ_authority_v9/formal/AnchoredExecution.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean
