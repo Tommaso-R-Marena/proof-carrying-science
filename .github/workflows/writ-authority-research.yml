@@ -29,8 +29,9 @@ jobs:
         shell: bash
         run: |
           lean --version
-          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean; then
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean; then
             echo "Forbidden proof escape hatch detected" >&2
             exit 1
           fi
           lean research/writ_authority_v9/formal/Authority.lean
+          lean research/writ_authority_v9/formal/Witness.lean
