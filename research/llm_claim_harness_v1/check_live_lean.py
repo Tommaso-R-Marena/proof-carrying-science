@@ -18,6 +18,7 @@ from .finite_universe import run_finite_universe, replay_finite_universe
 from .byte_bridge import run_byte_bridge, replay_byte_bridge
 from .csv_integrated_v8 import run_integrated, replay_integrated
 from .ols_integrated_v9 import run_ols, replay_ols
+from .ols_note_v9 import run_ols_note, replay_ols_note, parse_ols_note
 from .core import canonical, sha
 
 
@@ -215,9 +216,43 @@ def main() -> int:
     if not changed["kernel_checked"] or changed["metrics"][2]["candidate_matches_by_external_python"]:
         print("FAIL: v9 did not refute false zero SSE under changed dataset", file=sys.stderr)
         return 1
+    # V9.1: report-note numeric bytes and original CSV bytes in ONE Lean proof.
+    report_note = Source.from_bytes((HERE / "fixtures/ols_report_note.txt").read_bytes())
+    note = run_ols_note(ols_source, ols_manifest, report_note, lean=lean,
+                        expected_data_sha256=ols_source.digest,
+                        expected_manifest_sha256=sha(ols_manifest),
+                        expected_note_sha256=report_note.digest)
+    if (note["formal_status"] != "OLS_NOTE_PROVED" or not note["kernel_checked"]
+            or [x["reported_quote"] for x in note["reported_metric_sources"]] != ["2", "1", "0"]):
+        print("FAIL: v9.1 note/CVS integrated Lean proof failed:",
+              note.get("lean_diagnostic", note["formal_status"]), file=sys.stderr)
+        return 1
+    note_replay = replay_ols_note(ols_source, ols_manifest, report_note, canonical(note)+b"\n",
+                                  lean=lean, expected_data_sha256=ols_source.digest,
+                                  expected_manifest_sha256=sha(ols_manifest),
+                                  expected_note_sha256=report_note.digest)
+    if note_replay["status"] != "REPLAYED_OLS_NOTE":
+        print("FAIL: v9.1 note fresh proof replay failed:", note_replay, file=sys.stderr)
+        return 1
+    note_parsed = parse_ols_note(report_note, ols_source, ols_manifest)
+    start, end = note_parsed.numeric_spans[0]
+    original_expr = f"pcsByteSlice pcsOLSReportRaw {start} {end}"
+    forged_expr = f"pcsByteSlice pcsOLSReportRaw {start - 1} {end}"
+    if original_expr not in note["lean_source"] or lean._check_generated(
+            note["lean_source"].replace(original_expr, forged_expr, 1), True,
+            "OLS_NOTE")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged note byte offset unexpectedly accepted by Lean", file=sys.stderr)
+        return 1
+    changed_note = Source.from_bytes(report_note.raw.replace(b"slope=2\n", b"slope=3\n"))
+    changed_claim = run_ols_note(ols_source, ols_manifest, changed_note, lean=lean)
+    if (not changed_claim["kernel_checked"] or
+            changed_claim["reported_metric_sources"][0]["candidate_matches_by_external_python"]):
+        print("FAIL: modified report-note coefficient was not formally refuted", file=sys.stderr)
+        return 1
     print("PASS: Lean 4.28.0 checked previous 20 scoped proof checks and new exact OLS "
-          "(3 reported metrics + full fit), 9 fresh replays; forged coefficient and "
-          "source-perturbed residual controls rejected")
+          "(3 reported metrics + full fit) plus note-byte unified verification; "
+          "10 fresh replays; forged coefficient, report offset and changed-data "
+          "residual controls rejected")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 

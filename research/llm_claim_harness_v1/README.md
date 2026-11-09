@@ -580,3 +580,36 @@ misstating evidence and contaminating a prospective evaluation.
 Hosted research CI runs `check_live_lean.py`, including v9 positive controls,
 recertification, a forged coefficient, and a changed-data SSE negative control.
 Neither a fake test checker nor a model suggestion counts as kernel evidence.
+
+### V9.1 source-report-note bridge (restricted author/reviewer artifact)
+
+The optional `ols_note_v9.py` input is a separate, UTF-8/ASCII, **author-
+or reviewer-controlled** `PCS-OLS-NOTE/1` claim artifact, requiring independent
+review before anyone may rely on it as a faithful paper interpretation. Its exact eight-line grammar includes the SHA-256 of the whole
+CSV and table manifest, x/y column names, and *source-authored* slope,
+intercept and SSE literals. The parser rejects duplicate lines, reordered
+fields, implicit claims, confidence intervals, approximate claims and any
+other unsupported prose. Unlike an LLM-generated free-form interpretation,
+this strict format can be re-parsed deterministically.
+
+The **same Lean file** re-parses the original CSV, recomputes exact OLS, and
+parses the note's numerical claims directly from original note bytes with
+`pcsAsciiDecimal (pcsByteSlice ...)`. A model cannot silently substitute a
+numeric literal in the final formal check. A changed note value yields a
+Lean-checked refutation of that exact declared numeric result. The separate
+Python note-to-dataset SHA agreement, x/y role interpretation and source
+custody remain named external trust boundaries.
+
+```bash
+python -m research.llm_claim_harness_v1.ols_note_v9 \
+  --source research/llm_claim_harness_v1/fixtures/ols_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/ols_table_spec.json \
+  --report-note research/llm_claim_harness_v1/fixtures/ols_report_note.txt \
+  --out /tmp/pcs-note-v9-receipt.json
+```
+
+This is **not automatic interpretation of arbitrary research papers**. The
+strict note is an intermediate, researcher/reviewer-authored object; a model
+could propose draft note content for human checking, but a correct kernel proof
+does not validate the original paper's meaning or authenticate the note author.
+No general scientific-validity status or production PCS authority is granted.
