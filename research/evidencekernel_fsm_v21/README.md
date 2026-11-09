@@ -47,10 +47,12 @@ explicitly rejects dependent candidate draws. It is not a bypass of v20.
 
 ## Reproduction, scope and limits
 
-The reference Python implementation is in kernel.py. The full separately
-packaged v21 research overlay additionally contains an independently
-implemented Node.js verifier, signed-*free* synthetic demonstration, and
-exhaustive finite-model and differential tests.
+The reference Python implementation is in kernel.py. The separate independent.js
+recalculates the complete finite-state distribution, conditional right-CDF,
+composite weak-null p-value and lower ATE bound using BigInt fractions.
+The research tree includes exhaustive finite-model and cross-language tests.
+The downloadable local research overlay additionally contains a synthetic
+four-attempt demonstration and further bounded test cases.
 
 Finite caps: n <= 8, states <= 8, attempts <= 64. Rational arithmetic is
 exact and no new algorithm is claimed to provide general large-n efficiency.
