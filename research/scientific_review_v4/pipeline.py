@@ -29,6 +29,10 @@ FORMAT = "pcs-independent-scientific-review-package-v4"
 MEMBERS = frozenset({"interpretation.json", "checks.json", "correspondence.json", "summary.json", "context.json", "review.html"})
 MAX_REQUEST = 96 * 1024**2
 MAX_RESPONSE = 64 * 1024**2
+# Posthoc availability profile, introduced after the immutable primary final
+# run exposed repeated whole-XML parsing in the unchanged source checker.
+SOURCE_CHECK_REPARSE_BUDGET_BYTES = 32 * 1024**2
+SOURCE_CHECK_DISPATCH_POLICY = "pcs-source-check-reparse-budget-v4-posthoc-availability-1"
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 STATUSES = frozenset({"UNKNOWN", "REFUTED", "SOURCE_DECLARATION_CHECKED", "SOURCE_REPORT_CHECKED", "SCOPED_EQUATION_CHECKED", "REPRODUCED_COMPUTATION", "REPRODUCED_ROUNDED_COMPUTATION", "KERNEL_CHECKED_ABSTRACT_RESIDUAL_SEMANTICS"})
 
@@ -38,6 +42,7 @@ def context():
     return {"schema": "pcs-independent-scientific-review-context-v4", "parent": previous.context(),
             "sources": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.glob("*.py"))},
             "formal": {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root / "formal").rglob("*.lean"))},
+            "source_check_dispatch": source_check_policy(),
             "authority": False, "training_policy": "DENIED_BY_DEFAULT"}
 
 
@@ -68,10 +73,69 @@ def _portable(inventory):
     return {**inventory, "artifacts": [{k: v for k, v in a.items() if k != "snapshot_path"} for a in inventory["artifacts"]]}
 
 
+def source_check_policy():
+    return {"schema": SOURCE_CHECK_DISPATCH_POLICY, "posthoc_after_primary_final": True,
+            "project_reparse_byte_limit": SOURCE_CHECK_REPARSE_BUDGET_BYTES,
+            "cost": "Full raw source byte length charged for each dispatched independent claim check",
+            "ordering": "Deterministic interpretation order; a deferred check does not block smaller later sources",
+            "scope": "Resource dispatch only; scientific interpretation and the inherited checker are unchanged",
+            "deferred_status": "UNKNOWN", "positive_verdicts_inferred": False, "authority": False}
+
+
+def source_checks(claims, artifacts, inventory=None):
+    """Dispatch unchanged source checks within one fixed project byte budget.
+
+    The full interpretation has already been source validated. Deferred rows
+    still bind their exact quotation and original hash; they certify nothing.
+    No wall-time observation, cached verdict or source-specific exception
+    determines dispatch. Workflow, numerical and formal checks are separate.
+    """
+    from .grounding import bound_source
+    from research.scientific_semantics_v3.checks import check_claim
+    checks, consumed = [], 0
+    for claim in claims:
+        source = claim["source"]
+        if not bound_source(source, artifacts, inventory):
+            raise ValueError("ungrounded source-check claim")
+        transformation = source.get("transformation")
+        if isinstance(transformation, dict) and transformation.get("kind") == "adapter_extracted_text":
+            checks.append({"id": "check-" + claim["id"], "claim_id": claim["id"], "checker": "adapter-extracted-source-v4", "status": "UNKNOWN", "authority": False, "scientific_meaning": "OPEN", "source_sha256": source["sha256"], "reason": "The quotation is bound to adapter-extracted text; no independent scientific or original-byte declaration checker supports this transformed claim."})
+            continue
+        required = len(artifacts[source["path"]])
+        if consumed + required > SOURCE_CHECK_REPARSE_BUDGET_BYTES:
+            checks.append({"id": "check-" + claim["id"], "claim_id": claim["id"], "checker": "source-check-budget-v4",
+                           "status": "UNKNOWN", "authority": False, "scientific_meaning": "OPEN", "source_sha256": source["sha256"],
+                           "reason": "Independent source check deferred because the fixed project reparse-byte budget is exhausted; this posthoc availability dispatch grants no positive verdict.",
+                           "evidence": {"reason_code": "PROJECT_REPARSE_BYTE_BUDGET_EXHAUSTED", "dispatch_policy": SOURCE_CHECK_DISPATCH_POLICY,
+                                        "limit_reparse_bytes": SOURCE_CHECK_REPARSE_BUDGET_BYTES, "consumed_reparse_bytes": consumed,
+                                        "required_reparse_bytes": required, "source": source}})
+            continue
+        consumed += required
+        checks.append(check_claim(claim, artifacts))
+    return checks
+
+
+def source_check_coverage(meaning, checks, authorized):
+    """Disclose actual dispatch separately from the retained interpretation."""
+    claims = {c["id"]: c for c in meaning["claims"]}
+    sizes = {a["path"]: a["size"] for a in meaning["artifacts"]}
+    raw, derived = [], []
+    for record in checks:
+        if record.get("claim_id") not in claims:
+            continue
+        (derived if record.get("checker") == "adapter-extracted-source-v4" else raw).append(record)
+    dispatched = [r for r in raw if r.get("checker") != "source-check-budget-v4"]
+    cost = lambda rows: sum(sizes[claims[r["claim_id"]]["source"]["path"]] for r in rows)
+    return {**source_check_policy(), "authorized": authorized,
+            "interpreted_claims_retained": len(meaning["claims"]), "requested_raw_claim_checks": len(raw),
+            "dispatched_raw_claim_checks": len(dispatched), "deferred_raw_claim_checks": len(raw) - len(dispatched),
+            "derived_claim_checks_unknown": len(derived), "requested_reparse_bytes": cost(raw),
+            "dispatched_reparse_bytes": cost(dispatched), "all_requested_raw_checks_dispatched": bool(authorized and len(raw) == len(dispatched))}
+
+
 def analyze_snapshots(artifacts, inventory, check=False, formal_check=False):
     """Fixed worker implementation; inputs are bound bytes, not source paths."""
     from . import semantics, documents, schema, grounding, correspondence, workflow, simulation
-    from research.scientific_semantics_v3.checks import check_claim
     meaning = documents.augment(semantics.interpret_artifacts(artifacts), inventory)
     validation = schema.validate_interpretation(meaning, artifacts, inventory=inventory)
     if not validation.get("valid"):
@@ -81,12 +145,7 @@ def analyze_snapshots(artifacts, inventory, check=False, formal_check=False):
     graph = correspondence.analyze(meaning, artifacts)
     checks = []
     if check:
-        for claim in meaning["claims"]:
-            transformation = claim["source"].get("transformation")
-            if isinstance(transformation, dict) and transformation.get("kind") == "adapter_extracted_text":
-                checks.append({"id": "check-" + claim["id"], "claim_id": claim["id"], "checker": "adapter-extracted-source-v4", "status": "UNKNOWN", "authority": False, "scientific_meaning": "OPEN", "source_sha256": claim["source"]["sha256"], "reason": "The quotation is bound to adapter-extracted text; no independent scientific or original-byte declaration checker supports this transformed claim."})
-            else:
-                checks.append(check_claim(claim, artifacts))
+        checks = source_checks(meaning["claims"], artifacts, inventory)
         checks.extend(workflow.analyze(artifacts)["checks"])
         checks.append(simulation.reconstruct(artifacts))
         if formal_check:
@@ -208,6 +267,7 @@ def summary_for(meaning, checks, graph, authorized, formal_authorized=False):
             "checks": dict(sorted(Counter(c["status"] for c in checks).items())),
             "correspondence_records": {k: len(v) for k, v in sorted(graph.items()) if isinstance(v, list)},
             "authorized_checks": authorized, "authorized_formal_checks": formal_authorized,
+            "source_check_budget": source_check_coverage(meaning, checks, authorized),
             "scientific_meanings_certified": 0, "authority": False, "training_examples_admitted": 0, "training_policy": "DENIED_BY_DEFAULT",
             "source_download_prefix": "parent/intake/objects/", "learned_routing": "disabled; deterministic interpretation",
             "researcher_action": "Review exact sources, extraction transformations, conditions and open scientific assumptions before relying on a conclusion."}
