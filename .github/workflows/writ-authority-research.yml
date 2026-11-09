@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           lean --version
-          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean; then
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean; then
             echo "Forbidden proof escape hatch detected" >&2
             exit 1
           fi
@@ -37,3 +37,5 @@ jobs:
           lean research/writ_authority_v9/formal/Witness.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/TraceExample.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean
+          lean -o "$RUNNER_TEMP/Provenance.olean" research/writ_authority_v9/formal/Provenance.lean
+          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/ProvenanceExample.lean
