@@ -80,6 +80,10 @@ theorem step_preserves_safety (expected : Binding) (start finish : State)
     StateSafe expected finish := by
   cases start <;> cases event <;> cases finish <;>
     simp_all [Next, StateSafe, Valid, VerifiedB]
+  all_goals
+    rcases step with ⟨⟨_, hbinding, hsignature⟩, hequal⟩
+    cases hequal
+    exact ⟨hbinding, hsignature⟩
 
 theorem replay_preserves_safety (expected : Binding) (events : List Event)
     (start finish : State) (safe : StateSafe expected start)
