@@ -1,0 +1,47 @@
+name: Writ16 live retention research
+on:
+  push:
+    branches:
+      - research/writ9-compositional-authority-20261109
+    paths:
+      - 'research/writ_authority_v9/**'
+      - '.github/workflows/writ16-retention-research.yml'
+  pull_request:
+    paths:
+      - 'research/writ_authority_v9/**'
+      - '.github/workflows/writ16-retention-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verified-retention-model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - name: Install independent Ed25519 reference library
+        run: python -m pip install --disable-pip-version-check --only-binary=:all: cryptography==46.0.4
+      - name: Independent receiver and challenge tests
+        run: |
+          python -m unittest -v research.writ_authority_v9.test_destination_reference research.writ_authority_v9.test_retention_reference research.writ_authority_v9.test_receiver_readback_v16
+      - name: Activate pinned Lean 4.28.0
+        shell: bash
+        run: source scripts/activate_lean_428.sh
+      - name: Kernel-check executable anti-replay and retention proofs
+        shell: bash
+        run: |
+          set -eu
+          lean --version
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/LiveRetention.lean research/writ_authority_v9/formal/LiveRetentionExample.lean; then exit 1; fi
+          lean -o "$RUNNER_TEMP/Authority.olean" research/writ_authority_v9/formal/Authority.lean
+          lean -o "$RUNNER_TEMP/Provenance.olean" research/writ_authority_v9/formal/Provenance.lean
+          LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/AnchoredExecution.olean" research/writ_authority_v9/formal/AnchoredExecution.lean
+          lean -o "$RUNNER_TEMP/DestinationAttestation.olean" research/writ_authority_v9/formal/DestinationAttestation.lean
+          LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/AttestedProduct.olean" research/writ_authority_v9/formal/AttestedProduct.lean
+          LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/LiveRetention.olean" research/writ_authority_v9/formal/LiveRetention.lean
+          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/LiveRetentionExample.lean
