@@ -15,6 +15,7 @@ from .evidence import discover_evidence, run_evidence
 from .table_evidence import run_table
 from .replay_table import replay_table
 from .finite_universe import run_finite_universe, replay_finite_universe
+from .byte_bridge import run_byte_bridge, replay_byte_bridge
 from .core import canonical
 
 
@@ -110,7 +111,27 @@ def main() -> int:
     if replay_universe["status"] != "REPLAYED_FINITE_UNIVERSE":
         print("FAIL: aggregate proof replay:", replay_universe, file=sys.stderr)
         return 1
-    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal, 5 typed, 2 evidence-linked, 4 CSV-linked and 2 finite-universe aggregate claims; 4 CSV and 2 aggregate claims freshly replayed")
+    byte_report = run_byte_bridge(table_source, table_manifest, lean=lean)
+    if byte_report["formal_status"] != "BYTE_GROUNDING_PROVED" or byte_report["cell_count"] != 6:
+        print("FAIL: source bytes did not independently decode under Lean:",
+              byte_report.get("lean_diagnostic", byte_report["formal_status"]), file=sys.stderr)
+        return 1
+    byte_replay = replay_byte_bridge(table_source, table_manifest, canonical(byte_report) + b"\n", lean=lean)
+    if byte_replay["status"] != "REPLAYED_BYTE_GROUNDING":
+        print("FAIL: source byte bridge recheck:", byte_replay, file=sys.stderr)
+        return 1
+    original_source = byte_report["lean_source"]
+    # Executed negative control: a forged expected decimal MUST be rejected by Lean.
+    one = "some ((2 : Rat) / (1 : Rat))"
+    forged = original_source.replace(one, "some ((7 : Rat) / (1 : Rat))", 1)
+    if forged == original_source:
+        print("FAIL: source-byte negative control was not constructed", file=sys.stderr)
+        return 1
+    negative = lean._check_generated(forged, True, "BYTE_GROUNDING")
+    if negative["status"] != "KERNEL_REJECTED" or negative["kernel_checked"]:
+        print("FAIL: forged decimal unexpectedly accepted by Lean:", negative["status"], file=sys.stderr)
+        return 1
+    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal, 5 typed, 2 evidence-linked, 4 CSV-linked, 2 finite-universe and 1 independent byte-grounding proof; 7 fresh replays; forged numeric expectation rejected")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 

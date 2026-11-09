@@ -444,3 +444,43 @@ subset remains limited to **1–16 rows**, 1–4 assertions, and the original v5
 strict numeric CSV grammar. Benchmarks on adversarial or blinded scientific
 projects and live LLM inference have **not** been run. Novel scientific or
 algorithmic superiority is not claimed from synthetic fixture passes.
+
+## Experimental v7: independent source-byte-to-decimal Lean checker
+
+The v6 finite-universe result still relies on Python to translate CSV numeric
+lexemes to rational constants. The new `byte_bridge.py` provides a **second
+implementation of that translation in Lean**, executed on the actual ASCII byte
+array embedded into the generated proof artifact. Lean checks (1) exact newline
+segmentation of the full embedded dataset and (2) that independently parsing
+**every selected cell's original byte slice** yields the purported rational.
+Only generated constants and the fixed in-module Lean decoder are used. The
+hosted smoke test includes an **executed negative control**: modifying the
+expected rational in the generated source must cause Lean to reject the proof.
+
+```bash
+python -m research.llm_claim_harness_v1.byte_bridge \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --out /tmp/pcs-byte-bridge.json
+
+python -m research.llm_claim_harness_v1.byte_bridge \
+  --source research/llm_claim_harness_v1/fixtures/table_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/table_spec.json \
+  --receipt /tmp/pcs-byte-bridge.json \
+  --out /tmp/pcs-byte-replay.json
+```
+
+This is separate from the v6 all-row proof and must not be confused with it.
+**Both checks** are needed for the stronger *experimental* data-to-arithmetic
+argument. The byte bridge is restricted to source files at most **512 bytes** and
+at most **32 numeric cells**, and rejects larger files without producing partial
+verified results. The fixed Lean decoder is independent of Python `Fraction`,
+but Python still chooses the cell offsets/expected values and embeds the input
+bytes into the proof source. Independent assurance that those embedded bytes
+match a document received by a reviewer requires direct comparison or a trusted
+hash/custody process; it is not guaranteed by the checker itself. Nor does this
+certify CSV completeness relative to an unpublished study, physical units,
+source interpretation, causal inference or empirical validity.
+
+This addition is a narrowed trust assumption and a useful architectural advance,
+not proof of novel algorithmic superiority or general scientific understanding.
