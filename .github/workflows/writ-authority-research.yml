@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12.14'
       - name: Execute independent Python reference checker
         run: |
-          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace research.writ_authority_v9.test_witness
+          python -m unittest -v research.writ_authority_v9.test_core research.writ_authority_v9.test_trace research.writ_authority_v9.test_witness research.writ_authority_v9.test_source_witness
           python -m research.writ_authority_v9.verify_bounds
       - name: Install hash-pinned Lean 4.28.0
         shell: bash
