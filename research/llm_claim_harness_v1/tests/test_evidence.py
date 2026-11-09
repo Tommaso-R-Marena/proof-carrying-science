@@ -302,6 +302,7 @@ class ReviewHtmlTests(unittest.TestCase):
         self.assertIn("mass * acceleration = 6 N", html)
         self.assertIn("NOT ASSESSED", html)
         self.assertIn("UNREVIEWED", html)
+        self.assertIn("Nearby source context (not checked)", html)
         self.assertIn("mass = 2 kg", html)
         self.assertNotIn("<script", html)
 

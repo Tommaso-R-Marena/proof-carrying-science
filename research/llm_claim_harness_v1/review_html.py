@@ -38,11 +38,14 @@ def render_evidence_review(source: Source, receipt: dict) -> str:
             deps.append(f'<li><code>{escape(dep["name"])}</code> at [{s}, {e}): <code>{escape(text)}</code></li>')
         formal = escape(str(claim.get("formal_status", "NOT_CHECKED")))
         kernel = "yes" if claim.get("kernel_checked") is True else "no"
+        before, after = max(0, start - 160), min(len(source.text), end + 160)
+        context = escape(source.text[before:after])
         rows.append(
             '<article class="claim">'
             f'<h2>{escape(str(claim.get("id", "unnamed")))}</h2>'
             f'<p class="small">Exact source span [{start}, {end})</p>'
             f'<pre>{escape(quote)}</pre>'
+            f'<h3>Nearby source context (not checked)</h3><pre>{context}</pre>'
             '<h3>Conservative syntactic normalization</h3>'
             f'<pre>{escape(str(claim.get("normalized_assertion", "")))}</pre>'
             f'<p><strong>Formal check:</strong> {formal}; kernel_checked={kernel}</p>'
