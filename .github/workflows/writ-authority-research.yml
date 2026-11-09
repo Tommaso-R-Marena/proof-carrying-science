@@ -46,4 +46,5 @@ jobs:
           lean -o "$RUNNER_TEMP/EffectLifecycle.olean" research/writ_authority_v9/formal/EffectLifecycle.lean
           LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/TripleSafety.olean" research/writ_authority_v9/formal/TripleSafety.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/SignedEffectReceipt.lean
-          lean -o "$RUNNER_TEMP/DestinationAttestation.olean" research/writ_authority_v9/formal/DestinationAttestation.lean\n          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/AttestedProduct.lean
+          lean -o "$RUNNER_TEMP/DestinationAttestation.olean" research/writ_authority_v9/formal/DestinationAttestation.lean
+          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/AttestedProduct.lean
