@@ -129,6 +129,32 @@ class WeightedStoppingTests(unittest.TestCase):
         print('COUNTEREXAMPLE correct:',Fraction(correct,d['total']),
               'naive:',Fraction(naive,d['total']))
 
+    def test_dependent_draws_with_correct_marginals_break_level(self):
+        # Actual mechanism: draw X uniformly; attempt 2 is X again; attempt 3
+        # is independent uniform. Every *unconditional* draw is marginally
+        # uniform, but the first two draws are dependent. On the sharp all-zero
+        # null, the registered IID prefix right-CDF is no longer calibrated.
+        p=make(5,2,3,[0,2,3,6,11],1,weights=[[1]*10]*3)
+        d=design(p)
+        alpha=Fraction(1,20)
+        claimed_null_reject=0
+        for seq,w in stopped(d):
+            r,M=prefix_cdf(d,seq)
+            if Fraction(r,M)<=alpha:claimed_null_reject+=w
+        # The precommitted IID mechanism has 4% size in this example.
+        self.assertEqual(Fraction(claimed_null_reject,d['total']),Fraction(1,25))
+        # In the *different*, dependent mechanism X1=X2, each first choice
+        # has probability 1/10; if X is unacceptable, terminal Y~Uniform(10).
+        wrong_null_reject=0
+        for i in range(d['N']):
+            for y in range(d['N']):
+                if d['accepted'][i]:seq=(i,)
+                else:seq=(i,i,y)
+                r,M=prefix_cdf(d,seq)
+                if Fraction(r,M)<=alpha:wrong_null_reject+=1
+        self.assertEqual(Fraction(wrong_null_reject,100),Fraction(1,10))
+        self.assertGreater(Fraction(wrong_null_reject,100),alpha)
+
     def test_uniform_limit_matches_v19(self):
         from research.evidencekernel_stopping_v19.kernel import design as v19_design, prefix_rank
         for n,k,H,cutoff in [(3,1,2,1),(4,2,3,2),(4,2,2,10000)]:

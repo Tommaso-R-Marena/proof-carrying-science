@@ -111,6 +111,27 @@ Monte Carlo estimates. This is a counterexample to a naive extension of v19,
 **not** an attack that bypasses v19's uniform-draw protocol validation.
 It also illustrates that discrete conservative statistics may have low power.
 
+### A second attack: correct marginals do not imply independent draws
+
+A different five-unit all-zero experiment specifies **uniform independent**
+candidate draws, three attempts, and one acceptable allocation. Under this
+registered IID mechanism, the transcript-rank test falsely rejects in exactly
+`1/25 = 4%` of experiments at the nominal 5% level.
+
+Now violate independence but preserve each attempted allocation's unconditional
+marginal uniformity: sample the first allocation `X` uniformly, **repeat X** at
+the second attempt if it is reached, and take a fresh independent uniform third
+candidate. If `X` is rejected, the first two rejected attempts are perfectly
+correlated. Applying the *registered* IID right-CDF to this different physical
+draw mechanism rejects a true null in exactly `1/10 = 10%` of experiments.
+
+This is a counterexample to replacing conditional independence with marginal
+uniformity. Even a fully consistent, pinned transcript cannot prove that
+actual candidate draws followed their declared conditional distributions.
+External randomizer governance and independent receipt custody remain
+necessary; the correct response to suspected unverified dependence is
+**abstention**, not a claim of unconditional false-positive control.
+
 A separate signed-free synthetic example produces the same complete JSON
 report in Python and independently implemented Node.js:
 `conditional_p = 864625/8661249`, with no discovery at `alpha = 1/20`.
@@ -135,7 +156,9 @@ Tests include brute-force weighted transcript enumeration, the conditional
 right-CDF inequality, superuniformity under **every** binary potential-outcome
 table in the bounded small designs, exact composite weak-null size checks,
 uniform-design regression against v19, zero-probability rejection, the
-86.69%-false-positive counterexample, and 24 seeded cross-language comparisons.
+86.69%-false-positive counterexample, and 24 seeded cross-language comparisons. A second exact control shows
+10% false positives under dependent draws with uniform marginals, versus
+4% under the registered independent mechanism.
 
 ## Scope of assurance and novelty
 
