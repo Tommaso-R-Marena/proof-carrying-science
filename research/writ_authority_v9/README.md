@@ -74,3 +74,19 @@ process-integrated witness/provenance demonstrations when packaged locally.
 theorems, no guarantee of complete dataflow observation or arbitrary-model
 noninterference, no security against rewriting both trusted pins and values,
 and no claim that delegated actions are harmless or scientifically true.
+
+## Writ/13 — Source-anchored proof-carrying execution receipts
+
+The companion **Writ/13 alpha**, delivered separately from this research PR, now offers `witness provenance;`: a domain-separated external witness commitment to the full explicit host source manifest (root byte digests, classifications, ordered derivation inputs, separator digests, and transitive lineage). This closes a concrete prior threat-model gap:
+
+1. Under a root-file substitution attacker who cannot rewrite the external witness, Writ/12 rebuilt new trusted source pins after restart and accepted the replacement as a fresh host intake.
+2. Writ/13 refuses that same valid-ledger/changed-root restart, even when the database and its internal signature were not modified.
+3. `python scripts/compare_source_restarts_v13.py` in the complete local Writ/13 package reproduces both observations. This protection assumes a witness *outside the attacker's rollback/write domain*.
+
+**Detached receipts:** the operator can independently Ed25519-sign a bounded canonical audit projection. A detached receiver, using a pinned operator public key, checks the signature, policy hash, source-manifest commitment, explicit graph labels, all recorded admissions and ancestor/budget debits, outbox identities, and hash-linked event continuity. The receiver needs neither SQLite nor the gateway's HMAC keys. To prove *freshness* rather than historical authenticity, an independently trusted latest checkpoint must also be supplied. By default, public receipts refuse metadata from internal/secret datasets to avoid revealing low-entropy private values through dictionary attacks on raw SHA digests.
+
+**Lean result:** `formal/AnchoredExecution.lean` is a computable product checker of an *opaque pinned source identity*, explicit-flow label validity, and finite weighted admission traces. Lean 4.28.0 kernel-checks its soundness, completeness, source-bound acceptance, no-overspending, and non-laundering conclusions **relative to their independently stated transition and graph semantics**. `formal/SignedGatewayReceipt.lean` is an actual deterministic source/authority-accounting projection generated after a successful synthetic signed Writ/13 receipt verification. Its accept case and deliberately wrong source-commitment reject case are kernel-checked. The Ed25519 signature and SHA-256 preimage are verified by Python, **not** Lean.
+
+**Independent cross-check:** `source_witness.py` is a separate reference implementation of the explicit root/concat provenance commitment. `test_source_witness.py` checks it against the frozen Writ/13 fixture commitment `35508ee5c4f886ef8a2154b81ce39a5318ec6d0334995d2dc1179087ac78eb8a` and rejects changed roots/recipes, including a hidden source substitution.
+
+The complete Writ/13 runtime (including external Ed25519 receipt verifier) is intentionally **not imported into PCS production**. Neither a kernel-checked projection nor an operator signature establishes honesty of the host, legitimacy of reviewer signers, correctness of arbitrary model behavior, implicit-flow security, real tool effects, or Python-to-Lean refinement. That precise refinement problem and an independent benchmark against Cedar and proof-carrying-agent protocols remain the primary research blockers.
