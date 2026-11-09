@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           lean --version
-          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean research/writ_authority_v9/formal/DualBoundary.lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean research/writ_authority_v9/formal/AnchoredExecution.lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean research/writ_authority_v9/formal/EffectLifecycle.lean research/writ_authority_v9/formal/TripleSafety.lean research/writ_authority_v9/formal/SignedEffectReceipt.lean research/writ_authority_v9/formal/DestinationAttestation.lean research/writ_authority_v9/formal/AttestedProduct.lean research/writ_authority_v9/formal/DestinationReceiptExample.lean; then
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean research/writ_authority_v9/formal/DualBoundary.lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean research/writ_authority_v9/formal/AnchoredExecution.lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean research/writ_authority_v9/formal/EffectLifecycle.lean research/writ_authority_v9/formal/TripleSafety.lean research/writ_authority_v9/formal/SignedEffectReceipt.lean research/writ_authority_v9/formal/DestinationAttestation.lean research/writ_authority_v9/formal/AttestedProduct.lean research/writ_authority_v9/formal/DestinationReceiptExample.lean research/writ_authority_v9/formal/LiveRetention.lean; then
             echo "Forbidden proof escape hatch detected" >&2
             exit 1
           fi
@@ -51,3 +51,4 @@ jobs:
           lean -o "$RUNNER_TEMP/DestinationAttestation.olean" research/writ_authority_v9/formal/DestinationAttestation.lean
           LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/AttestedProduct.olean" research/writ_authority_v9/formal/AttestedProduct.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/DestinationReceiptExample.lean
+          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/LiveRetention.lean
