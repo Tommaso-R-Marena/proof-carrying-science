@@ -138,4 +138,87 @@ theorem ancestor_revocation_blocks (path : List Nat) (revoked : Nat → Bool)
   have notRev := h id inPath
   simp [rev] at notRev
 
+
+/-!
+A computable authority-trace checker. Unlike an existential transition relation,
+this function is executable on concrete finite lists. The following theorems
+show SOUNDNESS and COMPLETENESS relative to the separately declared Runs
+relation, for arbitrary finite traces and initial balances.
+-/
+def AllPositive : List Nat → (Nat → Nat) → Bool
+  | [], _ => true
+  | id :: rest, balance => decide (0 < balance id) && AllPositive rest balance
+
+theorem allPositive_sound (path : List Nat) (balance : Nat → Nat)
+    (checked : AllPositive path balance = true) : CanDebit path balance := by
+  induction path with
+  | nil =>
+      intro id inPath
+      cases inPath
+  | cons first rest ih =>
+      have hParts : decide (0 < balance first) = true ∧ AllPositive rest balance = true := by
+        simpa [AllPositive, Bool.and_eq_true] using checked
+      intro id inPath
+      rcases List.mem_cons.mp inPath with firstEq | inRest
+      · subst id
+        exact of_decide_eq_true hParts.1
+      · exact ih hParts.2 id inRest
+
+theorem allPositive_complete (path : List Nat) (balance : Nat → Nat)
+    (permitted : CanDebit path balance) : AllPositive path balance = true := by
+  induction path with
+  | nil => rfl
+  | cons first rest ih =>
+      have firstGood : 0 < balance first := permitted first (by simp)
+      have restGood : CanDebit rest balance := by
+        intro id inRest
+        exact permitted id (by simp [inRest])
+      simp [AllPositive, firstGood, ih restGood]
+
+def CheckedReplay (balance : Nat → Nat) : List (List Nat) → Option (Nat → Nat)
+  | [] => some balance
+  | path :: rest =>
+      if AllPositive path balance then
+        CheckedReplay (Debit path balance) rest
+      else
+        none
+
+/-- Every successful executable replay corresponds to the Runs relation. -/
+theorem checkedReplay_sound {balance final : Nat → Nat} {trace : List (List Nat)}
+    (checked : CheckedReplay balance trace = some final) : Runs balance trace final := by
+  induction trace generalizing balance with
+  | nil =>
+      have eq : balance = final := by simpa [CheckedReplay] using checked
+      subst final
+      exact Runs.done balance
+  | cons path rest ih =>
+      by_cases permitted : AllPositive path balance = true
+      · have tail : CheckedReplay (Debit path balance) rest = some final := by
+          simpa [CheckedReplay, permitted] using checked
+        exact Runs.consume balance path rest final
+          (allPositive_sound path balance permitted) (ih tail)
+      · simp [CheckedReplay, permitted] at checked
+
+/-- Every valid relational trace is accepted by the executable checker. -/
+theorem checkedReplay_complete {balance final : Nat → Nat} {trace : List (List Nat)}
+    (valid : Runs balance trace final) : CheckedReplay balance trace = some final := by
+  induction valid with
+  | done _ => simp [CheckedReplay]
+  | consume balance path rest final enough next ih =>
+      have positive : AllPositive path balance = true :=
+        allPositive_complete path balance enough
+      simpa [CheckedReplay, positive] using ih
+
+/-- A successful run of the actual verifier cannot overspend any ancestor. -/
+theorem checkedReplay_no_overspend {balance final : Nat → Nat}
+    {trace : List (List Nat)} (accepted : CheckedReplay balance trace = some final)
+    (id : Nat) : Used id trace ≤ balance id := by
+  exact trace_no_overspend (checkedReplay_sound accepted) id
+
+/-- Exact accounting for every accepted executable trace. -/
+theorem checkedReplay_exact_accounting {balance final : Nat → Nat}
+    {trace : List (List Nat)} (accepted : CheckedReplay balance trace = some final)
+    (id : Nat) : balance id = final id + Used id trace := by
+  exact trace_quota_conservation (checkedReplay_sound accepted) id
+
 end Writ9
