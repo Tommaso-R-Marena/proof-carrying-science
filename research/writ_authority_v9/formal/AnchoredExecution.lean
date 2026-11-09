@@ -21,7 +21,7 @@ def CheckAnchored {n m : Nat}
     (parents : Fin n → List (Fin n)) (label : Fin n → Nat)
     (balance : Fin m → Nat) (trace : List (Fin m → Nat)) :
     Option (Fin m → Nat) :=
-  if decide (committed = current) && Writ12.CheckFlow parents label then
+  if committed = current ∧ Writ12.CheckFlow parents label = true then
     Writ9.CheckWeighted balance trace
   else
     none
@@ -35,14 +35,11 @@ theorem anchored_sound {n m : Nat}
     (accepted : CheckAnchored committed current parents label balance trace = some final) :
     committed = current ∧ Writ12.FlowSound parents label ∧
     Writ9.WeightedRuns balance trace final := by
-  by_cases hcheck : decide (committed = current) && Writ12.CheckFlow parents label = true
-  · have hparts := Bool.and_eq_true.mp hcheck
-    have htrace : Writ9.CheckWeighted balance trace = some final := by
-      simpa [CheckAnchored, hcheck] using accepted
-    exact ⟨of_decide_eq_true hparts.1,
-           (Writ12.checkFlow_iff parents label).mp hparts.2,
-           Writ9.checkWeighted_sound htrace⟩
-  · simp [CheckAnchored, hcheck] at accepted
+  have h : (committed = current ∧ Writ12.CheckFlow parents label = true) ∧
+      Writ9.CheckWeighted balance trace = some final := by
+    simpa [CheckAnchored] using accepted
+  exact ⟨h.1.1, (Writ12.checkFlow_iff parents label).mp h.1.2,
+         Writ9.checkWeighted_sound h.2⟩
 
 /-- Completeness relative to the explicitly stated checkpoint, flow and
 weighted-trace predicates. -/
@@ -53,9 +50,8 @@ theorem anchored_complete {n m : Nat}
     (same : committed = current) (safe : Writ12.FlowSound parents label)
     (run : Writ9.WeightedRuns balance trace final) :
     CheckAnchored committed current parents label balance trace = some final := by
-  have checked : decide (committed = current) && Writ12.CheckFlow parents label = true :=
-    Bool.and_eq_true.mpr
-      ⟨decide_eq_true same, (Writ12.checkFlow_iff parents label).mpr safe⟩
+  have checked : committed = current ∧ Writ12.CheckFlow parents label = true :=
+    ⟨same, (Writ12.checkFlow_iff parents label).mpr safe⟩
   simpa [CheckAnchored, checked] using Writ9.checkWeighted_complete run
 
 /-- A successful run cannot spend more of *any* finite authority resource than
