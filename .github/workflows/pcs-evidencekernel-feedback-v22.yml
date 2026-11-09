@@ -1,0 +1,43 @@
+name: PCS EvidenceKernel v22 response-adaptive report research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_feedback_v22/**'
+      - '.github/workflows/pcs-evidencekernel-feedback-v22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-feedback-model:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Finite-world, hostile-data, and independently implemented differential tests
+        run: python -m unittest discover -s research/evidencekernel_feedback_v22 -v -p 'test_*.py'
+      - name: Reproduce the 99.31 percent surrogate-substitution counterexample
+        run: python -m research.evidencekernel_feedback_v22.counterexample
+      - name: Independent exact signed-pin research replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          P=research/evidencekernel_feedback_v22
+          PIN="$(cat "$P/example_protocol_pin.txt")"
+          EPIN="$(cat "$P/example_evidence_pin.txt")"
+          python -m research.evidencekernel_feedback_v22.kernel "$P/example_protocol.json" "$P/example_evidence.json" --protocol-pin "$PIN" --evidence-pin "$EPIN" > "$RUNNER_TEMP/py.json"
+          node "$P/independent.js" "$P/example_protocol.json" "$P/example_evidence.json" "$PIN" "$EPIN" > "$RUNNER_TEMP/js.json"
+          python - "$RUNNER_TEMP/py.json" "$RUNNER_TEMP/js.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(x)) for x in sys.argv[1:]]
+          assert a==b
+          assert a['conditional_p']=='3/16'
+          assert a['compatible_joint_worlds']==512
+          PY
