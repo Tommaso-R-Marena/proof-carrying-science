@@ -1,0 +1,63 @@
+{
+  "all_declared_axiom_audits_empty": true,
+  "all_declared_axiom_audits_permitted": true,
+  "all_declared_theorems_audited": true,
+  "allowed_lean_axioms": [],
+  "authority": false,
+  "axiom_audit": {
+    "ghost_fifty_nonzero": {
+      "axioms": [],
+      "empty": true,
+      "name": "ScientificSampling.ghost_fifty_nonzero"
+    },
+    "sample_agreement_does_not_imply_global_equality": {
+      "axioms": [],
+      "empty": true,
+      "name": "ScientificSampling.sample_agreement_does_not_imply_global_equality"
+    },
+    "sampling_zeros": {
+      "axioms": [],
+      "empty": true,
+      "name": "ScientificSampling.sampling_zeros"
+    }
+  },
+  "checked_at_utc": "2026-11-09T00:08:53.206018+00:00",
+  "command": [
+    "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+    "-M1024",
+    "-j1",
+    "/dev/shm/pcs-independent-scientific-review-v4/research/scientific_understanding_v2/formal/Sampling.lean"
+  ],
+  "compiler_path": "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+  "compiler_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+  "compiler_shared_library_sha256": "cbfea1d1a2681923a714b5fcd36183b4ffecb8b06d398c833f095548f00fa62b",
+  "compiler_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "diagnostics": [],
+  "forbidden_tokens": [],
+  "profile": "sampling",
+  "python_lean_refinement": "OPEN",
+  "required_audit_empty": true,
+  "required_audit_permitted": true,
+  "required_theorems": [
+    "sampling_zeros",
+    "ghost_fifty_nonzero",
+    "sample_agreement_does_not_imply_global_equality"
+  ],
+  "required_theorems_present": true,
+  "returncode": 0,
+  "schema": "scientific-formal-receipt/v2",
+  "scope": "closed integer polynomial counterexample to inferring global equality from twelve fixed samples; rational rescaling is separate, Python refinement OPEN",
+  "source_path": "/dev/shm/pcs-independent-scientific-review-v4/research/scientific_understanding_v2/formal/Sampling.lean",
+  "source_sha256": "cd59d16c3df6de6a7d6444a7ac7fab5f6cc453b536968c71b3ae5c7d3ef65e6e",
+  "source_stable_during_compile": true,
+  "status": "VERIFIED",
+  "stderr": "",
+  "stdout": "'ScientificSampling.sampling_zeros' does not depend on any axioms\n'ScientificSampling.ghost_fifty_nonzero' does not depend on any axioms\n'ScientificSampling.sample_agreement_does_not_imply_global_equality' does not depend on any axioms\n",
+  "stdout_sha256": "70983eafade5bbebf7562c87e4b61c0304375afe89dfd2e614d1d813e4ec7ddb",
+  "theorem_declarations": [
+    "sampling_zeros",
+    "ghost_fifty_nonzero",
+    "sample_agreement_does_not_imply_global_equality"
+  ],
+  "unexpected_imports": []
+}

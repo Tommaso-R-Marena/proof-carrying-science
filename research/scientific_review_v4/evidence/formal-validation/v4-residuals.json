@@ -1,0 +1,157 @@
+{
+  "all_declared_axiom_audits_empty": false,
+  "all_declared_axiom_audits_permitted": true,
+  "all_declared_theorems_audited": true,
+  "allowed_lean_axioms": [
+    "propext"
+  ],
+  "authority": false,
+  "axiom_audit": {
+    "aligned_pair_keys_equal": {
+      "axioms": [],
+      "empty": true,
+      "name": "ScientificReviewV4.Residuals.aligned_pair_keys_equal"
+    },
+    "mismatched_keys_cannot_form_aligned_pair": {
+      "axioms": [],
+      "empty": true,
+      "name": "ScientificReviewV4.Residuals.mismatched_keys_cannot_form_aligned_pair"
+    },
+    "nonzero_residual_rules_out_zero_sse": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificReviewV4.Residuals.nonzero_residual_rules_out_zero_sse"
+    },
+    "residual_zero_iff_values_equal": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificReviewV4.Residuals.residual_zero_iff_values_equal"
+    },
+    "square_eq_zero_iff": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificReviewV4.Residuals.square_eq_zero_iff"
+    },
+    "square_nonnegative": {
+      "axioms": [],
+      "empty": true,
+      "name": "ScientificReviewV4.Residuals.square_nonnegative"
+    },
+    "sse_nonnegative": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificReviewV4.Residuals.sse_nonnegative"
+    },
+    "sse_preserved_by_permutation": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificReviewV4.Residuals.sse_preserved_by_permutation"
+    },
+    "sse_zero_iff_aligned_values_equal": {
+      "axioms": [
+        "propext"
+      ],
+      "empty": false,
+      "name": "ScientificReviewV4.Residuals.sse_zero_iff_aligned_values_equal"
+    }
+  },
+  "axiom_audit_count": 9,
+  "axiom_census_exact": true,
+  "checked_at_utc": "2026-11-09T00:09:11.227129+00:00",
+  "command": [
+    "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+    "-M1024",
+    "-j1",
+    "/dev/shm/pcs-independent-scientific-review-v4/research/scientific_review_v4/formal/Residuals.lean"
+  ],
+  "compiler_path": "/workspace/.onboarding/tools/lean-4.28.0-linux/bin/lean",
+  "compiler_sha256": "3e0d0d3d801675359f2d4cf9815bfdb417b20b92fdd9d48b3b14c95bbae28bbf",
+  "compiler_shared_library_sha256": "cbfea1d1a2681923a714b5fcd36183b4ffecb8b06d398c833f095548f00fa62b",
+  "compiler_stable_during_compile": true,
+  "compiler_version": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+  "compiler_version_returncode": 0,
+  "diagnostics": [],
+  "empirical_refinement": "OPEN",
+  "expected_axiom_census": {
+    "aligned_pair_keys_equal": [],
+    "mismatched_keys_cannot_form_aligned_pair": [],
+    "nonzero_residual_rules_out_zero_sse": [
+      "propext"
+    ],
+    "residual_zero_iff_values_equal": [
+      "propext"
+    ],
+    "square_eq_zero_iff": [
+      "propext"
+    ],
+    "square_nonnegative": [],
+    "sse_nonnegative": [
+      "propext"
+    ],
+    "sse_preserved_by_permutation": [
+      "propext"
+    ],
+    "sse_zero_iff_aligned_values_equal": [
+      "propext"
+    ]
+  },
+  "forbidden_tokens": [],
+  "harness_sha256": "ef1e65739af411806aff3bc321b1d8a18004e6e6a067b38ac63ef6bbcb96fce9",
+  "harness_stable_during_compile": true,
+  "key_join_refinement": "OPEN",
+  "python_fraction_refinement": "OPEN",
+  "python_lean_refinement": "OPEN",
+  "required_theorems": [
+    "aligned_pair_keys_equal",
+    "mismatched_keys_cannot_form_aligned_pair",
+    "square_nonnegative",
+    "square_eq_zero_iff",
+    "residual_zero_iff_values_equal",
+    "sse_nonnegative",
+    "sse_zero_iff_aligned_values_equal",
+    "nonzero_residual_rules_out_zero_sse",
+    "sse_preserved_by_permutation"
+  ],
+  "required_theorems_present": true,
+  "returncode": 0,
+  "reviewed_source_sha256": "9400e0afa7e11630c18240e08b61519c8244249cda8db8c824ad41503c07cd7d",
+  "schema": "scientific-residual-formal-receipt/v4",
+  "scientific_meaning": "OPEN",
+  "scope": "finite exact integer residuals and SSE under explicit pair-key equality; abstract algebra only",
+  "shared_harness_sha256": "08e16d016d1d772721d5bb9b6c9c3b86a7960860d77415b22b34400f8ab38d46",
+  "shared_library_stable_during_compile": true,
+  "source_correspondence": "OPEN",
+  "source_matches_reviewed_sha256": true,
+  "source_path": "/dev/shm/pcs-independent-scientific-review-v4/research/scientific_review_v4/formal/Residuals.lean",
+  "source_sha256": "9400e0afa7e11630c18240e08b61519c8244249cda8db8c824ad41503c07cd7d",
+  "source_stable_during_compile": true,
+  "status": "VERIFIED",
+  "stderr": "",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "'ScientificReviewV4.Residuals.aligned_pair_keys_equal' does not depend on any axioms\n'ScientificReviewV4.Residuals.mismatched_keys_cannot_form_aligned_pair' does not depend on any axioms\n'ScientificReviewV4.Residuals.square_nonnegative' does not depend on any axioms\n'ScientificReviewV4.Residuals.square_eq_zero_iff' depends on axioms: [propext]\n'ScientificReviewV4.Residuals.residual_zero_iff_values_equal' depends on axioms: [propext]\n'ScientificReviewV4.Residuals.sse_nonnegative' depends on axioms: [propext]\n'ScientificReviewV4.Residuals.sse_zero_iff_aligned_values_equal' depends on axioms: [propext]\n'ScientificReviewV4.Residuals.nonzero_residual_rules_out_zero_sse' depends on axioms: [propext]\n'ScientificReviewV4.Residuals.sse_preserved_by_permutation' depends on axioms: [propext]\n",
+  "stdout_sha256": "e991332001878dff45c5c93a16efb328db78f13ddcdd6233ffab57feff6b7470",
+  "theorem_census_exact": true,
+  "theorem_count": 9,
+  "theorem_declarations": [
+    "aligned_pair_keys_equal",
+    "mismatched_keys_cannot_form_aligned_pair",
+    "square_nonnegative",
+    "square_eq_zero_iff",
+    "residual_zero_iff_values_equal",
+    "sse_nonnegative",
+    "sse_zero_iff_aligned_values_equal",
+    "nonzero_residual_rules_out_zero_sse",
+    "sse_preserved_by_permutation"
+  ],
+  "unexpected_imports": []
+}
