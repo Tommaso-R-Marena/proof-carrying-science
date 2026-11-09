@@ -1,7 +1,10 @@
+import Std
+
 /-!
 Writ/9 independent abstract authority calculus.
-This file does NOT prove correspondence to the Python/SQLite gateway,
-cryptographic authenticity, host identity or external execution semantics.
+
+The theorems concern *this definition only*, not Python gateway refinement,
+credential authenticity, host isolation, or real-world effects.
 -/
 namespace Writ9
 
@@ -11,7 +14,6 @@ structure Scope where
   maxBytes : Nat
   quota : Nat
 
-/-- A child does not receive broader authority than its parent. -/
 def Attenuates (child parent : Scope) : Prop :=
   (∀ a, a ∈ child.actions → a ∈ parent.actions) ∧
   child.clearance ≤ parent.clearance ∧
@@ -27,17 +29,17 @@ theorem attenuation_reflexive (s : Scope) : Attenuates s s := by
 theorem attenuation_transitive {leaf mid root : Scope}
     (h₁ : Attenuates leaf mid) (h₂ : Attenuates mid root) :
     Attenuates leaf root := by
-  rcases h₁ with ⟨a₁, l₁, b₁, q₁⟩
-  rcases h₂ with ⟨a₂, l₂, b₂, q₂⟩
-  exact ⟨(fun x hx => a₂ x (a₁ x hx)),
-         Nat.le_trans l₁ l₂, Nat.le_trans b₁ b₂, Nat.le_trans q₁ q₂⟩
+  exact ⟨(fun x hx => h₂.1 x (h₁.1 x hx)),
+         Nat.le_trans h₁.2.1 h₂.2.1,
+         Nat.le_trans h₁.2.2.1 h₂.2.2.1,
+         Nat.le_trans h₁.2.2.2 h₂.2.2.2⟩
 
 theorem authorized_child_implies_parent {child parent : Scope}
     (h : Attenuates child parent) {a label bytes : Nat}
     (authorized : Allows child a label bytes) : Allows parent a label bytes := by
-  rcases h with ⟨ha, hl, hb, _⟩
-  rcases authorized with ⟨aok, lok, bok⟩
-  exact ⟨ha a aok, Nat.le_trans lok hl, Nat.le_trans bok hb⟩
+  exact ⟨h.1 a authorized.1,
+         Nat.le_trans authorized.2.1 h.2.1,
+         Nat.le_trans authorized.2.2 h.2.2.1⟩
 
 theorem three_hop_nonamplification {leaf mid root : Scope}
     (h₁ : Attenuates leaf mid) (h₂ : Attenuates mid root)
