@@ -166,3 +166,71 @@ standalone-line discovery is a **cost-saving fast path**, not complete document
 coverage: prose-embedded, context-dependent, symbolic and scientific claims are
 skipped rather than declared absent or false. More expensive LLM extraction
 remains available where its narrower benefits are demonstrably useful.
+
+
+## Experimental v3: explicit source-grounded typed quantities
+
+`--mode typed` accepts only a **standalone `PCS-TYPED/1` plain-text program**, not
+arbitrary prose, extracted PDF equations, or LLM-inferred meaning. Example:
+
+```text
+PCS-TYPED/1
+let mass : kg = 2
+let acceleration : m/s^2 = 3
+let distance : m = 2
+let offset : cm = 30
+assert mass * acceleration = 6[N]
+assert distance + offset = 2.3[m]
+assert distance + offset = 2.4[m]
+```
+
+Run without API keys:
+
+```bash
+python -m research.llm_claim_harness_v1 \
+  --mode typed --primary deterministic \
+  --source research/llm_claim_harness_v1/fixtures/typed_source.txt \
+  --out /tmp/pcs-typed-experiment.json
+```
+
+Only literal `let name : unit = exact_value` declarations **before any**
+assertions are accepted. `assert` must consume an entire nonblank source line.
+Each LLM proposal consists only of a source span, its exact quote and empty
+assumptions; the model may not define variables, units, scientific premises or
+Lean code. The receiver parses claim syntax deterministically, with no
+`eval`, imported source code execution, regex-derived model promises, or
+unbounded symbolic search. A reviewer may select the same exact claim; model
+agreement never authorizes a proof by itself.
+
+Exact rational arithmetic and compositional dimensional checks support `+`,
+`-`, `*`, `/`, parentheses, unary signs, and one comparison. Numeric literals
+may carry a bracketed unit (`30[cm]`); otherwise they are dimensionless.
+Declarations require a unit. Unit definitions include SI base units and a small
+hardcoded subset of exact, non-affine derived units (`g`, `cm`, `L`, `N`, `Pa`,
+`J`, `W`, `Hz`, etc.). Unit exponents and rational magnitudes are bounded. There
+is no conversion for offset units such as Celsius, measurement uncertainties,
+statistical estimators, nonlinear functions, implicit multiplication, scientific
+notation, time-dependent states, external ontologies or partial interpretations.
+
+Every accepted assertion carries SHA-256 of its original source and declaration
+bindings, exact offsets, normalized SI dimensions and values, the complete
+Lean-generated source, and an explicit experimental authority label. The fixed
+Lean interpreter re-evaluates the **complete quantity expression AST** as
+`Option PCSQty`, including the seven-component SI exponent vector, dimension
+compatibility of additions and comparisons, and exact rational operations.
+Lean checks either `some true` or `some false` via `by decide +kernel`; a
+mixed-unit error or unknown operation does not produce an accepted assertion.
+`TYPED_QTY_PROVED` means the *generated closed proposition* was checked, not
+that a scientific measurement or its external provenance was verified. Model
+interpretation, unit parsing, source-to-AST translation, the Python arithmetic
+and the external compiler/runtime remain trust assumptions.
+
+The hosted Lean smoke task now includes five typed quantities (four true and one
+false) alongside the previous five arithmetic/literal checks. No API keys or
+paid services are needed for this reproducible experiment. Existing PCS production
+verification, PR #203, and independently frozen evidence are unchanged.
+
+**Next research milestone:** source-specific typed declaration adapters for
+human-annotated CSV/SBML projects, with explicit identifier scope, unit
+provenance, versioned IR schema and a prospective false-certification benchmark.
+No direct import from the unmerged PR #203 is attempted.

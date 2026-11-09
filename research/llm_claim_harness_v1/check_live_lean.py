@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 
 from .core import Source
-from .pipeline import LeanChecker, run, run_arithmetic
+from .pipeline import LeanChecker, run, run_arithmetic, run_typed
 
 
 HERE = Path(__file__).parent
@@ -39,7 +39,21 @@ def main() -> int:
     if literal_statuses != ["NORMALIZED_PROVED", "NORMALIZED_REFUTED"]:
         print("FAIL: legacy Lean verification incomplete:", literal_statuses, file=sys.stderr)
         return 1
-    print("PASS: Lean 4.28.0 checked 3 rational expression AST claims and 2 literal comparisons")
+    typed_src = Source.from_bytes((HERE / "fixtures/typed_source.txt").read_bytes())
+    typed_proposals = json.loads((HERE / "fixtures/typed_proposals.json").read_text())
+    typed_reviewer = json.loads((HERE / "fixtures/typed_reviewer.json").read_text())
+    typed = run_typed(typed_src, typed_proposals, reviewer_proposals=typed_reviewer, lean=lean)
+    typed_statuses = [c["status"] for c in typed["claims"]]
+    if typed_statuses != ["TYPED_QTY_PROVED"] * 4 + ["TYPED_QTY_REFUTED"]:
+        print("FAIL: typed quantity Lean verification incomplete:", typed_statuses, file=sys.stderr)
+        for c in typed["claims"]:
+            if c["status"] not in ("TYPED_QTY_PROVED", "TYPED_QTY_REFUTED"):
+                print("Lean diagnostic:", c.get("lean_diagnostic", "not available"), file=sys.stderr)
+        return 1
+    if typed["counts"]["kernel_checked"] != 5:
+        print("FAIL: not all typed quantity examples were kernel checked", file=sys.stderr)
+        return 1
+    print("PASS: Lean 4.28.0 checked 3 arithmetic, 2 literal and 5 typed quantity claims")
     print("Research-only: no source-context semantic or empirical claim is certified")
     return 0
 

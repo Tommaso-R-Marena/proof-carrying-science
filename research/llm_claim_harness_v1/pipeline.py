@@ -13,6 +13,7 @@ from . import VERSION
 from .core import Source, Comparison, canonical, make_lean_source, prompt_for, PROPOSAL_SCHEMA, sha, validate_proposals
 from .providers import Provider
 from .arithmetic import ArithmeticClaim, make_arithmetic_lean_source, validate_arithmetic_proposals
+from .typed import TypedClaim, make_typed_lean_source, validate_typed_proposals
 
 
 class LocalCache:
@@ -84,6 +85,10 @@ class LeanChecker:
     def check_arithmetic(self, claim: ArithmeticClaim) -> dict:
         code, truth = make_arithmetic_lean_source(claim)
         return self._check_generated(code, truth, "ARITH_EXPR")
+
+    def check_typed(self, claim: TypedClaim) -> dict:
+        code, truth = make_typed_lean_source(claim)
+        return self._check_generated(code, truth, "TYPED_QTY")
 
     def _check_generated(self, code: str, truth: bool, scope: str) -> dict:
         executable = shutil.which(self.executable)
@@ -221,4 +226,48 @@ def run_arithmetic(
             "kernel_checked": sum(row.get("kernel_checked", False) for row in rows),
             "needs_review": sum(row["status"] == "NEEDS_REVIEW" for row in rows),
         },
+    }
+
+
+def run_typed(
+    source: Source, primary_proposals: dict, *, reviewer_proposals: dict | None = None,
+    lean: LeanChecker | None = None, primary_metadata: dict | None = None,
+    reviewer_metadata: dict | None = None,
+) -> dict:
+    """Research-only explicit declaration/quantity comparison receiver."""
+    bindings, primary, rejected = validate_typed_proposals(primary_proposals, source)
+    reviewer_set = None
+    reviewer_rejected = []
+    if reviewer_proposals is not None:
+        _, reviewers, reviewer_rejected = validate_typed_proposals(reviewer_proposals, source)
+        reviewer_set = {c.identity() for c in reviewers}
+    rows=[]
+    for claim in primary:
+        row=claim.to_dict()
+        if reviewer_set is not None and claim.identity() not in reviewer_set:
+            row.update({"status":"NEEDS_REVIEW", "kernel_checked":False})
+        else:
+            checker=lean or LeanChecker(executable="__pcs_missing_lean_executable__")
+            row.update(checker.check_typed(claim))
+        rows.append(row)
+    return {
+       "schema_version":"llm-claim-typed-v3-research",
+       "authority":"EXPERIMENTAL_NOT_PCS_V06_AUTHORITY",
+       "source_sha256":source.digest,
+       "source_encoding":"UTF-8 raw bytes; offsets index Unicode codepoints",
+       "declarations":[binding.json() for binding in bindings.values()],
+       "declaration_sha256":sha(canonical([binding.json() for binding in bindings.values()])),
+       "primary_proposal_sha256":sha(canonical(primary_proposals)),
+       "reviewer_proposal_sha256":sha(canonical(reviewer_proposals)) if reviewer_proposals is not None else None,
+       "primary":primary_metadata or {"provider":"offline","model":"local-fixture"},
+       "reviewer":reviewer_metadata,
+       "scope":"PCS-TYPED/1 closed exact rational quantity assertions; source semantics, data provenance, units translation and scientific validity not proved",
+       "claims":rows, "rejected":rejected, "reviewer_rejected":reviewer_rejected,
+       "counts":{
+           "primary_proposed":len(primary_proposals["claims"]),
+           "accepted_grounding":len(primary),
+           "rejected_grounding":len(rejected),
+           "kernel_checked":sum(row.get("kernel_checked",False) for row in rows),
+           "needs_review":sum(row["status"]=="NEEDS_REVIEW" for row in rows),
+       },
     }

@@ -8,14 +8,14 @@ from pathlib import Path
 import sys
 
 from .core import Source, canonical
-from .pipeline import LeanChecker, LocalCache, get_proposals, run, run_arithmetic
+from .pipeline import LeanChecker, LocalCache, get_proposals, run, run_arithmetic, run_typed
 from .providers import Provider, ProviderError
 from .discovery import discover_standalone
 
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Experimental PCS source-grounded LLM+Lean harness (NOT production verifier)")
-    parser.add_argument("--mode", choices=["literal", "arithmetic"], default="literal",
+    parser.add_argument("--mode", choices=["literal", "arithmetic", "typed"], default="literal",
                         help="Experimental arithmetic mode checks rational expression ASTs in Lean")
     parser.add_argument("--source", type=Path, required=True, help="Plain UTF-8 text only; <=32KiB")
     parser.add_argument("--out", type=Path, required=True, help="Where to write an experimental JSON receipt")
@@ -72,7 +72,7 @@ def main(argv=None) -> int:
             provider = Provider(args.reviewer, args.reviewer_model, mode=args.mode)
             reviewer, hit = get_proposals(provider, source, cache)
             reviewer_meta = {"provider": provider.kind, "model": provider.model, "cache_hit": hit}
-        receiver = run_arithmetic if args.mode == "arithmetic" else run
+        receiver = {"literal": run, "arithmetic": run_arithmetic, "typed": run_typed}[args.mode]
         receipt = receiver(source, primary, reviewer_proposals=reviewer, lean=LeanChecker(args.lean), primary_metadata=primary_meta, reviewer_metadata=reviewer_meta)
         # Refuse symlink targets; caller controls the output path.
         if args.out.is_symlink():
