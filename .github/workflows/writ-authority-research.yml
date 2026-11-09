@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           lean --version
-          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean research/writ_authority_v9/formal/DualBoundary.lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean research/writ_authority_v9/formal/AnchoredExecution.lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean research/writ_authority_v9/formal/EffectLifecycle.lean research/writ_authority_v9/formal/TripleSafety.lean research/writ_authority_v9/formal/SignedEffectReceipt.lean research/writ_authority_v9/formal/DestinationAttestation.lean; then
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom|unsafe|implemented_by)([[:space:]]|$)' research/writ_authority_v9/formal/Authority.lean research/writ_authority_v9/formal/Witness.lean research/writ_authority_v9/formal/TraceExample.lean research/writ_authority_v9/formal/SyntheticGatewayReceipt.lean research/writ_authority_v9/formal/Provenance.lean research/writ_authority_v9/formal/ProvenanceExample.lean research/writ_authority_v9/formal/DualBoundary.lean research/writ_authority_v9/formal/GeneratedProvenanceReceipt.lean research/writ_authority_v9/formal/AnchoredExecution.lean research/writ_authority_v9/formal/SignedGatewayReceipt.lean research/writ_authority_v9/formal/EffectLifecycle.lean research/writ_authority_v9/formal/TripleSafety.lean research/writ_authority_v9/formal/SignedEffectReceipt.lean research/writ_authority_v9/formal/DestinationAttestation.lean research/writ_authority_v9/formal/AttestedProduct.lean; then
             echo "Forbidden proof escape hatch detected" >&2
             exit 1
           fi
@@ -46,4 +46,4 @@ jobs:
           lean -o "$RUNNER_TEMP/EffectLifecycle.olean" research/writ_authority_v9/formal/EffectLifecycle.lean
           LEAN_PATH="$RUNNER_TEMP" lean -o "$RUNNER_TEMP/TripleSafety.olean" research/writ_authority_v9/formal/TripleSafety.lean
           LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/SignedEffectReceipt.lean
-          lean research/writ_authority_v9/formal/DestinationAttestation.lean
+          lean -o "$RUNNER_TEMP/DestinationAttestation.olean" research/writ_authority_v9/formal/DestinationAttestation.lean\n          LEAN_PATH="$RUNNER_TEMP" lean research/writ_authority_v9/formal/AttestedProduct.lean
