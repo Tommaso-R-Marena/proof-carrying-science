@@ -30,6 +30,13 @@ structure Attestation where
 def Valid (expected : Binding) (proof : Attestation) : Prop :=
   proof.binding = expected ∧ proof.signatureVerified = true
 
+def VerifiedB (expected : Binding) (proof : Attestation) : Bool :=
+  decide (proof.binding = expected) && proof.signatureVerified
+
+theorem verifiedB_iff (expected : Binding) (proof : Attestation) :
+    VerifiedB expected proof = true ↔ Valid expected proof := by
+  simp [VerifiedB, Valid, Bool.and_eq_true]
+
 inductive State where
   | pending
   | working (lease : Nat)
@@ -49,7 +56,7 @@ def Next (expected : Binding) : State → Event → Option State
   | .pending, .lease value =>
       if value = expected.lease then some (.working value) else none
   | .working value, .acknowledgment proof =>
-      if value = expected.lease ∧ Valid expected proof then
+      if decide (value = expected.lease) && VerifiedB expected proof then
         some (.delivered proof)
       else none
   | .working _, .uncertain => some .uncertain
@@ -71,8 +78,8 @@ theorem step_preserves_safety (expected : Binding) (start finish : State)
     (event : Event) (safe : StateSafe expected start)
     (step : Next expected start event = some finish) :
     StateSafe expected finish := by
-  cases start <;> cases event <;>
-    simp_all [Next, StateSafe, Valid]
+  cases start <;> cases event <;> cases finish <;>
+    simp_all [Next, StateSafe, Valid, VerifiedB]
 
 theorem replay_preserves_safety (expected : Binding) (events : List Event)
     (start finish : State) (safe : StateSafe expected start)
@@ -102,14 +109,15 @@ theorem delivered_requires_verified_receiver (expected : Binding)
 theorem wrong_receiver_rejected (expected : Binding) (lease : Nat) (proof : Attestation)
     (bad : proof.binding.receiver ≠ expected.receiver) :
     Next expected (.working lease) (.acknowledgment proof) = none := by
-  simp [Next, Valid]
-  intro _ h
-  exact bad (congrArg Binding.receiver h)
+  have neq : proof.binding ≠ expected := by
+    intro h
+    exact bad (congrArg Binding.receiver h)
+  simp [Next, VerifiedB, neq]
 
 theorem forged_signature_rejected (expected : Binding) (lease : Nat) (proof : Attestation)
     (bad : proof.signatureVerified = false) :
     Next expected (.working lease) (.acknowledgment proof) = none := by
-  simp [Next, Valid, bad]
+  simp [Next, VerifiedB, bad]
 
 theorem terminal_outcomes_are_absorbing (expected : Binding) (proof : Attestation)
     (event : Event) :
