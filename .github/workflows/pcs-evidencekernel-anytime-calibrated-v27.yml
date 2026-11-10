@@ -1,0 +1,46 @@
+name: PCS EvidenceKernel v27 anytime calibration research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_anytime_calibration_v27/**'
+      - '.github/workflows/pcs-evidencekernel-anytime-calibrated-v27.yml'
+      - 'research/evidencekernel_propensity_v25/**'
+      - 'research/evidencekernel_calibrated_v26/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-e-process-and-independent-audit:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Exhaustive stopping-path coverage and independent differential tests
+        run: python -m unittest discover -s research/evidencekernel_anytime_calibration_v27 -p 'test_*.py' -v
+      - name: Deterministic full report cross-check and fail-closed pin enforcement
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir=research/evidencekernel_anytime_calibration_v27
+          cp="$(cat "$dir/example_contract_pin.txt")"
+          rp="$(cat "$dir/example_records_pin.txt")"
+          pp="$(cat "$dir/example_study_pin.txt")"
+          ep="$(cat "$dir/example_evidence_pin.txt")"
+          python -m research.evidencekernel_anytime_calibration_v27.kernel "$dir/example_contract.json" "$dir/example_records.json" "$dir/example_study_protocol.json" "$dir/example_study_records.json" --contract-pin "$cp" --records-pin "$rp" --study-pin "$pp" --evidence-pin "$ep" > "$RUNNER_TEMP/v27-python.json"
+          node "$dir/independent.js" "$dir/example_contract.json" "$dir/example_records.json" "$dir/example_study_protocol.json" "$dir/example_study_records.json" "$cp" "$rp" "$pp" "$ep" > "$RUNNER_TEMP/v27-node.json"
+          python - "$RUNNER_TEMP/v27-python.json" "$RUNNER_TEMP/v27-node.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(p)) for p in sys.argv[1:]]
+          assert a==b
+          assert a['calibration']['propensity_ceiling_by_state']==['691/1000','509/1000','561/1000']
+          assert a['scientific_type_i_upper_if_premises_hold']=='7/100'
+          assert not a['drift_monitor']['alarm']
+          PY
