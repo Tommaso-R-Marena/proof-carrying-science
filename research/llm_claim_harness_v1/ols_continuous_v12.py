@@ -44,7 +44,7 @@ private theorem pcs_v12_abs_weighted_sum
     (hδ : ∀ i, |d i| ≤ ε) :
     |∑ i, w i * d i| ≤ ε * ∑ i, |w i| := by
   calc
-    |∑ i, w i * d i| ≤ ∑ i, |w i * d i| := abs_sum_le_sum_abs _ _
+    |∑ i, w i * d i| ≤ ∑ i, |w i * d i| := Finset.abs_sum_le_sum_abs _ _
     _ = ∑ i, |w i| * |d i| := by simp only [abs_mul]
     _ ≤ ∑ i, |w i| * ε := by
       apply Finset.sum_le_sum
@@ -165,7 +165,7 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
        (∑ i, pcsV12{weights} i * y i)| ≤ pcsV12{target}Threshold := by
   apply pcs_v12_continuous_affine_bound
   · exact hbox
-  · norm_num [pcsV12Error, pcsV12{weights}, pcsV12{target}Threshold]''')
+  · norm_num [pcsV12Error, pcsV12{weights}, pcsV12{target}Threshold, Fin.sum_univ_succ]''')
     code = 'import Mathlib\n\n' + MATHLIB_THEOREM + '\n\n' + old + '\n\n' + '\n\n'.join(anchors+extra) + '\n'
     return code, {
         'row_count': n,
