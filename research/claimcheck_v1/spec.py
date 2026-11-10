@@ -153,6 +153,7 @@ class ClaimSpec:
         reported = raw.get("reported")
         if not isinstance(reported, str) or not REPORTED_RE.match(reported):
             raise SpecError("reported must be the decimal literal exactly as printed")
+        parse_decimal(reported)  # also bounds the exponent
         column = raw.get("column")
         x_column = raw.get("x_column")
         if column is not None:
