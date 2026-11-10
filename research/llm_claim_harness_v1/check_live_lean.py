@@ -20,6 +20,7 @@ from .csv_integrated_v8 import run_integrated, replay_integrated
 from .ols_integrated_v9 import run_ols, replay_ols
 from .ols_note_v9 import run_ols_note, replay_ols_note, parse_ols_note
 from .ols_stability_v10 import run_stability, replay_stability
+from .ols_uncertainty_v11 import run_uncertainty, replay_uncertainty
 from .core import canonical, sha
 
 
@@ -299,6 +300,53 @@ def main() -> int:
         True, "OLS_LOO")["status"] != "KERNEL_REJECTED":
         print("FAIL: forged claim of stability accepted on influential row", file=sys.stderr)
         return 1
+    # V11: source-bound full response-error endpoint cube; source bytes, note
+    # bytes, CSV column checks and EVERY 2^4 corner in one Lean proof.
+    uncertainty_note = Source.from_bytes((HERE / "fixtures/ols_uncertainty_note_v11.txt").read_bytes())
+    robust = run_uncertainty(ols_source, ols_manifest, uncertainty_note, lean=LeanChecker("lean", timeout=60),
+                             expected_data_sha256=ols_source.digest,
+                             expected_manifest_sha256=sha(ols_manifest),
+                             expected_note_sha256=uncertainty_note.digest)
+    if (not robust["kernel_checked"] or robust["finite_corner_verdict"] != "ALL_CORNERS_WITHIN_THRESHOLDS"
+            or robust["metrics"]["complete_corner_count"] != 16):
+        print("FAIL: v11 full response-error corner kernel check:",
+              robust.get("lean_diagnostic", robust["formal_status"]), file=sys.stderr)
+        return 1
+    replay_robust = replay_uncertainty(
+        ols_source, ols_manifest, uncertainty_note, canonical(robust) + b"\n",
+        lean=LeanChecker("lean", timeout=60), expected_data_sha256=ols_source.digest,
+        expected_manifest_sha256=sha(ols_manifest), expected_note_sha256=uncertainty_note.digest)
+    if not replay_robust["matched"]:
+        print("FAIL: v11 fresh uncertainty-cube receipt replay:", replay_robust, file=sys.stderr)
+        return 1
+    robust_src = robust["lean_source"]
+    # Negative control A: false expected global verdict.
+    true_robust = "pcsOLSRobustVerdict = some true"
+    if true_robust not in robust_src or LeanChecker("lean", timeout=60)._check_generated(
+        robust_src.replace(true_robust, "pcsOLSRobustVerdict = some false", 1),
+        True, "OLS_RESPONSE_CORNERS")["status"] != "KERNEL_REJECTED":
+        print("FAIL: forged uncertainty verdict was not rejected", file=sys.stderr)
+        return 1
+    # Negative control B: skip the PLUS branch for every endpoint. The checked
+    # 16-corner count must reject an artificially truncated cube.
+    full = "tails.map (fun rest => (p.1, p.2 + error) :: rest)"
+    if full not in robust_src or LeanChecker("lean", timeout=60)._check_generated(
+        robust_src.replace(full, "[]", 1), True, "OLS_RESPONSE_CORNERS"
+    )["status"] != "KERNEL_REJECTED":
+        print("FAIL: omitted uncertainty corners unexpectedly passed", file=sys.stderr)
+        return 1
+    # Negative control C: make the declared slope threshold too tight. The
+    # kernel must check a genuine counterexample, not accept the old verdict.
+    tight_bytes = uncertainty_note.raw.replace(b"max_slope_shift_si=0.08", b"max_slope_shift_si=0.07")
+    tight_note = Source.from_bytes(tight_bytes)
+    tight = run_uncertainty(ols_source, ols_manifest, tight_note, lean=LeanChecker("lean", timeout=60))
+    if (not tight["kernel_checked"] or tight["finite_corner_verdict"] != "COUNTEREXAMPLE_CORNER"
+            or tight["metrics"]["first_violating_corner_index"] is None):
+        print("FAIL: v11 narrow threshold did not produce checked counterexample:",
+              tight.get("lean_diagnostic", tight["formal_status"]), file=sys.stderr)
+        return 1
+    print("PASS: v11 16/16 exact source-bound OLS uncertainty corners, fresh replay, "
+          "false-verdict / missing-corner negative controls, and kernel-checked counterexample")
     print("PASS: v10 source-backed finite leave-one-out true/false kernel checks, "
           "fresh replay, omitted-deletion and forged-verdict negative controls")
     print("PASS: Lean 4.28.0 checked previous 20 scoped proof checks and new exact OLS "

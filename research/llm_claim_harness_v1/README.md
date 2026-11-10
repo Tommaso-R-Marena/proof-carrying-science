@@ -648,3 +648,46 @@ assumptions, sampling representativeness, outlier resistance to larger changes,
 scientific interpretation, or any production PCS v0.6 authority. Truth of
 formal arithmetic on an admitted note is separate from whether the original
 research paper actually claimed or justified that tolerance.
+
+## Experimental v11: source-bound response-error uncertainty corners
+
+The standalone `ols_uncertainty_v11` research CLI checks whether a fixed-predictor
+OLS line is stable under **every corner** of an independent symmetric error box
+for the observed response values. Given `n` complete CSV rows (currently 3–6),
+it checks the entire `2^n` response-endpoint ensemble, never a selected subset.
+All decimals and unit conversions are exact rationals. A separate note pins the
+complete CSV and manifest SHA-256 and supplies the `response_error_si`,
+`max_slope_shift_si`, and `max_intercept_shift_si` declarations. These bounds
+are interpreted in SI units; the source schema determines x/y unit conversion.
+
+```bash
+python -m research.llm_claim_harness_v1.ols_uncertainty_v11 \
+  --source research/llm_claim_harness_v1/fixtures/ols_data.csv \
+  --table-spec research/llm_claim_harness_v1/fixtures/ols_table_spec.json \
+  --uncertainty-note research/llm_claim_harness_v1/fixtures/ols_uncertainty_note_v11.txt \
+  --out /tmp/pcs-ols-v11-receipt.json --lean lean
+```
+
+A second invocation with `--receipt /tmp/pcs-ols-v11-receipt.json` rechecks
+all proof obligations with Lean and rejects modified receipts. Use independently
+retained `--expected-data-sha256`, `--expected-manifest-sha256`, and
+`--expected-note-sha256` pins when authenticity of input identity matters.
+
+The kernel's generated script parses original CSV cells, constructs its OLS
+fit, decodes the three bounds from original note bytes, generates all response
+corners, and checks every corner against the two tolerances. It verifies a
+**finite-corner statement only**. A source change, forged bound, omitted corner,
+false robust verdict or bad fit must be rejected or refuted. The research
+receipt separately includes an exact, externally calculated affine envelope:
+with fixed predictor values, OLS coefficients are affine functions of the
+responses, and the continuous-box extrema occur at corners. The generic
+continuous-box theorem is **not yet Lean-proved in this module**, so the receipt
+marks it `EXTERNAL_AFFINE_DERIVATION_NOT_KERNEL_PROVED` and does not promote
+continuous robustness to formal authority. The source error bound itself,
+measurement noise distribution, independence of errors, model choice, source
+completeness, outlier effects and empirical scientific validity are not certified.
+
+This is a bounded uncertainty verification **research capability**, not evidence
+of a novel theorem or an independently demonstrated scientific breakthrough.
+No provider output, selected corner, missing Lean check, or LLM agreement can
+promote a scientific-validity status. Production PCS v0.6 is untouched.
