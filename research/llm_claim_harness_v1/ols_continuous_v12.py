@@ -124,6 +124,47 @@ private theorem pcs_v12_ols_slope_response_bound {n : ℕ}
 '''
 
 
+MATHLIB_INTERCEPT_REFINEMENT = r'''
+-- Standard OLS intercept is also a fixed-design affine functional of responses.
+private noncomputable def pcsV12RealIntercept {n : ℕ} (x y : Fin n → ℝ) : ℝ :=
+  ((∑ i, y i) - pcsV12RealSlope x y * (∑ i, x i)) / (n : ℝ)
+
+private noncomputable def pcsV12RealInterceptWeight {n : ℕ} (x : Fin n → ℝ) (i : Fin n) : ℝ :=
+  (1 / (n : ℝ)) - ((∑ j, x j) / (n : ℝ)) * pcsV12RealSlopeWeight x i
+
+private theorem pcs_v12_real_ols_intercept_is_affine {n : ℕ} (x y : Fin n → ℝ) :
+    pcsV12RealIntercept x y = ∑ i, pcsV12RealInterceptWeight x i * y i := by
+  classical
+  simp only [pcsV12RealIntercept, pcsV12RealInterceptWeight]
+  rw [pcs_v12_real_ols_slope_is_affine]
+  let sx : ℝ := ∑ i, x i
+  let slope : ℝ := ∑ i, pcsV12RealSlopeWeight x i * y i
+  change ((∑ i, y i) - slope * sx) / (n : ℝ) =
+    ∑ i, ((1 / (n : ℝ)) - (sx / (n : ℝ)) * pcsV12RealSlopeWeight x i) * y i
+  calc
+    ((∑ i, y i) - slope * sx) / (n : ℝ) =
+        (∑ i, (1 / (n : ℝ)) * y i) -
+        ∑ i, (sx / (n : ℝ)) * (pcsV12RealSlopeWeight x i * y i) := by
+          rw [← Finset.mul_sum, ← Finset.mul_sum]
+          dsimp [slope]
+          ring
+    _ = ∑ i, ((1 / (n : ℝ)) - (sx / (n : ℝ)) * pcsV12RealSlopeWeight x i) * y i := by
+          rw [← Finset.sum_sub_distrib]
+          apply Finset.sum_congr rfl
+          intro i hi
+          ring
+
+private theorem pcs_v12_ols_intercept_response_bound {n : ℕ}
+    (x y d : Fin n → ℝ) (ε tolerance : ℝ)
+    (hbox : ∀ i, |d i| ≤ ε)
+    (hthreshold : ε * (∑ i, |pcsV12RealInterceptWeight x i|) ≤ tolerance) :
+    |pcsV12RealIntercept x (fun i => y i + d i) - pcsV12RealIntercept x y| ≤ tolerance := by
+  rw [pcs_v12_real_ols_intercept_is_affine, pcs_v12_real_ols_intercept_is_affine]
+  exact pcs_v12_continuous_affine_bound
+    (pcsV12RealInterceptWeight x) y d ε tolerance hbox hthreshold
+'''
+
+
 # A proof generated for this specific source computes the weights inside Lean
 # from the SAME decoded CSV as all the earlier OLS/units checks.
 WEIGHT_RECONSTRUCTION = r'''
@@ -208,6 +249,11 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
          '  fin_cases i <;> norm_num [pcsV12RealSlopeWeight, pcsV12DesignX, '
          'pcsV12SlopeWeights, Fin.sum_univ_succ]'),
         f'def pcsV12InterceptWeights : Fin {n} → ℝ := {int_fun}',
+        (f'example : (fun i : Fin {n} => pcsV12RealInterceptWeight pcsV12DesignX i) = '
+         'pcsV12InterceptWeights := by\n'
+         '  funext i\n'
+         '  fin_cases i <;> norm_num [pcsV12RealInterceptWeight, pcsV12RealSlopeWeight, '
+         'pcsV12DesignX, pcsV12InterceptWeights, Fin.sum_univ_succ]'),
         f'def pcsV12Error : ℝ := {real_rat(limits[0])}',
         f'def pcsV12SlopeThreshold : ℝ := {real_rat(limits[1])}',
         f'def pcsV12InterceptThreshold : ℝ := {real_rat(limits[2])}',
@@ -246,7 +292,18 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
             '  · norm_num [pcsV12Error, pcsV12DesignX, pcsV12RealSlopeWeight, '
             'pcsV12SlopeThreshold, Fin.sum_univ_succ]'
         )
-    code = 'import Mathlib\n\n' + MATHLIB_THEOREM + '\n\n' + MATHLIB_OLS_REFINEMENT + '\n\n' + old + '\n\n' + '\n\n'.join(anchors+extra) + '\n'
+    if radii[1] <= limits[2]:
+        extra.append(
+            f'example (y d : Fin {n} → ℝ) '
+            '(hbox : ∀ i, |d i| ≤ pcsV12Error) :\n'
+            '|pcsV12RealIntercept pcsV12DesignX (fun i => y i + d i) - '
+            'pcsV12RealIntercept pcsV12DesignX y| ≤ pcsV12InterceptThreshold := by\n'
+            '  apply pcs_v12_ols_intercept_response_bound\n'
+            '  · exact hbox\n'
+            '  · norm_num [pcsV12Error, pcsV12DesignX, pcsV12RealInterceptWeight, '
+            'pcsV12RealSlopeWeight, pcsV12InterceptThreshold, Fin.sum_univ_succ]'
+        )
+    code = 'import Mathlib\n\n' + MATHLIB_THEOREM + '\n\n' + MATHLIB_OLS_REFINEMENT + '\n\n' + MATHLIB_INTERCEPT_REFINEMENT + '\n\n' + old + '\n\n' + '\n\n'.join(anchors+extra) + '\n'
     return code, {
         'row_count': n,
         'continuous_theorem': 'ALL_REAL_BOX_PERTURBATIONS_OF_SOURCE_DERIVED_AFFINE_FUNCTIONAL',
@@ -256,9 +313,11 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
         'max_intercept_shift_si': str(radii[1]),
         'slope_tolerance_holds': radii[0] <= limits[1],
         'intercept_tolerance_holds': radii[1] <= limits[2],
-        'ols_to_affine_refinement_proved': False,
+        'ols_to_affine_refinement_proved': None, # receive authority only after native kernel check
         'ols_slope_closed_form_identity_in_generated_lean': True,
+        'ols_intercept_closed_form_identity_in_generated_lean': True,
         'source_anchored_real_slope_instantiation_in_generated_lean': True,
+        'source_anchored_real_intercept_instantiation_in_generated_lean': True,
         'semantic_fidelity': 'NOT_ESTABLISHED',
         'scientific_status': 'NOT_ASSESSED',
     }
@@ -319,8 +378,10 @@ def run_continuous(data: Source, manifest: bytes, note: Source, *, checker: Math
         'expected_note_sha256':expected_note_sha256,
         'scope':'All real-valued response deviations within independent absolute box bounds; quantified affine linear functional theorem, exact rational source weight anchors; OLS affine refinement and semantic/scientific adequacy not yet proved.',
         'continuous_affine_certificate':'KERNEL_CHECKED' if verified else 'UNVERIFIED',
-        'ols_regression_semantics':'SOURCE_GROUNDED_REAL_SLOPE_PROVED_INTERCEPT_PENDING' if verified else 'NOT_FORMALLY_REFINED',
+        'ols_regression_semantics':'SOURCE_GROUNDED_REAL_SLOPE_AND_INTERCEPT_PROVED' if verified else 'NOT_FORMALLY_REFINED',
         'ols_slope_identity_kernel_checked':verified,
+        'ols_intercept_identity_kernel_checked':verified,
+        'source_specific_ols_coefficients_kernel_checked':verified,
         'scientific_status':'NOT_ASSESSED',
         'metrics':info,
         **{k:v for k,v in checked.items() if k not in {'kernel_checked','status'}},

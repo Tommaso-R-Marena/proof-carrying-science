@@ -51,6 +51,8 @@ class Tests(unittest.TestCase):
         self.assertIn('pcsOLSOriginalPairs = some',code)
         self.assertIn('pcsV12RealSlope pcsV12DesignX',code)
         self.assertIn('pcsV12RealSlopeWeight pcsV12DesignX',code)
+        self.assertIn('pcsV12RealIntercept pcsV12DesignX',code)
+        self.assertIn('pcs_v12_real_ols_intercept_is_affine',code)
 
     def test_generic_theorem_free_of_untrusted_axioms(self):
         for token in ['sorry','native_decide','axiom ', 'unsafe def', 'admit', 'False.elim']:
@@ -74,7 +76,7 @@ class Tests(unittest.TestCase):
     def test_mock_is_not_scientific_certification(self):
         result=run_continuous(*inputs(),checker=MockMathlib(True))
         self.assertEqual(result['scientific_status'],'NOT_ASSESSED')
-        self.assertEqual(result['ols_regression_semantics'],'SOURCE_GROUNDED_REAL_SLOPE_PROVED_INTERCEPT_PENDING')
+        self.assertEqual(result['ols_regression_semantics'],'SOURCE_GROUNDED_REAL_SLOPE_AND_INTERCEPT_PROVED')
         self.assertFalse(result['metrics']['ols_to_affine_refinement_proved'])
 
     def test_note_adjusted_slope_tight(self):
@@ -132,6 +134,28 @@ class Tests(unittest.TestCase):
                          abs(sum((a*x for a,x in zip(b,delta)),Fraction()))))
         self.assertEqual(max(x for x,y in vals),radii[0])
         self.assertEqual(max(y for x,y in vals),radii[1])
+
+    def test_intercept_affine_weights_match_classic_ols_formula(self):
+        # Mathematical diagnostic against an independent closed-form fit.
+        _, sw, iw, lims, radii = _weights(*inputs())
+        xs=[Fraction(0),Fraction(1),Fraction(2),Fraction(3)]
+        n=len(xs)
+        meanx=sum(xs)/n
+        rand=random.Random(50)
+        for _ in range(100):
+            yy=[Fraction(rand.randint(-12,12),7) for i in xs]
+            num=n*sum(x*y for x,y in zip(xs,yy))-sum(xs)*sum(yy)
+            den=n*sum(x*x for x in xs)-sum(xs)**2
+            slope=num/den
+            intercept=(sum(yy)-slope*sum(xs))/n
+            self.assertEqual(slope, sum((a*y for a,y in zip(sw,yy)),Fraction()))
+            self.assertEqual(intercept,sum((a*y for a,y in zip(iw,yy)),Fraction()))
+
+    def test_source_specific_intercept_lean_obligation_generated(self):
+        code,_=make_continuous_mathlib_source(*inputs())
+        self.assertIn('pcsV12RealInterceptWeight pcsV12DesignX',code)
+        self.assertIn('pcs_v12_ols_intercept_response_bound',code)
+        self.assertIn('pcsV12InterceptThreshold',code)
 
     def test_replay_missing_checker_refuses(self):
         result=run_continuous(*inputs(),checker=MockMathlib(True))

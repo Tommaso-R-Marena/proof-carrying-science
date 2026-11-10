@@ -27,8 +27,9 @@ def main() -> int:
         print(report.get('lean_diagnostic',report['formal_status']),file=sys.stderr)
         return 1
     if (report['scientific_status'] != 'NOT_ASSESSED' or
-        report['ols_regression_semantics'] != 'SOURCE_GROUNDED_REAL_SLOPE_PROVED_INTERCEPT_PENDING' or
-        'pcsV12RealSlope pcsV12DesignX' not in report['lean_source']):
+        report['ols_regression_semantics'] != 'SOURCE_GROUNDED_REAL_SLOPE_AND_INTERCEPT_PROVED' or
+        'pcsV12RealSlope pcsV12DesignX' not in report['lean_source'] or
+        'pcsV12RealIntercept pcsV12DesignX' not in report['lean_source']):
         print('FAIL: scientific interpretation or OLS refinement inappropriately elevated',file=sys.stderr)
         return 1
     replay=replay_continuous(csv,manifest,note,canonical(report),checker=checker,
@@ -58,9 +59,14 @@ def main() -> int:
     if reject2['status'] != 'KERNEL_REJECTED':
         print('FAIL: false zero uncertainty bound was accepted',reject2['status'],file=sys.stderr)
         return 1
-    print('PASS: all-real affine bound and source-specific exact closed-form OLS slope theorem, Lean 4.28.0 + Mathlib')
+    old_intercept='pcsV12Error * (∑ i, |pcsV12InterceptWeights i|) <= pcsV12InterceptThreshold'
+    forged_intercept='pcsV12Error * (∑ i, |pcsV12InterceptWeights i|) <= (0 : ℝ)'
+    if old_intercept not in code or checker.check(code.replace(old_intercept,forged_intercept,1))['status'] != 'KERNEL_REJECTED':
+        print('FAIL: forged zero intercept robustness bound was not rejected',file=sys.stderr)
+        return 1
+    print('PASS: source-specific ALL-REAL exact OLS slope and intercept bounds, Lean 4.28.0 + Mathlib')
     print('PASS: complete CSV/manifest/note math bound, fresh replay, two forged certificates rejected')
-    print('LIMIT: intercept OLS refinement and scientific/semantic validity remain unproved')
+    print('LIMIT: scientific/semantic validity, statistical assumptions, and independent data authenticity remain unproved')
     return 0
 
 

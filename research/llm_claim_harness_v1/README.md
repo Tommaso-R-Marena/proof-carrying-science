@@ -767,3 +767,13 @@ weights, and instantiates the generic real OLS perturbation theorem for this
 actual design. This is a stronger *mathematical* connection, but remains invalid
 until the corresponding hosted Mathlib job succeeds; intercept refinement and
 scientific/experimental meaning remain explicitly outside its proved scope.
+
+### Intercept completion (experimental, requires fresh kernel result)
+
+The latest continuation proposes a generic real OLS intercept-as-affine-weighted-
+sum theorem and a source-specific instantiation, using the very same CSV
+row-derived predictor values and independent response tolerance. It also
+adds a deliberately false intercept bound that a real kernel must reject.
+**Until the new CI passes, intercept refinement remains unverified.**
+Neither theorem proves source completeness, model selection or empirical
+scientific validity.
