@@ -48,6 +48,9 @@ class Tests(unittest.TestCase):
             self.assertIn(token,code)
         self.assertIn('pcs_v12_real_ols_slope_is_affine',code)
         self.assertIn('pcs_v12_ols_slope_response_bound',code)
+        self.assertIn('pcsOLSOriginalPairs = some',code)
+        self.assertIn('pcsV12RealSlope pcsV12DesignX',code)
+        self.assertIn('pcsV12RealSlopeWeight pcsV12DesignX',code)
 
     def test_generic_theorem_free_of_untrusted_axioms(self):
         for token in ['sorry','native_decide','axiom ', 'unsafe def', 'admit', 'False.elim']:
@@ -71,7 +74,7 @@ class Tests(unittest.TestCase):
     def test_mock_is_not_scientific_certification(self):
         result=run_continuous(*inputs(),checker=MockMathlib(True))
         self.assertEqual(result['scientific_status'],'NOT_ASSESSED')
-        self.assertEqual(result['ols_regression_semantics'],'GENERIC_SLOPE_IDENTITY_ONLY_SOURCE_REFINEMENT_PENDING')
+        self.assertEqual(result['ols_regression_semantics'],'SOURCE_GROUNDED_REAL_SLOPE_PROVED_INTERCEPT_PENDING')
         self.assertFalse(result['metrics']['ols_to_affine_refinement_proved'])
 
     def test_note_adjusted_slope_tight(self):

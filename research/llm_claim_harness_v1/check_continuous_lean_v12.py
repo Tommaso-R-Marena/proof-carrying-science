@@ -26,7 +26,9 @@ def main() -> int:
         print('FAIL: v12 quantified continuous-real bound was not kernel-checked',file=sys.stderr)
         print(report.get('lean_diagnostic',report['formal_status']),file=sys.stderr)
         return 1
-    if report['scientific_status'] != 'NOT_ASSESSED' or report['ols_regression_semantics'] != 'NOT_FORMALLY_REFINED':
+    if (report['scientific_status'] != 'NOT_ASSESSED' or
+        report['ols_regression_semantics'] != 'SOURCE_GROUNDED_REAL_SLOPE_PROVED_INTERCEPT_PENDING' or
+        'pcsV12RealSlope pcsV12DesignX' not in report['lean_source']):
         print('FAIL: scientific interpretation or OLS refinement inappropriately elevated',file=sys.stderr)
         return 1
     replay=replay_continuous(csv,manifest,note,canonical(report),checker=checker,
@@ -56,9 +58,9 @@ def main() -> int:
     if reject2['status'] != 'KERNEL_REJECTED':
         print('FAIL: false zero uncertainty bound was accepted',reject2['status'],file=sys.stderr)
         return 1
-    print('PASS: general all-real perturbation affine theorem (source-bound weights), actual Lean 4.28.0 + Mathlib')
+    print('PASS: all-real affine bound and source-specific exact closed-form OLS slope theorem, Lean 4.28.0 + Mathlib')
     print('PASS: complete CSV/manifest/note math bound, fresh replay, two forged certificates rejected')
-    print('LIMIT: OLS-coefficient affine refinement is not kernel-proved; semantic/scientific validity is not assessed')
+    print('LIMIT: intercept OLS refinement and scientific/semantic validity remain unproved')
     return 0
 
 

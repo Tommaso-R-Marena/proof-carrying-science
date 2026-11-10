@@ -76,11 +76,11 @@ theorem pcs_v12_continuous_affine_bound {n : ℕ}
 
 MATHLIB_OLS_REFINEMENT = r'''
 -- Standard fixed-design ordinary least squares coefficient, real-valued.
-private def pcsV12RealSlope {n : ℕ} (x y : Fin n → ℝ) : ℝ :=
+private noncomputable def pcsV12RealSlope {n : ℕ} (x y : Fin n → ℝ) : ℝ :=
   (((n : ℝ) * (∑ i, x i * y i)) - (∑ i, x i) * (∑ i, y i)) /
     ((n : ℝ) * (∑ i, x i * x i) - (∑ i, x i) ^ 2)
 
-private def pcsV12RealSlopeWeight {n : ℕ} (x : Fin n → ℝ) (i : Fin n) : ℝ :=
+private noncomputable def pcsV12RealSlopeWeight {n : ℕ} (x : Fin n → ℝ) (i : Fin n) : ℝ :=
   (((n : ℝ) * x i) - (∑ j, x j)) /
     ((n : ℝ) * (∑ j, x j * x j) - (∑ j, x j) ^ 2)
 
@@ -174,6 +174,18 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
     for i, weight in enumerate(slope_w):
         anchors.append(f'example : pcsV12DesignWeights.bind (fun ws => ws[{i}]?) = some {_rat(weight)} := by decide +kernel')
     n = len(slope_w)
+    spec = parse_table_spec(manifest)
+    rows = parse_table_rows(data, spec)
+    columns = {c.name: (i, c.unit) for i, c in enumerate(spec.columns)}
+    xi, xu = columns[parsed.x]
+    yi, yu = columns[parsed.y]
+    xs, _ = unit_value(xu)
+    ys, _ = unit_value(yu)
+    xvalues = tuple(Fraction(row.cells[xi].value) * xs for row in rows)
+    yvalues = tuple(Fraction(row.cells[yi].value) * ys for row in rows)
+    encoded_pairs = '[' + ', '.join('(' + _rat(x) + ', ' + _rat(y) + ')'
+                                  for x, y in zip(xvalues, yvalues)) + ']'
+    anchors.append(f'example : pcsOLSOriginalPairs = some ({encoded_pairs} : List (Rat × Rat)) := by decide +kernel')
     # The two coefficient weights are explicit Rational-to-Real casts, their
     # numerical identity linked above to CSV-derived Rat weights; intercept
     # weights are recomputed from the same accepted fixed predictor design.
@@ -186,8 +198,15 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
         ) + '(0 : ℝ)' + ')' * len(weights)
     slope_fun = function_term(slope_w)
     int_fun = function_term(int_w)
+    x_fun = function_term(xvalues)
     extra = [
+        f'def pcsV12DesignX : Fin {n} → ℝ := {x_fun}',
         f'def pcsV12SlopeWeights : Fin {n} → ℝ := {slope_fun}',
+        (f'example : (fun i : Fin {n} => pcsV12RealSlopeWeight pcsV12DesignX i) = '
+         'pcsV12SlopeWeights := by\n'
+         '  funext i\n'
+         '  fin_cases i <;> norm_num [pcsV12RealSlopeWeight, pcsV12DesignX, '
+         'pcsV12SlopeWeights, Fin.sum_univ_succ]'),
         f'def pcsV12InterceptWeights : Fin {n} → ℝ := {int_fun}',
         f'def pcsV12Error : ℝ := {real_rat(limits[0])}',
         f'def pcsV12SlopeThreshold : ℝ := {real_rat(limits[1])}',
@@ -216,6 +235,17 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
   apply pcs_v12_continuous_affine_bound
   · exact hbox
   · norm_num [pcsV12Error, pcsV12{weights}, pcsV12{target}Threshold, Fin.sum_univ_succ]''')
+    if radii[0] <= limits[1]:
+        extra.append(
+            f'example (y d : Fin {n} → ℝ) '
+            '(hbox : ∀ i, |d i| ≤ pcsV12Error) :\n'
+            '|pcsV12RealSlope pcsV12DesignX (fun i => y i + d i) - '
+            'pcsV12RealSlope pcsV12DesignX y| ≤ pcsV12SlopeThreshold := by\n'
+            '  apply pcs_v12_ols_slope_response_bound\n'
+            '  · exact hbox\n'
+            '  · norm_num [pcsV12Error, pcsV12DesignX, pcsV12RealSlopeWeight, '
+            'pcsV12SlopeThreshold, Fin.sum_univ_succ]'
+        )
     code = 'import Mathlib\n\n' + MATHLIB_THEOREM + '\n\n' + MATHLIB_OLS_REFINEMENT + '\n\n' + old + '\n\n' + '\n\n'.join(anchors+extra) + '\n'
     return code, {
         'row_count': n,
@@ -228,6 +258,7 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
         'intercept_tolerance_holds': radii[1] <= limits[2],
         'ols_to_affine_refinement_proved': False,
         'ols_slope_closed_form_identity_in_generated_lean': True,
+        'source_anchored_real_slope_instantiation_in_generated_lean': True,
         'semantic_fidelity': 'NOT_ESTABLISHED',
         'scientific_status': 'NOT_ASSESSED',
     }
@@ -288,7 +319,7 @@ def run_continuous(data: Source, manifest: bytes, note: Source, *, checker: Math
         'expected_note_sha256':expected_note_sha256,
         'scope':'All real-valued response deviations within independent absolute box bounds; quantified affine linear functional theorem, exact rational source weight anchors; OLS affine refinement and semantic/scientific adequacy not yet proved.',
         'continuous_affine_certificate':'KERNEL_CHECKED' if verified else 'UNVERIFIED',
-        'ols_regression_semantics':'GENERIC_SLOPE_IDENTITY_ONLY_SOURCE_REFINEMENT_PENDING' if verified else 'NOT_FORMALLY_REFINED',
+        'ols_regression_semantics':'SOURCE_GROUNDED_REAL_SLOPE_PROVED_INTERCEPT_PENDING' if verified else 'NOT_FORMALLY_REFINED',
         'ols_slope_identity_kernel_checked':verified,
         'scientific_status':'NOT_ASSESSED',
         'metrics':info,

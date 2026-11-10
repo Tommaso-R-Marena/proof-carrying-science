@@ -757,3 +757,13 @@ a kernel-checked refinement from the source-decoded CSV into a particular
 real-valued design vector; nor does it identify the OLS intercept with its
 source-bound affine weights. Both are tracked separately. Do not report those
 connections as proved until the hosted Mathlib job passes an explicit proof.
+
+### Source-specific OLS slope instantiation (experimental, kernel required)
+
+The source-specific extension now constructs the real-valued predictor vector
+from all CSV rows, checks the exact rational `(x, y)` pairs from original bytes
+in Lean, checks the real slope-weight function against the source-derived rational
+weights, and instantiates the generic real OLS perturbation theorem for this
+actual design. This is a stronger *mathematical* connection, but remains invalid
+until the corresponding hosted Mathlib job succeeds; intercept refinement and
+scientific/experimental meaning remain explicitly outside its proved scope.
