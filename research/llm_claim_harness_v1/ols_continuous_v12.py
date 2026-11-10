@@ -74,6 +74,56 @@ theorem pcs_v12_continuous_affine_bound {n : ℕ}
   exact (pcs_v12_abs_weighted_sum w d ε hbox).trans hthreshold
 '''
 
+MATHLIB_OLS_REFINEMENT = r'''
+-- Standard fixed-design ordinary least squares coefficient, real-valued.
+private def pcsV12RealSlope {n : ℕ} (x y : Fin n → ℝ) : ℝ :=
+  (((n : ℝ) * (∑ i, x i * y i)) - (∑ i, x i) * (∑ i, y i)) /
+    ((n : ℝ) * (∑ i, x i * x i) - (∑ i, x i) ^ 2)
+
+private def pcsV12RealSlopeWeight {n : ℕ} (x : Fin n → ℝ) (i : Fin n) : ℝ :=
+  (((n : ℝ) * x i) - (∑ j, x j)) /
+    ((n : ℝ) * (∑ j, x j * x j) - (∑ j, x j) ^ 2)
+
+-- Algebraic identity, even when denominator is 0. The scientific OLS
+-- interpretation separately REQUIRES a nondegenerate fixed design.
+private theorem pcs_v12_real_ols_slope_is_affine {n : ℕ} (x y : Fin n → ℝ) :
+    pcsV12RealSlope x y = ∑ i, pcsV12RealSlopeWeight x i * y i := by
+  classical
+  simp only [pcsV12RealSlope, pcsV12RealSlopeWeight]
+  let sx : ℝ := ∑ i, x i
+  let den : ℝ := (n : ℝ) * (∑ i, x i * x i) - sx ^ 2
+  change ((n : ℝ) * (∑ i, x i * y i) - sx * (∑ i, y i)) / den =
+    ∑ i, (((n : ℝ) * x i - sx) / den) * y i
+  have hnum : (n : ℝ) * (∑ i, x i * y i) - sx * (∑ i, y i) =
+    ∑ i, ((n : ℝ) * x i - sx) * y i := by
+    calc
+      (n : ℝ) * (∑ i, x i * y i) - sx * (∑ i, y i)
+          = (∑ i, (n : ℝ) * (x i * y i)) - ∑ i, sx * y i := by
+              rw [Finset.mul_sum, Finset.mul_sum]
+      _ = ∑ i, ((n : ℝ) * x i - sx) * y i := by
+            rw [← Finset.sum_sub_distrib]
+            apply Finset.sum_congr rfl
+            intro i hi
+            ring
+  rw [hnum]
+  simp only [div_eq_mul_inv]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro i hi
+  ring
+
+-- Every REAL response perturbation, expressed in actual closed-form OLS slope.
+private theorem pcs_v12_ols_slope_response_bound {n : ℕ}
+    (x y d : Fin n → ℝ) (ε tolerance : ℝ)
+    (hbox : ∀ i, |d i| ≤ ε)
+    (hthreshold : ε * (∑ i, |pcsV12RealSlopeWeight x i|) ≤ tolerance) :
+    |pcsV12RealSlope x (fun i => y i + d i) - pcsV12RealSlope x y| ≤ tolerance := by
+  rw [pcs_v12_real_ols_slope_is_affine, pcs_v12_real_ols_slope_is_affine]
+  exact pcs_v12_continuous_affine_bound
+    (pcsV12RealSlopeWeight x) y d ε tolerance hbox hthreshold
+'''
+
+
 # A proof generated for this specific source computes the weights inside Lean
 # from the SAME decoded CSV as all the earlier OLS/units checks.
 WEIGHT_RECONSTRUCTION = r'''
@@ -166,7 +216,7 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
   apply pcs_v12_continuous_affine_bound
   · exact hbox
   · norm_num [pcsV12Error, pcsV12{weights}, pcsV12{target}Threshold, Fin.sum_univ_succ]''')
-    code = 'import Mathlib\n\n' + MATHLIB_THEOREM + '\n\n' + old + '\n\n' + '\n\n'.join(anchors+extra) + '\n'
+    code = 'import Mathlib\n\n' + MATHLIB_THEOREM + '\n\n' + MATHLIB_OLS_REFINEMENT + '\n\n' + old + '\n\n' + '\n\n'.join(anchors+extra) + '\n'
     return code, {
         'row_count': n,
         'continuous_theorem': 'ALL_REAL_BOX_PERTURBATIONS_OF_SOURCE_DERIVED_AFFINE_FUNCTIONAL',
@@ -177,6 +227,7 @@ def make_continuous_mathlib_source(data: Source, manifest: bytes, note: Source) 
         'slope_tolerance_holds': radii[0] <= limits[1],
         'intercept_tolerance_holds': radii[1] <= limits[2],
         'ols_to_affine_refinement_proved': False,
+        'ols_slope_closed_form_identity_in_generated_lean': True,
         'semantic_fidelity': 'NOT_ESTABLISHED',
         'scientific_status': 'NOT_ASSESSED',
     }
@@ -237,7 +288,8 @@ def run_continuous(data: Source, manifest: bytes, note: Source, *, checker: Math
         'expected_note_sha256':expected_note_sha256,
         'scope':'All real-valued response deviations within independent absolute box bounds; quantified affine linear functional theorem, exact rational source weight anchors; OLS affine refinement and semantic/scientific adequacy not yet proved.',
         'continuous_affine_certificate':'KERNEL_CHECKED' if verified else 'UNVERIFIED',
-        'ols_regression_semantics':'NOT_FORMALLY_REFINED',
+        'ols_regression_semantics':'GENERIC_SLOPE_IDENTITY_ONLY_SOURCE_REFINEMENT_PENDING' if verified else 'NOT_FORMALLY_REFINED',
+        'ols_slope_identity_kernel_checked':verified,
         'scientific_status':'NOT_ASSESSED',
         'metrics':info,
         **{k:v for k,v in checked.items() if k not in {'kernel_checked','status'}},

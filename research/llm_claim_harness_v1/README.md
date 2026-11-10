@@ -746,3 +746,14 @@ PCS v0.6 production verification or makes a claim of general scientific
 verification. The finite 16-corner experiment and the continuous theorem are
 related but distinct assurance claims; neither can be silently promoted into
 scientific certification.
+
+### Generic OLS slope algebra (experimental v12 continuation)
+
+The Mathlib script also contains a **general proof obligation** identifying
+the standard real-number closed-form OLS slope with the affine weighted sum for
+all finite fixed-design vectors, followed by an all-real response perturbation
+bound expressed in terms of that OLS coefficient. This is not yet the same as
+a kernel-checked refinement from the source-decoded CSV into a particular
+real-valued design vector; nor does it identify the OLS intercept with its
+source-bound affine weights. Both are tracked separately. Do not report those
+connections as proved until the hosted Mathlib job passes an explicit proof.
