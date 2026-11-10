@@ -311,3 +311,62 @@ https://web.stanford.edu/~ouster/cgi-bin/papers/rifl.pdf), not a demonstrated
 novel consensus or storage algorithm. Neither Writ/17 nor its model proves
 Python/SQLite refinement, guaranteed real-world delivery, or general AI
 alignment.
+
+## Writ/18: claim-linked readback evidence and a distinct signed protocol
+
+**New confirmed Writ/17 gap.** After a valid first-write reservation, output
+delivery and receiver-signed ACK, removing *only*
+`writ-<effect-id>.claim.json` left the output and ACK intact. The old Writ/17
+receiver's `prove-retention` endpoint verified the output and ACK, then
+issued a **fresh receiver-signed retention proof even though the foundational
+write-once claim no longer existed**. A valid claim of present bytes was
+being mistaken for evidence of an intact linearity reservation.
+
+The companion Writ/18 alpha makes a new opt-in language declaration
+`audit claim-readback;` dependent on `audit linearity;`. A distinct
+`writ/18` canonical policy and `writ/portable-receipt/6` Ed25519 signing
+domain prevent old receipts from satisfying the new semantics. A Writ/18
+gateway requires the separately signed receiver identity to advertise both
+`writ/receiver-claim/1` and `writ/receiver-claim-readback/1`; it rejects
+older receivers. The receiver must authenticate its exact persisted first
+claim **at the time of each live readback**, reconstructing the signed
+original request from the ACK and the current re-read, digest-checked bytes,
+before issuing a v18 `writ/retention-proof/2` under its own signing domain.
+The new signed `claim_link` is independently recomputed from the authenticated
+ACK's policy, effect, route, source digest, byte length and nonce fields.
+The new detached verifier rejects the old v16/17 signed proof format.
+
+This missing-first-claim check is also applied as a **security patch to
+existing strict Writ/17 receiver implementations** without changing their
+canonical policy hashes. Old policies still receive the old signed proof
+format but no longer accept a newly signed readback with a missing claim.
+
+The full research distribution (outside this PR) passes **377/377 tests**
+(367 inherited plus 10 new adversarial Writ/18 cases). It includes a passing
+separate-process gateway→receiver→dual-signature→fresh-readback
+demonstration and an inherited Writ/17 separate-process regression.
+The test deliberately deletes and restores the claim under a real receiver
+and verifies refusal/recovery, and also covers forged and old-domain
+signatures, replayed nonces, symlinked/tampered claims, changed bytes,
+older receiver capability mismatch and preserved older policy identities.
+
+**Code in this PCS PR:** `formal/ClaimLinkedReadback.lean`, a *standalone*
+candidate Lean model (does not depend on Writ/16's previously unconfirmed Lean
+compilation), plus `claim_readback_reference_v18.py` and
+`test_claim_readback_reference_v18.py`: an independent Ed25519 verifier
+and optional pinned-FD original-claim checker with adversarial tests.
+The updated research workflow attempts to kernel-check the exact Lean source.
+
+**Verification status:** The 377 local Python tests and separate-process
+demonstrations have passed. Do **not** call the new Writ/18 Lean theorems
+kernel checked until an exact-source Lean 4.28 run finishes successfully.
+The standalone mathematical checker treats `signatureVerified` and
+`claimLinked` as trusted inputs, so even a successful Lean proof would
+not establish that Python/SQLite/OS operations refine it.
+
+**Unavoidable limitation:** A receiver adversary that erases every local
+claim, output, ACK and rollback witness leaves a state observationally
+identical to a never-used receiver. Preventing complete rollback requires a
+separately protected non-rollbackable witness; signatures and local files
+alone cannot prove history. Writ remains a research prototype rather than
+a demonstrated novel consensus protocol or general AI alignment solution.
