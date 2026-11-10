@@ -1,0 +1,68 @@
+name: PCS EvidenceKernel v24 predictable anytime research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_anytime_v24/**'
+      - '.github/workflows/pcs-evidencekernel-anytime-v24.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-anytime-inference:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Exact proof-certificate checks, finite exhaustive controls, and 110 independent replays
+        run: python -m unittest discover -s research/evidencekernel_anytime_v24 -t . -v
+      - name: Real independent demonstration from source pinned fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          D=research/evidencekernel_anytime_v24
+          P="$(cat "$D/example_protocol_pin.txt")"
+          E="$(cat "$D/example_evidence_pin.txt")"
+          python -m research.evidencekernel_anytime_v24.kernel \
+            "$D/example_protocol.json" "$D/example_evidence.json" \
+            --protocol-pin "$P" --evidence-pin "$E" > "$RUNNER_TEMP/ekv24-python.json"
+          node "$D/independent.js" "$D/example_protocol.json" \
+            "$D/example_evidence.json" "$P" "$E" > "$RUNNER_TEMP/ekv24-node.json"
+          python - "$RUNNER_TEMP/ekv24-python.json" "$RUNNER_TEMP/ekv24-node.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(x)) for x in sys.argv[1:]]
+          assert a==b
+          assert a['enrolled_units']==457
+          assert a['anytime_lower_ate']=='6009709/11796480'
+          assert a['status']=='CONDITIONALLY_REJECTED'
+          PY
+      - name: Quantified false-propensity counterexample (not a valid design)
+        shell: bash
+        run: |
+          python -m research.evidencekernel_anytime_v24.counterexample > "$RUNNER_TEMP/ekv24-attack.json"
+          python - "$RUNNER_TEMP/ekv24-attack.json" <<'PY'
+          import json,sys
+          from fractions import Fraction
+          x=json.load(open(sys.argv[1]))
+          assert Fraction(x['exact_false_positive_probability'])>Fraction(999,1000)
+          assert x['rejected_treated_counts'][0]==43
+          PY
+      - name: Source checksum manifest
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('research/evidencekernel_anytime_v24')
+          manifest=json.loads((root/'SOURCE_SHA256.json').read_text())
+          for name,expected in manifest.items():
+              source=root/name
+              assert source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest()==expected, name
+          print(len(manifest),'checksums verified')
+          PY

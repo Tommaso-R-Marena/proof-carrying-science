@@ -1,0 +1,246 @@
+{
+  "assignment_model": "predictable_bernoulli_upper_bounded_fresh_randomness",
+  "calibration_failure_bound": "1/100",
+  "confidence_alpha": "1/20",
+  "estimand": "fixed_registered_cohort_binary_ate",
+  "format": "pcs-evidencekernel-propensity-upper-v25",
+  "initial_state": 0,
+  "interval_model": "binary_labels_with_max_misses",
+  "max_interval_misses": 2,
+  "min_enrollment": 448,
+  "next_state_by_state_action_report": [
+    [
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    [
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ]
+    ]
+  ],
+  "null_ate_upper": "0",
+  "propensity_upper_by_state": [
+    "31/50",
+    "21/50",
+    "13/25"
+  ],
+  "registered_units": 512,
+  "states": 3,
+  "stop_after_by_state_action_report": [
+    [
+      [
+        false,
+        false
+      ],
+      [
+        false,
+        false
+      ]
+    ],
+    [
+      [
+        false,
+        false
+      ],
+      [
+        false,
+        false
+      ]
+    ],
+    [
+      [
+        false,
+        false
+      ],
+      [
+        false,
+        true
+      ]
+    ]
+  ],
+  "stopping_rule": "registered_feedback_fsm",
+  "tuning": [
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/64",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/32",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/16",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/8",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/64",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          19,
+          31
+        ],
+        [
+          29,
+          21
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/32",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          19,
+          31
+        ],
+        [
+          29,
+          21
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/16",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          19,
+          31
+        ],
+        [
+          29,
+          21
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "taylor_terms": 16
+    },
+    {
+      "alpha_spend": "1/160",
+      "lambda": "1/8",
+      "log_upper": "26/5",
+      "reference_weights_by_state": [
+        [
+          19,
+          31
+        ],
+        [
+          29,
+          21
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "taylor_terms": 16
+    }
+  ]
+}

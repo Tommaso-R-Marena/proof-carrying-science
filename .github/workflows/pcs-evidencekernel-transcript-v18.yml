@@ -1,0 +1,45 @@
+name: PCS EvidenceKernel v18 transcript-conditioned research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_transcript_v18/**'
+      - '.github/workflows/pcs-evidencekernel-transcript-v18.yml'
+      - 'research/evidencekernel_selective_v17/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-transcript-inference:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Run exhaustive exact-model tests and independent JavaScript differential checks
+        run: python -m unittest discover -s research/evidencekernel_transcript_v18 -v -p 'test_*.py'
+      - name: Replay signed-free synthetic demonstration in two exact implementations
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir=research/evidencekernel_transcript_v18
+          PIN="$(cat "$dir/example_pin.txt")"
+          ATTEMPTS_PIN="$(cat "$dir/example_attempts_pin.txt")"
+          python -m research.evidencekernel_transcript_v18.kernel "$dir/example_protocol.json" "$dir/example_evidence.json" --protocol-pin "$PIN" --attempts-pin "$ATTEMPTS_PIN" > "$RUNNER_TEMP/ekv18-python.json"
+          node "$dir/independent.js" "$dir/example_protocol.json" "$dir/example_evidence.json" "$PIN" "$ATTEMPTS_PIN" > "$RUNNER_TEMP/ekv18-node.json"
+          python - "$RUNNER_TEMP/ekv18-python.json" "$RUNNER_TEMP/ekv18-node.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(x)) for x in sys.argv[1:]]
+          assert a==b
+          assert a['conditional_rank_p']=='1/400'
+          assert a['conditional_lower_ate']=='1/2'
+          assert a['within_selected_assignment_transcript_rank']=='1'
+          assert a['within_selected_assignment_transcript_mass']=='2'
+          assert a['attempts_sha256']==open('research/evidencekernel_transcript_v18/example_attempts_pin.txt').read().strip()
+          PY

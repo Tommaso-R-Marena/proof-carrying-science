@@ -1,0 +1,59 @@
+name: PCS EvidenceKernel v23 exact report-driven stopping research
+on:
+  pull_request:
+    paths:
+      - 'research/evidencekernel_stopping_v23/**'
+      - '.github/workflows/pcs-evidencekernel-stopping-v23.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-stopped-path-audit:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Exact finite-model, adversarial and independent replay checks
+        run: |
+          python -m unittest research.evidencekernel_stopping_v23.test_kernel research.evidencekernel_stopping_v23.test_differential -v
+      - name: Verify frozen source checksums
+        shell: bash
+        run: |
+          python - <<'PYCHK'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('.')
+          manifest=json.loads(Path('research/evidencekernel_stopping_v23/SOURCE_SHA256.json').read_text())
+          for path,expected in manifest.items():
+              actual=hashlib.sha256((root/path).read_bytes()).hexdigest()
+              assert actual==expected,path
+          print('Source SHA-256 manifest matches')
+          PYCHK
+      - name: Compare independent exact signed-free demo calculations
+        shell: bash
+        run: |
+          set -euo pipefail
+          D=research/evidencekernel_stopping_v23
+          P="$(cat "$D/example_protocol_pin.txt")"
+          E="$(cat "$D/example_evidence_pin.txt")"
+          python -m research.evidencekernel_stopping_v23.kernel "$D/example_protocol.json" "$D/example_evidence.json" --protocol-pin "$P" --evidence-pin "$E" > "$RUNNER_TEMP/ekv23-python.json"
+          node "$D/independent.js" "$D/example_protocol.json" "$D/example_evidence.json" "$P" "$E" > "$RUNNER_TEMP/ekv23-node.json"
+          python - "$RUNNER_TEMP/ekv23-python.json" "$RUNNER_TEMP/ekv23-node.json" <<'PY'
+          import json,sys
+          a,b=[json.load(open(x)) for x in sys.argv[1:]]
+          assert a==b
+          assert a['conditional_p']=='15/32'
+          assert a['registered_units']==4 and a['enrolled_units']==3
+          assert a['compatible_joint_worlds']==1024
+          PY
+      - name: Reproduce the optional peeking false-positive counterexample
+        run: |
+          python -m research.evidencekernel_stopping_v23.counterexample
