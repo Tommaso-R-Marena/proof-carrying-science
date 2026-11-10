@@ -246,3 +246,68 @@ proposal is a narrower **point-in-time readback assurance improvement**, not
 a proof of durable storage forever or general AI safety. The proof workflow
 must compile the exact Writ/16 Lean file before it can be described as
 machine-checked; do not infer that from earlier successful Writ/15 runs.
+
+## Writ/17: write-once effect claims and conservative crash recovery
+
+**New reproducible Writ/16 counterexample:** deliver effect ID 7, delete only
+`writ-000000000007.ack.json` while keeping its output, then send a *separately
+valid gateway-signed request* for effect ID 7 with a different lease nonce.
+The old receiver accepted the equal output bytes and emitted **two distinct,
+Ed25519-valid delivery ACKs for the same effect ID**. This is a receiver
+journal-loss equivocation attack, **not** a forged receiver signature.
+
+The companion Writ/17 alpha (downloaded separately, not imported into
+PCS production) adds `audit linearity;` and a new `writ/17` policy /
+`writ/portable-receipt/5` identity. The receiver advertises
+`writ/receiver-claim/1` through its signed identity challenge. A strict
+gateway refuses any older receiver that cannot prove it implements this
+protocol.
+
+The receiver persists a **canonical request-bound first-claim** via fsynced
+temporary file, exclusive hardlink and parent-directory fsync **before** the
+first output write. A claim binds exact policy, route, payload, effect ID,
+lease nonce and receiver identity via the gateway's signed request hash.
+Only the first successful reservation may invoke the adapter and publish a
+new signed ACK. An existing, identical claim may return an *existing* verified
+ACK without reexecuting; if that ACK is missing, the outcome is **uncertain**
+and no automatic retry or new ACK is permitted. An output/ACK with no claim
+is treated as a possible rollback and refused.
+
+Concrete implementation results from the separately packaged Writ/17:
+- **367/367** Python regression tests (352 inherited, 15 new), PASS.
+- **597,871** bounded effect-event sequences (length up to 6) evaluated
+  against an independent oracle; 39 are valid, zero mismatches or valid
+  dual-ACK traces. This is *bounded testing*, not a kernel-checked proof.
+- Separate gateway/receiver-process delivery, operator + receiver Ed25519
+  receipt verification, live readback, receiver restart and refusal of
+  conflicting nonce after deliberate ACK deletion: **PASS**.
+- Crash injection before and after the output fsync: the permanent claim
+  remains and the receiver refuses automatic reexecution.
+- Clean-installed Python wheel and SHA-256 checked source archive.
+
+Reviewable PCS PR code:
+- `formal/ReceiverClaim.lean`: candidate non-equivocation proof for
+  arbitrary finite transition traces, claim binding preservation, and
+  uncertain-state no-retry.
+- `receiver_claim_reference_v17.py` and
+  `test_receiver_claim_reference_v17.py`: independent, runnable POSIX
+  first-claim reference with crash/orphan/concurrent-claim tests.
+- `verify_claim_v17.py`: the stand-alone finite oracle.
+- Updated dedicated Writ research workflow to run the new Python and Lean
+  checks. **Do not report the new Lean candidate as kernel-checked until
+  an exact-commit hosted run passes.**
+
+**Limits and prior art:** The durable claim must not itself be rolled back or
+silently deleted. A receiver attacker able to remove *claim + output + ACK*
+can erase all local evidence, making changed history indistinguishable from
+a genuinely new operation absent an **independent non-rollbackable witness**.
+The local prototype uses one OS account with separate processes/keys and
+does not prove true OS compartmentalization or filesystem hardware behavior.
+For general external effects, crash-safe deduplication requires destination
+transactionality; Writ/17 deliberately sacrifices availability for safety.
+This is closely related to long-established exactly-once and durable RPC
+techniques, notably Lee et al.'s RIFL system (SOSP 2015,
+https://web.stanford.edu/~ouster/cgi-bin/papers/rifl.pdf), not a demonstrated
+novel consensus or storage algorithm. Neither Writ/17 nor its model proves
+Python/SQLite refinement, guaranteed real-world delivery, or general AI
+alignment.
