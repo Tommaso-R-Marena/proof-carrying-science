@@ -24,6 +24,19 @@ jobs:
           node-version: '22'
       - name: Install exact supported Ed25519 provider
         run: python -m pip install cryptography==46.0.4
+      - name: Verify all source SHA-256 hashes
+        run: |
+          python - <<'PYHASH'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('research/evidencekernel_witness_v28')
+          expected=json.loads((root/'SOURCE_SHA256.json').read_text())
+          assert len(expected)==8
+          for name,digest in expected.items():
+              assert name != 'SOURCE_SHA256.json'
+              assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest, name
+          print('Source file SHA-256 checksums verified')
+          PYHASH
       - name: Reproduce deliberately untrusted synthetic ceremony fixtures
         run: python -m research.evidencekernel_witness_v28.make_demo
       - name: Exhaustive XOR fairness, tampering attacks, independent replay
