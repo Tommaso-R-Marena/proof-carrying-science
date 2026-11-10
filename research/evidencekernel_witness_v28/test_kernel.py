@@ -1,5 +1,7 @@
 """Exact ceremony verification, targeted tampering, and falsification tests."""
 import base64
+from hashlib import sha256
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from copy import deepcopy
 from fractions import Fraction
 import unittest
@@ -109,6 +111,38 @@ class WitnessVerification(unittest.TestCase):
         kept=[v for v in attempts if v==1]
         self.assertEqual(sum(kept),len(kept))
         self.assertEqual(Fraction(sum(kept),len(kept)),1)
+
+    def test_colluding_witness_can_sign_an_entirely_deterministic_trial(self):
+        # Cryptographically consistent but scientifically INVALID physical assignment.
+        # This is an explicit NEGATIVE assurance test: signatures do not imply randomness.
+        key=Ed25519PrivateKey.from_private_bytes(sha256(
+            b'SYNTHETIC-UNTRUSTED-EK-v28-signature-key').digest())
+        c=deepcopy(self.c);p=deepcopy(self.p)
+        cp=v25.digest(c);sp=v25.digest(p)
+        state=p['initial_state'];previous=cp;history=[]
+        for i in range(p['registered_units']):
+            os='00'*32;ws='00'*32
+            oc=k.commit_share('operator',cp,i,previous,os)
+            wc=k.commit_share('witness',cp,i,previous,ws)
+            commit=k.commitment_body(cp,i,previous,state,oc,wc)
+            receipt=base64.b64encode(key.sign(k.signature_message(commit))).decode()
+            a=1;r=1
+            self.assertEqual(k.treatment_from_shares(os,ws,8,
+                             Fraction(p['propensity_upper_by_state'][state])),1)
+            reveal=k.reveal_body(cp,commit,receipt,os,ws,a,r)
+            signature=base64.b64encode(key.sign(k.signature_message(reveal))).decode()
+            row={'index':i,'prev_sha256':previous,'state':state,
+                 'operator_commit_sha256':oc,'witness_commit_sha256':wc,
+                 'commit_receipt_signature_b64':receipt,'operator_share_hex':os,
+                 'witness_share_hex':ws,'action':a,'report':r,
+                 'draw_signature_b64':signature}
+            history.append(row);previous=v25.digest(row)
+            state=p['next_state_by_state_action_report'][state][a][r]
+        e={'draws':history,'true_intervals':['0']*len(history)}
+        audited=self.trial(c=c,p=p,e=e)
+        self.assertEqual(audited['verified_signed_draws'],len(history))
+        self.assertEqual([x['action'] for x in e['draws']],[1]*len(history))
+        self.assertIn('cannot prove',audited['trust_boundary'])
 
     def test_modulo_shortcut_is_not_exact_for_non_power_of_two(self):
         counts=[sum(x%3==j for x in range(256)) for j in range(3)]
