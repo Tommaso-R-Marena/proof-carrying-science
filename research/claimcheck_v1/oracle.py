@@ -64,6 +64,7 @@ def parse_csv(data: bytes) -> list[list[bytes]] | None:
     """Strict CSV automaton; byte-for-byte the same language as ``csvGo`` in Lean."""
     if data[:3] == b"\xef\xbb\xbf":
         data = data[3:]
+    data = data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")   # normEol
     rows: list[list[bytes]] = []
     row: list[bytes] = []
     fld = bytearray()
@@ -87,12 +88,6 @@ def parse_csv(data: bytes) -> list[list[bytes]] | None:
                 if not row:
                     return None
                 end_row()
-            elif b == 13:
-                if i + 1 < n and data[i + 1] == 10 and row:
-                    end_row()
-                    i += 1
-                else:
-                    return None
             else:
                 fld.append(b)
                 mode = 1
@@ -101,11 +96,6 @@ def parse_csv(data: bytes) -> list[list[bytes]] | None:
                 row.append(bytes(fld)); fld = bytearray(); mode = 0
             elif b == 10:
                 end_row(); mode = 0
-            elif b == 13:
-                if i + 1 < n and data[i + 1] == 10:
-                    end_row(); mode = 0; i += 1
-                else:
-                    return None
             elif b == 34:
                 return None
             else:
@@ -122,11 +112,6 @@ def parse_csv(data: bytes) -> list[list[bytes]] | None:
                 row.append(bytes(fld)); fld = bytearray(); mode = 0
             elif b == 10:
                 end_row(); mode = 0
-            elif b == 13:
-                if i + 1 < n and data[i + 1] == 10:
-                    end_row(); mode = 0; i += 1
-                else:
-                    return None
             else:
                 return None
         i += 1

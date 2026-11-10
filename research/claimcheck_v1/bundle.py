@@ -82,7 +82,7 @@ def render_report(receipts: list[dict], *, source_name: str, data_name: str) -> 
                     f"Statistic <code>{_e(v['stat'])}</code>: exact value ≈ {_e(format(po['approximate_in_reported_units'], '.10g'))} "
                     f"from {_e(po['rows_used'])} rows ({_e(po['rows_skipped_as_missing'])} skipped as missing) — "
                     f"{_e(v['status'])}; Lean kernel accepted: {_e(lean.get('kernel_accepted'))}"
-                    + (f" in {_e(lean.get('seconds'))} s" if lean.get("kernel_accepted") else f" ({_e(lean.get('detail'))})")
+                    + (f" (theorem {_e(lean.get('theorem'))} in {_e(lean.get('obligation_file'))})" if lean.get("kernel_accepted") else f" ({_e(lean.get('detail'))})")
                     + (f"; assumes {_e(v['assumption'])}" if v.get("assumption") else "") + ".<br>")
             else:
                 parts.append(f"Statistic <code>{_e(v['stat'])}</code> is undefined here: {_e(po.get('explanation'))}<br>")

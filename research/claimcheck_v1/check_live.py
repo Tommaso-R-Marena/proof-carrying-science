@@ -19,7 +19,7 @@ import time
 from dataclasses import replace
 from fractions import Fraction
 
-from .lean import THEOREM, check_source, checker_text, lean_claim, lean_outcome, obligation_source
+from .lean import batch_source, check_source, checker_text, lean_claim, lean_outcome, obligation_source
 from .oracle import Outcome, evaluate
 from .spec import ClaimSpec, Cond
 
@@ -70,15 +70,14 @@ POSITIVE = [
 SCALES = {14: Fraction(100)}  # share reported as a percentage
 
 
-def _batch(cases: list[tuple[bytes, ClaimSpec, tuple, Fraction, Outcome]]) -> str:
+def _batch(cases: list[tuple[bytes, ClaimSpec, tuple, Fraction, Outcome]]) -> tuple[str, int]:
+    """One file, one independent single-claim theorem per case (cases have different data)."""
     parts = [checker_text(), "\nopen PCS.ClaimCheck\n"]
     for i, (data, spec, na, scale, outcome) in enumerate(cases):
         parts.append(f"def s{i} : Source := ⟨0x{data.hex() or '0'}, {len(data)}⟩\n")
         parts.append(f"def c{i} : Claim :=\n  {lean_claim(spec, na, scale)}\n")
-        parts.append(f"theorem t{i} : run s{i} c{i} = {lean_outcome(outcome)} := by decide +kernel\n")
-    # one named theorem so the standard axiom audit applies to the whole file's style
-    parts.append(f"theorem {THEOREM} : True := trivial\n#print axioms {THEOREM}\n")
-    return "".join(parts)
+        parts.append(f"theorem pcs_claim_{i} : run s{i} c{i} = {lean_outcome(outcome)} := by decide +kernel\n#print axioms pcs_claim_{i}\n")
+    return "".join(parts), len(cases)
 
 
 def _forge(o: Outcome, rng: random.Random) -> Outcome:
@@ -119,7 +118,7 @@ def _random_case(rng: random.Random) -> tuple[bytes, ClaimSpec, tuple, Fraction]
         rows[rng.randrange(1, n + 1)][1] = "abc"
     elif bad < 0.10:
         rows[0][2] = "x"                       # duplicate header
-    eol = rng.choice(["\n", "\r\n"])
+    eol = rng.choice(["\n", "\r\n", "\r"])
     lines = []
     for r in rows:
         cells = []
@@ -175,7 +174,8 @@ def main(argv=None) -> int:
     t0 = time.monotonic()
 
     cases = [(FIXTURE, s, NA, SCALES.get(i, Fraction(1)), evaluate(FIXTURE, s, NA, SCALES.get(i, Fraction(1)))) for i, s in enumerate(POSITIVE)]
-    res = check_source(_batch(cases))
+    text, n = _batch(cases)
+    res = check_source(text, claims=n)
     if not res.accepted:
         report["failures"].append(f"positive controls rejected: {res.detail}")
     report["positive"] = len(cases)
@@ -200,6 +200,19 @@ def main(argv=None) -> int:
     else:
         report["negative_rejected"] += 1
 
+    # shared-parse batch: all positive controls about FIXTURE in one pcs_batch, one theorem each
+    items = [(c[1], c[2], c[3], c[4]) for c in cases]
+    rb = check_source(batch_source(FIXTURE, items), claims=len(items))
+    if not rb.accepted:
+        report["failures"].append(f"shared-parse batch of positive controls rejected: {rb.detail}")
+    report["batch_positive"] = len(items)
+    bad = list(items)
+    bad[7] = (bad[7][0], bad[7][1], bad[7][2], _forge(bad[7][3], rng))
+    if check_source(batch_source(FIXTURE, bad), claims=len(bad)).accepted:
+        report["failures"].append("a batch containing one forged outcome was accepted")
+    else:
+        report["negative_rejected"] += 1
+
     fuzz = []
     for _ in range(args.fuzz):
         data, spec, na, scale = _random_case(rng)
@@ -209,7 +222,8 @@ def main(argv=None) -> int:
         report["fuzz_outcomes"][key] = report["fuzz_outcomes"].get(key, 0) + 1
     for start in range(0, len(fuzz), 100):
         chunk = fuzz[start:start + 100]
-        r = check_source(_batch(chunk), timeout=1800)
+        text, n = _batch(chunk)
+        r = check_source(text, claims=n, timeout=1800)
         if not r.accepted:
             # locate the disagreement precisely
             for j, case in enumerate(chunk):

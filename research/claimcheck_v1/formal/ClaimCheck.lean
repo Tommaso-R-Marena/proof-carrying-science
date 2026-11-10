@@ -87,12 +87,24 @@ abbrev Field := List Nat
 abbrev Row := List Field
 
 /--
+Line-end normalisation: CR LF and a lone CR both become LF.  (This also applies
+inside quoted fields; a cell containing a line break can never equal a claim's
+text value, a missing-value token or a decimal, so no verdict depends on it.)
+-/
+def normEol : List Nat → List Nat
+  | [] => []
+  | 13 :: 10 :: rest => 10 :: normEol rest
+  | 13 :: rest => 10 :: normEol rest
+  | b :: rest => b :: normEol rest
+
+/--
 Byte-level CSV automaton.
 
 modes: 0 = at start of a field, 1 = inside an unquoted field,
        2 = inside a quoted field, 3 = just read a `"` inside a quoted field.
 `fld` is the current field reversed, `row` the current row reversed, `acc` the
-finished rows reversed.  Returns `none` on any malformed input (fail closed).
+finished rows reversed.  Rows end at LF (line ends are normalised by `normEol`
+first).  Returns `none` on any malformed input (fail closed).
 -/
 def csvGo : List Nat → Nat → Field → Row → List Row → Option (List Row)
   | [], mode, fld, row, acc =>
@@ -111,18 +123,10 @@ def csvGo : List Nat → Nat → Field → Row → List Row → Option (List Row
         match row with
         | [] => none                                      -- blank line
         | _ => csvGo bs 0 [] [] ((([] :: row).reverse) :: acc)
-      else if Nat.beq b 13 then
-        match bs, row with
-        | 10 :: rest, _ :: _ => csvGo rest 0 [] [] ((([] :: row).reverse) :: acc)
-        | _, _ => none
       else csvGo bs 1 [b] row acc
     | 1 =>
       if Nat.beq b 44 then csvGo bs 0 [] (fld.reverse :: row) acc
       else if Nat.beq b 10 then csvGo bs 0 [] [] (((fld.reverse :: row).reverse) :: acc)
-      else if Nat.beq b 13 then
-        match bs with
-        | 10 :: rest => csvGo rest 0 [] [] (((fld.reverse :: row).reverse) :: acc)
-        | _ => none
       else if Nat.beq b 34 then none                      -- quote inside unquoted field
       else csvGo bs 1 (b :: fld) row acc
     | 2 =>
@@ -132,10 +136,6 @@ def csvGo : List Nat → Nat → Field → Row → List Row → Option (List Row
       if Nat.beq b 34 then csvGo bs 2 (34 :: fld) row acc
       else if Nat.beq b 44 then csvGo bs 0 [] (fld.reverse :: row) acc
       else if Nat.beq b 10 then csvGo bs 0 [] [] (((fld.reverse :: row).reverse) :: acc)
-      else if Nat.beq b 13 then
-        match bs with
-        | 10 :: rest => csvGo rest 0 [] [] (((fld.reverse :: row).reverse) :: acc)
-        | _ => none
       else none
 
 def stripBom : List Nat → List Nat
@@ -158,7 +158,7 @@ structure Table where
   rows : List Row
 
 def parseTable (bytes : List Nat) : Option Table :=
-  match csvGo (stripBom bytes) 0 [] [] [] with
+  match csvGo (normEol (stripBom bytes)) 0 [] [] [] with
   | some (h :: rs) => if allRowsWidth h.length rs then some ⟨h, rs⟩ else none
   | _ => none
 
@@ -630,6 +630,42 @@ def run (src : Source) (c : Claim) : Outcome :=
   else match parseTable src.bytes with
     | none => .undefined .csvMalformed
     | some t => runTable t c
+
+/-- All claims about one source, sharing a single parse of its bytes. -/
+def runAll (src : Source) (cs : List Claim) : List Outcome :=
+  if !src.wellFormed then cs.map (fun _ => .undefined .sourceNotWellFormed)
+  else match parseTable src.bytes with
+    | none => cs.map (fun _ => .undefined .csvMalformed)
+    | some t => cs.map (runTable t)
+
+/-- `runAll` is exactly `run` applied to each claim: batching changes cost, not meaning. -/
+theorem runAll_eq_map (src : Source) (cs : List Claim) : runAll src cs = cs.map (run src) := by
+  unfold runAll
+  by_cases hw : src.wellFormed = true
+  · cases hp : parseTable src.bytes with
+    | none =>
+      simp only [hw, Bool.not_true, Bool.false_eq_true, if_false]
+      apply List.map_congr_left
+      intro c _
+      simp [run, hw, hp]
+    | some t =>
+      simp only [hw, Bool.not_true, Bool.false_eq_true, if_false]
+      apply List.map_congr_left
+      intro c _
+      simp [run, hw, hp]
+  · have hw' : src.wellFormed = false := by simpa using hw
+    simp only [hw', Bool.not_false, if_true]
+    apply List.map_congr_left
+    intro c _
+    simp [run, hw']
+
+/-- From one batch theorem, the statement about its `i`-th claim alone. -/
+theorem run_of_runAll {src : Source} {cs : List Claim} {outs : List Outcome}
+    (h : runAll src cs = outs) (i : Nat) {c : Claim} {o : Outcome}
+    (hc : cs[i]? = some c) (ho : outs[i]? = some o) : run src c = o := by
+  have h2 : (cs.map (run src))[i]? = outs[i]? := by rw [← runAll_eq_map, h]
+  rw [List.getElem?_map, hc, ho] at h2
+  exact Option.some.inj h2
 
 /-- UTF-8 bytes of a string literal (used for column names, text values and reported literals). -/
 def b (s : String) : List Nat := s.toUTF8.data.toList.map UInt8.toNat

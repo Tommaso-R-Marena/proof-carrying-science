@@ -6,9 +6,9 @@ re-derives every fact it reports:
 
   1. every bundled file matches the digest recorded in bundle.json;
   2. the bundled checker is the reviewed checker (digest given by YOU, the reviewer);
-  3. each Lean obligation is exactly: checker text + data numeral + claim + theorem, where
-       - the numeral decodes to the bundled data file byte for byte,
-       - the claim and expected outcome are re-rendered here from the receipt and compared;
+  3. each Lean obligation file is exactly: checker text + data numeral + claims + theorems, where
+       - the numeral is the bundled data file byte for byte,
+       - every claim and expected outcome is re-rendered here from the receipts and compared;
   4. the real Lean compiler accepts each obligation afresh, using only standard axioms;
   5. the quoted text and the printed number are at the recorded offsets of the bundled source;
   6. a second, differently written calculation (Python csv + Decimal) agrees with the
@@ -36,7 +36,6 @@ from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
 
-THEOREM = "pcs_claim_outcome"
 ALLOWED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 SAFE = re.compile(r"[A-Za-z0-9 _.,:;()\[\]%/+\-#=<>&*!?@^|~]*\Z")
 STAT = {"count": ".count", "sum": ".sum", "mean": ".mean", "median": ".median", "min": ".min", "max": ".max",
@@ -85,8 +84,7 @@ def scale_for(spec: dict, stat: str, manifest: dict) -> Fraction:
     raise ValueError("unit conversion in receipt is not derivable")
 
 
-def render_tail(data: bytes, spec: dict, stat: str, manifest: dict, outcome: dict) -> str:
-    """Independent re-rendering of the generated part of an obligation from receipt fields."""
+def render_claim(spec: dict, stat: str, manifest: dict) -> str:
     if stat == "share":
         st = f".share {conds(spec['sub_filter'])}"
     elif stat == "pearson":
@@ -99,29 +97,42 @@ def render_tail(data: bytes, spec: dict, stat: str, manifest: dict, outcome: dic
         st = STAT[stat]
     column = "none" if spec.get("column") is None else f"some ({lb(spec['column'])})"
     na = "[" + ", ".join(lb(t) for t in (manifest.get("na_tokens") or ["", "NA"])) + "]"
+    return ("{ column := " + column + ",\n"
+            "    filter := " + conds(spec["filter"]) + ",\n"
+            "    stat := " + st + ",\n"
+            "    naTokens := " + na + ",\n"
+            "    scale := " + rat(scale_for(spec, stat, manifest)) + ",\n"
+            "    reported := " + lb(spec["reported"]) + " }")
+
+
+def render_outcome(outcome: dict) -> str:
     if not outcome["defined"]:
-        exp = f".undefined .{outcome['reason']}"
-    else:
-        q = Fraction(int(outcome["exact"]["numerator"]), int(outcome["exact"]["denominator"]))
-        val = f"(.rat {rat(q)})" if outcome["value_kind"] == "rational" else f"(.sqrt ({outcome['sign']} : Int) {rat(q)})"
-        exp = f".checked .{outcome['verdict']} {val} {outcome['rows_used']} {outcome['rows_skipped_as_missing']}"
-    return (
-        "\n-- ===== generated obligation (data numeral, claim, expected outcome) =====\n"
-        "open PCS.ClaimCheck\n\n"
-        f"def pcs_src : Source := ⟨0x{data.hex() or '0'}, {len(data)}⟩\n\n"
-        "def pcs_claim : Claim :=\n"
-        "  { column := " + column + ",\n"
-        "    filter := " + conds(spec["filter"]) + ",\n"
-        "    stat := " + st + ",\n"
-        "    naTokens := " + na + ",\n"
-        "    scale := " + rat(scale_for(spec, stat, manifest)) + ",\n"
-        "    reported := " + lb(spec["reported"]) + " }\n\n"
-        f"theorem {THEOREM} : run pcs_src pcs_claim = {exp} := by decide +kernel\n\n"
-        f"#print axioms {THEOREM}\n"
-    )
+        return f".undefined .{outcome['reason']}"
+    q = Fraction(int(outcome["exact"]["numerator"]), int(outcome["exact"]["denominator"]))
+    val = f"(.rat {rat(q)})" if outcome["value_kind"] == "rational" else f"(.sqrt ({outcome['sign']} : Int) {rat(q)})"
+    return f".checked .{outcome['verdict']} {val} {outcome['rows_used']} {outcome['rows_skipped_as_missing']}"
 
 
-def run_lean(lean: str, text: str, timeout: int) -> tuple[bool, str]:
+def render_tail(data: bytes, items: list, manifest: dict) -> str:
+    """Independent re-rendering of the generated part of an obligation file.
+
+    ``items`` is a list of (spec, stat, predicted outcome) taken from the receipts, in index order.
+    """
+    parts = ["\n-- ===== generated obligations (data numeral, claims, expected outcomes) =====\n"
+             "open PCS.ClaimCheck\n\n"
+             f"def pcs_src : Source := ⟨0x{data.hex() or '0'}, {len(data)}⟩\n\n"]
+    for i, (spec, stat, _o) in enumerate(items):
+        parts.append(f"def pcs_c{i} : Claim :=\n  {render_claim(spec, stat, manifest)}\n\n")
+    names = ", ".join(f"pcs_c{i}" for i in range(len(items)))
+    outs = ",\n    ".join(render_outcome(o) for _s, _t, o in items)
+    parts.append(f"theorem pcs_batch : runAll pcs_src [{names}] =\n    [{outs}] := by decide +kernel\n\n")
+    for i, (_s, _t, o) in enumerate(items):
+        parts.append(f"theorem pcs_claim_{i} : run pcs_src pcs_c{i} = {render_outcome(o)} :=\n"
+                     f"  run_of_runAll pcs_batch {i} rfl rfl\n#print axioms pcs_claim_{i}\n\n")
+    return "".join(parts)
+
+
+def run_lean(lean: str, text: str, claims: int, timeout: int) -> tuple[bool, str]:
     with tempfile.TemporaryDirectory(prefix="pcs-claimcheck-replay-") as tmp:
         path = Path(tmp) / "Obligation.lean"
         path.write_text(text, encoding="utf-8")
@@ -130,18 +141,21 @@ def run_lean(lean: str, text: str, timeout: int) -> tuple[bool, str]:
                                env={"PATH": os.environ.get("PATH", ""), "HOME": tmp, "LANG": "C.UTF-8"})
         except subprocess.TimeoutExpired:
             return False, "timeout"
-    out = p.stdout.strip()
+    lines = p.stdout.strip().splitlines()
     if p.returncode != 0 or p.stderr.strip():
-        return False, "lean rejected: " + (out.splitlines() or ["?"])[0][:200]
-    if out == f"'{THEOREM}' does not depend on any axioms":
-        return True, "no axioms"
-    m = re.fullmatch(r"'" + THEOREM + r"' depends on axioms: \[([A-Za-z0-9_., ]*)\]", out)
-    if not m:
+        return False, "lean rejected: " + (lines or ["?"])[0][:200]
+    if len(lines) != claims:
         return False, "unexpected lean output"
-    axioms = {a.strip() for a in m.group(1).split(",") if a.strip()}
-    if not axioms <= ALLOWED_AXIOMS:
-        return False, "non-standard axioms: " + ", ".join(sorted(axioms - ALLOWED_AXIOMS))
-    return True, "axioms: " + ", ".join(sorted(axioms))
+    for i, line in enumerate(lines):
+        if line == f"'pcs_claim_{i}' does not depend on any axioms":
+            continue
+        m = re.fullmatch(r"'pcs_claim_" + str(i) + r"' depends on axioms: \[([A-Za-z0-9_., ]*)\]", line)
+        if not m:
+            return False, "unexpected lean output"
+        axioms = {a.strip() for a in m.group(1).split(",") if a.strip()}
+        if not axioms <= ALLOWED_AXIOMS:
+            return False, "non-standard axioms: " + ", ".join(sorted(axioms - ALLOWED_AXIOMS))
+    return True, "accepted"
 
 
 # ---- second calculation: csv module + Decimal --------------------------------------------------
@@ -250,6 +264,36 @@ def replay(bundle: Path, checker_sha256: str | None, timeout: int, skip_lean: bo
             ver = subprocess.run([lean, "--version"], capture_output=True, text=True).stdout
             if "version 4.28.0," not in ver:
                 problems.append("Lean 4.28.0 required")
+    # ---- obligation files: re-derive each one from the receipts and re-check it ------------------
+    files: dict[str, list] = {}
+    for r in receipts:
+        for v in r.get("q1_mathematics", {}).get("variants", []):
+            lean_rec = v.get("lean", {})
+            if lean_rec.get("kernel_accepted"):
+                files.setdefault(lean_rec.get("obligation_file") or "", []).append((lean_rec.get("index"), r, v))
+    file_ok: dict[str, list[str]] = {}
+    for name, entries in sorted(files.items()):
+        issues: list[str] = []
+        file_ok[name] = issues
+        entries.sort(key=lambda e: (e[0] if isinstance(e[0], int) else -1))
+        size = entries[0][2]["lean"].get("batch_size")
+        if not name or [e[0] for e in entries] != list(range(len(entries))) or size != len(entries):
+            issues.append("receipts do not account for every claim of this obligation file")
+            continue
+        try:
+            text = checker + render_tail(data, [(r["claim"]["spec"], v["stat"], v["predicted_outcome"]) for _i, r, v in entries], manifest)
+        except Exception as exc:  # noqa: BLE001 - any failure is a replay failure
+            issues.append(f"cannot re-render obligation: {type(exc).__name__}")
+            continue
+        path = bundle / "obligations" / name
+        if not path.is_file() or path.read_text(encoding="utf-8") != text:
+            issues.append("bundled obligation differs from the one derived from the receipts")
+        if any(sha(text.encode("utf-8")) != v["lean"].get("obligation_sha256") for _i, _r, v in entries):
+            issues.append("obligation digest in a receipt differs from the re-derived obligation")
+        if not skip_lean and lean and not issues:
+            ok, detail = run_lean(lean, text, len(entries), timeout)
+            if not ok:
+                issues.append(f"fresh Lean check failed ({detail})")
     results = []
     for r in receipts:
         row = {"claim_id": r["claim_id"], "recorded_result": r["result"], "issues": []}
@@ -279,24 +323,7 @@ def replay(bundle: Path, checker_sha256: str | None, timeout: int, skip_lean: bo
                 statuses.append("UNKNOWN")
                 continue
             spec = r["claim"]["spec"]
-            try:
-                tail = render_tail(data, spec, v["stat"], manifest, po)
-            except Exception as exc:  # noqa: BLE001 - any failure is a replay failure
-                issues.append(f"cannot re-render obligation: {exc}")
-                statuses.append("UNKNOWN")
-                continue
-            expected_text = checker + tail
-            name = lean_rec.get("obligation_file")
-            if name:
-                on_disk = (bundle / "obligations" / name).read_text(encoding="utf-8")
-                if on_disk != expected_text:
-                    issues.append(f"{name}: bundled obligation differs from the one derived from the receipt")
-            if sha(expected_text.encode("utf-8")) != lean_rec.get("obligation_sha256"):
-                issues.append("obligation digest in receipt differs from the re-derived obligation")
-            if not skip_lean and lean:
-                ok, detail = run_lean(lean, expected_text, timeout)
-                if not ok:
-                    issues.append(f"fresh Lean check failed ({detail})")
+            issues.extend(f"{lean_rec.get('obligation_file')}: {msg}" for msg in file_ok.get(lean_rec.get("obligation_file") or "", ["no obligation file"]))
             if po["defined"]:
                 try:
                     approx, used = second_opinion(data, spec, v["stat"], manifest)
@@ -324,12 +351,7 @@ def replay(bundle: Path, checker_sha256: str | None, timeout: int, skip_lean: bo
             else:
                 statuses.append("UNKNOWN")
         # recompute Q1 status and the headline from the variants
-        if not statuses:
-            q1 = "UNKNOWN"
-        elif len(set(statuses)) == 1:
-            q1 = statuses[0]
-        else:
-            q1 = "UNKNOWN"
+        q1 = statuses[0] if statuses and len(set(statuses)) == 1 else "UNKNOWN"
         recorded_q1 = r.get("q1_mathematics", {}).get("status", "UNKNOWN")
         if q1 != recorded_q1:
             issues.append(f"Q1 status {recorded_q1} is not what the variants support ({q1})")
@@ -340,7 +362,7 @@ def replay(bundle: Path, checker_sha256: str | None, timeout: int, skip_lean: bo
         row["replayed"] = not issues
         results.append(row)
     ok = not problems and all(x["replayed"] for x in results)
-    return [{"bundle_problems": problems}] + results, ok
+    return [{"bundle_problems": problems, "obligation_files_rechecked": 0 if skip_lean else len(files)}] + results, ok
 
 
 def main(argv=None) -> int:

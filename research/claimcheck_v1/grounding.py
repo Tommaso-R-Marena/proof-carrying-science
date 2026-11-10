@@ -22,9 +22,29 @@ _INTERPRETIVE = re.compile(
     r"associated with|driven by|explain\w*)\b", re.IGNORECASE)
 
 
+# Wording that must accompany a non-count statistic in the same sentence.  A printed number that
+# merely happens to equal some statistic of a column the sentence mentions (a figure number, a
+# model coefficient) is not a report of that statistic.
+_RANGE = r"[0-9]\s?[–—-]\s?[0-9]|\b(?:rang(?:e|es|ed|ing)|between|minimum|maximum|min\.?|max\.?|smallest|largest|lowest|highest|shortest|longest|up to|at least|at most)\b"
+STAT_CUES = {
+    "mean": r"\b(?:means?|averag(?:e|es|ed|ing))\b",
+    "median": r"\bmedians?\b",
+    "sum": r"\b(?:total(?:s|led|ling)?|sum(?:s|med)?|altogether|combined|overall)\b",
+    "min": _RANGE, "max": _RANGE,
+    "sd": r"±|\+/-|\bSDs?\b|\bs\.d\.|\bstandard deviations?\b",
+    "var_sample": r"\bvariances?\b",
+    "sem": r"±|\+/-|\bSEM?s?\b|\bs\.e\.(?:m\.)?|\bstandard errors?\b",
+    "pearson": r"\bcorrelat\w*|\bPearson\b|\br\s?=|\bρ",
+    "ols_slope": r"\bslopes?\b|\bregress\w*|\bper\b|\by\s?=",
+    "ols_intercept": r"\bintercepts?\b|\bregress\w*|\by\s?=",
+}
+STAT_CUES["sd_sample"] = STAT_CUES["sd_pop"] = STAT_CUES["sd"]
+
+
 @dataclass
 class Grounding:
     ok: bool
+    ok_without_statistic_cue: bool = False
     checks: dict = field(default_factory=dict)
     quote_start: int | None = None
     quote_end: int | None = None
@@ -222,6 +242,17 @@ def ground(source: str, quote: str, spec: ClaimSpec, manifest: dict, *, quote_st
     g.checks["binding_anchors"] = anchors
     g.checks["binding_anchored"] = anchors_ok
 
+    # the statistic itself must be named (counts and shares are exempt: "n = 18", "46 snails")
+    cue_ok = True
+    pattern = STAT_CUES.get(spec.stat)
+    if pattern is not None:
+        m = re.search(pattern, window, re.IGNORECASE if spec.stat not in ("sd", "sd_sample", "sd_pop", "sem") else 0)
+        g.checks["statistic_named_in_sentence"] = m.group(0) if m else None
+        if m is None:
+            cue_ok = False
+            g.failures.append(f"The sentence has no wording that names the statistic “{spec.stat}” (for example mean, median, SD, range).")
+
     g.interpretive_terms = sorted({m.group(0).lower() for m in _INTERPRETIVE.finditer(window)})
-    g.ok = unit_ok and anchors_ok
+    g.ok_without_statistic_cue = unit_ok and anchors_ok
+    g.ok = unit_ok and anchors_ok and cue_ok
     return g

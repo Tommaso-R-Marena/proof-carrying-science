@@ -27,7 +27,7 @@ from .spec import ClaimSpec, Cond, sha256_hex
 FORMAL_DIR = Path(__file__).resolve().parent / "formal"
 CHECKER_PATH = FORMAL_DIR / "ClaimCheck.lean"
 CHECKER_PIN_PATH = FORMAL_DIR / "ClaimCheck.lean.sha256"
-THEOREM = "pcs_claim_outcome"
+THEOREM_PREFIX = "pcs_claim_"
 TOOLCHAIN = "4.28.0"
 ALLOWED_AXIOMS = frozenset({"propext", "Classical.choice", "Quot.sound"})
 MAX_DATA_BYTES = 65536
@@ -114,24 +114,41 @@ def lean_outcome(o: Outcome) -> str:
     return f".checked .{o.verdict} {value} {o.used} {o.missing}"
 
 
-def obligation_tail(data: bytes, spec: ClaimSpec, na_tokens: tuple[str, ...], scale: Fraction, outcome: Outcome) -> str:
-    """Everything after the checker text.  Deterministic in its arguments."""
+def batch_tail(data: bytes, items: list[tuple[ClaimSpec, tuple[str, ...], Fraction, Outcome]]) -> str:
+    """Everything after the checker text for one batch of claims about one data file.
+
+    ``pcs_batch`` makes the kernel parse the bytes once and evaluate every claim; each
+    ``pcs_claim_i`` is then the stand-alone statement ``run pcs_src pcs_c<i> = <outcome>``, obtained
+    through the general lemma ``run_of_runAll`` proved in the checker.  Deterministic in its arguments.
+    """
+    if not items:
+        raise ValueError("empty batch")
     numeral = "0x" + (data.hex() or "0")
-    return (
-        "\n-- ===== generated obligation (data numeral, claim, expected outcome) =====\n"
+    parts = [
+        "\n-- ===== generated obligations (data numeral, claims, expected outcomes) =====\n"
         "open PCS.ClaimCheck\n\n"
         f"def pcs_src : Source := ⟨{numeral}, {len(data)}⟩\n\n"
-        "def pcs_claim : Claim :=\n"
-        f"  {lean_claim(spec, na_tokens, scale)}\n\n"
-        f"theorem {THEOREM} : run pcs_src pcs_claim = {lean_outcome(outcome)} := by decide +kernel\n\n"
-        f"#print axioms {THEOREM}\n"
-    )
+    ]
+    for i, (spec, na, scale, _outcome) in enumerate(items):
+        parts.append(f"def pcs_c{i} : Claim :=\n  {lean_claim(spec, na, scale)}\n\n")
+    claims = ", ".join(f"pcs_c{i}" for i in range(len(items)))
+    outcomes = ",\n    ".join(lean_outcome(o) for _s, _n, _k, o in items)
+    parts.append(f"theorem pcs_batch : runAll pcs_src [{claims}] =\n    [{outcomes}] := by decide +kernel\n\n")
+    for i, (_s, _n, _k, outcome) in enumerate(items):
+        parts.append(f"theorem pcs_claim_{i} : run pcs_src pcs_c{i} = {lean_outcome(outcome)} :=\n"
+                     f"  run_of_runAll pcs_batch {i} rfl rfl\n#print axioms pcs_claim_{i}\n\n")
+    return "".join(parts)
+
+
+def batch_source(data: bytes, items: list[tuple[ClaimSpec, tuple[str, ...], Fraction, Outcome]]) -> str:
+    if len(data) > MAX_DATA_BYTES:
+        raise ValueError("data file exceeds the kernel-check size bound")
+    return checker_text() + batch_tail(data, items)
 
 
 def obligation_source(data: bytes, spec: ClaimSpec, na_tokens: tuple[str, ...], scale: Fraction, outcome: Outcome) -> str:
-    if len(data) > MAX_DATA_BYTES:
-        raise ValueError("data file exceeds the kernel-check size bound")
-    return checker_text() + obligation_tail(data, spec, na_tokens, scale, outcome)
+    """A batch of one."""
+    return batch_source(data, [(spec, na_tokens, scale, outcome)])
 
 
 def find_lean() -> str:
@@ -164,28 +181,35 @@ class LeanResult:
     toolchain: str
     source_sha256: str
     detail: str
+    claims: int = 1
 
-    def to_json(self) -> dict:
+    def to_json(self, index: int = 0) -> dict:
         return {
-            "kernel_accepted": self.accepted, "axioms": list(self.axioms), "seconds": round(self.seconds, 3),
+            "kernel_accepted": self.accepted, "axioms": list(self.axioms), "batch_seconds": round(self.seconds, 3),
+            "batch_size": self.claims, "index": index, "theorem": f"{THEOREM_PREFIX}{index}",
+            "statement": f"run pcs_src pcs_c{index} = <expected outcome>",
             "toolchain": self.toolchain, "obligation_sha256": self.source_sha256, "detail": self.detail,
-            "theorem": THEOREM, "tactic": "decide +kernel",
+            "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
         }
 
 
-_AXIOM_LINE = re.compile(r"'" + THEOREM + r"' depends on axioms: \[([A-Za-z0-9_., ]*)\]\Z")
-_NO_AXIOM_LINE = "'" + THEOREM + "' does not depend on any axioms"
+_AXIOM_LINE = re.compile(r"'" + THEOREM_PREFIX + r"(\d+)' depends on axioms: \[([A-Za-z0-9_., ]*)\]\Z")
+_NO_AXIOM_LINE = re.compile(r"'" + THEOREM_PREFIX + r"(\d+)' does not depend on any axioms\Z")
 
 
-def check_source(source: str, *, timeout: int = DEFAULT_TIMEOUT, keep: Path | None = None) -> LeanResult:
-    """Run the real Lean compiler on one obligation.  Fail closed on anything unexpected."""
+def check_source(source: str, *, claims: int = 1, timeout: int = DEFAULT_TIMEOUT, keep: Path | None = None) -> LeanResult:
+    """Run the real Lean compiler on one obligation file.  Fail closed on anything unexpected.
+
+    Accepted only if Lean exits 0, prints nothing on stderr, and prints exactly one axiom report per
+    claim theorem, in order, each naming only standard axioms.
+    """
     exe = find_lean()
     version = lean_version(exe)
     digest = sha256_hex(source.encode("utf-8"))
     forbidden = ("sorry", "native_decide", "axiom ", "unsafe ", "implemented_by", "extern ", "partial ", "ofReduceBool")
     tail = re.sub(r'"[^"\n]*"', '""', source[len(checker_text()):])  # string literals cannot contain quotes
     if any(word in tail for word in forbidden):
-        return LeanResult(False, (), 0.0, version, digest, "generated obligation contains a forbidden token")
+        return LeanResult(False, (), 0.0, version, digest, "generated obligation contains a forbidden token", claims)
     with tempfile.TemporaryDirectory(prefix="pcs-claimcheck-") as tmp:
         path = Path(tmp) / "Obligation.lean"
         path.write_text(source, encoding="utf-8")
@@ -199,21 +223,53 @@ def check_source(source: str, *, timeout: int = DEFAULT_TIMEOUT, keep: Path | No
                 env={"PATH": os.environ.get("PATH", ""), "HOME": tmp, "LANG": "C.UTF-8"},
             )
         except subprocess.TimeoutExpired:
-            return LeanResult(False, (), time.monotonic() - start, version, digest, f"Lean timed out after {timeout}s")
+            return LeanResult(False, (), time.monotonic() - start, version, digest, f"Lean timed out after {timeout}s", claims)
         seconds = time.monotonic() - start
     out = proc.stdout.strip()
     if proc.returncode != 0:
         first = (out or proc.stderr.strip()).splitlines()[:1]
-        return LeanResult(False, (), seconds, version, digest, "Lean rejected the obligation: " + (first[0][:240] if first else "no output"))
+        return LeanResult(False, (), seconds, version, digest,
+                          "Lean rejected the obligation: " + (first[0][:240] if first else "no output"), claims)
     if proc.stderr.strip():
-        return LeanResult(False, (), seconds, version, digest, "unexpected Lean diagnostics on stderr")
-    if out == _NO_AXIOM_LINE:
-        axioms: tuple[str, ...] = ()
-    else:
-        m = _AXIOM_LINE.match(out)
-        if not m:
-            return LeanResult(False, (), seconds, version, digest, "unexpected Lean output (warnings or extra messages)")
-        axioms = tuple(a.strip() for a in m.group(1).split(",") if a.strip())
-    if not set(axioms) <= ALLOWED_AXIOMS:
-        return LeanResult(False, axioms, seconds, version, digest, "theorem depends on a non-standard axiom")
-    return LeanResult(True, axioms, seconds, version, digest, "kernel accepted")
+        return LeanResult(False, (), seconds, version, digest, "unexpected Lean diagnostics on stderr", claims)
+    lines = out.splitlines()
+    if len(lines) != claims:
+        return LeanResult(False, (), seconds, version, digest, "unexpected Lean output (warnings or extra messages)", claims)
+    used: set[str] = set()
+    for i, line in enumerate(lines):
+        m = _AXIOM_LINE.match(line)
+        if m:
+            if int(m.group(1)) != i:
+                return LeanResult(False, (), seconds, version, digest, "axiom reports out of order", claims)
+            used |= {a.strip() for a in m.group(2).split(",") if a.strip()}
+        else:
+            m = _NO_AXIOM_LINE.match(line)
+            if not m or int(m.group(1)) != i:
+                return LeanResult(False, (), seconds, version, digest, "unexpected Lean output (warnings or extra messages)", claims)
+    if not used <= ALLOWED_AXIOMS:
+        return LeanResult(False, tuple(sorted(used)), seconds, version, digest, "a theorem depends on a non-standard axiom", claims)
+    return LeanResult(True, tuple(sorted(used)), seconds, version, digest, "kernel accepted", claims)
+
+
+def check_items(data: bytes, items: list[tuple[ClaimSpec, tuple[str, ...], Fraction, Outcome]], *, timeout: int = DEFAULT_TIMEOUT,
+                keep_dir: Path | None = None, name: str = "batch") -> list[dict]:
+    """Kernel-check a batch; if the batch is rejected, re-check every claim alone so that one wrong
+    prediction cannot block (or hide behind) the others.  Returns one JSON record per item."""
+    keep = None if keep_dir is None else keep_dir / f"{name}.lean"
+    res = check_source(batch_source(data, items), claims=len(items), timeout=timeout, keep=keep)
+    if res.accepted or len(items) == 1:
+        out = []
+        for i in range(len(items)):
+            rec = res.to_json(i)
+            rec["checker_sha256"] = checker_sha256()
+            if keep is not None:
+                rec["obligation_file"] = keep.name
+            out.append(rec)
+        return out
+    if keep is not None and keep.exists():
+        keep.unlink()
+    out = []
+    for i, item in enumerate(items):
+        out.extend(check_items(data, [item], timeout=timeout, keep_dir=keep_dir, name=f"{name}-single-{i:03d}"))
+        out[-1]["isolated_after_batch_rejection"] = True
+    return out
