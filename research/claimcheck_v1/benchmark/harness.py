@@ -44,6 +44,11 @@ class Document:
         return f"{self.slug}:{self.variant}"
 
     def _locate(self, item: dict) -> tuple[int, int]:
+        if "start" in item and "end" in item:        # variants carry explicit offsets
+            printed = self.text[item["start"]:item["end"]].replace(",", "").replace("−", "-")
+            if printed != item["token"].replace(",", ""):
+                raise ValueError(f"{self.slug}/{item['id']}: token is not at the recorded offsets")
+            return item["start"], item["end"]
         ctx = item["context"]
         pos = self.text.find(ctx)
         if pos == -1 or self.text.find(ctx, pos + 1) != -1:
@@ -93,7 +98,7 @@ class Verifier:
     def verify(self, doc: Document, proposals: list[dict], origin: str) -> list[dict]:
         cleaned, keys, out = [], [], {}
         for proposal in proposals:
-            clean = {k: v for k, v in proposal.items() if k in ("quote", "spec", "quote_start")} if isinstance(proposal, dict) else proposal
+            clean = proposal      # passed to the verifier exactly as proposed: rejecting junk is its job
             key = self._key(doc, clean)
             cleaned.append(clean)
             keys.append(key)

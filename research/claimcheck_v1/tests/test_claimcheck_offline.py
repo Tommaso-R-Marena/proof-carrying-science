@@ -203,6 +203,13 @@ class GroundingTests(unittest.TestCase):
                      spec(stat="max", column="len_mm", reported="104"), MANIFEST)
         self.assertTrue(rng.ok)
 
+    def test_declared_scope(self):
+        man = dict(MANIFEST, out_of_scope_terms=["juvenile", "juveniles"])
+        src = "Mean mass of juveniles was 10.81 g. Mean mass of adults was 10.81 g.\n"
+        s = spec(stat="mean", column="mass_g", reported="10.81")
+        self.assertFalse(ground(src, "Mean mass of juveniles was 10.81 g.", s, man).ok)
+        self.assertTrue(ground(src, "Mean mass of adults was 10.81 g.", s, man).ok)
+
     def test_sentence_window(self):
         a, b = sentence_window(SOURCE, SOURCE.index("11.0"), SOURCE.index("11.0") + 4)
         self.assertTrue(SOURCE[a:b].startswith("Mean mass"))

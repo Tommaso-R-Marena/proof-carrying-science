@@ -140,7 +140,7 @@ def generic_rectangular(data: bytes) -> bool:
         rows = list(csv.reader(io.StringIO(data.decode("utf-8-sig"), newline="")))
     except (UnicodeDecodeError, csv.Error):
         return False
-    return len(rows) >= 2 and len({len(r) for r in rows}) == 1
+    return len(rows) >= 2 and len({len(r) for r in rows}) == 1 and len(rows[0]) >= 2
 
 
 def acquire(rec: dict, out: Path) -> dict:

@@ -37,6 +37,11 @@ MODEL_RE = {
 }
 
 
+# Free reasoning models can spend their whole output budget on hidden reasoning and return no
+# answer; reasoning is therefore switched off for extraction calls.
+OPENROUTER_REASONING = {"enabled": False}
+
+
 class ProviderError(RuntimeError):
     """Deliberately carries no response body and no header content."""
 
@@ -98,7 +103,7 @@ def cache_key(provider: str, model: str, prompt: str, system: str) -> str:
 
 
 def complete(provider: str, model: str, prompt: str, *, system: str = "", ledger: Ledger, cache_dir: Path | None,
-             allow_network: bool, timeout: int = 180, max_output_tokens: int = 8192, retries: int = 3,
+             allow_network: bool, timeout: int = 300, max_output_tokens: int = 16384, retries: int = 3,
              transport=_post) -> dict:
     """One bounded text completion.  Returns ``{"text", "cached", "usage", "model", "provider", "key"}``."""
     if provider not in HOSTS:
@@ -125,14 +130,16 @@ def complete(provider: str, model: str, prompt: str, *, system: str = "", ledger
         headers = {"Content-Type": "application/json", "x-goog-api-key": secret}
         payload = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
                    "generationConfig": {"temperature": 0, "maxOutputTokens": max_output_tokens,
-                                        "responseMimeType": "application/json"}}
+                                        "responseMimeType": "application/json",
+                                        "thinkingConfig": {"thinkingLevel": "low"}}}
         if system:
             payload["systemInstruction"] = {"parts": [{"text": system}]}
     else:
         url = f"https://{HOSTS[provider]}/api/v1/chat/completions"
         headers = {"Content-Type": "application/json", "Authorization": "Bearer " + secret}
         messages = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
-        payload = {"model": model, "temperature": 0, "max_tokens": max_output_tokens, "messages": messages}
+        payload = {"model": model, "temperature": 0, "max_tokens": max_output_tokens, "messages": messages,
+                   "reasoning": dict(OPENROUTER_REASONING)}
     last = "no attempt"
     for attempt in range(retries + 1):
         if ledger.calls[provider] >= ledger.max_calls[provider]:
@@ -169,10 +176,12 @@ def complete(provider: str, model: str, prompt: str, *, system: str = "", ledger
                 cache_file.write_text(json.dumps({**rec, "cached": False}, ensure_ascii=False, indent=1), encoding="utf-8")
             return rec
         ledger.failures[provider] += 1
-        last = f"HTTP {status}" if status else "transport failure"
-        if status in (400, 401, 403, 404):
+        last = f"HTTP {status}" + (f", finish={finish}" if finish else "") if status else "transport failure"
+        # Deterministic failures are not retried: a bad request, a refused credential, or a model
+        # that answered but produced no text (for example all output spent on hidden reasoning).
+        if status in (200, 400, 401, 403, 404):
             break
-        time.sleep(min(60, 8 * (attempt + 1)))
+        time.sleep(min(120, (40 if status == 429 else 15) * (attempt + 1)))   # 429: per-minute quota
     raise ProviderError(f"{provider} did not return a usable completion ({last})")
 
 

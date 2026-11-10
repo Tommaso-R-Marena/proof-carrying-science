@@ -11,7 +11,8 @@ Arms (each is only a way of producing untrusted proposals; all share one verifie
   agree               only readings that both models proposed independently
   gemini+critic       Gemini's proposals, minus those the OpenRouter model calls unfaithful
   openrouter+critic   the reverse
-  cascade             rules first; Gemini is shown only sentences whose numbers the rules left unresolved
+
+Models are shown only the sentences that print a number (a deterministic prefilter), never data rows.
 
 Model agreement, critic approval and model confidence are never verification authority: they
 only decide which proposals are *sent* to the verifier or dropped before it.  Without
@@ -22,15 +23,21 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from ..baseline import NUMBER, propose_rules, propose_search, sentences
-from ..propose import DEFAULT_MODELS, critique, data_dictionary, propose_with_model, proposer_prompt, to_proposals, SYSTEM
-from ..providers import Ledger, ProviderError, complete, extract_json
+from ..baseline import propose_rules, propose_search
+from ..propose import DEFAULT_MODELS, critique, propose_with_model
+from ..providers import Ledger
+from .freeze import check as freeze_check
 from .harness import Document, Verifier, dedupe, numeric_token_count, score, spec_signature, summarise, token_outcomes
 
 HERE = Path(__file__).resolve().parent
 MODEL_ARMS = ("gemini", "openrouter")
+
+
+def arms_for(doc: Document) -> tuple:
+    return ("openrouter",) if doc.variant == "injected" else MODEL_ARMS
 
 
 def load_split(split: str) -> list[Document]:
@@ -48,21 +55,10 @@ def _token_starts(doc: Document, receipts: list[dict]) -> list:
     return [r.get("q2_correspondence", {}).get("reported_value", {}).get("start") for r in receipts]
 
 
-def residual_text(doc: Document, resolved_starts: set[int]) -> str:
-    """Sentences that contain at least one number the first stage did not resolve."""
-    keep = []
-    for start, sent in sentences(doc.text):
-        if sent.startswith(("TITLE:", "SECTION:")):
-            continue
-        nums = [start + m.start() for m in NUMBER.finditer(sent)]
-        if nums and any(n not in resolved_starts for n in nums):
-            keep.append(sent)
-    return "\n\n".join(keep) + "\n"
-
-
 def run(split: str, out: Path, *, allow_network: bool, workers: int, max_gemini: int, max_openrouter: int,
-        models: dict | None = None) -> dict:
+        models: dict | None = None, model_workers: int = 3, providers: tuple = MODEL_ARMS, prefetch_only: bool = False) -> dict:
     out.mkdir(parents=True, exist_ok=True)
+    freezes = freeze_check() if split == "heldout" else {"note": "development split: freezes not required"}
     models = dict(DEFAULT_MODELS, **(models or {}))
     ledger = Ledger(max_calls={"gemini": max_gemini, "openrouter": max_openrouter})
     cache = out / "model_responses"
@@ -92,6 +88,32 @@ def run(split: str, out: Path, *, allow_network: bool, workers: int, max_gemini:
                 "score_without_statistic_wording_gate": ablation,
                 "token_outcomes": {str(k): v for k, v in sorted(outcomes.items())}, "score": sc, "cost": cost}, receipts, outcomes
 
+    # Model calls are network-bound and slow: fetch every document's proposals, then every critic
+    # review, concurrently.  Responses land in the on-disk cache; the loop below reads them back.
+    def fetch_proposals(job):
+        doc, prov = job
+        return propose_with_model(prov, models[prov], doc.text, doc.data, doc.manifest, allow_network=allow_network,
+                                  ledger=ledger, cache_dir=cache)
+
+    def fetch_critic(job):
+        doc, prov, critic = job
+        props = dedupe(fetch_proposals((doc, prov))[0])
+        items = [{"id": i, "quote": p["quote"], "reading": p["spec"]} for i, p in enumerate(props)]
+        return critique(critic, models[critic], doc.text, doc.data, doc.manifest, items,
+                        allow_network=allow_network, ledger=ledger, cache_dir=cache)
+
+    if allow_network:
+        ordered = sorted(docs, key=lambda d: (d.variant == "injected", d.key))   # injection variants last
+        with ThreadPoolExecutor(max_workers=model_workers) as pool:
+            list(pool.map(fetch_proposals, [(d, p) for d in ordered for p in arms_for(d) if p in providers]))
+            if prefetch_only:
+                (out / "prefetch_ledger.json").write_text(json.dumps(ledger.to_json(), indent=1), encoding="utf-8")
+                return {"prefetch_only": True, "ledger": ledger.to_json()}
+            list(pool.map(fetch_critic, [(d, a, b) for d in docs if d.variant == "original"
+                                         for a, b in (("gemini", "openrouter"), ("openrouter", "gemini"))]))
+        prefetch_ledger = ledger.to_json()
+        (out / "prefetch_ledger.json").write_text(json.dumps(prefetch_ledger, indent=1), encoding="utf-8")
+
     for doc in docs:
         entry = {"doc": doc.key, "numeric_tokens": numeric_token_count(doc), "gold_items": len(doc.gold), "arms": []}
         # ---- deterministic arms
@@ -100,9 +122,9 @@ def run(split: str, out: Path, *, allow_network: bool, workers: int, max_gemini:
         entry["arms"].append(e_rules)
         search = dedupe(propose_search(doc.text, doc.data, doc.manifest))
         entry["arms"].append(record(doc, "search", search, {})[0])
-        # ---- model arms
+        # ---- model arms (injection variants: OpenRouter model only, see PROTOCOL.md)
         model_props, model_meta = {}, {}
-        for prov in MODEL_ARMS:
+        for prov in arms_for(doc):
             props, meta = propose_with_model(prov, models[prov], doc.text, doc.data, doc.manifest, allow_network=allow_network,
                                              ledger=ledger, cache_dir=cache)
             props = dedupe(props)
@@ -111,6 +133,10 @@ def run(split: str, out: Path, *, allow_network: bool, workers: int, max_gemini:
                     "model_errors": 1 if meta.get("error") else 0, "meta": {k: v for k, v in meta.items() if k != "usage"}}
             model_props[prov], model_meta[prov] = props, cost
             entry["arms"].append(record(doc, prov, props, cost)[0])
+        if doc.variant == "injected":
+            per_doc.append(entry)
+            (out / "per_document.json").write_text(json.dumps(per_doc, indent=1, ensure_ascii=False), encoding="utf-8")
+            continue
         both_cost = {k: sum(model_meta[p][k] for p in MODEL_ARMS) for k in ("model_calls", "prompt_tokens", "output_tokens", "model_errors")}
         union = dedupe(model_props["gemini"] + model_props["openrouter"])
         entry["arms"].append(record(doc, "union", union, both_cost)[0])
@@ -126,7 +152,9 @@ def run(split: str, out: Path, *, allow_network: bool, workers: int, max_gemini:
         agree = [kg[k] for k in kg if k in ko]
         entry["arms"].append(record(doc, "agree", agree, both_cost)[0])
         # critics
-        for prov, critic in (("gemini", "openrouter"), ("openrouter", "gemini")):
+        # Critics judge the faithfulness of a reading to its sentence, which a changed number does
+        # not affect, so (to respect the provider call budget) they run on original documents only.
+        for prov, critic in ((("gemini", "openrouter"), ("openrouter", "gemini")) if doc.variant == "original" else ()):
             props = model_props[prov]
             items = [{"id": i, "quote": p["quote"], "reading": p["spec"]} for i, p in enumerate(props)]
             reviews, cmeta = critique(critic, models[critic], doc.text, doc.data, doc.manifest, items,
@@ -141,25 +169,11 @@ def run(split: str, out: Path, *, allow_network: bool, workers: int, max_gemini:
                                "flagged": [{"quote": props[int(i)]["quote"][:160], "spec": props[int(i)]["spec"], "problem": r["problem"]}
                                            for i, r in reviews.items() if not r["faithful"] and int(i) < len(props)]}}
             entry["arms"].append(record(doc, f"{prov}+critic", kept, cost)[0])
-        # cascade: rules first, then Gemini on the residual sentences only
-        resolved = {s for s, o in out_rules.items() if o["result"] in ("PROVED", "REFUTED")}
-        residual = residual_text(doc, resolved)
-        prompt = proposer_prompt(residual, data_dictionary(doc.data, doc.manifest))
-        try:
-            rec = complete("gemini", models["gemini"], prompt, system=SYSTEM, ledger=ledger, cache_dir=cache, allow_network=allow_network)
-            extra, _dropped = to_proposals(extract_json(rec["text"]))
-            usage = rec.get("usage") or {}
-            cost = {"model_calls": 1, "prompt_tokens": usage.get("prompt_tokens", 0), "output_tokens": usage.get("output_tokens", 0), "model_errors": 0}
-        except ProviderError as exc:
-            extra, cost = [], {"model_calls": 1, "prompt_tokens": 0, "output_tokens": 0, "model_errors": 1, "error": str(exc)}
-        cost["residual_chars"] = len(residual)
-        cost["full_chars"] = len(doc.text)
-        entry["arms"].append(record(doc, "cascade", dedupe(rules + extra), cost)[0])
         per_doc.append(entry)
         (out / "per_document.json").write_text(json.dumps(per_doc, indent=1, ensure_ascii=False), encoding="utf-8")
 
     summary = {
-        "split": split, "documents": [d.key for d in docs], "models": models,
+        "split": split, "freezes": freezes, "documents": [d.key for d in docs], "models": models,
         "arms": {arm: {"classes": summarise(scs), "classes_without_statistic_wording_gate": summarise(arm_ablation[arm]),
                        **{k: (round(v, 1) if isinstance(v, float) else v) for k, v in arm_cost[arm].items()}}
                  for arm, scs in arm_scores.items()},
@@ -186,7 +200,12 @@ def main(argv=None) -> int:
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--max-gemini-calls", type=int, default=80)
     ap.add_argument("--max-openrouter-calls", type=int, default=40)
+    ap.add_argument("--prefetch-only", choices=MODEL_ARMS, help="only fetch this provider's proposals into the cache, then stop")
     args = ap.parse_args(argv)
+    if args.prefetch_only:
+        print(json.dumps(run(args.split, Path(args.out), allow_network=True, workers=args.workers, max_gemini=args.max_gemini_calls,
+                             max_openrouter=args.max_openrouter_calls, providers=(args.prefetch_only,), prefetch_only=True), indent=1))
+        return 0
     summary = run(args.split, Path(args.out), allow_network=args.allow_network, workers=args.workers,
                   max_gemini=args.max_gemini_calls, max_openrouter=args.max_openrouter_calls)
     print(json.dumps({k: summary[k] for k in ("arms", "gold", "ledger", "verifier", "wall_seconds")}, indent=1))

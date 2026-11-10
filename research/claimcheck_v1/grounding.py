@@ -115,35 +115,68 @@ def locate_token(text: str, literal: str) -> list[tuple[int, int, str]]:
     return hits
 
 
-def sentence_window(source: str, start: int, end: int) -> tuple[int, int]:
-    """The sentence(s) overlapping [start, end): bounded by blank lines or sentence punctuation."""
-    left = start
-    while left > 0:
-        ch = source[left - 1]
-        if ch == "\n" and left > 1 and source[left - 2] == "\n":
-            break
-        if ch in ".!?" and left < len(source) and source[left].isspace() and _starts_sentence(source, left):
-            break
-        left -= 1
-    right = end
-    while right < len(source):
-        ch = source[right]
-        if ch == "\n" and right + 1 < len(source) and source[right + 1] == "\n":
-            break
-        if ch in ".!?" and right + 1 < len(source) and source[right + 1].isspace() and _starts_sentence(source, right + 1):
-            right += 1
-            break
-        right += 1
-    while left < right and source[left].isspace():
-        left += 1
-    return left, right
+_ABBREVIATIONS = {"sp", "spp", "e.g", "i.e", "al", "fig", "figs", "vs", "cf", "ca", "approx", "no", "nos", "dr", "prof",
+                  "st", "eq", "eqs", "ref", "refs", "tab", "resp", "var", "subsp", "ssp", "cv", "ver", "vol", "ed", "eds"}
 
 
-def _starts_sentence(source: str, ws_index: int) -> bool:
-    j = ws_index
-    while j < len(source) and source[j] in " \t\n":
+def _is_boundary(text: str, i: int) -> bool:
+    """Is the punctuation mark at ``text[i]`` the end of a sentence?"""
+    if text[i] not in ".!?" or i + 1 >= len(text) or not text[i + 1].isspace():
+        return False
+    j = i + 1
+    while j < len(text) and text[j] in " \t\n":
         j += 1
-    return j < len(source) and (source[j].isupper() or source[j] in "([\"'“")
+    if j >= len(text):
+        return True
+    nxt = text[j]
+    if not (nxt.isupper() or nxt.isdigit() or nxt in "\"'“‘["):
+        return False                      # lower case or "(" continues the sentence
+    if text[i] == ".":
+        k = i
+        while k > 0 and (text[k - 1].isalpha() or text[k - 1] == "."):
+            k -= 1
+        word = text[k:i]
+        if word.lower() in _ABBREVIATIONS:
+            return False                  # "sp.", "et al.", "Fig."  (when unsure, split: a shorter
+                                          # sentence can only make the anchor checks stricter)
+    return True
+
+
+def sentence_spans(text: str) -> list[tuple[int, int]]:
+    """Sentences as (start, end) offsets.  Blank lines always separate; abbreviations do not."""
+    spans, start, i, n = [], 0, 0, len(text)
+
+    def close(end):
+        nonlocal start
+        a, b = start, end
+        while a < b and text[a].isspace():
+            a += 1
+        while b > a and text[b - 1].isspace():
+            b -= 1
+        if b > a:
+            spans.append((a, b))
+        start = end
+
+    while i < n:
+        if text[i] == "\n" and i + 1 < n and text[i + 1] == "\n":
+            close(i)
+            while i < n and text[i] == "\n":
+                i += 1
+            start = i
+            continue
+        if _is_boundary(text, i):
+            close(i + 1)
+        i += 1
+    close(n)
+    return spans
+
+
+def sentence_window(source: str, start: int, end: int) -> tuple[int, int]:
+    """The sentence(s) overlapping [start, end)."""
+    hit = [(a, b) for a, b in sentence_spans(source) if a < end and start < b]
+    if not hit:
+        return start, end
+    return hit[0][0], hit[-1][1]
 
 
 def default_aliases(name: str) -> list[str]:
@@ -242,6 +275,14 @@ def ground(source: str, quote: str, spec: ClaimSpec, manifest: dict, *, quote_st
     g.checks["binding_anchors"] = anchors
     g.checks["binding_anchored"] = anchors_ok
 
+    # scope: wording the submitter declared as "not about this table" (e.g. "male" for a table of females)
+    scope_ok = True
+    outside = alias_present(window, list(manifest.get("out_of_scope_terms") or []))
+    g.checks["sentence_within_table_scope"] = outside is None
+    if outside is not None:
+        scope_ok = False
+        g.failures.append(f"The sentence mentions “{outside}”, which the dataset manifest says this table does not cover.")
+
     # the statistic itself must be named (counts and shares are exempt: "n = 18", "46 snails")
     cue_ok = True
     pattern = STAT_CUES.get(spec.stat)
@@ -253,6 +294,6 @@ def ground(source: str, quote: str, spec: ClaimSpec, manifest: dict, *, quote_st
             g.failures.append(f"The sentence has no wording that names the statistic “{spec.stat}” (for example mean, median, SD, range).")
 
     g.interpretive_terms = sorted({m.group(0).lower() for m in _INTERPRETIVE.finditer(window)})
-    g.ok_without_statistic_cue = unit_ok and anchors_ok
-    g.ok = unit_ok and anchors_ok and cue_ok
+    g.ok_without_statistic_cue = unit_ok and anchors_ok and scope_ok
+    g.ok = unit_ok and anchors_ok and scope_ok and cue_ok
     return g

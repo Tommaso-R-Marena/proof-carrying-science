@@ -132,6 +132,9 @@ def validate_manifest(manifest: Any) -> str | None:
     pin = manifest.get("sha256")
     if pin is not None and not (isinstance(pin, str) and len(pin) == 64 and all(c in "0123456789abcdef" for c in pin)):
         return "sha256 must be 64 lowercase hex digits"
+    terms = manifest.get("out_of_scope_terms")
+    if terms is not None and not (isinstance(terms, list) and len(terms) <= 24 and all(isinstance(t, str) and 2 <= len(t) <= 40 for t in terms)):
+        return "out_of_scope_terms must be a short list of words"
     for key in ("columns", "values"):
         if manifest.get(key) is not None and not isinstance(manifest[key], dict):
             return f"{key} must be an object"

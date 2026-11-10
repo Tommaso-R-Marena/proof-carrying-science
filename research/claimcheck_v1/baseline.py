@@ -16,27 +16,16 @@ import itertools
 import re
 from fractions import Fraction
 
-from .grounding import alias_present, column_aliases, value_aliases
+from .grounding import alias_present, column_aliases, sentence_spans, value_aliases
 from .oracle import _decimal, _trim, evaluate, parse_table
 from .spec import ClaimSpec, Cond, unit_factor
 
 NUMBER = re.compile(r"(?<![0-9A-Za-z.,])[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?(?![0-9])|(?<![0-9A-Za-z.])(?:[0-9]+(?:\.[0-9]+)?)(?![0-9]|\.[0-9])")
-SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\[“\"'])|\n\s*\n")
 MAX_GROUP_VALUES = 40
 
 
 def sentences(text: str) -> list[tuple[int, str]]:
-    out, pos = [], 0
-    for m in SENT_SPLIT.finditer(text):
-        seg = text[pos:m.start()]
-        if seg.strip():
-            lead = len(seg) - len(seg.lstrip())
-            out.append((pos + lead, seg.strip()))
-        pos = m.end()
-    seg = text[pos:]
-    if seg.strip():
-        out.append((pos + len(seg) - len(seg.lstrip()), seg.strip()))
-    return out
+    return [(a, text[a:b]) for a, b in sentence_spans(text)]
 
 
 def table_profile(data: bytes, manifest: dict) -> dict:
