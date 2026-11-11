@@ -229,7 +229,8 @@ fields was exercised by family A, not by an obedient model.
 
 ## Kernel agreement, replay and cost
 
-* Oracle versus kernel: 690 held-out claims and 80 adversarial claims were put to the Lean kernel;
+* Oracle versus kernel: 706 held-out claims (690 on day 1, 16 on day 2) and 80 adversarial claims
+  were put to the Lean kernel;
   every prediction of the untrusted Python oracle was accepted. No disagreement has been observed
   anywhere (also 300–400 random cases per run of `check_live`, and 425 cases against the
   JavaScript implementation).
