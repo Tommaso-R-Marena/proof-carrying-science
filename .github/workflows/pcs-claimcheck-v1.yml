@@ -1,0 +1,70 @@
+name: PCS ClaimCheck v1 research checks (actual Lean 4.28)
+
+# Path-scoped research CI. It grants no production authority and does not replace
+# the protected source-admission gate.
+on:
+  pull_request:
+    paths:
+      - "research/claimcheck_v1/**"
+      - ".github/workflows/pcs-claimcheck-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-and-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Software and held-out inputs match their frozen digests
+        run: python -m research.claimcheck_v1.benchmark.freeze check
+      - name: Offline tests (no Lean, no network, no API keys)
+        run: python -m unittest discover -s research/claimcheck_v1/tests -v
+      - name: Install checksum-pinned Lean 4.28.0
+        shell: bash
+        run: source scripts/activate_lean_428.sh
+      - name: Live kernel controls and oracle/checker differential fuzz
+        run: python -m research.claimcheck_v1.check_live --fuzz 300
+      - name: Independently replay one committed held-out evidence bundle
+        run: |
+          python research/claimcheck_v1/replay_independent.py \
+            research/claimcheck_v1/benchmark/results/bundles/08_pmc6238128 \
+            --checker-sha256 "$(cut -d' ' -f1 research/claimcheck_v1/formal/ClaimCheck.lean.sha256)"
+      - name: Post-run analysis reproduces from committed receipts (no Lean, no network)
+        run: |
+          python -m research.claimcheck_v1.tools.analyze \
+            --results research/claimcheck_v1/benchmark/results/heldout --out "$RUNNER_TEMP/analysis.json"
+
+  meaning-theorems:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checker lemmas and Mathlib meaning theorems, with axiom audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/claimcheck_v1/formal
+          lake exe cache get
+          lake build ClaimCheck ClaimCheckReal
+          cat > "$RUNNER_TEMP/audit.lean" <<'LEAN'
+          import ClaimCheckReal
+          #print axioms PCS.ClaimCheck.runAll_eq_map
+          #print axioms PCS.ClaimCheck.run_of_runAll
+          #print axioms PCS.ClaimCheck.sqrtInInterval_iff
+          #print axioms PCS.ClaimCheck.within_rat_iff
+          #print axioms PCS.ClaimCheck.within_sqrt_iff
+          #print axioms PCS.ClaimCheck.sumQ_eq_sum
+          #print axioms PCS.ClaimCheck.meanQ_eq
+          #print axioms PCS.ClaimCheck.ssQ_eq
+          #print axioms PCS.ClaimCheck.pearson_signed_sqrt
+          LEAN
+          lake env lean "$RUNNER_TEMP/audit.lean" | tee "$RUNNER_TEMP/axioms.txt"
+          test "$(wc -l < "$RUNNER_TEMP/axioms.txt")" = 9
+          ! grep -v "depends on axioms: \[propext, Classical.choice, Quot.sound\]$" "$RUNNER_TEMP/axioms.txt"
