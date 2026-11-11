@@ -1,0 +1,665 @@
+<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+<title>ClaimCheck report</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:60rem;margin:2rem auto;padding:0 1rem;color:#1a1a1a}h1{font-size:1.5rem}h2{font-size:1.1rem;margin:0}article{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0}.b{display:inline-block;color:#fff;border-radius:4px;padding:.1rem .5rem;font-weight:700;font-size:.85rem}blockquote{margin:.5rem 0;padding:.25rem .75rem;border-left:4px solid #999;background:#f6f6f6}dt{font-weight:700;margin-top:.6rem}dd{margin:0}code{background:#f0f0f0;padding:0 .2rem}small{color:#555}ul{margin:.2rem 0 .2rem 1.2rem;padding:0}</style>
+<h1>ClaimCheck report</h1>
+<p>Paper text: <code>article.txt</code>. Data file: <code>soil_nut_xwalked.csv</code>. Research tool; no production PCS authority.</p>
+<p>Each statement gets three separate answers. <b>1 — the arithmetic</b>: decided by the Lean kernel on the exact bytes of the data file. <b>2 — the link to the paper</b>: which mechanical source checks passed. <b>3 — the science</b>: never assessed here.</p>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c001</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of pH over all rows equals 6.07 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The arithmetic mean of pH over all rows equals 6.07 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 6.066130952 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-001.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 6.07 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt a8604a0b4a914384</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c002</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of pH over all rows equals 0.05 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The standard error of the mean (sample SD / √n) of pH over all rows equals 0.05 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.04758870019 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-001.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.05 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 661eadc5f84aebf8</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c003</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of pH over all rows equals 5.01 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The minimum of pH over all rows equals 5.01 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 5.01 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-002.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 5.01 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 287d35a55f5f23da</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c004</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of pH over all rows equals 8.03 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The maximum of pH over all rows equals 8.03 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 8.03 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-002.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 8.03 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 304bd412b3828b0c</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c005</h2>
+<blockquote>Organic matter was generally low with a mean 4.2 % ± 0.2 SE (range = 0.6–15.5 %).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of OM over all rows equals 4.2 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The arithmetic mean of OM over all rows equals 4.2 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 4.219345238 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 4.2 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column OM” — named in the sentence as “organic matter”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6348b1850dd7063e</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c006</h2>
+<blockquote>Organic matter was generally low with a mean 4.2 % ± 0.2 SE (range = 0.6–15.5 %).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of OM over all rows equals 0.2 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The standard error of the mean (sample SD / √n) of OM over all rows equals 0.2 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.2243028063 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.2 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column OM” — named in the sentence as “organic matter”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 2f3cc98a777d80cd</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c007</h2>
+<blockquote>Organic matter was generally low with a mean 4.2 % ± 0.2 SE (range = 0.6–15.5 %).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of OM over all rows equals 0.6 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The minimum of OM over all rows equals 0.6 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 0.59 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.6 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column OM” — named in the sentence as “organic matter”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 587ce991f6d16247</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c008</h2>
+<blockquote>Organic matter was generally low with a mean 4.2 % ± 0.2 SE (range = 0.6–15.5 %).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of OM over all rows equals 15.5 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The maximum of OM over all rows equals 15.5 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 15.53 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 15.5 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column OM” — named in the sentence as “organic matter”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 75a61bee6224a67b</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c009</h2>
+<blockquote>Salinity was highly variable and ranged from 12 to 390 ppm with a mean of 91.8 ± 6.7 SE at this coastal site.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Na_ppm over all rows equals 12 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 12 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 12 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Na_ppm” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column Na_ppm” (accepted wordings: sodium, Na, Na_ppm, Na ppm).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6aac40af69f943e7</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c010</h2>
+<blockquote>Salinity was highly variable and ranged from 12 to 390 ppm with a mean of 91.8 ± 6.7 SE at this coastal site.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of Na_ppm over all rows equals 390 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>max</code>: exact value ≈ 390 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 390 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Na_ppm” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column Na_ppm” (accepted wordings: sodium, Na, Na_ppm, Na ppm).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 2ef623acf90d1550</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c011</h2>
+<blockquote>Salinity was highly variable and ranged from 12 to 390 ppm with a mean of 91.8 ± 6.7 SE at this coastal site.</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Na_ppm over all rows equals 91.8 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 91.79761905 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 91.8 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Na_ppm” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column Na_ppm” (accepted wordings: sodium, Na, Na_ppm, Na ppm).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6e051bcba7f5c16c</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c012</h2>
+<blockquote>Salinity was highly variable and ranged from 12 to 390 ppm with a mean of 91.8 ± 6.7 SE at this coastal site.</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Na_ppm over all rows equals 6.7 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 6.673046702 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 6.7 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Na_ppm” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column Na_ppm” (accepted wordings: sodium, Na, Na_ppm, Na ppm).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 3552d11c6112625a</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c013</h2>
+<blockquote>For each of the 14 angiosperm species, we sampled soils from 6 unique collection locations in the field, at least 100 m apart, at Bodega Bay Marine Reserve, CA, USA [see Supporting Information].</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 14 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The number of all rows equals 14 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 168 from 168 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 14 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (supporting); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 33b4687b3b6b3711</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c014</h2>
+<blockquote>For each of the 14 angiosperm species, we sampled soils from 6 unique collection locations in the field, at least 100 m apart, at Bodega Bay Marine Reserve, CA, USA [see Supporting Information].</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where soilSourceSp is “CO” equals 6 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The number of rows where soilSourceSp is “CO” equals 6 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 12 from 12 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“soilSourceSp = CO” — named in the sentence as “CO”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (supporting); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt a5a7a1956809d391</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c015</h2>
+<blockquote>To characterize soil chemical properties, soil samples taken from each soil collection (n = 84) were analysed for NO3 (ppm), Olsen P (ppm), K (ppm), K (meq/100 g), Na (ppm), Ca (meq/100 g), Mg (meq/100 g), cation-exchange capacity, organic matter and pH by the Division of Agriculture and Natural Resources Analytical Laboratory at the University of California, Davis.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 84 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The number of all rows equals 84 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 168 from 168 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-006.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 84 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 83ff199607c9e500</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c016</h2>
+<blockquote>Soil samples were stored on dry ice in the field and moved to −80 °C within &lt;12 h.</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where soilSourceSp is “SA” equals 12 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The number of rows where soilSourceSp is “SA” equals 12 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 12 from 12 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-006.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 12 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“soilSourceSp = SA” — named in the sentence as “SA”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt e30bee5976b694dc</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c017</h2>
+<blockquote>Each species was represented in the data set by at least 1 DNA region, matK was present for 7 species, ITS for 13 and trnL-trnF for 11 [see Supporting Information].</blockquote>
+<p><b>Reading that was checked:</b> The minimum of rep over all rows equals 1 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The minimum of rep over all rows equals 1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 1 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-007.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column rep” — named in the sentence as “rep”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (supporting); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 18bce09162b12952</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c018</h2>
+<blockquote>We conducted ordinations with and without data transformation, and with and without removing rare taxa (taxa present in ≤7 % of subsamples) prior to ordination.</blockquote>
+<p><b>Reading that was checked:</b> The fraction of all rows where soilSourceSp is “CO” equals 7 % when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The fraction of all rows where soilSourceSp is “CO” equals 7 % when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>share</code>: exact value ≈ 7.142857143 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-007.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 7 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li><li>Unit conversion: reported value = 100 × statistic in data units (fraction → %).</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“soilSourceSp = CO” — named in the sentence as “CO”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 362c077b4d797080</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c019</h2>
+<blockquote>We then choose the subset of phylogenetic eigenvectors that were statistically significant (P &lt; 0.05) for the reduced model ().</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of pH over all rows equals 0.05 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.04758870019 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.05 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 8864796ac91b0eb7</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c020</h2>
+<blockquote>We compared this full model (e.g. fungal community axis 1 ∼ plant phylogeny + spatial location) to models dropping effects from the model using a likelihood ratio test to determine the statistical significance of each predictor.</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effects, predictor, significance); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt adc0edfd37158fe1</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c021</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of pH over all rows equals 6.07 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The arithmetic mean of pH over all rows equals 6.07 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 6.066130952 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-008.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 6.07 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt a2eb2f948805bd70</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c022</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of pH over all rows equals 0.05 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The standard error of the mean (sample SD / √n) of pH over all rows equals 0.05 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.04758870019 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-008.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.05 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 1c6d85ca3998ad9b</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c023</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of pH over all rows equals 5.01 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The minimum of pH over all rows equals 5.01 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 5.01 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-009.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 5.01 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 7ea36fb1eb366212</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c024</h2>
+<blockquote>Soils from the Bodega Bay site were primarily loamy sand with a somewhat acidic average pH of 6.07 ± 0.05 SE (range = 5.01–8.03).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of pH over all rows equals 8.03 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The maximum of pH over all rows equals 8.03 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 8.03 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-009.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 8.03 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 8da053c4603186dc</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c025</h2>
+<blockquote>Organic matter was generally low with a mean 4.2 % ± 0.2 SE (range = 0.6–15.5 %).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of OM over all rows equals 0.2 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The standard error of the mean (sample SD / √n) of OM over all rows equals 0.2 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.2243028063 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-010.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.2 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column OM” — named in the sentence as “organic matter”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt fdc12ec89cdff774</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c026</h2>
+<blockquote>Organic matter was generally low with a mean 4.2 % ± 0.2 SE (range = 0.6–15.5 %).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of OM over all rows equals 0.6 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The minimum of OM over all rows equals 0.6 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 0.59 from 168 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-010.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.6 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column OM” — named in the sentence as “organic matter”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt c28a731078c8602d</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c027</h2>
+<blockquote>Salinity was highly variable and ranged from 12 to 390 ppm with a mean of 91.8 ± 6.7 SE at this coastal site.</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where soilSourceSp is “CO” equals 12 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file soil_nut_xwalked.csv (SHA-256 4db2fc7fd7b275dc…) only: “The number of rows where soilSourceSp is “CO” equals 12 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 12 from 12 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-011.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 12 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“soilSourceSp = CO” — named in the sentence as “CO”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 9c4a7416d1c5b57f</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c028</h2>
+<blockquote>Variation in pH explained 19 % of the variance in bacterial community composition on axis 2 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 780e80f0fb0934ad</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c029</h2>
+<blockquote>Variation in K, Na and Ca explained 11 % of the variance on axis 4 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Ca_meq_100g over all rows equals 4 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 4.039047619 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 4 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Ca_meq_100g” — named in the sentence as “Ca”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 5953dda623dfcc3e</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c030</h2>
+<blockquote>Variation in K, Na and Ca explained 11 % of the variance on axis 4 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Ca_meq_100g over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 1.1 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Ca_meq_100g” — named in the sentence as “Ca”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 5655323be84d3820</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c031</h2>
+<blockquote>Plant phylogeny was a significant but poor predictor of bacterial community composition, explaining 1, 5, 9 and 8 % of the variation on ordination axes 1–4 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explaining, predictor, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 8e11c93b9c0e52f3</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c032</h2>
+<blockquote>CAPTION: Figure 1.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Ca_meq_100g over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 1.1 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Ca_meq_100g” — named in the sentence as “Ca”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 5331611ff77a7eb1</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c033</h2>
+<blockquote>CAPTION: Table 1.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Ca_meq_100g over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 1.1 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Ca_meq_100g” — named in the sentence as “Ca”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 81b351a4a3fffa01</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c034</h2>
+<blockquote>Model selection was conducted by retaining statistically significant phylogenetic eigenvectors (P &lt; 0.05) for the combined data set (see text for details).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of pH over all rows equals 0.05 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.04758870019 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.05 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 9a6908a8d7b7f987</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c035</h2>
+<blockquote>CAPTION: Figure 2.</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of Ca_meq_100g over all rows equals 2 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 2.378528262 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 2.371438743 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Ca_meq_100g” — named in the sentence as “Ca”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt a7aace969879ce4f</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c036</h2>
+<blockquote>Soil bacterial communities were significantly, but weakly, correlated with plant phylogeny on ordination axis 3 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (significantly); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt cecda206110e3615</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c037</h2>
+<blockquote>Plant phylogeny explained 29 % of the variance in soil fungal communities on ordination axis 2 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 58d42f63dacc2940</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c038</h2>
+<blockquote>Variation among soil samples in pH explained 27 % of the variation in fungal community composition on axis 2 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt b6c7185e15d1d8d8</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c039</h2>
+<blockquote>Plant phylogeny explained 29 % of the variance on ordination axis 2 (Table 1).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt a2d4411d1cacd82a</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c040</h2>
+<blockquote>The alternative analysis with plant genus, rather than plant phylogeny, suggested that plant genus explained 16 and 30 % of the variance on ordination axes 1 and 2, respectively [see Supporting Information—Table S2].</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of pH over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 0.6168200522 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 0.6149815382 from 168 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column pH” — named in the sentence as “pH”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (explained, suggested, supporting); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt f3204ae6e77d651f</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c041</h2>
+<blockquote>Our work was funded by the National Science Foundation (United States) DEB (11-20387) and by the Holden Arboretum Trust and the Corning Institution for Education and Research.</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Na_ppm over rows where soilSourceSp is “SC” equals 11 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 11.47139063 from 12 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 11 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Na_ppm” — named in the sentence as “Na”<br>
+“soilSourceSp = SC” — named in the sentence as “SC”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt d2bb44d889394e53</small></article>
+</html>
