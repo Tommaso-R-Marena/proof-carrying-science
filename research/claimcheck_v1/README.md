@@ -15,6 +15,23 @@ path, and is not a general paper reviewer. Read [REPORT.md](REPORT.md) for what 
 (including where it fails) and [TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) for exactly what a result
 does and does not establish.
 
+## What the held-out evaluation found, in brief
+
+Six open-access articles with deposited data, frozen before the run ([REPORT.md](REPORT.md)):
+
+* **A PROVED from a proposer that had not seen the data was reliable.** 71 PROVED results from two
+  language models; 64 matched a gold reading, 6 were faithful readings the gold set had missed, 1 is
+  defensible, none was found unfaithful.
+* **A REFUTED is only as good as the reading.** One model issued 131 wrong refutations (mostly
+  "number of rows" for a count of something else); the other issued 2 wrong and 11 right, including
+  two real discrepancies between a paper and its deposited data. Read REFUTED as "this reading does
+  not hold for this file".
+* **A proposer that can see the data can fit readings to it.** A deliberate coincidence search got
+  3 false PROVEDs through the source checks. The tool cannot verify that a submitter was blind.
+* **Coverage is modest** (at best 40 of 86 true statements), and about half of the screened
+  articles print no descriptive statistic of their table in prose at all.
+* Model agreement and model critics added no reliability. Neither is used as authority anywhere.
+
 ## What a result means
 
 A receipt's `result` is PROVED or REFUTED only if **both** hold:
@@ -141,3 +158,4 @@ dialects and claims; any disagreement fails.
 | `replay_independent.py` | stand-alone replayer (imports nothing from this package) |
 | `baseline.py`, `propose.py`, `providers.py` | untrusted proposers: rules, search, language models |
 | `benchmark/` | frozen protocol, development and held-out documents, runners, results |
+| `tools/` | reporting tools written after the freeze: post-run analysis, bundle cross-check, website export (they change no result) |

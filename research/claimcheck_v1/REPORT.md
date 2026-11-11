@@ -371,7 +371,10 @@ different day or a paid tier.
 3. A PROVED is only as safe as the proposer is data-blind; the tool cannot verify that property of
    a human or third-party submitter.
 4. Prose only, one table, at most 64 KB, descriptive statistics only. Tables and figures in the
-   paper, model estimates and tests are out of scope.
+   paper, model estimates and tests are out of scope. Kernel evaluation is slow and
+   memory-hungry on the larger tables: for the 617-row table a claim took up to about 90 s and
+   9 GB, and Lean rejected obligation files holding many claims with a recursion-depth error, so
+   the runner fell back to one or two claims per file. The results are unaffected, the cost is not.
 5. Manifests (aliases, units, scope terms) are human input and determine coverage.
 6. Custody is not addressed: the deposited file may not be the analysed file.
 7. The checker is a reviewed definition, not a verified implementation of any external standard.
