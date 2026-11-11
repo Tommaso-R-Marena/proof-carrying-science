@@ -53,7 +53,7 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
     shutil.copy(CHECKER_PATH, site / "claim-check" / "ClaimCheck.lean")
-    catalog = []
+    catalog, skipped = [], []
     for bundle in sorted(p for p in bundles.iterdir() if (p / "bundle.json").exists()):
         index = json.loads((bundle / "bundle.json").read_text(encoding="utf-8"))
         doc = index["extra"]["document"]
@@ -61,22 +61,47 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
         data = (bundle / "data.csv").read_bytes()
         source = (bundle / "source.txt").read_bytes().decode("utf-8")
         manifest = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
-        picked = select(receipts)
-        if not picked:
+        origins_all = sorted({r["proposal_origin"] for r in receipts if r["result"] in ("PROVED", "REFUTED")})
+        meta = {"name": doc["slug"], "license": doc["article_license"], "citation": doc["citation"]}
+
+        def attempt(chosen: list[dict]):
+            """Verify one selection afresh; None unless it forms exactly one accepted obligation file."""
+            with tempfile.TemporaryDirectory() as tmp:
+                out = verify_many(
+                    [(f"e{i + 1:03d}", {"quote": r["q2_correspondence"]["quote"]["text"], "quote_start": r["q2_correspondence"]["quote"]["start"],
+                                        "spec": r["claim"]["spec"]}, r["proposal_origin"]) for i, r in enumerate(chosen)],
+                    source_text=source, source_meta=meta, data=data, manifest=manifest, keep_dir=Path(tmp), batch_size=128, workers=1,
+                    lean_timeout=1800, lean_when_ungrounded=False)
+                files = sorted(Path(tmp).glob("*.lean"))
+                if len(files) != 1:
+                    return None
+                if [r["result"] for r in out] != [r["result"] for r in chosen]:
+                    raise SystemExit(f"{doc['slug']}: fresh verification disagrees with the bundle")
+                return out, files[0].read_bytes()
+
+        full = select(receipts)
+        if not full:
             continue
-        origins = sorted({r["proposal_origin"] for r in picked})
-        with tempfile.TemporaryDirectory() as tmp:
-            fresh = verify_many(
-                [(f"e{i + 1:03d}", {"quote": r["q2_correspondence"]["quote"]["text"], "quote_start": r["q2_correspondence"]["quote"]["start"],
-                                    "spec": r["claim"]["spec"]}, r["proposal_origin"]) for i, r in enumerate(picked)],
-                source_text=source, source_meta={"name": doc["slug"], "license": doc["article_license"], "citation": doc["citation"]},
-                data=data, manifest=manifest, keep_dir=Path(tmp), batch_size=128, workers=1, lean_timeout=1800, lean_when_ungrounded=False)
-            files = sorted(Path(tmp).glob("*.lean"))
-            if len(files) != 1:
-                raise SystemExit(f"{doc['slug']}: expected one obligation file, found {len(files)}")
-            obligation = files[0].read_bytes()
-        if [r["result"] for r in fresh] != [r["result"] for r in picked]:
-            raise SystemExit(f"{doc['slug']}: fresh verification disagrees with the bundle")
+        # A large table can make Lean reject an obligation file that holds many claims although it
+        # accepts the same claims one or two per file.  The website shows one file per example, so
+        # fall back to a smaller selection (proved readings first) and say so in the example.
+        decided = sorted((r for r in full if r["result"] in ("PROVED", "REFUTED")), key=lambda r: r["result"] != "PROVED")
+        ungrounded = [r for r in full if r["result"] == "UNKNOWN" and r["reason"] == "binding_not_grounded"][:2]
+        by_position = lambda rs: sorted(rs, key=lambda r: r.get("q2_correspondence", {}).get("reported_value", {}).get("start", 10**9))
+        result, picked, selection_note = None, full, None
+        for cap in (None, 4, 2):
+            picked = full if cap is None else by_position(decided[:cap] + ungrounded)
+            result = attempt(picked)
+            if result is not None:
+                if cap is not None:
+                    selection_note = (f"This table is large: Lean accepts its checks only a few per proof file. {len(picked)} of the "
+                                      f"{len(full)} selected readings are shown here; all of them are in the evidence bundle in the core repository.")
+                break
+        if result is None:
+            skipped.append({"id": doc["slug"], "reason": "no selection of readings formed one accepted obligation file"})
+            continue
+        fresh, obligation = result
+        origins = sorted({r["proposal_origin"] for r in picked}) or origins_all
         example = {
             "id": doc["slug"], "title": doc["citation"].split(")")[1].split(".")[0].strip() if ")" in doc["citation"] else doc["slug"],
             "citation": doc["citation"], "article_license": doc["article_license"].upper(), "article_doi": doc["article_doi"],
@@ -85,7 +110,7 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
             "na_tokens": manifest.get("na_tokens") or ["", "NA"],
             "column_units": {k: v.get("unit") for k, v in (manifest.get("columns") or {}).items() if v.get("unit")},
             "obligation_sha256": sha256_hex(obligation), "proposed_by": " and ".join(origins) or "the benchmark arms",
-            "receipts": fresh,
+            "selection_note": selection_note, "receipts": fresh,
         }
         (out_dir / f"{doc['slug']}.json").write_text(json.dumps(example, ensure_ascii=False), encoding="utf-8")
         catalog.append({"id": doc["slug"], "title": example["title"], "data_sha256": example["data_sha256"],
@@ -136,7 +161,7 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
     cat = {"format": "pcs-claimcheck-site-examples-v1", "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
            "toolchain": "Lean 4.28.0", "checker_sha256": checker_sha256(),
            "recorded_utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-           "examples": catalog, "benchmark": benchmark}
+           "examples": catalog, "not_published_as_examples": skipped, "benchmark": benchmark}
     (site / "claim-check" / "examples.json").write_text(json.dumps(cat, indent=1, ensure_ascii=False), encoding="utf-8")
     loaders = "".join(f"  '{e['id']}': () => fetch('claim-check/examples/{e['id']}.json'),\n" for e in catalog)
     (site / "claim-check-examples.mjs").write_text(
