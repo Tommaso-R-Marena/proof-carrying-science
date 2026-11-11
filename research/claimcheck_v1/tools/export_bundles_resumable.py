@@ -24,6 +24,7 @@ def main(argv=None) -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--arms", default="gemini,openrouter,search")
+    ap.add_argument("--batch-size", type=int, default=4)
     args = ap.parse_args(argv)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -31,6 +32,10 @@ def main(argv=None) -> int:
     docs = [d for d in load_split(args.split) if d.variant == "original"]
     records = []
     original_loader = frozen.load_split
+    original_verify = frozen.verify_many
+    # Smaller kernel batches: the same per-claim theorems, grouped so that a large table cannot push
+    # one obligation file past the time limit (which would only cause a slower one-by-one fallback).
+    frozen.verify_many = lambda *a, **k: original_verify(*a, **{**k, "batch_size": args.batch_size})
     try:
         for doc in docs:
             record_path = out / f"{doc.slug}.record.json"
@@ -46,6 +51,7 @@ def main(argv=None) -> int:
             print(json.dumps({k: report["bundles"][0][k] for k in ("doc", "claims", "counts", "all_replayed", "verify_seconds", "replay_seconds")}), flush=True)
     finally:
         frozen.load_split = original_loader
+        frozen.verify_many = original_verify
     summary = {"split": args.split, "arms": list(arms), "bundles": records, "all_bundles_replayed": all(b["all_replayed"] for b in records)}
     (out / "replay_summary.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({"all_bundles_replayed": summary["all_bundles_replayed"], "documents": len(records)}))

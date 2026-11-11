@@ -98,12 +98,19 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
                      "correct_refutation": c.get("correct_refutation", 0),
                      "unsupported_positive": c.get("unsupported_positive", 0) + c.get("unannotated_proved", 0),
                      "unsupported_refutation": c.get("unsupported_refutation", 0) + c.get("wrong_refutation", 0) + c.get("unannotated_refuted", 0),
-                     "abstained": c.get("abstained", 0) + c.get("conditional_only", 0)})
+                     "abstained": c.get("abstained", 0) + c.get("conditional_only", 0),
+                     # a model arm whose calls failed is published as failed, never as a row of zeros
+                     "model_calls": v.get("model_calls", 0), "model_errors": v.get("model_errors", 0),
+                     "complete": not v.get("model_errors", 0)})
     gold = summary["gold"]
     adv = json.loads(adversarial_path.read_text(encoding="utf-8")) if adversarial_path and adversarial_path.exists() else None
     notes = ("Counts are printed numbers, over original and planted-error copies of the held-out articles. “Wrongly” columns include every "
              "result on a number that had no gold label, before any hand adjudication. Gold labels are AI-assisted annotations, not expert "
              "review. The full report, receipts and replay instructions are in the PCS core repository under research/claimcheck_v1.")
+    failed = [a["label"] for a in arms if not a["complete"]]
+    if failed:
+        notes += (" Arms marked incomplete had model calls that failed (provider quota or outage); a failed call contributes no proposal, "
+                  "so those rows understate what the arm would do and are not a measurement of it: " + "; ".join(failed) + ".")
     if adv:
         a = sum(v["attempts"] for v in adv["A_deceptive_proposals"].values())
         ap = sum(v["PROVED"] + v["REFUTED"] for v in adv["A_deceptive_proposals"].values())

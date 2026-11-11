@@ -1,0 +1,3770 @@
+[
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The sum of N over all rows equals 501 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "501",
+    "reported_unit": null,
+    "stat": "sum",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c001",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 501 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 501.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "501"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "sum",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "individuals",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sum” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "reported_value": {
+    "end": 6276,
+    "literal_checked": "501",
+    "printed": "501",
+    "start": 6273,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "cf29a7e386138eb9e76a6182be1793adf5b3296c11de1b0549c2a053cf159aa8",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "96",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c002",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 96.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "96"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "reported_value": {
+    "end": 6294,
+    "literal_checked": "96",
+    "printed": "96",
+    "start": 6292,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "0665a097bc411b7ff2b362d17bfa3fdc4423007f2344c0cbaaac8ace5af972cf",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of N over all rows equals 3 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "3",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c003",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 3.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "3"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "min",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "sample",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "ranging",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 7024,
+    "start": 6894,
+    "text": "We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns."
+   },
+   "reported_value": {
+    "end": 6948,
+    "literal_checked": "3",
+    "printed": "3",
+    "start": 6947,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 7024,
+    "start": 6894,
+    "text": "We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "confirmed"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "0c00aed8d9ce4e769f6ebddfb8563a51a980684abbfa822a01e51433c40609be",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The minimum of N over all rows equals 3 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The maximum of N over all rows equals 17 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "17",
+    "reported_unit": null,
+    "stat": "max",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c004",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 17 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 2,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c2 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_2",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 17.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "17"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "max",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "sample",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "ranging",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 7024,
+    "start": 6894,
+    "text": "We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns."
+   },
+   "reported_value": {
+    "end": 6954,
+    "literal_checked": "17",
+    "printed": "17",
+    "start": 6952,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 7024,
+    "start": 6894,
+    "text": "We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "confirmed"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "821f2f7f5e830aa2c5ce8aa373963eda9a4c56b061edf7abc342d3332ee6536d",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The maximum of N over all rows equals 17 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The sum of N over all rows equals 58 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "58",
+    "reported_unit": null,
+    "stat": "sum",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c005",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 58 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 501.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "501"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "sum",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "individuals",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sum” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "reported_value": {
+    "end": 12506,
+    "literal_checked": "58",
+    "printed": "58",
+    "start": 12504,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "a706422cf540c3c292b308e52fbfb9d1310dbb36bfd0a11c4b58add9939fc746",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of N over all rows equals 1 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "1",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c006",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 3,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c3 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_3",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 3.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "3"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "min",
+     "status": "REFUTED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "individuals",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 2,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "1–6",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "reported_value": {
+    "end": 12521,
+    "literal_checked": "1",
+    "printed": "1",
+    "start": 12520,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "137504214e9b378dd8b83e131de39cc904b424b2fd066c34b61c8307692f439f",
+  "result": "REFUTED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "REFUTED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The minimum of N over all rows equals 1 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The maximum of N over all rows equals 6 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "6",
+    "reported_unit": null,
+    "stat": "max",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c007",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 4,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c4 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_4",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 17.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "17"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "max",
+     "status": "REFUTED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "individuals",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "1–6",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "reported_value": {
+    "end": 12523,
+    "literal_checked": "6",
+    "printed": "6",
+    "start": 12522,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "ff973a19ade937b3c9b9ada6f2d0e5e44a4488eb03e3627f3145a1019fe0b3ce",
+  "result": "REFUTED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "REFUTED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The maximum of N over all rows equals 6 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 32 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "32",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c008",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 32 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 5,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c5 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_5",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 96.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "96"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "count",
+     "status": "REFUTED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13700,
+    "start": 13407,
+    "text": "For a subset of 32 species (five males per species), we found a significant effect of mean body size on mean braincase compactness (F 1,30 = 32.97 ± 1.26; p < 0.001; R 2 = 0.52 ± 0.01; λ = 1; Figure 4a): Smaller species had more circular braincases than larger species (β = −0.011; p < 0.001)."
+   },
+   "reported_value": {
+    "end": 13425,
+    "literal_checked": "32",
+    "printed": "32",
+    "start": 13423,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13700,
+    "start": 13407,
+    "text": "For a subset of 32 species (five males per species), we found a significant effect of mean body size on mean braincase compactness (F 1,30 = 32.97 ± 1.26; p < 0.001; R 2 = 0.52 ± 0.01; λ = 1; Figure 4a): Smaller species had more circular braincases than larger species (β = −0.011; p < 0.001)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "cebcb15bbc8582a551596e37712c10fe51245319f37a34fc3419aff60ecbd1b4",
+  "result": "REFUTED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "REFUTED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 32 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of N over all rows equals 5 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "5",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c009",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The reported value 5 is not printed in the quoted text as a complete number.",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "checks": {
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": false
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The reported value 5 is not printed in the quoted text as a complete number."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13700,
+    "start": 13407,
+    "text": "For a subset of 32 species (five males per species), we found a significant effect of mean body size on mean braincase compactness (F 1,30 = 32.97 ± 1.26; p < 0.001; R 2 = 0.52 ± 0.01; λ = 1; Figure 4a): Smaller species had more circular braincases than larger species (β = −0.011; p < 0.001)."
+   },
+   "semantic_reading": "UNREVIEWED",
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_in_source",
+  "receipt_sha256": "f3f696fa11c15bd93bd85e1a1ff927dab7bc4a0901ac44fce2d8adde2c7a1f44",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of Percentage of ossification over all rows equals 44 % when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "44",
+    "reported_unit": "%",
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c010",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 44 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 6.251041666666667,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "960",
+       "numerator": "6001"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": null,
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “column Percentage of ossification” (accepted wordings: ossification, skull ossification, Percentage of ossification).",
+    "The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 14384,
+    "start": 13951,
+    "text": "Finally, small species had relatively larger eyes (relative to the body) than those of larger species (F 1,30 = 144.44; β = 12.55; p < 0.001; R 2 = 0.85; λ = 0), but a positive relationship between body size and percentage of the lateral head area occupied by the eye socket (F 1,30 = 10.68; β = 3.44; p < 0.005; R 2 = 0.31; λ = 0; Figure 4c), with small species having relatively smaller eye sockets (44%) than larger species (50%)."
+   },
+   "reported_value": {
+    "end": 14355,
+    "literal_checked": "44",
+    "printed": "44",
+    "start": 14353,
+    "unit_printed_after": "%"
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 14384,
+    "start": 13951,
+    "text": "Finally, small species had relatively larger eyes (relative to the body) than those of larger species (F 1,30 = 144.44; β = 12.55; p < 0.001; R 2 = 0.85; λ = 0), but a positive relationship between body size and percentage of the lateral head area occupied by the eye socket (F 1,30 = 10.68; β = 3.44; p < 0.005; R 2 = 0.31; λ = 0; Figure 4c), with small species having relatively smaller eye sockets (44%) than larger species (50%)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "86b52cda2520e0a1550657c6fb35c749b1a50c1ce9b0618090ded9f1d8fc56cb",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of Percentage of ossification over all rows equals 50 % when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "50",
+    "reported_unit": "%",
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c011",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 50 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 6.251041666666667,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "960",
+       "numerator": "6001"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": null,
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “column Percentage of ossification” (accepted wordings: ossification, skull ossification, Percentage of ossification).",
+    "The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 14384,
+    "start": 13951,
+    "text": "Finally, small species had relatively larger eyes (relative to the body) than those of larger species (F 1,30 = 144.44; β = 12.55; p < 0.001; R 2 = 0.85; λ = 0), but a positive relationship between body size and percentage of the lateral head area occupied by the eye socket (F 1,30 = 10.68; β = 3.44; p < 0.005; R 2 = 0.31; λ = 0; Figure 4c), with small species having relatively smaller eye sockets (44%) than larger species (50%)."
+   },
+   "reported_value": {
+    "end": 14381,
+    "literal_checked": "50",
+    "printed": "50",
+    "start": 14379,
+    "unit_printed_after": "%"
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 14384,
+    "start": 13951,
+    "text": "Finally, small species had relatively larger eyes (relative to the body) than those of larger species (F 1,30 = 144.44; β = 12.55; p < 0.001; R 2 = 0.85; λ = 0), but a positive relationship between body size and percentage of the lateral head area occupied by the eye socket (F 1,30 = 10.68; β = 3.44; p < 0.005; R 2 = 0.31; λ = 0; Figure 4c), with small species having relatively smaller eye sockets (44%) than larger species (50%)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "fd5ae0eaf546ef5f505a179e11fbcc287e6f99a88f397d5cc267436e51c95c2c",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The sum of N over all rows equals 501 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "501",
+    "reported_unit": null,
+    "stat": "sum",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c012",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 501 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 501.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "501"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "sum",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "individuals",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sum” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "reported_value": {
+    "end": 6276,
+    "literal_checked": "501",
+    "printed": "501",
+    "start": 6273,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "6d85842493288052b0be7232f7c782b5417efce21a4975e03a03752a0490a66c",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "96",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c013",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 6,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c6 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_6",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 96.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "96"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "reported_value": {
+    "end": 6294,
+    "literal_checked": "96",
+    "printed": "96",
+    "start": 6292,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 6485,
+    "start": 6187,
+    "text": "We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "6d8f4b64d5662fce81ac7d00083d51fd2596e255ca2deb42605a54188359cf02",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The maximum of N over all rows equals 17 when rounded to the printed precision.",
+   "spec": {
+    "column": "N",
+    "filter": [],
+    "reported": "17",
+    "reported_unit": null,
+    "stat": "max",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c014",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 17 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 7,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c7 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_7",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 17.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "17"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "max",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "sample",
+      "binds": "column N"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "ranging",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 7024,
+    "start": 6894,
+    "text": "We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns."
+   },
+   "reported_value": {
+    "end": 6954,
+    "literal_checked": "17",
+    "printed": "17",
+    "start": 6952,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 7024,
+    "start": 6894,
+    "text": "We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "confirmed"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "1958be735ca0db426788c5feee50d50dbb2ac27253afedfe7251d685b9a0d5cb",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The maximum of N over all rows equals 17 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "96",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c015",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 8,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c8 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_8",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 96.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "96"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 10155,
+    "start": 9819,
+    "text": "We controlled for the phylogenetic relationship, within each subset of species (trees with 96, 32, and 24 hummingbird species, respectively), in each analysis using on 5,000 molecular phylogenies built using the backbone method (Hackett et al., ) and data obtained from http://www.birdtree.org (Jetz, Thomas, Joy, Hartmann, & Mooers, )."
+   },
+   "reported_value": {
+    "end": 9912,
+    "literal_checked": "96",
+    "printed": "96",
+    "start": 9910,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 10155,
+    "start": 9819,
+    "text": "We controlled for the phylogenetic relationship, within each subset of species (trees with 96, 32, and 24 hummingbird species, respectively), in each analysis using on 5,000 molecular phylogenies built using the backbone method (Hackett et al., ) and data obtained from http://www.birdtree.org (Jetz, Thomas, Joy, Hartmann, & Mooers, )."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "284a0ca7f172e0c21e53fafc14c1b33cc660f65e18bb65794eb7f2b79f3cfb7d",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "1",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c016",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.8670427593106081,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "87552000",
+       "numerator": "65818367"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sem",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12347,
+    "start": 12177,
+    "text": "All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p < 0.001; R 2 = 0.42; λ = 0; Figure 3a)."
+   },
+   "reported_value": {
+    "end": 12293,
+    "literal_checked": "1",
+    "printed": "1",
+    "start": 12292,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12347,
+    "start": 12177,
+    "text": "All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p < 0.001; R 2 = 0.42; λ = 0; Figure 3a)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "f90e0a116303a3c6eb35028614ed67d22393af87a1879429fe9b27e05ed652f2",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "2",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c017",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 2.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "2"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "median",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “median” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12347,
+    "start": 12177,
+    "text": "All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p < 0.001; R 2 = 0.42; λ = 0; Figure 3a)."
+   },
+   "reported_value": {
+    "end": 12320,
+    "literal_checked": "2",
+    "printed": "2",
+    "start": 12319,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12347,
+    "start": 12177,
+    "text": "All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p < 0.001; R 2 = 0.42; λ = 0; Figure 3a)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "a4c52e791eb0040e069d416afa4d54a7b233bfe8c99109e843d9f9c03618f155",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of Percentage of ossification over all rows equals 0 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "0",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c018",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 0 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "0"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "min",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “min” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12347,
+    "start": 12177,
+    "text": "All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p < 0.001; R 2 = 0.42; λ = 0; Figure 3a)."
+   },
+   "reported_value": {
+    "end": 12334,
+    "literal_checked": "0",
+    "printed": "0",
+    "start": 12333,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12347,
+    "start": 12177,
+    "text": "All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p < 0.001; R 2 = 0.42; λ = 0; Figure 3a)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "13992bb347340f8fe7997458c47c747474b2d6d8be05d0eff1b201797d75094d",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "96",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c019",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 9,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c9 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_9",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 96.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "96"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12462,
+    "start": 12348,
+    "text": "For the 96 species of hummingbirds, the percentage of ossification increased with body size (β = 0.78; p < 0.001)."
+   },
+   "reported_value": {
+    "end": 12358,
+    "literal_checked": "96",
+    "printed": "96",
+    "start": 12356,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12462,
+    "start": 12348,
+    "text": "For the 96 species of hummingbirds, the percentage of ossification increased with body size (β = 0.78; p < 0.001)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "24d777a03215f52f79517ecc373557b9d4c4200e57f2737d3284e8b6e9d11165",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "1",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c020",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.8670427593106081,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "87552000",
+       "numerator": "65818367"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sem",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 2,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "reported_value": {
+    "end": 12521,
+    "literal_checked": "1",
+    "printed": "1",
+    "start": 12520,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "632335a5d3f33c6a36526fa69809fb78c47c1e60822d8ac805c9b6dd880a300a",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of Percentage of ossification over all rows equals 6 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "6",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c021",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 6.251041666666667,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "960",
+       "numerator": "6001"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "mean",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "reported_value": {
+    "end": 12523,
+    "literal_checked": "6",
+    "printed": "6",
+    "start": 12522,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "e53a372e23355ac125e5105cd8793bc6fe015df7d5c35fbbf0dddd307aa0460e",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "2",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c022",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 2.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "2"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "median",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “median” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "reported_value": {
+    "end": 12661,
+    "literal_checked": "2",
+    "printed": "2",
+    "start": 12660,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12795,
+    "start": 12463,
+    "text": "For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p < 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p < 0.01)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "2340a0ee83fe6fb1dafaa2aaee66b21a0ea050c662f617da298a27f2c519e0ca",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "1",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c023",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.8670427593106081,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "87552000",
+       "numerator": "65818367"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sem",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12975,
+    "start": 12796,
+    "text": "However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c)."
+   },
+   "reported_value": {
+    "end": 12923,
+    "literal_checked": "1",
+    "printed": "1",
+    "start": 12922,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12975,
+    "start": 12796,
+    "text": "However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "10d16f852f9f31bc6d99a269c1f1873d31d44d0fcfca0b8fe944fa24d168cd89",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "2",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c024",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 2.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "2"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "median",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “median” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12975,
+    "start": 12796,
+    "text": "However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c)."
+   },
+   "reported_value": {
+    "end": 12948,
+    "literal_checked": "2",
+    "printed": "2",
+    "start": 12947,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12975,
+    "start": 12796,
+    "text": "However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "b59752630b4743f05fd0e0d063c2a1e8f7b01df486e1bdfaa9af8157d44e34e3",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of Percentage of ossification over all rows equals 0 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "0",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c025",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 0 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "0"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "min",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “min” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12975,
+    "start": 12796,
+    "text": "However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c)."
+   },
+   "reported_value": {
+    "end": 12962,
+    "literal_checked": "0",
+    "printed": "0",
+    "start": 12961,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12975,
+    "start": 12796,
+    "text": "However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "effect",
+    "significant"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "1cc2fa0942ae2441d0056f4ae76d4a3ec57e9d0465e213c877bd1244c7d2e456",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard deviation (denominator n − 1) of Body Mass (g) over all rows equals 3 when rounded to the printed precision.",
+   "spec": {
+    "column": "Body Mass (g)",
+    "filter": [],
+    "reported": "3",
+    "reported_unit": null,
+    "stat": "sd_sample",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c026",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": "standard deviation uses denominator n − 1",
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 2.8209875012938537,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "22800000",
+       "numerator": "181441727"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sd_sample",
+     "status": "UNKNOWN"
+    },
+    {
+     "assumption": "standard deviation uses denominator n",
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 2.806256395377518,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "23040000",
+       "numerator": "181441727"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sd_pop",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "body mass",
+      "binds": "column Body Mass (g)"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13383,
+    "start": 12977,
+    "text": "CAPTION: Figure 3 Patterns of skull ossification in hummingbirds. (a) Relationship between body mass and skull ossification for 96 species. (b) Relationship between the brain/body mass ratio and the skull ossification for 24 species. (c) Nonsignificant relationship between the residuals of body mass/brain mass and residuals of body mass/skull ossification (for coefficients and R 2 values, see main text)"
+   },
+   "reported_value": {
+    "end": 12994,
+    "literal_checked": "3",
+    "printed": "3",
+    "start": 12993,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13383,
+    "start": 12977,
+    "text": "CAPTION: Figure 3 Patterns of skull ossification in hummingbirds. (a) Relationship between body mass and skull ossification for 96 species. (b) Relationship between the brain/body mass ratio and the skull ossification for 24 species. (c) Nonsignificant relationship between the residuals of body mass/brain mass and residuals of body mass/skull ossification (for coefficients and R 2 values, see main text)"
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "7afc9eb1554848bccbffbf7716d7fb472aede0096152b08e3a99d5b09953b4d7",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "96",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c027",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 10,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c10 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_10",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 96.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "96"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13383,
+    "start": 12977,
+    "text": "CAPTION: Figure 3 Patterns of skull ossification in hummingbirds. (a) Relationship between body mass and skull ossification for 96 species. (b) Relationship between the brain/body mass ratio and the skull ossification for 24 species. (c) Nonsignificant relationship between the residuals of body mass/brain mass and residuals of body mass/skull ossification (for coefficients and R 2 values, see main text)"
+   },
+   "reported_value": {
+    "end": 13107,
+    "literal_checked": "96",
+    "printed": "96",
+    "start": 13105,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13383,
+    "start": 12977,
+    "text": "CAPTION: Figure 3 Patterns of skull ossification in hummingbirds. (a) Relationship between body mass and skull ossification for 96 species. (b) Relationship between the brain/body mass ratio and the skull ossification for 24 species. (c) Nonsignificant relationship between the residuals of body mass/brain mass and residuals of body mass/skull ossification (for coefficients and R 2 values, see main text)"
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "9b1b7b5a0bdeb2c43821a37cc66a79eac4517f21a417b9666b30f4ab9287b0b3",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "1",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c028",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 5.0,
+      "batch_size": 12,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 11,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "88650b0a7a0e5e92d1dc55f9f2d3b87fa2101c610a3fc243142018852b0d4629",
+      "statement": "run pcs_src pcs_c11 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_11",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.8670427593106081,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "87552000",
+       "numerator": "65818367"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sem",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 2,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "±",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13950,
+    "start": 13701,
+    "text": "In addition, more circular skulls correlated with low levels of ossification (F 1,30 = 10.33 ± 0.42; β = −0.004; p < 0.005; R 2 = 0.26 ± 0.01; λ = 1; Figure 4b), so that more circular skulls had lower levels of ossification (β = −0.0044; p < 0.005)."
+   },
+   "reported_value": {
+    "end": 13782,
+    "literal_checked": "1",
+    "printed": "1",
+    "start": 13781,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13950,
+    "start": 13701,
+    "text": "In addition, more circular skulls correlated with low levels of ossification (F 1,30 = 10.33 ± 0.42; β = −0.004; p < 0.005; R 2 = 0.26 ± 0.01; λ = 1; Figure 4b), so that more circular skulls had lower levels of ossification (β = −0.0044; p < 0.005)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "9618c02c61283aa1bc5eccc5a7aabe01b4baaec93d0d83e4531571fa3c54e14a",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.",
+   "spec": {
+    "column": "Percentage of ossification",
+    "filter": [],
+    "reported": "2",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c029",
+  "data": {
+   "bytes": 3186,
+   "license": "cc-zero",
+   "name": "Ossification_data.csv",
+   "origin": "https://zenodo.org/api/records/4964882/files/Ossification%20data.csv/content",
+   "pinned_sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6",
+   "sha256": "eca9c8973f3ef2a3046e012fe50dc7cd63f7c77ec04185ae1543115c52dde8d6"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "search:deterministic",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 2.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "2"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 96,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "median",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "ossification",
+      "binds": "column Percentage of ossification"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “median” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13950,
+    "start": 13701,
+    "text": "In addition, more circular skulls correlated with low levels of ossification (F 1,30 = 10.33 ± 0.42; β = −0.004; p < 0.005; R 2 = 0.26 ± 0.01; λ = 1; Figure 4b), so that more circular skulls had lower levels of ossification (β = −0.0044; p < 0.005)."
+   },
+   "reported_value": {
+    "end": 13828,
+    "literal_checked": "2",
+    "printed": "2",
+    "start": 13827,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13950,
+    "start": 13701,
+    "text": "In addition, more circular skulls correlated with low levels of ossification (F 1,30 = 10.33 ± 0.42; β = −0.004; p < 0.005; R 2 = 0.26 ± 0.01; λ = 1; Figure 4b), so that more circular skulls had lower levels of ossification (β = −0.0044; p < 0.005)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "e417563dcdac953c0272eb12293e7fbf2605c1dfce992324b8e2dd90896f464f",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Ocampo D, Barrantes G, Uy JAC (2018) Morphological adaptations for relatively larger brains in hummingbird skulls. Ecology and Evolution 8:10482–10488. CC BY.",
+   "license": "cc by",
+   "name": "08_pmc6238128:original",
+   "sha256": "bc40d7f40cac97b2b0f98027ab5e2571e82cbb100f05ace8efd3686c458b60cb"
+  },
+  "version": "pcs-claimcheck-v1"
+ }
+]
