@@ -47,8 +47,8 @@
     "unsupported_refutation": 73
    },
    "proposals": 183,
-   "verify_seconds": 1857.0,
-   "kernel_claims_new": 217,
+   "verify_seconds": 3.4,
+   "kernel_claims_new": 0,
    "model_calls": 0,
    "prompt_tokens": 0,
    "output_tokens": 0,
@@ -70,8 +70,8 @@
     "unsupported_positive": 4
    },
    "proposals": 258,
-   "verify_seconds": 1168.7,
-   "kernel_claims_new": 275,
+   "verify_seconds": 2.9,
+   "kernel_claims_new": 0,
    "model_calls": 0,
    "prompt_tokens": 0,
    "output_tokens": 0,
@@ -79,20 +79,28 @@
   },
   "gemini": {
    "classes": {
-    "abstained": 108,
-    "correct_abstention": 54
+    "abstained": 73,
+    "correct_abstention": 52,
+    "correct_refutation": 11,
+    "correct_verification": 24,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
    },
    "classes_without_statistic_wording_gate": {
-    "abstained": 108,
-    "correct_abstention": 54
+    "abstained": 71,
+    "correct_abstention": 52,
+    "correct_refutation": 13,
+    "correct_verification": 24,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
    },
-   "proposals": 0,
-   "verify_seconds": 0.8,
-   "kernel_claims_new": 0,
+   "proposals": 59,
+   "verify_seconds": 98.2,
+   "kernel_claims_new": 16,
    "model_calls": 12,
-   "prompt_tokens": 0,
-   "output_tokens": 0,
-   "model_errors": 12
+   "prompt_tokens": 52632,
+   "output_tokens": 8307,
+   "model_errors": 0
   },
   "openrouter": {
    "classes": {
@@ -116,8 +124,8 @@
     "unsupported_refutation": 39
    },
    "proposals": 356,
-   "verify_seconds": 857.4,
-   "kernel_claims_new": 198,
+   "verify_seconds": 3.1,
+   "kernel_claims_new": 0,
    "model_calls": 14,
    "prompt_tokens": 61659,
    "output_tokens": 42452,
@@ -125,66 +133,80 @@
   },
   "union": {
    "classes": {
-    "abstained": 41,
-    "correct_abstention": 38,
-    "correct_refutation": 12,
-    "correct_verification": 32,
+    "abstained": 35,
+    "correct_abstention": 36,
+    "correct_refutation": 16,
+    "correct_verification": 34,
     "unannotated_proved": 4,
     "unannotated_refuted": 88,
     "unsupported_positive": 1,
-    "unsupported_refutation": 38
+    "unsupported_refutation": 40
    },
    "classes_without_statistic_wording_gate": {
-    "abstained": 39,
-    "correct_abstention": 38,
-    "correct_refutation": 13,
-    "correct_verification": 33,
+    "abstained": 31,
+    "correct_abstention": 36,
+    "correct_refutation": 19,
+    "correct_verification": 35,
     "unannotated_proved": 4,
     "unannotated_refuted": 94,
     "unsupported_positive": 1,
-    "unsupported_refutation": 38
+    "unsupported_refutation": 40
    },
-   "proposals": 317,
-   "verify_seconds": 2.2,
+   "proposals": 337,
+   "verify_seconds": 2.9,
    "kernel_claims_new": 0,
    "model_calls": 24,
-   "prompt_tokens": 53114,
-   "output_tokens": 36931,
-   "model_errors": 12
+   "prompt_tokens": 105746,
+   "output_tokens": 45238,
+   "model_errors": 0
   },
   "agree": {
    "classes": {
-    "abstained": 108,
-    "correct_abstention": 54
+    "abstained": 79,
+    "correct_abstention": 52,
+    "correct_refutation": 7,
+    "correct_verification": 22,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
    },
    "classes_without_statistic_wording_gate": {
-    "abstained": 108,
-    "correct_abstention": 54
+    "abstained": 79,
+    "correct_abstention": 52,
+    "correct_refutation": 7,
+    "correct_verification": 22,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
    },
-   "proposals": 0,
-   "verify_seconds": 0.8,
+   "proposals": 48,
+   "verify_seconds": 1.5,
    "kernel_claims_new": 0,
    "model_calls": 24,
-   "prompt_tokens": 53114,
-   "output_tokens": 36931,
-   "model_errors": 12
+   "prompt_tokens": 105746,
+   "output_tokens": 45238,
+   "model_errors": 0
   },
   "gemini+critic": {
    "classes": {
-    "abstained": 54,
-    "correct_abstention": 27
+    "abstained": 35,
+    "correct_abstention": 25,
+    "correct_refutation": 2,
+    "correct_verification": 17,
+    "unsupported_refutation": 2
    },
    "classes_without_statistic_wording_gate": {
-    "abstained": 54,
-    "correct_abstention": 27
+    "abstained": 34,
+    "correct_abstention": 25,
+    "correct_refutation": 3,
+    "correct_verification": 17,
+    "unsupported_refutation": 2
    },
-   "proposals": 0,
-   "verify_seconds": 0.4,
+   "proposals": 32,
+   "verify_seconds": 1.0,
    "kernel_claims_new": 0,
-   "model_calls": 6,
-   "prompt_tokens": 0,
-   "output_tokens": 0,
-   "model_errors": 6
+   "model_calls": 9,
+   "prompt_tokens": 31645,
+   "output_tokens": 4500,
+   "model_errors": 0
   },
   "openrouter+critic": {
    "classes": {
@@ -193,7 +215,7 @@
     "correct_refutation": 1,
     "correct_verification": 23,
     "unannotated_proved": 2,
-    "unannotated_refuted": 51,
+    "unannotated_refuted": 47,
     "unsupported_positive": 1,
     "unsupported_refutation": 18
    },
@@ -203,17 +225,17 @@
     "correct_refutation": 1,
     "correct_verification": 24,
     "unannotated_proved": 2,
-    "unannotated_refuted": 54,
+    "unannotated_refuted": 50,
     "unsupported_positive": 1,
     "unsupported_refutation": 18
    },
-   "proposals": 169,
-   "verify_seconds": 1.1,
+   "proposals": 161,
+   "verify_seconds": 1.3,
    "kernel_claims_new": 0,
    "model_calls": 12,
-   "prompt_tokens": 26557,
-   "output_tokens": 20104,
-   "model_errors": 6
+   "prompt_tokens": 45178,
+   "output_tokens": 23677,
+   "model_errors": 0
   }
  },
  "gold": {
@@ -226,39 +248,39 @@
  },
  "ledger": {
   "max_calls": {
-   "gemini": 80,
-   "openrouter": 40
+   "gemini": 20,
+   "openrouter": 8
   },
   "network_calls": {
-   "gemini": 0,
-   "openrouter": 0
+   "gemini": 18,
+   "openrouter": 4
   },
   "cache_hits": {
-   "gemini": 0,
-   "openrouter": 14
+   "gemini": 30,
+   "openrouter": 36
   },
   "prompt_tokens": {
-   "gemini": 0,
-   "openrouter": 0
+   "gemini": 35131,
+   "openrouter": 5329
   },
   "output_tokens": {
-   "gemini": 0,
-   "openrouter": 0
+   "gemini": 7940,
+   "openrouter": 275
   },
   "seconds": {
-   "gemini": 0.0,
-   "openrouter": 0.0
+   "gemini": 77.21,
+   "openrouter": 13.5
   },
   "failures": {
-   "gemini": 0,
-   "openrouter": 0
+   "gemini": 7,
+   "openrouter": 1
   }
  },
  "verifier": {
-  "fresh_receipts": 790,
-  "cache_hits": 810,
-  "kernel_checked_claims": 690,
-  "verify_wall_seconds": 3875.1
+  "fresh_receipts": 20,
+  "cache_hits": 1790,
+  "kernel_checked_claims": 16,
+  "verify_wall_seconds": 96.5
  },
- "wall_seconds": 3998.0
+ "wall_seconds": 669.8
 }
