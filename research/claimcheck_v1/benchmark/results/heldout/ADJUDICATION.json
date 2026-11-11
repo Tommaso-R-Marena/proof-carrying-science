@@ -1,0 +1,864 @@
+{
+ "prepared": "by hand after the frozen run, by the same AI system that built the tool; not expert adjudication",
+ "scope": "every PROVED on a number without a gold label (all arms, 19 distinct readings); every REFUTED on a number without a gold label from the OpenRouter arm on original documents (51). Other unlabelled REFUTED results were not adjudicated individually.",
+ "gold_label_notes": [
+  {
+   "id": "H06-20",
+   "note": "Gold says not derivable (the n of a statistical model). The OpenRouter arm PROVED 'number of rows with a value in fcaro = 335', which is a defensible reading of '(n = 335, χ² …)'. The automatic score counts it as an unsupported positive; on review the reading is reasonable and the gold label was too strict."
+  }
+ ],
+ "verdict_meaning": {
+  "faithful": "the typed reading is what the sentence says about this table",
+  "not_faithful": "it is not"
+ },
+ "items": [
+  {
+   "slug": "06_pmc5980576",
+   "outcome": "PROVED",
+   "stat": "sd_sample",
+   "sentence_fragment": "n day 5 and 18 of the nestling phase (Figure 1; mean nest",
+   "reading": "The standard deviation (denominator n − 1) of chick_age over all rows equals 1 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"± 1 day\"/nearby number is not a standard deviation of this column; numerical coincidence at one significant digit"
+  },
+  {
+   "slug": "06_pmc5980576",
+   "outcome": "PROVED",
+   "stat": "sd",
+   "sentence_fragment": "viving nestlings at 12 days post‐hatching (± 1 day); then",
+   "reading": "The standard deviation (convention not stated) of mass over all rows equals 1 when rounded to the printed precision.",
+   "arms": [
+    "rules"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"(± 1 day)\" is a measurement tolerance, not the SD of body mass"
+  },
+  {
+   "slug": "06_pmc5980576",
+   "outcome": "PROVED",
+   "stat": "sd_sample",
+   "sentence_fragment": "viving nestlings at 12 days post‐hatching (± 1 day); then",
+   "reading": "The standard deviation (denominator n − 1) of mass over all rows equals 1 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "same as above"
+  },
+  {
+   "slug": "08_pmc6238128",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": ".001; R 2 = 0.42; λ = 0; Figure 3a). For the 96 species o",
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "faithful",
+   "why": "the table has one row per species; 96 species"
+  },
+  {
+   "slug": "08_pmc6238128",
+   "outcome": "PROVED",
+   "stat": "sem",
+   "sentence_fragment": "orrelated with low levels of ossification (F 1,30 = 10.33",
+   "reading": "The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "an F statistic's degrees of freedom, not a standard error"
+  },
+  {
+   "slug": "08_pmc6238128",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "p, within each subset of species (trees with 96, 32, and ",
+   "reading": "The number of all rows equals 96 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "faithful",
+   "why": "96 species = rows of the table"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "PROVED",
+   "stat": "max",
+   "sentence_fragment": "0(8)) or northeast‐southwest (NC‐001(10), NC‐015(7), NC‐0",
+   "reading": "The maximum of n sequences over all rows equals 015 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"NC-015(7)\": part of a haplotype label read as a number"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "PROVED",
+   "stat": "sum",
+   "sentence_fragment": " total of 434 individuals were analyzed, and 341 useable ",
+   "reading": "The sum of n sequences over all rows equals 341 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "faithful",
+   "why": "341 useable sequences = sum of the sequence counts"
+  },
+  {
+   "slug": "12_pmc4417136",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "ice in the field and moved to −80 °C within <12 h. To qua",
+   "reading": "The number of rows where soilSourceSp is “SA” equals 12 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"<12 h\" is a storage time"
+  },
+  {
+   "slug": "12_pmc4417136",
+   "outcome": "PROVED",
+   "stat": "min",
+   "sentence_fragment": " was represented in the data set by at least 1 DNA region",
+   "reading": "The minimum of rep over all rows equals 1 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"at least 1 DNA region\" is unrelated to the rep column"
+  },
+  {
+   "slug": "12_pmc4417136",
+   "outcome": "PROVED",
+   "stat": "share",
+   "sentence_fragment": "without removing rare taxa (taxa present in ≤7 % of subsa",
+   "reading": "The fraction of all rows where soilSourceSp is “CO” equals 7 % when rounded to the printed precision.",
+   "arms": [
+    "rules",
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"≤7 %\" is a rarity threshold"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "mean",
+   "sentence_fragment": " was maintained at an average temperature of 22 °C, and a",
+   "reading": "The arithmetic mean of Muscle_area over all rows equals 22 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "\"22 °C\" is a temperature"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "max",
+   "sentence_fragment": "g analysis. For experiments, 20, 24, 27, and 30 days post",
+   "reading": "The maximum of dph over all rows equals 30 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "a list of design levels (20, 24, 27, 30 dph), not a reported maximum; the value is true of the data but the sentence does not state a maximum"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "rate on routine or burst swimming speed (n = 171 and 161,",
+   "reading": "The number of rows where group is “routine” equals 171 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "faithful",
+   "why": "n = 171 routine-speed records"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "s set at α = 0.05. Sample sizes were 171 and 161 for the ",
+   "reading": "The number of rows where group is “burst” equals 161 when rounded to the printed precision.",
+   "arms": [
+    "openrouter",
+    "openrouter+critic",
+    "search",
+    "union"
+   ],
+   "verdict": "faithful",
+   "why": "161 burst-speed records"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "min",
+   "sentence_fragment": "using 3D tracking analysis. For experiments, 20, 24, 27, ",
+   "reading": "The minimum of dph over all rows equals 20 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "not_faithful",
+   "why": "design levels, see above"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "hip between burst speed and growth rate (n = 161)\n\nCAPTIO",
+   "reading": "The number of rows where group is “burst” equals 161 when rounded to the printed precision.",
+   "arms": [
+    "rules",
+    "search"
+   ],
+   "verdict": "faithful",
+   "why": "n = 161 burst-speed records"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "routine or burst swimming speed (n = 171 and 161, respect",
+   "reading": "The number of rows where group is “burst” equals 161 when rounded to the printed precision.",
+   "arms": [
+    "search"
+   ],
+   "verdict": "faithful",
+   "why": "161 burst-speed records"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "PROVED",
+   "stat": "count",
+   "sentence_fragment": "tests was set at α = 0.05. Sample sizes were 171 and 161 ",
+   "reading": "The number of rows where group is “routine” equals 171 when rounded to the printed precision.",
+   "arms": [
+    "openrouter",
+    "openrouter+critic",
+    "search",
+    "union"
+   ],
+   "verdict": "faithful",
+   "why": "171 routine-speed records"
+  },
+  {
+   "slug": "06_pmc5980576",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "g pairs (Pearson's correlation: r = .40, n = 108, p < .00",
+   "reading": "The number of all rows with a value in fcaro equals 108 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "06_pmc5980576",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "s which had received fat‐plus‐vitamin E (n = 165, χ22 = 9",
+   "reading": "The number of all rows with a value in pmda equals 165 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "08_pmc6238128",
+   "outcome": "REFUTED",
+   "stat": "min",
+   "sentence_fragment": "pecies with brain size data (58 individuals, 1–6 individu",
+   "reading": "The minimum of N over all rows equals 1 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "08_pmc6238128",
+   "outcome": "REFUTED",
+   "stat": "max",
+   "sentence_fragment": "cies with brain size data (58 individuals, 1–6 individual",
+   "reading": "The maximum of N over all rows equals 6 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "08_pmc6238128",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "text)\n\nSECTION: Skull shape\n\nFor a subset of 32 species (",
+   "reading": "The number of all rows equals 32 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "lembola (springtails).\n\nABSTRACT: A total of 77 soil samp",
+   "reading": "The number of all rows equals 77 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "the Namib Desert gravel plains. We extracted 434 springta",
+   "reading": "The number of all rows equals 434 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "lains. We extracted 434 springtails from the 37 samples w",
+   "reading": "The number of all rows equals 37 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": " unique haplotypes. GMYC analyses identified 30 putative ",
+   "reading": "The number of all rows equals 30 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "omid COI sequences (582 bp) grouped into the 26 GMYC spec",
+   "reading": "The number of all rows equals 26 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "ongitudinal transect at 10‐km intervals (n = 20 sites). F",
+   "reading": "The number of all rows equals 20 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": ", 2013).\n\nSECTION: Data analyses\n\nA total of 434 individu",
+   "reading": "The number of all rows equals 434 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": " total of 434 individuals were analyzed, and 341 useable ",
+   "reading": "The number of all rows equals 341 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "1 useable sequences were obtained. Of these, 294 (86%) co",
+   "reading": "The number of all rows equals 294 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "bp barcoding gene region while the remaining 47 sequences",
+   "reading": "The number of all rows equals 47 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "ength. An alignment of only full‐length (n = 294; 658 bp)",
+   "reading": "The number of all rows equals 294 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": ".\n\nSECTION: RESULTS\n\nWe found springtails in 37 of the 77",
+   "reading": "The number of all rows equals 37 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": ": RESULTS\n\nWe found springtails in 37 of the 77 soil samp",
+   "reading": "The number of all rows equals 77 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "uence. The final trimmed alignment covered a 582 bp regio",
+   "reading": "The number of all rows equals 582 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "nuclear pseudogenes. The alignment contained 269 variable",
+   "reading": "The number of all rows equals 269 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": " The alignment contained 269 variable sites (250 parsimon",
+   "reading": "The number of all rows equals 250 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "iable sites (250 parsimony‐informative), and 175 unique h",
+   "reading": "The number of all rows equals 175 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "OLD sequences included in the alignment (n = 10) was 17% ",
+   "reading": "The number of all rows equals 10 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "remaining haplotypes were singletons (118 of 175) (see Su",
+   "reading": "The number of all rows equals 175 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "zed mixed yule coalescent analyses indicated 26 putative ",
+   "reading": "The number of all rows equals 26 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "ed 26 putative species within our dataset of 334 isotomid",
+   "reading": "The number of all rows equals 334 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "identified from among the outgroup taxa (n = 7) sequenced",
+   "reading": "The number of all rows equals 7 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "max",
+   "sentence_fragment": "ridae). Sequence coverage ranged from one to 56 sequences",
+   "reading": "The maximum of n sequences over all rows equals 56 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "(intraspecific p‐distance max. 3.6%). Of the 26 GMYC spec",
+   "reading": "The number of all rows equals 26 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "x. 3.6%). Of the 26 GMYC species identified, 23 were in a",
+   "reading": "The number of all rows equals 23 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "en one and six sites. However, most species (17 of 26) we",
+   "reading": "The number of all rows equals 17 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": " and six sites. However, most species (17 of 26) were fou",
+   "reading": "The number of all rows equals 26 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "min",
+   "sentence_fragment": "owever, the total number of sequences (range 52–210) and ",
+   "reading": "The minimum of n sequences over all rows equals 52 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "max",
+   "sentence_fragment": "ver, the total number of sequences (range 52–210) and GMY",
+   "reading": "The maximum of n sequences over all rows equals 210 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "min",
+   "sentence_fragment": "ences (range 52–210) and GMYC species (range 5–14) obtain",
+   "reading": "The minimum of n sequences over all rows equals 5 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "max",
+   "sentence_fragment": "ces (range 52–210) and GMYC species (range 5–14) obtained",
+   "reading": "The maximum of n sequences over all rows equals 14 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": " dispersal (and gene flow) among sites. From 334 isotomid",
+   "reading": "The number of all rows equals 334 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "quences, we detected the potential for up to 26 distinct ",
+   "reading": "The number of all rows equals 26 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "t species (GMYC analyses; >4.3% p‐distance), 17 of which ",
+   "reading": "The number of all rows equals 17 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "y single sites. Furthermore, only six of the 170 haplotyp",
+   "reading": "The number of all rows equals 170 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "a high proportion of single haplotypes, with 118 of 175 h",
+   "reading": "The number of all rows equals 118 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "09_pmc6476783",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "proportion of single haplotypes, with 118 of 175 haplotyp",
+   "reading": "The number of all rows equals 175 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "10_pmc5817150",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "ncluded 590 and 475 body mass estimates from 203 and 171 ",
+   "reading": "The number of all rows equals 203 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "10_pmc5817150",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "590 and 475 body mass estimates from 203 and 171 individu",
+   "reading": "The number of all rows equals 171 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "10_pmc5817150",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": " adults (i.e., aged ≥3 years). The remaining 180 females ",
+   "reading": "The number of all rows equals 180 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "12_pmc4417136",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "14 angiosperm species, we sampled soils from 6 unique col",
+   "reading": "The number of rows where soilSourceSp is “CO” equals 6 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "ine speed and burst speed, respectively, and 57 for the G",
+   "reading": "The number of all rows equals 57 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "lots of growth rate against burst speed were 2000.5, 1996",
+   "reading": "The number of all rows equals 2000.5 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "growth rate against burst speed were 2000.5, 1996.9, and ",
+   "reading": "The number of all rows equals 1996.9 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "against burst speed were 2000.5, 1996.9, and 1997.9, resp",
+   "reading": "The number of all rows equals 1997.9 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  },
+  {
+   "slug": "17_pmc9309151",
+   "outcome": "REFUTED",
+   "stat": "count",
+   "sentence_fragment": "eneralized linear models (GLMs; a and b; n = 57) or the g",
+   "reading": "The number of all rows equals 57 when rounded to the printed precision.",
+   "arms": [
+    "openrouter"
+   ],
+   "verdict": "not_faithful",
+   "why": "the sentence does not state this statistic of this table (typically a count of something other than the table's rows)"
+  }
+ ]
+}

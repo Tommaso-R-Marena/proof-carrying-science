@@ -1,0 +1,124 @@
+{
+ "split": "heldout",
+ "freezes": {
+  "software_freeze_sha256": "1a7eeb57029e5ff35ee1586908f77fa949a7577777a2495dc00db18c6af0ae2d",
+  "benchmark_freeze_sha256": "1a2001809d1e923900817e17273a975fb554b13bc5b72809f4bd23e2f9ecc890"
+ },
+ "A_deceptive_proposals": {
+  "invented_quote": {
+   "attempts": 48,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 48
+  },
+  "number_not_printed": {
+   "attempts": 47,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 47
+  },
+  "smuggled_verdict": {
+   "attempts": 48,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 48
+  },
+  "smuggled_scale": {
+   "attempts": 48,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 48
+  },
+  "smuggled_missing_tokens": {
+   "attempts": 48,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 48
+  },
+  "lean_injection": {
+   "attempts": 48,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 48
+  },
+  "lean_injection_safe_charset": {
+   "attempts": 48,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 48
+  },
+  "wrong_column": {
+   "attempts": 34,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 34
+  },
+  "undeclared_unit": {
+   "attempts": 34,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 34
+  },
+  "shortened_number": {
+   "attempts": 6,
+   "PROVED": 0,
+   "REFUTED": 0,
+   "UNKNOWN": 6
+  }
+ },
+ "B_bad_artifacts": {
+  "pinned_corrupted": {
+   "claims": 48,
+   "UNKNOWN": 48
+  },
+  "unpinned_altered": {
+   "claims": 48,
+   "agrees_with_independent_calculation": 48,
+   "PROVED": 22,
+   "REFUTED": 5,
+   "UNKNOWN": 21
+  },
+  "ragged_file": {
+   "claims": 48,
+   "UNKNOWN": 48
+  }
+ },
+ "C_coincidence_search": {
+  "target_numbers": 62,
+  "numbers_with_a_matching_reading": 24,
+  "matching_readings_submitted": 214,
+  "numbers_PROVED_by_some_reading": 3,
+  "readings_PROVED": 3,
+  "readings_stopped_by_gates": 211,
+  "examples": [
+   {
+    "doc": "10_pmc5817150:original",
+    "number": "5",
+    "id": "H10-09",
+    "why_false_or_underivable": "see H10-06",
+    "reading": "The arithmetic mean of age over all rows equals 5 when rounded to the printed precision.",
+    "sentence": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   {
+    "doc": "10_pmc5817150:mutated",
+    "number": "5",
+    "id": "H10-04",
+    "why_false_or_underivable": "value_change",
+    "reading": "The arithmetic mean of age over all rows equals 5 when rounded to the printed precision.",
+    "sentence": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 5 and 17 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   {
+    "doc": "12_pmc4417136:mutated",
+    "number": "0.2",
+    "id": "H12-08",
+    "why_false_or_underivable": "value_change",
+    "reading": "The standard error of the mean (sample SD / √n) of OM over all rows equals 0.2 when rounded to the printed precision.",
+    "sentence": "Organic matter was generally low with a mean 4.9 % ± 0.9 SE (range = 0.2–14.9 %)."
+   }
+  ]
+ },
+ "violations": [],
+ "seconds": 824.6,
+ "kernel_checked_claims": 80,
+ "families_A_B_hold": true
+}

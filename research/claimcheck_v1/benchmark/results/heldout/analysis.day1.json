@@ -1,0 +1,322 @@
+{
+ "split": "heldout",
+ "policies": {
+  "frozen": {
+   "rules": {
+    "abstained": 70,
+    "correct_abstention": 42,
+    "correct_refutation": 1,
+    "correct_verification": 5,
+    "unannotated_proved": 7,
+    "unannotated_refuted": 88,
+    "unsupported_positive": 3,
+    "unsupported_refutation": 73
+   },
+   "search": {
+    "abstained": 87,
+    "correct_abstention": 66,
+    "correct_verification": 37,
+    "unannotated_proved": 41,
+    "unsupported_positive": 4
+   },
+   "openrouter": {
+    "abstained": 51,
+    "correct_abstention": 50,
+    "correct_refutation": 13,
+    "correct_verification": 40,
+    "unannotated_proved": 4,
+    "unannotated_refuted": 92,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 39
+   }
+  },
+  "no_bare_count_refutation": {
+   "rules": {
+    "abstained": 94,
+    "correct_abstention": 50,
+    "correct_verification": 5,
+    "unannotated_proved": 7,
+    "unannotated_refuted": 51,
+    "unsupported_positive": 3,
+    "unsupported_refutation": 42
+   },
+   "search": {
+    "abstained": 87,
+    "correct_abstention": 66,
+    "correct_verification": 37,
+    "unannotated_proved": 41,
+    "unsupported_positive": 4
+   },
+   "openrouter": {
+    "abstained": 74,
+    "correct_abstention": 66,
+    "correct_refutation": 12,
+    "correct_verification": 40,
+    "unannotated_proved": 4,
+    "unannotated_refuted": 12,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 1
+   }
+  },
+  "corroborated_refutation": {
+   "rules": {
+    "abstained": 116,
+    "correct_abstention": 65,
+    "correct_verification": 5,
+    "unannotated_proved": 7,
+    "unannotated_refuted": 6,
+    "unsupported_positive": 3,
+    "unsupported_refutation": 5
+   },
+   "search": {
+    "abstained": 87,
+    "correct_abstention": 66,
+    "correct_verification": 37,
+    "unannotated_proved": 41,
+    "unsupported_positive": 4
+   },
+   "openrouter": {
+    "abstained": 80,
+    "correct_abstention": 64,
+    "correct_refutation": 7,
+    "correct_verification": 40,
+    "unannotated_proved": 4,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 2
+   }
+  }
+ },
+ "frozen_by_statistic": {
+  "rules": {
+   "REFUTED": {
+    "mean": {
+     "right": 0,
+     "wrong": 21,
+     "unlabelled": 6
+    },
+    "sd": {
+     "right": 0,
+     "wrong": 10,
+     "unlabelled": 20
+    },
+    "count": {
+     "right": 1,
+     "wrong": 31,
+     "unlabelled": 40
+    },
+    "sem": {
+     "right": 0,
+     "wrong": 3
+    },
+    "max": {
+     "right": 0,
+     "wrong": 2,
+     "unlabelled": 2
+    },
+    "median": {
+     "right": 0,
+     "wrong": 6,
+     "unlabelled": 4
+    },
+    "share": {
+     "right": 0,
+     "wrong": 0,
+     "unlabelled": 16
+    }
+   },
+   "PROVED": {
+    "count": {
+     "right": 5,
+     "wrong": 0,
+     "unlabelled": 2
+    },
+    "sd": {
+     "right": 0,
+     "wrong": 3,
+     "unlabelled": 3
+    },
+    "share": {
+     "right": 0,
+     "wrong": 0,
+     "unlabelled": 2
+    }
+   }
+  },
+  "search": {
+   "PROVED": {
+    "count": {
+     "right": 11,
+     "wrong": 1,
+     "unlabelled": 18
+    },
+    "min": {
+     "right": 9,
+     "wrong": 0,
+     "unlabelled": 4
+    },
+    "max": {
+     "right": 9,
+     "wrong": 0,
+     "unlabelled": 4
+    },
+    "sd_sample": {
+     "right": 0,
+     "wrong": 0,
+     "unlabelled": 6
+    },
+    "sem": {
+     "right": 2,
+     "wrong": 1,
+     "unlabelled": 3
+    },
+    "sum": {
+     "right": 0,
+     "wrong": 0,
+     "unlabelled": 2
+    },
+    "mean": {
+     "right": 4,
+     "wrong": 2,
+     "unlabelled": 2
+    },
+    "median": {
+     "right": 2,
+     "wrong": 0
+    },
+    "share": {
+     "right": 0,
+     "wrong": 0,
+     "unlabelled": 2
+    }
+   }
+  },
+  "openrouter": {
+   "PROVED": {
+    "count": {
+     "right": 11,
+     "wrong": 1,
+     "unlabelled": 4
+    },
+    "min": {
+     "right": 9,
+     "wrong": 0
+    },
+    "max": {
+     "right": 8,
+     "wrong": 0
+    },
+    "sem": {
+     "right": 5,
+     "wrong": 0
+    },
+    "mean": {
+     "right": 5,
+     "wrong": 0
+    },
+    "median": {
+     "right": 2,
+     "wrong": 0
+    }
+   },
+   "REFUTED": {
+    "count": {
+     "right": 1,
+     "wrong": 39,
+     "unlabelled": 83
+    },
+    "mean": {
+     "right": 4,
+     "wrong": 0
+    },
+    "min": {
+     "right": 2,
+     "wrong": 0,
+     "unlabelled": 4
+    },
+    "max": {
+     "right": 4,
+     "wrong": 0,
+     "unlabelled": 5
+    },
+    "sem": {
+     "right": 2,
+     "wrong": 0
+    }
+   }
+  }
+ },
+ "unlabelled_results_after_hand_adjudication": {
+  "rules": {
+   "PROVED": {
+    "faithful": 2,
+    "not_faithful": 5,
+    "not_adjudicated": 0
+   },
+   "REFUTED": {
+    "faithful": 0,
+    "not_faithful": 16,
+    "not_adjudicated": 72
+   }
+  },
+  "search": {
+   "PROVED": {
+    "faithful": 18,
+    "not_faithful": 23,
+    "not_adjudicated": 0
+   },
+   "REFUTED": {
+    "faithful": 0,
+    "not_faithful": 0,
+    "not_adjudicated": 0
+   }
+  },
+  "openrouter": {
+   "PROVED": {
+    "faithful": 4,
+    "not_faithful": 0,
+    "not_adjudicated": 0
+   },
+   "REFUTED": {
+    "faithful": 0,
+    "not_faithful": 90,
+    "not_adjudicated": 2
+   }
+  }
+ },
+ "note": "Only the 'frozen' policy is a result of the frozen system. The other two are post hoc, exploratory and unvalidated.",
+ "frozen_precision": {
+  "rules": {
+   "PROVED_total": 15,
+   "PROVED_matching_gold": 5,
+   "PROVED_unlabelled_faithful_after_adjudication": 2,
+   "PROVED_unlabelled_not_faithful_after_adjudication": 5,
+   "PROVED_gold_unsupported": 3,
+   "REFUTED_total": 162,
+   "REFUTED_matching_gold": 1,
+   "REFUTED_gold_unsupported": 73,
+   "REFUTED_unlabelled": 88
+  },
+  "search": {
+   "PROVED_total": 82,
+   "PROVED_matching_gold": 37,
+   "PROVED_unlabelled_faithful_after_adjudication": 18,
+   "PROVED_unlabelled_not_faithful_after_adjudication": 23,
+   "PROVED_gold_unsupported": 4,
+   "REFUTED_total": 0,
+   "REFUTED_matching_gold": 0,
+   "REFUTED_gold_unsupported": 0,
+   "REFUTED_unlabelled": 0
+  },
+  "openrouter": {
+   "PROVED_total": 45,
+   "PROVED_matching_gold": 40,
+   "PROVED_unlabelled_faithful_after_adjudication": 4,
+   "PROVED_unlabelled_not_faithful_after_adjudication": 0,
+   "PROVED_gold_unsupported": 1,
+   "REFUTED_total": 144,
+   "REFUTED_matching_gold": 13,
+   "REFUTED_gold_unsupported": 39,
+   "REFUTED_unlabelled": 92
+  }
+ }
+}
