@@ -688,20 +688,20 @@ def pcs_c0 : Claim :=
 def pcs_c1 : Claim :=
   { column := some (b "OM"),
     filter := [],
-    stat := .sem,
+    stat := .max,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "0.2" }
+    reported := b "15.5" }
 
 theorem pcs_batch : runAll pcs_src [pcs_c0, pcs_c1] =
     [.checked .consistent (.rat ((14177 : Rat) / 3360)) 168 0,
-    .checked .consistent (.sqrt (1 : Int) ((2371397999 : Rat) / 47134080000)) 168 0] := by decide +kernel
+    .checked .consistent (.rat ((1553 : Rat) / 100)) 168 0] := by decide +kernel
 
 theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((14177 : Rat) / 3360)) 168 0 :=
   run_of_runAll pcs_batch 0 rfl rfl
 #print axioms pcs_claim_0
 
-theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .consistent (.sqrt (1 : Int) ((2371397999 : Rat) / 47134080000)) 168 0 :=
+theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .consistent (.rat ((1553 : Rat) / 100)) 168 0 :=
   run_of_runAll pcs_batch 1 rfl rfl
 #print axioms pcs_claim_1
 

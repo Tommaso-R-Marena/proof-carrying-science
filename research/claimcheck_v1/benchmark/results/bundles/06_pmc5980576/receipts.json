@@ -1,6 +1,18 @@
 [
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of chick_age over all rows equals 13.06 when rounded to the printed precision.",
+   "spec": {
+    "column": "chick_age",
+    "filter": [],
+    "reported": "13.06",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
   "claim_id": "c001",
   "data": {
    "bytes": 33339,
@@ -10,18 +22,100 @@
    "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
    "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
   },
-  "message": "The proposed claim is not well formed: mean needs a target column",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
-   "status": "UNKNOWN",
-   "why": "No arithmetic was checked."
+   "assumptions": [
+    "Rounding: the printed value 13.06 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 26.447,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "d06f4e0d3e188666b3802918da47813e8a779eef19f17688ab122ebdb6f08942",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 12.134285714285713,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "350",
+       "numerator": "4247"
+      },
+      "rows_skipped_as_missing": 1,
+      "rows_used": 350,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "REFUTED"
+    }
+   ]
   },
   "q2_correspondence": {
-   "status": "NOT_GROUNDED",
-   "why": "mean needs a target column"
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "nestling age",
+      "binds": "column chick_age"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "mean",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 11802,
+    "start": 11540,
+    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
+   },
+   "reported_value": {
+    "end": 11776,
+    "literal_checked": "13.06",
+    "printed": "13.06",
+    "start": 11771,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 11802,
+    "start": 11540,
+    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
+   },
+   "status": "GROUNDED"
   },
   "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
    "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
    "open_obligations": [
     "Whether this file is the data the authors actually analysed (custody and completeness).",
@@ -30,11 +124,11 @@
    ],
    "status": "NOT_ASSESSED"
   },
-  "reason": "malformed_proposal",
-  "receipt_sha256": "2822c0e75e24e6e13686496f2f2efbc905de872bd4194d3b16a83e58257bef27",
-  "result": "UNKNOWN",
+  "reason": "checked",
+  "receipt_sha256": "6b5d939443681601ddfbfae887ff7fe2541708cafe556ac7c68655c84f202d60",
+  "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
+  "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The arithmetic mean of chick_age over all rows equals 13.06 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
   "source": {
    "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
    "license": "cc by",
@@ -45,6 +139,18 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of chick_age over all rows equals 0.18 when rounded to the printed precision.",
+   "spec": {
+    "column": "chick_age",
+    "filter": [],
+    "reported": "0.18",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
   "claim_id": "c002",
   "data": {
    "bytes": 33339,
@@ -54,18 +160,102 @@
    "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
    "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
   },
-  "message": "The proposed claim is not well formed: sem needs a target column",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
-   "status": "UNKNOWN",
-   "why": "No arithmetic was checked."
+   "assumptions": [
+    "Rounding: the printed value 0.18 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 26.447,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "d06f4e0d3e188666b3802918da47813e8a779eef19f17688ab122ebdb6f08942",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 0.04113499947705922,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "42752500",
+       "numerator": "72341"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 1,
+      "rows_used": 350,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "inconsistent"
+     },
+     "stat": "sem",
+     "status": "REFUTED"
+    }
+   ]
   },
   "q2_correspondence": {
-   "status": "NOT_GROUNDED",
-   "why": "sem needs a target column"
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "nestling age",
+      "binds": "column chick_age"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "±",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 11802,
+    "start": 11540,
+    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
+   },
+   "reported_value": {
+    "end": 11788,
+    "literal_checked": "0.18",
+    "printed": "0.18",
+    "start": 11784,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 11802,
+    "start": 11540,
+    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
+   },
+   "status": "GROUNDED"
   },
   "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
    "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
    "open_obligations": [
     "Whether this file is the data the authors actually analysed (custody and completeness).",
@@ -74,11 +264,11 @@
    ],
    "status": "NOT_ASSESSED"
   },
-  "reason": "malformed_proposal",
-  "receipt_sha256": "99eb936b6cbe89a5705889ca278dc465fd31c0cd0711ff37e255742206f3aebc",
-  "result": "UNKNOWN",
+  "reason": "checked",
+  "receipt_sha256": "c410c7c7b4b6a2cf21a2e1376e20aabecef4e132cdec37a7eaf8b1ccfc3472e8",
+  "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
+  "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The standard error of the mean (sample SD / √n) of chick_age over all rows equals 0.18 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
   "source": {
    "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
    "license": "cc by",
@@ -89,6 +279,18 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows equals 351 when rounded to the printed precision.",
+   "spec": {
+    "column": null,
+    "filter": [],
+    "reported": "351",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
   "claim_id": "c003",
   "data": {
    "bytes": 33339,
@@ -98,18 +300,94 @@
    "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
    "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
   },
-  "message": "The proposed claim is not well formed: mean needs a target column",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
-   "status": "UNKNOWN",
-   "why": "No arithmetic was checked."
+   "assumptions": [
+    "Rounding: the printed value 351 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 26.123,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-002.lean",
+      "obligation_sha256": "fd356bcbaca9538471b0ef7cf04b6049e30441da89445f61521c99e5b4b25787",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 351.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "351"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 351,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
   },
   "q2_correspondence": {
-   "status": "NOT_GROUNDED",
-   "why": "mean needs a target column"
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 11802,
+    "start": 11540,
+    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
+   },
+   "reported_value": {
+    "end": 11800,
+    "literal_checked": "351",
+    "printed": "351",
+    "start": 11797,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 11802,
+    "start": 11540,
+    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
+   },
+   "status": "GROUNDED"
   },
   "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
    "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
    "open_obligations": [
     "Whether this file is the data the authors actually analysed (custody and completeness).",
@@ -118,11 +396,11 @@
    ],
    "status": "NOT_ASSESSED"
   },
-  "reason": "malformed_proposal",
-  "receipt_sha256": "956e117735783891b3929d2426159c727213f1c802e3e28e68de0d9a8a2a4d42",
-  "result": "UNKNOWN",
+  "reason": "checked",
+  "receipt_sha256": "7675f1004e3f0800153dc3a2a718c99134f8e4770f836e0f4b9c58a46da5e1f7",
+  "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows equals 351 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
   "source": {
    "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
    "license": "cc by",
@@ -133,6 +411,18 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of effort over all rows equals 12.0 when rounded to the printed precision.",
+   "spec": {
+    "column": "effort",
+    "filter": [],
+    "reported": "12.0",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
   "claim_id": "c004",
   "data": {
    "bytes": 33339,
@@ -142,18 +432,102 @@
    "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
    "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
   },
-  "message": "The proposed claim is not well formed: mean needs a target column",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
-   "status": "UNKNOWN",
-   "why": "No arithmetic was checked."
+   "assumptions": [
+    "Rounding: the printed value 12.0 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 26.123,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-002.lean",
+      "obligation_sha256": "fd356bcbaca9538471b0ef7cf04b6049e30441da89445f61521c99e5b4b25787",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 12.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "12"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 351,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "min",
+     "status": "PROVED"
+    }
+   ]
   },
   "q2_correspondence": {
-   "status": "NOT_GROUNDED",
-   "why": "mean needs a target column"
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "reproductive effort",
+      "binds": "column effort"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "between",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "reported_value": {
+    "end": 12559,
+    "literal_checked": "12.0",
+    "printed": "12.0",
+    "start": 12555,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "status": "GROUNDED"
   },
   "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "therefore"
+   ],
    "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
    "open_obligations": [
     "Whether this file is the data the authors actually analysed (custody and completeness).",
@@ -162,8 +536,691 @@
    ],
    "status": "NOT_ASSESSED"
   },
-  "reason": "malformed_proposal",
-  "receipt_sha256": "db844c81ee37e0f6c109de26d074922cd0538b5d5c303c005ecbea2ce0d3c9d1",
+  "reason": "checked",
+  "receipt_sha256": "75c955f018946002db54377d57a9baea6401536a4d8fc691c5f2175ded8d5dd3",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The minimum of effort over all rows equals 12.0 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The maximum of effort over all rows equals 167.0 when rounded to the printed precision.",
+   "spec": {
+    "column": "effort",
+    "filter": [],
+    "reported": "167.0",
+    "reported_unit": null,
+    "stat": "max",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c005",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 167.0 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 26.534,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-003.lean",
+      "obligation_sha256": "0c57945450cafcb68175805ae6d624271bbbedf7854e52be717a2fb676907415",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 167.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "167"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 351,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "max",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "reproductive effort",
+      "binds": "column effort"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "between",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "reported_value": {
+    "end": 12567,
+    "literal_checked": "167.0",
+    "printed": "167.0",
+    "start": 12562,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "therefore"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "4cef0ca862ef372413fede15dfb24412ee5493780a040eab4c0eb3886e7f76c7",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The maximum of effort over all rows equals 167.0 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of effort over all rows equals 78.4 when rounded to the printed precision.",
+   "spec": {
+    "column": "effort",
+    "filter": [],
+    "reported": "78.4",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c006",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 78.4 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 26.534,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-003.lean",
+      "obligation_sha256": "0c57945450cafcb68175805ae6d624271bbbedf7854e52be717a2fb676907415",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 78.34900284900284,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "702",
+       "numerator": "55001"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 351,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "REFUTED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "reproductive effort",
+      "binds": "column effort"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "mean",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "reported_value": {
+    "end": 12584,
+    "literal_checked": "78.4",
+    "printed": "78.4",
+    "start": 12580,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "therefore"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "c86c0f46a51369e82a630c087558d34c8d46dc4bbab3d53d955f2f70e351e3a4",
+  "result": "REFUTED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The arithmetic mean of effort over all rows equals 78.4 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of effort over all rows equals 1.6 when rounded to the printed precision.",
+   "spec": {
+    "column": "effort",
+    "filter": [],
+    "reported": "1.6",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c007",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1.6 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 27.435,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-004.lean",
+      "obligation_sha256": "d4961bd3de7106ec48d8f29a0b04bf22e1645004a83047a9ed24f96b138d7fda",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 1.550263535701639,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "86240700",
+       "numerator": "207263743"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 0,
+      "rows_used": 351,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "consistent"
+     },
+     "stat": "sem",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "reproductive effort",
+      "binds": "column effort"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "±",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "reported_value": {
+    "end": 12590,
+    "literal_checked": "1.6",
+    "printed": "1.6",
+    "start": 12587,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 12619,
+    "start": 12295,
+    "text": "Therefore, a continuous measure of “reproductive effort” was calculated and controlled for in breeding condition analyses, defined as the sum of brood sizes for each nest on each day between the first day post‐hatching and the day of parental sampling (range: 12.0 – 167.0, mean ± SE: 78.4 ± 1.6), following Mayfield (1975)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [
+    "therefore"
+   ],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "1a3657c9c19e01032348187c066ad22318b144fa356f7b05b3bd56bad913c075",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The standard error of the mean (sample SD / √n) of effort over all rows equals 1.6 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows with a value in fcaro equals 335 when rounded to the printed precision.",
+   "spec": {
+    "column": "fcaro",
+    "filter": [],
+    "reported": "335",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c008",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 335 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 27.435,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-004.lean",
+      "obligation_sha256": "d4961bd3de7106ec48d8f29a0b04bf22e1645004a83047a9ed24f96b138d7fda",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 335.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "335"
+      },
+      "rows_skipped_as_missing": 16,
+      "rows_used": 335,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "feather total carotenoid",
+      "binds": "column fcaro"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "reported_value": {
+    "end": 13470,
+    "literal_checked": "335",
+    "printed": "335",
+    "start": 13467,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "edadd64748277afaa1005e45f0dc4caa9d74315a94fa00854a5b56f5842ca4a2",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in fcaro equals 335 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows with a value in pcaro equals 136 when rounded to the printed precision.",
+   "spec": {
+    "column": "pcaro",
+    "filter": [],
+    "reported": "136",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c009",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 136 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 136.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "136"
+      },
+      "rows_skipped_as_missing": 215,
+      "rows_used": 136,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": null,
+      "binds": "column pcaro"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “column pcaro” (accepted wordings: plasma carotenoid, plasma carotenoids, plasma total carotenoid, plasma total carotenoids, pcaro)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "reported_value": {
+    "end": 13528,
+    "literal_checked": "136",
+    "printed": "136",
+    "start": 13525,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "0fbf51c2254dcb390d97bf67b0276abbab5d7f6e090343aee1a2a59049f5f9fe",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -177,7 +1234,822 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c005",
+  "claim": {
+   "reading": "The number of all rows with a value in patoc equals 124 when rounded to the printed precision.",
+   "spec": {
+    "column": "patoc",
+    "filter": [],
+    "reported": "124",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c010",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 124 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 25.913,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-005.lean",
+      "obligation_sha256": "8723900a9e6afd290b9de3265d97821e0907742fee3ce12ddd761944def8b912",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 124.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "124"
+      },
+      "rows_skipped_as_missing": 227,
+      "rows_used": 124,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "tocopherol",
+      "binds": "column patoc"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "reported_value": {
+    "end": 13552,
+    "literal_checked": "124",
+    "printed": "124",
+    "start": 13549,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "0497aebbbe19de822753601cb6597a6de8d00de44d328c544620f5dfb038101a",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in patoc equals 124 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The number of all rows with a value in pmda equals 171 when rounded to the printed precision.",
+   "spec": {
+    "column": "pmda",
+    "filter": [],
+    "reported": "171",
+    "reported_unit": null,
+    "stat": "count",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c011",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 171 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 25.913,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-005.lean",
+      "obligation_sha256": "8723900a9e6afd290b9de3265d97821e0907742fee3ce12ddd761944def8b912",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 171.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "171"
+      },
+      "rows_skipped_as_missing": 180,
+      "rows_used": 171,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "count",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "MDA",
+      "binds": "column pmda"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "reported_value": {
+    "end": 13588,
+    "literal_checked": "171",
+    "printed": "171",
+    "start": 13585,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 13608,
+    "start": 13369,
+    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "81e4a2d0d64e2ba86af5058e6ac50083581a6246e464c4e620cf6b03e56fe56c",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in pmda equals 171 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of patoc over all rows equals 23.13 when rounded to the printed precision.",
+   "spec": {
+    "column": "patoc",
+    "filter": [],
+    "reported": "23.13",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c012",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 23.13 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 22.95177419354839,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "6200",
+       "numerator": "142301"
+      },
+      "rows_skipped_as_missing": 227,
+      "rows_used": 124,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "tocopherol",
+      "binds": "column patoc"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": null,
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range)."
+   ],
+   "grounded_except_statistic_wording": true,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "reported_value": {
+    "end": 21364,
+    "literal_checked": "23.13",
+    "printed": "23.13",
+    "start": 21359,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "aa22fb038c60ea8b6b4fb46f298eb709c38d06fb74e32941fe144676f3ba0844",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The standard error of the mean (sample SD / √n) of patoc over all rows equals 1.06 when rounded to the printed precision.",
+   "spec": {
+    "column": "patoc",
+    "filter": [],
+    "reported": "1.06",
+    "reported_unit": null,
+    "stat": "sem",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c013",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "Under the stated reading, the data file does not give the printed number.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 1.06 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "REFUTED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 25.444,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-006.lean",
+      "obligation_sha256": "8a419b5563c578b72271650bf45f1568bc7dab61847ef5d0d8fc56cb662e135c",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 1.043956117441132,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1576040000",
+       "numerator": "1717638329"
+      },
+      "exact_note": "value = sign × √(numerator/denominator)",
+      "rows_skipped_as_missing": 227,
+      "rows_used": 124,
+      "sign": 1,
+      "value_kind": "signed_square_root",
+      "verdict": "inconsistent"
+     },
+     "stat": "sem",
+     "status": "REFUTED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "tocopherol",
+      "binds": "column patoc"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "±",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "reported_value": {
+    "end": 21371,
+    "literal_checked": "1.06",
+    "printed": "1.06",
+    "start": 21367,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "f582cb44469d38ba64f8747afa3cdf8bc5d0c01fb24cf3070550ac5b36278e28",
+  "result": "REFUTED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The standard error of the mean (sample SD / √n) of patoc over all rows equals 1.06 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of patoc over all rows equals 3.30 when rounded to the printed precision.",
+   "spec": {
+    "column": "patoc",
+    "filter": [],
+    "reported": "3.30",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c014",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 3.30 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 25.444,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-006.lean",
+      "obligation_sha256": "8a419b5563c578b72271650bf45f1568bc7dab61847ef5d0d8fc56cb662e135c",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 3.3,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "10",
+       "numerator": "33"
+      },
+      "rows_skipped_as_missing": 227,
+      "rows_used": 124,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "min",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "tocopherol",
+      "binds": "column patoc"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "range",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "reported_value": {
+    "end": 21390,
+    "literal_checked": "3.30",
+    "printed": "3.30",
+    "start": 21386,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "969f4eb5b294d68f97db51268619fe7f2fdfb3e6fb8662db5d99167e97268399",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The minimum of patoc over all rows equals 3.30 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The maximum of patoc over all rows equals 70.91 when rounded to the printed precision.",
+   "spec": {
+    "column": "patoc",
+    "filter": [],
+    "reported": "70.91",
+    "reported_unit": null,
+    "stat": "max",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c015",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 70.91 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 24.971,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-007.lean",
+      "obligation_sha256": "81a042071bb9d9c7cfd4352a16e0e10a6f948383d841031f22498fdc1669bbcf",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 70.91,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "100",
+       "numerator": "7091"
+      },
+      "rows_skipped_as_missing": 227,
+      "rows_used": 124,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "max",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "tocopherol",
+      "binds": "column patoc"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "range",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "reported_value": {
+    "end": 21396,
+    "literal_checked": "70.91",
+    "printed": "70.91",
+    "start": 21391,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 21592,
+    "start": 21275,
+    "text": "Concentrations of α‐tocopherol in the plasma varied considerably among individuals (23.13 ± 1.06 μg/ml, range: 3.30–70.91 μg/ml), and body mass was strongly negatively correlated with reproductive effort (p < .001; Table 1), but neither were influenced by winter feeding treatment (p ≥ .16; Table 1; Figure 3c and d)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "b3698416639bfbc85d81e0883d62221baa8d4020acbe465a11ae687efb46c490",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The maximum of patoc over all rows equals 70.91 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c016",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -207,7 +2079,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "438062c2be4781cc6795ecb6ca2c9f2212660dc6d64d61958ce91f4a00fc7846",
+  "receipt_sha256": "d904e167768759838ba542f379769d488ddab68bbdf9476e84571bdf5078de94",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -221,7 +2093,7 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c006",
+  "claim_id": "c017",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -251,7 +2123,183 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "3285d7658ad6b80786e7de30fb2ca3dc976d603ab4f68c49a74ffe5b3e4811bd",
+  "receipt_sha256": "1a256403086d270eba783241b2b7fe897425d4389cde96fff96539ff5aa96fe8",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c018",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The proposed claim is not well formed: mean needs a target column",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "status": "NOT_GROUNDED",
+   "why": "mean needs a target column"
+  },
+  "q3_interpretation": {
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "malformed_proposal",
+  "receipt_sha256": "ab3928b76dc262460539397807e781c6fa8c8ffaf8e14a2414a7ff3aba2020fd",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c019",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The proposed claim is not well formed: mean needs a target column",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "status": "NOT_GROUNDED",
+   "why": "mean needs a target column"
+  },
+  "q3_interpretation": {
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "malformed_proposal",
+  "receipt_sha256": "e4e2b0fef462190fdb2be5b7f826f5550dba4263379b4f0d97ca38ca29793406",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c020",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The proposed claim is not well formed: mean needs a target column",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "status": "NOT_GROUNDED",
+   "why": "mean needs a target column"
+  },
+  "q3_interpretation": {
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "malformed_proposal",
+  "receipt_sha256": "c646c893e730393925e389ebed6c592e5d903c1de722a1b64676ec88e993e86a",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
+   "license": "cc by",
+   "name": "06_pmc5980576:original",
+   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c021",
+  "data": {
+   "bytes": 33339,
+   "license": "cc-zero",
+   "name": "Plummer_BTphenotypes_dataset.csv",
+   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
+   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
+   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
+  },
+  "message": "The proposed claim is not well formed: sem needs a target column",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "status": "NOT_GROUNDED",
+   "why": "sem needs a target column"
+  },
+  "q3_interpretation": {
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "malformed_proposal",
+  "receipt_sha256": "51dcdd19215a330eed86f4e2bab5d24affe9ad51c7e1b0c49a85abd332acadd0",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -277,7 +2325,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c007",
+  "claim_id": "c022",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -306,17 +2354,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 24.971,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 0,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "obligation_file": "batch-007.lean",
+      "obligation_sha256": "81a042071bb9d9c7cfd4352a16e0e10a6f948383d841031f22498fdc1669bbcf",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_0",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -383,7 +2431,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "79e0ba1baf84d56f68f53409007275f1bd7c732f0359efbaf8c9595332f8ea34",
+  "receipt_sha256": "e8e725661282f96c6bc793b4d23755dbc1f7809d844a445e9781e082399b2b98",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows equals 243 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -409,7 +2457,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c008",
+  "claim_id": "c023",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -438,17 +2486,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 25.986,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 1,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "obligation_file": "batch-008.lean",
+      "obligation_sha256": "fd356bcbaca9538471b0ef7cf04b6049e30441da89445f61521c99e5b4b25787",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_1",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -515,7 +2563,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "3d1fcb0c732bc07a4b927cbfa24e0715370f0b997cccaca678f06341e6316fac",
+  "receipt_sha256": "7f0296158229b3a2e2cf5e5296a70d099bae17bf4f33331a4da245b188ffb773",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows equals 351 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -541,7 +2589,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c009",
+  "claim_id": "c024",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -570,17 +2618,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 25.986,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 2,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c2 = <expected outcome>",
+      "obligation_file": "batch-008.lean",
+      "obligation_sha256": "fd356bcbaca9538471b0ef7cf04b6049e30441da89445f61521c99e5b4b25787",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_2",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -655,7 +2703,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "05af9ba48d5d80987e842555505573132405be802ba103a0b122b11de0906c2f",
+  "receipt_sha256": "c49bfdab8669182e58f6f3b4772177c03c618d817f9956dc81d63df64d2d9396",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The minimum of effort over all rows equals 12.0 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -681,7 +2729,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c010",
+  "claim_id": "c025",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -710,17 +2758,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 27.113,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 3,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c3 = <expected outcome>",
+      "obligation_file": "batch-009.lean",
+      "obligation_sha256": "0c57945450cafcb68175805ae6d624271bbbedf7854e52be717a2fb676907415",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_3",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -795,7 +2843,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "815f25d90a27e6b925de34a97753ab694cad2e90fc7f3222b2c9b3bbd0bb2d0c",
+  "receipt_sha256": "4f41bfc961fe35cfecd7995ce792576891d83679ed61303d5f9cd4d6dc7b4d31",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The maximum of effort over all rows equals 167.0 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -821,7 +2869,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c011",
+  "claim_id": "c026",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -850,17 +2898,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 27.113,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 4,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c4 = <expected outcome>",
+      "obligation_file": "batch-009.lean",
+      "obligation_sha256": "0c57945450cafcb68175805ae6d624271bbbedf7854e52be717a2fb676907415",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_4",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -935,7 +2983,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "c714c6563569dc722b0ab77299422f8d473535934cd997a1ab310115a3d873a1",
+  "receipt_sha256": "38966fe84ac5973f7f2ba5c41c4b823509ca4bd33d0a0f79210303948a5c8f21",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The arithmetic mean of effort over all rows equals 78.4 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -961,7 +3009,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c012",
+  "claim_id": "c027",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -990,17 +3038,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 27.803,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 5,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c5 = <expected outcome>",
+      "obligation_file": "batch-010.lean",
+      "obligation_sha256": "d4961bd3de7106ec48d8f29a0b04bf22e1645004a83047a9ed24f96b138d7fda",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_5",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -1077,7 +3125,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "bd343ca5eedadeec9ebbed8c3c7299be9894a5bc74a4abd896ca580dc9d1a195",
+  "receipt_sha256": "905232b82598f61c653b8b22d2755d91cc2b2bc7c1789a11e80c56b5286f9673",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The standard error of the mean (sample SD / √n) of effort over all rows equals 1.6 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -1103,7 +3151,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c013",
+  "claim_id": "c028",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -1202,7 +3250,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "d9164aa7e18153a434aa711b4bf79fcb22c11b70a963289616b1171a39573b22",
+  "receipt_sha256": "4912914cb5aabec327d8fbd59422e3c9c12c7208bcda467eb80152b5afb33ee3",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -1228,7 +3276,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c014",
+  "claim_id": "c029",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -1329,142 +3377,10 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "7c52a377037dc89bd8edc3800e387f61e11bec143bf58935866b4a6afd95cd4a",
+  "receipt_sha256": "c59ccfe82fe8c70930a7ca026534c8e016a26daf9094cf1be5f2ed674f557ea0",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
-   "license": "cc by",
-   "name": "06_pmc5980576:original",
-   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The number of all rows equals 351 when rounded to the printed precision.",
-   "spec": {
-    "column": null,
-    "filter": [],
-    "reported": "351",
-    "reported_unit": null,
-    "stat": "count",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c015",
-  "data": {
-   "bytes": 33339,
-   "license": "cc-zero",
-   "name": "Plummer_BTphenotypes_dataset.csv",
-   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
-   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
-   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
-  },
-  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 351 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "PROVED",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [
-       "Classical.choice",
-       "Quot.sound",
-       "propext"
-      ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "kernel accepted",
-      "index": 6,
-      "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c6 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_6",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 351.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "351"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 351,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "count",
-     "status": "PROVED"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 11802,
-    "start": 11540,
-    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
-   },
-   "reported_value": {
-    "end": 11800,
-    "literal_checked": "351",
-    "printed": "351",
-    "start": 11797,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 11802,
-    "start": 11540,
-    "text": "Breeding birds were captured opportunistically on the nest during routine nest checks or using spring traps (Amber Electronics Ltd, Daventry, UK) between day 5 and 18 of the nestling phase (Figure 1; mean nestling age at sampling, 13.06 days ± 0.18 SE, n = 351)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "checked",
-  "receipt_sha256": "b2abe8b1716bef105d6cd8d7365c814e86ab0a36273cf8424652829698d731dd",
-  "result": "PROVED",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows equals 351 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
   "source": {
    "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
    "license": "cc by",
@@ -1487,7 +3403,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c016",
+  "claim_id": "c030",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -1516,552 +3432,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 27.803,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 7,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c7 = <expected outcome>",
+      "obligation_file": "batch-010.lean",
+      "obligation_sha256": "d4961bd3de7106ec48d8f29a0b04bf22e1645004a83047a9ed24f96b138d7fda",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_7",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 335.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "335"
-      },
-      "rows_skipped_as_missing": 16,
-      "rows_used": 335,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "count",
-     "status": "PROVED"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "feather total carotenoid",
-      "binds": "column fcaro"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "reported_value": {
-    "end": 13470,
-    "literal_checked": "335",
-    "printed": "335",
-    "start": 13467,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "checked",
-  "receipt_sha256": "04ce7f9bef799862c3e35c5a449bafaf4c7e74f45ff21a8a7ad0924072977178",
-  "result": "PROVED",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in fcaro equals 335 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
-  "source": {
-   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
-   "license": "cc by",
-   "name": "06_pmc5980576:original",
-   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The number of all rows with a value in pcaro equals 136 when rounded to the printed precision.",
-   "spec": {
-    "column": "pcaro",
-    "filter": [],
-    "reported": "136",
-    "reported_unit": null,
-    "stat": "count",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c017",
-  "data": {
-   "bytes": 33339,
-   "license": "cc-zero",
-   "name": "Plummer_BTphenotypes_dataset.csv",
-   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
-   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
-   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
-  },
-  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 136 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "detail": "not sent to the kernel because the source binding failed",
-      "kernel_accepted": false
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 136.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "136"
-      },
-      "rows_skipped_as_missing": 215,
-      "rows_used": 136,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "count",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": false,
-    "binding_anchors": [
-     {
-      "anchored_by": null,
-      "binds": "column pcaro"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [
-    "Nothing in the sentence names “column pcaro” (accepted wordings: plasma carotenoid, plasma carotenoids, plasma total carotenoid, plasma total carotenoids, pcaro)."
-   ],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "reported_value": {
-    "end": 13528,
-    "literal_checked": "136",
-    "printed": "136",
-    "start": 13525,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "status": "NOT_GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "8eb6dceec572d097ce01b50a93e7d4ea56f71bb27305c176e41b1994dd7194df",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
-   "license": "cc by",
-   "name": "06_pmc5980576:original",
-   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The number of all rows with a value in patoc equals 124 when rounded to the printed precision.",
-   "spec": {
-    "column": "patoc",
-    "filter": [],
-    "reported": "124",
-    "reported_unit": null,
-    "stat": "count",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c018",
-  "data": {
-   "bytes": 33339,
-   "license": "cc-zero",
-   "name": "Plummer_BTphenotypes_dataset.csv",
-   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
-   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
-   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
-  },
-  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 124 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "PROVED",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [
-       "Classical.choice",
-       "Quot.sound",
-       "propext"
-      ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "kernel accepted",
-      "index": 8,
-      "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c8 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_8",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 124.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "124"
-      },
-      "rows_skipped_as_missing": 227,
-      "rows_used": 124,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "count",
-     "status": "PROVED"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "tocopherol",
-      "binds": "column patoc"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "reported_value": {
-    "end": 13552,
-    "literal_checked": "124",
-    "printed": "124",
-    "start": 13549,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "checked",
-  "receipt_sha256": "54cf02e8e75335aa4500320384a079bb9cb63870f1ae42fb19529331c7532df2",
-  "result": "PROVED",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in patoc equals 124 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
-  "source": {
-   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
-   "license": "cc by",
-   "name": "06_pmc5980576:original",
-   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The number of all rows with a value in pmda equals 171 when rounded to the printed precision.",
-   "spec": {
-    "column": "pmda",
-    "filter": [],
-    "reported": "171",
-    "reported_unit": null,
-    "stat": "count",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c019",
-  "data": {
-   "bytes": 33339,
-   "license": "cc-zero",
-   "name": "Plummer_BTphenotypes_dataset.csv",
-   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
-   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
-   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
-  },
-  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 171 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "PROVED",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [
-       "Classical.choice",
-       "Quot.sound",
-       "propext"
-      ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "kernel accepted",
-      "index": 9,
-      "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c9 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_9",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 171.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "171"
-      },
-      "rows_skipped_as_missing": 180,
-      "rows_used": 171,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "count",
-     "status": "PROVED"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "MDA",
-      "binds": "column pmda"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "reported_value": {
-    "end": 13588,
-    "literal_checked": "171",
-    "printed": "171",
-    "start": 13585,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 13608,
-    "start": 13369,
-    "text": "Standard methods were used for the quantification of feather total carotenoid concentrations (n = 335), and plasma concentrations of total carotenoids (n = 136), α‐tocopherol (n = 124), and malondialdehyde (MDA; n = 171) (see Appendix S2)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "checked",
-  "receipt_sha256": "868f2693a866c26e69b192c9bef2a521be29c0250b58b245208ac1c8bf1bf070",
-  "result": "PROVED",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in pmda equals 171 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
-  "source": {
-   "citation": "Plummer KE, Bearhop S, Leech DI, Chamberlain DE, Blount JD (2018) Effects of winter food provisioning on the phenotypes of breeding blue tits. Ecology and Evolution 8:5059–5068. CC BY.",
-   "license": "cc by",
-   "name": "06_pmc5980576:original",
-   "sha256": "0c993ad9fd0c17b1c85389c1c6afe39606575f95b431cc6bd279c47487cd34c5"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The number of all rows with a value in fcaro equals 335 when rounded to the printed precision.",
-   "spec": {
-    "column": "fcaro",
-    "filter": [],
-    "reported": "335",
-    "reported_unit": null,
-    "stat": "count",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c020",
-  "data": {
-   "bytes": 33339,
-   "license": "cc-zero",
-   "name": "Plummer_BTphenotypes_dataset.csv",
-   "origin": "https://zenodo.org/api/records/4993421/files/Plummer_BTphenotypes_dataset.csv/content",
-   "pinned_sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44",
-   "sha256": "3431fbd902acd24298a4fcc2980e10b694018d91a015cb38822e2828f1171d44"
-  },
-  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 335 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "PROVED",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [
-       "Classical.choice",
-       "Quot.sound",
-       "propext"
-      ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "kernel accepted",
-      "index": 10,
-      "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c10 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_10",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -2135,7 +3516,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "029aed574df0da1a84e48252aef7839986c54231cf1b339f19ae922bae47e58b",
+  "receipt_sha256": "107122e281864944b7b7fd3b1dae9341b39d27aeae81a1e5d6163aeb1d1e2ebb",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in fcaro equals 335 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -2161,7 +3542,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c021",
+  "claim_id": "c031",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2190,17 +3571,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 26.309,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 11,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c11 = <expected outcome>",
+      "obligation_file": "batch-011.lean",
+      "obligation_sha256": "e3051d1d58d0901495e75e3b273df81210005d9173b1d17f2c4f5f8ecd91c2e2",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_11",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -2274,7 +3655,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "fc529204af4ddb3dcb0f930b9e4c6f6acc07bab4e7d09987614620e0165e508f",
+  "receipt_sha256": "741df99524a5d83c162a100ec2eb434393d091ef1a68d0a4daef7723d4bffc86",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in pmda equals 165 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -2288,7 +3669,7 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c022",
+  "claim_id": "c032",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2318,7 +3699,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "5c87d549e449bdc29e2c915e962c783ff751b153ca58c52c718c3c4b604af79f",
+  "receipt_sha256": "dab0b937264ffc0a7aa9bfd5cf19533d3c7998f90a86fa86b3028cda11377527",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2332,7 +3713,7 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c023",
+  "claim_id": "c033",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2362,7 +3743,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "ffceaac3ae2587e611bb25d3f5264b6557081dd13aa13d64126755147c45dde8",
+  "receipt_sha256": "dc37d2b8074e9df80f82c9c08130c371ab38191a6eca30b4df5228aaa597ce35",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2376,7 +3757,7 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c024",
+  "claim_id": "c034",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2406,7 +3787,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "e2164eb29ba233e23aa9bda163ffee82e032a45d830e8cad08ced91460587844",
+  "receipt_sha256": "c05baacf6a34cf552d54d0dba182eda2d5e07bed59baccc084d6fc307c39d3d4",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2420,7 +3801,7 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c025",
+  "claim_id": "c035",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2450,7 +3831,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "97c7bb1c3779c16651b13a70f99fec8ca2728c8db6205fe0e49a5aa47d77f324",
+  "receipt_sha256": "3ae3347d68daf7be0188932b10aa7f7b5c78ca4047c45e2d1be1f57ec1b0040a",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2476,7 +3857,7 @@
     "x_column": "fcaro"
    }
   },
-  "claim_id": "c026",
+  "claim_id": "c036",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2523,7 +3904,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_in_source",
-  "receipt_sha256": "6c78ee02a3defbdfaaa1076a32eb77f4cf9ded66d389d4f00cd1b3ac028619ff",
+  "receipt_sha256": "9c2f93d4e782279d90337363c096a362bd159af73e211b1f4bc7c72f35f5e16e",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2549,7 +3930,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c027",
+  "claim_id": "c037",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2578,17 +3959,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 26.309,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 12,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c12 = <expected outcome>",
+      "obligation_file": "batch-011.lean",
+      "obligation_sha256": "e3051d1d58d0901495e75e3b273df81210005d9173b1d17f2c4f5f8ecd91c2e2",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_12",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -2660,7 +4041,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "c9bb23a69bdbbd49876046e49a4eafaa6b2514a05a46ad7f7f5fcbf332bf2803",
+  "receipt_sha256": "58e8eb2834804fb890a99854f33d1a02b5639a60c701e55d54fdcba1d639f60a",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows with a value in fcaro equals 108 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -2686,7 +4067,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c028",
+  "claim_id": "c038",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2785,7 +4166,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "220e74a0af9968bc987f03c84f98a563da345e2c5d8b64ebb3c5723966541fe5",
+  "receipt_sha256": "f965a8f98655941ad5dbabdacdef69c8f8ac6e0ee5008ae19182c5ddd65fe028",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2811,7 +4192,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c029",
+  "claim_id": "c039",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -2841,17 +4222,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 28.097,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 13,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c13 = <expected outcome>",
+      "obligation_file": "batch-012.lean",
+      "obligation_sha256": "13298b11313fa3452d8419ddd3e1809d83b313227e5d39b77ae5aab1b8949e7d",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_13",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -2880,17 +4261,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 28.097,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 14,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c14 = <expected outcome>",
+      "obligation_file": "batch-012.lean",
+      "obligation_sha256": "13298b11313fa3452d8419ddd3e1809d83b313227e5d39b77ae5aab1b8949e7d",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_14",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -2965,7 +4346,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "5574c3c1ff81f18e51c8da5b5512faff445d66bfe9243c2ccb92a8baa825b092",
+  "receipt_sha256": "275c110a250da1b3361972035288c51fdb475d1f419d666e1e0bf6531ccdb95a",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The standard deviation (denominator n − 1) of mass over all rows equals 1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -2991,7 +4372,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c030",
+  "claim_id": "c040",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3021,17 +4402,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 56.751,
-      "batch_size": 16,
+      "batch_seconds": 26.633,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 15,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
-      "obligation_sha256": "44617135d59cb9f8fc30871c2a8d136090f3d82a084885f8b2ae1d80cb5f4e1e",
-      "statement": "run pcs_src pcs_c15 = <expected outcome>",
+      "obligation_file": "batch-013.lean",
+      "obligation_sha256": "a2950e90eca1a2408ed4efe2bd9cd4dd25cc870150d97823c3e3c6a44710ae3c",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_15",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -3060,17 +4441,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 26.633,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 0,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "obligation_file": "batch-013.lean",
+      "obligation_sha256": "a2950e90eca1a2408ed4efe2bd9cd4dd25cc870150d97823c3e3c6a44710ae3c",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_0",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -3145,7 +4526,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "fcc15c0d33ea0b098d595d3853294749b9ee5adba42e591195b4efd6dfac102d",
+  "receipt_sha256": "d820f4af5076dd41ede3cfaf040ebe6c4e5b6012b6c9c3520a67f9cbd036a01c",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The standard deviation (denominator n − 1) of chick_age over all rows equals 1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -3171,7 +4552,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c031",
+  "claim_id": "c041",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3200,17 +4581,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 22.48,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 1,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "obligation_file": "batch-014.lean",
+      "obligation_sha256": "0839cfdbb251e792b9ef9461c7270ab85d2e12ea4aeac8797cbf31f6041afab8",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_1",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -3277,7 +4658,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "c48229ba0a98e6b60f15feab197f9ece6d22d42f00e431fffc55867f392ce685",
+  "receipt_sha256": "89919f2ac934a3722d265b37af62e0661e8bb41f93ec70cbd78bf7c4b79ea1b4",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows equals 351 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -3303,7 +4684,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c032",
+  "claim_id": "c042",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3332,17 +4713,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 22.48,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 2,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c2 = <expected outcome>",
+      "obligation_file": "batch-014.lean",
+      "obligation_sha256": "0839cfdbb251e792b9ef9461c7270ab85d2e12ea4aeac8797cbf31f6041afab8",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_2",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -3409,7 +4790,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "7b8c862829dab620050333e7c283aebec5582a9f90c104c06a5ea73a1c8185e2",
+  "receipt_sha256": "ca5f81ed067b67029737042a66404845e122bebb93f385d54d19f4737f150ad6",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The number of all rows equals 351 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -3435,7 +4816,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c033",
+  "claim_id": "c043",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3464,17 +4845,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 27.19,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 3,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c3 = <expected outcome>",
+      "obligation_file": "batch-015.lean",
+      "obligation_sha256": "0a947242b6b5a68e7a7e749fb57efbe634338e5408d382828f335f1c129cb262",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_3",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -3549,7 +4930,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "df5d61869c56e357cf39bd0d2111269f7c2aae0be93d3fc73e027ed4bf3c9bfd",
+  "receipt_sha256": "c6f4f4a76ae1bd307a873c3c9c21fc3ce89d4431f078f892194c681e8e9d7548",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The minimum of effort over all rows equals 12.0 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -3575,7 +4956,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c034",
+  "claim_id": "c044",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3604,17 +4985,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 27.19,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 4,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c4 = <expected outcome>",
+      "obligation_file": "batch-015.lean",
+      "obligation_sha256": "0a947242b6b5a68e7a7e749fb57efbe634338e5408d382828f335f1c129cb262",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_4",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -3689,7 +5070,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "61325ad7358f446640682986ed2d349670c9863614702c6093ccee85da7291c4",
+  "receipt_sha256": "921edfd227fbd29e37ac4b9c5635d13e2818bc3e029ee341af833e6f021f15bb",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The maximum of effort over all rows equals 167.0 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -3715,7 +5096,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c035",
+  "claim_id": "c045",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3817,7 +5198,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "4445a436db6aa5d363513e608fa647eb62843ee18c1eec6b9cc23f961e0d7330",
+  "receipt_sha256": "b331f960a540bf3ca3bdabeb1c3a8af143efd4db74384325c0e6bd04ec2508f2",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3854,7 +5235,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c036",
+  "claim_id": "c046",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -3965,7 +5346,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "9b6f819209e2b3fb1227295207ef463276969a5f7dee0559a32d275b2a383eb6",
+  "receipt_sha256": "158952da2a0bf4aaa4e34ea09d767e45b6ed2609acc81b315c874f94432312f8",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3991,7 +5372,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c037",
+  "claim_id": "c047",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -4020,17 +5401,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 25.195,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 5,
+      "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c5 = <expected outcome>",
+      "obligation_file": "batch-016.lean",
+      "obligation_sha256": "2b1141bb38d4ef4fab4da63cdb12560182d6039cf78397d6fa832295c0c66a64",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_5",
+      "theorem": "pcs_claim_0",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -4103,7 +5484,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "7cc7d330f0858840f9465e432527c1f8b732fa920555e92d470dcc44b743537a",
+  "receipt_sha256": "284dc0903a318e4dab76fc12c819aa2b2351e49c6fd318a467416a52ac47a580",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The minimum of patoc over all rows equals 3.30 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -4129,7 +5510,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c038",
+  "claim_id": "c048",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -4158,17 +5539,17 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 48.934,
-      "batch_size": 7,
+      "batch_seconds": 25.195,
+      "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
-      "index": 6,
+      "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
-      "obligation_sha256": "b00515db30ae2398505201535e16bf9d1520e07ad91b7dfc0f572cac4bcaa893",
-      "statement": "run pcs_src pcs_c6 = <expected outcome>",
+      "obligation_file": "batch-016.lean",
+      "obligation_sha256": "2b1141bb38d4ef4fab4da63cdb12560182d6039cf78397d6fa832295c0c66a64",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_6",
+      "theorem": "pcs_claim_1",
       "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
      },
      "predicted_outcome": {
@@ -4241,7 +5622,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "d3f6c57f6c34f7a511716f3e46f0cc024f709d2d216fb575d81c1dfe75a5fe9b",
+  "receipt_sha256": "cf3f3ce32ff895fd2ac9e3fc72528ca576280441ab0fc5cabefae0b80e4cde2b",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file Plummer_BTphenotypes_dataset.csv (SHA-256 3431fbd902acd242…) only: “The maximum of patoc over all rows equals 70.91 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -4267,7 +5648,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c039",
+  "claim_id": "c049",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -4366,7 +5747,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "906a2a4a1d51612e5c1094ba67e3a0ac9fae1d1de91d8109189d3092bd1d6d6a",
+  "receipt_sha256": "4cd43e0eb44725a2b2e5127b5f5ff4c704acae61a7b135d035c510e6e4ca5de9",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -4392,7 +5773,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c040",
+  "claim_id": "c050",
   "data": {
    "bytes": 33339,
    "license": "cc-zero",
@@ -4491,7 +5872,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "130da6a21232a3a908d42e5b5567ca3e12ff2856a7c4e8f2cd36bb06b86f349c",
+  "receipt_sha256": "f81058fed33702f5b17b6b697350b552a8282ec0fcadb15a1a058518bc811e1f",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",

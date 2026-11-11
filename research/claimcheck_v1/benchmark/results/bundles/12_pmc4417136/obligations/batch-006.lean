@@ -683,25 +683,25 @@ def pcs_c0 : Claim :=
     stat := .count,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "84" }
+    reported := b "14" }
 
 def pcs_c1 : Claim :=
   { column := none,
-    filter := [.textEq (b "soilSourceSp") (b "SA")],
+    filter := [.textEq (b "soilSourceSp") (b "CO")],
     stat := .count,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "12" }
+    reported := b "6" }
 
 theorem pcs_batch : runAll pcs_src [pcs_c0, pcs_c1] =
     [.checked .inconsistent (.rat ((168 : Rat) / 1)) 168 0,
-    .checked .consistent (.rat ((12 : Rat) / 1)) 12 0] := by decide +kernel
+    .checked .inconsistent (.rat ((12 : Rat) / 1)) 12 0] := by decide +kernel
 
 theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .inconsistent (.rat ((168 : Rat) / 1)) 168 0 :=
   run_of_runAll pcs_batch 0 rfl rfl
 #print axioms pcs_claim_0
 
-theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .consistent (.rat ((12 : Rat) / 1)) 12 0 :=
+theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .inconsistent (.rat ((12 : Rat) / 1)) 12 0 :=
   run_of_runAll pcs_batch 1 rfl rfl
 #print axioms pcs_claim_1
 

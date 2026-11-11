@@ -1,6 +1,18 @@
 [
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The Pearson correlation coefficient of massjun against massaug over all rows equals 0.75 when rounded to the printed precision.",
+   "spec": {
+    "column": "massjun",
+    "filter": [],
+    "reported": "0.75",
+    "reported_unit": null,
+    "stat": "pearson",
+    "sub_filter": [],
+    "x_column": "massaug"
+   }
+  },
   "claim_id": "c001",
   "data": {
    "bytes": 26444,
@@ -10,18 +22,35 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The proposed claim is not well formed: mean needs a target column",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "message": "The reported value 0.75 is not printed in the quoted text as a complete number.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
    "status": "UNKNOWN",
    "why": "No arithmetic was checked."
   },
   "q2_correspondence": {
-   "status": "NOT_GROUNDED",
-   "why": "mean needs a target column"
+   "checks": {
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": false
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "The reported value 0.75 is not printed in the quoted text as a complete number."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 19140,
+    "start": 18907,
+    "text": "However, due to individual variation in summer fat accumulation, correlations were less than one, meaning that seasonal masses can be considered different traits (Pearson's correlation: r = .75; N = 472 individual‐year observations)."
+   },
+   "semantic_reading": "UNREVIEWED",
+   "status": "NOT_GROUNDED"
   },
   "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
    "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
    "open_obligations": [
     "Whether this file is the data the authors actually analysed (custody and completeness).",
@@ -30,8 +59,8 @@
    ],
    "status": "NOT_ASSESSED"
   },
-  "reason": "malformed_proposal",
-  "receipt_sha256": "35bf069306cd14bca1df07c0fc387eb11f179ef677347cd30940c08e5f6203cf",
+  "reason": "not_in_source",
+  "receipt_sha256": "b0b2117a46107490f28f8be9adeba64608a9d5e668e26f6c29cb5117db6faf8e",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -45,7 +74,1093 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.",
+   "spec": {
+    "column": "age",
+    "filter": [],
+    "reported": "5.1",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
   "claim_id": "c002",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 5.1 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 86.733,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 0,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "4587abf93b26fa1a0adfd6003255b8feea51391398f72d8baeb03576375ec358",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 5.124797406807131,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "617",
+       "numerator": "3162"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 617,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "mean",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "age",
+      "binds": "column age"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "mean",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27241,
+    "literal_checked": "5.1",
+    "printed": "5.1",
+    "start": 27238,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "5fddcfea9dbc5036d66020ec0901c42a7341693fb97fbe7672691809717870e8",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of age over all rows equals 4 when rounded to the printed precision.",
+   "spec": {
+    "column": "age",
+    "filter": [],
+    "reported": "4",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c003",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 4 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "PROVED",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [
+       "Classical.choice",
+       "Quot.sound",
+       "propext"
+      ],
+      "batch_seconds": 86.733,
+      "batch_size": 2,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "kernel accepted",
+      "index": 1,
+      "kernel_accepted": true,
+      "obligation_file": "batch-001.lean",
+      "obligation_sha256": "4587abf93b26fa1a0adfd6003255b8feea51391398f72d8baeb03576375ec358",
+      "statement": "run pcs_src pcs_c1 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_1",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 4.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "4"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 617,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "median",
+     "status": "PROVED"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "age",
+      "binds": "column age"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 2,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "median",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27259,
+    "literal_checked": "4",
+    "printed": "4",
+    "start": 27258,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "checked",
+  "receipt_sha256": "30d92aa56e896d7d1dfde17aebd96d268dd7910ffbcb8e0c75a97997ea8a2156",
+  "result": "PROVED",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The median of age over all rows equals 4 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The minimum of lifespan over all rows equals 3 when rounded to the printed precision.",
+   "spec": {
+    "column": "lifespan",
+    "filter": [],
+    "reported": "3",
+    "reported_unit": null,
+    "stat": "min",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c004",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-uyoc79zn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [],
+      "batch_seconds": 21.849,
+      "batch_size": 1,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-uyoc79zn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
+      "index": 0,
+      "isolated_after_batch_rejection": true,
+      "kernel_accepted": false,
+      "obligation_file": "batch-002-single-000.lean",
+      "obligation_sha256": "6cf1017b5a672866d193158c61a2c56eb3555a59fcf8353fa37dd3aa83f7d4e1",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 3.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "3"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 617,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "min",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "lifespan",
+      "binds": "column lifespan"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 3,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "range",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27289,
+    "literal_checked": "3",
+    "printed": "3",
+    "start": 27288,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "f6304b43f4f070c0a64f4fc6891160cac8e2bf857ff2c520676a56f74731aaa4",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The maximum of lifespan over all rows equals 14 when rounded to the printed precision.",
+   "spec": {
+    "column": "lifespan",
+    "filter": [],
+    "reported": "14",
+    "reported_unit": null,
+    "stat": "max",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c005",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-jxsu0y_k/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 14 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "axioms": [],
+      "batch_seconds": 20.279,
+      "batch_size": 1,
+      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-jxsu0y_k/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
+      "index": 0,
+      "isolated_after_batch_rejection": true,
+      "kernel_accepted": false,
+      "obligation_file": "batch-002-single-001.lean",
+      "obligation_sha256": "213c8adf62db9fdd8df0d0eda81512f277ac7c2a8434d75d8d7fe874abe1d547",
+      "statement": "run pcs_src pcs_c0 = <expected outcome>",
+      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
+      "theorem": "pcs_claim_0",
+      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 14.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "14"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 617,
+      "value_kind": "rational",
+      "verdict": "consistent"
+     },
+     "stat": "max",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": true,
+    "binding_anchors": [
+     {
+      "anchored_by": "lifespan",
+      "binds": "column lifespan"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "range",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27333,
+    "literal_checked": "14",
+    "printed": "14",
+    "start": 27331,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "897dc0212b22654a9926cd26363186fa7186891e0a47d518a50e700fafb1089d",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of lifespan over rows where valley is “dv” equals 6.3 when rounded to the printed precision.",
+   "spec": {
+    "column": "lifespan",
+    "filter": [
+     {
+      "column": "valley",
+      "kind": "text_eq",
+      "value": "dv"
+     }
+    ],
+    "reported": "6.3",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c006",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 6.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 7.939622641509434,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "265",
+       "numerator": "2104"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 265,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": "lifespan",
+      "binds": "column lifespan"
+     },
+     {
+      "anchored_by": null,
+      "binds": "valley = dv"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "mean",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “valley = dv” (accepted wordings: down-valley, dv)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27364,
+    "literal_checked": "6.3",
+    "printed": "6.3",
+    "start": 27361,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "6de790f138ea4881c2084857c1444b90524cc8d3e51b38f0e39bdc2b38f638bc",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of lifespan over rows where valley is “dv” equals 6 when rounded to the printed precision.",
+   "spec": {
+    "column": "lifespan",
+    "filter": [
+     {
+      "column": "valley",
+      "kind": "text_eq",
+      "value": "dv"
+     }
+    ],
+    "reported": "6",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c007",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 8.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "8"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 265,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "median",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": "lifespan",
+      "binds": "column lifespan"
+     },
+     {
+      "anchored_by": null,
+      "binds": "valley = dv"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 3,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "median",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “valley = dv” (accepted wordings: down-valley, dv)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27291,
+    "literal_checked": "6",
+    "printed": "6",
+    "start": 27290,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "cb5a29da23d938290dc28f5e4de44913b6dc80fd45573e5f3437c66f1494bf43",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The arithmetic mean of lifespan over rows where valley is “uv” equals 5.3 when rounded to the printed precision.",
+   "spec": {
+    "column": "lifespan",
+    "filter": [
+     {
+      "column": "valley",
+      "kind": "text_eq",
+      "value": "uv"
+     }
+    ],
+    "reported": "5.3",
+    "reported_unit": null,
+    "stat": "mean",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c008",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 5.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 6.806818181818182,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "88",
+       "numerator": "599"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 352,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "mean",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": "lifespan",
+      "binds": "column lifespan"
+     },
+     {
+      "anchored_by": null,
+      "binds": "valley = uv"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "mean",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “valley = uv” (accepted wordings: up-valley, uv)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27410,
+    "literal_checked": "5.3",
+    "printed": "5.3",
+    "start": 27407,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "222b6eb418afcf15fa9453e935845369b93f657f2bfaad65d915a0a991b64776",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim": {
+   "reading": "The median of lifespan over rows where valley is “uv” equals 5 when rounded to the printed precision.",
+   "spec": {
+    "column": "lifespan",
+    "filter": [
+     {
+      "column": "valley",
+      "kind": "text_eq",
+      "value": "uv"
+     }
+    ],
+    "reported": "5",
+    "reported_unit": null,
+    "stat": "median",
+    "sub_filter": [],
+    "x_column": null
+   }
+  },
+  "claim_id": "c009",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
+  "proposal_origin": "gemini:gemini-3.6-flash",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "assumptions": [
+    "Rounding: the printed value 5 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
+    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
+    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
+   ],
+   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
+   "status": "UNKNOWN",
+   "variants": [
+    {
+     "assumption": null,
+     "lean": {
+      "detail": "not sent to the kernel because the source binding failed",
+      "kernel_accepted": false
+     },
+     "predicted_outcome": {
+      "approximate_in_reported_units": 6.0,
+      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
+      "defined": true,
+      "exact": {
+       "denominator": "1",
+       "numerator": "6"
+      },
+      "rows_skipped_as_missing": 0,
+      "rows_used": 352,
+      "value_kind": "rational",
+      "verdict": "inconsistent"
+     },
+     "stat": "median",
+     "status": "UNKNOWN"
+    }
+   ]
+  },
+  "q2_correspondence": {
+   "checks": {
+    "binding_anchored": false,
+    "binding_anchors": [
+     {
+      "anchored_by": "lifespan",
+      "binds": "column lifespan"
+     },
+     {
+      "anchored_by": null,
+      "binds": "valley = uv"
+     }
+    ],
+    "quote_in_source": true,
+    "quote_occurrences": 1,
+    "reported_value_in_quote": true,
+    "reported_value_occurrences_in_quote": 1,
+    "sentence_within_table_scope": true,
+    "statistic_named_in_sentence": "median",
+    "unit_consistent_with_source": true
+   },
+   "data_digest_pinned": true,
+   "failures": [
+    "Nothing in the sentence names “valley = uv” (accepted wordings: up-valley, uv)."
+   ],
+   "grounded_except_statistic_wording": false,
+   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
+   "quote": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "reported_value": {
+    "end": 27422,
+    "literal_checked": "5",
+    "printed": "5",
+    "start": 27421,
+    "unit_printed_after": null
+   },
+   "semantic_reading": "UNREVIEWED",
+   "sentence": {
+    "end": 27435,
+    "start": 27197,
+    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
+   },
+   "status": "NOT_GROUNDED"
+  },
+  "q3_interpretation": {
+   "interpretive_wording_in_sentence": [],
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "not_kernel_checked",
+  "receipt_sha256": "e271230dab7e15a58d93ec490668e1fc074a984295982aa17da108c70e00e5aa",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c010",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -75,7 +1190,51 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "malformed_proposal",
-  "receipt_sha256": "62ad543067fe1be436eaccb079ee049dd67ed55e1e4634e3381cfd6fc3e67338",
+  "receipt_sha256": "5cd550ed8abe9fb9866ce837ff0a320116c47b100bb0b9fe0114e169e8108a11",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c011",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The proposed claim is not well formed: mean needs a target column",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "status": "NOT_GROUNDED",
+   "why": "mean needs a target column"
+  },
+  "q3_interpretation": {
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "malformed_proposal",
+  "receipt_sha256": "1cfa2c25df5c7eb3cb954b342d3a5335bc6aa2ed9ec1ebe89a022cc487fa4509",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -108,7 +1267,7 @@
     "x_column": "massaug"
    }
   },
-  "claim_id": "c003",
+  "claim_id": "c012",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -155,7 +1314,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_in_source",
-  "receipt_sha256": "2e0d825f96dde19694930d33b0fcebc5e4e2a8a7b7906597ff767d75fbc0b4dc",
+  "receipt_sha256": "21a669aeadd6c7ee078e3cef81f4e091f7b6a41d4b3dcccb41cc54abe15c1677",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -188,7 +1347,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c004",
+  "claim_id": "c013",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -289,7 +1448,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "5e1cfa0aa1c957e757b4a3dd26e3cbd1b8554f7bc8a2d4ac7339285a8ec48c21",
+  "receipt_sha256": "d15b9c72b4ed61e98d9f21fd49fb40ec1cd3c30582ac6c366a82897a28329761",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -315,7 +1474,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c005",
+  "claim_id": "c014",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -344,13 +1503,13 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 15.978,
+      "batch_seconds": 19.039,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
       "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
+      "obligation_file": "batch-003.lean",
       "obligation_sha256": "9e304727217e1e895275cbd55cb56ea15a8a3d74b1aded9ed49abcd77d641f44",
       "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
@@ -421,7 +1580,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "7b872c8649258a35be62833f2b957c5ed6917a9c49840fe8156dddaa63031306",
+  "receipt_sha256": "e864941639bfa3c335fc4a02972971294789b835b171ab33e6c41fffdfdbee73",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 590 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -447,7 +1606,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c006",
+  "claim_id": "c015",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -476,13 +1635,13 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 15.978,
+      "batch_seconds": 19.039,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
       "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-001.lean",
+      "obligation_file": "batch-003.lean",
       "obligation_sha256": "9e304727217e1e895275cbd55cb56ea15a8a3d74b1aded9ed49abcd77d641f44",
       "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
@@ -553,7 +1712,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "4c873228c4c10bebee9c459b209a3618d42304257d060750b20799b062f1167b",
+  "receipt_sha256": "70d62fc7104169c998dc5c42a4316b9d1fc6dbdcd090710ffa98a589f163ddc9",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 475 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -579,7 +1738,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c007",
+  "claim_id": "c016",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -608,13 +1767,13 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 16.343,
+      "batch_seconds": 18.53,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
       "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
+      "obligation_file": "batch-004.lean",
       "obligation_sha256": "baa1702a4238192ef74e7a851600baf5b3e7b04caa153b7d8398157c70deb7f9",
       "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
@@ -685,7 +1844,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "2b99cc3dff6e96a524670eccb4a2b98174dfea000cc79b5653ff69a92c5fffae",
+  "receipt_sha256": "adf6026465a81ff14d3a1b651182d882e4a8505f1139ecadce0a0a4d4d76ab33",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 203 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -711,7 +1870,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c008",
+  "claim_id": "c017",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -740,13 +1899,13 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 16.343,
+      "batch_seconds": 18.53,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
       "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-002.lean",
+      "obligation_file": "batch-004.lean",
       "obligation_sha256": "baa1702a4238192ef74e7a851600baf5b3e7b04caa153b7d8398157c70deb7f9",
       "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
@@ -817,7 +1976,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "371ef5b3361d3cbc252eff537b65549b7f674fd1c8c4ea9fffcd0e91de926a5a",
+  "receipt_sha256": "6a36ccf7c089afedb3b0c0768a078b105d4469bb50054686c8258a5c5d4604af",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 171 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -843,7 +2002,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c009",
+  "claim_id": "c018",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -872,13 +2031,13 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 16.286,
+      "batch_seconds": 18.053,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
       "index": 0,
       "kernel_accepted": true,
-      "obligation_file": "batch-003.lean",
+      "obligation_file": "batch-005.lean",
       "obligation_sha256": "19bb8f4f20f4d4552dcbd6eae8308d0372a1ecc5800ed0641f178bc0eb393dad",
       "statement": "run pcs_src pcs_c0 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
@@ -949,7 +2108,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "18f8ef7f8544b2994c7a572b64658f3c59e21f0d7f04b46b202900ced301f47d",
+  "receipt_sha256": "f8d103f32bec6a10ea965c6677dfb4cab3e0d917d9ed521f69286fedead5e18e",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 205 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
@@ -981,7 +2140,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c010",
+  "claim_id": "c019",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -1079,7 +2238,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "ad2d6d7414ca2edc56deb8928b3ea46b70d661644fd5f5edebf9b9f61c6c7506",
+  "receipt_sha256": "3c4d1565a87f420ecdc2213b31557a050c580d44273add936406570fdd67f733",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -1111,7 +2270,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c011",
+  "claim_id": "c020",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -1209,7 +2368,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "e1122d5f5cfe3787ad6f6d9e70ad3c8d1760332e3b8ba82f0b13ee10c0ebbb79",
+  "receipt_sha256": "ef848fa1a40b36766151e7e4f356fa349bc5ab3370fc04e5da8567a851ea1d23",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -1242,7 +2401,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c012",
+  "claim_id": "c021",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -1289,7 +2448,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_in_source",
-  "receipt_sha256": "6f7677d6f449a9835fd4e258a1c2508af193271d2f3c4edb1d0665a7b64121e9",
+  "receipt_sha256": "fd376a58316132ac61806ba90f060343ad1d7b481f603841b640170127930101",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -1315,7 +2474,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c013",
+  "claim_id": "c022",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -1344,13 +2503,13 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 16.286,
+      "batch_seconds": 18.053,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
       "index": 1,
       "kernel_accepted": true,
-      "obligation_file": "batch-003.lean",
+      "obligation_file": "batch-005.lean",
       "obligation_sha256": "19bb8f4f20f4d4552dcbd6eae8308d0372a1ecc5800ed0641f178bc0eb393dad",
       "statement": "run pcs_src pcs_c1 = <expected outcome>",
       "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
@@ -1421,1140 +2580,10 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "8d233ca725f59e6d66aebb956f94f7e3d6568fa98a0d5112c5e0475abc318b61",
+  "receipt_sha256": "fc3397e96c159e04ab0615bd6d5bf62085f05351eb90d821f1a0491a82927f9f",
   "result": "REFUTED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 180 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim_id": "c014",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The proposed claim is not well formed: mean needs a target column",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "status": "UNKNOWN",
-   "why": "No arithmetic was checked."
-  },
-  "q2_correspondence": {
-   "status": "NOT_GROUNDED",
-   "why": "mean needs a target column"
-  },
-  "q3_interpretation": {
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "malformed_proposal",
-  "receipt_sha256": "6e6282cb062907fb7d7063f6621438b5a4058e9bd2617c9a98a9b739b8c95ba4",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.",
-   "spec": {
-    "column": "age",
-    "filter": [],
-    "reported": "5.1",
-    "reported_unit": null,
-    "stat": "mean",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c015",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 5.1 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "PROVED",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [
-       "Classical.choice",
-       "Quot.sound",
-       "propext"
-      ],
-      "batch_seconds": 78.31,
-      "batch_size": 2,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "kernel accepted",
-      "index": 0,
-      "kernel_accepted": true,
-      "obligation_file": "batch-004.lean",
-      "obligation_sha256": "4587abf93b26fa1a0adfd6003255b8feea51391398f72d8baeb03576375ec358",
-      "statement": "run pcs_src pcs_c0 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_0",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 5.124797406807131,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "617",
-       "numerator": "3162"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 617,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "mean",
-     "status": "PROVED"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "age",
-      "binds": "column age"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "mean",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27241,
-    "literal_checked": "5.1",
-    "printed": "5.1",
-    "start": 27238,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "checked",
-  "receipt_sha256": "c6554c83b751e4c791a78e2ec21b7505a615b7370f4e8ff4087d4dac5e8d0373",
-  "result": "PROVED",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The median of age over all rows equals 4 when rounded to the printed precision.",
-   "spec": {
-    "column": "age",
-    "filter": [],
-    "reported": "4",
-    "reported_unit": null,
-    "stat": "median",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c016",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The printed number is reproduced exactly from the data file under the stated reading.",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 4 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "PROVED",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [
-       "Classical.choice",
-       "Quot.sound",
-       "propext"
-      ],
-      "batch_seconds": 78.31,
-      "batch_size": 2,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "kernel accepted",
-      "index": 1,
-      "kernel_accepted": true,
-      "obligation_file": "batch-004.lean",
-      "obligation_sha256": "4587abf93b26fa1a0adfd6003255b8feea51391398f72d8baeb03576375ec358",
-      "statement": "run pcs_src pcs_c1 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_1",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 4.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "4"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 617,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "median",
-     "status": "PROVED"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "age",
-      "binds": "column age"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 2,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "median",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27259,
-    "literal_checked": "4",
-    "printed": "4",
-    "start": 27258,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "checked",
-  "receipt_sha256": "77ec54968c88ae6f1a17f031d68e5bb16bceb1b5a96933fae05a4316a88804cb",
-  "result": "PROVED",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The median of age over all rows equals 4 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The minimum of lifespan over all rows equals 3 when rounded to the printed precision.",
-   "spec": {
-    "column": "lifespan",
-    "filter": [],
-    "reported": "3",
-    "reported_unit": null,
-    "stat": "min",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c017",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-gepk7op5/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [],
-      "batch_seconds": 18.918,
-      "batch_size": 1,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-gepk7op5/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
-      "index": 0,
-      "isolated_after_batch_rejection": true,
-      "kernel_accepted": false,
-      "obligation_file": "batch-005-single-000.lean",
-      "obligation_sha256": "6cf1017b5a672866d193158c61a2c56eb3555a59fcf8353fa37dd3aa83f7d4e1",
-      "statement": "run pcs_src pcs_c0 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_0",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 3.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "3"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 617,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "min",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "lifespan",
-      "binds": "column lifespan"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 3,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "range",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27289,
-    "literal_checked": "3",
-    "printed": "3",
-    "start": 27288,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "4ea9cb7affa20532ae73da8983304418da7380764170bb07385d9c988cd74721",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The maximum of lifespan over all rows equals 14 when rounded to the printed precision.",
-   "spec": {
-    "column": "lifespan",
-    "filter": [],
-    "reported": "14",
-    "reported_unit": null,
-    "stat": "max",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c018",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-86eip_rw/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 14 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "axioms": [],
-      "batch_seconds": 18.474,
-      "batch_size": 1,
-      "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-86eip_rw/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
-      "index": 0,
-      "isolated_after_batch_rejection": true,
-      "kernel_accepted": false,
-      "obligation_file": "batch-005-single-001.lean",
-      "obligation_sha256": "213c8adf62db9fdd8df0d0eda81512f277ac7c2a8434d75d8d7fe874abe1d547",
-      "statement": "run pcs_src pcs_c0 = <expected outcome>",
-      "tactic": "decide +kernel (in pcs_batch), then run_of_runAll",
-      "theorem": "pcs_claim_0",
-      "toolchain": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)"
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 14.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "14"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 617,
-      "value_kind": "rational",
-      "verdict": "consistent"
-     },
-     "stat": "max",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": true,
-    "binding_anchors": [
-     {
-      "anchored_by": "lifespan",
-      "binds": "column lifespan"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "range",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27333,
-    "literal_checked": "14",
-    "printed": "14",
-    "start": 27331,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "9a9d74caebf8652ba9688a9a4359611b318de3e1d886849954d36f48f2f9de41",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The arithmetic mean of lifespan over rows where valley is “dv” equals 6.3 when rounded to the printed precision.",
-   "spec": {
-    "column": "lifespan",
-    "filter": [
-     {
-      "column": "valley",
-      "kind": "text_eq",
-      "value": "dv"
-     }
-    ],
-    "reported": "6.3",
-    "reported_unit": null,
-    "stat": "mean",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c019",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 6.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "detail": "not sent to the kernel because the source binding failed",
-      "kernel_accepted": false
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 7.939622641509434,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "265",
-       "numerator": "2104"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 265,
-      "value_kind": "rational",
-      "verdict": "inconsistent"
-     },
-     "stat": "mean",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": false,
-    "binding_anchors": [
-     {
-      "anchored_by": "lifespan",
-      "binds": "column lifespan"
-     },
-     {
-      "anchored_by": null,
-      "binds": "valley = dv"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "mean",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [
-    "Nothing in the sentence names “valley = dv” (accepted wordings: down-valley, dv)."
-   ],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27364,
-    "literal_checked": "6.3",
-    "printed": "6.3",
-    "start": 27361,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "NOT_GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "96624c111a63e76dae2bbda086cd9d903c56869460399273e5fe3a46bf949f68",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The median of lifespan over rows where valley is “dv” equals 6 when rounded to the printed precision.",
-   "spec": {
-    "column": "lifespan",
-    "filter": [
-     {
-      "column": "valley",
-      "kind": "text_eq",
-      "value": "dv"
-     }
-    ],
-    "reported": "6",
-    "reported_unit": null,
-    "stat": "median",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c020",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "detail": "not sent to the kernel because the source binding failed",
-      "kernel_accepted": false
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 8.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "8"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 265,
-      "value_kind": "rational",
-      "verdict": "inconsistent"
-     },
-     "stat": "median",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": false,
-    "binding_anchors": [
-     {
-      "anchored_by": "lifespan",
-      "binds": "column lifespan"
-     },
-     {
-      "anchored_by": null,
-      "binds": "valley = dv"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 3,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "median",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [
-    "Nothing in the sentence names “valley = dv” (accepted wordings: down-valley, dv)."
-   ],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27291,
-    "literal_checked": "6",
-    "printed": "6",
-    "start": 27290,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "NOT_GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "05fbbab5356574416a450e8c9883b82b22e55198b6882aa81662921bd65d1582",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The arithmetic mean of lifespan over rows where valley is “uv” equals 5.3 when rounded to the printed precision.",
-   "spec": {
-    "column": "lifespan",
-    "filter": [
-     {
-      "column": "valley",
-      "kind": "text_eq",
-      "value": "uv"
-     }
-    ],
-    "reported": "5.3",
-    "reported_unit": null,
-    "stat": "mean",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c021",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 5.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "detail": "not sent to the kernel because the source binding failed",
-      "kernel_accepted": false
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 6.806818181818182,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "88",
-       "numerator": "599"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 352,
-      "value_kind": "rational",
-      "verdict": "inconsistent"
-     },
-     "stat": "mean",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": false,
-    "binding_anchors": [
-     {
-      "anchored_by": "lifespan",
-      "binds": "column lifespan"
-     },
-     {
-      "anchored_by": null,
-      "binds": "valley = uv"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "mean",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [
-    "Nothing in the sentence names “valley = uv” (accepted wordings: up-valley, uv)."
-   ],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27410,
-    "literal_checked": "5.3",
-    "printed": "5.3",
-    "start": 27407,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "NOT_GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "b4d64976150c88c153f46dd0a2281117beb0c434f08be7e3ec1ba8cc44a0c22a",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
-  "source": {
-   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
-   "license": "cc by",
-   "name": "10_pmc5817150:original",
-   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
-  },
-  "version": "pcs-claimcheck-v1"
- },
- {
-  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
-  "claim": {
-   "reading": "The median of lifespan over rows where valley is “uv” equals 5 when rounded to the printed precision.",
-   "spec": {
-    "column": "lifespan",
-    "filter": [
-     {
-      "column": "valley",
-      "kind": "text_eq",
-      "value": "uv"
-     }
-    ],
-    "reported": "5",
-    "reported_unit": null,
-    "stat": "median",
-    "sub_filter": [],
-    "x_column": null
-   }
-  },
-  "claim_id": "c022",
-  "data": {
-   "bytes": 26444,
-   "license": "cc-zero",
-   "name": "BMdata.csv",
-   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
-   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
-   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
-  },
-  "message": "The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed",
-  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
-  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
-  "q1_mathematics": {
-   "assumptions": [
-    "Rounding: the printed value 5 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).",
-    "Missing values: cells equal to one of ['', 'NA'] are excluded; the count of excluded rows is part of the proof.",
-    "Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted."
-   ],
-   "decided_by": "Lean 4 kernel (decide +kernel) on the exact data bytes; the Python prediction has no authority",
-   "status": "UNKNOWN",
-   "variants": [
-    {
-     "assumption": null,
-     "lean": {
-      "detail": "not sent to the kernel because the source binding failed",
-      "kernel_accepted": false
-     },
-     "predicted_outcome": {
-      "approximate_in_reported_units": 6.0,
-      "approximation_note": "floating-point rendering for display only; the verdict uses the exact value",
-      "defined": true,
-      "exact": {
-       "denominator": "1",
-       "numerator": "6"
-      },
-      "rows_skipped_as_missing": 0,
-      "rows_used": 352,
-      "value_kind": "rational",
-      "verdict": "inconsistent"
-     },
-     "stat": "median",
-     "status": "UNKNOWN"
-    }
-   ]
-  },
-  "q2_correspondence": {
-   "checks": {
-    "binding_anchored": false,
-    "binding_anchors": [
-     {
-      "anchored_by": "lifespan",
-      "binds": "column lifespan"
-     },
-     {
-      "anchored_by": null,
-      "binds": "valley = uv"
-     }
-    ],
-    "quote_in_source": true,
-    "quote_occurrences": 1,
-    "reported_value_in_quote": true,
-    "reported_value_occurrences_in_quote": 1,
-    "sentence_within_table_scope": true,
-    "statistic_named_in_sentence": "median",
-    "unit_consistent_with_source": true
-   },
-   "data_digest_pinned": true,
-   "failures": [
-    "Nothing in the sentence names “valley = uv” (accepted wordings: up-valley, uv)."
-   ],
-   "grounded_except_statistic_wording": false,
-   "meaning": "GROUNDED means only that the checks below passed. It does not mean the sentence has been understood: the semantic reading is a proposal until a named person confirms it.",
-   "quote": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "reported_value": {
-    "end": 27422,
-    "literal_checked": "5",
-    "printed": "5",
-    "start": 27421,
-    "unit_printed_after": null
-   },
-   "semantic_reading": "UNREVIEWED",
-   "sentence": {
-    "end": 27435,
-    "start": 27197,
-    "text": "The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6)."
-   },
-   "status": "NOT_GROUNDED"
-  },
-  "q3_interpretation": {
-   "interpretive_wording_in_sentence": [],
-   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
-   "open_obligations": [
-    "Whether this file is the data the authors actually analysed (custody and completeness).",
-    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
-    "Whether any comparison, trend or causal reading drawn from the number is justified."
-   ],
-   "status": "NOT_ASSESSED"
-  },
-  "reason": "not_kernel_checked",
-  "receipt_sha256": "8eba873c280136221ebb04d35db37f14bd9d2f9d83de7d56ae729be98e3369cc",
-  "result": "UNKNOWN",
-  "schema": "pcs-claimcheck-receipt-v1",
-  "scope": "Nothing is asserted about the paper’s statement.",
   "source": {
    "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
    "license": "cc by",
@@ -2609,6 +2638,50 @@
  },
  {
   "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
+  "claim_id": "c024",
+  "data": {
+   "bytes": 26444,
+   "license": "cc-zero",
+   "name": "BMdata.csv",
+   "origin": "https://zenodo.org/api/records/4987737/files/BMdata.csv/content",
+   "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
+   "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
+  },
+  "message": "The proposed claim is not well formed: mean needs a target column",
+  "proposal_origin": "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+  "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
+  "q1_mathematics": {
+   "status": "UNKNOWN",
+   "why": "No arithmetic was checked."
+  },
+  "q2_correspondence": {
+   "status": "NOT_GROUNDED",
+   "why": "mean needs a target column"
+  },
+  "q3_interpretation": {
+   "meaning": "ClaimCheck does not judge whether this number supports any scientific conclusion.",
+   "open_obligations": [
+    "Whether this file is the data the authors actually analysed (custody and completeness).",
+    "Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.",
+    "Whether any comparison, trend or causal reading drawn from the number is justified."
+   ],
+   "status": "NOT_ASSESSED"
+  },
+  "reason": "malformed_proposal",
+  "receipt_sha256": "09629f6bcd62f5e5b1f2b99f727ffb2fd165464e3691a51ced71f3d0959fd32f",
+  "result": "UNKNOWN",
+  "schema": "pcs-claimcheck-receipt-v1",
+  "scope": "Nothing is asserted about the paper’s statement.",
+  "source": {
+   "citation": "Kroeger SB, Blumstein DT, Armitage KB, Reid JM, Martin JGA (2018) Age, state, environment, and season dependence of senescence in body mass. Ecology and Evolution 8:2050–2061. CC BY.",
+   "license": "cc by",
+   "name": "10_pmc5817150:original",
+   "sha256": "e9579681f4bb0686089d0cdce92304c9c6bd7b809b611808e1fc03f7b30d5c80"
+  },
+  "version": "pcs-claimcheck-v1"
+ },
+ {
+  "authority": "RESEARCH_ONLY_NOT_PCS_V06_AUTHORITY",
   "claim": {
    "reading": "The arithmetic mean of age over all rows equals 9.8 when rounded to the printed precision.",
    "spec": {
@@ -2621,7 +2694,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c024",
+  "claim_id": "c025",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -2723,7 +2796,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "cfcd24efd7307e756466263044da0602cdd30b6c7893c4402da19057666d0742",
+  "receipt_sha256": "b4b0798c9ef11f40b73db7c55aab192f2919089692cdffca244c20102c486300",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2749,7 +2822,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c025",
+  "claim_id": "c026",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -2851,7 +2924,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "c9cf08c5d382b60e100155ca33417e403e8c6ba30ff405d7942e998acce27056",
+  "receipt_sha256": "19868655bae8d951cc38c7fba7d118de4f2557fa714557d0c392cc686fc09677",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -2877,7 +2950,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c026",
+  "claim_id": "c027",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -2886,7 +2959,7 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-2niinmf7/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-q17jcv5w/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
   "proposal_origin": "search:deterministic",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
@@ -2902,10 +2975,10 @@
      "assumption": null,
      "lean": {
       "axioms": [],
-      "batch_seconds": 19.549,
+      "batch_seconds": 22.482,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-2niinmf7/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-q17jcv5w/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
       "index": 0,
       "isolated_after_batch_rejection": true,
       "kernel_accepted": false,
@@ -2986,7 +3059,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "53e9f328f5d36f847b4413bc4ae20aa7f62cfdf662efbc5c09277c3d06a6715c",
+  "receipt_sha256": "f543c599cc5c8b08ba20ce39a47ee127b3e77226ca8d8af212e4947c6b568385",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3012,7 +3085,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c027",
+  "claim_id": "c028",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3021,7 +3094,7 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-lc7ri3eg/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-xzvctqnt/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
   "proposal_origin": "search:deterministic",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
@@ -3037,10 +3110,10 @@
      "assumption": null,
      "lean": {
       "axioms": [],
-      "batch_seconds": 18.321,
+      "batch_seconds": 21.895,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-lc7ri3eg/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-xzvctqnt/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached",
       "index": 0,
       "isolated_after_batch_rejection": true,
       "kernel_accepted": false,
@@ -3121,7 +3194,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "57e0c623016d870536fbe91e84131ea73ff3166039d4a961e02f69becac72b65",
+  "receipt_sha256": "0888f94fc138c371eb1a1c42195e04f04b7162edb35a81ec4faa029e98eec842",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3147,7 +3220,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c028",
+  "claim_id": "c029",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3156,7 +3229,7 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-wg0c110y/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-iln8kjc1/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
   "proposal_origin": "search:deterministic",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
@@ -3172,10 +3245,10 @@
      "assumption": null,
      "lean": {
       "axioms": [],
-      "batch_seconds": 19.635,
+      "batch_seconds": 21.307,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-wg0c110y/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-iln8kjc1/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
       "index": 0,
       "isolated_after_batch_rejection": true,
       "kernel_accepted": false,
@@ -3256,7 +3329,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "7fe4745cdcfa3265b2e8d5c85a5b5d9a4c0114454aa152d70ff294e26e0f59ae",
+  "receipt_sha256": "187fd30ab466aa705663dd9d1ea93102e565f7141939d02287f68a6dcbb00ee2",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3282,7 +3355,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c029",
+  "claim_id": "c030",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3383,7 +3456,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "97d59069154e4222fad6af6dc5592e4b664c0c2ebdaf5ac3d5c9850dd3db558c",
+  "receipt_sha256": "4a96719a8998579cd1cb653ce4f3c93546628aedccad6d44f3b38c42fe1c48c7",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3409,7 +3482,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c030",
+  "claim_id": "c031",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3508,7 +3581,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "c76f086163747ac3687897727c2d2b109a26e98475e8cff0f2e436a0d8a399f6",
+  "receipt_sha256": "2364e1ae6711b93dd549bae03e1c8706a34109ed6eefa9ecc90c1cadb772b437",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3534,7 +3607,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c031",
+  "claim_id": "c032",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3661,7 +3734,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "ae51954c01aaffefe5569e36c3399c5c19883fd6d43ac3e51fd55a30a1156a8e",
+  "receipt_sha256": "3f156dbcd64ca95dac42cb3303db0fbeaab6b47cff6cb4dce7bcf3f8ed125a83",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3687,7 +3760,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c032",
+  "claim_id": "c033",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3788,7 +3861,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "a40d57374e1dca66ef8be5d5985ef780cfae47899b66092277bec774e6ec1cd9",
+  "receipt_sha256": "e377df4c6c34a709e99c01a7f6e1192328518b57a12c9828bae67b25f6c8b6f9",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3814,7 +3887,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c033",
+  "claim_id": "c034",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -3913,7 +3986,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "f46be3296e9f86a39a02488dc85c153e0e044bcec4f3b7693f21b21efd6e604d",
+  "receipt_sha256": "c9f329aa72c3d911c496fc9c3bdaad604c9dbc3b08d088c99f2326bc1123ce0e",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -3939,7 +4012,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c034",
+  "claim_id": "c035",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4064,7 +4137,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "5458c4c7380bea53d1d4e81288cd25170868301188fcf236ec5c0cd71924d556",
+  "receipt_sha256": "5393ff8580f512f47878f34078872e3480b3abba26b8489342d9e96196b6b72e",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -4090,7 +4163,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c035",
+  "claim_id": "c036",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4099,7 +4172,7 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-o1ax7ebs/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-5u1avy7y/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
   "proposal_origin": "search:deterministic",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
@@ -4115,10 +4188,10 @@
      "assumption": null,
      "lean": {
       "axioms": [],
-      "batch_seconds": 18.734,
+      "batch_seconds": 21.105,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-o1ax7ebs/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-5u1avy7y/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
       "index": 0,
       "isolated_after_batch_rejection": true,
       "kernel_accepted": false,
@@ -4199,7 +4272,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "edc587b65079669c36d94a5026684cf93d8d7e923b44d82ca8f7042102b56d1d",
+  "receipt_sha256": "7db9a6bbd25b53a46c092df915625197fe48caf0ba9ca5e3599e755f3ae4ac6a",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -4225,7 +4298,7 @@
     "x_column": "lifespan"
    }
   },
-  "claim_id": "c036",
+  "claim_id": "c037",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4333,7 +4406,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "56a6db39312121e27d55f133de0efe47a999810e388a45bc5162cdd30d029ac9",
+  "receipt_sha256": "233739a5d96923d33d2ef8eac94d2564a6f4b64972240459979e201f44c19be6",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -4359,7 +4432,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c037",
+  "claim_id": "c038",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4458,7 +4531,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "b1dda45798ce5113a73fa6396c0d28f51d4b43964ef42e793f772bcd696df472",
+  "receipt_sha256": "576a47f6375ea1ec82cc7bceb5fdcdd4777a0ef3dd2019db16d9324bec5b7827",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -4484,7 +4557,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c038",
+  "claim_id": "c039",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4513,7 +4586,7 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 80.658,
+      "batch_seconds": 82.154,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
@@ -4596,7 +4669,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "701113dfca489a44a3b9cabb69563413834a3df6a5bcc6ba24bc37f26458e311",
+  "receipt_sha256": "0796e22ef13f6cc6cd9f14e2f4b09b39647f962adb63285d80a858714ecaf860",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -4622,7 +4695,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c039",
+  "claim_id": "c040",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4651,7 +4724,7 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 80.658,
+      "batch_seconds": 82.154,
       "batch_size": 2,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
@@ -4734,7 +4807,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "bab3c5a6c95f78a81c42afd9b682cd9f3cd4ea2014909ec5d3e2d85c27ee932d",
+  "receipt_sha256": "bef16a3f42b0c46e327728f9ff386f559e0463b440e2746a5f2957bd96313b09",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The median of age over all rows equals 4 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -4760,7 +4833,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c040",
+  "claim_id": "c041",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4769,7 +4842,7 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-zxyad1lj/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-5o8irrxd/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
   "proposal_origin": "search:deterministic",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
@@ -4785,10 +4858,10 @@
      "assumption": null,
      "lean": {
       "axioms": [],
-      "batch_seconds": 19.343,
+      "batch_seconds": 21.098,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-zxyad1lj/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-5o8irrxd/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached",
       "index": 0,
       "isolated_after_batch_rejection": true,
       "kernel_accepted": false,
@@ -4869,7 +4942,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "cdffbb2ab06c169c76701bb9cd211c926d5e88f4f1d57489791fd00cfcfdbe0c",
+  "receipt_sha256": "bc06fa62f6481bb7758f33fa0bc300ce8144ef992951d0353e33c7a736cdab97",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -4895,7 +4968,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c041",
+  "claim_id": "c042",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -4924,7 +4997,7 @@
        "Quot.sound",
        "propext"
       ],
-      "batch_seconds": 18.872,
+      "batch_seconds": 21.004,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
       "detail": "kernel accepted",
@@ -5008,7 +5081,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "checked",
-  "receipt_sha256": "5f9aab843341c143aa3152401ca1b5dea6a2f0ffcfd06bb9956a1629a0214041",
+  "receipt_sha256": "3a26f508e23e5fc1b284e75f52032ef1056602cff5a1ec2c27a8273a5e8f643c",
   "result": "PROVED",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.",
@@ -5034,7 +5107,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c042",
+  "claim_id": "c043",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5159,7 +5232,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "c7069f1f3414062b391449fb39f2ff5c8f5ead0834f011305c27450bd2ee0217",
+  "receipt_sha256": "331c850cdc1e319ad08967bf97a127c2ba42b71fc1ce64c83c35bcb78d8fcc53",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -5185,7 +5258,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c043",
+  "claim_id": "c044",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5286,7 +5359,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "73c03beffe7aafb6878ea783fbda40142e0f80cb7a634f29d6355fa44ff30014",
+  "receipt_sha256": "3c3f3f21ce324e967e12b947adaf057ece48d4d9f759781ecbc65375b1beff63",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -5312,7 +5385,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c044",
+  "claim_id": "c045",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5411,7 +5484,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "8585c74740185f82aa8e36d433b82be3e855bc26bcc9994e1411cf9a52248732",
+  "receipt_sha256": "912ff5e4104235d43bf882df7ab0a89b6f53a4e6bd45461f125d5ea5445bba82",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -5437,7 +5510,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c045",
+  "claim_id": "c046",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5562,7 +5635,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "435176173806620b64b7abdbb03127b6a90caf13020e8c3e2e36a59120e7e4af",
+  "receipt_sha256": "b154a20e43ac599347ecd96c99cf087730156ebe0b0d85b029af1884fb9df1bf",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -5588,7 +5661,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c046",
+  "claim_id": "c047",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5716,7 +5789,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "da48bde3998b10612b97eb2104620e2c93c0932344d825d9899472f57ada1c58",
+  "receipt_sha256": "2c52c857b881831ff8ed6986fbb8e6875304537edf524c272f208c0078df8478",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -5742,7 +5815,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c047",
+  "claim_id": "c048",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5867,7 +5940,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "3175f7a2b10928bb4353866468962d85f6b97cb59af8d87e734dde9a7e774189",
+  "receipt_sha256": "8d65fb61b0b240623aa16ca2d96e087183d437dc867c97df4eab1100bf966144",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",
@@ -5893,7 +5966,7 @@
     "x_column": null
    }
   },
-  "claim_id": "c048",
+  "claim_id": "c049",
   "data": {
    "bytes": 26444,
    "license": "cc-zero",
@@ -5902,7 +5975,7 @@
    "pinned_sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f",
    "sha256": "b3712bff4020df73727159f30321cb0f0e95ba7f404b377437b77479fdae646f"
   },
-  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-0zfd0m5u/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
+  "message": "The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-8kwoh1kn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
   "proposal_origin": "search:deterministic",
   "proposal_origin_note": "Who proposed this reading. A proposer has no authority; only the checks below count.",
   "q1_mathematics": {
@@ -5918,10 +5991,10 @@
      "assumption": null,
      "lean": {
       "axioms": [],
-      "batch_seconds": 19.579,
+      "batch_seconds": 20.507,
       "batch_size": 1,
       "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
-      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-0zfd0m5u/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
+      "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-8kwoh1kn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached",
       "index": 0,
       "kernel_accepted": false,
       "obligation_file": "batch-010.lean",
@@ -6001,7 +6074,7 @@
    "status": "NOT_ASSESSED"
   },
   "reason": "not_kernel_checked",
-  "receipt_sha256": "9c622dec6a2133572d14bc10a9462c0caa56a14fc803e47301a695d2059add00",
+  "receipt_sha256": "4a4e595235ce5c307b0e6ae34346c3cb21d1db1392b10f55eb22e9433ff8b952",
   "result": "UNKNOWN",
   "schema": "pcs-claimcheck-receipt-v1",
   "scope": "Nothing is asserted about the paper’s statement.",

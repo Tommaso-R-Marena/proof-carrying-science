@@ -256,7 +256,50 @@ fields was exercised by family A, not by an obedient model.
 
 ## Independent replay
 
-_Filled in from `benchmark/results/bundles/replay_summary.json` once the bundle run completes._
+One evidence bundle per held-out article, in
+[`benchmark/results/bundles/`](benchmark/results/bundles/), holding every reading the two models and
+the search baseline proposed for the original article: the source text, the data file, the
+manifest, the checker, every Lean obligation file, every receipt and a readable `report.html`.
+
+Each bundle was produced by verifying the proposals afresh, and then replayed by
+[`replay_independent.py`](replay_independent.py), which imports nothing from the package. The
+replayer recomputes all digests, re-renders each obligation file from the receipts with its own
+renderer and compares bytes, re-runs Lean 4.28.0 on every file, recomputes every statistic with a
+separate decimal calculation, and recomputes each result from its parts.
+
+| Article | Claims | PROVED | REFUTED | UNKNOWN | Obligation files re-run | Kernel-checked claim theorems | Replayed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 06 Plummer et al. 2018 | 50 | 22 | 8 | 20 | 16 | 32 | all |
+| 08 Ocampo et al. 2018 | 29 | 9 | 3 | 17 | 6 | 12 | all |
+| 09 Collins et al. 2019 | 90 | 2 | 48 | 40 | 25 | 50 | all |
+| 10 Kroeger et al. 2018 | 49 | 5 | 6 | 38 | 6 | 11 | all |
+| 12 Burns et al. 2015 | 45 | 20 | 3 | 22 | 12 | 23 | all |
+| 17 Sasaki et al. 2022 | 39 | 12 | 6 | 21 | 9 | 18 | all |
+| **Total** | **302** | **70** | **74** | **158** | **74** | **146** | **302 of 302** |
+
+([`replay_summary.json`](benchmark/results/bundles/replay_summary.json); 729 s to verify, 1,189 s to
+replay, two workers.)
+
+Two further checks:
+
+* [`crosscheck.json`](benchmark/results/bundles/crosscheck.json): the fresh verification behind
+  each bundle gave every distinct proposal the same result the frozen benchmark run had recorded,
+  in all six bundles. The benchmark run and the bundle run used different batch groupings of the
+  same theorems, so this is also a check that grouping does not affect results.
+* Hosted CI replays one committed bundle on a clean runner with a checksum-pinned Lean
+  (`.github/workflows/pcs-claimcheck-v1.yml`), and rebuilds the Mathlib meaning theorems with an
+  axiom audit.
+
+What replay does not establish: it re-runs the same checker on the same bytes with the same
+readings. It shows that the recorded results are what the kernel says about those inputs. It does
+not test whether the readings are right; that is what the gold comparison above measures. The
+replayer and the pipeline were written by the same author, so "independent" means independent
+code, not an independent party. No third party has replayed these bundles.
+
+An operational note: three Lean processes on the 617-row table (article 10) exceeded the 14 GB
+memory limit of the evaluation machine and were killed. A killed check can only produce UNKNOWN.
+The bundles above were produced with two workers and two claims per obligation file, with no
+process killed, and the cross-check confirms the frozen run's results were not affected.
 
 ## Gemini and multi-model arms
 

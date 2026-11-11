@@ -693,99 +693,9 @@ def pcs_c1 : Claim :=
     scale := ((1 : Rat) / 1),
     reported := b "3" }
 
-def pcs_c2 : Claim :=
-  { column := some (b "N"),
-    filter := [],
-    stat := .max,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "17" }
-
-def pcs_c3 : Claim :=
-  { column := some (b "N"),
-    filter := [],
-    stat := .min,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "1" }
-
-def pcs_c4 : Claim :=
-  { column := some (b "N"),
-    filter := [],
-    stat := .max,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "6" }
-
-def pcs_c5 : Claim :=
-  { column := none,
-    filter := [],
-    stat := .count,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "32" }
-
-def pcs_c6 : Claim :=
-  { column := none,
-    filter := [],
-    stat := .count,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "96" }
-
-def pcs_c7 : Claim :=
-  { column := some (b "N"),
-    filter := [],
-    stat := .max,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "17" }
-
-def pcs_c8 : Claim :=
-  { column := none,
-    filter := [],
-    stat := .count,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "96" }
-
-def pcs_c9 : Claim :=
-  { column := none,
-    filter := [],
-    stat := .count,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "96" }
-
-def pcs_c10 : Claim :=
-  { column := none,
-    filter := [],
-    stat := .count,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "96" }
-
-def pcs_c11 : Claim :=
-  { column := some (b "Percentage of ossification"),
-    filter := [],
-    stat := .sem,
-    naTokens := [b "", b "NA"],
-    scale := ((1 : Rat) / 1),
-    reported := b "1" }
-
-theorem pcs_batch : runAll pcs_src [pcs_c0, pcs_c1, pcs_c2, pcs_c3, pcs_c4, pcs_c5, pcs_c6, pcs_c7, pcs_c8, pcs_c9, pcs_c10, pcs_c11] =
+theorem pcs_batch : runAll pcs_src [pcs_c0, pcs_c1] =
     [.checked .consistent (.rat ((96 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((3 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((17 : Rat) / 1)) 96 0,
-    .checked .inconsistent (.rat ((3 : Rat) / 1)) 96 0,
-    .checked .inconsistent (.rat ((17 : Rat) / 1)) 96 0,
-    .checked .inconsistent (.rat ((96 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((96 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((17 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((96 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((96 : Rat) / 1)) 96 0,
-    .checked .consistent (.rat ((96 : Rat) / 1)) 96 0,
-    .checked .consistent (.sqrt (1 : Int) ((65818367 : Rat) / 87552000)) 96 0] := by decide +kernel
+    .checked .consistent (.rat ((3 : Rat) / 1)) 96 0] := by decide +kernel
 
 theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((96 : Rat) / 1)) 96 0 :=
   run_of_runAll pcs_batch 0 rfl rfl
@@ -794,44 +704,4 @@ theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((96 : Rat
 theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .consistent (.rat ((3 : Rat) / 1)) 96 0 :=
   run_of_runAll pcs_batch 1 rfl rfl
 #print axioms pcs_claim_1
-
-theorem pcs_claim_2 : run pcs_src pcs_c2 = .checked .consistent (.rat ((17 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 2 rfl rfl
-#print axioms pcs_claim_2
-
-theorem pcs_claim_3 : run pcs_src pcs_c3 = .checked .inconsistent (.rat ((3 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 3 rfl rfl
-#print axioms pcs_claim_3
-
-theorem pcs_claim_4 : run pcs_src pcs_c4 = .checked .inconsistent (.rat ((17 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 4 rfl rfl
-#print axioms pcs_claim_4
-
-theorem pcs_claim_5 : run pcs_src pcs_c5 = .checked .inconsistent (.rat ((96 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 5 rfl rfl
-#print axioms pcs_claim_5
-
-theorem pcs_claim_6 : run pcs_src pcs_c6 = .checked .consistent (.rat ((96 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 6 rfl rfl
-#print axioms pcs_claim_6
-
-theorem pcs_claim_7 : run pcs_src pcs_c7 = .checked .consistent (.rat ((17 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 7 rfl rfl
-#print axioms pcs_claim_7
-
-theorem pcs_claim_8 : run pcs_src pcs_c8 = .checked .consistent (.rat ((96 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 8 rfl rfl
-#print axioms pcs_claim_8
-
-theorem pcs_claim_9 : run pcs_src pcs_c9 = .checked .consistent (.rat ((96 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 9 rfl rfl
-#print axioms pcs_claim_9
-
-theorem pcs_claim_10 : run pcs_src pcs_c10 = .checked .consistent (.rat ((96 : Rat) / 1)) 96 0 :=
-  run_of_runAll pcs_batch 10 rfl rfl
-#print axioms pcs_claim_10
-
-theorem pcs_claim_11 : run pcs_src pcs_c11 = .checked .consistent (.sqrt (1 : Int) ((65818367 : Rat) / 87552000)) 96 0 :=
-  run_of_runAll pcs_batch 11 rfl rfl
-#print axioms pcs_claim_11
 

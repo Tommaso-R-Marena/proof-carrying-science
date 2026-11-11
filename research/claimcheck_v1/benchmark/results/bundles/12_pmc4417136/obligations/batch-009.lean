@@ -680,28 +680,28 @@ def pcs_src : Source := ⟨0x736f696c536f7572636553702c736f696c5472742c7265702c6
 def pcs_c0 : Claim :=
   { column := some (b "pH"),
     filter := [],
-    stat := .min,
+    stat := .mean,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "5.01" }
+    reported := b "6.07" }
 
 def pcs_c1 : Claim :=
   { column := some (b "pH"),
     filter := [],
-    stat := .max,
+    stat := .sem,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "8.03" }
+    reported := b "0.05" }
 
 theorem pcs_batch : runAll pcs_src [pcs_c0, pcs_c1] =
-    [.checked .consistent (.rat ((501 : Rat) / 100)) 168 0,
-    .checked .consistent (.rat ((803 : Rat) / 100)) 168 0] := by decide +kernel
+    [.checked .consistent (.rat ((101911 : Rat) / 16800)) 168 0,
+    .checked .consistent (.sqrt (1 : Int) ((21348763 : Rat) / 9426816000)) 168 0] := by decide +kernel
 
-theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((501 : Rat) / 100)) 168 0 :=
+theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((101911 : Rat) / 16800)) 168 0 :=
   run_of_runAll pcs_batch 0 rfl rfl
 #print axioms pcs_claim_0
 
-theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .consistent (.rat ((803 : Rat) / 100)) 168 0 :=
+theorem pcs_claim_1 : run pcs_src pcs_c1 = .checked .consistent (.sqrt (1 : Int) ((21348763 : Rat) / 9426816000)) 168 0 :=
   run_of_runAll pcs_batch 1 rfl rfl
 #print axioms pcs_claim_1
 

@@ -25,8 +25,8 @@ from ..pipeline import verify_many
 from ..spec import sha256_hex
 
 LABELS = {"rules": "Cue-word rules (no model)", "search": "Data-matching search (no model)", "gemini": "Gemini model",
-          "openrouter": "OpenRouter model (Nemotron)", "union": "Both models, all proposals", "agree": "Only readings both models proposed",
-          "gemini+critic": "Gemini, filtered by the other model", "openrouter+critic": "OpenRouter model, filtered by Gemini"}
+          "openrouter": "Nemotron model (via OpenRouter)", "union": "Both models, all proposals", "agree": "Only readings both models proposed",
+          "gemini+critic": "Gemini, filtered by Nemotron as critic", "openrouter+critic": "Nemotron, filtered by Gemini as critic"}
 
 
 def select(receipts: list[dict], max_unknown: int = 5) -> list[dict]:
@@ -92,9 +92,15 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
                         "counts": {k: sum(1 for r in fresh if r["result"] == k) for k in ("PROVED", "REFUTED", "UNKNOWN")}})
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     arms = []
+    docs = summary["documents"]
+    # Fixed by the protocol before the run: Gemini is not sent the prompt-injection copies, and
+    # critics run on original articles only.  Rows with different coverage are not comparable.
+    covered = {"gemini": [d for d in docs if not d.endswith(":injected")], "openrouter+critic": [d for d in docs if d.endswith(":original")]}
+    covered.update({"union": covered["gemini"], "agree": covered["gemini"], "gemini+critic": covered["openrouter+critic"]})
     for arm, v in summary["arms"].items():
         c = v["classes"]
-        arms.append({"label": LABELS.get(arm, arm), "arm": arm, "correct_verification": c.get("correct_verification", 0),
+        arms.append({"label": LABELS.get(arm, arm), "arm": arm, "document_copies": len(covered.get(arm, docs)), "document_copies_total": len(docs),
+                     "correct_verification": c.get("correct_verification", 0),
                      "correct_refutation": c.get("correct_refutation", 0),
                      "unsupported_positive": c.get("unsupported_positive", 0) + c.get("unannotated_proved", 0),
                      "unsupported_refutation": c.get("unsupported_refutation", 0) + c.get("wrong_refutation", 0) + c.get("unannotated_refuted", 0),
@@ -104,9 +110,12 @@ def export(bundles: Path, summary_path: Path, adversarial_path: Path | None, sit
                      "complete": not v.get("model_errors", 0)})
     gold = summary["gold"]
     adv = json.loads(adversarial_path.read_text(encoding="utf-8")) if adversarial_path and adversarial_path.exists() else None
-    notes = ("Counts are printed numbers, over original and planted-error copies of the held-out articles. “Wrongly” columns include every "
+    notes = ("Counts are printed numbers, over original, planted-error and prompt-injection copies of the held-out articles. Rows that cover "
+             "fewer copies cannot be compared with rows that cover more. “Wrongly” columns include every "
              "result on a number that had no gold label, before any hand adjudication. Gold labels are AI-assisted annotations, not expert "
-             "review. The full report, receipts and replay instructions are in the PCS core repository under research/claimcheck_v1.")
+             "review. In this evaluation a proved match was reliable when the proposer had not seen the data, and a refutation was often a wrong "
+             "reading of the sentence, so read “refuted” as “this reading does not hold for this file”. "
+             "The full report, receipts and replay instructions are in the PCS core repository under research/claimcheck_v1.")
     failed = [a["label"] for a in arms if not a["complete"]]
     if failed:
         notes += (" Arms marked incomplete had model calls that failed (provider quota or outage); a failed call contributes no proposal, "

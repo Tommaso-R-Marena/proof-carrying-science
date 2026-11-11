@@ -683,7 +683,7 @@ def pcs_c0 : Claim :=
     stat := .count,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "203" }
+    reported := b "205" }
 
 def pcs_c1 : Claim :=
   { column := none,
@@ -691,7 +691,7 @@ def pcs_c1 : Claim :=
     stat := .count,
     naTokens := [b "", b "NA"],
     scale := ((1 : Rat) / 1),
-    reported := b "171" }
+    reported := b "180" }
 
 theorem pcs_batch : runAll pcs_src [pcs_c0, pcs_c1] =
     [.checked .inconsistent (.rat ((617 : Rat) / 1)) 617 0,

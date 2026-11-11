@@ -5,28 +5,8 @@
 <p>Paper text: <code>article.txt</code>. Data file: <code>BMdata.csv</code>. Research tool; no production PCS authority.</p>
 <p>Each statement gets three separate answers. <b>1 — the arithmetic</b>: decided by the Lean kernel on the exact bytes of the data file. <b>2 — the link to the paper</b>: which mechanical source checks passed. <b>3 — the science</b>: never assessed here.</p>
 <article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c001</h2>
-<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 35bf069306cd14bc</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c002</h2>
-<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 62ad543067fe1be4</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c003</h2>
-<blockquote>June and August mass are inherently correlated because adults have a constant skeletal size after age 3. However, due to individual variation in summer fat accumulation, correlations were less than one, meaning that seasonal masses can be considered different traits (Pearson&#x27;s correlation: r = .75; N = 472 individual‐year observations).</blockquote>
-<p><b>Reading that was checked:</b> The Pearson correlation coefficient of massjun against massaug over rows where age ≥ 3 equals 0.75 when rounded to the printed precision.</p>
+<blockquote>However, due to individual variation in summer fat accumulation, correlations were less than one, meaning that seasonal masses can be considered different traits (Pearson&#x27;s correlation: r = .75; N = 472 individual‐year observations).</blockquote>
+<p><b>Reading that was checked:</b> The Pearson correlation coefficient of massjun against massaug over all rows equals 0.75 when rounded to the printed precision.</p>
 <p>The reported value 0.75 is not printed in the quoted text as a complete number.</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
 </dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
@@ -36,169 +16,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 2e0d825f96dde196</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c004</h2>
-<blockquote>June and August mass are inherently correlated because adults have a constant skeletal size after age 3. However, due to individual variation in summer fat accumulation, correlations were less than one, meaning that seasonal masses can be considered different traits (Pearson&#x27;s correlation: r = .75; N = 472 individual‐year observations).</blockquote>
-<p><b>Reading that was checked:</b> The number of rows where age ≥ 3 equals 472 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
-Assumptions:<ul><li>Rounding: the printed value 472 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-“age ge 3” — <b>not named in the sentence</b><br>
-<b>Failed:</b> Nothing in the sentence names “age ge 3” (accepted wordings: 3).<br>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-<li>The sentence uses interpretive wording (because, due to); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 5e1cfa0aa1c957e7</small></article>
-<article><h2><span class=b style='background:#a12626'>REFUTED</span> c005</h2>
-<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
-<p><b>Reading that was checked:</b> The number of all rows equals 590 when rounded to the printed precision.</p>
-<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 590 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
-<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-001.lean).<br>
-Assumptions:<ul><li>Rounding: the printed value 590 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 7b872c8649258a35</small></article>
-<article><h2><span class=b style='background:#a12626'>REFUTED</span> c006</h2>
-<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
-<p><b>Reading that was checked:</b> The number of all rows equals 475 when rounded to the printed precision.</p>
-<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 475 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
-<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-001.lean).<br>
-Assumptions:<ul><li>Rounding: the printed value 475 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 4c873228c4c10beb</small></article>
-<article><h2><span class=b style='background:#a12626'>REFUTED</span> c007</h2>
-<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
-<p><b>Reading that was checked:</b> The number of all rows equals 203 when rounded to the printed precision.</p>
-<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 203 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
-<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-002.lean).<br>
-Assumptions:<ul><li>Rounding: the printed value 203 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 2b99cc3dff6e96a5</small></article>
-<article><h2><span class=b style='background:#a12626'>REFUTED</span> c008</h2>
-<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
-<p><b>Reading that was checked:</b> The number of all rows equals 171 when rounded to the printed precision.</p>
-<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 171 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
-<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-002.lean).<br>
-Assumptions:<ul><li>Rounding: the printed value 171 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 371ef5b3361d3cbc</small></article>
-<article><h2><span class=b style='background:#a12626'>REFUTED</span> c009</h2>
-<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
-<p><b>Reading that was checked:</b> The number of all rows equals 205 when rounded to the printed precision.</p>
-<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 205 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
-<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-003.lean).<br>
-Assumptions:<ul><li>Rounding: the printed value 205 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 18f8ef7f8544b299</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c010</h2>
-<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
-<p><b>Reading that was checked:</b> The number of rows where valley is “dv” equals 78 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>count</code>: exact value ≈ 265 from 265 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
-Assumptions:<ul><li>Rounding: the printed value 78 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-“valley = dv” — <b>not named in the sentence</b><br>
-<b>Failed:</b> Nothing in the sentence names “valley = dv” (accepted wordings: down-valley, dv).<br>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt ad2d6d7414ca2edc</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c011</h2>
-<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
-<p><b>Reading that was checked:</b> The number of rows where valley is “uv” equals 127 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>count</code>: exact value ≈ 352 from 352 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
-Assumptions:<ul><li>Rounding: the printed value 127 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-“valley = uv” — <b>not named in the sentence</b><br>
-<b>Failed:</b> Nothing in the sentence names “valley = uv” (accepted wordings: up-valley, uv).<br>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt e1122d5f5cfe3787</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c012</h2>
-<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
-<p><b>Reading that was checked:</b> The number of rows where age ≥ 3 equals 25 when rounded to the printed precision.</p>
-<p>The reported value 25 is not printed in the quoted text as a complete number.</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-<b>Failed:</b> The reported value 25 is not printed in the quoted text as a complete number.<br>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6f7677d6f449a983</small></article>
-<article><h2><span class=b style='background:#a12626'>REFUTED</span> c013</h2>
-<blockquote>The remaining 180 females were weighed over a range of years, with a mean of 3.8 weighings within a year.</blockquote>
-<p><b>Reading that was checked:</b> The number of all rows equals 180 when rounded to the printed precision.</p>
-<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 180 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
-<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
-Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-003.lean).<br>
-Assumptions:<ul><li>Rounding: the printed value 180 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
-</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 8d233ca725f59e6d</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c014</h2>
-<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
-<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
-Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
-</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
-<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
-<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
-<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6e6282cb062907fb</small></article>
-<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c015</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt b0b2117a46107490</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c002</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.</p>
 <p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
 <dt>1 — Is the arithmetic right? PROVED</dt><dd>
-Statistic <code>mean</code>: exact value ≈ 5.124797407 from 617 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-004.lean).<br>
+Statistic <code>mean</code>: exact value ≈ 5.124797407 from 617 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-001.lean).<br>
 Assumptions:<ul><li>Rounding: the printed value 5.1 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column age” — named in the sentence as “age”<br>
@@ -207,13 +31,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt c6554c83b751e4c7</small></article>
-<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c016</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt 5fddcfea9dbc5036</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c003</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The median of age over all rows equals 4 when rounded to the printed precision.</p>
 <p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The median of age over all rows equals 4 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
 <dt>1 — Is the arithmetic right? PROVED</dt><dd>
-Statistic <code>median</code>: exact value ≈ 4 from 617 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-004.lean).<br>
+Statistic <code>median</code>: exact value ≈ 4 from 617 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-001.lean).<br>
 Assumptions:<ul><li>Rounding: the printed value 4 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column age” — named in the sentence as “age”<br>
@@ -222,13 +46,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 77ec54968c88ae6f</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c017</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt 30d92aa56e896d7d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c004</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The minimum of lifespan over all rows equals 3 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-gepk7op5/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-uyoc79zn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>min</code>: exact value ≈ 3 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-gepk7op5/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>min</code>: exact value ≈ 3 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-uyoc79zn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column lifespan” — named in the sentence as “lifespan”<br>
@@ -237,13 +61,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 4ea9cb7affa20532</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c018</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt f6304b43f4f070c0</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c005</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The maximum of lifespan over all rows equals 14 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-86eip_rw/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-jxsu0y_k/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>max</code>: exact value ≈ 14 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-86eip_rw/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>max</code>: exact value ≈ 14 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-jxsu0y_k/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 14 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column lifespan” — named in the sentence as “lifespan”<br>
@@ -252,8 +76,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 9a9d74caebf8652b</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c019</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt 897dc0212b22654a</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c006</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of lifespan over rows where valley is “dv” equals 6.3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -269,8 +93,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 96624c111a63e76d</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c020</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt 6de790f138ea4881</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c007</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The median of lifespan over rows where valley is “dv” equals 6 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -286,8 +110,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 05fbbab535657441</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c021</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt cb5a29da23d93829</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c008</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of lifespan over rows where valley is “uv” equals 5.3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -303,8 +127,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt b4d64976150c88c1</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c022</h2>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt 222b6eb418afcf15</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c009</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The median of lifespan over rows where valley is “uv” equals 5 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -320,7 +144,186 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 8eba873c28013622</small></article>
+</ul></dd></dl><small>proposed by: gemini:gemini-3.6-flash · receipt e271230dab7e15a5</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c010</h2>
+<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 5cd550ed8abe9fb9</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c011</h2>
+<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 1cfa2c25df5c7eb3</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c012</h2>
+<blockquote>June and August mass are inherently correlated because adults have a constant skeletal size after age 3. However, due to individual variation in summer fat accumulation, correlations were less than one, meaning that seasonal masses can be considered different traits (Pearson&#x27;s correlation: r = .75; N = 472 individual‐year observations).</blockquote>
+<p><b>Reading that was checked:</b> The Pearson correlation coefficient of massjun against massaug over rows where age ≥ 3 equals 0.75 when rounded to the printed precision.</p>
+<p>The reported value 0.75 is not printed in the quoted text as a complete number.</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+<b>Failed:</b> The reported value 0.75 is not printed in the quoted text as a complete number.<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 21a669aeadd6c7ee</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c013</h2>
+<blockquote>June and August mass are inherently correlated because adults have a constant skeletal size after age 3. However, due to individual variation in summer fat accumulation, correlations were less than one, meaning that seasonal masses can be considered different traits (Pearson&#x27;s correlation: r = .75; N = 472 individual‐year observations).</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where age ≥ 3 equals 472 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 472 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“age ge 3” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “age ge 3” (accepted wordings: 3).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (because, due to); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt d15b9c72b4ed61e9</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c014</h2>
+<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 590 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 590 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 590 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt e864941639bfa3c3</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c015</h2>
+<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 475 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 475 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 475 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 70d62fc7104169c9</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c016</h2>
+<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 203 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 203 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 203 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt adf6026465a81ff1</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c017</h2>
+<blockquote>The data sets for spring and late summer included 590 and 475 body mass estimates from 203 and 171 individual females, respectively.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 171 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 171 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 171 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6a36ccf7c089afed</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c018</h2>
+<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 205 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 205 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 205 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt f8d103f32bec6a10</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c019</h2>
+<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where valley is “dv” equals 78 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>count</code>: exact value ≈ 265 from 265 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 78 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“valley = dv” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “valley = dv” (accepted wordings: down-valley, dv).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 3c4d1565a87f420e</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c020</h2>
+<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where valley is “uv” equals 127 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>count</code>: exact value ≈ 352 from 352 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 127 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“valley = uv” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “valley = uv” (accepted wordings: up-valley, uv).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt ef848fa1a40b3676</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c021</h2>
+<blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where age ≥ 3 equals 25 when rounded to the printed precision.</p>
+<p>The reported value 25 is not printed in the quoted text as a complete number.</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+<b>Failed:</b> The reported value 25 is not printed in the quoted text as a complete number.<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt fd376a58316132ac</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c022</h2>
+<blockquote>The remaining 180 females were weighed over a range of years, with a mean of 3.8 weighings within a year.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 180 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The number of all rows equals 180 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 617 from 617 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 180 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt fc3397e96c159e04</small></article>
 <article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c023</h2>
 <p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
@@ -332,6 +335,16 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 </ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 3b06cff7bc5a6877</small></article>
 <article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c024</h2>
+<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 09629f6bcd62f5e5</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c025</h2>
 <blockquote>Linear regressions fitted across “old females,” weighed at and beyond age 9 and 8, in spring and late summer, respectively (predicted ages at maximum body mass: spring = 9.8 years; late summer = 8.4 years), showed that negative quadratic effects did describe body mass decreases in old age.</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of age over all rows equals 9.8 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -347,8 +360,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (effects, predicted); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt cfcd24efd7307e75</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c025</h2>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt b4b0798c9ef11f40</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c026</h2>
 <blockquote>Linear regressions fitted across “old females,” weighed at and beyond age 9 and 8, in spring and late summer, respectively (predicted ages at maximum body mass: spring = 9.8 years; late summer = 8.4 years), showed that negative quadratic effects did describe body mass decreases in old age.</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of age over all rows equals 8.4 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -364,13 +377,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (effects, predicted); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt c9cf08c5d382b60e</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c026</h2>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 19868655bae8d951</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c027</h2>
 <blockquote>During 1975–2013, to attempt to capture each adult (i.e., age ≥3 years) at least once every two weeks, weekly trapping sessions alternated between up‐valley and down‐valley colonies.</blockquote>
 <p><b>Reading that was checked:</b> The minimum of year over all rows equals 1975 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-2niinmf7/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-q17jcv5w/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>min</code>: exact value ≈ 1975 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-2niinmf7/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>min</code>: exact value ≈ 1975 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-q17jcv5w/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 1975 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column year” — named in the sentence as “year”<br>
@@ -379,13 +392,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 53e9f328f5d36f84</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c027</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt f543c599cc5c8b08</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c028</h2>
 <blockquote>During 1975–2013, to attempt to capture each adult (i.e., age ≥3 years) at least once every two weeks, weekly trapping sessions alternated between up‐valley and down‐valley colonies.</blockquote>
 <p><b>Reading that was checked:</b> The maximum of year over all rows equals 2013 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-lc7ri3eg/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-xzvctqnt/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>max</code>: exact value ≈ 2013 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-lc7ri3eg/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>max</code>: exact value ≈ 2013 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-xzvctqnt/Obligation.lean:689:65: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 2013 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column year” — named in the sentence as “year”<br>
@@ -394,13 +407,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 57e0c623016d8705</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c028</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 0888f94fc138c371</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c029</h2>
 <blockquote>During 1975–2013, to attempt to capture each adult (i.e., age ≥3 years) at least once every two weeks, weekly trapping sessions alternated between up‐valley and down‐valley colonies.</blockquote>
 <p><b>Reading that was checked:</b> The minimum of age over all rows equals 3 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-wg0c110y/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-iln8kjc1/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>min</code>: exact value ≈ 3 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-wg0c110y/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>min</code>: exact value ≈ 3 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-iln8kjc1/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column age” — named in the sentence as “age”<br>
@@ -409,8 +422,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 7fe4745cdcfa3265</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c029</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 187fd30ab466aa70</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c030</h2>
 <blockquote>June and August mass are inherently correlated because adults have a constant skeletal size after age 3.</blockquote>
 <p><b>Reading that was checked:</b> The minimum of age over all rows equals 3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -426,8 +439,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (because); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 97d59069154e4222</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c030</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 4a96719a8998579c</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c031</h2>
 <blockquote>Lifespan was calculated as each female&#x27;s age at last observation, so for example, an individual that was last seen in 2001 at age 5, but is not observed in 2002 or thereafter, has a lifespan of 5 years.</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of age over all rows equals 5 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -442,8 +455,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt c76f086163747ac3</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c031</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 2364e1ae6711b93d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c032</h2>
 <blockquote>To test for changes in body mass in the years before death, both season‐specific models also included a time to death (TTD) effect, modeled as a four‐level factor (0, 1, 2, and 3 years or more before death) where the level TTD0 corresponds to the last year of life.</blockquote>
 <p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of TTD3 over all rows equals 1 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -460,8 +473,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (effect); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt ae51954c01aaffef</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c032</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 3f156dbcd64ca95d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c033</h2>
 <blockquote>To test for changes in body mass in the years before death, both season‐specific models also included a time to death (TTD) effect, modeled as a four‐level factor (0, 1, 2, and 3 years or more before death) where the level TTD0 corresponds to the last year of life.</blockquote>
 <p><b>Reading that was checked:</b> The maximum of TTD3 over all rows equals 3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -477,8 +490,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (effect); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt a40d57374e1dca66</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c033</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt e377df4c6c34a709</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c034</h2>
 <blockquote>To verify that collinearity between age and lifespan did not affect the results, models were refitted with data split into three discrete lifespan categories (Reid, Bignal, Bignal, McCracken, &amp; Monaghan, ), defined as short‐lived (4–6 years), medium‐lived (7–9 years), and long‐lived (10–14 years).</blockquote>
 <p><b>Reading that was checked:</b> The median of age over all rows equals 4 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -493,8 +506,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt f46be3296e9f86a3</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c034</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt c9f329aa72c3d911</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c035</h2>
 <blockquote>To verify that collinearity between age and lifespan did not affect the results, models were refitted with data split into three discrete lifespan categories (Reid, Bignal, Bignal, McCracken, &amp; Monaghan, ), defined as short‐lived (4–6 years), medium‐lived (7–9 years), and long‐lived (10–14 years).</blockquote>
 <p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of year over all rows equals 10 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -510,13 +523,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 5458c4c7380bea53</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c035</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 5393ff8580f512f4</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c036</h2>
 <blockquote>To verify that collinearity between age and lifespan did not affect the results, models were refitted with data split into three discrete lifespan categories (Reid, Bignal, Bignal, McCracken, &amp; Monaghan, ), defined as short‐lived (4–6 years), medium‐lived (7–9 years), and long‐lived (10–14 years).</blockquote>
 <p><b>Reading that was checked:</b> The maximum of age over all rows equals 14 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-o1ax7ebs/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-5u1avy7y/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>max</code>: exact value ≈ 14 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-o1ax7ebs/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>max</code>: exact value ≈ 14 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-5u1avy7y/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 14 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column age” — named in the sentence as “age”<br>
@@ -525,8 +538,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt edc587b65079669c</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c036</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 7db9a6bbd25b53a4</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c037</h2>
 <blockquote>Females with lifespans of 3 years were excluded from the short‐lived category because they only had 1 year of data and therefore provided no information on body mass variation with age or TTD.</blockquote>
 <p><b>Reading that was checked:</b> The Pearson correlation coefficient of age against lifespan over all rows equals 1 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -543,8 +556,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (because, therefore); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 56a6db39312121e2</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c037</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 233739a5d96923d3</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c038</h2>
 <blockquote>Across both data sets, there were a total of 205 different females (78 living down‐valley and 127 living up‐valley), of which twenty‐five were weighed only once as fully grown adults (i.e., aged ≥3 years).</blockquote>
 <p><b>Reading that was checked:</b> The minimum of age over all rows equals 3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -559,8 +572,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt b1dda45798ce5113</small></article>
-<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c038</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 576a47f6375ea1ec</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c039</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.</p>
 <p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5.1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
@@ -574,8 +587,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 701113dfca489a44</small></article>
-<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c039</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 0796e22ef13f6cc6</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c040</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The median of age over all rows equals 4 when rounded to the printed precision.</p>
 <p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The median of age over all rows equals 4 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
@@ -589,13 +602,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt bab3c5a6c95f78a8</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c040</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt bef16a3f42b0c46e</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c041</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The maximum of age over all rows equals 14 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-zxyad1lj/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-5o8irrxd/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>max</code>: exact value ≈ 14 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-zxyad1lj/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>max</code>: exact value ≈ 14 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-5o8irrxd/Obligation.lean:689:63: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 14 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column age” — named in the sentence as “age”<br>
@@ -604,8 +617,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt cdffbb2ab06c169c</small></article>
-<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c041</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt bc06fa62f6481bb7</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c042</h2>
 <blockquote>The mean age across all female‐years was 5.1 years (median = 4, interquartile range: IQR = 3–6), with lifespans ranging between 3 and 14 years (down‐valley: mean = 6.3, median = 6, IQR = 4‐8; up‐valley: mean = 5.3, median = 5, IQR = 3‐6).</blockquote>
 <p><b>Reading that was checked:</b> The arithmetic mean of age over all rows equals 5 when rounded to the printed precision.</p>
 <p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file BMdata.csv (SHA-256 b3712bff4020df73…) only: “The arithmetic mean of age over all rows equals 5 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
@@ -619,8 +632,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 5f9aab843341c143</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c042</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 3a26f508e23e5fc1</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c043</h2>
 <blockquote>CAPTION: Figure 2 Relationships between body mass and age (in years) in (a) spring and (b) late summer, in old female yellow‐bellied marmots living (solid lines, circles) down‐valley and (dashed lines, triangles) up‐valley.</blockquote>
 <p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of age over all rows equals 2 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -636,8 +649,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt c7069f1f3414062b</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c043</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 331c850cdc1e319a</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c044</h2>
 <blockquote>CAPTION: Figure 3 Predicted values of body mass with time to death (TTD) in (a) spring and (b) late summer, in female yellow‐bellied marmots living (light‐gray) down‐valley and (dark‐gray) up‐valley.</blockquote>
 <p><b>Reading that was checked:</b> The maximum of TTD3 over all rows equals 3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -653,8 +666,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (predicted); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 73c03beffe7aafb6</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c044</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 3c3f3f21ce324e96</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c045</h2>
 <blockquote>The levels in TTD are 3 years or more (TTD3+), 2 years (TTD2), 1 year (TTD1), and 0 years (TTD0) before death, where TTD0 equates to the last year of life.</blockquote>
 <p><b>Reading that was checked:</b> The maximum of TTD3 over all rows equals 3 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -669,8 +682,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 8585c74740185f82</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c045</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 912ff5e4104235d4</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c046</h2>
 <blockquote>The levels in TTD are 3 years or more (TTD3+), 2 years (TTD2), 1 year (TTD1), and 0 years (TTD0) before death, where TTD0 equates to the last year of life.</blockquote>
 <p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of TTD3 over all rows equals 1 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -686,8 +699,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 435176173806620b</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c046</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt b154a20e43ac5993</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c047</h2>
 <blockquote>However, the estimated effect of age at higher elevation was small (see Figure 2b; Table S1), indicating a lower rate of senescence in the harsher environment compared to the more favorable lower elevation environment.</blockquote>
 <p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of age over all rows equals 2 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -704,8 +717,8 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
 <li>The sentence uses interpretive wording (effect, indicating); none of that was checked.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt da48bde3998b1061</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c047</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 2c52c857b881831f</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c048</h2>
 <blockquote>In spring, body mass of females living in the lower elevation environment decreased over the last 2–3 years prior to death, independently of age.</blockquote>
 <p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of age over all rows equals 2 when rounded to the printed precision.</p>
 <p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
@@ -721,13 +734,13 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 3175f7a2b10928bb</small></article>
-<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c048</h2>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 8d65fb61b0b24062</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c049</h2>
 <blockquote>In spring, body mass of females living in the lower elevation environment decreased over the last 2–3 years prior to death, independently of age.</blockquote>
 <p><b>Reading that was checked:</b> The minimum of age over all rows equals 3 when rounded to the printed precision.</p>
-<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-0zfd0m5u/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<p>The Lean kernel did not confirm a verdict: Lean rejected the obligation: /tmp/pcs-claimcheck-8kwoh1kn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
 <dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
-Statistic <code>min</code>: exact value ≈ 3 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-0zfd0m5u/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached).<br>
+Statistic <code>min</code>: exact value ≈ 3 from 617 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (Lean rejected the obligation: /tmp/pcs-claimcheck-8kwoh1kn/Obligation.lean:689:62: error: [Error pretty printing: maximum recursion depth has been reached).<br>
 Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
 </dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
 “column age” — named in the sentence as “age”<br>
@@ -736,5 +749,5 @@ Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must
 <li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
 <li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
 <li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
-</ul></dd></dl><small>proposed by: search:deterministic · receipt 9c622dec6a213357</small></article>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 4a4e595235ce5c30</small></article>
 </html>
