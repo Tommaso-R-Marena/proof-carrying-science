@@ -517,5 +517,74 @@
    "REFUTED_gold_unsupported": 40,
    "REFUTED_unlabelled": 88
   }
+ },
+ "critic_posthoc": {
+  "note": "Post hoc and exploratory. Only 'frozen_parser' reproduces the frozen openrouter+critic arm.",
+  "openrouter_filtered_by_gemini": {
+   "frozen_parser": {
+    "abstained": 21,
+    "correct_abstention": 17,
+    "correct_refutation": 1,
+    "correct_verification": 23,
+    "unannotated_proved": 2,
+    "unannotated_refuted": 47,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 18
+   },
+   "lenient_parser": {
+    "abstained": 21,
+    "correct_abstention": 17,
+    "correct_refutation": 1,
+    "correct_verification": 23,
+    "unannotated_proved": 2,
+    "unannotated_refuted": 45,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 18
+   }
+  },
+  "per_document": [
+   {
+    "doc": "06_pmc5980576",
+    "proposals": 27,
+    "critic_answer_shape": "bare_list",
+    "flagged_frozen_parser": 0,
+    "flagged_lenient_parser": 2
+   },
+   {
+    "doc": "08_pmc6238128",
+    "proposals": 11,
+    "critic_answer_shape": "object",
+    "flagged_frozen_parser": 2,
+    "flagged_lenient_parser": 2
+   },
+   {
+    "doc": "09_pmc6476783",
+    "proposals": 75,
+    "critic_answer_shape": "bare_list",
+    "flagged_frozen_parser": 0,
+    "flagged_lenient_parser": 5
+   },
+   {
+    "doc": "10_pmc5817150",
+    "proposals": 25,
+    "critic_answer_shape": "bare_list",
+    "flagged_frozen_parser": 0,
+    "flagged_lenient_parser": 2
+   },
+   {
+    "doc": "12_pmc4417136",
+    "proposals": 15,
+    "critic_answer_shape": "object",
+    "flagged_frozen_parser": 1,
+    "flagged_lenient_parser": 1
+   },
+   {
+    "doc": "17_pmc9309151",
+    "proposals": 16,
+    "critic_answer_shape": "object",
+    "flagged_frozen_parser": 5,
+    "flagged_lenient_parser": 5
+   }
+  ]
  }
 }

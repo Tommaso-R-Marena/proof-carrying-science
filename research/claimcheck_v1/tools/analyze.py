@@ -23,8 +23,8 @@ from pathlib import Path
 from ..baseline import propose_rules, propose_search
 from ..benchmark.harness import Document, Verifier, dedupe, score, spec_signature, summarise, token_outcomes
 from ..benchmark.run import load_split
-from ..propose import DEFAULT_MODELS, propose_with_model
-from ..providers import Ledger
+from ..propose import DEFAULT_MODELS, SYSTEM, critic_prompt, data_dictionary, propose_with_model
+from ..providers import Ledger, ProviderError, complete, extract_json
 from ..grounding import sentence_window
 
 
@@ -93,6 +93,56 @@ def apply_policy(doc: Document, receipts: list[dict], policy: str) -> list[dict]
     return out
 
 
+def critic_posthoc(split: str, results: Path, verifier: Verifier) -> dict:
+    """POST HOC, exploratory: what the Gemini critic's answers would have removed from the other
+    model's proposals if answers given as a bare JSON list had been read.
+
+    The frozen parser accepts only ``{"reviews": [...]}``.  On three of six documents the critic
+    answered with a bare list, which the frozen system ignored (so nothing was filtered there).
+    This recomputes the ``openrouter+critic`` arm from the cached responses and cached receipts with
+    both shapes accepted.  No Lean, no network.  Not a result of the frozen system.
+    """
+    ledger = Ledger(max_calls={"gemini": 0, "openrouter": 0})
+    scores, detail = {"frozen_parser": [], "lenient_parser": []}, []
+    for doc in load_split(split):
+        if doc.variant != "original":
+            continue
+        props, meta = propose_with_model("openrouter", DEFAULT_MODELS["openrouter"], doc.text, doc.data, doc.manifest,
+                                         allow_network=False, ledger=ledger, cache_dir=results / "model_responses")
+        props = dedupe(props)
+        items = [{"id": i, "quote": q["quote"], "reading": q["spec"]} for i, q in enumerate(props)]
+        shape, strict, lenient = "no_call", {}, {}
+        if items:
+            try:
+                rec = complete("gemini", DEFAULT_MODELS["gemini"], critic_prompt(doc.text, data_dictionary(doc.data, doc.manifest), items),
+                               system=SYSTEM, ledger=ledger, cache_dir=results / "model_responses", allow_network=False)
+            except ProviderError:
+                rec = None
+            if rec is not None:
+                text = rec["text"].strip()
+                obj = extract_json(text)
+                rows = obj.get("reviews") if isinstance(obj, dict) and isinstance(obj.get("reviews"), list) else None
+                shape = "object" if rows is not None else "unusable"
+                if rows is not None:
+                    strict = {str(r["id"]): r["faithful"] for r in rows if isinstance(r, dict) and isinstance(r.get("faithful"), bool) and r.get("id") is not None}
+                    lenient = dict(strict)
+                else:
+                    try:
+                        rows = json.loads(text[text.index("["):text.rindex("]") + 1])
+                    except ValueError:
+                        rows = None
+                    if isinstance(rows, list):
+                        shape = "bare_list"
+                        lenient = {str(r["id"]): r["faithful"] for r in rows if isinstance(r, dict) and isinstance(r.get("faithful"), bool) and r.get("id") is not None}
+        for name, reviews in (("frozen_parser", strict), ("lenient_parser", lenient)):
+            kept = [q for i, q in enumerate(props) if reviews.get(str(i), True)]
+            scores[name].append(score(doc, token_outcomes(doc, kept, verifier.verify(doc, kept, "openrouter"))))
+        detail.append({"doc": doc.slug, "proposals": len(props), "critic_answer_shape": shape,
+                       "flagged_frozen_parser": sum(1 for v in strict.values() if not v), "flagged_lenient_parser": sum(1 for v in lenient.values() if not v)})
+    return {"note": "Post hoc and exploratory. Only 'frozen_parser' reproduces the frozen openrouter+critic arm.",
+            "openrouter_filtered_by_gemini": {k: summarise(v) for k, v in scores.items()}, "per_document": detail}
+
+
 def analyse(split: str, results: Path) -> dict:
     verifier = _CacheOnly(results / "receipts")
     docs = load_split(split)
@@ -152,6 +202,8 @@ def analyse(split: str, results: Path) -> dict:
             "REFUTED_total": cr + ur + un_r, "REFUTED_matching_gold": cr, "REFUTED_gold_unsupported": ur, "REFUTED_unlabelled": un_r,
         }
     out["frozen_precision"] = prec
+    if "gemini" in out["policies"]["frozen"]:
+        out["critic_posthoc"] = critic_posthoc(split, results, verifier)
     return out
 
 
@@ -169,6 +221,7 @@ def main(argv=None) -> int:
             print(f"  {arm:11s}", {k: v for k, v in classes.items() if k not in ("abstained", "correct_abstention")})
     print(json.dumps(out["frozen_precision"], indent=1))
     print(json.dumps(out["unlabelled_results_after_hand_adjudication"]))
+    print(json.dumps(out.get("critic_posthoc")))
     return 0
 
 
