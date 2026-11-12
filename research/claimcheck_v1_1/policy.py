@@ -35,9 +35,9 @@ from .space import DECOYS_PER_SIDE, MAX_CONDITIONS, Reading, SourceContext, fami
 # Maximum decoy coincidence rate for a match to count as evidence for its reading: at most this
 # share of nearby numbers of the same printed precision may be reproducible by SOME eligible reading.
 TAU = Fraction(2, 100)
-# A number must have at least this many comparable decoys for the rate to mean anything.  A
-# one-digit number has at most eight, so it can never be confirmed on its own.
-MIN_DECOYS = 50
+# With the printed number counted among the comparable numbers, a number needs at least 50 of
+# them (49 decoys) before its rate can be at or below 2 %.  A one-digit number has nine.
+MIN_DECOYS = 49
 
 # Wording that marks a descriptive number as something outside the supported grammar.  A mismatch in
 # such a sentence may only mean that the paper reports a statistic ClaimCheck does not compute.
@@ -168,6 +168,19 @@ def _same_quantity(it: Item, rd: Reading) -> bool:
     return (rd.column, rd.x_column) == (spec.column, spec.x_column)
 
 
+def _bound_to(ctx: SourceContext, it: Item):
+    """Predicate: is a reading's statistic worded at this item's number?"""
+    window = ctx.source[it.w0:it.w1]
+    start, end = it.token_start - it.w0, (it.token_end or it.token_start) - it.w0
+    cache: dict = {}
+
+    def check(rd: Reading) -> bool:
+        if rd.stat not in cache:
+            cache[rd.stat] = bound(rd.stat, window, start, end, ctx.manifest) is not None
+        return cache[rd.stat]
+    return check
+
+
 def _alternatives(it: Item, analysis, *, competing_only: bool = False) -> list[Reading]:
     """Other eligible readings that reproduce the printed number.
 
@@ -190,9 +203,11 @@ def _numeric_evidence(ctx: SourceContext, it: Item, tau: Fraction) -> tuple[bool
     base_ok, base = _basic_findings(ctx, it)
     findings.extend(base)
     problems = [] if base_ok else ["x"]
-    a = it.analysis = it.analysis or _analyse(ctx, it)
+    # Only readings whose wording is attached to THIS number can be confirmed for it, so only they
+    # count as competitors and as ways to reproduce a decoy.
+    a = it.analysis = it.analysis or _analyse(ctx, it, restrict=_bound_to(ctx, it))
     findings.append({"rule": "bounded_reading_space", "passed": not a.truncated,
-                     "detail": f"{a.eligible_readings} eligible readings of this sentence were examined"
+                     "detail": f"{a.eligible_readings} readings that this sentence's wording attaches to the number were examined"
                                + (" (the space was too large to examine completely)." if a.truncated else ".")})
     alts = _alternatives(it, a, competing_only=True)
     same = [r for r in _alternatives(it, a) if _same_quantity(it, r)]
@@ -202,12 +217,9 @@ def _numeric_evidence(ctx: SourceContext, it: Item, tau: Fraction) -> tuple[bool
                            + (f" The same statistic over {len(same)} other row selection(s) the sentence names gives the same value." if same else "")),
                      "competing_readings": [_describe(r) for r in alts[:8]],
                      "equivalent_row_selections": [{"reading": _describe(r), "spec": r.spec(it.literal, it.spec.reported_unit).to_json()} for r in same[:8]]})
-    ok_rate = a.decoys >= MIN_DECOYS and a.rate <= tau
+    ok_rate = a.rate <= tau
     findings.append({"rule": "low_chance_of_coincidence", "passed": ok_rate,
-                     "detail": (f"{a.decoys_reproduced} of {a.decoys} comparable numbers (same decimals, same number of digits) would also be reproduced "
-                                f"by some eligible reading (limit {float(tau):.0%}).") if a.decoys >= MIN_DECOYS else
-                               (f"The printed number has too few digits to carry evidence on its own: only {a.decoys} comparable numbers exist "
-                                f"(at least {MIN_DECOYS} are needed), and {a.decoys_reproduced} of them would also be reproduced."),
+                     "detail": _rate_words(a, tau),
                      "decoys": a.decoys, "decoys_reproduced": a.decoys_reproduced,
                      "examples": [{"offset_in_last_digit_units": k, "reading": _describe(r)} for k, r in a.examples]})
     return (not problems and not a.truncated and not alts and ok_rate), findings
@@ -236,6 +248,15 @@ def _basic_findings(ctx: SourceContext, it: Item) -> tuple[bool, list]:
          "wording": how},
     ]
     return plain and not problems and how is not None and alien is None, findings
+
+
+def _rate_words(a, tau: Fraction) -> str:
+    total = a.decoys + 1
+    if Fraction(1, total) > tau:
+        return (f"The printed number has too few digits to carry evidence: only {total} comparable numbers exist (same decimals, same number "
+                f"of digits), so a chance match cannot be made unlikely (limit {float(tau):.0%}).")
+    return (f"{a.decoys_reproduced + 1} of {total} comparable numbers (same decimals, same number of digits; the printed one included) are "
+            f"reproduced by some reading the sentence's wording attaches to this number (limit {float(tau):.0%}).")
 
 
 def sibling_proposals(ctx: SourceContext, receipt: dict) -> list[dict]:
@@ -355,15 +376,17 @@ def _decide(ctx: SourceContext, receipt: dict, it: Item | None, corroborators, t
         # a weak match can still be supported by a strong sibling that pins the column and the rows
         cor = corroborators(it, same_column=False)
         if cor and _basic_findings(ctx, it)[0]:
-            pinned = _analyse(ctx, it, restrict=lambda rd: any(_scope(rd) == s.scope_rows and (rd.column == s.spec.column or rd.stat == "count"
-                                                                                               or s.spec.stat in ("count", "share")) for s in cor))
+            is_bound = _bound_to(ctx, it)
+            pinned = _analyse(ctx, it, restrict=lambda rd: is_bound(rd) and any(
+                _scope(rd) == s.scope_rows and (rd.column == s.spec.column or rd.stat == "count" or s.spec.stat in ("count", "share")) for s in cor))
             alts = _alternatives(it, pinned, competing_only=True)
-            ok = not alts and pinned.decoys_reproduced == 0 and not pinned.truncated
+            ok = not alts and pinned.rate <= tau and not pinned.truncated
             findings.append({"rule": "supported_by_another_number_in_the_sentence", "passed": ok,
                              "detail": f"Another number in this sentence ({', '.join(sorted({s.literal for s in cor}))}) is confirmed from the same rows"
-                                       f"{'' if it.spec.stat in ('count', 'share') else ' and column'}. Among the readings that fixes, "
-                                       f"{pinned.decoys_reproduced} of {pinned.decoys} comparable numbers would be reproduced"
-                                       f"{' and no other statistic reproduces this one' if not alts else '; another statistic also reproduces this one'}."})
+                                       f"{'' if it.spec.stat in ('count', 'share') else ' and column'}. Among the readings that fixes: "
+                                       + _rate_words(pinned, tau)
+                                       + ("" if not alts else " Another statistic also reproduces this number."),
+                             "decoys": pinned.decoys, "decoys_reproduced": pinned.decoys_reproduced})
             if ok:
                 return out("CONFIRMATION", cor)
         reasons.append("The number is reproduced, but that alone does not show the sentence means this reading: "

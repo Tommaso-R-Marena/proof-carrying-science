@@ -37,14 +37,19 @@ def context(doc: Document) -> SourceContext:
 
 
 def oracle_receipts(doc: Document, proposals: list[dict], origin: str = "development adversary (oracle-predicted, no kernel)") -> list[dict]:
+    return oracle_receipts_raw(doc.text, doc.data, doc.manifest, proposals, origin=origin, name=doc.key)
+
+
+def oracle_receipts_raw(source_text: str, data: bytes, manifest: dict, proposals: list[dict], *,
+                        origin: str = "oracle-predicted, no kernel", name: str = "source") -> list[dict]:
     """v1 receipts for proposals, with the kernel step REPLACED by the untrusted oracle prediction.
 
-    Development analysis only.  The receipts are marked and are never written into an evidence
-    bundle.  (The oracle and the kernel have never disagreed; anything that an adversary gets
-    through the v1.1 policy is afterwards put to the real kernel.)
+    Development analysis and offline tests only.  The receipts are marked and are never written
+    into an evidence bundle.  (The oracle and the kernel have never disagreed; anything that an
+    adversary gets through the v1.1 policy is afterwards put to the real kernel.)
     """
-    receipts = verify_many([(f"o{i:05d}", p, origin) for i, p in enumerate(proposals)], source_text=doc.text,
-                           source_meta={"name": doc.key}, data=doc.data, manifest=doc.manifest, run_lean=False)
+    receipts = verify_many([(f"o{i:05d}", p, origin) for i, p in enumerate(proposals)], source_text=source_text,
+                           source_meta={"name": name}, data=data, manifest=manifest, run_lean=False)
     for r in receipts:
         q1 = r.get("q1_mathematics") or {}
         variants = q1.get("variants") or []

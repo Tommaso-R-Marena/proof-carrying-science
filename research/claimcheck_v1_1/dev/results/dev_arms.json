@@ -60,31 +60,6 @@
       "of_which_no_result": 8,
       "of_which_review_requested": 7
      }
-    },
-    "v1.1 tau=1/20": {
-     "rules": {
-      "abstained_on_false": 14,
-      "abstained_on_true": 34,
-      "correct_abstention": 25,
-      "correct_confirmation": 8,
-      "of_which_no_result": 27,
-      "of_which_review_requested": 21
-     },
-     "search": {
-      "abstained_on_false": 14,
-      "abstained_on_true": 19,
-      "correct_abstention": 25,
-      "correct_confirmation": 23,
-      "of_which_no_result": 29,
-      "of_which_review_requested": 4
-     },
-     "openrouter": {
-      "abstained_on_true": 12,
-      "correct_abstention": 9,
-      "correct_confirmation": 7,
-      "of_which_no_result": 8,
-      "of_which_review_requested": 4
-     }
     }
    },
    "record_verdicts": {
@@ -102,22 +77,6 @@
       "REQUIRE_HUMAN_REVIEW": 35,
       "UNKNOWN": 11,
       "CONFIRMATION": 4
-     }
-    },
-    "v1.1 tau=1/20": {
-     "rules": {
-      "REQUIRE_HUMAN_REVIEW": 168,
-      "CONFIRMATION": 8
-     },
-     "search": {
-      "REQUIRE_HUMAN_REVIEW": 55,
-      "UNKNOWN": 11,
-      "CONFIRMATION": 23
-     },
-     "openrouter": {
-      "REQUIRE_HUMAN_REVIEW": 32,
-      "UNKNOWN": 11,
-      "CONFIRMATION": 7
      }
     }
    },
@@ -162,7 +121,7 @@
      "arm": "rules",
      "v1_result": "REFUTED",
      "rule": "number_worded_as_this_statistic",
-     "records": 4
+     "records": 5
     },
     {
      "arm": "rules",
@@ -180,7 +139,7 @@
      "arm": "search",
      "v1_result": "PROVED",
      "rule": "low_chance_of_coincidence",
-     "records": 22
+     "records": 19
     },
     {
      "arm": "search",
@@ -256,69 +215,30 @@
      },
      "search": {
       "abstained_on_false": 41,
-      "abstained_on_true": 58,
+      "abstained_on_true": 59,
       "correct_abstention": 67,
-      "correct_confirmation": 28,
+      "correct_confirmation": 27,
       "of_which_no_result": 73,
-      "of_which_review_requested": 26,
+      "of_which_review_requested": 27,
       "unlabelled_confirmation": 7
      },
      "gemini": {
       "abstained_on_false": 36,
-      "abstained_on_true": 51,
-      "correct_abstention": 54,
-      "correct_confirmation": 19,
-      "correct_discrepancy": 2,
-      "of_which_no_result": 71,
-      "of_which_review_requested": 16
-     },
-     "openrouter": {
-      "abstained_on_false": 38,
-      "abstained_on_true": 56,
-      "correct_abstention": 66,
-      "correct_confirmation": 30,
-      "correct_discrepancy": 3,
-      "of_which_no_result": 49,
-      "of_which_review_requested": 45,
-      "unsupported_confirmation": 1
-     }
-    },
-    "v1.1 tau=1/20": {
-     "rules": {
-      "abstained_on_false": 41,
-      "abstained_on_true": 81,
-      "correct_abstention": 67,
-      "correct_confirmation": 5,
-      "of_which_no_result": 70,
-      "of_which_review_requested": 52,
-      "unlabelled_confirmation": 2
-     },
-     "search": {
-      "abstained_on_false": 41,
       "abstained_on_true": 53,
-      "correct_abstention": 67,
-      "correct_confirmation": 33,
-      "of_which_no_result": 73,
-      "of_which_review_requested": 21,
-      "unlabelled_confirmation": 7
-     },
-     "gemini": {
-      "abstained_on_false": 36,
-      "abstained_on_true": 49,
       "correct_abstention": 54,
-      "correct_confirmation": 21,
+      "correct_confirmation": 17,
       "correct_discrepancy": 2,
       "of_which_no_result": 71,
-      "of_which_review_requested": 14
+      "of_which_review_requested": 18
      },
      "openrouter": {
       "abstained_on_false": 38,
-      "abstained_on_true": 54,
+      "abstained_on_true": 60,
       "correct_abstention": 66,
-      "correct_confirmation": 32,
+      "correct_confirmation": 26,
       "correct_discrepancy": 3,
       "of_which_no_result": 49,
-      "of_which_review_requested": 43,
+      "of_which_review_requested": 49,
       "unsupported_confirmation": 1
      }
     }
@@ -331,44 +251,20 @@
       "UNKNOWN": 2
      },
      "search": {
-      "REQUIRE_HUMAN_REVIEW": 202,
-      "CONFIRMATION": 35,
+      "REQUIRE_HUMAN_REVIEW": 203,
+      "CONFIRMATION": 34,
       "UNKNOWN": 21
      },
      "gemini": {
-      "REQUIRE_HUMAN_REVIEW": 20,
-      "CONFIRMATION": 19,
+      "REQUIRE_HUMAN_REVIEW": 22,
+      "CONFIRMATION": 17,
       "UNKNOWN": 18,
       "DISCREPANCY_FOR_REVIEW": 2
      },
      "openrouter": {
       "UNKNOWN": 158,
-      "REQUIRE_HUMAN_REVIEW": 164,
-      "CONFIRMATION": 31,
-      "DISCREPANCY_FOR_REVIEW": 3
-     }
-    },
-    "v1.1 tau=1/20": {
-     "rules": {
-      "REQUIRE_HUMAN_REVIEW": 174,
-      "CONFIRMATION": 7,
-      "UNKNOWN": 2
-     },
-     "search": {
-      "REQUIRE_HUMAN_REVIEW": 197,
-      "CONFIRMATION": 40,
-      "UNKNOWN": 21
-     },
-     "gemini": {
-      "REQUIRE_HUMAN_REVIEW": 18,
-      "CONFIRMATION": 21,
-      "UNKNOWN": 18,
-      "DISCREPANCY_FOR_REVIEW": 2
-     },
-     "openrouter": {
-      "UNKNOWN": 158,
-      "REQUIRE_HUMAN_REVIEW": 162,
-      "CONFIRMATION": 33,
+      "REQUIRE_HUMAN_REVIEW": 168,
+      "CONFIRMATION": 27,
       "DISCREPANCY_FOR_REVIEW": 3
      }
     }
@@ -378,7 +274,7 @@
      "arm": "gemini",
      "v1_result": "PROVED",
      "rule": "low_chance_of_coincidence",
-     "records": 5
+     "records": 7
     },
     {
      "arm": "gemini",
@@ -413,6 +309,12 @@
     {
      "arm": "gemini",
      "v1_result": "REFUTED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 1
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
      "rule": "printed_sample_size_agrees",
      "records": 2
     },
@@ -426,7 +328,7 @@
      "arm": "openrouter",
      "v1_result": "PROVED",
      "rule": "low_chance_of_coincidence",
-     "records": 10
+     "records": 14
     },
     {
      "arm": "openrouter",
@@ -444,7 +346,7 @@
      "arm": "openrouter",
      "v1_result": "PROVED",
      "rule": "supported_by_another_number_in_the_sentence",
-     "records": 5
+     "records": 3
     },
     {
      "arm": "openrouter",
@@ -540,7 +442,7 @@
      "arm": "rules",
      "v1_result": "REFUTED",
      "rule": "number_worded_as_this_statistic",
-     "records": 17
+     "records": 23
     },
     {
      "arm": "rules",
@@ -552,7 +454,7 @@
      "arm": "rules",
      "v1_result": "REFUTED",
      "rule": "supported_by_another_number_in_the_sentence",
-     "records": 162
+     "records": 165
     },
     {
      "arm": "rules",
@@ -564,7 +466,7 @@
      "arm": "search",
      "v1_result": "PROVED",
      "rule": "low_chance_of_coincidence",
-     "records": 25
+     "records": 26
     },
     {
      "arm": "search",
@@ -582,7 +484,7 @@
      "arm": "search",
      "v1_result": "PROVED",
      "rule": "supported_by_another_number_in_the_sentence",
-     "records": 2
+     "records": 3
     },
     {
      "arm": "search",
@@ -593,5 +495,5 @@
    ]
   }
  },
- "seconds": 185.1
+ "seconds": 212.1
 }

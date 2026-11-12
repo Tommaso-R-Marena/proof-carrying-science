@@ -16,9 +16,10 @@ from .space import family
 _I = re.IGNORECASE
 _DASH = r"(?:[–—−-]|\bto\b)"
 _PATTERNS_BEFORE = {
-    "mean": (r"\b(?:means?|averag(?:e|ed|es|ing))\b[^.;0-9]{0,60}$", _I),
-    "median": (r"\bmedians?\b[^.;0-9]{0,60}$", _I),
-    "sum": (r"\b(?:total(?:led|ling|s)?|sum(?:med|s)?|altogether|combined)\b[^.;0-9]{0,40}$", _I),
+    # no digit, full stop, semicolon or comma between the statistic's name and the number
+    "mean": (r"\b(?:means?|averag(?:e|ed|es|ing))\b[^.;,0-9]{0,50}$", _I),
+    "median": (r"\bmedians?\b[^.;,0-9]{0,50}$", _I),
+    "sum": (r"\b(?:total(?:led|ling|s)?|sum(?:med|s)?|altogether|combined)\b[^.;,0-9]{0,40}$", _I),
     "var_sample": (r"\bvariances?\b[^.;0-9]{0,30}$", _I),
     "pearson": (r"(?:\br\s?=\s?|\bcorrelat\w*[^.;0-9]{0,40})$", _I),
     "ols_slope": (r"\bslopes?\b[^.;0-9]{0,30}$", _I),
@@ -73,6 +74,8 @@ def bound(stat: str, window: str, start: int, end: int, manifest: dict) -> str |
             return "%"
         m = re.search(r"\b(?:proportion|fraction|share)\b[^.;0-9]{0,40}$", before, _I)
         return m.group(0).strip() if m else None
+    if fam in ("min", "max") and re.search(r"\b(?:IQR|interquartile|quartiles?|percentiles?|CI|CIs|confidence|credible)\b[^.;]{0,40}$", before, _I):
+        return None                                            # "IQR = 3–6", "95% CI 1.2–3.4": a printed interval that is not the range
     if fam == "min":
         if re.match(rf"\s{{0,2}}{_DASH}\s{{0,2}}[0-9.]", after) and not re.search(rf"[0-9]\s{{0,2}}{_DASH}\s{{0,2}}$", before):
             return "left end of a printed range"

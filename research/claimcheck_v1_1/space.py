@@ -319,7 +319,13 @@ class TokenAnalysis:
 
     @property
     def rate(self) -> Fraction:
-        return Fraction(self.decoys_reproduced, self.decoys) if self.decoys else Fraction(1)
+        """Share of comparable numbers that some eligible reading reproduces.
+
+        The printed number is itself one of the comparable numbers and is reproduced (that is why a
+        match is being judged), so it is counted: (decoys reproduced + 1) / (decoys + 1).  A
+        one-digit number has at most nine comparable numbers, so its rate is at least 1/9.
+        """
+        return Fraction(self.decoys_reproduced + 1, self.decoys + 1)
 
 
 class SourceContext:
