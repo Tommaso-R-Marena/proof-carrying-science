@@ -1,0 +1,75 @@
+{
+ "status": "DRAFT FOR OWNER REVIEW. Not frozen. Nothing has been evaluated against these criteria.",
+ "version": "claimcheck-v1.1-readiness-criteria-draft-1",
+ "confidence": 0.95,
+ "primary_arm": "union",
+ "primary_arm_meaning": "Readings proposed by both language models (each without access to data rows), all passed through the v1.1 pipeline.",
+ "levels": {
+  "internal_research": {
+   "meaning": "Reproducible and suitable for further controlled development. No external user.",
+   "requirements": [
+    "v1 frozen software and benchmark digests verify unchanged",
+    "v1.1 offline tests pass; live checks with the real Lean 4.28.0 kernel pass (end to end, tampering, fail-closed, runner)",
+    "development evaluation and free-choice adversary recorded, with every adversarial pass-through kernel-checked",
+    "hosted CI runs the ClaimCheck jobs on a clean runner and they pass"
+   ]
+  },
+  "supervised_external_pilot": {
+   "meaning": "Independent researchers may try the tool under documented limits, with a PCS team member reviewing every outward verdict before it is used for anything.",
+   "minimum_sample": {"papers": 60, "scientific_contexts": 3, "papers_per_context": 15, "confirmations_by_primary_arm": 150},
+   "criteria": {
+    "C1_unsupported_confirmations": {
+     "metric": "unsupported CONFIRMATION verdicts / all CONFIRMATION verdicts, primary arm, original articles",
+     "max_estimate": 0.02, "max_conservative_upper_bound": 0.05, "max_paper_level_upper_bound": 0.10,
+     "rationale": "Every pilot result is read by a person who is told the reading is unreviewed. A worst-case one-in-twenty rate of wrong confirmations under that supervision is the conventional tolerance for a screening aid; the point estimate must be clearly below it."},
+    "C2_misleading_refutations": {
+     "metric": "misleading DISCREPANCY_FOR_REVIEW verdicts / true or not-derivable numbers with at least one proposal, primary arm, originals and planted-error copies",
+     "max_estimate": 0.005, "max_conservative_upper_bound": 0.02, "max_paper_level_upper_bound": 0.05,
+     "rationale": "A flag that wrongly suggests a discrepancy in someone's paper is the more harmful error, so the tolerance is lower. A paper-level bound of 5 % with zero affected papers needs 59 papers, which sets the minimum sample."},
+    "C3_useful_coverage": {
+     "metric": "correct CONFIRMATION verdicts / numbers adjudicated as true supported statistics of the table, primary arm, original articles",
+     "min_estimate": 0.25, "min_lower_bound": 0.15,
+     "rationale": "A paper typically prints 5 to 15 such numbers. Below one in four, most papers would yield at most one or two confirmations and the tool would not repay the effort of preparing a manifest. Set from usefulness, not from development results (which were 24 % and 30 %)."},
+    "C4_independent_replay": {
+     "metric": "bundles whose every record replays (v1.1 replayer, Lean kernel re-run, byte-identical proof files) on a clean hosted runner / all bundles",
+     "required": 1.0,
+     "rationale": "A result that cannot be replayed from its bytes is not a ClaimCheck result."},
+    "C5_adversarial_selection": {
+     "metric_a": "free-choice adversary: unsupported CONFIRMATION verdicts obtained / all CONFIRMATION verdicts obtained, every printed number of every original article",
+     "max_estimate_a": 0.05, "max_conservative_upper_bound_a": 0.10,
+     "metric_b": "free-choice adversary: papers in which it obtains a DISCREPANCY_FOR_REVIEW on a true or not-derivable number / all papers",
+     "max_paper_level_upper_bound_b": 0.05,
+     "rationale": "A pilot user chooses readings after seeing the data. The adversary is the worst such user within the supported grammar."},
+    "C6_abstention": {
+     "metric": "numbers that adjudicators mark ambiguous (they cannot agree on a reading) and that nevertheless receive CONFIRMATION or DISCREPANCY_FOR_REVIEW from any arm",
+     "max_events": 0,
+     "also": "every withheld record keeps its kernel result (checked mechanically for all records)"},
+    "C7_computation": {
+     "metric": "kernel runs on the reference machine (4 cores, 16 GB), tables within the supported size",
+     "max_median_seconds_per_claim": 60, "max_p95_seconds_per_claim": 300, "max_peak_memory_gb": 8, "min_completed_share": 0.95,
+     "also": "a run that exceeds a limit yields UNKNOWN (tested)"},
+    "C8_usability": {
+     "metric": "formative study with researchers who have used neither PCS nor Lean",
+     "min_participants": 5, "min_task_completion": 0.8, "min_correct_on_each_critical_scope_question": 0.8,
+     "critical_scope_questions": ["Does a confirmation show the paper's conclusion is right?", "Does a discrepancy flag show the paper is wrong?",
+                                  "Who or what decided that the sentence means this statistic?", "What would you do with REQUIRE_HUMAN_REVIEW?"]},
+    "C9_independent_adjudication": {
+     "metric": "every decided verdict of every arm, and the sampled abstentions, labelled by two people who took no part in building PCS, blind to the system's output",
+     "required": true, "report": "raw agreement and Cohen's kappa; disagreements resolved by a third person or left ambiguous"},
+    "C10_owner_authorisation": {"required": true, "meaning": "Meeting C1 to C9 does not start a pilot. The project owner decides."}
+   }
+  },
+  "unrestricted_public_release": {
+   "meaning": "Anyone may use it without supervision. Not proposed now; listed so that the gap is explicit.",
+   "criteria": {
+    "unsupported_confirmations": {"max_conservative_upper_bound": 0.01},
+    "misleading_refutations": {"max_paper_level_upper_bound": 0.01, "note": "needs at least 299 papers with none affected"},
+    "scientific_contexts": {"min": 5, "each_meets_pilot_criteria_separately": true},
+    "independent_replication": "the prospective evaluation repeated by a group that did not build PCS",
+    "human_factors": {"min_participants": 20, "min_correct_on_each_critical_scope_question": 0.9},
+    "discrepancy_flags": "shown to a user only after a named reviewer has confirmed the reading",
+    "other": ["security review of the page and the runner", "accessibility audit", "operations and incident procedure", "data-handling and licence review"]
+   }
+  }
+ }
+}
