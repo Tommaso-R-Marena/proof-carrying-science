@@ -19,17 +19,20 @@ pushed to the repository.
 
 ## What this branch adds
 
-[`ADMISSION_CENSUS.json`](ADMISSION_CENSUS.json): 1,961 added files with SHA-256 and mode, generated
-from commit `4eeb4824`. No existing file is changed or removed (checked against every entry of the
+[`ADMISSION_CENSUS.json`](ADMISSION_CENSUS.json): 1,966 added files with SHA-256 and mode, generated
+from commit `4e440af8`. No existing file is changed or removed (checked against every entry of the
 V22 snapshot, using the gate's own rule for its one reviewed test successor).
 
 | Added | Files | What |
 | --- | ---: | --- |
 | `research/claimcheck_v1/**` | 1,900 | frozen v1 software, Lean checker and Mathlib meaning theorems, benchmark documents (open-licence article text and data), receipts, bundles |
-| `research/claimcheck_v1_1/**` | 60 | v1.1 policy layer, tools, development results, draft protocol, prepared adjudication and usability materials |
+| `research/claimcheck_v1_1/**` | 61 | v1.1 policy layer, tools, development results, draft protocol, prepared adjudication and usability materials |
 | `.github/workflows/pcs-claimcheck-v1.yml` | 1 | path-scoped research CI (read-only permissions) |
+| `docs/integration/claimcheck/**` | 4 | this proposal, the census, the dry-run record, the proposed control changes as a patch |
 
-(The files of this directory are added by later commits and will be in the final census.)
+Three of the four admission documents (census, dry-run record, patch) are rewritten by the dry run
+itself, and this branch has later documentation commits. The census is therefore exact for the
+commit named above and must be regenerated at the commit the owner fixes (step 2 below).
 
 Licences of the bundled third-party material: article text CC BY, data CC0 or CC BY, each recorded
 with source URL, digest and retrieval time in `benchmark/*/*/acquisition.json` and `document.json`.
@@ -56,7 +59,7 @@ script generated the successor, applied the constants there, and ran the unmodif
 gates:
 
 * the gate on `main` today passes (V22, 72 PRs, 8,042 files), checked on a worktree of `origin/main`;
-* with the successor: `reconcile --require-committed` passes (72 PRs, 10,004 files) and
+* with the successor: `reconcile --require-committed` passes (72 PRs, 10,009 files) and
   `check_reconciled_prs.py --core` passes against a local, unpushed tag;
 * rejected, as they must be: an unlisted extra file; an edited admitted file; an edited existing
   production file; an edited successor manifest; a tag pointing at another commit.

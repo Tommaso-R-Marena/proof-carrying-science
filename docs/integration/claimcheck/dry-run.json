@@ -1,15 +1,15 @@
 {
  "what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. Not an approval.",
- "generated_from_commit": "4eeb48242f8183b4d313f2c6073f1b99e7f29350",
+ "generated_from_commit": "4e440af8b785efd24ef81e0d5ef9060a94fcbb45",
  "valid_only_for_that_commit": true,
  "existing_files_changed_or_removed": [],
- "files_added": 1961,
+ "files_added": 1966,
  "gate_on_main_today": "passes (V22; 72 PRs, 8042 files) \u2014 checked separately on a worktree of origin/main",
  "gate_with_successor": {
   "exit": 0,
   "passed": true,
   "error": null,
-  "whole_tree_files_checked": 10004,
+  "whole_tree_files_checked": 10009,
   "prs_checked": 72
  },
  "negative_controls": {
@@ -37,10 +37,10 @@
   }
  },
  "proposed_retained_source_commit": {
-  "commit": "fe37e5fb72b5bbd78b5c661518ca946d285aae27",
-  "tree": "0087c3a7164a4d36d965ef78a695d82fc71cb973",
+  "commit": "2d4d9f2a4f5e78fea0fba473cc5489ceece8ed56",
+  "tree": "598d9bca71939cc673ae1cd5d95be15406df9fec",
   "parents": [
-   "4eeb48242f8183b4d313f2c6073f1b99e7f29350",
+   "4e440af8b785efd24ef81e0d5ef9060a94fcbb45",
    "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
   ],
   "reproducible_with": "git commit-tree <tree> -p <source commit> -p <previous intake> with the fixed identity and date in this script",
@@ -52,14 +52,14 @@
  },
  "successor_manifest": {
   "path": "docs/integration/2026-11-14/RECONCILIATION_V23.json",
-  "sha256": "62f630d137d195ddfe93a515774c3629c04c137fd3ab0f1601a8d5a595721fbb",
-  "bytes": 4699595,
-  "snapshot_entries": 10004,
+  "sha256": "01dadebcfce3491de829239084145c8fc3200d57eaf71fb48158ae4b21def96f",
+  "bytes": 4700454,
+  "snapshot_entries": 10009,
   "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"
  },
  "existing_control_tests_on_the_successor": {
   "exit": 1,
-  "last_line": "/usr/local/bin/python3: No module named pytest",
+  "last_line": "/usr/local/bin/python: No module named pytest",
   "note": "These tests are control files and pin V22 details; they need a reviewed update together with the successor."
  },
  "all_as_expected": true

@@ -115,6 +115,23 @@ can be confirmed. Units should be declared for every column that has one.
 | `prospective/` | **draft** protocol, criteria, statistics, contamination checks for the evaluation that has not been run |
 | `adjudication/`, `usability/` | materials prepared for people who have not yet been asked |
 
+## Licences and data handling
+
+* v1.1 adds no third-party material. The eight v1 documents it re-uses are CC BY articles with
+  CC0 data deposits; licence, source and digest are recorded with each
+  (`../claimcheck_v1/benchmark/*/*/document.json`, `acquisition.json`). The adjudication package
+  quotes sentences from those CC BY articles with their citations.
+* Code here is under the repository's Apache-2.0 licence. It needs Python's standard library and
+  Lean 4.28.0 (Apache-2.0); the meaning theorems of v1 use Mathlib (Apache-2.0).
+* v1.1 made no call to any language model. `verify`, the replayer and the kernel runner make no
+  network request: a researcher's data and text stay on the machine that runs them. The prospective
+  protocol sends models only sentences of openly licensed articles and column names, as v1 did.
+* Unpublished or uploaded researcher material is to be treated as confidential: do not put it in a
+  proposer prompt, a bug report or a committed bundle without the researcher's explicit permission.
+  A bundle embeds the complete data file.
+* Not done: a legal review of the model providers' terms for redistributing recorded model
+  proposals (the v1 receipts contain them as short typed readings). Listed for the owner.
+
 ## Limits
 
 * The rules are lexical and numerical. They cannot know that "nestling age at sampling" is not the
