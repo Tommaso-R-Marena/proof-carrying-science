@@ -25,8 +25,8 @@ V22 snapshot, using the gate's own rule for its one reviewed test successor).
 
 | Added | Files | What |
 | --- | ---: | --- |
-| `research/claimcheck_v1/**` | 1,893 | frozen v1 software, Lean checker and Mathlib meaning theorems, benchmark documents (open-licence article text and data), receipts, bundles |
-| `research/claimcheck_v1_1/**` | 67 | v1.1 policy layer, tools, development results, draft protocol, prepared adjudication and usability materials |
+| `research/claimcheck_v1/**` | 1,900 | frozen v1 software, Lean checker and Mathlib meaning theorems, benchmark documents (open-licence article text and data), receipts, bundles |
+| `research/claimcheck_v1_1/**` | 60 | v1.1 policy layer, tools, development results, draft protocol, prepared adjudication and usability materials |
 | `.github/workflows/pcs-claimcheck-v1.yml` | 1 | path-scoped research CI (read-only permissions) |
 
 (The files of this directory are added by later commits and will be in the final census.)
