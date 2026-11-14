@@ -1,0 +1,50 @@
+{
+ "article": {
+  "doi": "10.1093/aobpla/plv030",
+  "pmcid": "PMC4417136",
+  "license": "cc by",
+  "journal": "AoB PLANTS",
+  "year": "2015",
+  "xml_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4417136/fullTextXML",
+  "xml_sha256": "d868b3d516a894e5c6cbacdb219586efd57ef54fb18124d53f2bf7cf893b9eb3",
+  "xml_bytes": 112347,
+  "text_sha256": "2ad06ff48670907ca343b14a87118fcf32c437b02652de96b9f52e6897cc4cda",
+  "text_bytes": 32543,
+  "text_transformation": "research.claimcheck_v1.benchmark.acquire.jats_to_text (title, abstract, body paragraphs, captions; tables, formulas-as-markup, references omitted)",
+  "text_stats": {
+   "paragraphs": 37,
+   "captions": 3,
+   "tables_omitted": 1
+  }
+ },
+ "dataset": {
+  "zenodo_record": "4967720",
+  "doi": "10.5061/dryad.9bf7f",
+  "title": "Data from: Soil microbial community variation correlates most strongly with plant species identity, followed by soil chemistry, spatial location and plant genus",
+  "license": "cc-zero",
+  "files": [
+   {
+    "name": "soil_nut_xwalked.csv",
+    "stored_as": "soil_nut_xwalked.csv",
+    "url": "https://zenodo.org/api/records/4967720/files/soil_nut_xwalked.csv/content",
+    "sha256": "4db2fc7fd7b275dc5a190cf68fb24d4f572c4b5eda26d206af9654d5488644f7",
+    "bytes": 9792,
+    "zenodo_checksum": "md5:783a08c8053b6e6ddde38dd1adc771a5",
+    "generic_rectangular_csv": true
+   },
+   {
+    "name": "gps_collection_locations.csv",
+    "stored_as": "gps_collection_locations.csv",
+    "url": "https://zenodo.org/api/records/4967720/files/gps_collection_locations.csv/content",
+    "sha256": "189126f6555d7c56a7565a90aecfc3716bf6e3baeecdc6f59e535f47713193c9",
+    "bytes": 2628,
+    "zenodo_checksum": "md5:bc8d9a7459ab77c8f1c7c9ac40da9258",
+    "generic_rectangular_csv": true
+   }
+  ],
+  "chosen_table": "soil_nut_xwalked.csv",
+  "choice_rule": "largest CSV <= 64000 bytes, not a README, rectangular under Python's csv module"
+ },
+ "retrieved_utc": "2026-11-10T15:46:33Z",
+ "discovery_query": "soil samples"
+}

@@ -1,0 +1,286 @@
+{
+ "split": "heldout",
+ "freezes": {
+  "software_freeze_sha256": "1a7eeb57029e5ff35ee1586908f77fa949a7577777a2495dc00db18c6af0ae2d",
+  "benchmark_freeze_sha256": "1a2001809d1e923900817e17273a975fb554b13bc5b72809f4bd23e2f9ecc890"
+ },
+ "documents": [
+  "06_pmc5980576:original",
+  "06_pmc5980576:injected",
+  "06_pmc5980576:mutated",
+  "08_pmc6238128:original",
+  "08_pmc6238128:injected",
+  "08_pmc6238128:mutated",
+  "09_pmc6476783:original",
+  "09_pmc6476783:mutated",
+  "10_pmc5817150:original",
+  "10_pmc5817150:mutated",
+  "12_pmc4417136:original",
+  "12_pmc4417136:mutated",
+  "17_pmc9309151:original",
+  "17_pmc9309151:mutated"
+ ],
+ "models": {
+  "gemini": "gemini-3.6-flash",
+  "openrouter": "nvidia/nemotron-3-ultra-550b-a55b:free"
+ },
+ "arms": {
+  "rules": {
+   "classes": {
+    "abstained": 70,
+    "correct_abstention": 42,
+    "correct_refutation": 1,
+    "correct_verification": 5,
+    "unannotated_proved": 7,
+    "unannotated_refuted": 88,
+    "unsupported_positive": 3,
+    "unsupported_refutation": 73
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 70,
+    "correct_abstention": 42,
+    "correct_refutation": 1,
+    "correct_verification": 5,
+    "unannotated_proved": 7,
+    "unannotated_refuted": 88,
+    "unsupported_positive": 3,
+    "unsupported_refutation": 73
+   },
+   "proposals": 183,
+   "verify_seconds": 3.4,
+   "kernel_claims_new": 0,
+   "model_calls": 0,
+   "prompt_tokens": 0,
+   "output_tokens": 0,
+   "model_errors": 0
+  },
+  "search": {
+   "classes": {
+    "abstained": 87,
+    "correct_abstention": 66,
+    "correct_verification": 37,
+    "unannotated_proved": 41,
+    "unsupported_positive": 4
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 73,
+    "correct_abstention": 66,
+    "correct_verification": 51,
+    "unannotated_proved": 182,
+    "unsupported_positive": 4
+   },
+   "proposals": 258,
+   "verify_seconds": 2.9,
+   "kernel_claims_new": 0,
+   "model_calls": 0,
+   "prompt_tokens": 0,
+   "output_tokens": 0,
+   "model_errors": 0
+  },
+  "gemini": {
+   "classes": {
+    "abstained": 73,
+    "correct_abstention": 52,
+    "correct_refutation": 11,
+    "correct_verification": 24,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 71,
+    "correct_abstention": 52,
+    "correct_refutation": 13,
+    "correct_verification": 24,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
+   },
+   "proposals": 59,
+   "verify_seconds": 98.2,
+   "kernel_claims_new": 16,
+   "model_calls": 12,
+   "prompt_tokens": 52632,
+   "output_tokens": 8307,
+   "model_errors": 0
+  },
+  "openrouter": {
+   "classes": {
+    "abstained": 51,
+    "correct_abstention": 50,
+    "correct_refutation": 13,
+    "correct_verification": 40,
+    "unannotated_proved": 4,
+    "unannotated_refuted": 92,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 39
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 49,
+    "correct_abstention": 50,
+    "correct_refutation": 14,
+    "correct_verification": 41,
+    "unannotated_proved": 4,
+    "unannotated_refuted": 99,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 39
+   },
+   "proposals": 356,
+   "verify_seconds": 3.1,
+   "kernel_claims_new": 0,
+   "model_calls": 14,
+   "prompt_tokens": 61659,
+   "output_tokens": 42452,
+   "model_errors": 0
+  },
+  "union": {
+   "classes": {
+    "abstained": 35,
+    "correct_abstention": 36,
+    "correct_refutation": 16,
+    "correct_verification": 34,
+    "unannotated_proved": 4,
+    "unannotated_refuted": 88,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 40
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 31,
+    "correct_abstention": 36,
+    "correct_refutation": 19,
+    "correct_verification": 35,
+    "unannotated_proved": 4,
+    "unannotated_refuted": 94,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 40
+   },
+   "proposals": 337,
+   "verify_seconds": 2.9,
+   "kernel_claims_new": 0,
+   "model_calls": 24,
+   "prompt_tokens": 105746,
+   "output_tokens": 45238,
+   "model_errors": 0
+  },
+  "agree": {
+   "classes": {
+    "abstained": 79,
+    "correct_abstention": 52,
+    "correct_refutation": 7,
+    "correct_verification": 22,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 79,
+    "correct_abstention": 52,
+    "correct_refutation": 7,
+    "correct_verification": 22,
+    "unannotated_proved": 2,
+    "unsupported_refutation": 2
+   },
+   "proposals": 48,
+   "verify_seconds": 1.5,
+   "kernel_claims_new": 0,
+   "model_calls": 24,
+   "prompt_tokens": 105746,
+   "output_tokens": 45238,
+   "model_errors": 0
+  },
+  "gemini+critic": {
+   "classes": {
+    "abstained": 35,
+    "correct_abstention": 25,
+    "correct_refutation": 2,
+    "correct_verification": 17,
+    "unsupported_refutation": 2
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 34,
+    "correct_abstention": 25,
+    "correct_refutation": 3,
+    "correct_verification": 17,
+    "unsupported_refutation": 2
+   },
+   "proposals": 32,
+   "verify_seconds": 1.0,
+   "kernel_claims_new": 0,
+   "model_calls": 9,
+   "prompt_tokens": 31645,
+   "output_tokens": 4500,
+   "model_errors": 0
+  },
+  "openrouter+critic": {
+   "classes": {
+    "abstained": 21,
+    "correct_abstention": 17,
+    "correct_refutation": 1,
+    "correct_verification": 23,
+    "unannotated_proved": 2,
+    "unannotated_refuted": 47,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 18
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 20,
+    "correct_abstention": 17,
+    "correct_refutation": 1,
+    "correct_verification": 24,
+    "unannotated_proved": 2,
+    "unannotated_refuted": 50,
+    "unsupported_positive": 1,
+    "unsupported_refutation": 18
+   },
+   "proposals": 161,
+   "verify_seconds": 1.3,
+   "kernel_claims_new": 0,
+   "model_calls": 12,
+   "prompt_tokens": 45178,
+   "output_tokens": 23677,
+   "model_errors": 0
+  }
+ },
+ "gold": {
+  "items": 194,
+  "derivable_consistent": 86,
+  "derivable_inconsistent": 41,
+  "derivable_conditional": 0,
+  "not_derivable": 67,
+  "numeric_tokens_in_documents": 2533
+ },
+ "ledger": {
+  "max_calls": {
+   "gemini": 20,
+   "openrouter": 8
+  },
+  "network_calls": {
+   "gemini": 18,
+   "openrouter": 4
+  },
+  "cache_hits": {
+   "gemini": 30,
+   "openrouter": 36
+  },
+  "prompt_tokens": {
+   "gemini": 35131,
+   "openrouter": 5329
+  },
+  "output_tokens": {
+   "gemini": 7940,
+   "openrouter": 275
+  },
+  "seconds": {
+   "gemini": 77.21,
+   "openrouter": 13.5
+  },
+  "failures": {
+   "gemini": 7,
+   "openrouter": 1
+  }
+ },
+ "verifier": {
+  "fresh_receipts": 20,
+  "cache_hits": 1790,
+  "kernel_checked_claims": 16,
+  "verify_wall_seconds": 96.5
+ },
+ "wall_seconds": 669.8
+}

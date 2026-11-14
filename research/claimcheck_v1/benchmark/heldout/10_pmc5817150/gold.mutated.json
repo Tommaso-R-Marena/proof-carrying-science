@@ -1,0 +1,229 @@
+{
+ "annotation": "derived deterministically from gold.json by benchmark/mutate.py; planted errors confirmed by an independent calculation",
+ "synthetic_variant_of": "article.txt",
+ "items": [
+  {
+   "id": "H10-13",
+   "token": ".75",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "pearson",
+     "column": "massaug",
+     "x_column": "massjun",
+     "reported": ".75"
+    },
+    {
+     "stat": "pearson",
+     "column": "massjun",
+     "x_column": "massaug",
+     "reported": ".75"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": ".75",
+   "start": 19097,
+   "end": 19100
+  },
+  {
+   "id": "H10-14",
+   "token": "472",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "massaug",
+     "filter": [
+      {
+       "kind": "num",
+       "column": "massjun",
+       "cmp": "ge",
+       "value": "0"
+      }
+     ],
+     "reported": "472"
+    },
+    {
+     "stat": "count",
+     "column": "massjun",
+     "filter": [
+      {
+       "kind": "num",
+       "column": "massaug",
+       "cmp": "ge",
+       "value": "0"
+      }
+     ],
+     "reported": "472"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "472",
+   "start": 19106,
+   "end": 19109
+  },
+  {
+   "id": "H10-10",
+   "token": "592",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "massjun",
+     "reported": "592"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "590",
+   "planted": "value_change",
+   "start": 26802,
+   "end": 26805
+  },
+  {
+   "id": "H10-11",
+   "token": "473",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "massaug",
+     "reported": "473"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "475",
+   "planted": "value_change",
+   "start": 26810,
+   "end": 26813
+  },
+  {
+   "id": "H10-12",
+   "token": "205",
+   "kind": "not_derivable",
+   "why": "number of distinct females",
+   "original_token": "205",
+   "start": 26930,
+   "end": 26933
+  },
+  {
+   "id": "H10-01",
+   "token": "5.1",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "age",
+     "reported": "5.1"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "5.1",
+   "start": 27238,
+   "end": 27241
+  },
+  {
+   "id": "H10-02",
+   "token": "4",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "median",
+     "column": "age",
+     "reported": "4"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "4",
+   "start": 27258,
+   "end": 27259
+  },
+  {
+   "id": "H10-03",
+   "token": "3",
+   "kind": "not_derivable",
+   "why": "quartiles are not a supported statistic",
+   "original_token": "3",
+   "start": 27288,
+   "end": 27289
+  },
+  {
+   "id": "H10-04",
+   "token": "5",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "lifespan",
+     "reported": "5"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "3",
+   "planted": "value_change",
+   "start": 27325,
+   "end": 27326
+  },
+  {
+   "id": "H10-05",
+   "token": "17",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "lifespan",
+     "reported": "17"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "14",
+   "planted": "value_change",
+   "start": 27331,
+   "end": 27333
+  },
+  {
+   "id": "H10-06",
+   "token": "6.3",
+   "kind": "not_derivable",
+   "why": "lifespan per distinct female; the table has one row per female per year",
+   "original_token": "6.3",
+   "start": 27361,
+   "end": 27364
+  },
+  {
+   "id": "H10-07",
+   "token": "6",
+   "kind": "not_derivable",
+   "why": "see H10-06",
+   "original_token": "6",
+   "start": 27375,
+   "end": 27376
+  },
+  {
+   "id": "H10-08",
+   "token": "5.3",
+   "kind": "not_derivable",
+   "why": "see H10-06",
+   "original_token": "5.3",
+   "start": 27407,
+   "end": 27410
+  },
+  {
+   "id": "H10-09",
+   "token": "5",
+   "kind": "not_derivable",
+   "why": "see H10-06",
+   "original_token": "5",
+   "start": 27421,
+   "end": 27422
+  },
+  {
+   "id": "H10-15",
+   "token": "900",
+   "kind": "not_derivable",
+   "why": "a difference between two means, not a supported statistic",
+   "original_token": "900",
+   "start": 27551,
+   "end": 27554
+  }
+ ]
+}

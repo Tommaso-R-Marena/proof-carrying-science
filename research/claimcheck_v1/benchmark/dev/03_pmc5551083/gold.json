@@ -1,0 +1,376 @@
+{
+ "annotation": "internal AI-assisted annotation; not expert adjudicated",
+ "items": [
+  {
+   "id": "D03-01",
+   "token": "12.4",
+   "context": "Elimia livescens (length 12.4–23.2 mm; n = 100)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "shell_length",
+     "reported": "12.4"
+    }
+   ]
+  },
+  {
+   "id": "D03-02",
+   "token": "23.2",
+   "context": "Elimia livescens (length 12.4–23.2 mm; n = 100)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "shell_length",
+     "reported": "23.2"
+    }
+   ]
+  },
+  {
+   "id": "D03-03",
+   "token": "100",
+   "context": "Elimia livescens (length 12.4–23.2 mm; n = 100)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "reported": "100"
+    }
+   ]
+  },
+  {
+   "id": "D03-04",
+   "token": "100",
+   "context": "A total of 100 Elimia livescens snails were examined",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "reported": "100"
+    }
+   ]
+  },
+  {
+   "id": "D03-05",
+   "token": "46",
+   "context": "Of these, 46 snails contained trematodes",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "parasites",
+       "value": "Yes"
+      }
+     ],
+     "reported": "46"
+    }
+   ]
+  },
+  {
+   "id": "D03-06",
+   "token": "18",
+   "context": "Macrovestibulum obtusicaudum (Pronocephalidae; n = 18)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "species",
+       "value": "Macrovestibulum obtusicaudum"
+      }
+     ],
+     "reported": "18"
+    }
+   ]
+  },
+  {
+   "id": "D03-07",
+   "token": "13",
+   "context": "Protometra macrostoma (Azygiidae; n = 13)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "species",
+       "value": "Protometra macrostoma"
+      }
+     ],
+     "reported": "13"
+    }
+   ]
+  },
+  {
+   "id": "D03-08",
+   "token": "6",
+   "context": "Acanthatrium oregonense (Lecithodendriidae; n = 6)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "species",
+       "value": "Acanthatrium oregonense"
+      }
+     ],
+     "reported": "6"
+    }
+   ]
+  },
+  {
+   "id": "D03-09",
+   "token": "3",
+   "context": "unknown monostome cercariae (n = 3)",
+   "kind": "not_derivable",
+   "why": "the data file has no group with this name (a group of 3 is labelled 'Acetodextra amiuri')"
+  },
+  {
+   "id": "D03-10",
+   "token": "2",
+   "context": "Azygia sp. (Azygiidae; n = 2)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "species",
+       "value": "Azygia sp."
+      }
+     ],
+     "reported": "2"
+    }
+   ]
+  },
+  {
+   "id": "D03-11",
+   "token": "3",
+   "context": "M. obtusicaudum and A. oregonense (n = 3)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "species",
+       "value": "Macrovestibulum obtusicaudum + Acanthatrium oregonense"
+      }
+     ],
+     "reported": "3"
+    }
+   ]
+  },
+  {
+   "id": "D03-12",
+   "token": "1",
+   "context": "M. obtusicaudum and P. macrostoma (n = 1)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "species",
+       "value": "Protometra macrostoma + Macrovestibulum obtusicaudum"
+      }
+     ],
+     "reported": "1"
+    }
+   ]
+  },
+  {
+   "id": "D03-13",
+   "token": "54",
+   "context": "from nonparasitized (n = 54) snails",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "parasites",
+       "value": "No"
+      }
+     ],
+     "reported": "54"
+    }
+   ]
+  },
+  {
+   "id": "D03-14",
+   "token": "46",
+   "context": "from parasitized snails (n = 46)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "parasites",
+       "value": "Yes"
+      }
+     ],
+     "reported": "46"
+    }
+   ]
+  },
+  {
+   "id": "D03-15",
+   "token": "79",
+   "context": "Nitrogen excretion rates were measured from 79 snails",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "rate_ N",
+     "reported": "79"
+    }
+   ]
+  },
+  {
+   "id": "D03-16",
+   "token": "53",
+   "context": "P excretion rates were estimated from 53 snails",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "rate_ P",
+     "reported": "53"
+    }
+   ]
+  },
+  {
+   "id": "D03-17",
+   "token": "100",
+   "context": "Metabolic rates were measured from 100 snails",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "metabolic_rate",
+     "reported": "100"
+    }
+   ]
+  },
+  {
+   "id": "D03-18",
+   "token": "0.001",
+   "context": "faster than then 0.001 mmol N g−1 hr−1 from uninfected",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "rate_ N",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "parasites",
+       "value": "No"
+      }
+     ],
+     "reported": "0.001"
+    }
+   ]
+  },
+  {
+   "id": "D03-19",
+   "token": "0.00077",
+   "context": "0.00077 mmol N g−1 hr−1 from infected E. livescens",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "rate_ N",
+     "filter": [
+      {
+       "kind": "text_eq",
+       "column": "parasites",
+       "value": "Yes"
+      }
+     ],
+     "reported": "0.00077"
+    }
+   ]
+  },
+  {
+   "id": "D03-20",
+   "token": "1.3",
+   "context": "(both means = 1.3 × 10−3 mmol P g−1 hr−1)",
+   "kind": "not_derivable",
+   "why": "scientific notation written as '× 10−3' is outside the supported literal grammar; the plain literal 1.3 is not the statistic"
+  },
+  {
+   "id": "D03-21",
+   "token": "37,000",
+   "context": "E. livescens snails was 37,000 mg O2 kg−1 hr−1",
+   "kind": "not_derivable",
+   "why": "reported in different units with no exact conversion available from the table"
+  },
+  {
+   "id": "D03-22",
+   "token": "0.17",
+   "context": "mean uninfected (0.17 mmol P g−1 hr−1)",
+   "kind": "not_derivable",
+   "why": "value from another study (Bernot)"
+  },
+  {
+   "id": "D03-23",
+   "token": "2.24",
+   "context": "at a mean rate of 2.24 mmol N g−1 hr−1",
+   "kind": "not_derivable",
+   "why": "value from another study and species"
+  }
+ ]
+}

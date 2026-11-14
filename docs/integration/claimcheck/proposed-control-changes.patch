@@ -1,0 +1,62 @@
+diff --git a/research/integration_v2/reconcile.py b/research/integration_v2/reconcile.py
+index 6c80b5c2..189c21b4 100644
+--- a/research/integration_v2/reconcile.py
++++ b/research/integration_v2/reconcile.py
+@@ -18,8 +18,8 @@ import subprocess
+ import urllib.request
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V22.json"
+-MANIFEST_SHA256 = '28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83'
++MANIFEST = "docs/integration/2026-11-14/RECONCILIATION_V23.json"
++MANIFEST_SHA256 = '01dadebcfce3491de829239084145c8fc3200d57eaf71fb48158ae4b21def96f'
+ API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
+ # Exact reviewed source references for reconciling the held research branch.
+ # This adds a source rollback check; it does not release PR117 or grant authority.
+@@ -128,11 +128,11 @@ def _historical_identities(root, prs):
+ 
+ def _verify(root, manifest):
+     """Internal checker; the CLI accepts only the compiled-in manifest digest."""
+-    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"}:
++    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22", "pcs-source-reconciliation-v23"}:
+         raise ValueError("unsupported reconciliation")
+     prs = manifest["prs"]
+     numbers = [p["number"] for p in prs]
+-    expected_count = 72 if manifest["format"] in {"pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"} else 70
++    expected_count = 72 if manifest["format"] in {"pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22", "pcs-source-reconciliation-v23"} else 70
+     if len(numbers) != len(set(numbers)) or len(prs) != expected_count:
+         raise ValueError("incomplete or duplicate PR census")
+     if [p["number"] for p in prs if p["disposition"] == "HELD"] != [117]:
+@@ -311,8 +311,8 @@ def check(*, require_committed=False, live=False):
+     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
+         raise ValueError("reconciliation manifest differs from fixed reviewed digest")
+     manifest = _json(raw)
+-    if manifest["format"] != "pcs-source-reconciliation-v22":
+-        raise ValueError("current combined admission requires explicit V22 format")
++    if manifest["format"] != "pcs-source-reconciliation-v23":
++        raise ValueError("current combined admission requires explicit V23 format")
+     result = _verify(ROOT, manifest)
+     _snapshot(ROOT, manifest)
+     _workflows(ROOT, manifest)
+diff --git a/scripts/check_reconciled_prs.py b/scripts/check_reconciled_prs.py
+index 20925be8..0e744547 100644
+--- a/scripts/check_reconciled_prs.py
++++ b/scripts/check_reconciled_prs.py
+@@ -11,7 +11,7 @@ REGISTRY_SHA256='5d69305871d78e262ba3dfa25349743efa11577491f645da8583a15b7398fe0
+ # Exact qualified source histories, retained independently of linear main history.
+ # A mutable branch/tag name is not trusted in place of its exact object ID.
+ INTAKES={
+- 'proof-carrying-science':('0b521f39af99f5856b69dfcc25bc274ec9dc804a','pcs-source-intake/core-open-prs-v1-20261105'),
++ 'proof-carrying-science':('2d4d9f2a4f5e78fea0fba473cc5489ceece8ed56','pcs-source-intake/core-claimcheck-v1-20261114'),
+  'proof-carrying-science-site':('d35e2b5e6b29e0a27dc0cb117986895fd58c1456','pcs-source-intake/site-open-prs-v1-20261105'),
+ }
+ COMMON_CONTROLS={'scripts/check_reconciled_prs.py','scripts/test_reconciled_prs.py'}
+@@ -19,7 +19,7 @@ CONTROLS={
+  'proof-carrying-science':COMMON_CONTROLS|{
+   '.github/workflows/model-assurance-studio-research.yml',
+   'research/integration_v2/reconcile.py','research/integration_v2/test_reconcile.py',
+-  'docs/integration/2026-11-05/RECONCILIATION_V22.json',
++  'docs/integration/2026-11-14/RECONCILIATION_V23.json',
+   'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md'},
+  'proof-carrying-science-site':COMMON_CONTROLS|{
+   '.github/workflows/open-pr-reconciliation.yml',

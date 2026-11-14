@@ -1,0 +1,499 @@
+{
+ "note": "DEVELOPMENT data for v1.1 (the v1 development and held-out documents). Not prospective validation.",
+ "splits": {
+  "dev": {
+   "documents_scored_from_oracle_predictions_not_kernel_receipts": [
+    "01_pmc6972591:mutated",
+    "01_pmc6972591:original",
+    "03_pmc5551083:injected",
+    "03_pmc5551083:mutated",
+    "03_pmc5551083:original"
+   ],
+   "by_policy": {
+    "v1": {
+     "rules": {
+      "abstained_on_false": 6,
+      "abstained_on_true": 21,
+      "correct_abstention": 14,
+      "correct_confirmation": 8,
+      "correct_discrepancy": 3,
+      "misleading_refutation": 29,
+      "of_which_no_result": 27,
+      "unlabelled_discrepancy": 40
+     },
+     "search": {
+      "abstained_on_false": 14,
+      "abstained_on_true": 15,
+      "correct_abstention": 25,
+      "correct_confirmation": 27,
+      "of_which_no_result": 29,
+      "unlabelled_confirmation": 10
+     },
+     "openrouter": {
+      "abstained_on_true": 10,
+      "correct_abstention": 9,
+      "correct_confirmation": 9,
+      "of_which_no_result": 10
+     }
+    },
+    "v1.1 tau=1/50": {
+     "rules": {
+      "abstained_on_false": 14,
+      "abstained_on_true": 34,
+      "correct_abstention": 25,
+      "correct_confirmation": 8,
+      "of_which_no_result": 27,
+      "of_which_review_requested": 21
+     },
+     "search": {
+      "abstained_on_false": 14,
+      "abstained_on_true": 27,
+      "correct_abstention": 25,
+      "correct_confirmation": 15,
+      "of_which_no_result": 29,
+      "of_which_review_requested": 12
+     },
+     "openrouter": {
+      "abstained_on_true": 15,
+      "correct_abstention": 9,
+      "correct_confirmation": 4,
+      "of_which_no_result": 8,
+      "of_which_review_requested": 7
+     }
+    }
+   },
+   "record_verdicts": {
+    "v1.1 tau=1/50": {
+     "rules": {
+      "REQUIRE_HUMAN_REVIEW": 168,
+      "CONFIRMATION": 8
+     },
+     "search": {
+      "REQUIRE_HUMAN_REVIEW": 63,
+      "UNKNOWN": 11,
+      "CONFIRMATION": 15
+     },
+     "openrouter": {
+      "REQUIRE_HUMAN_REVIEW": 35,
+      "UNKNOWN": 11,
+      "CONFIRMATION": 4
+     }
+    }
+   },
+   "why_v1_results_were_withheld_at_frozen_tau": [
+    {
+     "arm": "openrouter",
+     "v1_result": "PROVED",
+     "rule": "low_chance_of_coincidence",
+     "records": 5
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "beyond_rounding_convention",
+     "records": 1
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "dispersion_statistic_named_explicitly",
+     "records": 30
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "no_eligible_reading_reproduces_the_number",
+     "records": 11
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "no_out_of_grammar_wording",
+     "records": 2
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "not_a_count",
+     "records": 25
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 5
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "printed_sample_size_agrees",
+     "records": 25
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 72
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "low_chance_of_coincidence",
+     "records": 19
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 8
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "plain_number",
+     "records": 3
+    }
+   ]
+  },
+  "heldout": {
+   "documents_scored_from_oracle_predictions_not_kernel_receipts": [],
+   "by_policy": {
+    "v1": {
+     "rules": {
+      "abstained_on_false": 23,
+      "abstained_on_true": 47,
+      "correct_abstention": 42,
+      "correct_confirmation": 5,
+      "correct_discrepancy": 1,
+      "misleading_refutation": 73,
+      "of_which_no_result": 70,
+      "unlabelled_confirmation": 7,
+      "unlabelled_discrepancy": 88,
+      "unsupported_confirmation": 3
+     },
+     "search": {
+      "abstained_on_false": 39,
+      "abstained_on_true": 48,
+      "correct_abstention": 66,
+      "correct_confirmation": 37,
+      "of_which_no_result": 87,
+      "unlabelled_confirmation": 41,
+      "unsupported_confirmation": 4
+     },
+     "gemini": {
+      "abstained_on_false": 27,
+      "abstained_on_true": 46,
+      "correct_abstention": 52,
+      "correct_confirmation": 24,
+      "correct_discrepancy": 11,
+      "misleading_refutation": 2,
+      "of_which_no_result": 73,
+      "unlabelled_confirmation": 2
+     },
+     "openrouter": {
+      "abstained_on_false": 20,
+      "abstained_on_true": 31,
+      "correct_abstention": 50,
+      "correct_confirmation": 40,
+      "correct_discrepancy": 13,
+      "misleading_refutation": 39,
+      "of_which_no_result": 51,
+      "unlabelled_confirmation": 4,
+      "unlabelled_discrepancy": 92,
+      "unsupported_confirmation": 1
+     }
+    },
+    "v1.1 tau=1/50": {
+     "rules": {
+      "abstained_on_false": 41,
+      "abstained_on_true": 81,
+      "correct_abstention": 67,
+      "correct_confirmation": 5,
+      "of_which_no_result": 70,
+      "of_which_review_requested": 52,
+      "unlabelled_confirmation": 2
+     },
+     "search": {
+      "abstained_on_false": 41,
+      "abstained_on_true": 59,
+      "correct_abstention": 67,
+      "correct_confirmation": 27,
+      "of_which_no_result": 73,
+      "of_which_review_requested": 27,
+      "unlabelled_confirmation": 7
+     },
+     "gemini": {
+      "abstained_on_false": 36,
+      "abstained_on_true": 53,
+      "correct_abstention": 54,
+      "correct_confirmation": 17,
+      "correct_discrepancy": 2,
+      "of_which_no_result": 71,
+      "of_which_review_requested": 18
+     },
+     "openrouter": {
+      "abstained_on_false": 38,
+      "abstained_on_true": 60,
+      "correct_abstention": 66,
+      "correct_confirmation": 26,
+      "correct_discrepancy": 3,
+      "of_which_no_result": 49,
+      "of_which_review_requested": 49,
+      "unsupported_confirmation": 1
+     }
+    }
+   },
+   "record_verdicts": {
+    "v1.1 tau=1/50": {
+     "rules": {
+      "REQUIRE_HUMAN_REVIEW": 174,
+      "CONFIRMATION": 7,
+      "UNKNOWN": 2
+     },
+     "search": {
+      "REQUIRE_HUMAN_REVIEW": 203,
+      "CONFIRMATION": 34,
+      "UNKNOWN": 21
+     },
+     "gemini": {
+      "REQUIRE_HUMAN_REVIEW": 22,
+      "CONFIRMATION": 17,
+      "UNKNOWN": 18,
+      "DISCREPANCY_FOR_REVIEW": 2
+     },
+     "openrouter": {
+      "UNKNOWN": 158,
+      "REQUIRE_HUMAN_REVIEW": 168,
+      "CONFIRMATION": 27,
+      "DISCREPANCY_FOR_REVIEW": 3
+     }
+    }
+   },
+   "why_v1_results_were_withheld_at_frozen_tau": [
+    {
+     "arm": "gemini",
+     "v1_result": "PROVED",
+     "rule": "low_chance_of_coincidence",
+     "records": 7
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "PROVED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 2
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "PROVED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 1
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
+     "rule": "beyond_rounding_convention",
+     "records": 1
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
+     "rule": "dispersion_statistic_named_explicitly",
+     "records": 2
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
+     "rule": "no_eligible_reading_reproduces_the_number",
+     "records": 1
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 1
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
+     "rule": "printed_sample_size_agrees",
+     "records": 2
+    },
+    {
+     "arm": "gemini",
+     "v1_result": "REFUTED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 9
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "PROVED",
+     "rule": "low_chance_of_coincidence",
+     "records": 14
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "PROVED",
+     "rule": "no_competing_reading_reproduces_the_number",
+     "records": 1
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "PROVED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 4
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "PROVED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 3
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "beyond_rounding_convention",
+     "records": 4
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "no_eligible_reading_reproduces_the_number",
+     "records": 6
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "no_out_of_grammar_wording",
+     "records": 8
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "not_a_count",
+     "records": 123
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 85
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "printed_sample_size_agrees",
+     "records": 32
+    },
+    {
+     "arm": "openrouter",
+     "v1_result": "REFUTED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 139
+    },
+    {
+     "arm": "rules",
+     "v1_result": "PROVED",
+     "rule": "low_chance_of_coincidence",
+     "records": 8
+    },
+    {
+     "arm": "rules",
+     "v1_result": "PROVED",
+     "rule": "no_competing_reading_reproduces_the_number",
+     "records": 3
+    },
+    {
+     "arm": "rules",
+     "v1_result": "PROVED",
+     "rule": "unit_fits_the_quantity",
+     "records": 3
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "beyond_rounding_convention",
+     "records": 4
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "dispersion_statistic_named_explicitly",
+     "records": 30
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "no_eligible_reading_reproduces_the_number",
+     "records": 45
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "no_out_of_grammar_wording",
+     "records": 34
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "not_a_count",
+     "records": 72
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 23
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "printed_sample_size_agrees",
+     "records": 78
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 165
+    },
+    {
+     "arm": "rules",
+     "v1_result": "REFUTED",
+     "rule": "unit_fits_the_quantity",
+     "records": 12
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "low_chance_of_coincidence",
+     "records": 26
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "number_worded_as_this_statistic",
+     "records": 28
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "plain_number",
+     "records": 2
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "supported_by_another_number_in_the_sentence",
+     "records": 3
+    },
+    {
+     "arm": "search",
+     "v1_result": "PROVED",
+     "rule": "unit_fits_the_quantity",
+     "records": 7
+    }
+   ]
+  }
+ },
+ "seconds": 212.1
+}

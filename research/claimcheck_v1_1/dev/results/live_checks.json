@@ -1,0 +1,92 @@
+{
+ "lean": "Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)",
+ "checker_sha256": "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180d9927b9edf9",
+ "end_to_end": {
+  "verdicts": {
+   "c001": [
+    "CONFIRMATION",
+    "MATCH_PROVED"
+   ],
+   "c002": [
+    "DISCREPANCY_FOR_REVIEW",
+    "MISMATCH_PROVED"
+   ],
+   "c003": [
+    "REQUIRE_HUMAN_REVIEW",
+    "MATCH_PROVED"
+   ]
+  },
+  "as_expected": true,
+  "supporting_readings_found_and_kernel_checked": 7,
+  "every_decided_record_has_a_fresh_kernel_run": true
+ },
+ "independent_replay": {
+  "all_replayed": true,
+  "proofs_rechecked": true,
+  "obligation_files_rechecked": 3
+ },
+ "tampering": {
+  "verdict_upgraded": {
+   "replay_rejected": true,
+   "first_problem": "outward verdict CONFIRMATION is not what the findings support (REQUIRE_HUMAN_REVIEW)"
+  },
+  "findings_edited": {
+   "replay_rejected": true,
+   "first_problem": "the decoy finding does not follow from its own numbers"
+  },
+  "data_substituted": {
+   "replay_rejected": true,
+   "first_problem": "the v1 replay of the kernel evidence did not succeed"
+  },
+  "checker_edited": {
+   "replay_rejected": true,
+   "first_problem": "the v1 replay of the kernel evidence did not succeed"
+  },
+  "kernel_outcome_forged": {
+   "replay_rejected": true,
+   "first_problem": "the v1 replay of the kernel evidence did not succeed"
+  },
+  "corroboration_removed": {
+   "replay_rejected": true,
+   "first_problem": "outward verdict DISCREPANCY_FOR_REVIEW is not what the findings support (REQUIRE_HUMAN_REVIEW)"
+  },
+  "records_from_another_bundle": {
+   "replay_rejected": true,
+   "first_problem": "the number of v1.1 records differs from the number of v1 receipts"
+  }
+ },
+ "fail_closed": {
+  "killed_for_lack_of_memory": {
+   "verdict": "UNKNOWN",
+   "mathematical": "NOT_ESTABLISHED",
+   "kernel_run_recorded": false
+  },
+  "hangs_until_timeout": {
+   "verdict": "UNKNOWN",
+   "mathematical": "NOT_ESTABLISHED",
+   "kernel_run_recorded": false
+  },
+  "exits_zero_without_output": {
+   "verdict": "UNKNOWN",
+   "mathematical": "NOT_ESTABLISHED",
+   "kernel_run_recorded": false
+  },
+  "prints_a_warning": {
+   "verdict": "UNKNOWN",
+   "mathematical": "NOT_ESTABLISHED",
+   "kernel_run_recorded": false
+  },
+  "lean_missing": {
+   "verdict": "UNKNOWN",
+   "mathematical": "NOT_ESTABLISHED",
+   "kernel_run_recorded": false
+  }
+ },
+ "kernel_runner": {
+  "real_proof_file_accepted": true,
+  "theorems": 4,
+  "data_sha256_matches": true,
+  "forged_outcome_accepted": false
+ },
+ "passed": true
+}

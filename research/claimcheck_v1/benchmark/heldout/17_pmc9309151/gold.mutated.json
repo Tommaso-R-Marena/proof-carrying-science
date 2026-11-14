@@ -1,0 +1,90 @@
+{
+ "annotation": "derived deterministically from gold.json by benchmark/mutate.py; planted errors confirmed by an independent calculation",
+ "synthetic_variant_of": "article.txt",
+ "items": [
+  {
+   "id": "H17-01",
+   "token": "14.5",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "SL_mm",
+     "reported": "14.5"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "14.5",
+   "start": 691,
+   "end": 695
+  },
+  {
+   "id": "H17-02",
+   "token": "25.3",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "SL_mm",
+     "reported": "25.3"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "25.3",
+   "start": 696,
+   "end": 700
+  },
+  {
+   "id": "H17-03",
+   "token": "14.5",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "SL_mm",
+     "reported": "14.5"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "14.5",
+   "start": 8683,
+   "end": 8687
+  },
+  {
+   "id": "H17-04",
+   "token": "25.3",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "SL_mm",
+     "reported": "25.3",
+     "reported_unit": "cm"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "25.3",
+   "planted": "unit_swap",
+   "start": 8691,
+   "end": 8695
+  },
+  {
+   "id": "H17-05",
+   "token": "57",
+   "kind": "not_derivable",
+   "why": "number of distinct individuals; the table has several speed records per individual",
+   "original_token": "57",
+   "start": 8774,
+   "end": 8776
+  },
+  {
+   "id": "H17-06",
+   "token": "0.76",
+   "kind": "not_derivable",
+   "why": "calibration error of the tracking method, not in the table",
+   "original_token": "0.76",
+   "start": 12623,
+   "end": 12627
+  }
+ ]
+}

@@ -1,0 +1,234 @@
+{
+ "annotation": "derived deterministically from gold.json by benchmark/mutate.py; planted errors confirmed by an independent calculation",
+ "synthetic_variant_of": "article.txt",
+ "items": [
+  {
+   "id": "H12-14",
+   "token": "14",
+   "kind": "not_derivable",
+   "why": "number of distinct source species",
+   "original_token": "14",
+   "start": 8425,
+   "end": 8427
+  },
+  {
+   "id": "H12-01",
+   "token": "84",
+   "kind": "not_derivable",
+   "why": "number of soil collections; the table has two rows (soil treatments) per collection",
+   "original_token": "84",
+   "start": 10818,
+   "end": 10820
+  },
+  {
+   "id": "H12-15",
+   "token": "0.59",
+   "kind": "not_derivable",
+   "why": "rank correlation with phylogeny, which is not in the table",
+   "original_token": "0.59",
+   "start": 16617,
+   "end": 16621
+  },
+  {
+   "id": "H12-02",
+   "token": "6.07",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "pH",
+     "reported": "6.07"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "6.07",
+   "start": 18433,
+   "end": 18437
+  },
+  {
+   "id": "H12-03",
+   "token": "0.12",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "sem",
+     "column": "pH",
+     "reported": "0.12"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "0.05",
+   "planted": "value_change",
+   "start": 18440,
+   "end": 18444
+  },
+  {
+   "id": "H12-04",
+   "token": "5.01",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "pH",
+     "reported": "5.01"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "5.01",
+   "start": 18457,
+   "end": 18461
+  },
+  {
+   "id": "H12-05",
+   "token": "7.96",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "pH",
+     "reported": "7.96"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "8.03",
+   "planted": "value_change",
+   "start": 18462,
+   "end": 18466
+  },
+  {
+   "id": "H12-06",
+   "token": "4.9",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "OM",
+     "reported": "4.9"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "4.2",
+   "planted": "value_change",
+   "start": 18514,
+   "end": 18517
+  },
+  {
+   "id": "H12-07",
+   "token": "0.9",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "sem",
+     "column": "OM",
+     "reported": "0.9"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "0.2",
+   "planted": "value_change",
+   "start": 18522,
+   "end": 18525
+  },
+  {
+   "id": "H12-08",
+   "token": "0.2",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "OM",
+     "reported": "0.2"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "0.6",
+   "planted": "value_change",
+   "start": 18538,
+   "end": 18541
+  },
+  {
+   "id": "H12-09",
+   "token": "14.9",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "OM",
+     "reported": "14.9"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "15.5",
+   "planted": "value_change",
+   "start": 18542,
+   "end": 18546
+  },
+  {
+   "id": "H12-10",
+   "token": "10",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "Na_ppm",
+     "reported": "10"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "12",
+   "planted": "value_change",
+   "start": 18596,
+   "end": 18598
+  },
+  {
+   "id": "H12-11",
+   "token": "393",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "Na_ppm",
+     "reported": "393"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "390",
+   "planted": "value_change",
+   "start": 18602,
+   "end": 18605
+  },
+  {
+   "id": "H12-12",
+   "token": "91.6",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "Na_ppm",
+     "reported": "91.6"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "91.8",
+   "planted": "value_change",
+   "start": 18625,
+   "end": 18629
+  },
+  {
+   "id": "H12-13",
+   "token": "6.7",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "sem",
+     "column": "Na_ppm",
+     "reported": "6.7"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "6.7",
+   "start": 18632,
+   "end": 18635
+  }
+ ]
+}

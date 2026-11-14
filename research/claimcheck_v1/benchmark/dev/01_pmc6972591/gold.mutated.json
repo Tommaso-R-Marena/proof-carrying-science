@@ -1,0 +1,60 @@
+{
+ "annotation": "derived deterministically from gold.json by benchmark/mutate.py; planted errors confirmed by an independent calculation",
+ "synthetic_variant_of": "article.txt",
+ "items": [
+  {
+   "id": "D01-05",
+   "token": "12",
+   "kind": "not_derivable",
+   "why": "design description, not a statistic of the table",
+   "original_token": "12",
+   "start": 13072,
+   "end": 13074
+  },
+  {
+   "id": "D01-03",
+   "token": "78",
+   "kind": "not_derivable",
+   "why": "a count of distinct individuals, not a supported statistic (the table has 246 rows)",
+   "original_token": "78",
+   "start": 14087,
+   "end": 14089
+  },
+  {
+   "id": "D01-04",
+   "token": "41.27",
+   "kind": "not_derivable",
+   "why": "no column for agonistic interactions in the female table",
+   "original_token": "41.27",
+   "start": 21321,
+   "end": 21326
+  },
+  {
+   "id": "D01-02",
+   "token": "1392.55",
+   "kind": "not_derivable",
+   "why": "describes males; this document's table holds females only",
+   "original_token": "1392.55",
+   "start": 58891,
+   "end": 58898
+  },
+  {
+   "id": "D01-01",
+   "token": "1035.29",
+   "kind": "derivable",
+   "truth": "inconsistent",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "Body_Mass_Before",
+     "reported": "1035.29",
+     "reported_unit": "kg"
+    }
+   ],
+   "original_token": "1035.29",
+   "planted": "unit_swap",
+   "start": 59230,
+   "end": 59237
+  }
+ ]
+}

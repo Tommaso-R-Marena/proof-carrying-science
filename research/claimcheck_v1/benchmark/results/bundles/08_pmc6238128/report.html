@@ -1,0 +1,469 @@
+<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+<title>ClaimCheck report</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:60rem;margin:2rem auto;padding:0 1rem;color:#1a1a1a}h1{font-size:1.5rem}h2{font-size:1.1rem;margin:0}article{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0}.b{display:inline-block;color:#fff;border-radius:4px;padding:.1rem .5rem;font-weight:700;font-size:.85rem}blockquote{margin:.5rem 0;padding:.25rem .75rem;border-left:4px solid #999;background:#f6f6f6}dt{font-weight:700;margin-top:.6rem}dd{margin:0}code{background:#f0f0f0;padding:0 .2rem}small{color:#555}ul{margin:.2rem 0 .2rem 1.2rem;padding:0}</style>
+<h1>ClaimCheck report</h1>
+<p>Paper text: <code>article.txt</code>. Data file: <code>Ossification_data.csv</code>. Research tool; no production PCS authority.</p>
+<p>Each statement gets three separate answers. <b>1 — the arithmetic</b>: decided by the Lean kernel on the exact bytes of the data file. <b>2 — the link to the paper</b>: which mechanical source checks passed. <b>3 — the science</b>: never assessed here.</p>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c001</h2>
+<blockquote>We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR).</blockquote>
+<p><b>Reading that was checked:</b> The sum of N over all rows equals 501 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sum</code>: exact value ≈ 501 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 501 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column N” — named in the sentence as “individuals”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sum” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt cf29a7e386138eb9</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c002</h2>
+<blockquote>We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 96 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 96 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-001.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt a104c5ab31309dd6</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c003</h2>
+<blockquote>We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of N over all rows equals 3 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The minimum of N over all rows equals 3 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 3 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-001.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column N” — named in the sentence as “sample”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (confirmed); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 96e9af95f5c89e35</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c004</h2>
+<blockquote>We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of N over all rows equals 17 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The maximum of N over all rows equals 17 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 17 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-002.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 17 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column N” — named in the sentence as “sample”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (confirmed); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 4399788a35795cdc</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c005</h2>
+<blockquote>For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p &lt; 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p &lt; 0.01).</blockquote>
+<p><b>Reading that was checked:</b> The sum of N over all rows equals 58 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sum</code>: exact value ≈ 501 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 58 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column N” — named in the sentence as “individuals”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sum” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt a706422cf540c3c2</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c006</h2>
+<blockquote>For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p &lt; 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p &lt; 0.01).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of N over all rows equals 1 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The minimum of N over all rows equals 1 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 3 from 96 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-002.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column N” — named in the sentence as “individuals”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 58acd55d1fce24d2</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c007</h2>
+<blockquote>For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p &lt; 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p &lt; 0.01).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of N over all rows equals 6 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The maximum of N over all rows equals 6 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 17 from 96 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column N” — named in the sentence as “individuals”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt cc8e4143711aa90c</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c008</h2>
+<blockquote>For a subset of 32 species (five males per species), we found a significant effect of mean body size on mean braincase compactness (F 1,30 = 32.97 ± 1.26; p &lt; 0.001; R 2 = 0.52 ± 0.01; λ = 1; Figure 4a): Smaller species had more circular braincases than larger species (β = −0.011; p &lt; 0.001).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 32 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 32 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 96 from 96 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 32 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 49cfd7bb6c1fc05c</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c009</h2>
+<blockquote>For a subset of 32 species (five males per species), we found a significant effect of mean body size on mean braincase compactness (F 1,30 = 32.97 ± 1.26; p &lt; 0.001; R 2 = 0.52 ± 0.01; λ = 1; Figure 4a): Smaller species had more circular braincases than larger species (β = −0.011; p &lt; 0.001).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of N over all rows equals 5 when rounded to the printed precision.</p>
+<p>The reported value 5 is not printed in the quoted text as a complete number.</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+<b>Failed:</b> The reported value 5 is not printed in the quoted text as a complete number.<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt f3f696fa11c15bd9</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c010</h2>
+<blockquote>Finally, small species had relatively larger eyes (relative to the body) than those of larger species (F 1,30 = 144.44; β = 12.55; p &lt; 0.001; R 2 = 0.85; λ = 0), but a positive relationship between body size and percentage of the lateral head area occupied by the eye socket (F 1,30 = 10.68; β = 3.44; p &lt; 0.005; R 2 = 0.31; λ = 0; Figure 4c), with small species having relatively smaller eye sockets (44%) than larger species (50%).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Percentage of ossification over all rows equals 44 % when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 6.251041667 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 44 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column Percentage of ossification” (accepted wordings: ossification, skull ossification, Percentage of ossification).<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 86b52cda2520e0a1</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c011</h2>
+<blockquote>Finally, small species had relatively larger eyes (relative to the body) than those of larger species (F 1,30 = 144.44; β = 12.55; p &lt; 0.001; R 2 = 0.85; λ = 0), but a positive relationship between body size and percentage of the lateral head area occupied by the eye socket (F 1,30 = 10.68; β = 3.44; p &lt; 0.005; R 2 = 0.31; λ = 0; Figure 4c), with small species having relatively smaller eye sockets (44%) than larger species (50%).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Percentage of ossification over all rows equals 50 % when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 6.251041667 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 50 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column Percentage of ossification” (accepted wordings: ossification, skull ossification, Percentage of ossification).<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt fd5ae0eaf546ef5f</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c012</h2>
+<blockquote>We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR).</blockquote>
+<p><b>Reading that was checked:</b> The sum of N over all rows equals 501 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sum</code>: exact value ≈ 501 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 501 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column N” — named in the sentence as “individuals”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sum” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 6d85842493288052</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c013</h2>
+<blockquote>We collected the percentage of skull ossification as a proxy for skull thickness from 501 individuals in 96 hummingbird species, from museum specimens in the Louisiana State University Museum of Natural Science (LSUMNS) and Museo de Zoología, Escuela de Biología, Universidad de Costa Rica (MZUCR).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 96 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 96 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 23f6c475f5bc99d4</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c014</h2>
+<blockquote>We calculated mean values from a sample ranging from 3 to 17 adult males per species, as confirmed by gonads and plumage patterns.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of N over all rows equals 17 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The maximum of N over all rows equals 17 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 17 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 17 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column N” — named in the sentence as “sample”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (confirmed); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 73c108fab0e596aa</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c015</h2>
+<blockquote>We controlled for the phylogenetic relationship, within each subset of species (trees with 96, 32, and 24 hummingbird species, respectively), in each analysis using on 5,000 molecular phylogenies built using the backbone method (Hackett et al., ) and data obtained from http://www.birdtree.org (Jetz, Thomas, Joy, Hartmann, &amp; Mooers, ).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 96 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 96 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 670b89aa687079b6</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c016</h2>
+<blockquote>All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p &lt; 0.001; R 2 = 0.42; λ = 0; Figure 3a).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.8670427593 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt f90e0a116303a3c6</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c017</h2>
+<blockquote>All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p &lt; 0.001; R 2 = 0.42; λ = 0; Figure 3a).</blockquote>
+<p><b>Reading that was checked:</b> The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>median</code>: exact value ≈ 2 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “median” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt a4c52e791eb0040e</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c018</h2>
+<blockquote>All PGLS models showed a significant effect of body size on skull ossification, with little phylogenetic signal (F 1,94 = 68.13; p &lt; 0.001; R 2 = 0.42; λ = 0; Figure 3a).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Percentage of ossification over all rows equals 0 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 0 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 0 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 13992bb347340f8f</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c019</h2>
+<blockquote>For the 96 species of hummingbirds, the percentage of ossification increased with body size (β = 0.78; p &lt; 0.001).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 96 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 96 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 8f11066d9f1ee8f1</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c020</h2>
+<blockquote>For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p &lt; 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p &lt; 0.01).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.8670427593 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 632335a5d3f33c6a</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c021</h2>
+<blockquote>For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p &lt; 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p &lt; 0.01).</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Percentage of ossification over all rows equals 6 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 6.251041667 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 6 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt e53a372e23355ac1</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c022</h2>
+<blockquote>For the 24 species with brain size data (58 individuals, 1–6 individuals per species), the PGLS models also found an effect of relative brain size on skull ossification (F 1,22 = 9.98; p &lt; 0.01; R 2 = 0.32; λ = 0; Figure 3b), in which species with relatively larger brains had lower percentage of ossification (β = −0.39; p &lt; 0.01).</blockquote>
+<p><b>Reading that was checked:</b> The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>median</code>: exact value ≈ 2 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “median” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 2340a0ee83fe6fb1</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c023</h2>
+<blockquote>However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.8670427593 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 10d16f852f9f31bc</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c024</h2>
+<blockquote>However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c).</blockquote>
+<p><b>Reading that was checked:</b> The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>median</code>: exact value ≈ 2 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “median” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt b59752630b4743f0</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c025</h2>
+<blockquote>However, when we removed the effect of body size, we did not find a significant effect of brain size on skull ossification (F 1,22 = 0.86; p = 0.36; R 2 = 0.04; λ = 0; Figure 3c).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Percentage of ossification over all rows equals 0 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 0 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 0 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 1cc2fa0942ae2441</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c026</h2>
+<blockquote>CAPTION: Figure 3 Patterns of skull ossification in hummingbirds. (a) Relationship between body mass and skull ossification for 96 species. (b) Relationship between the brain/body mass ratio and the skull ossification for 24 species. (c) Nonsignificant relationship between the residuals of body mass/brain mass and residuals of body mass/skull ossification (for coefficients and R 2 values, see main text)</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of Body Mass (g) over all rows equals 3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 2.820987501 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 2.806256395 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Body Mass (g)” — named in the sentence as “body mass”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 7afc9eb1554848bc</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c027</h2>
+<blockquote>CAPTION: Figure 3 Patterns of skull ossification in hummingbirds. (a) Relationship between body mass and skull ossification for 96 species. (b) Relationship between the brain/body mass ratio and the skull ossification for 24 species. (c) Nonsignificant relationship between the residuals of body mass/brain mass and residuals of body mass/skull ossification (for coefficients and R 2 values, see main text)</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 96 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The number of all rows equals 96 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 96 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-006.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 96 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 1d7984ab263a5180</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c028</h2>
+<blockquote>In addition, more circular skulls correlated with low levels of ossification (F 1,30 = 10.33 ± 0.42; β = −0.004; p &lt; 0.005; R 2 = 0.26 ± 0.01; λ = 1; Figure 4b), so that more circular skulls had lower levels of ossification (β = −0.0044; p &lt; 0.005).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file Ossification_data.csv (SHA-256 eca9c8973f3ef2a3…) only: “The standard error of the mean (sample SD / √n) of Percentage of ossification over all rows equals 1 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.8670427593 from 96 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-006.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt b68f1190892bce31</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c029</h2>
+<blockquote>In addition, more circular skulls correlated with low levels of ossification (F 1,30 = 10.33 ± 0.42; β = −0.004; p &lt; 0.005; R 2 = 0.26 ± 0.01; λ = 1; Figure 4b), so that more circular skulls had lower levels of ossification (β = −0.0044; p &lt; 0.005).</blockquote>
+<p><b>Reading that was checked:</b> The median of Percentage of ossification over all rows equals 2 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>median</code>: exact value ≈ 2 from 96 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 2 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Percentage of ossification” — named in the sentence as “ossification”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “median” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt e417563dcdac953c</small></article>
+</html>

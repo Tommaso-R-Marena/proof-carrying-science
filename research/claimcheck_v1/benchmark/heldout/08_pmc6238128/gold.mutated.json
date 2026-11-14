@@ -1,0 +1,112 @@
+{
+ "annotation": "derived deterministically from gold.json by benchmark/mutate.py; planted errors confirmed by an independent calculation",
+ "synthetic_variant_of": "article.txt",
+ "items": [
+  {
+   "id": "H08-01",
+   "token": "499",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "sum",
+     "column": "N",
+     "reported": "499"
+    }
+   ],
+   "truth": "inconsistent",
+   "original_token": "501",
+   "planted": "value_change",
+   "start": 6273,
+   "end": 6276
+  },
+  {
+   "id": "H08-02",
+   "token": "96",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "reported": "96"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "96",
+   "start": 6292,
+   "end": 6294
+  },
+  {
+   "id": "H08-03",
+   "token": "3",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "N",
+     "reported": "3"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "3",
+   "start": 6947,
+   "end": 6948
+  },
+  {
+   "id": "H08-04",
+   "token": "17",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "N",
+     "reported": "17"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "17",
+   "start": 6952,
+   "end": 6954
+  },
+  {
+   "id": "H08-07",
+   "token": "32",
+   "kind": "not_derivable",
+   "why": "skull-shape sample, a different table",
+   "original_token": "32",
+   "start": 7646,
+   "end": 7648
+  },
+  {
+   "id": "H08-08",
+   "token": "0.94",
+   "kind": "not_derivable",
+   "why": "brain size is not in this table",
+   "original_token": "0.94",
+   "start": 11806,
+   "end": 11810
+  },
+  {
+   "id": "H08-05",
+   "token": "96",
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "reported": "96"
+    }
+   ],
+   "truth": "consistent",
+   "original_token": "96",
+   "start": 13105,
+   "end": 13107
+  },
+  {
+   "id": "H08-06",
+   "token": "24",
+   "kind": "not_derivable",
+   "why": "a subset defined by brain-mass data that this table does not contain",
+   "original_token": "24",
+   "start": 13199,
+   "end": 13201
+  }
+ ]
+}
