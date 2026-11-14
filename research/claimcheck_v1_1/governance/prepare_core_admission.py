@@ -82,7 +82,10 @@ def main(argv=None) -> int:
         tracked = set(git(wt, "ls-files", "-z").split("\0")) - {""}
         controls22 = set(v22["control_paths"])
         # ---- census: this change may only ADD files --------------------------------------------------
-        changed = [n for n, ident in v22["snapshot"].items() if n not in tracked or identity(wt, n) != ident]
+        # the gate itself already binds one reviewed test successor (same file, new bytes); use its own rule
+        sys.path.insert(0, str(wt))
+        from research.integration_v2.reconcile import _current_expected
+        changed = [n for n, ident in v22["snapshot"].items() if n not in tracked or identity(wt, n) != _current_expected(n, ident)]
         added = sorted(tracked - set(v22["snapshot"]) - controls22)
         report["existing_files_changed_or_removed"] = changed
         report["files_added"] = len(added)
@@ -174,7 +177,8 @@ def main(argv=None) -> int:
         report["successor_manifest"] = {"path": V23, "sha256": v23_sha, "bytes": len(v23_raw), "snapshot_entries": len(v23["snapshot"]),
                                         "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"}
         tests = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", "research/integration_v2/test_reconcile.py"], cwd=wt, capture_output=True, text=True)
-        report["existing_control_tests_on_the_successor"] = {"exit": tests.returncode, "last_line": (tests.stdout.strip().splitlines() or [""])[-1][:200],
+        report["existing_control_tests_on_the_successor"] = {"exit": tests.returncode,
+                                                             "last_line": ((tests.stdout.strip() or tests.stderr.strip()).splitlines() or [""])[-1][:200],
                                                              "note": "These tests are control files and pin V22 details; they need a reviewed update together with the successor."}
         (out / "ADMISSION_CENSUS.json").write_text(json.dumps(census, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         report["all_as_expected"] = (not changed and report["gate_with_successor"]["passed"] and ok
