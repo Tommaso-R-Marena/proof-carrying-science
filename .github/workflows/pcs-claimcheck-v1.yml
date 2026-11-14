@@ -1,4 +1,4 @@
-name: PCS ClaimCheck v1 research checks (actual Lean 4.28)
+name: PCS ClaimCheck research checks (v1 and v1.1, actual Lean 4.28)
 
 # Path-scoped research CI. It grants no production authority and does not replace
 # the protected source-admission gate.
@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - "research/claimcheck_v1/**"
+      - "research/claimcheck_v1_1/**"
       - ".github/workflows/pcs-claimcheck-v1.yml"
   workflow_dispatch:
 
@@ -35,6 +36,21 @@ jobs:
           python research/claimcheck_v1/replay_independent.py \
             research/claimcheck_v1/benchmark/results/bundles/08_pmc6238128 \
             --checker-sha256 "$(cut -d' ' -f1 research/claimcheck_v1/formal/ClaimCheck.lean.sha256)"
+      - name: v1.1 offline tests (policy, records, statistics, runner; no Lean, no network)
+        run: python -m unittest discover -s research/claimcheck_v1_1/tests -v
+      - name: v1.1 live checks with the real kernel (end to end, replay, tampering, fail-closed, runner)
+        run: python -m research.claimcheck_v1_1.check_live_v11
+      - name: Contamination safeguards reject a v1 pool record and a copy of a used article
+        run: |
+          python - <<'PY'
+          import json
+          from research.claimcheck_v1_1.prospective.contamination import V1, check
+          pool = json.loads((V1 / "candidates.json").read_text())
+          assert check(pool[0]), "a v1 pool record must be excluded"
+          d = V1 / "heldout" / "06_pmc5980576"
+          assert check({"zenodo": "0", "title": "x"}, (d / "article.mutated.txt").read_text(), None), "a copy of a used article must be excluded"
+          assert check({"zenodo": "0", "title": "Thermal tolerance of limpets"}, "new text " * 200, b"a,b\n1,2\n") == []
+          PY
       - name: Post-run analysis reproduces from committed receipts (no Lean, no network)
         run: |
           python -m research.claimcheck_v1.tools.analyze \
