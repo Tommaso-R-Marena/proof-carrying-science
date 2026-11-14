@@ -46,9 +46,17 @@ existing workflow. `source-policy` and `verified-public-integration` stay red un
 
 ## D. Website (companion PR)
 
-In the site repository, `docs/governance/CLAIMCHECK_PROPOSALS.md`: the reading-help successor
-(fresh evidence and manifest are in the branch; the verifier change is a patch, not applied), the
-frozen-`public/` rule of the reconciliation gate, and wiring the page's tests into the release gate.
+Exact patches, security implications and dry-run records are in the site repository,
+`docs/governance/CLAIMCHECK_PROPOSALS.md` and `docs/governance/claimcheck-proposals/`.
+
+| # | Decision | Protected file | Owner-held action |
+| --- | --- | --- | --- |
+| D1 | Accept the reading-help successor (one help entry added; fresh all-page browser run) | `scripts/verify_browser_ui_sources.mjs` | approve patch 01, which fixes the successor by digest |
+| D2 | Admit the page's sources; let `public/` change to an owner-tagged retained commit | `scripts/check_reconciled_prs.py` | approve patch 02; create the retained commit and push its tag; without a change to the gate's `public/` rule no public change can ever pass |
+| D3 | Put the page's tests in the complete website gate | `package.json` (`ci:zero-minutes`) | approve patch 03; optionally make `claim-check-page` a required check |
+
+None of the three patches is applied. Four hosted checks stay red on the site PR until D1 and D2
+are decided.
 
 ## E. Further integration, pilots, release
 

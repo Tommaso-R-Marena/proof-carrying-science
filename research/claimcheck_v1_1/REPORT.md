@@ -17,6 +17,8 @@ run; it waits for the owner's approval.
 | Free-choice adversary on the same documents | completed; partly oracle-predicted, pass-throughs kernel-checked |
 | Independent software replay of v1.1 bundles | completed locally by a separate program; hosted CI job added |
 | Kernel cost benchmark | completed |
+| Web page: browser-built proof file accepted by the real kernel through the served runner | completed (authored automation, site repository) |
+| Source admission, reading-help re-qualification, CI gate | **prepared and dry-run tested; not applied** (owner decisions C and D) |
 | Prospective evaluation | **not run** (protocol drafted) |
 | Independent human adjudication | **not done** (blinded package prepared, nobody asked yet) |
 | Usability study with researchers | **not done** (protocol prepared, no participant) |
@@ -113,6 +115,7 @@ The path of an authoritative statement, and what was tested at each step
 | record → what the user is told | outward verdict recomputed from the findings by the replayer; invariant asserted in code | (unit tests) a v1 `UNKNOWN` can never become a verdict; a match never becomes a discrepancy | pass |
 | conditional result | one SD convention matches, the other does not | (unit and v1 tests) | `REQUIRE_HUMAN_REVIEW`, both branches shown |
 | "fresh" | a record carries `kernel_run` only when the kernel ran in that invocation | record without kernel acceptance | `kernel_run` is null and the verdict is `UNKNOWN` |
+| web page → local kernel run | the page never runs Lean; a `kernel-run.json` from the stand-alone runner is shown only if its proof-file, data and checker digests equal what the page built, under the label "reported by your local run · not verified by this page" | report for other data; report for another proof file (real browser, real kernel, site repository `scripts/browser_claim_check.cjs`) | both refused; an accepted report is never called verified |
 
 The trusted computing base is unchanged from v1 ([`../claimcheck_v1/TRUST_BOUNDARY.md`](../claimcheck_v1/TRUST_BOUNDARY.md)):
 the Lean 4.28.0 binary, `ClaimCheck.lean` (digest `35c83b28…`), the process boundary that runs
