@@ -71,6 +71,9 @@ def classes(doc, outcomes: dict) -> Counter:
         match = any(spec_signature(doc, s) in gold_sigs for s in o["specs"])
         kind, truth, res = item["kind"], item.get("truth"), o["result"]
         derivable = kind == "derivable"
+        if res != "NO_PROPOSAL":      # the arm proposed at least one reading for this number
+            c["exposed_true" if derivable and truth == "consistent" else "exposed_false" if derivable and truth == "inconsistent"
+              else "exposed_conditional" if derivable else "exposed_not_derivable"] += 1
         if res == "PROVED":
             c["correct_confirmation" if derivable and truth == "consistent" and match else "unsupported_confirmation"] += 1
         elif res == "REFUTED":

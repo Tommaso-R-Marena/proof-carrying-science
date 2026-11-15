@@ -52,10 +52,12 @@ def upper_bound(k: int, n: float, confidence: float = 0.95) -> float:
 
 
 def lower_bound(k: int, n: float, confidence: float = 0.95) -> float:
-    n = int(math.floor(n))
+    """One-sided exact lower confidence bound.  A fractional n is rounded UP: for a lower bound more
+    trials with the same number of events is the conservative direction (draft 2; draft 1 rounded down)."""
+    n = int(math.ceil(n))
     if n <= 0 or k <= 0:
         return 0.0
-    return 1.0 - upper_bound(n - k, n, confidence)
+    return 1.0 - upper_bound(n - min(k, n), n, confidence)
 
 
 def intraclass_correlation(clusters: list[tuple[int, int]]) -> float:
@@ -75,13 +77,22 @@ def intraclass_correlation(clusters: list[tuple[int, int]]) -> float:
     return max(0.0, min(1.0, (msb - msw) / denom)) if denom > 0 else 0.0
 
 
-def design_effect(clusters: list[tuple[int, int]]) -> float:
+def weighted_cluster_size(clusters: list[tuple[int, int]]) -> float:
+    """Cluster size experienced by an average claim: sum n_i^2 / sum n_i."""
+    clusters = [(k, n) for k, n in clusters if n > 0]
+    big_n = sum(n for _k, n in clusters)
+    return sum(n * n for _k, n in clusters) / big_n if big_n else 1.0
+
+
+def design_effect(clusters: list[tuple[int, int]], icc_floor: float = 0.0) -> float:
+    """1 + (weighted cluster size - 1) * ICC, with ICC = max(estimate, icc_floor).
+
+    The estimate is 0 when no event (or only events) is observed, because the data then say nothing
+    about clustering.  ``icc_floor`` is the pre-specified assumption that replaces it (draft 2)."""
     clusters = [(k, n) for k, n in clusters if n > 0]
     if not clusters:
         return 1.0
-    big_n = sum(n for _k, n in clusters)
-    weighted_size = sum(n * n for _k, n in clusters) / big_n       # size experienced by an average claim
-    return 1.0 + (weighted_size - 1.0) * intraclass_correlation(clusters)
+    return 1.0 + (weighted_cluster_size(clusters) - 1.0) * max(icc_floor, intraclass_correlation(clusters))
 
 
 def bootstrap_interval(clusters: list[tuple[int, int]], *, reps: int = 10000, seed: int = 20261112, confidence: float = 0.95) -> tuple[float, float]:
@@ -99,13 +110,16 @@ def bootstrap_interval(clusters: list[tuple[int, int]], *, reps: int = 10000, se
     return stats[int(a * reps)], stats[min(reps - 1, int((1 - a) * reps))]
 
 
-def proportion(clusters: list[tuple[int, int]], confidence: float = 0.95) -> dict:
+ICC_GRID = (0.0, 0.1, 0.25, 0.5, 1.0)
+
+
+def proportion(clusters: list[tuple[int, int]], confidence: float = 0.95, icc_floor: float = 0.0) -> dict:
     """Everything reported for one proportion.  ``clusters`` holds one (events, opportunities) pair per paper."""
     clusters = [(k, n) for k, n in clusters if n > 0]
     k, n = sum(c[0] for c in clusters), sum(c[1] for c in clusters)
     papers = len(clusters)
     papers_with_event = sum(1 for c in clusters if c[0] > 0)
-    deff = design_effect(clusters)
+    deff = design_effect(clusters, icc_floor)
     n_eff = n / deff if deff > 0 else 0
     k_eff = math.ceil(k / deff) if deff > 0 else k
     lo, hi = bootstrap_interval(clusters, confidence=confidence) if clusters else (0.0, 1.0)
@@ -121,7 +135,37 @@ def proportion(clusters: list[tuple[int, int]], confidence: float = 0.95) -> dic
         "bootstrap_interval_over_papers": [lo, hi],
     }
     out["conservative_upper_bound"] = max(out["upper_bound_design_effect_adjusted"], out["bootstrap_interval_over_papers"][1])
+    out["icc_estimate"] = round(intraclass_correlation(clusters), 4) if clusters else None
+    out["icc_floor_assumed"] = icc_floor
+    size = weighted_cluster_size(clusters)
+    out["weighted_cluster_size"] = round(size, 2)
+    # what the bound would be under other assumptions about clustering (reported, never used to pass a criterion)
+    out["upper_bound_by_assumed_icc"] = {
+        str(rho): upper_bound(math.ceil(k / (1 + (size - 1) * rho)), n / (1 + (size - 1) * rho), confidence) for rho in ICC_GRID}
     return out
+
+
+def max_events_for_bound(n: int, bound: float, confidence: float = 0.95) -> int:
+    """Largest number of events in n independent units whose exact upper bound is still at most ``bound`` (-1 if none)."""
+    k = -1
+    while k + 1 < n and upper_bound(k + 1, n, confidence) <= bound:
+        k += 1
+    return k
+
+
+def acceptance_probability(n: int, max_events: int, true_rate: float) -> float:
+    """P(at most ``max_events`` events among n independent units) when each has probability ``true_rate``."""
+    return _binom_cdf(max_events, n, true_rate) if max_events >= 0 else 0.0
+
+
+def power_table(bound: float, sizes=(60, 90, 120, 180), rates=(0.001, 0.0025, 0.005, 0.01, 0.02, 0.05, 0.10)) -> list[dict]:
+    """For a criterion "exact upper bound over n papers <= bound": events allowed, and the chance of passing by true rate."""
+    rows = []
+    for n in sizes:
+        allowed = max_events_for_bound(n, bound)
+        rows.append({"papers": n, "bound": bound, "affected_papers_allowed": allowed,
+                     "chance_of_passing_by_true_paper_level_rate": {str(r): round(acceptance_probability(n, allowed, r), 3) for r in rates}})
+    return rows
 
 
 def papers_needed_for_zero_events(bound: float, confidence: float = 0.95) -> int:
@@ -129,5 +173,5 @@ def papers_needed_for_zero_events(bound: float, confidence: float = 0.95) -> int
     return math.ceil(math.log(1 - confidence) / math.log(1 - bound))
 
 
-__all__ = ["upper_bound", "lower_bound", "intraclass_correlation", "design_effect", "bootstrap_interval", "proportion",
-           "papers_needed_for_zero_events", "Fraction"]
+__all__ = ["upper_bound", "lower_bound", "intraclass_correlation", "design_effect", "weighted_cluster_size", "bootstrap_interval",
+           "proportion", "papers_needed_for_zero_events", "max_events_for_bound", "acceptance_probability", "power_table", "Fraction"]
