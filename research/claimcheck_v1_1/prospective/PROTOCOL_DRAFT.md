@@ -389,7 +389,7 @@ paid configuration are in [`MODEL_ACCESS.md`](MODEL_ACCESS.md). The Nemotron hal
 times; the Gemini price could not be read from the provider's model listing and must be confirmed
 before any paid use. A total cap of 15 US dollars is proposed. No paid call has been made. Kernel
 time about 10 hours per 60 papers on the reference machine. Adjudication: roughly 1,500 numbers per
-adjudicator per 60 papers, estimated 35 to 50 hours each
+adjudicator per 60 papers, estimated 35 to 55 hours each
 ([`../adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md`](../adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md)).
 
 ## 14. What this evaluation cannot show
