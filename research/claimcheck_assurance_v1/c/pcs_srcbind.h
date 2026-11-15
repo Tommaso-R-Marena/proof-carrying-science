@@ -40,7 +40,10 @@ size_t pcs_header_encode(uint8_t *out, size_t cap, const uint8_t *d, size_t m);
  * (and at most PCS_MAX_DATA bytes), stores that data in out[0..*m), sets *m, and returns the header
  * size (> 0).  Otherwise returns 0; *m is then unspecified and out may have been partly written
  * (never beyond cap).
- * Requires: buf readable for n bytes, out writable for cap bytes, m a valid pointer. */
+ * Requires: buf readable for n bytes, out writable for cap bytes, m a valid pointer, and the three
+ * objects buf[0..n), out[0..cap) and *m pairwise disjoint.  The last condition matters: if m points
+ * into out, the final store to *m overwrites decoded bytes and the call still succeeds (found by
+ * Aristotle, see ARISTOTLE_RESULTS.md and aristotle/sim/). */
 size_t pcs_header_decode(const uint8_t *buf, size_t n, uint8_t *out, size_t cap, size_t *m);
 
 #endif
