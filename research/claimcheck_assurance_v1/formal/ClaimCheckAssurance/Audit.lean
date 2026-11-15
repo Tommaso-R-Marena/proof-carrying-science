@@ -1,6 +1,7 @@
 import ClaimCheckAssurance.SourceBinding
 import ClaimCheckAssurance.Authority
 import ClaimCheckAssurance.Selection
+import ClaimCheckAssurance.Header
 
 /-!
 # Axiom audit
@@ -43,3 +44,16 @@ open PCS.ClaimCheck PCS.ClaimCheck.Assurance
 #print axioms sliding_window_exceeds_nominal_rate
 #print axioms strict_rule_within_two_percent
 #print axioms blockConfirmable_count_le
+#print axioms PRE_text
+#print axioms SUF_text
+#print axioms decStr_eq
+#print axioms decVal_decStr
+#print axioms decStr_decVal
+#print axioms unhex_hexBytes
+#print axioms hexBytes_unhex
+#print axioms hexValue_hexOf
+#print axioms decode_canon
+#print axioms decode_sound
+#print axioms canon_prefix_free
+#print axioms accepted_header_denotes_data
+#print axioms accepted_header_run
