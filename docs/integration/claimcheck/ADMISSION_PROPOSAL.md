@@ -37,6 +37,10 @@ commit named above and must be regenerated at the commit the owner fixes (step 2
 Licences of the bundled third-party material: article text CC BY, data CC0 or CC BY, each recorded
 with source URL, digest and retrieval time in `benchmark/*/*/acquisition.json` and `document.json`.
 
+An audit of every added file (credentials, generated files, duplicates, modes, licences, frozen
+digests, protected paths) finds nothing that blocks admission; it also explains how to review the
+addition by replay and digests rather than by reading: [`ADMISSION_AUDIT.md`](ADMISSION_AUDIT.md).
+
 ## The proposed change, exactly
 
 [`proposed-control-changes.patch`](proposed-control-changes.patch), plus one generated file:
