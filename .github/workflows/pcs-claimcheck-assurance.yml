@@ -7,6 +7,7 @@ on:
       - "research/claimcheck_assurance_v1/**"
       - "research/claimcheck_v1/formal/ClaimCheck.lean"
       - "research/claimcheck_v1_1/policy.py"
+      - "research/claimcheck_v1_1/space.py"
       - "research/claimcheck_v1_1/claimcheck_kernel_runner.py"
       - ".github/workflows/pcs-claimcheck-assurance.yml"
   workflow_dispatch:
@@ -45,6 +46,8 @@ jobs:
         run: python3 research/claimcheck_assurance_v1/conformance/test_header_refinement.py
       - name: Lean model of the verdict policy against the Python policy
         run: python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
+      - name: Implemented decoy rule against its Lean model
+        run: python3 research/claimcheck_assurance_v1/conformance/test_decoy_rule.py
       - name: C codec under address and undefined-behaviour sanitizers
         run: python3 research/claimcheck_assurance_v1/c/test_srcbind.py
       - name: Strict proof-file grammar, and the runner forgery with the real kernel

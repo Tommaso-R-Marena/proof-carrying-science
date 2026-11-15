@@ -44,6 +44,8 @@ open PCS.ClaimCheck PCS.ClaimCheck.Assurance
 #print axioms sliding_window_exceeds_nominal_rate
 #print axioms strict_rule_within_two_percent
 #print axioms blockConfirmable_count_le
+#print axioms routes_block_le
+#print axioms routes_count_le
 #print axioms PRE_text
 #print axioms SUF_text
 #print axioms decStr_eq

@@ -15,7 +15,8 @@ checker, a benchmark, a protected file or any production path. Kernel-checked wi
 | the rest of the generated part (claims, theorem statements) | eight forbidden words | `runner/strict_tail.py`: exactly the generator's language | **tested** (84 real files accepted, 16 forgeries rejected) |
 | kernel result → outward verdict | `assert` in the Python policy | `Authority.lean`: a decided verdict implies the statement about the real `run`; unknown and conditional results never become decided; withdrawing evidence never raises a verdict; a discrepancy needs a kernel-confirmed sibling | **proved** about a Lean model |
 | | | the Python policy computes the model's decision function on 302 real receipts and every one of 160 + 448 table states | **tested** (`conformance/check_conformance.py`) |
-| the decoy rule against a chooser who saw the data | "2 %" | `Selection.lean`: at most 2/51 ≈ 3.9 % of unrelated numbers are confirmable, and 2/52 is reached; two rules that do give 2 % | **proved** (finding) |
+| the decoy rule against a chooser who saw the data | "2 %" | `Selection.lean`: at most 2/51 ≈ 3.9 % of unrelated numbers are confirmable by either confirmation route (direct, or supported by one sibling), and 2/52 is reached; two rules that do give 2 % | **proved** (finding) |
+| | | every confirmation the implemented rule makes is confirmable in the model (785 checked); the real rule confirms 3.6 % in the worst pattern | **tested** (`conformance/test_decoy_rule.py`) |
 | the kernel itself, the Lean binary, SHA-256, the process boundary | trusted | — | **trusted**, unchanged |
 
 ## Findings
@@ -78,7 +79,17 @@ axiom. Every other input (findings, sibling links, notes, claims) is arbitrary.
 
 **Selection** (`Selection.lean`): `confirmable_block_le`, `confirmable_count_le`,
 `confirmable_count_le_general`, `sliding_window_exceeds_nominal_rate`,
-`strict_rule_within_two_percent`, `blockConfirmable_count_le`.
+`strict_rule_within_two_percent`, `blockConfirmable_count_le`, and for both confirmation routes
+together `routes_block_le` and `routes_count_le`:
+
+```lean
+theorem routes_block_le (R : Nat → Bool) (Rs : List (Nat → Bool))
+    (hsub : ∀ R' ∈ Rs, ∀ n, R' n = true → R n = true) (r k a : Nat) :
+    (List.range' a (r + 1)).countP (confirmableByRoutes R Rs r k) ≤ max 1 Rs.length * k
+```
+
+With one supporting sibling the bound is the same as for the direct route; with `s` different
+supporting reading sets it is `s · k`, and an example shows it can exceed `k`.
 
 Negative controls sit at the end of each module: every hypothesis is shown to be needed by a
 concrete case, and `coreFlawed` shows that the monotonicity theorem fails for a plausible wrong policy.
@@ -90,9 +101,9 @@ concrete case, and `coreFlawed` shows that the monotonicity theorem fails for a 
 * That the C decoder is memory safe for every input: sanitizer tests pass; Aristotle's memory-safety
   property for the decoder is unresolved.
 * The claims part of the proof file: strict grammar, tested, not proved.
-* The decoy bound covers the direct route and, for a fixed set of supporting numbers, the
-  sibling-supported route. With `s` different supporting scopes available to a chooser the bound can
-  grow by a factor of at most `s + 1`; not proved here.
+* The decoy bound with `s` different supporting reading sets is `s · k` per 51 numbers (proved). How
+  many such sets a chooser can obtain in one sentence is not bounded here; it is limited by the
+  numbers that are themselves strongly confirmed.
 * Anything about meaning: `faithfulness_not_decidable_from_observables` states why no verdict claims
   that a reading is what the authors meant.
 
@@ -103,6 +114,7 @@ source scripts/activate_lean_428.sh
 research/claimcheck_assurance_v1/formal/build.sh
 python3 research/claimcheck_assurance_v1/conformance/test_header_refinement.py
 python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
+python3 research/claimcheck_assurance_v1/conformance/test_decoy_rule.py
 python3 research/claimcheck_assurance_v1/c/test_srcbind.py
 PCS_LEAN="$(command -v lean)" python3 research/claimcheck_assurance_v1/runner/test_strict_tail.py
 ```

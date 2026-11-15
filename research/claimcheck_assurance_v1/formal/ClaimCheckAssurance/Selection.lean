@@ -190,4 +190,112 @@ example : (List.range 200).countP (blockConfirmable (fun n => decide (n % 100 < 
 example : (List.range 100).countP (confirmable (fun _ => true) 50 1000) = 100 := by
   decide +kernel
 
+/-! ## Both confirmation routes together
+
+The implemented policy confirms a number either directly (the readings `R` bound to it) or with the
+support of a confirmed sibling number in the same sentence (`policy.py`, the pinned analysis). The
+sibling route looks only at readings that are also bound to the number and that the sibling fixes,
+so its reproducible set `R'` is a subset of `R`. A chooser may offer several siblings, giving
+several such subsets. -/
+
+/-- Confirmable directly, or through one of the sibling-supported reading sets `Rs`. -/
+def confirmableByRoutes (R : Nat → Bool) (Rs : List (Nat → Bool)) (r k c : Nat) : Bool :=
+  confirmable R r k c || Rs.any (fun R' => confirmable R' r k c)
+
+theorem countP_or_le (p q : Nat → Bool) (l : List Nat) :
+    l.countP (fun x => p x || q x) ≤ l.countP p + l.countP q := by
+  induction l with
+  | nil => simp
+  | cons x l ih =>
+    simp only [List.countP_cons]
+    cases hp : p x <;> cases hq : q x <;> simp [hp, hq] <;> omega
+
+theorem countP_any_le {α : Type} (ys : List α) (g : α → Nat → Bool) (l : List Nat) :
+    l.countP (fun x => ys.any (fun y => g y x)) ≤ (ys.map (fun y => l.countP (g y))).sum := by
+  induction ys with
+  | nil => simp
+  | cons y ys ih =>
+    simp only [List.any_cons, List.map_cons, List.sum_cons]
+    exact Nat.le_trans (countP_or_le (g y) (fun x => ys.any (fun y' => g y' x)) l) (by omega)
+
+theorem sum_map_le {α : Type} (ys : List α) (f : α → Nat) (k : Nat) (h : ∀ y ∈ ys, f y ≤ k) :
+    (ys.map f).sum ≤ ys.length * k := by
+  induction ys with
+  | nil => simp
+  | cons y ys ih =>
+    simp only [List.map_cons, List.sum_cons, List.length_cons, Nat.succ_mul]
+    have h1 := h y (by simp)
+    have h2 := ih (fun y' hy' => h y' (by simp [hy']))
+    omega
+
+/-- **Both routes together:** any `r + 1` consecutive comparable numbers contain at most
+`max 1 s · k` numbers confirmable by some route, where `s` is the number of sibling-supported
+reading sets, each a subset of the direct one. With one sibling set the bound is the same `k` as
+for the direct route alone. -/
+theorem routes_block_le (R : Nat → Bool) (Rs : List (Nat → Bool))
+    (hsub : ∀ R' ∈ Rs, ∀ n, R' n = true → R n = true) (r k a : Nat) :
+    (List.range' a (r + 1)).countP (confirmableByRoutes R Rs r k) ≤ max 1 Rs.length * k := by
+  have hk : k ≤ max 1 Rs.length * k := Nat.le_trans (Nat.le_of_eq (Nat.one_mul k).symm)
+    (Nat.mul_le_mul_right k (Nat.le_max_left 1 _))
+  by_cases h : ∃ c ∈ List.range' a (r + 1), confirmable R r k c = true
+  · obtain ⟨c, hc, hconf⟩ := h
+    have hc' := List.mem_range'_1.mp hc
+    have hwin : windowCount R r c ≤ k := by
+      simp [confirmable] at hconf
+      exact hconf.2
+    have hsubl : (List.range' a (r + 1)).Sublist (List.range' (c - r) (c + r + 1 - (c - r))) :=
+      range'_sublist_range' (by omega) (by omega)
+    have hR : (List.range' a (r + 1)).countP R ≤ k := Nat.le_trans hsubl.countP_le hwin
+    have himp : ∀ x ∈ List.range' a (r + 1), confirmableByRoutes R Rs r k x = true → R x = true := by
+      intro x _ hx
+      simp only [confirmableByRoutes, Bool.or_eq_true, List.any_eq_true] at hx
+      rcases hx with hx | ⟨R', hR', hx⟩
+      · simp [confirmable] at hx
+        exact hx.1
+      · simp [confirmable] at hx
+        exact hsub R' hR' x hx.1
+    exact Nat.le_trans (Nat.le_trans (List.countP_mono_left himp) hR) hk
+  · have himp : ∀ x ∈ List.range' a (r + 1), confirmableByRoutes R Rs r k x = true →
+        Rs.any (fun R' => confirmable R' r k x) = true := by
+      intro x hx hconf
+      have hnot : confirmable R r k x = false := by
+        cases e : confirmable R r k x
+        · rfl
+        · exact absurd ⟨x, hx, e⟩ h
+      simpa [confirmableByRoutes, hnot] using hconf
+    calc (List.range' a (r + 1)).countP (confirmableByRoutes R Rs r k)
+        ≤ (List.range' a (r + 1)).countP (fun x => Rs.any (fun R' => confirmable R' r k x)) :=
+          List.countP_mono_left himp
+      _ ≤ (Rs.map (fun R' => (List.range' a (r + 1)).countP (confirmable R' r k))).sum :=
+          countP_any_le Rs (fun R' => confirmable R' r k) _
+      _ ≤ Rs.length * k := sum_map_le Rs _ k (fun R' _ => confirmable_block_le R' r k a)
+      _ ≤ max 1 Rs.length * k := Nat.mul_le_mul_right k (Nat.le_max_right 1 _)
+
+/-- Among the first `q (r + 1)` comparable numbers at most `q · max 1 s · k` are confirmable by
+some route. For the implemented rule with one supporting sibling: at most 2 in every 51. -/
+theorem routes_count_le (R : Nat → Bool) (Rs : List (Nat → Bool))
+    (hsub : ∀ R' ∈ Rs, ∀ n, R' n = true → R n = true) (r k q : Nat) :
+    (List.range (q * (r + 1))).countP (confirmableByRoutes R Rs r k) ≤ q * (max 1 Rs.length * k) := by
+  induction q with
+  | zero => simp
+  | succ q ih =>
+    have e : List.range ((q + 1) * (r + 1)) = List.range (q * (r + 1)) ++ List.range' (q * (r + 1)) (r + 1) := by
+      have := @List.range'_append 0 (q * (r + 1)) (r + 1) 1
+      rw [Nat.one_mul, Nat.zero_add] at this
+      rw [List.range_eq_range', List.range_eq_range', this, Nat.succ_mul]
+    rw [e, List.countP_append, Nat.succ_mul]
+    have := routes_block_le R Rs hsub r k (q * (r + 1))
+    omega
+
+/-- The subset hypothesis is needed: a sibling set that is not a subset of the direct one adds two
+confirmable numbers to a block that already has one, 3 > max 1 1 · 2. -/
+example : (List.range' 0 51).countP
+    (confirmableByRoutes (fun n => n == 0) [fun n => n == 30 || n == 31] 50 2) = 3 := by
+  decide +kernel
+
+/-- Several sibling sets can each confirm different numbers: the bound grows with their number. -/
+example : (List.range' 0 51).countP
+    (confirmableByRoutes (fun n => decide (n % 10 = 0)) [fun n => n == 10, fun n => n == 20, fun n => n == 30] 50 2) = 3 := by
+  decide +kernel
+
 end PCS.ClaimCheck.Assurance
