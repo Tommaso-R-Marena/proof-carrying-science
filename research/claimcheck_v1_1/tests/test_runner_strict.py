@@ -79,6 +79,8 @@ class StrictRunner(unittest.TestCase):
                     self.assertIn("not in canonical form", report["why_not"])
 
     def test_size_limits_are_refused_with_their_own_reason(self):
+        from research.claimcheck_v1 import lean as generator
+        self.assertEqual(runner.MAX_DATA_BYTES, generator.MAX_DATA_BYTES, "the runner accepts exactly the generator's data sizes")
         head, tail = OBLIGATIONS[0].read_text(encoding="utf-8").split(MARKER)
         big = runner.MAX_DATA_BYTES + 1
         with self.assertRaisesRegex(runner.NotCanonical, "this runner accepts at most"):

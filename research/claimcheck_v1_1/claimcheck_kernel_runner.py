@@ -69,7 +69,7 @@ PREAMBLE = "open PCS.ClaimCheck\n\n"
 SRC = re.compile(r"def pcs_src : Source := ⟨0x([0-9a-f]+), (0|[1-9][0-9]*)⟩\n\n")
 OUTCOME_RE = re.compile(OUTCOME)
 MAX_CLAIMS = 256
-MAX_DATA_BYTES = 1 << 20
+MAX_DATA_BYTES = 65536          # the generator's bound (claimcheck_v1/lean.py) and MAXD of the Lean header model
 
 
 class NotCanonical(ValueError):
