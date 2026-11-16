@@ -32,7 +32,12 @@ Read first: `README.md` (this directory), `../claimcheck_v1_1/OWNER_DECISIONS.md
 
 ## 3. Open proof obligations (precise)
 
-1. **Canonical grammar for the claims part.** The installed runner's `parse_tail` accepts only the generator's
+1. **Canonical grammar for the claims part. Done 2026-11-16:** `formal/ClaimCheckAssurance/Claims.lean`
+   proves `parseTail_iff`, `renderTail_injective` and `same_meaning_same_text`; the runner's grammar
+   was made canonical (core `39ce953c`) and agrees with the Lean parser on 7,248 inputs
+   (`conformance/test_claims_refinement.py`). What remains: the agreement is a test, not a proof; and
+   Lean's reading of the literals is trusted. The original statement of the obligation, for the
+   record: the installed runner's `parse_tail` accepted only the generator's
    language, so no foreign definition can enter a proof file, but it is not canonical: a byte string
    of safe characters may be written `b "abc"` or `[97, 98, 99]`; a rational may be unreduced
    (`((2 : Rat) / 2)`) or `-0`. Both spellings denote the same claim, so this is not a soundness
@@ -61,8 +66,8 @@ Read first: `README.md` (this directory), `../claimcheck_v1_1/OWNER_DECISIONS.md
 
 | Task | Isolated in | Acceptance |
 | --- | --- | --- |
-| A. tighten the installed runner's `parse_tail` to canonical forms | core `../claimcheck_v1_1/claimcheck_kernel_runner.py` (and the site's copy) | the 84 committed obligation files accepted; non-canonical spellings of byte strings and rationals rejected; `test_strict_tail.py` and `test_header_refinement.py` pass |
-| B. Lean renderer and parser for the claims part (obligation 1) | new `formal/ClaimCheckAssurance/Claims.lean` | kernel build passes; axiom report extended and still standard; a refinement test like `test_header_refinement.py` comparing the Lean parser with the installed runner's `parse_tail` on all committed files and mutations |
+| A. **done** (core `39ce953c`): tighten the installed runner's `parse_tail` to canonical forms | core `../claimcheck_v1_1/claimcheck_kernel_runner.py` (and the site's copy) | the 84 committed obligation files accepted; non-canonical spellings of byte strings and rationals rejected; `test_strict_tail.py` and `test_header_refinement.py` pass |
+| B. **done**: Lean renderer and parser for the claims part (obligation 1) | `formal/ClaimCheckAssurance/Claims.lean` | kernel build passes; axiom report extended and still standard; a refinement test like `test_header_refinement.py` comparing the Lean parser with the installed runner's `parse_tail` on all committed files and mutations |
 | C. prospective-evaluation plumbing on synthetic data only: screening record, adjudication form intake with sealing (SHA-256 and time before comparison), Cohen's κ, the D1 report | `../claimcheck_v1_1/prospective/` | tests on synthetic fixtures only; nothing reads a prospective paper; `test_score_draft2.py` still passes |
 | D. **done 2026-11-16** (C3/D4 authorised for preparation and testing): the v1.1 runner and the site's copy replaced by the strict runner | core `d5a36975`, `2de4f872`; site `a6e8c9c` | the forgery is a must-reject case in the core offline and live suites and in the site's tests and browser journey; the site pins the new digest |
 | E. ~~change the decoy rule~~: the owner decided A6 on 2026-11-16 to **retain** the rule and correct its wording (done in the ClaimCheck branch). Alternatives may be compared on development data only; the software to be frozen does not change without approval | `../claimcheck_v1_1/dev/` | any comparison is labelled exploratory and leaves `policy.py` unchanged |

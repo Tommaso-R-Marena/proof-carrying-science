@@ -32,11 +32,17 @@ Proved (Lean kernel):
 So every accepted tail consists of the canonical header of its data, the definitions
 `def pcs_c<i> : Claim := claimR (cs[i])`, the batch theorem `runAll pcs_src [pcs_c0, …] = [outR os[0], …]`,
 and for every `i` the theorem `run pcs_src pcs_c<i> = outR os[i]`, proved by `run_of_runAll` from the
-batch theorem, and nothing else: no other declaration, command, comment or spacing.  `denote` maps the
-syntax to the checker's own values (`Claim`, `Outcome`); read with the standard meaning of Lean's
-literals (`accepted_tail_statement`), theorem `i` of an accepted tail states
-`run src (denoteClaim cs[i]) = denoteOutcome os[i]` about the reviewed checker's `run`, for the
-source `src` whose bytes are the decoded data (`Header.accepted_header_denotes_data`).
+batch theorem, and nothing else: no other declaration, command, comment or spacing.
+
+`ClaimA.den` and `OutcomeA.den` map the syntax to the checker's own values (`Claim`, `Outcome`).  Read
+with the standard meaning of Lean's literals, the batch theorem of an accepted tail states
+`runAll src (cs.map ClaimA.den) = os.map OutcomeA.den` and theorem `i` states
+`run src (cs[i]).den = (os[i]).den`, about the reviewed checker's `run`, for the source `src` whose
+bytes are exactly the decoded data (`parseTail_source`, from `Header.lean`).  Further proved:
+
+* `batch_iff_claims`        the claim theorems say together exactly what the batch theorem says;
+* `same_meaning_same_text`  two accepted tails with the same data, claims and outcomes in the checker
+                            are the same text (one meaning, one spelling; `QLit.val_inj` for fractions).
 
 Trusted, not proved: that Lean's elaborator gives the literals their standard meaning (numerals,
 `-`, `((n : Rat) / d)`, string literals without backslash or quote, the structure instance and the

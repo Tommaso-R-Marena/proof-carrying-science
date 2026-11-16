@@ -87,12 +87,12 @@ Evidence, all in the suites CI runs:
   Lean) and on the forgery (refused, Lean never started); `scripts/browser_claim_check.cjs` repeats
   it with the real kernel and shows a v1 receipt refused by the page.
 
-The strict grammar is tested, not proved. Its header part agrees with the proved Lean decoder and
-the C decoder on 5,755 vectors (`conformance/test_header_refinement.py`). The claims part is the
-next formal target (`../HANDOFF.md`, obligation 1). The grammar still admits a few non-canonical
-spellings that the generator never writes (byte lists for strings that have a quoted form,
-unreduced fractions, `-0`, any identifier after `.undefined .`); each of them is still a closed
-literal, so the theorem remains about the reviewed checker's `run`.
+Since core `39ce953c` the grammar is canonical: one spelling per value, the generator's. The
+language it should accept is proved in Lean to be exactly the renderings of valid values
+(`../formal/ClaimCheckAssurance/Claims.lean`, `parseTail_iff`); the Python grammar agrees with the
+proved Lean parser on 7,248 inputs (`../conformance/test_claims_refinement.py`) and its header part
+with the proved header decoder and the C decoder on 5,755 (`../conformance/test_header_refinement.py`).
+These agreements are tests, not proofs.
 
 ## What remains for the owner
 

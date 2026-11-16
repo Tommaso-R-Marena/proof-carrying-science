@@ -44,6 +44,8 @@ jobs:
           diff "$RUNNER_TEMP/tables.json" ../conformance/lean_tables.json
       - name: Header decoder, the proved Lean function against the C and Python decoders
         run: python3 research/claimcheck_assurance_v1/conformance/test_header_refinement.py
+      - name: Claims part, the proved Lean parser against the runner's Python parser
+        run: python3 research/claimcheck_assurance_v1/conformance/test_claims_refinement.py
       - name: Lean model of the verdict policy against the Python policy
         run: python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
       - name: Implemented decoy rule against its Lean model

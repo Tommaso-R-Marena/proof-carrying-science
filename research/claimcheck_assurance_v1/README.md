@@ -12,7 +12,9 @@ checker, a benchmark, a protected file or any production path. Kernel-checked wi
 | | | the C decoder and the installed Python runner compute that same function on 5,755 inputs | **tested** (`conformance/test_header_refinement.py`) |
 | numeral → bytes the checker computes on | unstated | `SourceBinding.lean`: `Source.bytes` of the numeral is exactly the data; a well-formed source is the dump of its own bytes | **proved** |
 | text `0x…` → the number Lean uses | — | — | **trusted**: standard meaning of numeric literals in Lean's elaborator |
-| the rest of the generated part (claims, theorem statements) | eight forbidden words | the installed runner's `parse_tail` (core `research/claimcheck_v1_1/claimcheck_kernel_runner.py`, since 2026-11-16): exactly the generator's language, checked before Lean starts | **tested** (84 real files accepted; 16 forgeries here and 13 alterations in the core suite rejected) |
+| the rest of the generated part (claims, theorem statements) | eight forbidden words | `Claims.lean`: the Lean parser `parseTail` accepts exactly the renderings of valid values (`parseTail_iff`), returns the values whose rendering the text is, two values never share a text (`renderTail_injective`), and two accepted texts with the same meaning in the checker are the same text (`same_meaning_same_text`); the claim theorems say exactly what the batch theorem says (`batch_iff_claims`) | **proved** (Lean kernel) |
+| | | the installed runner's Python parser (core `research/claimcheck_v1_1/claimcheck_kernel_runner.py`, canonical since core `39ce953c`) computes that same function on 7,248 inputs: 84 committed files, 400 generator outputs, 1,389 non-canonical spellings, 3,209 truncations, 2,160 mutations, 6 forgeries; no disagreement | **tested** (`conformance/test_claims_refinement.py`) |
+| text of the claims → the values Lean uses | — | — | **trusted**: standard meaning of Lean's literals, structure instances and constructor names (which resolve to the checker's, because an accepted tail declares nothing else) |
 | kernel result → outward verdict | `assert` in the Python policy | `Authority.lean`: a decided verdict implies the statement about the real `run`; unknown and conditional results never become decided; withdrawing evidence never raises a verdict; a discrepancy needs a kernel-confirmed sibling | **proved** about a Lean model |
 | | | the Python policy computes the model's decision function on 302 real receipts and every one of 160 + 448 table states | **tested** (`conformance/check_conformance.py`) |
 | the decoy rule against a chooser who saw the data | "2 %" | `Selection.lean`: in any 51 consecutive comparable numbers at most 2 are confirmable by the direct route and one supporting sibling together (`max(1, s) × 2` with `s` supporting reading sets), and 2/52 is reached; two rules that do give 2 % | **proved** about a model of the rule (finding) |
@@ -38,6 +40,27 @@ checker, a benchmark, a protected file or any production path. Kernel-checked wi
 
 Axioms used: only `propext`, `Classical.choice`, `Quot.sound`; several use none
 ([`formal/AXIOMS.expected`](formal/AXIOMS.expected), checked by CI).
+
+**Claims** (`formal/ClaimCheckAssurance/Claims.lean`): abstract syntax of what a tail can say,
+`renderTail` written after `claimcheck_v1/lean.py::batch_tail`, a validity predicate `tailOk`, and a
+parser `parseTail`.
+
+* `parseTail_renderTail`: every valid tail the renderer writes is accepted and parsed back to its values.
+* `parseTail_sound`: whatever is accepted is exactly the rendering of what is returned, and valid
+  (so no other declaration, command, comment or spacing can occur in an accepted tail).
+* `parseTail_iff`: the accepted language is exactly `{ renderTail d cs os | tailOk d cs os }`.
+* `renderTail_injective`: two different valid values never have the same text.
+* `same_meaning_same_text`: two accepted tails that denote the same data, claims and outcomes in the
+  checker (`ClaimA.den`, `OutcomeA.den`) are the same text; fractions in lowest terms are determined
+  by their value (`QLit.val_inj`).
+* `batch_iff_claims`: `runAll src (cs.map den) = os.map den` iff `run src cs[i].den = os[i].den` for
+  every `i`: the claim theorems of an accepted tail say exactly what its batch theorem says.
+* `parseTail_header`, `parseTail_source`: an accepted tail begins with the canonical header of its
+  data, whose numerals denote a well-formed `Source` with exactly those bytes (`Header.lean`).
+* 15 negative controls evaluated by the kernel: a quoted string written as numbers, an unreduced
+  fraction, `-0`, a leading zero, an extra definition, the runner forgery, trailing text, a comment,
+  a claim theorem that disagrees with the batch theorem, a `√` sign of 2, a negative radicand, an
+  unknown reason; and positive round trips.
 
 **Header** (`formal/ClaimCheckAssurance/Header.lean`)
 
@@ -103,8 +126,10 @@ concrete case, and `coreFlawed` shows that the monotonicity theorem fails for a 
   proved. The functions that compute findings from text and data are outside the model.
 * That the C decoder is memory safe for every input: sanitizer tests pass; Aristotle's memory-safety
   property for the decoder is unresolved.
-* The claims part of the proof file: strict grammar, tested, not proved (next formal target,
-  `HANDOFF.md`).
+* That the runner's Python parser *is* the proved Lean parser: tested on 7,248 inputs, not proved.
+  That Lean's elaborator reads the accepted text as `denote` says (numerals, `((n : Rat) / d)`,
+  string literals without backslash or quote, the structure instance, constructor names): trusted,
+  the documented meaning of the syntax, as for the header's numerals.
 * The decoy bound with `s` different supporting reading sets is `max(1, s) · k` per `r + 1`
   numbers, that is `max(1, s) × 2` per 51 for the implemented rule (proved, `routes_block_le`,
   under the hypothesis that every supporting set is a subset of the direct one, which is how the
@@ -121,6 +146,7 @@ concrete case, and `coreFlawed` shows that the monotonicity theorem fails for a 
 source scripts/activate_lean_428.sh
 research/claimcheck_assurance_v1/formal/build.sh
 python3 research/claimcheck_assurance_v1/conformance/test_header_refinement.py
+python3 research/claimcheck_assurance_v1/conformance/test_claims_refinement.py
 python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
 python3 research/claimcheck_assurance_v1/conformance/test_decoy_rule.py
 python3 research/claimcheck_assurance_v1/c/test_srcbind.py
