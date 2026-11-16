@@ -133,7 +133,7 @@ def vectors(rng):
             b = bytearray(raw)
             b[rng.randrange(len(b))] = rng.choice([0x80, 0xC3, 0xE2, 0xFF, 0x00])
             out.append(("bytes", bytes(b)))
-    forged = (ROOT / "research/claimcheck_assurance_v1/findings/evidence/forged_tail.lean.txt").read_bytes()
+    forged = (ROOT / "research/claimcheck_assurance_v1/findings/record/forged_tail.lean.txt").read_bytes()
     out.append(("forgery", forged))
     g = small[0]
     for extra in ("def helper : Nat := 0\n\n", "namespace X\n", "set_option maxRecDepth 1 in\n", "-- note\n"):

@@ -4,7 +4,7 @@
   `parse_tail`) accepts every proof file the generator wrote and rejects hand-crafted tails and
   most single-character edits.  No Lean needed.
 * With PCS_LEAN set to a Lean 4.28.0 binary: the withdrawn runner, kept byte for byte as evidence in
-  `../findings/evidence/claimcheck_kernel_runner_v1.withdrawn` (SHA-256 8d9e07b4...), still accepts the
+  `../findings/record/claimcheck_kernel_runner_v1.withdrawn` (SHA-256 8d9e07b4...), still accepts the
   forged file and reports MATCHES (the finding reproduces); plain Lean accepts the forged file; the
   installed runner refuses it before Lean is started and accepts a genuine file.
 
@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT))
 from research.claimcheck_v1_1.claimcheck_kernel_runner import NotCanonical, parse_tail  # noqa: E402
 
 INSTALLED = ROOT / "research/claimcheck_v1_1/claimcheck_kernel_runner.py"
-WITHDRAWN = HERE.parent / "findings/evidence/claimcheck_kernel_runner_v1.withdrawn"
+WITHDRAWN = HERE.parent / "findings/record/claimcheck_kernel_runner_v1.withdrawn"
 WITHDRAWN_SHA256 = "8d9e07b4ac4b0abed13c9e750cbca113f1db26d82f3709579a7aafa7401f713f"
 MARKER = "\n-- ===== generated obligations (data numeral, claims, expected outcomes) =====\n"
 CHECKER = (ROOT / "research/claimcheck_v1/formal/ClaimCheck.lean").read_text(encoding="utf-8")
@@ -33,7 +33,7 @@ GOOD = ("open PCS.ClaimCheck\n\n"
         "theorem pcs_batch : runAll pcs_src [pcs_c0] =\n    [.checked .consistent (.rat ((1 : Rat) / 1)) 1 0] := by decide +kernel\n\n"
         "theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((1 : Rat) / 1)) 1 0 :=\n"
         "  run_of_runAll pcs_batch 0 rfl rfl\n#print axioms pcs_claim_0\n\n")
-SHADOW = (HERE.parent / "findings/evidence/forged_tail.lean.txt").read_text(encoding="utf-8")
+SHADOW = (HERE.parent / "findings/record/forged_tail.lean.txt").read_text(encoding="utf-8")
 
 
 def rejected(tail):

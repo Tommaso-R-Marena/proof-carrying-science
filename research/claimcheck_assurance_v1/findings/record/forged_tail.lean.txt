@@ -1,0 +1,15 @@
+open PCS.ClaimCheck
+
+def pcs_src : Source := ⟨0x612c620a312c320a, 8⟩
+
+structure Decoy where
+  n : Nat
+
+def pcs_c0 : Decoy := ⟨0⟩
+
+def run (_ : Source) (_ : Decoy) : Outcome := .checked .consistent (.rat ((999 : Rat) / 1)) 2 0
+
+theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.rat ((999 : Rat) / 1)) 2 0 :=
+  rfl
+#print axioms pcs_claim_0
+

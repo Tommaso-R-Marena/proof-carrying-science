@@ -28,7 +28,7 @@ checker, a benchmark, a protected file or any production path. Kernel-checked wi
   `run` and reported "MATCHES". Reproduced with the real kernel. **Corrected on the draft branches
   on 2026-11-16** (owner decisions C3/D4, authorised for preparation and testing): the strict runner
   is installed and served; the withdrawn runner is kept byte for byte as evidence in
-  [`findings/evidence/`](findings/evidence/README.md), not as a verification path.
+  [`findings/record/`](findings/record/README.md), not as a verification path.
 * `Selection.lean`: the documented "2 %" decoy limit is a local density, not a bound on coincidental
   confirmation. Owner decision A6 (2026-11-16): the rule is retained and its descriptions in the
   ClaimCheck branch were corrected to state the proved bound, its model and its assumptions.

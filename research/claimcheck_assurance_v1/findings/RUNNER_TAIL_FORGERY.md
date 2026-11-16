@@ -10,7 +10,7 @@ preparation and testing; not merged, not deployed). Core: commits `d5a36975` and
 `tommaso-r-marena/festive-galileo-4a5m5k` install the strict runner (receipt schema v2, SHA-256
 `fe974a9f…`). Site: commit `a6e8c9c` on the site branch serves it, pins its digest, and refuses v1
 receipts. The withdrawn runner is kept byte for byte as evidence in
-[`evidence/`](evidence/README.md); it is not a verification path.
+[`record/`](record/README.md); it is not a verification path.
 
 ## What is wrong
 
@@ -36,8 +36,8 @@ the checker.
 
 On the preserved withdrawn runner, `with_lean.withdrawn_runner_accepts_the_forged_file` is `true`;
 plain Lean accepts the forged file too. The forged tail is
-[`evidence/forged_tail.lean.txt`](evidence/forged_tail.lean.txt); the recorded output is
-[`evidence/forgery_reproduction.json`](evidence/forgery_reproduction.json).
+[`record/forged_tail.lean.txt`](record/forged_tail.lean.txt); the recorded output is
+[`record/forgery_reproduction.json`](record/forgery_reproduction.json).
 
 ## Who is affected
 

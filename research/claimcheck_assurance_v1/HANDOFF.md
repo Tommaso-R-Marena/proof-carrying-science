@@ -24,7 +24,7 @@ Read first: `README.md` (this directory), `../claimcheck_v1_1/OWNER_DECISIONS.md
   `check_conformance.py` (Lean policy model = Python policy), `test_decoy_rule.py` (implemented decoy
   rule within the model), `ExportTables.lean` + `lean_tables.json`.
 * `runner/`: `test_strict_tail.py` (the strict grammar of the installed runner; the forgery on the
-  withdrawn runner kept in `findings/evidence/`). Since 2026-11-16 the grammar lives in one place,
+  withdrawn runner kept in `findings/record/`). Since 2026-11-16 the grammar lives in one place,
   `parse_tail` of the installed runner `../claimcheck_v1_1/claimcheck_kernel_runner.py`; the
   prototype that was here was removed once installed.
 * `c/`: `pcs_srcbind.c`, `test_srcbind.py`, Aristotle prompt, results and counterexample.
