@@ -2,6 +2,7 @@ import ClaimCheckAssurance.SourceBinding
 import ClaimCheckAssurance.Authority
 import ClaimCheckAssurance.Selection
 import ClaimCheckAssurance.Header
+import ClaimCheckAssurance.Claims
 
 /-!
 # Axiom audit
@@ -59,3 +60,24 @@ open PCS.ClaimCheck PCS.ClaimCheck.Assurance
 #print axioms canon_prefix_free
 #print axioms accepted_header_denotes_data
 #print axioms accepted_header_run
+#print axioms texts_are_utf8
+#print axioms bytesP_bytesR
+#print axioms qP_qR
+#print axioms condP_condR
+#print axioms statP_statR
+#print axioms claimP_claimR
+#print axioms outP_outR
+#print axioms defsP_defsR
+#print axioms batchP_batchR
+#print axioms readTail_renderTail
+#print axioms parseTail_renderTail
+#print axioms parseTail_sound
+#print axioms parseTail_iff
+#print axioms renderTail_injective
+#print axioms parseTail_header
+#print axioms parseTail_source
+#print axioms QLit.val_inj
+#print axioms ClaimA.den_inj
+#print axioms OutcomeA.den_inj
+#print axioms same_meaning_same_text
+#print axioms batch_iff_claims

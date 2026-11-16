@@ -10,7 +10,7 @@ lean --version | grep -q 'version 4.28.0' || { echo "Lean 4.28.0 is required" >&
 sha256sum --check --status <(echo "$(cut -d' ' -f1 "$root/research/claimcheck_v1/formal/ClaimCheck.lean.sha256")  $root/research/claimcheck_v1/formal/ClaimCheck.lean")
 export LEAN_PATH="$OUT"
 (cd "$root/research/claimcheck_v1/formal" && lean -o "$OUT/ClaimCheck.olean" ClaimCheck.lean)
-for m in ${PCS_ASSURANCE_MODULES:-SourceBinding Authority Selection Header Audit}; do
+for m in ${PCS_ASSURANCE_MODULES:-SourceBinding Authority Selection Header Claims Audit}; do
   [ -f "$here/ClaimCheckAssurance/$m.lean" ] || continue
   (cd "$here" && lean -o "$OUT/ClaimCheckAssurance/$m.olean" "ClaimCheckAssurance/$m.lean")
 done
