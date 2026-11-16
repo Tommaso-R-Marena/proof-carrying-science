@@ -70,59 +70,68 @@ size_t pcs_header_encode(uint8_t *out, size_t cap, const uint8_t *d, size_t m) {
     return p;
 }
 
-size_t pcs_header_decode(const uint8_t *buf, size_t n, uint8_t *out, size_t cap, size_t *m) {
-    size_t i, p, k, len, value, digits;
+pcs_decoded pcs_header_decode(const uint8_t *buf, size_t n, uint8_t *out, size_t cap) {
+    pcs_decoded r;
+    size_t i, p, k, hex_start, len, value, digits;
     unsigned hi, lo;
 
-    if (n < PRE_LEN + 1) return 0;
+    r.header = 0;
+    r.data = 0;
+
+    /* Pass 1: decide whether buf begins with a canonical header.  Nothing is written. */
+    if (n < PRE_LEN + 1) return r;
     for (i = 0; i < PRE_LEN; i++) {
-        if (buf[i] != PRE[i]) return 0;
+        if (buf[i] != PRE[i]) return r;
     }
     p = PRE_LEN;
-    if (buf[p] != 'x') return 0;
+    if (buf[p] != 'x') return r;
     p++;
+    hex_start = p;
 
     /* k = number of consecutive lowercase hexadecimal digits starting at p */
     k = 0;
     while (p + k < n && hex_value(buf[p + k]) < 16u) k++;
 
     if (k == 1) {
-        if (buf[p] != '0') return 0; /* one digit is canonical only for the empty file */
+        if (buf[p] != '0') return r; /* one digit is canonical only for the empty file */
         len = 0;
     } else {
-        if (k == 0 || (k & 1u) != 0) return 0; /* two digits per byte, at least one byte */
+        if (k == 0 || (k & 1u) != 0) return r; /* two digits per byte, at least one byte */
         len = k / 2;
-        if (len > PCS_MAX_DATA || len > cap) return 0;
-        for (i = 0; i < len; i++) {
-            hi = hex_value(buf[p + 2 * i]);
-            lo = hex_value(buf[p + 2 * i + 1]);
-            out[i] = (uint8_t)((hi << 4) | lo);
-        }
+        if (len > PCS_MAX_DATA || len > cap) return r;
     }
     p += k;
 
-    if (n - p < 2) return 0;
-    if (buf[p] != ',' || buf[p + 1] != ' ') return 0;
+    if (n - p < 2) return r;
+    if (buf[p] != ',' || buf[p + 1] != ' ') return r;
     p += 2;
 
     /* decimal length: no leading zero, value bounded while it is read, must equal len */
     value = 0;
     digits = 0;
     while (p < n && buf[p] >= '0' && buf[p] <= '9') {
-        if (digits == 1 && value == 0) return 0; /* a leading zero */
+        if (digits == 1 && value == 0) return r; /* a leading zero */
         value = value * 10 + (size_t)(buf[p] - '0');
-        if (value > PCS_MAX_DATA) return 0;
+        if (value > PCS_MAX_DATA) return r;
         digits++;
         p++;
     }
-    if (digits == 0 || value != len) return 0;
+    if (digits == 0 || value != len) return r;
 
-    if (n - p < SUF_LEN) return 0;
+    if (n - p < SUF_LEN) return r;
     for (i = 0; i < SUF_LEN; i++) {
-        if (buf[p + i] != SUF[i]) return 0;
+        if (buf[p + i] != SUF[i]) return r;
     }
     p += SUF_LEN;
 
-    *m = len;
-    return p;
+    /* Pass 2: the header is canonical and len <= cap; store its data in out[0..len). */
+    for (i = 0; i < len; i++) {
+        hi = hex_value(buf[hex_start + 2 * i]);
+        lo = hex_value(buf[hex_start + 2 * i + 1]);
+        out[i] = (uint8_t)((hi << 4) | lo);
+    }
+
+    r.header = p;
+    r.data = len;
+    return r;
 }

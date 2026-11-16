@@ -6,7 +6,11 @@ data files, random data and mutated headers:
   * the C decoder accepts a buffer only if it starts with the canonical header of the data it returns;
   * every single-byte mutation, truncation and non-canonical spelling of a header is rejected or
     decodes to data whose canonical header is the mutated prefix (which a mutation cannot produce
-    unless it lands outside the header).
+    unless it lands outside the header);
+  * the decoder writes nothing at all when it rejects (the output buffer, pre-filled with a pattern,
+    is unchanged), and when it accepts writes nothing beyond out[0..data);
+  * the decoder's interface has no length pointer, so the aliasing of the first version (Aristotle's
+    counterexample, aristotle/sim/) cannot be expressed: the only pointer it writes through is out.
 Tests, not proofs.  Run: python3 research/claimcheck_assurance_v1/c/test_srcbind.py
 """
 import ctypes, json, os, random, subprocess, sys, tempfile
@@ -43,8 +47,16 @@ def main():
     u8p = ctypes.POINTER(ctypes.c_uint8)
     lib.pcs_header_size.argtypes = [ctypes.c_size_t]; lib.pcs_header_size.restype = ctypes.c_size_t
     lib.pcs_header_encode.argtypes = [u8p, ctypes.c_size_t, u8p, ctypes.c_size_t]; lib.pcs_header_encode.restype = ctypes.c_size_t
-    lib.pcs_header_decode.argtypes = [u8p, ctypes.c_size_t, u8p, ctypes.c_size_t, ctypes.POINTER(ctypes.c_size_t)]
-    lib.pcs_header_decode.restype = ctypes.c_size_t
+
+    class Decoded(ctypes.Structure):
+        _fields_ = [("header", ctypes.c_size_t), ("data", ctypes.c_size_t)]
+    # four arguments and a result by value: no argument is a pointer to a length (see the header)
+    lib.pcs_header_decode.argtypes = [u8p, ctypes.c_size_t, u8p, ctypes.c_size_t]
+    lib.pcs_header_decode.restype = Decoded
+    header_text = (HERE / "pcs_srcbind.h").read_text()
+    assert "pcs_decoded pcs_header_decode(const uint8_t *buf, size_t n, uint8_t *out, size_t cap);" in header_text
+    assert "size_t *m" not in header_text.split("pcs_header_decode(", 1)[1].split(";", 1)[0]
+    pattern = bytes((i * 131 + 7) & 0xFF for i in range(MAX + 64))  # what out holds before each call
 
     def exact(raw: bytes):
         """A heap buffer of exactly len(raw) bytes, so the sanitizer sees any read past the end."""
@@ -59,13 +71,23 @@ def main():
         return got, bytes(out[:got])
 
     def decode(buf: bytes, cap=MAX):
+        """Decode into an output buffer of exactly cap bytes pre-filled with the pattern, and check that
+        nothing is written on rejection and nothing beyond out[0..data) on acceptance."""
         b, n = exact(buf)
-        out = (ctypes.c_uint8 * max(cap, 1))()
-        m = ctypes.c_size_t(0)
-        got = lib.pcs_header_decode(b, n, out, cap, ctypes.byref(m))
-        return (got, bytes(out[:m.value])) if got else (0, None)
+        out = (ctypes.c_uint8 * max(cap, 1)).from_buffer_copy(pattern[:max(cap, 1)])
+        r = lib.pcs_header_decode(b, n, out, cap)
+        after = bytes(out)
+        if r.header == 0:
+            assert r.data == 0, "a rejection reports no data"
+            assert after == pattern[:max(cap, 1)], "the decoder wrote to out although it rejected"
+            counts["rejections_without_write"] += 1
+            return 0, None
+        assert r.data <= cap and r.data <= MAX and r.header <= n
+        assert after[r.data:] == pattern[r.data:max(cap, 1)], "the decoder wrote beyond out[0..data)"
+        return r.header, after[:r.data]
 
-    counts = {"real_files": 0, "random": 0, "mutations": 0, "mutations_rejected": 0, "noncanonical_rejected": 0, "truncations": 0}
+    counts = {"real_files": 0, "random": 0, "mutations": 0, "mutations_rejected": 0, "noncanonical_rejected": 0, "truncations": 0,
+              "rejections_without_write": 0}
     rng = random.Random(20261114)
 
     def roundtrip(data: bytes, rest: bytes = b""):

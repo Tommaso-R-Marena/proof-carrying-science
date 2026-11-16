@@ -3,7 +3,9 @@
 `ClaimCheckAssurance.Header` proves that `decode` accepts exactly the canonical headers and returns
 their data.  This test executes that same `decode` (via `lean --run HeaderRefinement.lean`) and
 compares it, vector by vector, with
-  * `c/pcs_srcbind.c::pcs_header_decode` (through ctypes), on every vector and capacity;
+  * `c/pcs_srcbind.c::pcs_header_decode` (through ctypes), on every vector and capacity; the C decoder
+    returns both lengths by value and must also leave its output buffer untouched when it rejects and
+    write nothing beyond out[0..data) when it accepts;
   * the header part of the installed stand-alone runner
     (`research/claimcheck_v1_1/claimcheck_kernel_runner.py`: its PREAMBLE and SRC objects and size
     rule), on every vector whose capacity is the 65,536-byte limit (the runner has no capacity).
@@ -100,8 +102,12 @@ def main():
                         "-o", lib_path], check=True)
         lib = ctypes.CDLL(lib_path)
         u8p = ctypes.POINTER(ctypes.c_uint8)
-        lib.pcs_header_decode.argtypes = [u8p, ctypes.c_size_t, u8p, ctypes.c_size_t, ctypes.POINTER(ctypes.c_size_t)]
-        lib.pcs_header_decode.restype = ctypes.c_size_t
+
+        class Decoded(ctypes.Structure):
+            _fields_ = [("header", ctypes.c_size_t), ("data", ctypes.c_size_t)]
+        lib.pcs_header_decode.argtypes = [u8p, ctypes.c_size_t, u8p, ctypes.c_size_t]
+        lib.pcs_header_decode.restype = Decoded
+        pattern = bytes((i * 131 + 7) & 0xFF for i in range(MAX + 64))
 
         vin, vout = os.path.join(tmp, "vectors.bin"), os.path.join(tmp, "lean.txt")
         with open(vin, "wb") as f:
@@ -121,11 +127,16 @@ def main():
         for (cap, buf, kind), lean in zip(vecs, lean_lines):
             b = (ctypes.c_uint8 * max(len(buf), 1)).from_buffer_copy(buf or b"\0")
             cap_alloc = min(cap, MAX + 16)
-            out = (ctypes.c_uint8 * max(cap_alloc, 1))()
-            m = ctypes.c_size_t(0)
-            got = lib.pcs_header_decode(b, len(buf), out, min(cap, cap_alloc), ctypes.byref(m))
+            out = (ctypes.c_uint8 * max(cap_alloc, 1)).from_buffer_copy(pattern[:max(cap_alloc, 1)])
+            r = lib.pcs_header_decode(b, len(buf), out, min(cap, cap_alloc))
             # caps above the allocation are equivalent: the decoder never writes more than MAX bytes
-            c_line = "N" if got == 0 else f"{got} {m.value} {h(bytes(out[:m.value]))}"
+            got = r.header
+            after = bytes(out)
+            if got == 0:
+                assert r.data == 0 and after == pattern[:max(cap_alloc, 1)], ("C wrote although it rejected", cap, buf[:120])
+            else:
+                assert after[r.data:] == pattern[r.data:max(cap_alloc, 1)], ("C wrote beyond out[0..data)", cap, buf[:120])
+            c_line = "N" if got == 0 else f"{got} {r.data} {h(after[:r.data])}"
             assert c_line == lean, ("C and Lean differ", cap, buf[:120], c_line, lean)
             counts["accepted" if got else "rejected"] += 1
             if cap >= MAX:
