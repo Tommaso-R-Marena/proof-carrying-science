@@ -33,6 +33,7 @@ import argparse
 import datetime
 import hashlib
 import json
+import math
 import os
 import platform
 import re
@@ -49,12 +50,17 @@ SCHEMA = "pcs-claimcheck-kernel-run-v2"
 
 
 # ---- strict grammar of the generated part: exactly the language of claimcheck_v1/lean.py::batch_tail ----
+# Canonical: every value has one spelling, the generator's.  The same language is the image of
+# `renderTail` in research/claimcheck_assurance_v1/formal/ClaimCheckAssurance/Claims.lean, where the
+# Lean parser is proved to accept exactly it (agreement with this parser is tested, not proved).
 
 NAT = r"(?:0|[1-9][0-9]*)"
-INT = r"-?(?:0|[1-9][0-9]*)"
+INT = r"(?:0|-?[1-9][0-9]*)"                      # no "-0"
+BYTE = r"(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])"
+SAFE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,:;()[]%/+-#=<>&*!?@^|~"
 SAFE = r"[A-Za-z0-9 _.,:;()\[\]%/+\-#=<>&*!?@^|~]*"
-BYTES = rf'(?:b "{SAFE}"|\[(?:{NAT}(?:, {NAT})*)?\])'
-RAT = rf"\(\({INT} : Rat\) / [1-9][0-9]*\)"
+BYTES = rf'(?:b "{SAFE}"|\[{BYTE}(?:, {BYTE})*\])'   # a list only when some byte is not a safe character (checked below)
+RAT = rf"\(\({INT} : Rat\) / [1-9][0-9]*\)"         # in lowest terms (checked below)
 CMP = r"\.(?:eq|ne|lt|le|gt|ge)"
 COND = rf"(?:\.textEq \({BYTES}\) \({BYTES}\)|\.textNe \({BYTES}\) \({BYTES}\)|\.num \({BYTES}\) {CMP} {RAT})"
 CONDS = rf"\[(?:{COND}(?:, {COND})*)?\]"
@@ -62,8 +68,10 @@ STAT = (rf"(?:\.count|\.sum|\.mean|\.median|\.min|\.max|\.varSample|\.sdSample|\
         rf"|\.pearson \({BYTES}\)|\.olsSlope \({BYTES}\)|\.olsIntercept \({BYTES}\))")
 COLUMN = rf"(?:none|some \({BYTES}\))"
 NALIST = rf"\[(?:{BYTES}(?:, {BYTES})*)?\]"
-VALUE = rf"(?:\(\.rat {RAT}\)|\(\.sqrt \({INT} : Int\) {RAT}\))"
-OUTCOME = rf"(?:\.undefined \.[A-Za-z]+|\.checked \.(?:consistent|inconsistent) {VALUE} {NAT} {NAT})"
+VALUE = rf"(?:\(\.rat {RAT}\)|\(\.sqrt \((?:-1|0|1) : Int\) \(\({NAT} : Rat\) / [1-9][0-9]*\)\))"
+UNDEFINED = (r"(?:sourceNotWellFormed|csvMalformed|columnNotFound|nonNumericCell|emptySelection|degenerate"
+             r"|badReportedLiteral|badScale|missingColumn)")
+OUTCOME = rf"(?:\.undefined \.{UNDEFINED}|\.checked \.(?:consistent|inconsistent) {VALUE} {NAT} {NAT})"
 
 PREAMBLE = "open PCS.ClaimCheck\n\n"
 SRC = re.compile(r"def pcs_src : Source := ⟨0x([0-9a-f]+), (0|[1-9][0-9]*)⟩\n\n")
@@ -74,6 +82,23 @@ MAX_DATA_BYTES = 65536          # the generator's bound (claimcheck_v1/lean.py) 
 
 class NotCanonical(ValueError):
     pass
+
+
+_SAFE_BYTES = frozenset(SAFE_CHARS.encode("ascii"))
+_QUOTED = re.compile(r'b "[^"]*"')
+_RAT_LITERAL = re.compile(r"\(\((-?[0-9]+) : Rat\) / ([0-9]+)\)")
+_BYTE_LIST = re.compile(r"\[([0-9]+(?:, [0-9]+)*)\]")
+
+
+def _canonical_literals(text: str) -> None:
+    """The literals of one claim or outcome must be the generator's spelling of their values."""
+    bare = _QUOTED.sub('b ""', text)          # string contents cannot hide or imitate a literal
+    for num, den in _RAT_LITERAL.findall(bare):
+        if math.gcd(abs(int(num)), int(den)) != 1:
+            raise NotCanonical("a fraction is not in lowest terms")
+    for body in _BYTE_LIST.findall(bare):
+        if all(int(v) in _SAFE_BYTES for v in body.split(", ")):
+            raise NotCanonical("a byte string that has a quoted spelling is written as a list of numbers")
 
 
 def _claim(i: int):
@@ -101,6 +126,7 @@ def parse_tail(tail: str):
         m = _claim(n).match(tail, pos)
         if not m:
             break
+        _canonical_literals(m.group(0))
         pos, n = m.end(), n + 1
     if n == 0:
         raise NotCanonical("no claim in canonical form")
@@ -115,6 +141,7 @@ def parse_tail(tail: str):
         m = OUTCOME_RE.match(tail, pos)
         if not m:
             raise NotCanonical(f"outcome {i} of the batch theorem is not a literal outcome")
+        _canonical_literals(m.group(0))
         outcomes.append(m.group(0))
         pos = m.end()
         sep = ",\n    " if i + 1 < n else "] := by decide +kernel\n\n"
