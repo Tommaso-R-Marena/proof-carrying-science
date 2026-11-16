@@ -45,7 +45,9 @@ scope where the results are to be reported as evidence (criterion C8 of the pilo
 
 ## One dependency on another decision
 
-Task 3 has participants run the stand-alone kernel runner. Its current version accepts forged proof
-files (`research/claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md`). Participants only run it on
-files the page generated, so the study is not affected, but the version in the study should be the
-one the owner decides to keep (the fixed v2 runner if that is approved).
+Task 3 has participants run the stand-alone kernel runner. The version distributed until 2026-11-16
+accepted forged proof files (`research/claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md`). On
+2026-11-16 the owner authorised its replacement for preparation and testing; the replacement (receipt
+schema v2) refuses anything but the generator's form before starting Lean. Participants only run it
+on files the page generated, so the study was not affected either way; the study uses the strict
+runner once the owner has reviewed it.

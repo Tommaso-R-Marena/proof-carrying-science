@@ -21,6 +21,17 @@ from .dev.common import context, documents, manifest_v11
 from .policy import assess_document, policy_parameters
 
 RUNNER = Path(__file__).with_name("claimcheck_kernel_runner.py")
+KERNEL_RUN_SCHEMA = "pcs-claimcheck-kernel-run-v2"
+# The runner served until 2026-11-16 accepted a hand-written proof file that defined its own `run`
+# (research/claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md).  Its receipts are refused.
+WITHDRAWN_RUNNERS = [{"sha256": "8d9e07b4ac4b0abed13c9e750cbca113f1db26d82f3709579a7aafa7401f713f",
+                      "kernel_run_schema": "pcs-claimcheck-kernel-run-v1", "withdrawn": "2026-11-16",
+                      "reason": "it accepted proof files whose generated part had been written by hand, including one that "
+                                "defined its own `run`, so its reports do not show that the reviewed checker was used"}]
+RUN_MEANING = {"establishes": "the supplied mathematical obligation: each theorem in the proof file, about the reviewed checker, "
+                              "holds for the data bytes embedded in that file",
+               "does_not_establish": "that the obligation faithfully represents a sentence of a paper, that the reported value is "
+                                     "the paper's number, or that the embedded bytes are the authors' data"}
 DEV_NOTE = ("The v1.1 reading rules were designed on these same six articles, so the following is development evidence, not a test. "
             "From the same kernel results, with readings proposed by two language models: misleading refutations fell from 131 and 2 to 0 and 0; "
             "correct confirmations fell from 40 and 24 to 26 and 17; detected discrepancies fell from 13 and 11 to 3 and 2. "
@@ -54,8 +65,15 @@ def export(site: Path) -> dict:
         totals.update(counts)
         path.write_text(json.dumps(ex, ensure_ascii=False), encoding="utf-8")
     shutil.copy(RUNNER, site / "claim-check" / "claimcheck_kernel_runner.py")
-    catalog["v1_1"] = {"policy_id": POLICY_ID, "kernel_runner": {"path": "claim-check/claimcheck_kernel_runner.py", "sha256": sha256_hex(RUNNER.read_bytes())},
-                       "kernel_run_schema": "pcs-claimcheck-kernel-run-v1", "recorded_example_verdicts": dict(sorted(totals.items())),
+    runner_text = RUNNER.read_text(encoding="utf-8")
+    assert f'SCHEMA = "{KERNEL_RUN_SCHEMA}"' in runner_text and "def parse_tail(" in runner_text, "publish only the strict runner"
+    assert sha256_hex(RUNNER.read_bytes()) not in {w["sha256"] for w in WITHDRAWN_RUNNERS}
+    catalog["v1_1"] = {"policy_id": POLICY_ID,
+                       "kernel_runner": {"path": "claim-check/claimcheck_kernel_runner.py", "sha256": sha256_hex(RUNNER.read_bytes()),
+                                         "accepts": "only proof files whose generated part is exactly in the generator's form; "
+                                                    "anything else is refused before Lean is started"},
+                       "kernel_run_schema": KERNEL_RUN_SCHEMA, "withdrawn_runners": WITHDRAWN_RUNNERS, "kernel_run_meaning": RUN_MEANING,
+                       "recorded_example_verdicts": dict(sorted(totals.items())),
                        "development_note": DEV_NOTE, "prospective_evaluation": "specified, not approved, not run"}
     catalog_path.write_text(json.dumps(catalog, indent=1, ensure_ascii=False), encoding="utf-8")
     return {"examples": {m["id"]: m["v1_1_counts"] for m in catalog["examples"]}, "totals": dict(totals), "runner_sha256": catalog["v1_1"]["kernel_runner"]["sha256"]}

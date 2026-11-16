@@ -31,12 +31,16 @@ any paper.
   `35c83b28…`) plus the v1.1 policy (`policy.py`, `space.py`, `binding.py`; decoy limit 2 %).
   **What the decoy limit does and does not bound (found 2026-11-15, proved in
   `claimcheck_assurance_v1/formal/ClaimCheckAssurance/Selection.lean`):** the limit caps the share of
-  reproducible comparable numbers within ±50 of the printed one. Against a chooser who has seen the
-  data, the share of unrelated printed numbers that can be confirmed is at most 2/51 ≈ 3.9 %, and a
-  pattern reaching 2/52 ≈ 3.8 % exists, so "2 %" is not a bound on coincidental confirmation. A rule
-  whose bound is 2 % (no decoy reproduced, or fixed blocks of 100) would have to be adopted before
-  the software freeze; that is owner decision A6, and every result so far was produced with the
-  current rule.
+  reproducible comparable numbers among the up to 100 nearest to the printed one (a local density).
+  In a model of the rule, against a chooser who has seen the data, at most 2 in any 51 consecutive
+  comparable numbers can be confirmed through the direct route and one supporting sibling together,
+  and `max(1, s) × 2` with `s` distinct supporting reading sets; a pattern reaching 2/52 ≈ 3.8 %
+  exists. For an unrelated printed number placed uniformly among comparable numbers that is about
+  4 %, so "2 %" is not a bound on coincidental confirmation, and nothing bounds errors on numbers
+  related to the table. That the implementation stays within the model is tested, not proved.
+  **Owner decision A6 (2026-11-16): the rule is retained** and only its description was corrected;
+  it is evaluated as it is. Alternatives may be compared on development data, as exploratory work
+  (section 11); the software to be frozen does not change without the owner's approval.
 * **Arms** (every arm feeds the same pipeline):
   * `union` (primary): readings proposed by both models, each given only numeric sentences and the
     column vocabulary;
@@ -315,11 +319,15 @@ against accepting a poor system. It gives a good system only a moderate chance o
   whose true rate is 1 % of papers fails 45 % of the time. A failure at 60 papers therefore does not
   show the system is bad; a pass does show the rate is below 5 %.
 * **C2a's claim-level bound of 2 % is borderline at 60 papers under the assumed clustering.** With
-  ICC 0.25 and no misleading flag, the bound is 2.2 % with about 5 exposed numbers per paper, 2.0 %
-  with 8 and 1.9 % with 10 or more (the effective sample cannot exceed about 60 / 0.25 = 240 however
-  many numbers a paper has). **One misleading flag anywhere fails C2a at 60 papers** (bound about
-  3 %). At 120 papers no flag gives about 1 % and one flag about 1.5 to 1.8 %, which passes. So at 60
-  papers C2a can be met only with zero misleading flags and a reasonably rich set of exposed numbers.
+  ICC 0.25, equal numbers per paper and no misleading flag, the bound is 2.2 % with 4 exposed numbers
+  per paper (not met), 2.0 % with 5, 1.7 % with 8 and 1.6 % with 10, and never below 1.2 % (the
+  effective sample cannot exceed about 60 / 0.25 = 240 however many numbers a paper has). Unequal
+  numbers per paper raise these bounds (the weighted cluster size is mean + variance / mean).
+  **One misleading flag anywhere fails C2a at 60 papers** (bound 2.6 to 3.4 %). At 120 papers no flag
+  gives 0.8 to 1.1 % and one flag 1.3 to 1.7 %, which passes; two pass with 8 or more exposed numbers
+  per paper. So at 60 papers C2a can be met only with zero misleading flags and at least about five
+  exposed numbers per paper. (Draft 2 of 2026-11-15 printed 2.2, 2.0 and 1.9 % for 5, 8 and 10; those
+  figures did not follow from `stats.py` and are corrected here; the conclusion is unchanged.)
 * **C1's claim-level bound of 5 %** at 150 confirmations and ICC 0.25 with about four confirmations
   per paper (effective sample about 85) tolerates no unsupported confirmation (bound 3.5 %) and
   fails with one (5.5 %); spread three per paper (design effect 1.5) it tolerates one (4.6 %).
@@ -338,6 +346,62 @@ against accepting a poor system. It gives a good system only a moderate chance o
   events percentile intervals are known to be too short; they are reported, and the criteria rest on
   the exact bounds.
 * A zero-error result bounds a rate. It does not show the rate is zero and the report will not say so.
+
+### 10a. The 120-paper design (proposed; the owner chooses at approval)
+
+All figures: [`design_120.py`](design_120.py) → [`DESIGN_120.json`](DESIGN_120.json), computed with
+`stats.py`, the scorer's own module. Nothing has been sampled.
+
+**What changes.** 40 eligible papers per context instead of 20 (A, B and C: 120 papers); screening
+stops at 40 eligible or **600** screened candidates per context; everything else is unchanged: frame,
+queries, hash order, eligibility, materials, arms, criteria, analysis. At the only yield measured so
+far (v1, one context: 8 eligible of 18 screened) a context fills after about 90 screened candidates;
+the cap of 600 fills it at any yield above 6.7 %. No screening time has been measured.
+
+**Fallback, fixed in advance (proposal).** If a context has at least 20 but fewer than 40 eligible
+papers when its cap is reached, the primary analysis uses the first 20 eligible papers of every
+context in hash order, that is the 60-paper design with its thresholds, and the analysis of all
+eligible papers is reported as a pre-specified secondary analysis. Fewer than 20 in a context: the
+shortfall rule of section 3 applies. The design is chosen at approval and not revisited after
+screening except by this rule.
+
+**What it buys** (ICC floor 0.25, equal numbers per paper):
+
+| | 60 papers | 120 papers |
+| --- | --- | --- |
+| C2b: affected papers allowed (bound ≤ 5 %) | 0 | 1 |
+| C2b: chance of passing if 0.5 % / 1 % / 2 % / 5 % of papers are affected | 74 / 55 / 30 / 4.6 % | 88 / 66 / 31 / 1.6 % |
+| C2a: bound with no flag, 5 / 10 exposed numbers per paper | 2.0 / 1.6 % | 1.0 / 0.8 % |
+| C2a: misleading flags allowed, 5 / 10 exposed numbers per paper | 0 / 0 | 1 / 2 |
+| C1: unsupported confirmations allowed, 2.5 / 5 confirmations in every paper | 1 / 2 | 5 / 8 |
+| C1 paper level: affected papers allowed (bound ≤ 10 %) | 1 | 6 |
+| C3: lower bound when the estimate is exactly 25 %, 8 numbers per paper | 19.8 % | 21.1 % |
+| per context, paper-level bound with no event | 13.9 % | 7.2 % |
+
+The larger sample mainly removes the zero-tolerance character of C2: at 60 papers a single paper
+with a misleading flag, or a single misleading flag, fails it, so a failure says little about the
+system. It does not make discrepancy detection measurable with useful precision, and it does not
+make per-context results strong: a context with no event still only bounds its paper-level rate
+at 7.2 %.
+
+**What it costs** (section 13 has the basis of each figure):
+
+| | 60 papers | 120 papers |
+| --- | --- | --- |
+| model calls (2 models × 2 documents per paper) | 240 | 480 |
+| HTTP requests in the worst case (each call and three retries after a 429) | 960 | 1,920 |
+| prompt / output tokens | 0.62–1.06 M / 0.07–0.72 M | 1.25–2.11 M / 0.14–1.44 M |
+| Nemotron half, paid configuration | about 1.2 USD (at most about 5) | about 2.4 USD (at most about 10) |
+| Gemini half | price not confirmed | price not confirmed |
+| proposed hard cap, paid configuration | 15 USD | 30 USD |
+| kernel time on the reference machine | about 10 h | about 20 h |
+| hosted replay of every bundle (C4) | about 10 runner-hours | about 20 runner-hours, in several jobs (6 h job limit) |
+| adjudication, if two adjudicators each cover all papers | 35–55 h each (70–110 person-hours) | 70–110 h each (140–220 person-hours) |
+| resolver | 11–19 h | 22–38 h |
+
+Adjudication figures are assumptions (adjudication plan, section 4); the preliminary round measures
+them before the owner commits to a size. With two adjudicators per context (six people) each covers
+20 or 40 papers, and the per-person load is a third of the figures above.
 
 ## 11. Statistical analysis plan
 
@@ -365,8 +429,9 @@ against accepting a poor system. It gives a good system only a moderate chance o
   favourable interval is reported as a success on its own.
 * **No interim looks.** Steps 3 to 5 of section 6 run once. No result is inspected before every
   adjudication form is returned and sealed.
-* **Exploratory:** anything not listed here, any other decoy limit, any policy change. Labelled as
-  exploratory and kept out of the criteria.
+* **Exploratory:** anything not listed here, any other decoy limit (for example the alternatives
+  of owner decision A6, compared on development data), any policy change. Labelled as exploratory
+  and kept out of the criteria.
 
 ## 12. Freeze and approval record (to be completed)
 
@@ -381,14 +446,16 @@ against accepting a poor system. It gives a good system only a moderate chance o
 
 ## 13. Cost
 
-240 model calls for 60 papers (480 for 120), before repeats: one per model per document, two
-documents per paper. Draft 1 said 120 and had forgotten the planted-error copies. Measured in v1,
+240 model calls for 60 papers (480 for 120; the two designs side by side in 10a), before repeats:
+one per model per document, two documents per paper. Draft 1 said 120 and had forgotten the planted-error copies. Measured in v1,
 per call: about 2,600 to 4,400 prompt tokens and 300 to 3,000 output tokens. Free tiers and a capped
 paid configuration are in [`MODEL_ACCESS.md`](MODEL_ACCESS.md). The Nemotron half of a paid run
 (120 calls) is estimated at about 1.2 US dollars, at most about 5 if every call were repeated three
-times; the Gemini price could not be read from the provider's model listing and must be confirmed
-before any paid use. A total cap of 15 US dollars is proposed. No paid call has been made. Kernel
-time about 10 hours per 60 papers on the reference machine. Adjudication: roughly 1,500 numbers per
+times (about 2.4 and 10 for 120 papers); the Gemini price could not be read from the provider's
+model listing and must be confirmed before any paid use. A total cap of 15 US dollars is proposed
+for 60 papers and 30 for 120, to be enforced by the calling code, not by a provider setting. No paid
+call has been made. Kernel time about 10 hours per 60 papers on the reference machine, and the same
+again for the hosted replay of C4, which at 120 papers must be split into several jobs. Adjudication: roughly 1,500 numbers per
 adjudicator per 60 papers, estimated 35 to 55 hours each
 ([`../adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md`](../adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md)).
 

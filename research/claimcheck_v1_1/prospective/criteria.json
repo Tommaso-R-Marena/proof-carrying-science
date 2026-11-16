@@ -27,7 +27,10 @@
     "owner_option_larger_sample": {
      "papers": 120,
      "papers_per_context": 40,
-     "why": "see protocol 10: at 60 papers the misleading-flag criterion passes only with zero affected papers (chance 55 % if the true paper-level rate is 1 %); at 120 one affected paper is allowed (66 %, and 88 % at 0.5 %)."
+     "why": "see protocol 10 and 10a: at 60 papers the misleading-flag criteria tolerate no affected paper and no misleading flag (C2b passes with chance 55 % if the true paper-level rate is 1 %); at 120 one affected paper and one or two flags are allowed (66 %, and 88 % at 0.5 %).",
+     "screening_cap_per_context": 600,
+     "fallback": "If a context has at least 20 but fewer than 40 eligible papers when its cap is reached, the primary analysis uses the first 20 eligible papers of every context in hash order (the 60-paper design and its thresholds); all eligible papers are a pre-specified secondary analysis. Fewer than 20: the shortfall rule applies.",
+     "design_tables": "prospective/DESIGN_120.json (protocol 10a)"
     }
    },
    "criteria": {

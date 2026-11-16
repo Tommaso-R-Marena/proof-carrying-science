@@ -73,6 +73,15 @@ prospective paper has been sampled, retrieved, inspected, labelled or scored.
 
 * The decoy limit's "2 %" is a local density, not a bound on coincidental confirmation by a chooser who
   has seen the data. The proved bound is 2/51 ≈ 3.9 % (protocol 2; owner decision A6).
+
+## Additions and corrections of 2026-11-16 (still draft 2, still for review)
+
+| What | Change | Where |
+| --- | --- | --- |
+| the 120-paper design and its costs (owner: continue preparing) | new section: 40 per context, screening cap 600 per context, a fallback to the 60-paper design fixed in advance, what each criterion gains, calls, tokens, money, kernel and replay time, adjudication hours | protocol 10a; `design_120.py`, `DESIGN_120.json`, test `tests/test_design_120.py`; `criteria.json` (larger-sample option) |
+| C2a figures at 60 papers | draft 2 printed 2.2 / 2.0 / 1.9 % for 5 / 8 / 10 exposed numbers per paper; `stats.py` gives 2.0 / 1.7 / 1.6 % (and 2.2 % for 4); conclusion unchanged: borderline at 60, met only with no misleading flag and about five or more exposed numbers per paper | protocol 10 |
+| decoy rule (owner decision A6: retain, correct the wording) | the description now states the proved bound's model, its assumptions and the effect of several supporting reading sets (`max(1, s) × 2` per 51); the rule itself is unchanged; alternatives only as exploratory comparisons on development data | protocol 2, 11 |
+| cost cap | 30 USD proposed for 120 papers; to be enforced by the calling code | protocol 13 |
 * `DEMONSTRATION_ON_DEVELOPMENT_DATA.json` regenerated with the draft-2 scorer. Still development data
   only; every criterion "not evaluable". Not an evaluation of v1.1.
 * `dev/evaluate.py` records which labelled numbers received at least one proposal ("exposed"), needed
@@ -84,6 +93,6 @@ prospective paper has been sampled, retrieved, inspected, labelled or scored.
 2. 60 or 120 papers.
 3. Flag-recall level for the wording rule (empty; 20 % suggested as a judgement).
 4. C2c threshold 50 %.
-5. Screening limit 300 per context.
-6. Decoy rule (A6): keep, with corrected wording; or no decoy reproduced; or fixed blocks.
+5. Screening limit 300 per context (600 if 120 papers), and the fallback of protocol 10a.
+6. ~~Decoy rule (A6)~~: decided 2026-11-16, the rule is retained with corrected wording.
 7. Model configuration F or P, and the identifiers (`MODEL_ACCESS.md`).

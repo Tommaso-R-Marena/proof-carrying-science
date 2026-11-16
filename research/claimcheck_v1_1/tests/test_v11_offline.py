@@ -254,7 +254,12 @@ class Runner(unittest.TestCase):
             self.assertFalse(report["accepted"])
             self.assertNotEqual(code, 0)
             self.assertIn(why, report["why_not"])
-        report, code = self._run(checker + marker + tail)                                # well formed, but no Lean available
+        report, code = self._run(checker + marker + tail)                                # not the generator's form: refused before Lean
+        self.assertFalse(report["accepted"])
+        self.assertEqual(code, 1)
+        self.assertIn("not in canonical form", report["why_not"])
+        genuine = sorted((HERE.parents[1] / "claimcheck_v1/benchmark/results/bundles").glob("*/obligations/*.lean"))[0]
+        report, code = self._run(genuine.read_text(encoding="utf-8"))                   # a generated file, but no Lean available
         self.assertFalse(report["accepted"])
         self.assertEqual(code, 2)
 
