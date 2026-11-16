@@ -13,66 +13,101 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from .stats import lower_bound, proportion
+from .stats import proportion, upper_bound
 
 CRITERIA = Path(__file__).with_name("criteria.json")
 
 
-def metrics(per_paper: dict[str, Counter]) -> dict:
-    """``per_paper[paper]`` holds class counts for one arm (see dev.evaluate.classes).  One cluster per paper."""
+def metrics(per_paper: dict[str, Counter], icc_floor: float = 0.0) -> dict:
+    """``per_paper[paper]`` holds class counts for one arm.  One cluster per paper.
+
+    Counter keys (dev.evaluate.classes writes the first three groups; a prospective label set adds the last):
+      verdicts   correct_confirmation, unsupported_confirmation, unlabelled_confirmation,
+                 correct_discrepancy, misleading_refutation, unlabelled_discrepancy
+      totals     true_claims_total, false_claims_total, not_derivable_total
+      exposure   exposed_true, exposed_not_derivable        (numbers for which the arm proposed a reading)
+      ambiguous  ambiguous_total, exposed_ambiguous         (a decided verdict on an ambiguous number is counted
+                                                             as unsupported_confirmation / misleading_refutation)
+    """
     def clusters(events, opportunities):
         return [(sum(c.get(k, 0) for k in events), sum(c.get(k, 0) for k in opportunities)) for c in per_paper.values()]
 
+    def prop(events, opportunities):
+        return proportion(clusters(events, opportunities), icc_floor=icc_floor)
+
     confirmations = ("correct_confirmation", "unsupported_confirmation", "unlabelled_confirmation")
     flags = ("correct_discrepancy", "misleading_refutation", "unlabelled_discrepancy")
-    true_claims = ("correct_confirmation", "abstained_on_true", "true_claim_misjudged")
-    false_claims = ("correct_discrepancy", "abstained_on_false", "false_claim_misjudged")
-    non_false = ("true_claims_total", "not_derivable_total")
+    non_false = ("true_claims_total", "not_derivable_total", "ambiguous_total")
+    exposed = ("exposed_true", "exposed_not_derivable", "exposed_ambiguous")
+    has_exposure = any(c.get(k, 0) for c in per_paper.values() for k in exposed)
+    ambiguous = sum(c.get("ambiguous_total", 0) for c in per_paper.values())
+    labelled = sum(c.get(k, 0) for c in per_paper.values() for k in ("true_claims_total", "false_claims_total", "not_derivable_total", "ambiguous_total"))
+    # paper-level view of C1 uses papers that have a confirmation, of C2 all papers
+    flag_clusters = [(sum(c.get(k, 0) for k in ("misleading_refutation",)), 1) for c in per_paper.values()]
     out = {
-        "unsupported_confirmations_among_confirmations": proportion(clusters(("unsupported_confirmation",), confirmations)),
-        "misleading_refutations_among_flags": proportion(clusters(("misleading_refutation",), flags)),
-        "misleading_refutations_per_true_or_not_derivable_number": proportion(clusters(("misleading_refutation",), non_false)),
-        "coverage_of_true_statements": proportion(clusters(("correct_confirmation",), ("true_claims_total",))),
-        "discrepancies_detected_among_false_statements": proportion(clusters(("correct_discrepancy",), ("false_claims_total",))),
-        "abstention_on_true_statements": proportion(clusters(("abstained_on_true",), ("true_claims_total",))),
+        "unsupported_confirmations_among_confirmations": prop(("unsupported_confirmation",), confirmations),
+        "misleading_refutations_among_flags": prop(("misleading_refutation",), flags),
+        "misleading_refutations_per_exposed_number": prop(("misleading_refutation",), exposed) if has_exposure else None,
+        "misleading_refutations_per_true_or_not_derivable_number": prop(("misleading_refutation",), non_false),
+        "papers_with_a_misleading_refutation": {"papers": len(per_paper), "affected": sum(1 for k, _n in flag_clusters if k),
+                                                "upper_bound": upper_bound(sum(1 for k, _n in flag_clusters if k), len(per_paper))},
+        "coverage_of_true_statements": prop(("correct_confirmation",), ("true_claims_total", "ambiguous_total")),
+        "coverage_of_true_statements_ambiguous_removed": prop(("correct_confirmation",), ("true_claims_total",)),
+        "discrepancies_detected_among_false_statements": prop(("correct_discrepancy",), ("false_claims_total",)),
+        "abstention_on_true_statements": prop(("abstained_on_true",), ("true_claims_total",)),
+        "ambiguous": {"numbers": ambiguous, "share_of_labelled_numbers": (ambiguous / labelled) if labelled else None},
         "not_adjudicated": {"confirmations": sum(c.get("unlabelled_confirmation", 0) for c in per_paper.values()),
                             "flags": sum(c.get("unlabelled_discrepancy", 0) for c in per_paper.values())},
-        "papers": len(per_paper),
+        "papers": len(per_paper), "icc_floor_assumed": icc_floor,
     }
-    cov = out["coverage_of_true_statements"]
-    cov["lower_bound_ignoring_clustering"] = lower_bound(cov["events"], cov["opportunities"])
-    del true_claims, false_claims
     return out
 
 
 def judge(m: dict, criteria: dict) -> dict:
-    """Apply C1 to C3 of the pilot criteria.  A criterion that cannot be evaluated is NOT met."""
+    """Apply C1 to C3 and D1 of the pilot criteria.  A criterion that cannot be evaluated is NOT met."""
     pilot = criteria["levels"]["supervised_external_pilot"]
     need = pilot["minimum_sample"]
     c = pilot["criteria"]
+    too_ambiguous = (m["ambiguous"]["share_of_labelled_numbers"] or 0) > c["C6_abstention"].get("max_share_ambiguous", 1)
+    papers_ok = m["papers"] >= need["papers"] and not too_ambiguous
     out = {}
-    u = m["unsupported_confirmations_among_confirmations"]
-    enough = m["papers"] >= need["papers"] and u["opportunities"] >= need["confirmations_by_primary_arm"] and not m["not_adjudicated"]["confirmations"]
+    u, k1 = m["unsupported_confirmations_among_confirmations"], c["C1_unsupported_confirmations"]
+    enough = papers_ok and u["opportunities"] >= need["confirmations_by_primary_arm"] and not m["not_adjudicated"]["confirmations"]
     out["C1_unsupported_confirmations"] = {
-        "met": bool(enough and u["estimate"] is not None and u["estimate"] <= c["C1_unsupported_confirmations"]["max_estimate"]
-                    and u["conservative_upper_bound"] <= c["C1_unsupported_confirmations"]["max_conservative_upper_bound"]
-                    and u["paper_level_upper_bound"] <= c["C1_unsupported_confirmations"]["max_paper_level_upper_bound"]),
+        "met": bool(enough and u["estimate"] is not None and u["estimate"] <= k1["max_estimate"]
+                    and u["conservative_upper_bound"] <= k1["max_conservative_upper_bound"]
+                    and u["paper_level_upper_bound"] <= k1["max_paper_level_upper_bound"]),
         "evaluable": bool(enough), "estimate": u["estimate"], "conservative_upper_bound": u["conservative_upper_bound"],
-        "paper_level_upper_bound": u["paper_level_upper_bound"], "confirmations": u["opportunities"], "papers": m["papers"]}
-    r = m["misleading_refutations_per_true_or_not_derivable_number"]
-    enough = m["papers"] >= need["papers"] and not m["not_adjudicated"]["flags"]
+        "paper_level_upper_bound": u["paper_level_upper_bound"], "confirmations": u["opportunities"], "papers": m["papers"],
+        "upper_bound_by_assumed_icc": u["upper_bound_by_assumed_icc"]}
+    k2 = c["C2_misleading_refutations"]
+    r, fl, pp = m["misleading_refutations_per_exposed_number"], m["misleading_refutations_among_flags"], m["papers_with_a_misleading_refutation"]
+    enough = papers_ok and not m["not_adjudicated"]["flags"] and r is not None
+    a_ok = bool(r and r["estimate"] is not None and r["estimate"] <= k2["a_per_exposed_claim"]["max_estimate"]
+                and r["conservative_upper_bound"] <= k2["a_per_exposed_claim"]["max_conservative_upper_bound"])
+    b_ok = pp["upper_bound"] <= k2["b_per_paper"]["max_paper_level_upper_bound"]
+    c_evaluable = fl["opportunities"] >= k2["c_among_flags"]["min_flags_for_evaluation"]
+    c_ok = bool(c_evaluable and upper_bound(fl["events"], fl["opportunities"]) <= k2["c_among_flags"]["max_upper_bound"])
     out["C2_misleading_refutations"] = {
-        "met": bool(enough and r["estimate"] is not None and r["estimate"] <= c["C2_misleading_refutations"]["max_estimate"]
-                    and r["conservative_upper_bound"] <= c["C2_misleading_refutations"]["max_conservative_upper_bound"]
-                    and r["paper_level_upper_bound"] <= c["C2_misleading_refutations"]["max_paper_level_upper_bound"]),
-        "evaluable": bool(enough), "estimate": r["estimate"], "conservative_upper_bound": r["conservative_upper_bound"],
-        "paper_level_upper_bound": r["paper_level_upper_bound"], "papers": m["papers"]}
-    v = m["coverage_of_true_statements"]
-    enough = m["papers"] >= need["papers"]
+        "met": bool(enough and a_ok and b_ok and c_ok), "evaluable": bool(enough and c_evaluable),
+        "a_per_exposed_claim": {"met": a_ok, "estimate": r["estimate"] if r else None, "conservative_upper_bound": r["conservative_upper_bound"] if r else None},
+        "b_per_paper": {"met": bool(b_ok), "affected_papers": pp["affected"], "papers": pp["papers"], "upper_bound": pp["upper_bound"]},
+        "c_among_flags": {"met": c_ok, "evaluable": c_evaluable, "misleading": fl["events"], "flags": fl["opportunities"],
+                          "upper_bound": upper_bound(fl["events"], fl["opportunities"]) if fl["opportunities"] else None}}
+    v, k3 = m["coverage_of_true_statements"], c["C3_useful_coverage"]
     out["C3_useful_coverage"] = {
-        "met": bool(enough and v["estimate"] is not None and v["estimate"] >= c["C3_useful_coverage"]["min_estimate"]
-                    and v["lower_bound_design_effect_adjusted"] >= c["C3_useful_coverage"]["min_lower_bound"]),
-        "evaluable": bool(enough), "estimate": v["estimate"], "lower_bound": v["lower_bound_design_effect_adjusted"]}
+        "met": bool(papers_ok and v["estimate"] is not None and v["estimate"] >= k3["min_estimate"]
+                    and v["lower_bound_design_effect_adjusted"] >= k3["min_lower_bound"]),
+        "evaluable": bool(papers_ok), "estimate": v["estimate"], "lower_bound": v["lower_bound_design_effect_adjusted"],
+        "estimate_with_ambiguous_numbers_removed": m["coverage_of_true_statements_ambiguous_removed"]["estimate"]}
+    det, rule = m["discrepancies_detected_among_false_statements"], c["D1_discrepancy_detection"]["wording_rule"]
+    needed = rule["flag_recall_lower_bound_needed_to_describe_the_tool_as_finding_errors"]
+    lower = det["lower_bound_design_effect_adjusted"] if det["opportunities"] else None
+    out["D1_discrepancy_detection"] = {
+        "flag_recall": det["estimate"], "lower_bound": lower, "false_statements": det["opportunities"],
+        "necessary_condition_met": bool(lower is not None and r is not None and lower > r["conservative_upper_bound"]),
+        "may_be_described_as_finding_errors": bool(needed is not None and lower is not None and lower >= needed),
+        "note": "No pass/fail minimum. If the wording threshold is unset or not reached, a pilot is confirmation only."}
     return out
 
 
@@ -104,8 +139,8 @@ def demo() -> dict:
                       "This demonstrates the scoring machinery. It is not an evaluation of v1.1 and no criterion can be met by it.",
            "arms": {}}
     for arm, papers in per_arm.items():
-        m = metrics(papers)
-        out["arms"][arm] = {"metrics": m, "criteria_C1_to_C3": judge(m, criteria)}
+        m = metrics(papers, icc_floor=criteria["assumptions"]["icc_floor"])
+        out["arms"][arm] = {"metrics": m, "criteria": judge(m, criteria)}
     return out
 
 
@@ -118,11 +153,8 @@ def main(argv=None) -> int:
     out = demo()
     Path(args.out).write_text(json.dumps(out, indent=1), encoding="utf-8")
     for arm, body in out["arms"].items():
-        m = body["metrics"]
-        print(arm, {k: (round(v["estimate"], 3) if v["estimate"] is not None else None, v["events"], v["opportunities"],
-                        "upper", round(v["conservative_upper_bound"], 3), "paper-level upper", round(v["paper_level_upper_bound"], 3))
-                    for k, v in m.items() if isinstance(v, dict) and "estimate" in v})
-        print("   ", {k: (v["met"], "evaluable" if v["evaluable"] else "NOT evaluable") for k, v in body["criteria_C1_to_C3"].items()})
+        print(arm, {k: (v["met"] if "met" in v else v.get("may_be_described_as_finding_errors"), "evaluable" if v.get("evaluable", True) else "NOT evaluable")
+                    for k, v in body["criteria"].items()})
     return 0
 
 

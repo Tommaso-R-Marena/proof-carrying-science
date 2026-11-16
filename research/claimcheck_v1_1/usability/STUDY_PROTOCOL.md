@@ -16,8 +16,8 @@ tabular data and read quantitative papers; any field. Excluded: anyone who has c
 used Lean, or read the ClaimCheck reports. Recruited by the project owner. Participation is
 voluntary and unpaid unless the owner decides otherwise; participants may stop at any time.
 
-Before any session the owner must settle whether this needs ethics review at the owner's
-institution. This protocol does not decide that.
+**Ethics determination comes before recruitment.** See [`ETHICS_DETERMINATION.md`](ETHICS_DETERMINATION.md).
+Nobody has been recruited, contacted or asked, and no session will be simulated.
 
 ## What is recorded
 

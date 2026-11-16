@@ -1,6 +1,8 @@
 # ClaimCheck v1.1: development report and readiness assessment
 
 Date: 2026-11-14. Research sidecar, draft, no production authority.
+Amended 2026-11-16: the stand-alone kernel runner was replaced (section 3, last two rows of the
+table) and the scope of the 2 % decoy limit is stated (section 7, item 4). Nothing else changed.
 
 **What kind of evidence this is.** Everything measured here uses the eight ClaimCheck v1 documents
 (two development, six held-out). All eight were read while v1.1 was designed, and the v1.1 rules
@@ -18,6 +20,7 @@ run; it waits for the owner's approval.
 | Independent software replay of v1.1 bundles | completed locally by a separate program; hosted CI job added |
 | Kernel cost benchmark | completed |
 | Web page: browser-built proof file accepted by the real kernel through the served runner | completed (authored automation, site repository) |
+| Stand-alone runner refuses forged and altered proof files before starting Lean | completed 2026-11-16 (offline: the reported forgery and 13 alterations; live: the forgery). The runner served before then accepted the forgery |
 | Source admission, reading-help re-qualification, CI gate | **prepared and dry-run tested; not applied** (owner decisions C and D) |
 | Prospective evaluation | **not run** (protocol drafted) |
 | Independent human adjudication | **not done** (blinded package prepared, nobody asked yet) |
@@ -115,6 +118,7 @@ The path of an authoritative statement, and what was tested at each step
 | record → what the user is told | outward verdict recomputed from the findings by the replayer; invariant asserted in code | (unit tests) a v1 `UNKNOWN` can never become a verdict; a match never becomes a discrepancy | pass |
 | conditional result | one SD convention matches, the other does not | (unit and v1 tests) | `REQUIRE_HUMAN_REVIEW`, both branches shown |
 | "fresh" | a record carries `kernel_run` only when the kernel ran in that invocation | record without kernel acceptance | `kernel_run` is null and the verdict is `UNKNOWN` |
+| proof file → stand-alone runner | since 2026-11-16 (receipt schema v2): reviewed checker by digest, and the generated part must be exactly in the generator's form, parsed before Lean is started | hand-written generated part defining its own `run` (the reported forgery); 13 other alterations (extra definition, macro, import, option, comment, other proof term, other outcome, trailing text, …) | refused before Lean starts. **Before 2026-11-16 (schema v1) the forgery was accepted and reported as a match**; recorded results were not affected because `verify` and the replayer write the proof file themselves |
 | web page → local kernel run | the page never runs Lean; a `kernel-run.json` from the stand-alone runner is shown only if its proof-file, data and checker digests equal what the page built, under the label "reported by your local run · not verified by this page" | report for other data; report for another proof file (real browser, real kernel, site repository `scripts/browser_claim_check.cjs`) | both refused; an accepted report is never called verified |
 
 The trusted computing base is unchanged from v1 ([`../claimcheck_v1/TRUST_BOUNDARY.md`](../claimcheck_v1/TRUST_BOUNDARY.md)):
@@ -189,7 +193,14 @@ automatically. Whether any of them is one is a question for people; the blinded 
    they do not remove it.
 4. The decoy rate estimates how often *some* eligible reading reproduces a comparable number in
    this table. It is an empirical property of one table and one sentence, not a probability with a
-   guarantee.
+   guarantee. Its 2 % limit is a local density (among the up to 101 comparable numbers nearest to
+   the printed one, itself included). What is proved about it (`../claimcheck_assurance_v1/formal/ClaimCheckAssurance/
+   Selection.lean`, research branch): if the printed number is unrelated to the table and equally
+   likely to be any comparable number, a chooser who has seen the data gets at most 2 numbers in any
+   51 consecutive comparable numbers confirmed, about 3.9 %, through the direct route and one
+   supporting sibling together; with `s` distinct supporting reading sets, at most `s` times that.
+   It says nothing about printed numbers that are related to the table, which is the usual case,
+   and it does not bound the rate of false confirmations in a body of papers.
 5. Coverage is low, and discrepancy detection is very low. A tool that almost never flags is safe
    and of limited use for finding errors. That trade was made deliberately and is measured above.
 6. `row_unit` and column units must be supplied in the manifest. For the v1 documents they were

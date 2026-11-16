@@ -9,7 +9,8 @@
    record moved to another bundle).
 3. Resource exhaustion and interruption: a killed, hung or silent Lean process can only yield
    UNKNOWN, never a positive result.
-4. The stand-alone kernel runner accepts a real proof file and rejects a forged one.
+4. The stand-alone kernel runner accepts a real proof file; rejects a forged outcome (Lean refuses
+   it); and refuses a forged generated part that defines its own `run` before Lean starts.
 """
 from __future__ import annotations
 
@@ -178,16 +179,30 @@ def fail_closed(work: Path, real_version: str) -> dict:
 
 
 def runner_cases(good: Path, work: Path) -> dict:
+    from .runner_negative_controls import MARKER, shadowed_run_tail
     proof = sorted((good / "v1" / "obligations").glob("*.lean"))[0]
-    run = lambda p: json.loads(subprocess.run([sys.executable, str(HERE / "claimcheck_kernel_runner.py"), str(p)], capture_output=True, text=True).stdout)
+    run = lambda p, *extra: json.loads(subprocess.run([sys.executable, str(HERE / "claimcheck_kernel_runner.py"), str(p), *extra],
+                                                      capture_output=True, text=True).stdout)
     real = run(proof)
     forged = work / "forged.lean"
     text = proof.read_text(encoding="utf-8")
     swap = (".checked .consistent", ".checked .inconsistent") if ".checked .consistent" in text.split("generated obligations")[1] else (".checked .inconsistent", ".checked .consistent")
     head, tail = text.split("-- ===== generated obligations", 1)
     forged.write_text(head + "-- ===== generated obligations" + tail.replace(*swap), encoding="utf-8")
+    # the forgery of research/claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md, with the real kernel available
+    shadow = work / "shadowed-run.lean"
+    shadow.write_text(text.split(MARKER)[0] + MARKER + shadowed_run_tail(DATA), encoding="utf-8")
+    shadow_report = run(shadow)
+    # and with a stand-in lean that records being started: it must not be started
+    marker, standin = work / "lean-was-started", work / "standin-lean"
+    standin.write_text(f"#!{sys.executable}\nimport pathlib\npathlib.Path({str(marker)!r}).write_text('x')\nprint('Lean (version 4.28.0, stand-in)')\n")
+    standin.chmod(0o755)
+    run(shadow, "--lean", str(standin))
     return {"real_proof_file_accepted": real["accepted"], "theorems": len(real["theorems"]),
-            "data_sha256_matches": real.get("data_sha256") == sha256_hex(DATA), "forged_outcome_accepted": run(forged)["accepted"]}
+            "real_receipt_schema": real.get("schema"), "data_sha256_matches": real.get("data_sha256") == sha256_hex(DATA),
+            "forged_outcome_accepted": run(forged)["accepted"],
+            "shadowed_run_accepted": shadow_report["accepted"], "shadowed_run_why_not": shadow_report.get("why_not"),
+            "lean_started_for_shadowed_run": marker.exists()}
 
 
 def main(argv=None) -> int:
@@ -219,7 +234,10 @@ def main(argv=None) -> int:
               and all(c["replay_rejected"] for c in report["tampering"].values())
               and all(c["verdict"] == "UNKNOWN" and c["mathematical"] == "NOT_ESTABLISHED" and not c["kernel_run_recorded"] for c in report["fail_closed"].values())
               and report["kernel_runner"]["real_proof_file_accepted"] and report["kernel_runner"]["data_sha256_matches"]
-              and not report["kernel_runner"]["forged_outcome_accepted"])
+              and not report["kernel_runner"]["forged_outcome_accepted"]
+              and not report["kernel_runner"]["shadowed_run_accepted"]
+              and not report["kernel_runner"]["lean_started_for_shadowed_run"]
+              and report["kernel_runner"]["real_receipt_schema"] == "pcs-claimcheck-kernel-run-v2")
     report["passed"] = passed
     text = json.dumps(report, indent=1, ensure_ascii=False)
     if args.out:

@@ -33,8 +33,10 @@ MAX_SIBLINGS = 12
 OUTWARD_TEXT = {
     "CONFIRMATION": (
         "The printed number is reproduced from this file under the stated reading. The wording attached to the number fits the "
-        "statistic, no other statistic or column named in the sentence reproduces it, and a chance match is unlikely even for "
-        "someone who chose the reading after seeing the data. No person has reviewed the reading."),
+        "statistic, no other statistic or column named in the sentence reproduces it, and the readings the wording admits "
+        "reproduce few comparable numbers. That limits coincidence but does not exclude it: for an unrelated number and a "
+        "reader who chose the reading after seeing the data, the proved limit is about 4 %, not zero. No person has reviewed "
+        "the reading."),
     "DISCREPANCY_FOR_REVIEW": (
         "Under the stated reading, this file does not give the printed number, and another number in the same sentence is "
         "reproduced from the same column and rows, which supports the reading. This is a discrepancy for a person to look at. "

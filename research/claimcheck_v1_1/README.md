@@ -50,10 +50,24 @@ Needed for any outward verdict:
 For a match to be a `CONFIRMATION`:
 
 5. No other statistic or column that the sentence's wording attaches to this number reproduces it.
-6. **Low chance of coincidence.** Among comparable numbers (same decimals, same number of digits,
-   the printed one included), at most 2 % are reproduced by some eligible reading. A one-digit number
-   has nine comparable numbers, so it is never confirmed. Or: a confirmed number in the same sentence
-   fixes the column and rows, and the 2 % limit holds within what that leaves.
+6. **Few comparable numbers reproduced.** Among comparable numbers (same decimals, same number of
+   digits, the printed one included), at most 2 % are reproduced by some eligible reading. A one-digit
+   number has nine comparable numbers, so it is never confirmed. Or: a confirmed number in the same
+   sentence fixes the column and rows, and the 2 % limit holds within what that leaves.
+
+   **What the 2 % is and is not.** It is a local density: among the comparable numbers nearest to the
+   printed one (up to 101, the printed one included) at most 2 % may be reproducible. It is not a
+   bound on the probability of a false confirmation. What is proved, in a model of the rule
+   (`research/claimcheck_assurance_v1/formal/ClaimCheckAssurance/Selection.lean`, research branch):
+   whatever the reproducible numbers are, at most 2 in any 51 consecutive comparable numbers can be
+   confirmed by the direct route and one supporting sibling together, and a pattern reaching 2 in
+   every 52 exists. So if the printed number is unrelated to the table and equally likely to be any
+   comparable number, a chooser who saw the data gets it confirmed with probability at most about
+   4 % (2 per 51 consecutive numbers; at most 36 of the 900 numbers of a three-digit format), not 2 %. With `s` different supporting reading sets (each, as the policy builds
+   them, a subset of the direct one) the bound is `max(1, s) × 2` per 51. That the implemented rule
+   stays within the model is tested (785 confirmations; 3.6 % reached on the worst pattern), not
+   proved. Nothing here bounds errors for numbers that are related to the table, which is the usual
+   case.
 
 For a mismatch to be a `DISCREPANCY_FOR_REVIEW`, all of:
 
@@ -96,7 +110,27 @@ this repository:
 python claimcheck_kernel_runner.py claimcheck-proof.lean --out kernel-run.json
 ```
 
-It checks that the file starts with the reviewed checker, runs Lean, and reports what was proved.
+It refuses the file, without starting Lean, unless the file starts with the reviewed checker and the
+rest is exactly in the form the generator writes: one data numeral, claims built from literals, one
+batch theorem, and one fixed-form theorem per claim. Then it runs Lean 4.28.0 and reports what the
+kernel accepted (receipt schema `pcs-claimcheck-kernel-run-v2`).
+
+A pass verifies the supplied mathematical obligation: each theorem in the file, about the reviewed
+checker, holds for the data bytes embedded in the file. It does **not** verify that the obligation
+faithfully represents a paper: whether the sentence means that statement, whether the reported value
+is the paper's number, and whether the bytes are the authors' data.
+
+**Correction, 2026-11-16.** The runner distributed until then (receipt schema v1, SHA-256
+`8d9e07b4…`) checked the generated part only for a few forbidden words. A hand-written file that
+defined its own `run` and proved the expected equation by `rfl` passed the Lean kernel, and that
+runner reported "MATCHES" for it, although the theorem said nothing about the reviewed checker
+(finding `research/claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md`, on the research branch
+of [PR 216](https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/216)). That runner is
+withdrawn; do not rely on v1 receipts. Results recorded by `verify`, the committed bundles and the
+replayer were not affected: they generate the proof file themselves, and the replayer re-derives it
+from the receipt byte for byte. The reported forgery and 13 other alterations of genuine files are
+refused before Lean starts in `tests/test_runner_strict.py`, and the forgery again with the real
+kernel installed in `check_live_v11.py`.
 
 A manifest may now say what one row is (`"row_unit": ["individual"]`); without it no count in prose
 can be confirmed. Units should be declared for every column that has one.
@@ -108,7 +142,8 @@ can be confirmed. Units should be declared for every column that has one.
 | `policy.py`, `space.py`, `binding.py` | the rules; the reading space a sentence admits; wording attached to a number |
 | `verify.py`, `__main__.py` | v1 pipeline → policy → three-layer records, bundle, report; command line |
 | `replay_independent_v1_1.py` | stand-alone replay (imports nothing from the packages) |
-| `claimcheck_kernel_runner.py` | stand-alone kernel runner for one proof file |
+| `claimcheck_kernel_runner.py` | stand-alone kernel runner for one proof file (strict generated part, receipt schema v2) |
+| `runner_negative_controls.py` | proof files the runner must refuse (the reported forgery and 13 alterations) |
 | `check_live_v11.py`, `tests/` | live checks with the real kernel; offline tests |
 | `dev/` | development evaluation and free-choice adversary on the v1 documents |
 | `perf/` | kernel cost by table size |

@@ -11,7 +11,11 @@ Three statements are kept apart in every v1.1 record.
 Outward verdicts (about the printed number, never about the paper's correctness):
 
   CONFIRMATION             the number is reproduced; the wording admits no other reading that
-                           reproduces it; a chance match is unlikely even for a chooser who saw the data
+                           reproduces it; the admitted readings reproduce few comparable numbers (a
+                           local density of at most 2 %; this limits coincidence but does not exclude
+                           it: against a chooser who saw the data, the bound proved in a model of the
+                           rule for an unrelated number is about 4 %, 2 per 51 comparable numbers;
+                           see claimcheck_assurance_v1 Selection.lean)
   DISCREPANCY_FOR_REVIEW   the number is not reproduced under a reading that another number in the
                            same sentence independently supports; for a person to look at
   REQUIRE_HUMAN_REVIEW     a mathematical result exists, but support for the reading is insufficient
@@ -34,6 +38,11 @@ from .space import DECOYS_PER_SIDE, MAX_CONDITIONS, Reading, SourceContext, fami
 
 # Maximum decoy coincidence rate for a match to count as evidence for its reading: at most this
 # share of nearby numbers of the same printed precision may be reproducible by SOME eligible reading.
+# This is a local density around the printed number, not a probability of a false confirmation.
+# In a model of this rule (research/claimcheck_assurance_v1/formal, Selection.lean) at most 2 in any 51
+# consecutive comparable numbers can be confirmed, by the direct route and one supporting sibling
+# together, and max(1, s) * 2 with s supporting reading sets; for an unrelated, uniformly placed number
+# and a chooser who saw the data that is about 4 %.  Nothing bounds errors for related numbers.
 TAU = Fraction(2, 100)
 # With the printed number counted among the comparable numbers, a number needs at least 50 of
 # them (49 decoys) before its rate can be at or below 2 %.  A one-digit number has nine.
