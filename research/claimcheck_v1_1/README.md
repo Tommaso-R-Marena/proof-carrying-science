@@ -112,8 +112,12 @@ python claimcheck_kernel_runner.py claimcheck-proof.lean --out kernel-run.json
 
 It refuses the file, without starting Lean, unless the file starts with the reviewed checker and the
 rest is exactly in the form the generator writes: one data numeral, claims built from literals, one
-batch theorem, and one fixed-form theorem per claim. Then it runs Lean 4.28.0 and reports what the
-kernel accepted (receipt schema `pcs-claimcheck-kernel-run-v2`).
+batch theorem, and one fixed-form theorem per claim, with the generator's one spelling of every
+value. Then it runs Lean 4.28.0 and reports what the kernel accepted (receipt schema
+`pcs-claimcheck-kernel-run-v2`). On the research branch, `ClaimCheckAssurance/Claims.lean` proves in
+Lean that this language is exactly the set of renderings of valid values, that a text is determined
+by its meaning in the checker, and that the claim theorems say exactly what the batch theorem says;
+the runner's parser agrees with the proved parser on 7,248 inputs (a test, not a proof).
 
 A pass verifies the supplied mathematical obligation: each theorem in the file, about the reviewed
 checker, holds for the data bytes embedded in the file. It does **not** verify that the obligation

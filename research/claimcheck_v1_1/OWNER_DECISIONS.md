@@ -33,7 +33,7 @@ No session has been run and none will be simulated.
 | --- | --- | --- | --- | --- |
 | C1 | Admit `research/claimcheck_v1/**`, `research/claimcheck_v1_1/**`, the workflow and the admission documents | **supported in principle, not yet approved** | [`../../docs/integration/claimcheck/ADMISSION_PROPOSAL.md`](../../docs/integration/claimcheck/ADMISSION_PROPOSAL.md), the census, the dry run, the patch; audit [`../../docs/integration/claimcheck/ADMISSION_AUDIT.md`](../../docs/integration/claimcheck/ADMISSION_AUDIT.md) | review; fix the admitted commit; create and push the retained-source tag; approve the successor manifest and control changes |
 | C2 | Make the ClaimCheck jobs required | **supported in principle** | `offline-and-kernel`, `meaning-theorems` (and, if PR 216 is admitted, `proofs-and-refinement`) | add them to the ruleset's required checks (a repository setting only the owner can change) |
-| C3 | The stand-alone kernel runner accepted forged proof files | 2026-11-16: **authorised for preparation and testing**: replace the runner and the served copy with the tested strict runner; reject the reported forgery before Lean; keep accepting generated files; make the negative controls mandatory tests | done on this branch: `claimcheck_kernel_runner.py` (receipt schema v2) refuses anything but the generator's form before Lean starts; `runner_negative_controls.py`, `tests/test_runner_strict.py`, `check_live_v11.py` (real kernel); README and REPORT corrected; finding `claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md` (research branch) keeps the vulnerable runner as evidence | owner review of the corrected runner and its tests. Recorded results were not affected |
+| C3 | The stand-alone kernel runner accepted forged proof files | 2026-11-16: **authorised for preparation and testing**: replace the runner and the served copy with the tested strict runner; reject the reported forgery before Lean; keep accepting generated files; make the negative controls mandatory tests | done on this branch (`d5a36975`, `2de4f872`, canonical grammar `39ce953c`): `claimcheck_kernel_runner.py` (receipt schema v2) refuses anything but the generator's form, one spelling per value, before Lean starts; `runner_negative_controls.py`, `tests/test_runner_strict.py`, `check_live_v11.py` (real kernel); README and REPORT corrected; finding `claimcheck_assurance_v1/findings/RUNNER_TAIL_FORGERY.md` (research branch) keeps the vulnerable runner as evidence | owner review of the corrected runner and its tests. Recorded results were not affected |
 
 No protected file has been edited: not the manifest, not `reconcile.py`, not any existing workflow.
 
@@ -60,7 +60,19 @@ No protected file has been edited: not the manifest, not `reconcile.py`, not any
   protected admission files, no retained-source tag. Refreshed admission and qualification evidence
   is prepared for the owner's separate review once the runner correction is complete.
 * 2026-11-16: next formal target: the canonical claims-part parser and renderer
-  (`../claimcheck_assurance_v1/HANDOFF.md`).
+  (`../claimcheck_assurance_v1/HANDOFF.md`). Done on the research branch: `Claims.lean` (round trip,
+  canonicity, injectivity, one meaning one text, batch iff claims; kernel-checked) and a conformance
+  test of the runner's parser against it (7,248 inputs, no disagreement; a test, not a proof).
+
+## G. Refreshed evidence for the owner's separate review (2026-11-16)
+
+Nothing here is approved, applied or tagged.
+
+| For | Refreshed at | What | Result |
+| --- | --- | --- | --- |
+| C1 core admission | `39ce953c` | census `../../docs/integration/claimcheck/ADMISSION_CENSUS.json`; dry run `dry-run.json`; patch; audit `ADMISSION_AUDIT.md/.json` | 1,982 added files, none existing changed; gate with the successor passes on 10,025 files and 72 PRs; five negative controls rejected; audit all clear (no credential, no generated file, modes 100644, licences in order, frozen digests verify, protected paths unchanged). Valid only for that commit; to be regenerated at the commit the owner fixes |
+| D1-D3 site gates | site `5538f1b` | site `docs/governance/claimcheck-proposals/`: census (42 files: 36 added, 6 modified) and dry runs of patches 01, 02, 03, all reproducible by script | all as expected: 01 patched verifier accepts, 22 tests pass, 5 alterations rejected; 02 successor passes, 6 controls rejected; 03 complete gate runs 11 claim-check tests, 8 alterations rejected (incl. a non-strict served runner and a v1 receipt shown again) |
+| reading-help re-qualification | site branch head | all-pages browser run repeated on the changed page | byte-identical to the recorded evidence (`all-pages-browser.json`, sha256 `e161824d…`); the successor check passes |
 
 * External pilot: only after A to D and after criteria C1 to C9 are met; then the owner's authorisation (C10).
 * Deployment of the page: not requested; not before D and C3 are decided.
