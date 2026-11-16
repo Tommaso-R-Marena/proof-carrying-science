@@ -4,8 +4,9 @@
 their data.  This test executes that same `decode` (via `lean --run HeaderRefinement.lean`) and
 compares it, vector by vector, with
   * `c/pcs_srcbind.c::pcs_header_decode` (through ctypes), on every vector and capacity;
-  * the header part of `runner/strict_tail.py` (its own PREAMBLE and SRC objects and size rule), on
-    every vector whose capacity is the 65,536-byte limit (the Python runner has no capacity).
+  * the header part of the installed stand-alone runner
+    (`research/claimcheck_v1_1/claimcheck_kernel_runner.py`: its PREAMBLE and SRC objects and size
+    rule), on every vector whose capacity is the 65,536-byte limit (the runner has no capacity).
 Vectors: the generated part of every committed obligation file, canonical headers of random data
 of many sizes with random suffixes, every truncation and many single-byte mutations of headers,
 non-canonical spellings, near-grammar fuzz, random bytes.  Agreement on these inputs is evidence
@@ -20,8 +21,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ASSURANCE = HERE.parent
 ROOT = ASSURANCE.parents[1]
-sys.path.insert(0, str(ASSURANCE / "runner"))
-import strict_tail  # noqa: E402
+sys.path.insert(0, str(ROOT))
+from research.claimcheck_v1_1 import claimcheck_kernel_runner as strict_tail  # noqa: E402  (the installed runner)
 
 MAX = 65536
 MARKER = b"\n-- ===== generated obligations (data numeral, claims, expected outcomes) =====\n"
@@ -32,7 +33,7 @@ def canonical(data: bytes) -> bytes:
 
 
 def python_header(buf: bytes):
-    """strict_tail's header rule, applied to the start of `buf`: (header length, data) or None."""
+    """The installed runner's header rule, applied to the start of `buf`: (header length, data) or None."""
     text = buf.decode("utf-8", "surrogateescape")
     if not text.startswith(strict_tail.PREAMBLE):
         return None

@@ -75,7 +75,7 @@ authority. The counterexample, by contrast, is a C program anyone can run.
   after 92 credits on 60 lines of C. The encoder's four simple loops were not finished.
 * Rough cost guide from this run: about 90 credits for one 60-line parser function plus helpers,
   incomplete. A complete canonical decoder for the whole generated part of a proof file (see
-  `../runner/strict_tail.py`, about ten times the logic) is out of reach of the remaining 408
+  `parse_tail` of the installed runner, about ten times the logic) is out of reach of the remaining 408
   credits at this rate.
 
 ## Independent evidence for the same code (tests, not proofs)

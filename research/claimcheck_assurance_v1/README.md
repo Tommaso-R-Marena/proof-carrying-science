@@ -9,24 +9,27 @@ checker, a benchmark, a protected file or any production path. Kernel-checked wi
 | Step of the chain | Status before | Added here | Kind of evidence |
 | --- | --- | --- | --- |
 | proof-file text → data bytes | regular expressions in the runner | `Header.lean`: the strict decoder accepts exactly the canonical headers and returns their data; canonical headers are prefix-free | **proved** (Lean kernel) |
-| | | the C decoder and the Python runner compute that same function on 5,755 inputs | **tested** (`conformance/test_header_refinement.py`) |
+| | | the C decoder and the installed Python runner compute that same function on 5,755 inputs | **tested** (`conformance/test_header_refinement.py`) |
 | numeral → bytes the checker computes on | unstated | `SourceBinding.lean`: `Source.bytes` of the numeral is exactly the data; a well-formed source is the dump of its own bytes | **proved** |
 | text `0x…` → the number Lean uses | — | — | **trusted**: standard meaning of numeric literals in Lean's elaborator |
-| the rest of the generated part (claims, theorem statements) | eight forbidden words | `runner/strict_tail.py`: exactly the generator's language | **tested** (84 real files accepted, 16 forgeries rejected) |
+| the rest of the generated part (claims, theorem statements) | eight forbidden words | the installed runner's `parse_tail` (core `research/claimcheck_v1_1/claimcheck_kernel_runner.py`, since 2026-11-16): exactly the generator's language, checked before Lean starts | **tested** (84 real files accepted; 16 forgeries here and 13 alterations in the core suite rejected) |
 | kernel result → outward verdict | `assert` in the Python policy | `Authority.lean`: a decided verdict implies the statement about the real `run`; unknown and conditional results never become decided; withdrawing evidence never raises a verdict; a discrepancy needs a kernel-confirmed sibling | **proved** about a Lean model |
 | | | the Python policy computes the model's decision function on 302 real receipts and every one of 160 + 448 table states | **tested** (`conformance/check_conformance.py`) |
-| the decoy rule against a chooser who saw the data | "2 %" | `Selection.lean`: at most 2/51 ≈ 3.9 % of unrelated numbers are confirmable by either confirmation route (direct, or supported by one sibling), and 2/52 is reached; two rules that do give 2 % | **proved** (finding) |
+| the decoy rule against a chooser who saw the data | "2 %" | `Selection.lean`: in any 51 consecutive comparable numbers at most 2 are confirmable by the direct route and one supporting sibling together (`max(1, s) × 2` with `s` supporting reading sets), and 2/52 is reached; two rules that do give 2 % | **proved** about a model of the rule (finding) |
 | | | every confirmation the implemented rule makes is confirmable in the model (785 checked); the real rule confirms 3.6 % in the worst pattern | **tested** (`conformance/test_decoy_rule.py`) |
 | the kernel itself, the Lean binary, SHA-256, the process boundary | trusted | — | **trusted**, unchanged |
 
 ## Findings
 
 * [`findings/RUNNER_TAIL_FORGERY.md`](findings/RUNNER_TAIL_FORGERY.md): the v1.1 stand-alone kernel
-  runner, also served by the website draft, accepts a hand-written proof file that defines its own
-  `run` and reports "MATCHES". Reproduced with the real kernel; fix prepared and tested
-  (`runner/claimcheck_kernel_runner_v2.py`), not applied to the v1.1 files.
+  runner, also served by the website draft, accepted a hand-written proof file that defines its own
+  `run` and reported "MATCHES". Reproduced with the real kernel. **Corrected on the draft branches
+  on 2026-11-16** (owner decisions C3/D4, authorised for preparation and testing): the strict runner
+  is installed and served; the withdrawn runner is kept byte for byte as evidence in
+  [`findings/evidence/`](findings/evidence/README.md), not as a verification path.
 * `Selection.lean`: the documented "2 %" decoy limit is a local density, not a bound on coincidental
-  confirmation. Owner decision A6 in the ClaimCheck branch.
+  confirmation. Owner decision A6 (2026-11-16): the rule is retained and its descriptions in the
+  ClaimCheck branch were corrected to state the proved bound, its model and its assumptions.
 * [`c/ARISTOTLE_RESULTS.md`](c/ARISTOTLE_RESULTS.md): Aristotle refuted two decoder properties as I
   had stated them (missing non-aliasing precondition, runnable counterexample) and proved four
   smaller ones; 92 credits were billed against an authorised 50.
@@ -100,10 +103,15 @@ concrete case, and `coreFlawed` shows that the monotonicity theorem fails for a 
   proved. The functions that compute findings from text and data are outside the model.
 * That the C decoder is memory safe for every input: sanitizer tests pass; Aristotle's memory-safety
   property for the decoder is unresolved.
-* The claims part of the proof file: strict grammar, tested, not proved.
-* The decoy bound with `s` different supporting reading sets is `s · k` per 51 numbers (proved). How
-  many such sets a chooser can obtain in one sentence is not bounded here; it is limited by the
-  numbers that are themselves strongly confirmed.
+* The claims part of the proof file: strict grammar, tested, not proved (next formal target,
+  `HANDOFF.md`).
+* The decoy bound with `s` different supporting reading sets is `max(1, s) · k` per `r + 1`
+  numbers, that is `max(1, s) × 2` per 51 for the implemented rule (proved, `routes_block_le`,
+  under the hypothesis that every supporting set is a subset of the direct one, which is how the
+  policy builds them and is tested, not proved). How many such sets a chooser can obtain in one
+  sentence is not bounded here; it is limited by the numbers that are themselves strongly confirmed.
+  The bound is about printed numbers unrelated to the table and placed uniformly among comparable
+  numbers; it says nothing about related numbers and is not a false-confirmation rate.
 * Anything about meaning: `faithfulness_not_decidable_from_observables` states why no verdict claims
   that a reading is what the authors meant.
 
