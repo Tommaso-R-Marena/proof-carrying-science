@@ -91,6 +91,36 @@ class StrictRunner(unittest.TestCase):
         with self.assertRaisesRegex(runner.NotCanonical, "more than 256 claims"):
             runner.parse_tail(many)
 
+    def test_only_the_generators_spelling_of_each_value_is_accepted(self):
+        good = ("open PCS.ClaimCheck\n\n"
+                "def pcs_src : Source := ⟨0x612c620a312c320a, 8⟩\n\n"
+                "def pcs_c0 : Claim :=\n  { column := some (b \"a\"),\n    filter := [.num ([226, 128, 147]) .ge ((-1 : Rat) / 2)],\n"
+                "    stat := .mean,\n    naTokens := [b \"\", b \"NA\"],\n"
+                "    scale := ((1 : Rat) / 1),\n    reported := b \"1\" }\n\n"
+                "theorem pcs_batch : runAll pcs_src [pcs_c0] =\n    [.checked .consistent (.sqrt (1 : Int) ((2 : Rat) / 3)) 1 0] := by decide +kernel\n\n"
+                "theorem pcs_claim_0 : run pcs_src pcs_c0 = .checked .consistent (.sqrt (1 : Int) ((2 : Rat) / 3)) 1 0 :=\n"
+                "  run_of_runAll pcs_batch 0 rfl rfl\n#print axioms pcs_claim_0\n\n")
+        runner.parse_tail(good)
+        variants = {
+            "a quoted string written as numbers": ('some (b "a")', "some ([97])"),
+            "an empty byte list": ('reported := b "1"', "reported := []"),
+            "a byte above 255": ("[226, 128, 147]", "[226, 128, 256]"),
+            "a byte with a leading zero": ("[226, 128, 147]", "[226, 128, 0147]"),
+            "a fraction not in lowest terms": ("scale := ((1 : Rat) / 1)", "scale := ((2 : Rat) / 2)"),
+            "minus zero": ("((-1 : Rat) / 2)", "((-0 : Rat) / 1)"),
+            "a zero denominator": ("((-1 : Rat) / 2)", "((-1 : Rat) / 0)"),
+            "a square-root sign of 2": ("(.sqrt (1 : Int)", "(.sqrt (2 : Int)"),
+            "a negative radicand": ("((2 : Rat) / 3)) 1 0]", "((-2 : Rat) / 3)) 1 0]"),
+            "an unknown reason": (".checked .consistent (.sqrt (1 : Int) ((2 : Rat) / 3)) 1 0]", ".undefined .whatever]"),
+        }
+        for name, (old, new) in variants.items():
+            with self.subTest(name):
+                self.assertIn(old, good)
+                with self.assertRaises(runner.NotCanonical):
+                    runner.parse_tail(good.replace(old, new, 1))
+        # a column named like a fraction or a byte list is still a quoted string, and accepted
+        runner.parse_tail(good.replace('some (b "a")', 'some (b "((2 : Rat) / 2) [97]")', 1))
+
     def test_receipts_say_what_they_do_not_establish(self):
         source = RUNNER.read_text(encoding="utf-8")
         self.assertIn("does not verify that the obligation faithfully represents a paper", source)
