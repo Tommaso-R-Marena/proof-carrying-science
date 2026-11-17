@@ -58,7 +58,8 @@ Do not edit other research dirs.
 
 ## Next highest-value objectives
 
-1. Prove Python algorithm establishes `IncrementalAccept` (or extract decide-checker).
-2. Frontier scheduling to avoid full topo walks (with proof obligations).
-3. Real Lean-kernel local-check timings (beyond synthetic delay).
-4. Independent human review of theorem statements and trust model.
+1. Bridge `runIncremental` ok-result ⇒ `LogicalAccept` (kernel-checked).
+2. Real Lean 4.28.0 proof-check benchmarks (cold/warm/trusted/defense).
+3. Independent arithmetic reference (no shared op registry).
+4. Multistep history soundness; PRIOR_ART novelty comparison.
+5. Independent human review of theorem statements and trust model.

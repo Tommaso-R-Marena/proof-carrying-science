@@ -18,6 +18,7 @@ from .graph import (
     same_defn,
     changes_complete,
     missing_definitional_changes,
+    compute_changes,
 )
 from .ops import (
     OpRegistry,
@@ -54,6 +55,7 @@ __all__ = [
     "same_defn",
     "changes_complete",
     "missing_definitional_changes",
+    "compute_changes",
     "OpRegistry",
     "default_registry",
     "LocalCheck",

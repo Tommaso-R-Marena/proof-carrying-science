@@ -107,9 +107,10 @@ class OpSpec:
     name: str
 
 
-# LocalCheck: OpId → VersionId → PolicyId → List Value → CertPayload → Value → Bool
+# LocalCheck: OpId → VersionId → PolicyId → EvidenceId → deps → payload → output → Bool
+# Matches Lean PCSIncremental.LocalCheck (evidence-bound).
 LocalCheck = Callable[
-    [int, int, int, Sequence[Value], CanonValue, Value],
+    [int, int, int, int, Sequence[Value], CanonValue, Value],
     bool,
 ]
 
@@ -159,44 +160,13 @@ class OpRegistry:
         op: int,
         version: int,
         policy: int,
+        evidence: int,
         deps: Sequence[Value],
         payload: CanonValue,
         output: Value,
     ) -> bool:
-        """Executable LocalCheck matching the Lean abbrev."""
-        if policy not in self.allowed_policies:
-            return False
-        exp_ver = self.versions.get(op)
-        if exp_ver is None or version != exp_ver:
-            return False
-        try:
-            expected = self.compute(op, deps, evidence=_evidence_from_payload_or_node(op, payload, deps))
-        except (TypeError, ValueError):
-            # For CONST ops evidence is needed; fall back to verifying payload witness
-            try:
-                expected = self._expected_from_witness(op, deps, payload)
-            except (TypeError, ValueError):
-                return False
-        if canonicalize_value(expected) != canonicalize_value(output):
-            return False
-        # payload must be exact witness
-        want: CanonValue = ("ok", op, canonicalize_value(output))
-        return payload == want
-
-    def _expected_from_witness(
-        self, op: int, deps: Sequence[Value], payload: CanonValue
-    ) -> Value:
-        if (
-            isinstance(payload, tuple)
-            and len(payload) == 3
-            and payload[0] == "ok"
-            and payload[1] == op
-        ):
-            # Recompute from deps when possible; for consts, decode payload
-            if op in (OP_INT_CONST, OP_RAT_CONST) and len(deps) == 0:
-                return _decode_canon(payload[2])
-            # recompute with evidence 0 placeholder then compare — not used
-        raise ValueError("cannot recover expected value")
+        """Lean-shaped LocalCheck (evidence-bound). Alias of local_check_node."""
+        return self.local_check_node(op, version, policy, evidence, deps, payload, output)
 
     def local_check_node(
         self,
@@ -208,7 +178,7 @@ class OpRegistry:
         payload: CanonValue,
         output: Value,
     ) -> bool:
-        """Node-aware LocalCheck that uses evidence for constants."""
+        """Evidence-bound LocalCheck matching Lean `LocalCheck`."""
         if policy not in self.allowed_policies:
             return False
         exp_ver = self.versions.get(op)
@@ -224,61 +194,18 @@ class OpRegistry:
         return payload == want
 
     def as_local_check(self) -> LocalCheck:
-        """
-        Lean-shaped LocalCheck (no evidence arg).
-        Evidence is recovered from payload for const ops; for others recomputed.
-        Prefer `local_check_node` in the executable verifier.
-        """
+        """Lean-shaped LocalCheck including evidence."""
 
         def check(
             op: int,
             version: int,
             policy: int,
+            evidence: int,
             deps: Sequence[Value],
             payload: CanonValue,
             output: Value,
         ) -> bool:
-            if policy not in self.allowed_policies:
-                return False
-            exp_ver = self.versions.get(op)
-            if exp_ver is None or version != exp_ver:
-                return False
-            # recover evidence for consts from output/payload; recompute others
-            if op == OP_INT_CONST:
-                if len(deps) != 0:
-                    return False
-                try:
-                    expected = _decode_canon(payload[2]) if _is_ok_payload(payload, op) else None
-                except Exception:
-                    return False
-                if expected is None:
-                    return False
-                return (
-                    canonicalize_value(expected) == canonicalize_value(output)
-                    and payload == ("ok", op, canonicalize_value(output))
-                )
-            if op == OP_RAT_CONST:
-                if len(deps) != 0:
-                    return False
-                if not _is_ok_payload(payload, op):
-                    return False
-                try:
-                    expected = _decode_canon(payload[2])
-                except Exception:
-                    return False
-                return (
-                    canonicalize_value(expected) == canonicalize_value(output)
-                    and payload == ("ok", op, canonicalize_value(output))
-                )
-            try:
-                # non-const: evidence unused
-                expected = self.compute(op, deps, evidence=0)
-            except (TypeError, ValueError):
-                return False
-            return (
-                canonicalize_value(expected) == canonicalize_value(output)
-                and payload == ("ok", op, canonicalize_value(output))
-            )
+            return self.local_check_node(op, version, policy, evidence, deps, payload, output)
 
         return check
 

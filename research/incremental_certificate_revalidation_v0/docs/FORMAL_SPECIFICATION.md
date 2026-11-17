@@ -18,7 +18,7 @@ full verification.
 | `CacheEntry` | key + cert + `priorAccepted` |
 | `ValidState` | well-formed acyclic graph + outputs + authoritative cache |
 | `ChangeSet` | node ids whose local definition/evidence changed |
-| `LocalCheck` | op → version → policy → deps → payload → output → Bool |
+| `LocalCheck` | op → version → policy → **evidence** → deps → payload → output → Bool |
 | `FreshWitness` | prior FreshValid + cacheSound authority reconstruction |
 
 ## Three cache concepts

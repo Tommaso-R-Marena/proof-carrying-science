@@ -24,6 +24,7 @@ from model.graph import (
     WellFormedError,
     CycleError,
     changes_complete,
+    compute_changes,
     missing_definitional_changes,
     obligation_of,
     reject_duplicate_keys,
@@ -152,6 +153,7 @@ class IncrementalVerifier:
         record_trace: bool = True,
         require_changes_complete: bool = True,
         invalidation_graph: str = "new",
+        auto_compute_changes: bool = False,
     ) -> IncrementalReport:
         """
         Apply changes relative to prior ValidState.
@@ -161,9 +163,19 @@ class IncrementalVerifier:
         mode `invalidation_graph="prior"` is retained only for counterexample tests.
 
         `require_changes_complete` enforces Lean `ChangesComplete` (fail-closed).
+        `auto_compute_changes=True` replaces `changes` with Lean `computeChanges`
+        (preferred operational path; matches `runIncremental`).
+
+        Authoritative state is committed only after all acceptance gates succeed
+        (including optional fresh comparison). Failures preserve the prior ValidState.
         """
         if self.valid_state is None:
             raise ValueError("no prior ValidState; call initial_verify first")
+
+        # Snapshot prior authoritative state for transactional rollback.
+        prior_vs = self.valid_state
+        prior_cache = self.cache
+        prior_graph_ref = self.graph
 
         report = IncrementalReport(accepted=False, changes=list(changes))
         def _trace(ev: TraceEvent) -> None:
@@ -177,7 +189,10 @@ class IncrementalVerifier:
             report.rejected = list(new_graph.ids())
             return report
 
-        prior_graph = self.valid_state.graph
+        prior_graph = prior_vs.graph
+        if auto_compute_changes:
+            changes = compute_changes(prior_graph, new_graph)
+            report.changes = list(changes)
         if require_changes_complete:
             missing = missing_definitional_changes(prior_graph, new_graph, changes)
             if missing:
@@ -306,11 +321,30 @@ class IncrementalVerifier:
             new_cache.put_authoritative(current_key, cert)
             report.rechecked.append(node.id)
 
-        report.accepted = True
         report.outputs = outputs
         report.certs = certs
 
-        # Update prior state for further incremental steps
+        if compare_fresh:
+            fresh = fresh_verify(new_graph, self.registry, provided_certs=certs)
+            report.fresh_accepted = fresh.accepted
+            report.agrees_with_fresh = (
+                fresh.accepted
+                and _outputs_equal(fresh.outputs, report.outputs)
+            )
+            if not report.agrees_with_fresh:
+                report.accepted = False
+                report.error = (
+                    (report.error or "")
+                    + f"; incremental/fresh disagreement: fresh={fresh.accepted}"
+                )
+                # Transactional: preserve prior authoritative state.
+                self.cache = prior_cache
+                self.graph = prior_graph_ref
+                self.valid_state = prior_vs
+                return report
+
+        # Commit only after all acceptance gates succeed.
+        report.accepted = True
         self.cache = new_cache
         self.graph = new_graph
         self.valid_state = ValidState(
@@ -321,20 +355,6 @@ class IncrementalVerifier:
             acyclic=True,
             certs=dict(certs),
         )
-
-        if compare_fresh:
-            fresh = fresh_verify(new_graph, self.registry, provided_certs=certs)
-            report.fresh_accepted = fresh.accepted
-            report.agrees_with_fresh = (
-                fresh.accepted == report.accepted
-                and _outputs_equal(fresh.outputs, report.outputs)
-            )
-            if not report.agrees_with_fresh:
-                report.error = (
-                    (report.error or "")
-                    + f"; incremental/fresh disagreement: fresh={fresh.accepted}"
-                )
-
         return report
 
     def apply_node_changes(

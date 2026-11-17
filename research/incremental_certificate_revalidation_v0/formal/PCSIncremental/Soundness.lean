@@ -53,20 +53,22 @@ theorem safe_reuse_preserves_obligation
 theorem obligation_keys_agree_ops
     (n n0 : Node) (deps deps0 : List Value)
     (h : obligationOf n deps = obligationOf n0 deps0) :
-    n.op = n0.op ∧ n.version = n0.version ∧ n.policy = n0.policy ∧ deps = deps0 := by
+    n.op = n0.op ∧ n.version = n0.version ∧ n.policy = n0.policy ∧
+    n.evidence = n0.evidence ∧ deps = deps0 := by
   have hop := congrArg ObligationKey.op h
   have hver := congrArg ObligationKey.version h
   have hpol := congrArg ObligationKey.policy h
+  have hev := congrArg ObligationKey.evidence h
   have hdeps := congrArg ObligationKey.depOutputs h
-  exact ⟨hop, hver, hpol, hdeps⟩
+  exact ⟨hop, hver, hpol, hev, hdeps⟩
 
-/-- Authoritative eligible reuse preserves the local check bit. -/
+/-- Authoritative eligible reuse preserves the local check bit (evidence-bound). -/
 theorem reuse_entry_checks
     (check : LocalCheck) (vs : ValidState) (w : FreshWitness check vs)
     (n : Node) (σ' : Assignment) (e : CacheEntry)
     (he : e ∈ vs.cache.entries)
     (hperm : reusePermitted e (obligationOf n (depValues n σ'))) :
-    check n.op n.version n.policy (depValues n σ') e.cert.payload e.cert.output = true := by
+    check n.op n.version n.policy n.evidence (depValues n σ') e.cert.payload e.cert.output = true := by
   have hkey : e.key = obligationOf n (depValues n σ') := hperm.1
   have hauth : e.priorAccepted = true := by
     simpa [hasAuthority] using hperm.2
@@ -74,17 +76,17 @@ theorem reuse_entry_checks
   have hagree :=
     obligation_keys_agree_ops n n0 (depValues n σ') (depValues n0 vs.outputs)
       (hkey.symm.trans hkey0)
-  rcases hagree with ⟨hop, hver, hpol, hdeps⟩
+  rcases hagree with ⟨hop, hver, hpol, hev, hdeps⟩
   have hchk := hcheck0.1
-  rw [hop, hver, hpol, hdeps]
+  rw [hop, hver, hpol, hev, hdeps]
   exact hchk
 
-/-- **Substantive incremental soundness:** premises ⇒ `FreshValid` on `g'`. -/
-theorem incremental_implies_fresh
+/-- Logical premises alone imply FreshValid (ChangesComplete unused here). -/
+theorem logical_implies_fresh
     (check : LocalCheck) (vs : ValidState)
     (g' : Graph) (changes : ChangeSet) (σ' : Assignment)
     (certs' : NodeId → Certificate)
-    (h : IncrementalAccept check vs g' changes σ' certs') :
+    (h : LogicalAccept check vs g' changes σ' certs') :
     FreshValid check g' σ' certs' := by
   intro n hn
   by_cases ha : Affected g' changes n.id
@@ -95,6 +97,15 @@ theorem incremental_implies_fresh
     constructor
     · rw [hcert]; exact hbit
     · rw [hcert]; exact hout
+
+/-- **Substantive incremental soundness:** IncrementalAccept ⇒ `FreshValid` on `g'`. -/
+theorem incremental_implies_fresh
+    (check : LocalCheck) (vs : ValidState)
+    (g' : Graph) (changes : ChangeSet) (σ' : Assignment)
+    (certs' : NodeId → Certificate)
+    (h : IncrementalAccept check vs g' changes σ' certs') :
+    FreshValid check g' σ' certs' :=
+  logical_implies_fresh check vs g' changes σ' certs' h.toLogical
 
 theorem incremental_accept_eq_fresh_accept
     (check : LocalCheck) (vs : ValidState)
@@ -206,6 +217,7 @@ theorem new_dependent_is_affected
 end PCSIncremental
 
 #print axioms PCSIncremental.incremental_implies_fresh
+#print axioms PCSIncremental.logical_implies_fresh
 #print axioms PCSIncremental.reuse_entry_checks
 #print axioms PCSIncremental.invalidation_soundness
 #print axioms PCSIncremental.non_escalation

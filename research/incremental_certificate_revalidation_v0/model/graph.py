@@ -274,6 +274,18 @@ def changes_complete(prior: Graph, new: Graph, changes: Sequence[NodeId]) -> boo
     return not missing_definitional_changes(prior, new, changes)
 
 
+def compute_changes(prior: Graph, new: Graph) -> List[NodeId]:
+    """Lean `computeChanges`: new ids and same-id definitional diffs (order of `new`)."""
+    prior_by = prior.by_id()
+    out: List[NodeId] = []
+    for n in new.nodes:
+        if n.id not in prior_by:
+            out.append(n.id)
+        elif not same_defn(prior_by[n.id], n):
+            out.append(n.id)
+    return out
+
+
 def obligation_of(n: Node, dep_outputs: Sequence[Value]) -> ObligationKey:
     return ObligationKey(
         id=n.id,
