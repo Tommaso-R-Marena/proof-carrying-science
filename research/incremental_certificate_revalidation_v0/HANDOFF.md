@@ -4,12 +4,10 @@
 
 - **Branch:** `research/pcs-incremental-revalidation-v0`
 - **Draft PR:** https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/217
-- **Current commit:** `898c7a9607dbc57130b9edc59c9a9b543b3aae5b`
+- **Tip:** recorded in `results/HEAD_COMMIT.txt` (do not chase SHA in this file)
 - **Worktree:** `/home/ubuntu/worktrees/pcs-incremental-revalidation-v0`
-- **Base main:** `898c7a9607dbc57130b9edc59c9a9b543b3aae5b`
+- **Base main:** `bc78660b5fac857fce3873eb6cda0445d1903da1`
 - **Exclusive path:** `research/incremental_certificate_revalidation_v0/` only
-
-Update this file’s commit SHA after each push.
 
 ## Completed
 
@@ -19,8 +17,8 @@ Update this file’s commit SHA after each push.
 - [x] Python verifier + fresh reference + adversarial suite (9 attacks resisted)
 - [x] Differential mutation tests (12 pytest tests passing)
 - [x] Benchmarks to ~20k-node synthetic scientific graphs (honest slowdown recorded)
-- [x] Docs: formal spec, soundness, trust, refinement, performance, adversarial, reproducibility, integration proposal
-- [x] Manuscript draft
+- [x] Docs + manuscript draft
+- [x] Draft PR #217 opened (clearance required before non-draft)
 
 ## Proven theorems (Lean)
 
@@ -44,7 +42,7 @@ fresh, mutation safety, demo forged/policy/dep counterexamples,
 
 ## Performance
 
-Incremental slower than fresh for cheap Int ops (~0.5×). Reuse counts high on
+Incremental slower than fresh for cheap Int ops (~0.45–0.53×). Reuse counts high on
 sparse changes. See `docs/PERFORMANCE_REPORT.md`.
 
 ## Overlap concerns
@@ -56,6 +54,6 @@ Do not edit other research dirs.
 
 1. Prove stronger bidirectional equivalence under reconstructed authoritative caches.
 2. Lean-extracted or decide-based checker for a thin executable fragment.
-3. Benchmarks where local_check is artificially/really expensive (Lean kernel).
+3. Benchmarks where local_check is expensive (Lean kernel).
 4. Frontier scheduling to avoid full topo walks (with proof obligations).
 5. Independent human review of theorem statements and trust model.
