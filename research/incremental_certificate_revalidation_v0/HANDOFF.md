@@ -3,7 +3,8 @@
 ## Branch / commits
 
 - **Branch:** `research/pcs-incremental-revalidation-v0`
-- **Current commit:** `aaf44c68c0d6c1133f8ccb421c136aac5d98e054`
+- **Draft PR:** https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/217
+- **Current commit:** `00e487f7ef9f265ef9c1176aae31ddc5455ac879`
 - **Worktree:** `/home/ubuntu/worktrees/pcs-incremental-revalidation-v0`
 - **Base main:** `bc78660b5fac857fce3873eb6cda0445d1903da1`
 - **Exclusive path:** `research/incremental_certificate_revalidation_v0/` only
