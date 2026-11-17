@@ -1,0 +1,22 @@
+ℹ [5/10] Replayed ScientificReasoning.Soundness
+info: ScientificReasoning/Soundness.lean:71:0: 'ScientificReasoning.derives_sound' depends on axioms: [propext]
+info: ScientificReasoning/Soundness.lean:72:0: 'ScientificReasoning.derives_support_in_context' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Soundness.lean:73:0: 'ScientificReasoning.andI_authority_meet' does not depend on any axioms
+info: ScientificReasoning/Soundness.lean:74:0: 'ScientificReasoning.no_escalation_by_meet' depends on axioms: [propext]
+info: ScientificReasoning/Soundness.lean:75:0: 'ScientificReasoning.meet_empirical_not_math' depends on axioms: [propext]
+ℹ [6/10] Replayed ScientificReasoning.Contradictions
+info: ScientificReasoning/Contradictions.lean:81:0: 'ScientificReasoning.derives_atoms_from_context' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Contradictions.lean:82:0: 'ScientificReasoning.no_ex_falso_unrelated_atom' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Contradictions.lean:83:0: 'ScientificReasoning.demo_locally_contradictory' depends on axioms: [propext]
+ℹ [7/10] Built ScientificReasoning.Retraction (234ms)
+info: ScientificReasoning/Retraction.lean:49:0: 'ScientificReasoning.retract_removes' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Retraction.lean:50:0: 'ScientificReasoning.hyp_invalidated_by_self' depends on axioms: [propext]
+info: ScientificReasoning/Retraction.lean:51:0: 'ScientificReasoning.andI_support_union_invalidation' depends on axioms: [propext]
+⚠ [8/10] Built ScientificReasoning.Certificates (315ms)
+warning: ScientificReasoning/Certificates.lean:44:23: unused variable `h`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+info: ScientificReasoning/Certificates.lean:50:0: 'ScientificReasoning.valid_implies_sound' depends on axioms: [propext]
+info: ScientificReasoning/Certificates.lean:51:0: 'ScientificReasoning.valid_support_in_context' depends on axioms: [propext, Quot.sound]
+✔ [9/10] Built ScientificReasoning (169ms)
+Build completed successfully (10 jobs).
